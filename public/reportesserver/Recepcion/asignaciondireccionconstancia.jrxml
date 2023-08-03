@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="asignaciondireccionconstancia" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="0" uuid="6a6bba8f-ec64-4f96-8559-31bc6c394bb0">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="fiscalizacion"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="347"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="647"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="690"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="300"/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/Investigacion/Recepcion/asignaciondireccionconstancia_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/Investigacion/Recepcion/asignaciondireccionconstancia"/>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#D4D4D4">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="ListaExpedientes" uuid="c1c6c0cf-9d27-4189-a012-fa1c58a95113">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="FiscalizacionV3"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+	numero_expediente,
+	tipo,
+	fecha_recepcion,
+	concluido,
+	constancia_id,
+	direccion_id
+FROM
+	invexpedientes
+WHERE 
+	direccion_id is not null and concluido='Sí' and constancia_id is null]]>
+		</queryString>
+		<field name="NUMERO_EXPEDIENTE" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="NUMERO_EXPEDIENTE"/>
+			<property name="com.jaspersoft.studio.field.label" value="NUMERO_EXPEDIENTE"/>
+		</field>
+		<field name="TIPO" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="TIPO"/>
+			<property name="com.jaspersoft.studio.field.label" value="TIPO"/>
+		</field>
+		<field name="FECHA_RECEPCION" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="FECHA_RECEPCION"/>
+			<property name="com.jaspersoft.studio.field.label" value="FECHA_RECEPCION"/>
+		</field>
+		<field name="CONCLUIDO" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="CONCLUIDO"/>
+			<property name="com.jaspersoft.studio.field.label" value="CONCLUIDO"/>
+		</field>
+		<field name="CONSTANCIA_ID" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="CONSTANCIA_ID"/>
+			<property name="com.jaspersoft.studio.field.label" value="CONSTANCIA_ID"/>
+		</field>
+		<field name="DIRECCION_ID" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="DIRECCION_ID"/>
+			<property name="com.jaspersoft.studio.field.label" value="DIRECCION_ID"/>
+		</field>
+	</subDataset>
+	<parameter name="nombre_movimiento" class="java.lang.String"/>
+	<parameter name="estado" class="java.lang.String"/>
+	<parameter name="motivo_rechazo" class="java.lang.String"/>
+	<parameter name="autoriza" class="java.lang.String"/>
+	<parameter name="cargo" class="java.lang.String"/>
+	<parameter name="where" class="java.lang.String"/>
+	<parameter name="firma" class="java.lang.String"/>
+	<parameter name="hash" class="java.lang.String"/>
+	<parameter name="fechahora" class="java.lang.String"/>
+	<parameter name="qr" class="java.lang.String"/>
+	<parameter name="mensaje_encabezado" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+	count(id) as total
+FROM
+	invexpedientes
+WHERE 
+	direccion_id is not null and concluido='Sí' and constancia_id is null]]>
+	</queryString>
+	<field name="TOTAL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOTAL"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTAL"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="152">
+			<frame>
+				<reportElement x="-20" y="-20" width="594" height="172" uuid="690f0b15-e02c-41e3-9429-79519964f124"/>
+				<image scaleImage="FillFrame">
+					<reportElement x="0" y="0" width="594" height="149" uuid="cd0ee06a-24f6-4327-8b37-6087e71f7cd3"/>
+					<imageExpression><![CDATA["../Img/banner_up-1920x600.jpg"]]></imageExpression>
+				</image>
+				<image scaleImage="FillFrame">
+					<reportElement x="28" y="19" width="45" height="44" uuid="4e738df1-d558-4eaa-ade7-73c0ef42d28c"/>
+					<imageExpression><![CDATA["../Img/LogoLegislaturaTransparente.png"]]></imageExpression>
+				</image>
+				<image scaleImage="FillFrame">
+					<reportElement mode="Transparent" x="80" y="19" width="120" height="38" uuid="03461f6c-a30d-4b32-a096-546bc58b35f1"/>
+					<imageExpression><![CDATA["../Img/LogoOsfemTransparente.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="370" y="21" width="166" height="28" uuid="4743115a-4945-432d-88e5-14f6eb39980f"/>
+					<textElement>
+						<font fontName="Arial" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Constancia de ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="449" y="39" width="139" height="28" forecolor="#A0B0B9" uuid="513896b2-6452-481b-803c-6a9ea6a6a336"/>
+					<textElement>
+						<font fontName="Arial" size="24" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Movimiento]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="280" y="115" width="280" height="30" uuid="81886d83-92f4-49bc-86d0-b69322c37a2c"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Toluca de Lerdo, Estado de México; "+(new java.text.SimpleDateFormat("dd MMMMM yyyy", new Locale("es", "ES"))).format(new Date())]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight">
+					<reportElement x="20" y="146" width="540" height="26" forecolor="#212529" uuid="ad09ba09-4d5b-4645-9b26-513b4f0b19e1">
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{nombre_movimiento}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight">
+					<reportElement x="0" y="91" width="594" height="24" uuid="694bef0f-5371-4284-94da-2d76d2aa9546">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman&#xD;&#xA;" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{mensaje_encabezado}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="97">
+			<frame>
+				<reportElement x="14" y="7" width="526" height="90" uuid="7d468faa-6c16-4162-a84d-8d5c89c496d1"/>
+				<staticText>
+					<reportElement x="0" y="0" width="338" height="20" uuid="62562789-a5f4-4f42-9f83-9d33f7340997"/>
+					<textElement>
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<text><![CDATA[ÓRGANO SUPERIOR DE FISCALIZACIÓN DEL ESTADO DE MÉXICO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="16" width="338" height="20" uuid="6311184c-fc91-460f-a484-280c757f4c20"/>
+					<textElement>
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<text><![CDATA[P R E S E N T E:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="36" width="526" height="64" uuid="6e67276c-0e31-4f71-902c-5a4bb34306cb"/>
+					<textElement textAlignment="Justified" markup="html">
+						<font fontName="Arial" size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["En atribuciones conferidas al suscrito en el articulo 'XX' del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México y en atención a mis funciones y obligaciones realicé el análisis del soporte documental y metadatos del presente expediente, constando que cumple con la normatividad establecida en las leyes de la materia."]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="160">
+			<componentElement>
+				<reportElement mode="Transparent" x="30" y="82" width="509" height="60" uuid="e2ce4bd5-802f-45f2-93b1-9686804d48c8">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="NoDataCell">
+					<datasetRun subDataset="ListaExpedientes" uuid="44abe916-ef0e-42a1-b6fc-9082dcdbc806">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="170" uuid="c7a8881b-6c21-4527-b490-9ccca70f4ce8">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="170" height="30" uuid="0e5bae7d-339c-436b-9e6e-0a7b87a4fa6b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="10" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Número de expediente]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField textAdjust="StretchHeight">
+								<reportElement mode="Transparent" x="0" y="0" width="170" height="30" uuid="f7bc89a2-03d8-4ca3-8efb-63d130312087"/>
+								<box padding="6"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{NUMERO_EXPEDIENTE}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="220" uuid="5743dfbe-6e4b-4aa8-b1dc-6ee4bad06dc2">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="220" height="30" uuid="d8c2d9ee-ace0-47f4-8774-26dd801a1c51"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="10" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Tipo]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField textAdjust="StretchHeight">
+								<reportElement mode="Transparent" x="0" y="0" width="220" height="30" uuid="142b36da-f312-469e-8854-f1da58908c24"/>
+								<box padding="5"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{TIPO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="119" uuid="ad8fc173-fd99-433b-b29c-1b11ce35d912">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="119" height="30" uuid="29c3cc2c-7ac6-4f87-a655-a7d0c501ce5b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="10" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Fecha de recepción]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField textAdjust="StretchHeight">
+								<reportElement mode="Transparent" x="0" y="0" width="119" height="30" uuid="2ec33a10-3651-44e9-8dc1-f66df13081f3"/>
+								<box padding="5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[DATEFORMAT($F{FECHA_RECEPCION}, "dd/MM/YYYY" )]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:noData height="30">
+						<staticText>
+							<reportElement x="0" y="0" width="509" height="30" uuid="cef1d90a-cc88-415e-948d-1c3d828d3d65"/>
+							<box>
+								<pen lineColor="#ADADAD"/>
+								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle"/>
+							<text><![CDATA[Sin registros]]></text>
+						</staticText>
+					</jr:noData>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement x="30" y="59" width="510" height="15" forecolor="#4A4A4A" uuid="1e058283-2cb2-44fd-8b6f-afcff1bbe3de">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Expedientes asignados:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="19" y="1" width="43" height="20" forecolor="#951953" uuid="677d0031-f1f1-437e-b425-541e66c3dbe2">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.5" lineColor="#951953"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#951953"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="28" width="96" height="15" forecolor="#4A4A4A" uuid="79c14dc1-9aed-4af1-a462-4f5b3b68a9fb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Dirección asignada:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="127" y="28" width="414" height="15" forecolor="#000000" uuid="278e3f7e-4676-4cd6-bca4-6d6846e8e111">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Dirección de Investigación"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="31" y="44" width="140" height="15" forecolor="#4A4A4A" uuid="7c9e2ef0-2d2e-44f5-96e5-5c09912c40b4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Número total de expedientes:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="170" y="43" width="370" height="15" forecolor="#000000" uuid="23979d39-3a4e-4fbe-add4-d7586d33568a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="194">
+			<printWhenExpression><![CDATA[$P{hash}!=null]]></printWhenExpression>
+			<frame>
+				<reportElement x="0" y="10" width="555" height="184" uuid="e9d60870-9c29-481b-a045-9adc22379e36"/>
+				<staticText>
+					<reportElement x="2" y="0" width="553" height="34" uuid="18a56649-a0df-410a-a07f-506dc7944f7f"/>
+					<textElement>
+						<font fontName="Arial"/>
+					</textElement>
+					<text><![CDATA[Por lo antes expuesto, firmo el presente documento entendible y legible, para su incorporación al expediente de control mediante Plataforma Digital de este Órgano Superior. 
+
+]]></text>
+				</staticText>
+				<rectangle radius="17">
+					<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="44" width="555" height="140" isPrintWhenDetailOverflows="true" forecolor="#787878" uuid="a40b4eb4-f327-47ea-a586-9983ce27aaa8">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="2.0" lineColor="#787878"/>
+					</graphicElement>
+				</rectangle>
+				<textField textAdjust="StretchHeight">
+					<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="126" y="72" width="424" height="63" uuid="34455a68-6cb1-43a7-8a6b-08713e8e8657"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{firma}+
+"\nHash:"+$P{hash}+
+"\nFecha y Hora de Certificación:"+$P{fechahora}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="180" y="47" width="300" height="25" forecolor="#787878" uuid="0ec89b59-79f5-4e8f-8437-80990734a01d"/>
+					<textElement>
+						<font fontName="Arial" size="16" isBold="true"/>
+					</textElement>
+					<text><![CDATA[F I R M A   E L E C T R Ó N I C A]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement positionType="Float" mode="Transparent" x="2" y="58" width="125" height="115" uuid="404e3280-9d3c-446b-a009-a0fc3115ccf9"/>
+					<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<jr:codeExpression><![CDATA[$P{qr}]]></jr:codeExpression>
+					</jr:QRCode>
+				</componentElement>
+				<textField>
+					<reportElement x="126" y="138" width="425" height="17" forecolor="#616161" uuid="732ad7f9-66af-4861-a0fc-1c09c8626264"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{autoriza}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="126" y="156" width="424" height="17" forecolor="#616161" uuid="9e3ab6a8-e6a3-4591-8b93-870b34f50875"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{cargo}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="57">
+			<frame>
+				<reportElement x="-22" y="1" width="597" height="56" uuid="7531bf0c-45a8-4551-9ada-febb31137b2f"/>
+				<image scaleImage="FillFrame">
+					<reportElement x="2" y="0" width="595" height="56" uuid="2e9c28a9-8c17-4372-b845-2392fd8ea034"/>
+					<imageExpression><![CDATA["../Img/PlecaOsfemPie.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="0" y="17" width="595" height="35" uuid="0ad62674-f603-4db8-b1c1-39aababd1ea8"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+					<text><![CDATA[Este documento y anexos, en su caso, serán tratados conforme a lo previsto en la Ley de Protección de Datos Personales en Posesión de Sujetos Obligados del Estado de México y Municipios.
+Para mayor información, visite el aviso de privacidad en el sitio: www.osfem.gob.mx]]></text>
+				</staticText>
+				<textField evaluationTime="Master">
+					<reportElement x="0" y="35" width="596" height="10" uuid="f1c493ac-2714-4db2-8ff9-d2bd0096b976"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página " + $V{MASTER_CURRENT_PAGE} + " de " + $V{MASTER_TOTAL_PAGES}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

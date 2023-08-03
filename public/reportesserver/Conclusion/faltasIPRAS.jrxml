@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="faltasIPRAS" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f138ba5a-c390-433d-8245-897cacbf85aa">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="osfem"/>
+	<property name="ireport.jasperserver.url" value="http://localhost:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/Investigacion/Conclusion/faltasIPRAS_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/Investigacion/Conclusion/faltasIPRAS"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<subDataset name="Dataset1" uuid="f5185c2e-6a61-40fd-b31b-9be1bd9cbb0e">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="osfem"/>
+		<parameter name="falta_id" class="java.math.BigDecimal"/>
+		<queryString language="SQL">
+			<![CDATA[select invdenunciados_sujetos.nombre
+from invipras_responsables
+inner join invdenunciados_sujetos
+on invipras_responsables.denunciado_id=invdenunciados_sujetos.id
+where invipras_responsables.conducta_id = $P{falta_id}]]>
+		</queryString>
+		<field name="NOMBRE" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="NOMBRE"/>
+			<property name="com.jaspersoft.studio.field.label" value="NOMBRE"/>
+		</field>
+	</subDataset>
+	<parameter name="where" class="java.math.BigDecimal"/>
+	<queryString language="SQL">
+		<![CDATA[select 
+invconductas_expedientes.id as falta_id,
+invcatconductas.descripcion as falta
+from invconductas_expedientes
+inner join invcatconductas 
+on invcatconductas.id=invconductas_expedientes.cat_conducta_id
+where invconductas_expedientes.expediente_id = $P{where}]]>
+	</queryString>
+	<field name="FALTA_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="FALTA_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="FALTA_ID"/>
+	</field>
+	<field name="FALTA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FALTA"/>
+		<property name="com.jaspersoft.studio.field.label" value="FALTA"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="22">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="2" width="510" height="20" forecolor="#000000" backcolor="#DEDFE0" uuid="0fb95150-e3a9-476d-be68-bae2df0cb86e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.75" lineStyle="Solid"/>
+					<topPen lineWidth="2.25" lineStyle="Solid" lineColor="#030303"/>
+					<leftPen lineWidth="2.25" lineStyle="Solid" lineColor="#030303"/>
+					<bottomPen lineWidth="2.25" lineStyle="Solid" lineColor="#030303"/>
+					<rightPen lineWidth="2.25" lineStyle="Solid" lineColor="#030303"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Faltas administrativas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="62">
+			<textField>
+				<reportElement x="0" y="20" width="510" height="20" uuid="5e643c14-7c20-48a6-becd-49d6af114c25">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="6" rightPadding="3">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FALTA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="510" height="20" forecolor="#4A4A4A" uuid="a5665573-d987-4907-92d4-4faa979a3448">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="12" rightPadding="3">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[Lista de presuntos responsables]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="0" y="40" width="510" height="20" uuid="6820ec3f-f2bd-45b7-bd10-c61ead1047b2">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Dataset1" uuid="30016ee6-192c-4f1f-8e76-f09d1f706521">
+						<datasetParameter name="falta_id">
+							<datasetParameterExpression><![CDATA[$F{FALTA_ID}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="510" uuid="ba001b85-4858-4b86-9f03-ab5c56331428">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:detailCell height="20">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<textField>
+								<reportElement x="0" y="0" width="510" height="20" uuid="28d1be92-677f-4f35-a11f-7a2528f54fb8"/>
+								<box leftPadding="18" rightPadding="9">
+									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

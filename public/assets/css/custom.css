@@ -1,0 +1,489 @@
+.table-head {
+    background: #9a9b9e;
+    color: white;
+}
+
+.sub-table-head {
+    background: #ccc;
+    color: #555;
+}
+
+.table-head,
+th {
+    border-color: #9a9b9e !important;
+}
+
+.radio .iradio_square-grey {
+    margin-right: 5px;
+}
+
+.radio-inline .iradio_square-grey {
+    margin-right: 5px;
+}
+
+.radio-inline {
+    padding-right: 20px;
+}
+
+.checkbox .icheckbox_square-grey {
+    margin-right: 5px;
+}
+
+.page-item.active .page-link {
+    background-color: #A13B71;
+    border-color: #A13B71;
+}
+
+.fa-chev {
+    vertical-align: baseline !important;
+}
+
+.list-desglose h6,
+.list-desglose span,
+.list-desglose div {
+    cursor: pointer;
+}
+
+.desglose .fa-chev {
+    transition: .3s transform ease-in-out;
+}
+
+.desglose .collapsed .fa-chev {
+    transform: rotate(-90deg);
+}
+
+.something-else .fa-chev {
+    transition: .3s transform ease-in-out;
+}
+
+.something-else .collapsed .fa-chev {
+    transform: rotate(-180deg);
+}
+
+.list .fa-chev {
+    transition: .3s transform ease-in-out;
+}
+
+.list .collapsed .fa-chev {
+    transform: rotate(-90deg);
+}
+
+.desglose .fa-chev {
+    transition: .3s transform ease-in-out;
+}
+
+.desglose .collapsed .fa-chev {
+    transform: rotate(-90deg);
+}
+
+.list-desglose .fa-chev {
+    transition: .3s transform ease-in-out;
+}
+
+.list-desglose .collapsed .fa-chev {
+    transform: rotate(-90deg);
+}
+
+.text-pending {
+    color: #ffc107 !important;
+}
+
+.bg-sistema {
+    background: #A13B71 !important;
+}
+
+.text-sistema {
+    color: #A13B71 !important;
+}
+
+.help-block,
+.error-help-block {
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.925rem;
+    color: #dc3545;
+}
+
+.control-label {
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #3F4254;
+}
+
+.form-group .checkbox,
+.radio,
+.radio-inline {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #3F4254;
+}
+
+.spin-x {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.1em;
+}
+
+.spin-1x {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-width: 0.1em;
+}
+
+.icon-1x {
+    font-size: 1.3rem;
+}
+
+.btn-link+.form-group .control-label {
+    display: none !important;
+}
+
+.form-group+.form-group .control-label {
+    display: none !important;
+}
+
+.file-error-message+.form-group .control-label {
+    display: none !important;
+}
+
+.jumbotron__container {
+    display: flex;
+}
+
+.jumbotron__text {
+    flex: 1 0 50%;
+    padding: 10px;
+    border-right: 1px solid black;
+}
+
+.jumbotron__image {
+    flex: 1 0 50%;
+    margin-top: 25%;
+    align-items: center;
+    justify-content: center;
+}
+
+.bg-breadcrumb {
+    background-color: #e9ecef !important;
+}
+
+.row {
+    margin-bottom: 0.75rem;
+}
+
+.select2-dropdown {
+    border: 0.1rem solid #B5B5C3 !important;
+}
+
+input[type=date] {
+    position: relative;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: block;
+    width: 90%;
+    background: #0000;
+    position: absolute;
+    transform: scale(12)
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: transparent;
+    background: none;
+    z-index: 1;
+}
+
+input[type="date"]:before {
+    color: transparent;
+    background: none;
+    display: block;
+    content: "";
+    background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16"%3E%3Cpath d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/%3E%3C/svg%3E') center / contain no-repeat;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 11px;
+    right: 14px;
+    color: #222;
+}
+
+input[type=time] {
+    position: relative;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: block;
+    width: 90%;
+    background: #0000;
+    position: absolute;
+    transform: scale(12)
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    color: transparent;
+    background: none;
+    z-index: 1;
+}
+
+input[type="time"]:before {
+    color: transparent;
+    background: none;
+    display: block;
+    content: "";
+    background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16"%3E%3Cpath d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/%3E%3Cpath d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/%3E/%3E%3C/svg%3E') center / contain no-repeat;
+    width: 13px;
+    height: 13px;
+    position: absolute;
+    top: 11px;
+    right: 14px;
+    color: #222;
+}
+
+.select2-close-mask {
+    z-index: 10000;
+}
+
+.select2-dropdown {
+    z-index: 10001;
+}
+
+.w-1 {
+    width: 1% !important;
+}
+
+.w-2 {
+    width: 2% !important;
+}
+
+.w-3 {
+    width: 3% !important;
+}
+
+.w-4 {
+    width: 4% !important;
+}
+
+.w-5 {
+    width: 5% !important;
+}
+
+.w-6 {
+    width: 6% !important;
+}
+
+.w-7 {
+    width: 7% !important;
+}
+
+.w-8 {
+    width: 8% !important;
+}
+
+.w-9 {
+    width: 9% !important;
+}
+
+.w-10 {
+    width: 10% !important;
+}
+
+.w-11 {
+    width: 11% !important;
+}
+
+.w-12 {
+    width: 12% !important;
+}
+
+.w-13 {
+    width: 13% !important;
+}
+
+.w-14 {
+    width: 14% !important;
+}
+
+.w-15 {
+    width: 15% !important;
+}
+
+.text-justify {
+    text-align: justify;
+    word-wrap: break-word;
+}
+.loader {
+    transform: rotateZ(45deg);
+    perspective: 1000px;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    color: rgb(14, 13, 13);
+}
+.loader:before,
+.loader:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    border-radius: 50%;
+    transform: rotateX(70deg);
+    animation: 1s spin linear infinite;
+}
+.loader:after {
+    color: #910043;
+    transform: rotateY(70deg);
+    animation-delay: .4s;
+}
+
+  @keyframes rotate {
+    0% {
+        transform: translate(-50%, -50%) rotateZ(0deg);
+    }
+    
+    100% {
+        transform: translate(-50%, -50%) rotateZ(360deg);
+    }
+  }
+
+  @keyframes rotateccw {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(-360deg);
+    }
+  }
+
+  @keyframes spin {
+    0%,
+    100% {
+    box-shadow: .2em 0px 0 0px currentcolor;
+    }
+
+    12% {
+    box-shadow: .2em .2em 0 0 currentcolor;
+    }
+
+    25% {
+    box-shadow: 0 .2em 0 0px currentcolor;
+    }
+
+    37% {
+    box-shadow: -.2em .2em 0 0 currentcolor;
+    }
+
+    50% {
+    box-shadow: -.2em 0 0 0 currentcolor;
+    }
+
+    62% {
+    box-shadow: -.2em -.2em 0 0 currentcolor;
+    }
+    
+    75% {
+        box-shadow: 0px -.2em 0 0 currentcolor;
+    }
+
+    87% {
+        box-shadow: .2em -.2em 0 0 currentcolor;
+    }
+  }
+
+  .body_loader {
+      align-items: center;
+      background-color: #f8f5f600;
+      display: flex;
+      height: 50px;
+      justify-content: center;
+      width: 100%;
+  }
+
+  .pagination {
+      justify-content: left;
+  }
+
+  .form-control:disabled {
+      background-color: #eceff0;
+      opacity: 1;
+  }
+
+  .form-control[readonly] {
+      background-color: #eceff0;
+  }
+
+  .flatpickr-input {
+      position: relative;
+  }
+
+  .flatpickr-input::-webkit-calendar-picker-indicator {
+      display: block;
+      width: 90%;
+      background: #0000;
+      position: absolute;
+      transform: scale(12)
+  }
+
+  .flatpickr-input::-webkit-calendar-picker-indicator {
+      position: absolute;
+  }
+
+  .flatpickr-input::-webkit-calendar-picker-indicator {
+      color: transparent;
+      background: none;
+      z-index: 1;
+  }
+
+  .flatpickr-input:before {
+      color: transparent;
+      background: none;
+      display: block;
+      content: "";
+      background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16"%3E%3Cpath d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/%3E%3C/svg%3E') center / contain no-repeat;
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      top: 11px;
+      right: 14px;
+      color: #222;
+  }
+
+  .form-control-feedback {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin-right: 14px;
+      z-index: 80;
+      display: block;
+      width: 10px;
+      height: 12px;
+      line-height: 90px;
+      text-align: center;
+      pointer-events: auto;
+  }
+
+  .has-float-label {
+      width: 100%;
+      position: relative;
+  }
+
+  .flatpickr-day {
+      color: #181C32;
+  }
+
+  .flatpickr-day .flatpickr-disabled {
+      color: #B5B5C3 !important;
+  }
+
