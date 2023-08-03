@@ -1,0 +1,2 @@
+# Seguimiento
+Componente de seguimiento
