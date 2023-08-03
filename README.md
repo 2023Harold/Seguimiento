@@ -1,2 +1,2 @@
 # Seguimiento
-Componente de seguimiento
+Componente de seguimiento 2
