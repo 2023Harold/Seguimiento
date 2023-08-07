@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('segcomparecencia_anexos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('comparecencia_id')->constrained('segcomparecencia');
-            $table->integer('numero', 10)->nullable();
+            $table->integer('numero')->nullable();
             $table->string('archivo', 100);
             $table->string('descripcion', 800);
         });
