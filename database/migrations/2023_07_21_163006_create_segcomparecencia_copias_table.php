@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('segcomparecencia_copias', function (Blueprint $table) {
             $table->id();
-            //$table->foreignId('comparecencia_id')->constrained('segcomparecencia');
-            $table->integer('numero')->nullable();
+            $table->foreignId('comparecencia_id')->constrained('segcomparecencia');
+            $table->integer('numero', 10)->nullable();
             $table->string('nombre', 75);
             $table->string('domicilio_notificacion', 2)->nullable();
             $table->string('calle', 100)->nullable();
