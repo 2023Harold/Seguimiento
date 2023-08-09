@@ -21,7 +21,7 @@ class CatTiposAccionesSeeder extends Seeder
             ['descripcion' => 'Recomendación'],
             ['descripcion' => 'Pliego de observación'],
             ['descripcion' => 'Promoción de responsabilidad administrativa sancionatoria'],
-            ['descripcion' => 'Ninguna'],
+            
         ]);
     }
 }

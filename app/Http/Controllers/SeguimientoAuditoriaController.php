@@ -43,7 +43,7 @@ class SeguimientoAuditoriaController extends Controller
         $auditorias=Auditoria::all()->count();
         $consecutivo=$auditorias+1;
         $entidades = EntidadFiscalizableIntra::where('NivEntFis', 1)->where('StsEntFis', 1)->whereNotIN('PkCveEntFis', [607, 608])->get()->pluck('NomEntFis', 'PkCveEntFis');
-        $tipos = CatalogoTipoAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');      
+        $tipos = CatalogoTipoAuditoria::all()->pluck('Descripcion', 'id')->prepend('Seleccionar una opción', '');      
         $tiporevision = [null=>'','Cumplimiento Financiero'=>'Cumplimiento Financiero','Inversión Física'=>'Inversión Física','Financiera'=>'Financiera','Obra'=>'Obra','Desempeño'=>'Desempeño'];
         $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022'];
         $lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->director->unidad_administrativa_id)->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
