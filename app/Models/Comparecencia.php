@@ -22,6 +22,7 @@ class Comparecencia extends Model
      */
     protected $fillable = [        
         'auditoria_id',
+        'oficio_acreditacion',
         'nombre_titular',
         'cargo_titular',
         'oficio_comparecencia',

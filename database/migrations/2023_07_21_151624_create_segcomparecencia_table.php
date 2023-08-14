@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('auditoria_id')->constrained('segauditorias');
             $table->string('nombre_titular', 120);
+            $table->string('oficio_acreditacion', 120);
             $table->string('cargo_titular', 120);
             $table->string('oficio_comparecencia', 512);
             $table->date('fecha_comparecencia');

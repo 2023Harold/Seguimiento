@@ -46,11 +46,15 @@ class ComparecenciaController extends Controller
     public function store(Request $request)
     {
         $auditoria = Auditoria::find(getSession('comparecencia_auditoria_id'));
-        mover_archivos($request, ['oficio_comparecencia']);
+        mover_archivos($request, ['acta_comparecencia']);
+        $auditoria = Auditoria::find(getSession('comparecencia_auditoria_id'));
+        mover_archivos($request, ['oficio_acreditacion']);
+
+
         $request['usuario_creacion_id'] = auth()->id();
         $request['auditoria_id'] = $auditoria->id;   
-        $request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
-        $request['fecha_termino_aclaracion'] = addBusinessDays($request->fecha_inicio_aclaracion, 30);
+        //DMM//$request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
+        //DMM//$request['fecha_termino_aclaracion'] = addBusinessDays($request->fecha_inicio_aclaracion, 30);
 
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_comparecencia'], null, $ruta);
@@ -100,10 +104,13 @@ class ComparecenciaController extends Controller
     public function update(Request $request, Comparecencia $comparecencia)
     {
         $auditoria = Auditoria::find(getSession('comparecencia_auditoria_id'));
-        mover_archivos($request, ['oficio_comparecencia'],$comparecencia);
+        mover_archivos($request, ['oficio_acta'],$comparecencia);
+        $auditoria = Auditoria::find(getSession('comparecencia_auditoria_id'));
+        mover_archivos($request, ['oficio_acreditacion'],$comparecencia);
+
         $request['usuario_modificacion_id'] = auth()->id();      
-        $request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
-        $request['fecha_termino_aclaracion'] = addBusinessDays($request->fecha_inicio_aclaracion, 30);
+       /* $request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
+        $request['fecha_termino_aclaracion'] = addBusinessDays($request->fecha_inicio_aclaracion, 30);*/
        
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_comparecencia'], null, $ruta);

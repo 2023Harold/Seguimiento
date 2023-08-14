@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Validator;
 class ComparecenciaNotificacionController extends Controller
 {
     public $model;
+    protected $validationRules;
+    protected $attributeNames;
+    protected $errorMessages;
 
     public function __construct(Comparecencia $model)
     {
