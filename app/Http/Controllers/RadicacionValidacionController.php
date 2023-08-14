@@ -59,7 +59,9 @@ class RadicacionValidacionController extends Controller
      */
     public function edit(Radicacion $radicacion)
     {
-         return view('radicacionvalidacion.form', compact('radicacion'));
+        $auditoria=$radicacion->auditoria;
+        $comparecencia=$auditoria->comparecencia;
+         return view('radicacionvalidacion.form', compact('radicacion','auditoria'));
     }
 
     /**

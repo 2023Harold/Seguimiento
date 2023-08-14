@@ -8,6 +8,7 @@
         "php": "^8.0.2",
         "barryvdh/laravel-cors": "^3.0",
         "diglactic/laravel-breadcrumbs": "^8.1",
+        "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
         "jaspersoft/rest-client": "v2.0.0",
         "kartik-v/bootstrap-fileinput": "dev-master",

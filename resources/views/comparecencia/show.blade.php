@@ -6,21 +6,52 @@
     <div class="card">
         <div class="card-header">
             <h1 class="card-title">
-                <a href="{{ route('comparecencia.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                &nbsp; Consulta
+                <a href="{{ route('radicacion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+                &nbsp; Datos de comparecencia
             </h1>
         </div>
         <div class="card-body">
             @include('flash::message')
-            @include('layouts.contextos._auditoria')            
+            @include('layouts.contextos._auditoria') 
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Acuerdo de radicación: </label>
+                    <span class="text-primary">
+                        <a href="{{ asset($auditoria->radicacion->oficio_acuerdo) }}" target="_blank">
+                            <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->radicacion->oficio_acuerdo)) ?>
+                        </a>           
+                    </span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label>Acuse del oficio de designación: </label>
+                    <span class="text-primary">
+                        <a href="{{ asset($auditoria->radicacion->oficio_designacion) }}" target="_blank">
+                            <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->radicacion->oficio_designacion)) ?>
+                        </a> <br>      
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">                         
+                    <label>Fecha del acuerdo de radicación: </label>
+                    <span class="text-primary">
+                        {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}
+                    </span>
+                </div>  
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">                         
+                    <label>Fecha del oficio de designación: </label>
+                    <span class="text-primary">
+                        {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}
+                    </span>
+                </div>
+            </div>
             <h4 class="text-primary">Comparecencia</h3>
             <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>Nombre del titular a quien se dirige</th>
-                                <th>Cargo del titular a quien se dirige</th>
-                                <th>Oficio de notificación de la comparecencia</th>
+                                <th>Cargo del titular a quien se dirige</th>                                
                                 <th>Fecha y hora de la comparecencia</th>
                                 <th>Periodo de la etapa de aclaración</th>                              
                             </tr>
@@ -32,12 +63,7 @@
                                     </td>
                                     <td>
                                         {{ $auditoria->comparecencia->cargo_titular }}                                  
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ asset($auditoria->comparecencia->oficio_comparecencia) }}" target="_blank">
-                                            <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_comparecencia)) ?>
-                                        </a> 
-                                    </td>
+                                    </td>                                   
                                     <td class="text-center">
                                         <span>
                                             {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . $auditoria->comparecencia->hora_comparecencia_inicio . ' - ' . $auditoria->comparecencia->hora_comparecencia_termino }}
@@ -50,7 +76,7 @@
                         </tbody>
                     </table> 
                 </div>        
-            <div class="table-responsive">
+            {{-- <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
@@ -107,7 +133,7 @@
                                 </tr>       
                         </tbody>
                     </table> 
-                </div>        
+                </div>         --}}
         </div>
     </div>
 @endsection

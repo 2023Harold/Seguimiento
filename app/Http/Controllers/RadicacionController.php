@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\Comparecencia;
 use App\Models\Movimientos;
 use App\Models\Radicacion;
 use Illuminate\Http\Request;
@@ -30,9 +31,10 @@ class RadicacionController extends Controller
     {
         $auditoria=Auditoria::find(getSession('radicacion_auditoria_id'));
         $radicacion = new Radicacion(); 
+        $comparecencia = new Comparecencia();
         $accion = 'Agregar';    
 
-        return view('radicacion.form', compact('radicacion','auditoria','accion'));
+        return view('radicacion.form', compact('radicacion','auditoria','accion','comparecencia'));
     }
 
     /**
@@ -45,8 +47,14 @@ class RadicacionController extends Controller
     {       
         mover_archivos($request, ['oficio_acuerdo','oficio_designacion'], null);
         $request['usuario_creacion_id'] = auth()->user()->id;
-        $request['auditoria_id']=getSession('radicacion_auditoria_id');
+        $request['auditoria_id']=getSession('radicacion_auditoria_id');        
+        $request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
+        $request['fecha_termino_aclaracion'] = addBusinessDays($request->fecha_inicio_aclaracion, 30);
         $radicacion = Radicacion::create($request->all());
+        $comparecencia = Comparecencia::create($request->all());
+
+        //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($auditoria->numero_auditoria)).'/Documentos';
+        //mover_archivos_minio($request, ['oficio_comparecencia'], null, $ruta);      
 
         Movimientos::create([
             'tipo_movimiento' => 'Registro de la radicación',

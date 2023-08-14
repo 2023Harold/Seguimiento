@@ -37,15 +37,12 @@
                                 <th>No. de auditoría</th>
                                 <th>Entidad fiscalizable</th>
                                 <th>Acto de fiscalización</th>
-                                {{--<th>Informe de auditoría</th>
-                                <th>Acciones promovidas</th>
-                                <th>Monto por aclarar</th>                                                                 
-                                <th>Asignación de departamentos</th>
-                                <th>Asignación del encargado de la auditoría</th> --}}
                                 <th>Número de acuerdo</th>
                                 <th>Acuerdo de radicación</th>
                                 <th>Acuse del oficio de designación</th>
-                                <th> Fase / Acción / Constancia</th>
+                                <th>Datos de comparecencia</th>
+                                <th>Fase / Acción / Constancia</th>
+                                <th>Acuses</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,7 +82,14 @@
                                             </a> <br>                                            
                                             <small> {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }} </small>                                    
                                         @endif                                 
-                                    </td>                                                                      
+                                    </td> 
+                                    <td class="text-center">
+                                        @if (!empty($auditoria->comparecencia))
+                                        <a href="{{ route('comparecencia.show', $auditoria->comparecencia) }}" class="btn btn-secondary" data-title="Consultar">
+                                            <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                        </a>
+                                        @endif                                        
+                                    </td>                                                                     
                                     <td class="text-center">
                                         @if (empty($auditoria->radicacion))
                                             @can('radicacion.auditoria')
@@ -128,7 +132,20 @@
                                                 @btnXml($auditoria->radicacion, 'constancia')
                                             @endif                                                                          
                                         @endif                                                                            
-                                    </td>                                                                      
+                                    </td>   
+                                    <td class="text-center">
+                                        @if (!empty($auditoria->radicacion->fase_autorizacion)&&$auditoria->radicacion->fase_autorizacion=='Autorizado')
+                                            @if (empty($auditoria->comparecencia->oficio_recepcion))
+                                                <a href="{{ route('comparecenciaacuse.edit', $auditoria->comparecencia) }}" class="btn btn-primary">
+                                                    <span class="fa fa-file-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                                </a>
+                                            @else
+                                                <a href="{{ route('comparecenciaacuse.show', $auditoria->comparecencia) }}" class="btn btn-secondary" >
+                                                    <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                                </a>
+                                            @endif
+                                        @endif  
+                                    </td>                                                                   
                                 </tr>
                                 @if (!empty($auditoria->radicacion))
                                     {!! movimientosDesglose($auditoria->radicacion->id, 10, $auditoria->radicacion->movimientos) !!}

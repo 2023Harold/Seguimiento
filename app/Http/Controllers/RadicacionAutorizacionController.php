@@ -79,8 +79,9 @@ class RadicacionAutorizacionController extends Controller
          $preconstancia = reporte($radicacion->id, 'Fiscalizacion/Seguimiento/radicacionconstancia', $params, 'pdf');
          $archivorutaxml = reporte($radicacion->id, 'Fiscalizacion/Seguimiento/radicacionconstancia', $params, 'xml');
          $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutaxml)));
+         $auditoria=$radicacion->auditoria;
 
-         return view('radicacionautorizacion.form', compact('radicacion', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
+         return view('radicacionautorizacion.form', compact('radicacion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
     }
 
     /**

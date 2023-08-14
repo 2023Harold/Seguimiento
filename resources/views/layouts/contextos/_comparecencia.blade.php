@@ -16,14 +16,6 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg- col-md-6 col-sm-12 col-12">
-            <label>Oficio de notificación de la comparecencia: </label>
-            <span class="text-sistema">
-                <a href="{{ asset($auditoria->comparecencia->oficio_comparecencia) }}" target="_blank">
-                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_comparecencia)) ?>
-                </a> 
-            </span>
-        </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
             <label>Fecha y hora de la comparecencia: </label>
             <span class="text-sistema">

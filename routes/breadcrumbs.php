@@ -151,6 +151,18 @@ Breadcrumbs::for('radicacionautorizacion.edit', function (BreadcrumbTrail $trail
     $trail->parent('radicacion.index');
     $trail->push('Autorizar', route('radicacionautorizacion.edit',$radicacion));
 });
+Breadcrumbs::for('comparecenciaacuse.edit', function (BreadcrumbTrail $trail,$comparecencia) {
+    $trail->parent('radicacion.index');
+    $trail->push('Acuses', route('comparecenciaacuse.edit',$comparecencia));
+});
+Breadcrumbs::for('comparecencia.show', function (BreadcrumbTrail $trail,$comparecencia) {
+    $trail->parent('radicacion.index');
+    $trail->push('Datos de comparecencia', route('comparecencia.show',$comparecencia));
+});
+Breadcrumbs::for('comparecenciaacuse.show', function (BreadcrumbTrail $trail,$comparecencia) {
+    $trail->parent('radicacion.index');
+    $trail->push('Acuses', route('comparecenciaacuse.show',$comparecencia));
+});
 
 /*Comparecencia*/
 Breadcrumbs::for('comparecencia.index', function (BreadcrumbTrail $trail) {
@@ -169,11 +181,6 @@ Breadcrumbs::for('comparecencia.edit', function (BreadcrumbTrail $trail, $compar
     
 });
 
-Breadcrumbs::for('comparecencia.show', function (BreadcrumbTrail $trail,$comparecencia) {
-    $trail->parent('comparecencia.index');
-    $trail->push('Consulta', route('comparecencia.show',$comparecencia));
-});
-
 Breadcrumbs::for('comparecenciavalidacion.edit', function (BreadcrumbTrail $trail,$comparecencia) {
     $trail->parent('comparecencia.index');
     $trail->push('Validar', route('comparecenciavalidacion.edit',$comparecencia));
@@ -184,10 +191,7 @@ Breadcrumbs::for('comparecenciaautorizacion.edit', function (BreadcrumbTrail $tr
     $trail->push('Autorizar', route('comparecenciaautorizacion.edit',$comparecencia));
 });
 
-Breadcrumbs::for('comparecenciaacuse.edit', function (BreadcrumbTrail $trail,$comparecencia) {
-    $trail->parent('comparecencia.index');
-    $trail->push('Acuses', route('comparecenciaacuse.edit',$comparecencia));
-});
+
 
 Breadcrumbs::for('comparecenciacedula.edit', function (BreadcrumbTrail $trail,$comparecencia) {
     $trail->parent('comparecencia.index');

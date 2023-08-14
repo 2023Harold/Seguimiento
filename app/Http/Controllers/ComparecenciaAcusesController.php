@@ -44,9 +44,11 @@ class ComparecenciaAcusesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Comparecencia $comparecencia)
     {
-        //
+        $auditoria = $comparecencia->auditoria; 
+
+        return view('comparecenciaacuse.show', compact('auditoria', 'comparecencia'));
     }
 
     /**
@@ -78,7 +80,7 @@ class ComparecenciaAcusesController extends Controller
         $comparecencia->update($request->all());
         setMessage('Los acuses se han guardado correctamente');
 
-        return redirect()->route('comparecencia.index');
+        return redirect()->route('radicacion.index');
     }
 
     /**

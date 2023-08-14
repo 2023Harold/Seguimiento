@@ -14,7 +14,7 @@
                 </div>
                 <div class="card-body">
                     @include('flash::message')
-                    @include('layouts.contextos._radicacion', $radicacion)
+                    @include('layouts.contextos._radicacion')
                     {!! BootForm::open(['model' => $radicacion,'update'=>'radicacionvalidacion.update','id'=>'form'] )!!}
                         <div class="row">
                             <div class="col-md-6">
