@@ -73,12 +73,10 @@
                 </div>
             <div class="row">
                 <div class="col-md-6">
-                    {{-- @if (empty($auditoria->asignacion_departamentos) || $auditoria->asignacion_departamentos != 'Si')--}}
                     @canany(['radicacion.store','radicacion.update'])                      
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     @endcan
                     <a href="{{ route('radicacion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
-                    {{-- @endif --}}
                 </div>
             </div>
             {!! BootForm::close() !!}

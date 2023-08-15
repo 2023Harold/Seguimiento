@@ -44,9 +44,11 @@ class ComparecenciaActaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Comparecencia $comparecencia)
     {
-        //
+        $auditoria=$comparecencia->auditoria;
+
+        return view('comparecenciaacta.show', compact('comparecencia', 'auditoria'));
     }
 
     /**
@@ -74,7 +76,7 @@ class ComparecenciaActaController extends Controller
         $request['usuario_modificacion_id'] = auth()->id();
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($comparecencia->auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['cedula_general'], null, $ruta);
-        mover_archivos($request, ['oficio_acta']);
+        mover_archivos($request, ['oficio_acta','oficio_acreditacion']);
         $comparecencia->update($request->all());
         setMessage('El acta se han guardado correctamente');
 

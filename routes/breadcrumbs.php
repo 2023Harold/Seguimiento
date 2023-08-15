@@ -169,40 +169,12 @@ Breadcrumbs::for('comparecencia.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Comparecencia', route('comparecencia.index'));
 });
-
-Breadcrumbs::for('comparecencia.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('comparecencia.index');
-    $trail->push('Agregar', route('comparecencia.create'));
-
-});
-Breadcrumbs::for('comparecencia.edit', function (BreadcrumbTrail $trail, $comparecencia) {
-    $trail->parent('comparecencia.index');
-    $trail->push('Editar', route('comparecencia.edit',$comparecencia));
-    
-});
-
-Breadcrumbs::for('comparecenciavalidacion.edit', function (BreadcrumbTrail $trail,$comparecencia) {
-    $trail->parent('comparecencia.index');
-    $trail->push('Validar', route('comparecenciavalidacion.edit',$comparecencia));
-});
-
-Breadcrumbs::for('comparecenciaautorizacion.edit', function (BreadcrumbTrail $trail,$comparecencia) {
-    $trail->parent('comparecencia.index');
-    $trail->push('Autorizar', route('comparecenciaautorizacion.edit',$comparecencia));
-});
-
-
-
-Breadcrumbs::for('comparecenciacedula.edit', function (BreadcrumbTrail $trail,$comparecencia) {
-    $trail->parent('comparecencia.index');
-    $trail->push('Cédula', route('comparecenciacedula.edit',$comparecencia));
-});
 Breadcrumbs::for('comparecenciaacta.edit', function (BreadcrumbTrail $trail,$comparecencia) {
     $trail->parent('comparecencia.index');
     $trail->push('Acta', route('comparecenciaacta.edit',$comparecencia));
 });
-Breadcrumbs::for('comparecenciarespuesta.edit', function (BreadcrumbTrail $trail,$comparecencia) {
+Breadcrumbs::for('comparecenciaacta.show', function (BreadcrumbTrail $trail,$comparecencia) {
     $trail->parent('comparecencia.index');
-    $trail->push('Respuesta', route('comparecenciarespuesta.edit',$comparecencia));
+    $trail->push('Acta', route('comparecenciaacta.edit',$comparecencia));
 });
 

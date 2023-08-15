@@ -37,8 +37,7 @@
                                 <th>No. de auditoría</th>
                                 <th>Entidad fiscalizable</th>
                                 <th>Acto de fiscalización</th>
-                                <th>Comparecencia</th>                               
-                                <th>Fase / Acción / Constancia</th>
+                                <th>Acta</th>                       
                             </tr>
                         </thead>
                         <tbody>
@@ -59,121 +58,21 @@
                                         {{ $auditoria->acto_fiscalizacion }}
                                     </td>
                                     <td class="text-center">
-                                        @if (empty($auditoria->comparecencia))
-                                            @can('comparecencia.auditoria') 
-                                                <a href="{{ route('comparecencia.auditoria', $auditoria) }}" class="btn btn-primary"><span class="fa fa-pencil" aria-hidden="true"></span>&nbsp; Registrar</a>                                           
+                                        @if (empty($auditoria->comparecencia->oficio_acta))
+                                            @can('comparecenciaacta.update') 
+                                                <a href="{{ route('comparecenciaacta.edit',$auditoria->comparecencia) }}"  class="btn btn-primary">
+                                                    <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Adjuntar
+                                                </a>  
                                             @endcan
-                                        @elseif(!empty($auditoria->comparecencia)&&(empty($auditoria->comparecencia->fase_autorizacion)||$auditoria->comparecencia->fase_autorizacion=='Rechazado'))
-                                            @can('comparecencia.edit')
-                                                <a href="{{ route('comparecencia.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
-                                                    <span class="align-middle fas fa-edit" aria-hidden="true"></span> &nbsp; Editar
-                                                </a> 
-                                            @endcan
-                                        @elseif (!empty($auditoria->comparecencia)&&!empty($auditoria->comparecencia->fase_autorizacion)&&$auditoria->comparecencia->fase_autorizacion!='Rechazado'&&$auditoria->comparecencia->fase_autorizacion!='Autorizado')
-                                            @can('comparecencia.show')
-                                                <a href="{{ route('comparecencia.show', $auditoria->comparecencia) }}" class="btn btn-primary">
-                                                    <span class="fa fa-file-search" aria-hidden="true"></span>&nbsp; Consultar
-                                                </a> 
-                                            @endcan
-                                        @elseif (!empty($auditoria->comparecencia)&&!empty($auditoria->comparecencia->fase_autorizacion)&&$auditoria->comparecencia->fase_autorizacion=='Autorizado'&&empty($auditoria->comparecencia->oficio_recepcion))
-                                            @can('comparecenciaacuse.edit')
-                                                <a href="{{ route('comparecenciaacuse.edit', $auditoria->comparecencia) }}" class="btn btn-primary">
-                                                    <span class="fa fa-file-plus" aria-hidden="true"></span>&nbsp; Adjuntar Acuses
-                                                </a> 
-                                            @else
-                                                @can('comparecencia.show')
-                                                <a href="{{ route('comparecencia.show', $auditoria->comparecencia) }}" class="btn btn-primary">
-                                                    <span class="fa fa-file-search" aria-hidden="true"></span>&nbsp; Consultar
-                                                </a> 
-                                                @endcan
-                                            @endcan  
-                                        @elseif (!empty($auditoria->comparecencia)&&!empty($auditoria->comparecencia->fase_autorizacion)&&$auditoria->comparecencia->fase_autorizacion=='Autorizado'&&!empty($auditoria->comparecencia->oficio_recepcion))
-                                            @if (!empty($auditoria->comparecencia->cedula_general)&&!empty($auditoria->comparecencia->oficio_acta)&&!empty($auditoria->comparecencia->oficio_respuesta))
-                                                @can('comparecencia.show')
-                                                    <a href="{{ route('comparecencia.show', $auditoria->comparecencia) }}" class="btn btn-primary">
-                                                        <span class="fa fa-file-search" aria-hidden="true"></span>&nbsp; Consultar
-                                                    </a> 
-                                                @endcan                                               
-                                            @else
-                                                @if (in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray()))
-                                                    @can('comparecencia.show')
-                                                        <a href="{{ route('comparecencia.show', $auditoria->comparecencia) }}" class="btn btn-secondary" id="link-respuesta" data-title="Consultar">
-                                                            <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
-                                                        </a>
-                                                    @endcan
-                                                @else
-                                                    @can('comparecencia.show')
-                                                        <a href="{{ route('comparecencia.show', $auditoria->comparecencia) }}" class="btn btn-primary">
-                                                            <span class="fa fa-file-search" aria-hidden="true"></span>&nbsp; Consultar
-                                                        </a> 
-                                                    @endcan                                                        
-                                                @endif
-                                            @endif                                                
-                                            @if (empty($auditoria->comparecencia->cedula_general))  
-                                                @can('comparecenciacedula.edit')
-                                                    <a href="{{ route('comparecenciacedula.edit', $auditoria->comparecencia) }}" class="btn btn-secondary" id="link-cedula" data-title="Adjuntar Cédula">
-                                                        <img alt="Logo" src="{{asset('assets/img/cedula.png')}}" class="h-30px logo"/>
-                                                    </a>                                               
-                                                @endcan                                 
-                                            @endif
-                                            @if (empty($auditoria->comparecencia->oficio_acta)) 
-                                                @can('comparecenciaacta.edit')
-                                                    <a href="{{ route('comparecenciaacta.edit', $auditoria->comparecencia) }}" class="btn btn-secondary" id="link-acta" data-title="Adjuntar Acta">
-                                                        <img alt="Logo" src="{{asset('assets/img/acta.png')}}" class="h-30px logo" />
-                                                    </a>
-                                                @endcan                           
-                                            @endif
-                                            @if (empty($auditoria->comparecencia->oficio_respuesta)) 
-                                                @can('comparecenciarespuesta.edit')
-                                                    <a href="{{ route('comparecenciarespuesta.edit', $auditoria->comparecencia) }}" class="btn btn-secondary" id="link-respuesta" data-title="Adjuntar Respuesta">
-                                                        <img alt="Logo" src="{{asset('assets/img/respuesta.png')}}" class="h-30px logo" />
-                                                    </a>
-                                                @endcan
-                                            @endif   
                                         @else
-                                            @can('comparecencia.show')
-                                                <a href="{{ route('comparecencia.show', $auditoria->comparecencia) }}" class="btn btn-primary">
-                                                    <span class="fa fa-file-search" aria-hidden="true"></span>&nbsp; Consultar
-                                                </a> 
-                                            @endcan                          
-                                        @endif                                        
-                                    </td>                                                                       
-                                    <td class="text-center"> 
-                                        @if (!empty($auditoria->comparecencia))
-                                            @if(!empty($auditoria->comparecencia)&&!empty($auditoria->comparecencia->fase_autorizacion)&&$auditoria->comparecencia->fase_autorizacion=='Rechazado')
-                                                <span class="badge badge-light-danger">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
-                                            @endif
-                                            @if ($auditoria->comparecencia->fase_autorizacion == 'En validación')
-                                                @can('comparecenciavalidacion.edit')
-                                                    <a href="{{ route('comparecenciavalidacion.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
-                                                        <li class="fa fa-gavel"></li>
-                                                        Validar
-                                                    </a>
-                                                @else
-                                                    <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
-                                                @endcan
-                                            @endif
-                                            @if ($auditoria->comparecencia->fase_autorizacion == 'En autorización')                                                                                              
-                                                @can('comparecenciaautorizacion.edit')
-                                                    <a href="{{ route('comparecenciaautorizacion.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
-                                                        <li class="fa fa-gavel"></li>
-                                                        Autorizar
-                                                    </a> 
-                                                @else
-                                                    <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>                                           
-                                                @endcan
-                                            @endif 
-                                            @if ($auditoria->comparecencia->fase_autorizacion=='Autorizado')
-                                            <span class="badge badge-light-success">{{ $auditoria->comparecencia->fase_autorizacion }} </span> <br>
-                                                @btnFile($auditoria->comparecencia->constancia)
-                                                @btnXml($auditoria->comparecencia, 'constancia')
-                                            @endif 
-                                        @endif
-                                    </td>                                                                             
-                                </tr>
-                                @if (!empty($auditoria->comparecencia))
-                                    {!! movimientosDesglose($auditoria->comparecencia->id, 10, $auditoria->comparecencia->movimientos) !!}
-                                @endif                                                                                           
+                                            @can('comparecenciaacta.show') 
+                                                <a href="{{ route('comparecenciaacta.show', $auditoria->comparecencia) }}" class="btn btn-secondary" >
+                                                    <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                                </a>
+                                            @endcan
+                                        @endif                                                 
+                                    </td>                                                                           
+                                </tr>                                                                                                                          
                             @empty
                                 <tr>
                                     <td class="text-center" colspan="8">
@@ -191,8 +90,4 @@
         </div>
     </div>
 </div>
-
-@endsection
-@section('script')
-    {!! JsValidator::formRequest('App\Http\Requests\ComparecenciaRequest') !!}   
 @endsection

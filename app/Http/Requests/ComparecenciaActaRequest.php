@@ -26,7 +26,8 @@ class ComparecenciaActaRequest extends FormRequest
         return [
             'oficio_acta' => 'required|string|max:100',
             'numero_acta' => 'required|string|max:50',
-            'fecha_acta' => 'required|date_format:Y-m-d|max:10'
+            'fecha_acta' => 'required|date_format:Y-m-d|max:10',
+            'oficio_acreditacion' => 'required|string|max:100',
         ];
     }
 

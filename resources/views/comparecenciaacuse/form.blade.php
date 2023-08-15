@@ -33,7 +33,9 @@
                 </div>                
                 <div class="row">
                     <div class="col-md-12">
-                        @btnSubmit("Guardar")
+                        {{-- @can('comparecenciaacuse.update')  --}}
+                            @btnSubmit("Guardar")
+                        {{-- @endcan --}}
                         @btnCancelar('Cancelar', route('radicacion.index'))
                     </div>
                 </div>

@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('segcomparecencia', function (Blueprint $table) {
             $table->id();
             $table->foreignId('auditoria_id')->constrained('segauditorias');
-            $table->string('nombre_titular', 120);
-            $table->string('oficio_acreditacion', 120);
+            $table->string('nombre_titular', 120);           
             $table->string('cargo_titular', 120);
             $table->string('oficio_comparecencia', 512);
             $table->date('fecha_comparecencia');
@@ -43,8 +42,9 @@ return new class extends Migration
             $table->string('oficio_acuse', 100)->nullable();
             $table->date('fecha_acuse')->nullable();            
             $table->string('oficio_acta', 100)->nullable();
-            $table->string('numero_acta', 50)->nullable();
+            $table->string('numero_acta', 50)->nullable();            
             $table->date('fecha_acta')->nullable();
+            $table->string('oficio_acreditacion', 120)->nullable();
             $table->string('oficio_respuesta', 512)->nullable();
             $table->date('fecha_respuesta')->nullable();
             $table->string('cedula_general', 100)->nullable();

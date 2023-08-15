@@ -69,30 +69,29 @@ class RolesSeeder extends Seeder
         $asignacionesDepartamentoEncargadoDirector=['asignaciondepartamentoencargado.edit','asignaciondepartamentoencargado.update'];
                 
         //Radicacion
-        $radicacionJefeDepartamento=['radicacion.index','radicacion.auditoria','radicacion.create','radicacion.store','radicacion.edit','radicacion.update'];
+        $radicacionJefeDepartamento=['radicacion.index','radicacion.auditoria','radicacion.create','radicacion.store','radicacion.edit','radicacion.update','comparecencia.show','comparecenciaacuse.show','comparecenciaacuse.edit','comparecenciaacuse.update'];
        
         //Radicacion Validación Director
-        $radicacionvalidacionDirector=['radicacion.index','radicacionvalidacion.edit','radicacionvalidacion.update'];
+        $radicacionvalidacionDirector=['radicacion.index','radicacionvalidacion.edit','radicacionvalidacion.update','comparecencia.show','comparecenciaacuse.show'];
         
         //Radicacion Autorización Titular
-        $radicacionautorizacionTitular=['radicacion.index','radicacionautorizacion.edit','radicacionautorizacion.update'];
+        $radicacionautorizacionTitular=['radicacion.index','radicacionautorizacion.edit','radicacionautorizacion.update','comparecencia.show','comparecenciaacuse.show'];
         
         //Rdaicación Consulta
-        $radicacionConsulta=['radicacion.index'];
+        $radicacionConsulta=['radicacion.index','comparecencia.show','comparecenciaacuse.show'];
 
         //Comparecencia Titular
-        $comparecenciaTitular=['comparecencia.index','comparecencia.show','comparecenciaautorizacion.edit','comparecenciaautorizacion.update'];
+        $comparecenciaTitular=['comparecencia.index','comparecenciaacta.show'];
 
         //Comparecencia Director
-        $comparecenciaDirector=['comparecencia.index','comparecencia.show','comparecenciavalidacion.edit','comparecenciavalidacion.update'];
+        $comparecenciaDirector=['comparecencia.index','comparecenciaacta.show'];
         
         //Comparecencia Jefe de Departamento
-        $comparecenciaJefeDepartamento=['comparecencia.index','comparecencia.auditoria','comparecencia.create','comparecencia.store','comparecencia.show','comparecencia.edit','comparecencia.update','comparecencianotificacion.edit','comparecencianotificacion.update','comparecenciaacuse.edit','comparecenciaacuse.update','comparecenciacedula.edit','comparecenciacedula.update','comparecenciaacta.edit','comparecenciaacta.update','comparecenciarespuesta.edit','comparecenciarespuesta.update'];
-        $comparecenciaAnexosJefeDepartamento=['comparecenciaanexo.index','comparecenciaanexo.create','comparecenciaanexo.store','comparecenciaanexo.edit','comparecenciaanexo.update','comparecenciaanexo.destroy'];
-        $comparecenciaCopiasJefeDepartamento=['comparecenciacopia.index','comparecenciacopia.create','comparecenciacopia.store','comparecenciacopia.edit','comparecenciacopia.update','comparecenciacopia.destroy'];
+        $comparecenciaJefeDepartamento=['comparecencia.index','comparecenciaacta.show','comparecenciaacta.edit','comparecenciaacta.update'];
+       
        
         //Comparecencia Consulta
-        $comparecenciaConsulta=['comparecencia.index','comparecencia.show'];
+        $comparecenciaConsulta=['comparecencia.index','comparecenciaacta.show'];
 
 
         //*********************************************************************************************************************************************************** */
@@ -104,7 +103,7 @@ class RolesSeeder extends Seeder
         $permisosLiderProyecto = array_merge($home, $seguimientoauditoriaLiderProyecto, $seguimientoauditoriaaccionesLiderProyecto,$seguimientoauditoriarevisionLiderProyecto);
         
         //Permisos Jefe de Departamento
-        $permisosJefeDepartamento = array_merge($home, $seguimientoauditoriaJefeDepartamento, $seguimientoauditoriaaccionesJefeDepartamento, $seguimientoauditoriarevisionJefeDepartamento,$asignacionesLiderAnalistaJefeDepartamento,$radicacionJefeDepartamento,$comparecenciaJefeDepartamento,$comparecenciaAnexosJefeDepartamento,$comparecenciaCopiasJefeDepartamento);
+        $permisosJefeDepartamento = array_merge($home, $seguimientoauditoriaJefeDepartamento, $seguimientoauditoriaaccionesJefeDepartamento, $seguimientoauditoriarevisionJefeDepartamento,$asignacionesLiderAnalistaJefeDepartamento,$radicacionJefeDepartamento,$comparecenciaJefeDepartamento);
         
         //Permisos Director
         $permisosDirector = array_merge($home, $seguimientoauditoriaDirector, $seguimientoauditoriaaccionesDirector, $seguimientoauditoriavalidacionDirector,$asignaciondepartamentoDirector,$asignacionesLiderAnalistaConsulta,$radicacionvalidacionDirector,$asignacionesDepartamentoEncargadoDirector,$comparecenciaDirector);

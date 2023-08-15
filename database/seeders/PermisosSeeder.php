@@ -24,10 +24,7 @@ class PermisosSeeder extends Seeder
                         'seguimientoauditoriavalidacion','seguimientoauditoriaautorizacion',
                         'asignaciondireccion','asignaciondepartamento','asignacionlideranalista',
                         'asignaciondepartamentoencargado','radicacion','radicacionvalidacion',
-                        'radicacionautorizacion','comparecencia','comparecencianotificacion',
-                        'comparecenciaanexo','comparecenciacopia','comparecenciavalidacion',
-                        'comparecenciaautorizacion','comparecenciaacuse','comparecenciacedula',
-                        'comparecenciaacta','comparecenciarespuesta'];
+                        'radicacionautorizacion','comparecencia','comparecenciaacuse','comparecenciaacta'];
         $permisosGenerales = [];
         $i = 0;
 
@@ -66,6 +63,5 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'asignacionlideranalista.accionesconsulta']);
         Permission::create(['name' => 'asignacionlideranalista.consulta']);
         Permission::create(['name' => 'radicacion.auditoria']);
-        Permission::create(['name' => 'comparecencia.auditoria']);
     }
 }

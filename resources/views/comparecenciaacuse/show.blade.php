@@ -51,7 +51,7 @@
                         <thead>
                             <tr>
                                 <th>Comprobante de recepción depto. de notificaciones</th>
-                                <th>Acuse del oficio de la comparecencia</th>                                                                                            
+                                <th>Acuse de la radicación y comparecencia</th>                                                                                            
                             </tr>
                         </thead>
                         <tbody>                            

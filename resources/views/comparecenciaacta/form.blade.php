@@ -28,12 +28,19 @@
                     {!! BootForm::date('fecha_acta', 'Fecha del acta: *', old('fecha_comparecencia', fecha($comparecencia->fecha_comparecencia, 'Y-m-d')), ['readonly']); !!}
                 </div>
             </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        @btnSubmit("Guardar")
-                        @btnCancelar('Cancelar', route('comparecencia.index'))
-                    </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {!! archivo('oficio_acreditacion', 'Oficio de acreditación: *', old('oficio_acreditacion', $comparecencia->oficio_acreditacion)) !!}
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @can('comparecenciaacta.update') 
+                        @btnSubmit("Guardar")
+                    @endcan
+                    @btnCancelar('Cancelar', route('comparecencia.index'))
+                </div>
+            </div>
             {!! BootForm::close() !!}
         </div>
     </div>

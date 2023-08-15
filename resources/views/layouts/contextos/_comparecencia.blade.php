@@ -59,7 +59,7 @@
     </div>
     <div class="row">        
         <div class="col-lg-3 col-md-6 col-sm-12 col-12">
-            <label>Acuse del oficio de la comparecencia: </label>
+            <label>Acuse de la radicación y comparecencia: </label>
             <span class="text-sistema">
                 <a href="{{ asset($auditoria->comparecencia->oficio_acuse) }}" target="_blank">
                     <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_acuse)) ?>
@@ -74,7 +74,7 @@
         </div>
     </div>           
     @endif    
-    @if (!empty($auditoria->comparecencia->cedula_general))
+    {{-- @if (!empty($auditoria->comparecencia->cedula_general))
     <h3 class="card-title text-primary">Cédula</h3> 
     <div class="row">        
         <div class="col-lg-3 col-md-4 col-sm-12 col-12">
@@ -136,7 +136,7 @@
             </span>
         </div>
     </div>            
-    @endif    
+    @endif     --}}
     @endif
     <div class="row">
         <div class="col-md-12"><hr></div>
