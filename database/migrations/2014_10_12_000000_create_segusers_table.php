@@ -27,11 +27,12 @@ return new class extends Migration
             $table->dateTime('fecha_ultimo_acceso')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->foreignId('usuario_creacion_id')->nullable()->constrained('segusers')->default(1);
-            $table->foreignId('usuario_actualizacion_id')->nullable()->constrained('segusers');
+            $table->foreignId('usuariclso_actualizacion_id')->nullable()->constrained('segusers');
             $table->rememberToken();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
@@ -40,6 +41,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('segusers');
     }
 };

@@ -41,17 +41,17 @@ class CatalogoTipoAuditoria extends Model
 
     public function scopeCumplimiento()
     {
-        return $this->whereLike('Descripcion', 'Cumplimiento Financiero')->pluck('id')->toArray();
+        return $this->whereLike('descripcion', 'Cumplimiento Financiero')->pluck('id')->toArray();
     }
 
     public function scopeInversion()
     {
-        return $this->whereLike('Descripcion', 'Inversión Física')->pluck('id')->toArray();
+        return $this->whereLike('descripcion', 'Inversión Física')->pluck('id')->toArray();
     }
 
     public function scopeDesempenio()
     {
-        return $this->whereLike('Descripcion', 'Desempeño')->pluck('id')->toArray();
+        return $this->whereLike('descripcion', 'Desempeño')->pluck('id')->toArray();
     }
 
     public function scopeLegalidad()

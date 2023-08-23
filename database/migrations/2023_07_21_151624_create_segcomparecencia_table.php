@@ -13,15 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('segcomparecencia', function (Blueprint $table) {
+        Schema::create('segcomparecencia', function (Blueprint $table)
+        {
             $table->id();
             $table->foreignId('auditoria_id')->constrained('segauditorias');
             $table->string('nombre_titular', 120);           
             $table->string('cargo_titular', 120);
-            $table->string('oficio_comparecencia', 512);
+            $table->string('oficio_comparecencia')->nullable();
             $table->date('fecha_comparecencia');
             $table->string('hora_comparecencia_inicio', 20);
-            $table->string('hora_comparecencia_termino', 20);
+            $table->string('hora_comparecencia_termino', 20)->nullable();
             $table->date('fecha_inicio_aclaracion');
             $table->date('fecha_termino_aclaracion');
             $table->string('notificacion_estrados', 1)->nullable();

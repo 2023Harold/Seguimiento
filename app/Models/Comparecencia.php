@@ -57,8 +57,17 @@ class Comparecencia extends Model
         'fecha_cedula',
         'usuario_creacion_id',
         'usuario_modificacion_id',
-        'created_at'=>'datetime',
-        'updated_at'=>'datetime'
+        'created_at',
+        'updated_at',
+        'cargo_testigo1',
+        'numero_identificacion_testigo1',
+        'nombre_testigo2',
+        'cargo_testigo2',
+        'numero_identificacion_testigo2',
+        'nombre_representante',
+        'cargo_representante1',
+        'numero_identificacion_representante',
+
     ];
 
            

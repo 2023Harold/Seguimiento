@@ -106,8 +106,8 @@ class RadicacionController extends Controller
     {
         $auditoria=$radicacion->auditoria; 
         $accion = 'Editar';            
-
-        return view('radicacion.form', compact('radicacion','auditoria','accion'));        
+        $comparecencia=$auditoria->comparecencia;
+        return view('radicacion.form', compact('radicacion','auditoria','accion','comparecencia'));        
     }
 
     /**

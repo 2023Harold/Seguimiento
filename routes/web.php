@@ -30,6 +30,7 @@ use App\Http\Controllers\SeguimientoAuditoriaController;
 use App\Http\Controllers\SeguimientoAuditoriaRevision01Controller;
 use App\Http\Controllers\SeguimientoAuditoriaRevisionController;
 use App\Http\Controllers\SeguimientoAuditoriaValidacionController;
+use App\Http\Controllers\Usercontroller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -56,6 +57,8 @@ Route::get('/', function () {
 Route::post('/salir', [LogoutController::class, 'logout'])->name('auth.logout');
 
 
+//usuarios
+Route::resource('user', Usercontroller::class);
 
 Route::get('notificaciones',[NotificacionController::class, 'index'])->name('notificaciones.index');
 Route::get('marcarleido', [NotificacionController::class, 'marcarleido'])->name('marcarleido');
@@ -113,4 +116,13 @@ Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['par
 
 /*Comparecencia*/
 Route::resource('comparecencia', ComparecenciaController::class,['parameters' => ['comparecencia' => 'comparecencia']]);
+Route::resource('comparecencianotificacion', ComparecenciaNotificacionController::class,['parameters' => ['comparecencianotificacion' => 'comparecencia']]);
+Route::resource('comparecenciaanexo', ComparecenciaAnexoController::class,['parameters' => ['comparecenciaanexo' => 'anexo']]);
+Route::resource('comparecenciacopia', ComparecenciaCopiaController::class,['parameters' => ['comparecenciacopia' => 'copia']]);
+Route::get('auditoriacomparecencia/{auditoria}', [ComparecenciaController::class,'auditoria'])->name('comparecencia.auditoria');
+Route::resource('comparecenciavalidacion', ComparecenciaValidacionController::class,['parameters' => ['comparecenciavalidacion' => 'comparecencia']]);
+Route::resource('comparecenciaautorizacion', ComparecenciaAutorizacionController::class,['parameters' => ['comparecenciaautorizacion' => 'comparecencia']]);
+Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['parameters' => ['comparecenciaacuse' => 'comparecencia']]);
+Route::resource('comparecenciacedula', ComparecenciaCedulaController::class,['parameters' => ['comparecenciacedula' => 'comparecencia']]);
 Route::resource('comparecenciaacta', ComparecenciaActaController::class,['parameters' => ['comparecenciaacta' => 'comparecencia']]);
+Route::resource('comparecenciarespuesta', ComparecenciaRespuestaController::class,['parameters' => ['comparecenciarespuesta' => 'comparecencia']]);

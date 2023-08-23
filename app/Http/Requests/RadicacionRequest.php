@@ -33,7 +33,6 @@ class RadicacionRequest extends FormRequest
             'cargo_titular' => 'required|string|max:120',          
             'fecha_comparecencia' => 'required|date|max:10|after:fecha_oficio_designacion',
             'hora_comparecencia_inicio' => 'required|string|max:15',
-            'hora_comparecencia_termino' => 'required|string|max:15',
             'fecha_inicio_aclaracion' => 'required',
             'fecha_termino_aclaracion' => 'required', 
         ];
@@ -50,8 +49,7 @@ class RadicacionRequest extends FormRequest
             'nombre_titular' => 'nombre del titular  a quien se dirige la comparecencia',
             'cargo_titular' => 'cargo del titular a quien se dirige la comparecencia',            
             'fecha_comparecencia' => 'fecha de la comparecencia',
-            'hora_comparecencia_inicio' => 'hora de inicio de la comparecencia',
-            'hora_comparecencia_termino' => 'hora de término de la comparecencia',
+            'hora_comparecencia_inicio' => 'hora de inicio de la comparecencia',          
             'fecha_inicio_aclaracion' => 'inicio de la etapa de aclaración',
             'fecha_termino_aclaracion' => 'término de la etapa de aclaración',
         ];

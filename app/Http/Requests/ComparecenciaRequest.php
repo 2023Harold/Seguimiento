@@ -27,8 +27,12 @@ class ComparecenciaRequest extends FormRequest
             'numero_acta' => 'required|string|max:150',
             'oficio_acta' => 'required|string|max:120',
             'oficio_acreditacion' => 'required|string|max:120',
-            
-            
+            'nombre' => 'required|string|max:100',
+            'cargo' => 'required|string|max:300',
+            'identificacion' => 'required|string|max:50',
+            'fecha_fin' => 'required',
+
+
            /* 'nombre_titular' => 'required|string|max:120',
             'cargo_titular' => 'required|string|max:120',
             'oficio_comparecencia' => 'required|string|max:100',
@@ -46,8 +50,10 @@ class ComparecenciaRequest extends FormRequest
             'numero_acta' => 'Número de Acta',
             'oficio_acta' => 'Acta',
             'oficio_acreditacion' => 'Oficio de acreditacion',
-
-
+            'nombre' => 'nombre',
+            'cargo' => 'cargo',
+            'identificacion' => 'required|string|max:50',
+            'fecha_fin' => 'término de la etapa de aclaración',
            /* 'nombre_titular' => 'nombre del titular  a quien se dirige la comparecencia',
             'cargo_titular' => 'cargo del titular a quien se dirige la comparecencia',
             'oficio_comparecencia' => 'oficio de notificación de la comparecencia',
@@ -65,6 +71,9 @@ class ComparecenciaRequest extends FormRequest
             'numero_acta' => 'El campo :attribute es obligatorio.',
             'oficio_acta' => 'El campo :attribute es obligatorio.',
             'oficio_acreditacion' => 'El campo :attribute es obligatorio.',
+            //'required_if' => 'El campo :attribute es obligatorio.',
+            //'required_without' => 'El campo :attribute es obligatorio.',
+            'fecha_fin' => 'El campo :attribute es obligatorio.',
         ];
     }
 }

@@ -34,7 +34,8 @@ class Radicacion extends Model
         'usuario_modificacion_id',
         'usuario_firmante_id',
         'created_at'=>'datetime',
-        'updated_at'=>'datetime'
+        'updated_at'=>'datetime',
+        'aplicacion_periodo',
     ];
 
            
