@@ -22,6 +22,8 @@ use App\Http\Controllers\CotejamientoController;
 use App\Http\Controllers\FirmaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\PrasController;
+use App\Http\Controllers\PrasaccionesController;
 use App\Http\Controllers\RadicacionAutorizacionController;
 use App\Http\Controllers\RadicacionController;
 use App\Http\Controllers\RadicacionValidacionController;
@@ -126,3 +128,8 @@ Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['par
 Route::resource('comparecenciacedula', ComparecenciaCedulaController::class,['parameters' => ['comparecenciacedula' => 'comparecencia']]);
 Route::resource('comparecenciaacta', ComparecenciaActaController::class,['parameters' => ['comparecenciaacta' => 'comparecencia']]);
 Route::resource('comparecenciarespuesta', ComparecenciaRespuestaController::class,['parameters' => ['comparecenciarespuesta' => 'comparecencia']]);
+
+/*pras*/
+Route::resource('pras',PrasController::class);
+/*prasacciones*/
+Route::resource('prasacciones',PrasaccionesController::class);

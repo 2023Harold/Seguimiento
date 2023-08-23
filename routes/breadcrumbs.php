@@ -178,3 +178,14 @@ Breadcrumbs::for('comparecenciaacta.show', function (BreadcrumbTrail $trail,$com
     $trail->push('Acta', route('comparecenciaacta.edit',$comparecencia));
 });
 
+/*pras */
+Breadcrumbs::for('pras.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('pras', route('comparecencia.index'));
+});
+
+/*pras */
+Breadcrumbs::for('prasacciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('pras.index');
+    $trail->push('prasacciones', route('comparecencia.index'));
+});

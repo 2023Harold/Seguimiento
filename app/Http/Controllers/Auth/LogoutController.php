@@ -16,7 +16,7 @@ class LogoutController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('http://localhost:8081/GITComponentes/Seguimiento/public/login');
+        return redirect('/');
        
         //return redirect('https://plataforma.osfem.gob.mx/Desarrollo/OSDirectorio/public/login');
     }
