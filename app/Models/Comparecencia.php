@@ -59,6 +59,7 @@ class Comparecencia extends Model
         'usuario_modificacion_id',
         'created_at',
         'updated_at',
+        'nombre_testigo1',
         'cargo_testigo1',
         'numero_identificacion_testigo1',
         'nombre_testigo2',

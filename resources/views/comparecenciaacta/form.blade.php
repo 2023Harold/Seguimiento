@@ -51,7 +51,7 @@
                 $comparecencia->nombre_representante),)!!}
             </div>
             <div class="col-md-4">
-                {!! BootForm::text('cargo_representante','Cargo del representante 1: *',old('cargo_representante',
+                {!! BootForm::text('cargo_representante1','Cargo del representante 1: *',old('cargo_representante',
                 $comparecencia->cargo_representante),) !!}
             </div>
             <div class="col-md-4">
