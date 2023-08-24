@@ -143,6 +143,10 @@ Breadcrumbs::for('radicacion.edit', function (BreadcrumbTrail $trail,$radicacion
     $trail->parent('radicacion.index');
     $trail->push('Editar', route('radicacion.edit',$radicacion));
 });
+Breadcrumbs::for('comparecenciaagenda.edit', function (BreadcrumbTrail $trail,$comparecencia,$radicacion) {
+    $trail->parent('radicacion.edit',$radicacion);
+    $trail->push('Agendar', route('comparecenciaagenda.edit',$comparecencia));
+});
 Breadcrumbs::for('radicacionvalidacion.edit', function (BreadcrumbTrail $trail,$radicacion) {
     $trail->parent('radicacion.index');
     $trail->push('Validar', route('radicacionvalidacion.edit',$radicacion));
@@ -164,6 +168,8 @@ Breadcrumbs::for('comparecenciaacuse.show', function (BreadcrumbTrail $trail,$co
     $trail->push('Acuses', route('comparecenciaacuse.show',$comparecencia));
 });
 
+
+
 /*Comparecencia*/
 Breadcrumbs::for('comparecencia.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
@@ -181,11 +187,10 @@ Breadcrumbs::for('comparecenciaacta.show', function (BreadcrumbTrail $trail,$com
 /*pras */
 Breadcrumbs::for('pras.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('pras', route('comparecencia.index'));
+    $trail->push('PRAS', route('comparecencia.index'));
 });
 
-/*pras */
-Breadcrumbs::for('prasacciones.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('pras.create', function (BreadcrumbTrail $trail) {
     $trail->parent('pras.index');
-    $trail->push('prasacciones', route('comparecencia.index'));
+    $trail->push('Turnar PRAS a OIC o equivalente', route('pras.index'));
 });

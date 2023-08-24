@@ -71,13 +71,26 @@
     </div>
 </div>
 <div class="row">    
-    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+    <div class="col-lg-4 col-md-5 col-sm-12 col-12">
         <label>Fecha y hora de la comparecencia: </label>
         <span class="text-sistema">
-            {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . $auditoria->comparecencia->hora_comparecencia_inicio . ' - ' . $auditoria->comparecencia->hora_comparecencia_termino }}
+            {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . $auditoria->comparecencia->hora_comparecencia_inicio . ' - ' . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"00:00":$auditoria->comparecencia->hora_comparecencia_termino) }}
+        </span>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+        <label>Hora aproximada de término: </label>
+        <span class="text-sistema">
+            {{ $auditoria->comparecencia->agenda->hora_fin}}
+        </span>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+        <label>Sala: </label>
+        <span class="text-sistema">
+            {{ $auditoria->comparecencia->agenda->sala}}
         </span>
     </div>
 </div>
+
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
         <label>Inicio de la etapa de aclaración: </label>

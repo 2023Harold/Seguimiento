@@ -6,6 +6,7 @@
 <div class="row justify-content-center">
     <div class="mt-4 mb-5 col-12">
         <div class="flex-row row flex-center">
+            @canany(['user.index'])
             <div class="col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12 mb-3 mb-3">
                 <div class="card">
                     <div class="card-header">
@@ -15,17 +16,18 @@
                     </div>
                     <div class="card-body overflow-auto h-200px">
                         <div class="d-flex flex-column">
-                            {{-- @can('user.index') --}}
+                            @can('user.index')
                             <li class="d-flex align-items-center py-2">
                                 <span class="bullet me-5 bg-primary"></span> <a
                                     href="{{ route('user.index') }}">Usuarios</a>
                             </li>
-                            {{-- @endcan --}}
+                            @endcan
 
                         </div>
                     </div>
                 </div>
             </div>
+            @endcan
             {{-- @canany(['catrequerimiento.index', 'user.index', 'rol.index', 'permiso.index', 'acceso.index',
             'ejercicio.index'])
             <div class="mb-3 col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12">

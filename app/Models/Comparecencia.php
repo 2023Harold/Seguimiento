@@ -59,16 +59,15 @@ class Comparecencia extends Model
         'usuario_modificacion_id',
         'created_at',
         'updated_at',
+        'nombre_representante',
+        'cargo_representante1',
+        'numero_identificacion_representante',
         'nombre_testigo1',
         'cargo_testigo1',
         'numero_identificacion_testigo1',
         'nombre_testigo2',
         'cargo_testigo2',
-        'numero_identificacion_testigo2',
-        'nombre_representante',
-        'cargo_representante1',
-        'numero_identificacion_representante',
-
+        'numero_identificacion_testigo2'
     ];
 
            
@@ -93,6 +92,11 @@ class Comparecencia extends Model
     public function auditoria()
     {
         return $this->belongsTo(Auditoria::class, 'auditoria_id', 'id');
+    }
+
+    public function agenda()
+    {
+        return $this->belongsTo(ComparecenciaAgenda::class, 'id','id_comparecencia');
     }
 
     public function movimientos()

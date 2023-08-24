@@ -53,6 +53,8 @@
                                 <th>Nombre del titular a quien se dirige</th>
                                 <th>Cargo del titular a quien se dirige</th>                                
                                 <th>Fecha y hora de la comparecencia</th>
+                                <th>Hora aproximada de término </th>
+                                <th>Sala </th>
                                 <th>Periodo de la etapa de aclaración</th>                              
                             </tr>
                         </thead>
@@ -66,7 +68,39 @@
                                     </td>                                   
                                     <td class="text-center">
                                         <span>
-                                            {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . $auditoria->comparecencia->hora_comparecencia_inicio . ' - ' . $auditoria->comparecencia->hora_comparecencia_termino }}
+                                            {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . $auditoria->comparecencia->hora_comparecencia_inicio . ' - ' . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"00:00":$auditoria->comparecencia->hora_comparecencia_termino) }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">{{ $auditoria->comparecencia->agenda->hora_fin}}</td>                                                                       
+                                    <td class="text-center">{{ $auditoria->comparecencia->agenda->sala }}</td>                                                                       
+                                    <td class="text-center"> 
+                                        {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion) . ' - ' .fecha($auditoria->comparecencia->fecha_termino_aclaracion) }}
+                                    </td>                                                                                                              
+                                </tr>       
+                        </tbody>
+                    </table> 
+                </div>        
+            <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fecha de la comparecencia</th>
+                                <th></th>                                
+                                <th></th>
+                                <th></th>                              
+                            </tr>
+                        </thead>
+                        <tbody>                            
+                                <tr>
+                                    <td>
+                                        {{ $auditoria->comparecencia->nombre_titular }}
+                                    </td>
+                                    <td>
+                                        {{ $auditoria->comparecencia->cargo_titular }}                                  
+                                    </td>                                   
+                                    <td class="text-center">
+                                        <span>
+                                            {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . $auditoria->comparecencia->hora_comparecencia_inicio . ' - ' . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"00:00":$auditoria->comparecencia->hora_comparecencia_termino) }}
                                         </span>
                                     </td>                                                                       
                                     <td class="text-center"> 

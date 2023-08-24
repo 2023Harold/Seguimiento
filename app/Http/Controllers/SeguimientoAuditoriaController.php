@@ -46,7 +46,8 @@ class SeguimientoAuditoriaController extends Controller
         $tipos = CatalogoTipoAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');      
         $tiporevision = [null=>'','Cumplimiento Financiero'=>'Cumplimiento Financiero','Inversión Física'=>'Inversión Física','Financiera'=>'Financiera','Obra'=>'Obra','Desempeño'=>'Desempeño'];
         $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022'];
-        $lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->director->unidad_administrativa_id)->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
+        //$lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->director->unidad_administrativa_id)->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
+        $lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->jefe->unidad_administrativa_id)->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
         $entidad1 = null;
         $entidad2 = null;
         $entidad3 = null;
@@ -99,7 +100,7 @@ class SeguimientoAuditoriaController extends Controller
         $tipos = CatalogoTipoAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');      
         $tiporevision = [null=>'','Cumplimiento Financiero'=>'Cumplimiento Financiero','Inversión Física'=>'Inversión Física','Financiera'=>'Financiera','Obra'=>'Obra','Desempeño'=>'Desempeño'];
         $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022'];
-        $lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->director->unidad_administrativa_id)->get()->pluck('name','id');
+        $lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->jefe->unidad_administrativa_id)->get()->pluck('name','id');
         $entidad1 = null;
         $entidades2 = null;
         $entidad2 = null;
@@ -189,7 +190,8 @@ class SeguimientoAuditoriaController extends Controller
            in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||
            in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){                 
-            $query = $query->whereNotNull('fase_autorizacion');
+            $unidadAdministrativa=rtrim(auth()->user()->unidad_administrativa_id, 0);			
+            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"]);
         }
         
                 

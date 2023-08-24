@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use Illuminate\Http\Request;
 
 class PrasController extends Controller
@@ -18,8 +19,9 @@ class PrasController extends Controller
         public function index(Request $request)
         {
             $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
+            $acciones = AuditoriaAccion::where('segtipo_accion_id',4)->paginate(30);
                    
-            return view('pras.index', compact('auditorias', 'request'));
+            return view('pras.index', compact('auditorias', 'acciones','request'));
         }
     
     /**compo
@@ -67,9 +69,11 @@ class PrasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(AuditoriaAccion $accion)
     {
-        //
+        setSession('prasaccion_id',$accion->id);
+        
+        return redirect()->route('prasacciones.create');        
     }
 
     /**

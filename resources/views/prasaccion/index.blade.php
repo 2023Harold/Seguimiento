@@ -70,7 +70,7 @@
                                     </td>                                   
                                     <td class="text-center">   
                                         <a href="{{ route('pras.edit',$accion) }}" class="btn btn-primary">
-                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Turnar
+                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Registrar
                                         </a>                                                  
                                     </td>                                  
                                 </tr>                            

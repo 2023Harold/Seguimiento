@@ -22,6 +22,7 @@ class Radicacion extends Model
      */
     protected $fillable = [
         'auditoria_id',
+        'numero_expediente',
         'numero_acuerdo',
         'oficio_acuerdo',
         'fecha_oficio_acuerdo',
@@ -34,8 +35,7 @@ class Radicacion extends Model
         'usuario_modificacion_id',
         'usuario_firmante_id',
         'created_at'=>'datetime',
-        'updated_at'=>'datetime',
-        'aplicacion_periodo',
+        'updated_at'=>'datetime',        
     ];
 
            

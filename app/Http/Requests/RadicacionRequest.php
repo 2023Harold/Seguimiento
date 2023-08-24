@@ -24,6 +24,7 @@ class RadicacionRequest extends FormRequest
     public function rules()
     {
         return [
+            'numero_expediente'=>'required|string|max:150',
             'numero_acuerdo' => 'required|string|max:30',
             'oficio_acuerdo' => 'required|string|max:100',
             'fecha_oficio_acuerdo' => 'required|date|max:10',
@@ -33,6 +34,7 @@ class RadicacionRequest extends FormRequest
             'cargo_titular' => 'required|string|max:120',          
             'fecha_comparecencia' => 'required|date|max:10|after:fecha_oficio_designacion',
             'hora_comparecencia_inicio' => 'required|string|max:15',
+            'aplicacion_periodo'=>  'required|string|max:2',
             'fecha_inicio_aclaracion' => 'required',
             'fecha_termino_aclaracion' => 'required', 
         ];
@@ -41,6 +43,7 @@ class RadicacionRequest extends FormRequest
     public function attributes()
     {
         return [
+            'numero_expediente'=>'número de expediente',
             'numero_acuerdo' => 'número de acuerdo',
             'oficio_acuerdo' => 'acuerdo de radicación',
             'fecha_oficio_acuerdo' => 'fecha del acuerdo',
@@ -49,7 +52,8 @@ class RadicacionRequest extends FormRequest
             'nombre_titular' => 'nombre del titular  a quien se dirige la comparecencia',
             'cargo_titular' => 'cargo del titular a quien se dirige la comparecencia',            
             'fecha_comparecencia' => 'fecha de la comparecencia',
-            'hora_comparecencia_inicio' => 'hora de inicio de la comparecencia',          
+            'hora_comparecencia_inicio' => 'hora de inicio de la comparecencia', 
+            'aplicacion_periodo'=>'¿El periodo de la etapa de aclaración es de 30 días hábiles?',
             'fecha_inicio_aclaracion' => 'inicio de la etapa de aclaración',
             'fecha_termino_aclaracion' => 'término de la etapa de aclaración',
         ];

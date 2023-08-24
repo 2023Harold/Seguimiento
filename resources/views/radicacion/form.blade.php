@@ -20,11 +20,17 @@
         {!! BootForm::open(['model' => $radicacion,'store' => 'radicacion.store','update' => 'radicacion.update','id' =>
         'form',]) !!}
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
+                {!! BootForm::text('numero_expediente', 'Número de expediente: *', old('numero_expediente',
+                $radicacion->numero_expediente)) !!}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
                 {!! BootForm::text('numero_acuerdo', 'Número de acuerdo: *', old('numero_acuerdo',
                 $radicacion->numero_acuerdo)) !!}
             </div>
-        </div>
+        </div>        
         <div class="row">
             <div class="col-md-6">
                 {!! archivo('oficio_acuerdo', 'Acuerdo de radicación: *', old('oficio_acuerdo',
@@ -70,6 +76,11 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-md-6">
+                {!! BootForm::radios('aplicacion_periodo', '¿El periodo de la etapa de aclaración es de 30 días hábiles? *', ['Si' => 'Si', 'No' => 'No'], old('aplicacion_periodo',$comparecencia->aplicacion_periodo),true,['class'=>'i-checks']); !!}
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-3">
                 {!! BootForm::date('fecha_inicio_aclaracion','Inicio de la etapa de aclaración:
                 *',old('fecha_inicio_aclaracion', fecha($comparecencia->fecha_inicio_aclaracion, 'Y-m-d')),['readonly'])
@@ -78,14 +89,13 @@
             <div class="col-md-3">
                 {!! BootForm::date('fecha_termino_aclaracion','Término de la etapa de aclaración:
                 *',old('fecha_termino_aclaracion', fecha($comparecencia->fecha_termino_aclaracion,
-                'Y-m-d')),['readonly'],
-                ) !!}
+                'Y-m-d')),['readonly'],) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 @canany(['radicacion.store','radicacion.update'])
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="submit" class="btn btn-primary">Guardar y continuar</button>
                 @endcan
                 <a href="{{ route('radicacion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
             </div>
@@ -141,6 +151,14 @@
                   today = yyyy + '-' + mm + '-' + dd;
                   $("#fecha_termino_aclaracion").val(today);
               }
+
+                $('input[name="aplicacion_periodo"]').on('ifChanged', function(event) {
+                    if (event.target.value == 'Si') { 
+                        document.getElementById("fecha_termino_aclaracion").readOnly = true;
+                    }else{
+                        document.getElementById("fecha_termino_aclaracion").readOnly = false;
+                    }
+                });
           });
 </script>
 @endsection

@@ -9,6 +9,7 @@ use App\Http\Controllers\AsignacionDireccionController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\ComparecenciaActaController;
 use App\Http\Controllers\ComparecenciaAcusesController;
+use App\Http\Controllers\ComparecenciaAgendaController;
 use App\Http\Controllers\ComparecenciaAnexoController;
 use App\Http\Controllers\ComparecenciaAutorizacionController;
 use App\Http\Controllers\ComparecenciaCedulaController;
@@ -115,6 +116,7 @@ Route::get('auditoriaradicacion/{auditoria}', [RadicacionController::class,'audi
 Route::resource('radicacionvalidacion', RadicacionValidacionController::class,['parameters' => ['radicacionvalidacion' => 'radicacion']]);
 Route::resource('radicacionautorizacion', RadicacionAutorizacionController::class,['parameters' => ['radicacionautorizacion' => 'radicacion']]);
 Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['parameters' => ['comparecenciaacuse' => 'comparecencia']]);
+Route::resource('comparecenciaagenda', ComparecenciaAgendaController::class,['parameters' => ['comparecenciaagenda' => 'comparecencia']]);
 
 /*Comparecencia*/
 Route::resource('comparecencia', ComparecenciaController::class,['parameters' => ['comparecencia' => 'comparecencia']]);
@@ -130,6 +132,6 @@ Route::resource('comparecenciaacta', ComparecenciaActaController::class,['parame
 Route::resource('comparecenciarespuesta', ComparecenciaRespuestaController::class,['parameters' => ['comparecenciarespuesta' => 'comparecencia']]);
 
 /*pras*/
-Route::resource('pras',PrasController::class);
+Route::resource('pras',PrasController::class,['parameters' => ['pras' => 'accion']]);
 /*prasacciones*/
 Route::resource('prasacciones',PrasaccionesController::class);

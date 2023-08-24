@@ -64,7 +64,7 @@ class AuditoriaAccion extends Model
 
     public function auditoria()
     {
-        return $this->belongsTo(Auditoria::class, 'id', 'segauditoria_id');
+        return $this->belongsTo(Auditoria::class, 'segauditoria_id','id');
     }
 
     public function tipo()

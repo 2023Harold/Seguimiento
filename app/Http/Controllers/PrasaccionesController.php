@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
+use App\Models\Segpras;
 use Illuminate\Http\Request;
 
 class PrasaccionesController extends Controller
@@ -32,7 +34,11 @@ class PrasaccionesController extends Controller
      */
     public function create()
     {
-        //
+        $accion=AuditoriaAccion::find(getSession('prasaccion_id'));
+        $auditoria=$accion->auditoria;
+        $pras=new Segpras();
+
+        return view('prasacciones.form',compact('pras','accion','auditoria'));
     }
 
     /**

@@ -56,7 +56,7 @@ class RadicacionController extends Controller
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_comparecencia'], null, $ruta);      
 
-        Movimientos::create([
+        /*Movimientos::create([
             'tipo_movimiento' => 'Registro de la radicación',
             'accion' => 'Radicación',
             'accion_id' => $radicacion->id,
@@ -79,10 +79,10 @@ class RadicacionController extends Controller
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
 
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
+        */
+        setMessage('Los datos de la radicacion se han registrado exitosamente, continua agendado la comparecencia.');
 
-        setMessage('La radicación se ha registrado correctamente y se ha enviado a validación.');
-
-        return redirect()->route('radicacion.index');
+        return redirect()->route('comparecenciaagenda.edit',$comparecencia);
     }
 
     /**
@@ -107,6 +107,7 @@ class RadicacionController extends Controller
         $auditoria=$radicacion->auditoria; 
         $accion = 'Editar';            
         $comparecencia=$auditoria->comparecencia;
+        
         return view('radicacion.form', compact('radicacion','auditoria','accion','comparecencia'));        
     }
 
@@ -122,8 +123,10 @@ class RadicacionController extends Controller
         mover_archivos($request, ['oficio_acuerdo','oficio_designacion'], $radicacion);
         $request['usuario_modificacion_id'] = auth()->user()->id;
         $radicacion->update($request->all());
+        $auditoria=$radicacion->auditoria;
+        $comparecencia=$auditoria->comparecencia;
 
-        Movimientos::create([
+        /*Movimientos::create([
             'tipo_movimiento' => 'Registro de la radicación',
             'accion' => 'Radicación',
             'accion_id' => $radicacion->id,
@@ -140,10 +143,10 @@ class RadicacionController extends Controller
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
 
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
+        */
+        setMessage('La radicación se ha modificado correctamente, continua agendando la comparecencia.');
 
-        setMessage('La radicación se ha modificado correctamente y se ha enviado a validación.');
-
-        return redirect()->route('radicacion.index');
+        return redirect()->route('comparecenciaagenda.edit',$comparecencia);
     }
 
     /**

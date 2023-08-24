@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('segagenda_comparecencias', function (Blueprint $table) {
-                $table->id('id_comparecencia');
-                $table->dateTime('fecha')->nullable();
-                $table->string('hora_inicio', 20);
-                $table->string('hora_fin', 20);
-                $table->foreignId('usuario_creacion_id')->nullable();
-                $table->foreignId('usuario_actualizacion_id')->nullable();
-                
+            $table->id();
+            $table->foreignId('id_comparecencia');
+            $table->dateTime('fecha')->nullable();
+            $table->string('hora_inicio', 20);
+            $table->string('hora_fin', 20);
+            $table->foreignId('usuario_creacion_id')->nullable();
+            $table->foreignId('usuario_actualizacion_id')->nullable();
         });
     }
 
