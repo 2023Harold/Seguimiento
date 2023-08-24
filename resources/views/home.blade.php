@@ -401,7 +401,7 @@
                 </div>
             </div>
             @endcan
-            {{-- <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title">
@@ -414,11 +414,11 @@
                         <div class="d-flex flex-column">
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('asignaciondireccion.index') }}">
+                                <a href="{{ route('pras.index') }}">
                                     PRAS
                                 </a>
                             </li>
-                            <li class="py-2 d-flex align-items-center">
+                            {{-- <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('asignaciondireccion.index') }}">
                                     Solventaciones
@@ -435,11 +435,11 @@
                                 <a href="{{ route('asignaciondireccion.index') }}">
                                     Conclusion y archivo
                                 </a>
-                            </li>
+                            </li> --}}
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> {{--
             <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">
