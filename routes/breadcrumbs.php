@@ -187,10 +187,23 @@ Breadcrumbs::for('comparecenciaacta.show', function (BreadcrumbTrail $trail,$com
 /*pras */
 Breadcrumbs::for('pras.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('PRAS', route('comparecencia.index'));
+    $trail->push('PRAS', route('pras.index'));
 });
 
 Breadcrumbs::for('pras.create', function (BreadcrumbTrail $trail) {
     $trail->parent('pras.index');
     $trail->push('Turnar PRAS a OIC o equivalente', route('pras.index'));
 });
+
+/*prasaccion */
+Breadcrumbs::for('prasacciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('pras.index');
+    $trail->push('Acciones', route('prasacciones.index'));
+    
+});
+
+/*prasturno */
+Breadcrumbs::for('prasturno.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('prasacciones.index');
+    $trail->push('Acciones', route('prasturno.create'));
+});    

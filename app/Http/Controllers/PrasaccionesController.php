@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\CatalogoTipoAccion;
 use App\Models\Segpras;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class PrasaccionesController extends Controller
 
     protected $model;
     
-        public function __construct(Auditoria $model)
+        public function __construct(AuditoriaAccion $model)
         {
             $this->model = $model;
         }
@@ -20,9 +21,16 @@ class PrasaccionesController extends Controller
     
         public function index(Request $request)
         {
-            $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-                   
-            return view('prasacciones.index', compact('auditorias', 'request'));
+        $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
+        $auditoria = Auditoria::find(getSession('prasauditoria_id'));
+        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);     
+        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
+        $numero_auditoria=$this->setQuery($request)->orderBy('id')->paginate(30);
+        $entidad_fiscalizable=$this->setQuery($request);
+        $acto_fiscalizacion=$this->setQuery($request);
+        $monto_aclarar=$this->setQuery($request);
+        
+        return view('prasacciones.index', compact('numero_auditoria','request','acciones', 'auditoria','auditorias','monto_aclarar','acto_fiscalizacion' ));
         }
     
     
@@ -38,7 +46,7 @@ class PrasaccionesController extends Controller
         $auditoria=$accion->auditoria;
         $pras=new Segpras();
 
-        return view('prasacciones.form',compact('pras','accion','auditoria'));
+        return view('prasacciones.index',compact('pras','accion','auditoria'));
     }
 
     /**
@@ -69,9 +77,13 @@ class PrasaccionesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(AuditoriaAccion $accion)
     {
-        //
+     
+    setSession('prasauditoriaaccion_id',$accion->id);
+    
+    return redirect()->route('prasturno.create');
+    
     }
 
     /**
@@ -96,5 +108,24 @@ class PrasaccionesController extends Controller
     {
         
     } 
+    public function setQuery(Request $request)
+    {
+         $query = $this->model;
+
+         $query = $query->where('segauditoria_id',getSession('prasauditoria_id'));
+                
+        if ($request->filled('consecutivo')) {            
+            $query = $query->where('consecutivo',$request->consecutivo);
+         }
+
+        if ($request->filled('tipo')) {
+            $query = $query->where('tipo',$request->tipo);
+        }
+        if ($request->filled('monto_aclarar')) {
+            $query = $query->where('monto_aclarar',$request->monto_aclarar);
+        }
+        return $query;
+    }
+
   
 }

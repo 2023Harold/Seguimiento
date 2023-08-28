@@ -1,19 +1,19 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('prasacciones.form') }}
+{{ Breadcrumbs::render('prasturno.create') }}
 @endsection
 @section('content')
 <div class="card">
     <div class="card-header">
         <h1 class="card-title">
-            <a href="{{ route('pras.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+            <a href="{{ route('prasturno.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
             &nbsp; Turnar PRAS a OIC o equivalente
         </h1>
     </div>
     <div class="card-body">
         @include('flash::message')
         @include('layouts.contextos._auditoria')
-        {!! BootForm::open(['model' => $pras,'store' => 'prasacciones.store','update' => 'prasacciones.update','id' =>
+        {!! BootForm::open(['model' => $pras,'store' => 'prasturno.store','update' => 'prasacciones.turno','id' =>
         'form',]) !!}
         <div class="row">
             <div class="col-md-6">
@@ -46,25 +46,25 @@
         <div class="row">
             <div class="col-md-6">
                 {!! BootForm::text('nombre_unidad','Área de adscripción del firmante:
-                *',auth()->user()->titular->unidadAdministrativa->descripcion,['disabled'],) !!}
+                *','',['disabled'],) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('nombre_firmante', 'Nombre del firmante: *', auth()->user()->titular->name,
+                {!! BootForm::text('nombre_firmante', 'Nombre del firmante: *', '',
                 ['disabled']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('categoria_firmante', 'Categoría del firmante: *', auth()->user()->titular->puesto,
+                {!! BootForm::text('categoria_firmante', 'Categoría del firmante: *', '',
                 ['disabled']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 @btnSubmit('Guardar')
-                @btnCancelar('Cancelar', route('pras.index'))
+                @btnCancelar('Cancelar', route('prasturno.index'))
             </div>
         </div>
         {!! BootForm::close() !!}

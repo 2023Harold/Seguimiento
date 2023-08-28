@@ -27,9 +27,9 @@ class AccionesController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);     
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
-      
+        $monto_aclarar=$this->setQuery($request)->orderBy('monto_aclarar');
        
-        return view('seguimientoauditoriaaccion.index', compact('acciones', 'request', 'auditoria','tiposaccion'));
+        return view('seguimientoauditoriaaccion.index', compact('acciones', 'request', 'auditoria','tiposaccion','monto_aclarar'));
     }
 
     /**
@@ -138,6 +138,10 @@ class AccionesController extends Controller
             $numeroAcccion=strtolower($request->numero);
             $query = $query->whereRaw('LOWER(numero) LIKE (?) ',["%{$numeroAcccion}%"]);
         }
+        if ($request->filled('monto_aclarar')) {
+            $query = $query->where('monto_aclarar',$request->monto_aclarar);;
+        }
+
 
         return $query;
     }

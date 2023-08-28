@@ -25,6 +25,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PrasController;
 use App\Http\Controllers\PrasaccionesController;
+use App\Http\Controllers\PrasTurnoController;
 use App\Http\Controllers\RadicacionAutorizacionController;
 use App\Http\Controllers\RadicacionController;
 use App\Http\Controllers\RadicacionValidacionController;
@@ -120,18 +121,19 @@ Route::resource('comparecenciaagenda', ComparecenciaAgendaController::class,['pa
 
 /*Comparecencia*/
 Route::resource('comparecencia', ComparecenciaController::class,['parameters' => ['comparecencia' => 'comparecencia']]);
-Route::resource('comparecencianotificacion', ComparecenciaNotificacionController::class,['parameters' => ['comparecencianotificacion' => 'comparecencia']]);
-Route::resource('comparecenciaanexo', ComparecenciaAnexoController::class,['parameters' => ['comparecenciaanexo' => 'anexo']]);
-Route::resource('comparecenciacopia', ComparecenciaCopiaController::class,['parameters' => ['comparecenciacopia' => 'copia']]);
+// Route::resource('comparecencianotificacion', ComparecenciaNotificacionController::class,['parameters' => ['comparecencianotificacion' => 'comparecencia']]);
+// Route::resource('comparecenciaanexo', ComparecenciaAnexoController::class,['parameters' => ['comparecenciaanexo' => 'anexo']]);
+// Route::resource('comparecenciacopia', ComparecenciaCopiaController::class,['parameters' => ['comparecenciacopia' => 'copia']]);
 Route::get('auditoriacomparecencia/{auditoria}', [ComparecenciaController::class,'auditoria'])->name('comparecencia.auditoria');
-Route::resource('comparecenciavalidacion', ComparecenciaValidacionController::class,['parameters' => ['comparecenciavalidacion' => 'comparecencia']]);
-Route::resource('comparecenciaautorizacion', ComparecenciaAutorizacionController::class,['parameters' => ['comparecenciaautorizacion' => 'comparecencia']]);
+// Route::resource('comparecenciavalidacion', ComparecenciaValidacionController::class,['parameters' => ['comparecenciavalidacion' => 'comparecencia']]);
+// Route::resource('comparecenciaautorizacion', ComparecenciaAutorizacionController::class,['parameters' => ['comparecenciaautorizacion' => 'comparecencia']]);
 Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['parameters' => ['comparecenciaacuse' => 'comparecencia']]);
-Route::resource('comparecenciacedula', ComparecenciaCedulaController::class,['parameters' => ['comparecenciacedula' => 'comparecencia']]);
+// Route::resource('comparecenciacedula', ComparecenciaCedulaController::class,['parameters' => ['comparecenciacedula' => 'comparecencia']]);
 Route::resource('comparecenciaacta', ComparecenciaActaController::class,['parameters' => ['comparecenciaacta' => 'comparecencia']]);
-Route::resource('comparecenciarespuesta', ComparecenciaRespuestaController::class,['parameters' => ['comparecenciarespuesta' => 'comparecencia']]);
+// Route::resource('comparecenciarespuesta', ComparecenciaRespuestaController::class,['parameters' => ['comparecenciarespuesta' => 'comparecencia']]);
 
 /*pras*/
-Route::resource('pras',PrasController::class,['parameters' => ['pras' => 'accion']]);
+Route::resource('pras',PrasController::class,['parameters' => ['pras' => 'auditoria']]);
 /*prasacciones*/
-Route::resource('prasacciones',PrasaccionesController::class);
+Route::resource('prasacciones',PrasaccionesController::class,['parameters' => ['prasacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
+Route::resource('prasturno',PrasTurnoController::class,['parameters' => ['prasturno' => 'pras']]);

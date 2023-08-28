@@ -69,11 +69,11 @@ class PrasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(AuditoriaAccion $accion)
+    public function edit(Auditoria $auditoria)
     {
-        setSession('prasaccion_id',$accion->id);
+        setSession('prasauditoria_id',$auditoria->id);        
         
-        return redirect()->route('prasacciones.create');        
+        return redirect()->route('prasacciones.index');        
     }
 
     /**
