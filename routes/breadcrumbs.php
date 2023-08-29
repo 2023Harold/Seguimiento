@@ -205,5 +205,5 @@ Breadcrumbs::for('prasacciones.index', function (BreadcrumbTrail $trail) {
 /*prasturno */
 Breadcrumbs::for('prasturno.create', function (BreadcrumbTrail $trail) {
     $trail->parent('prasacciones.index');
-    $trail->push('Acciones', route('prasturno.create'));
+    $trail->push('Turnar PRAS', route('prasturno.create'));
 });    

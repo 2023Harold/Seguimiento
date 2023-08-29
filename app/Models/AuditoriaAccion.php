@@ -81,5 +81,10 @@ class AuditoriaAccion extends Model
     {
         return $this->belongsTo(User::class, 'analista_asignado_id', 'id');
     }
+    public function pras()
+    {
+        return $this->belongsTo(Segpras::class, 'id','accion_id');
+    }
+
     
 }

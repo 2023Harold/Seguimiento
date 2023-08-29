@@ -81,8 +81,14 @@ class PrasaccionesController extends Controller
     {
      
     setSession('prasauditoriaaccion_id',$accion->id);
+    if (empty($accion->pras)) {
+        return redirect()->route('prasturno.create');
+    } else {
+        return redirect()->route('prasturno.edit',$accion->pras);
+    }
     
-    return redirect()->route('prasturno.create');
+    
+   
     
     }
 

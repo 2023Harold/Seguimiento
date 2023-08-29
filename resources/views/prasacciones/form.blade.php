@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('prasacciones.form') }}
+{{ Breadcrumbs::render('prasacciones.create') }}
 @endsection
 @section('content')
 <div class="card">
@@ -17,13 +17,13 @@
         'form',]) !!}
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('nombre_titular_oic','Nombre del titular del Órgano interno de control:
+                {!! BootForm::text('nombre_titular_oic','Nombre del titular del Órgano Interno de Control:
                 *',old('nombre_titular_oic', $pras->nombre_titular_oic),) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! archivo('oficio_remision','Oficio de Turno: *',old('oficio_remision',
+                {!! archivo('oficio_remision','Oficio de turno: *',old('oficio_remision',
                 $pras->oficio_remision),['data-allowedFileExtensions' => 'pdf'],) !!}
             </div>
             <div class="col-md-3">

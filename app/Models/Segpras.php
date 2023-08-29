@@ -45,7 +45,8 @@ class Segpras extends Model
         'usuario_firmante_id',
         'usuario_creacion_id',
         'usuario_modificacion_id',
-        'usuario_firmante_id'
+        'usuario_firmante_id',
+        'nivel_autorizacion'
     ];
 
     protected $dates = [

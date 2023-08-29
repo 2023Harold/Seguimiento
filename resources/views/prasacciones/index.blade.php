@@ -61,9 +61,16 @@
                                     {{ '$'.number_format( $accion->monto_aclarar, 2) }}
                                 </td>
                                 <td class="text-center">
+                                    @if (empty($accion->pras))
+
                                     <a href="{{ route('prasacciones.edit',$accion) }}" class="btn btn-primary">
                                         <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Turnar
                                     </a>
+                                    @else
+                                    <a href="{{ route('prasacciones.edit',$accion) }}" class="btn btn-primary">
+                                        <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Consultar
+                                        @endif
+
                                 </td>
                             </tr>
                             @empty

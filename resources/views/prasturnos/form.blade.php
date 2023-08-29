@@ -6,24 +6,25 @@
 <div class="card">
     <div class="card-header">
         <h1 class="card-title">
-            <a href="{{ route('prasturno.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+            <a href="{{ route('prasacciones.index') }}"><i
+                    class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
             &nbsp; Turnar PRAS a OIC o equivalente
         </h1>
     </div>
     <div class="card-body">
         @include('flash::message')
         @include('layouts.contextos._auditoria')
-        {!! BootForm::open(['model' => $pras,'store' => 'prasturno.store','update' => 'prasacciones.turno','id' =>
+        {!! BootForm::open(['model' => $pras,'store' => 'prasturno.store','update' => 'prasturno.update','id' =>
         'form',]) !!}
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('nombre_titular_oic','Nombre del titular del Órgano interno de control:
+                {!! BootForm::text('nombre_titular_oic','Nombre del titular del Órgano Interno de Control:
                 *',old('nombre_titular_oic', $pras->nombre_titular_oic),) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! archivo('oficio_remision','Oficio de Turno: *',old('oficio_remision',
+                {!! archivo('oficio_remision','Oficio de turno: *',old('oficio_remision',
                 $pras->oficio_remision),['data-allowedFileExtensions' => 'pdf'],) !!}
             </div>
             <div class="col-md-3">
@@ -46,28 +47,34 @@
         <div class="row">
             <div class="col-md-6">
                 {!! BootForm::text('nombre_unidad','Área de adscripción del firmante:
-                *','',['disabled'],) !!}
+                *',auth()->user()->titular->unidadAdministrativa->descripcion,['disabled']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('nombre_firmante', 'Nombre del firmante: *', '',
-                ['disabled']) !!}
+                {!! BootForm::text('nombre_firmante', 'Nombre del firmante: *',
+                auth()->user()->titular->name,['disabled']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('categoria_firmante', 'Categoría del firmante: *', '',
-                ['disabled']) !!}
+                {!! BootForm::text('categoria_firmante', 'Categoría del firmante: *',
+                auth()->user()->titular->puesto,['disabled']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
+
                 @btnSubmit('Guardar')
-                @btnCancelar('Cancelar', route('prasturno.index'))
+
+                @btnCancelar('Cancelar', route('prasacciones.index'))
+
             </div>
         </div>
         {!! BootForm::close() !!}
     </div>
 </div>
+@endsection
+@section('script')
+{!! JsValidator::formRequest('App\Http\Requests\PRASTurnosRequest') !!}
 @endsection

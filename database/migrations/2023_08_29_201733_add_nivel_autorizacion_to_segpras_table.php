@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('segcomparecencia', function (Blueprint $table) {
-            $table->string('oficio_comparecencia', 512)->nullable()->change();
-         });  
+        Schema::table('segpras', function (Blueprint $table) {
+            $table->string('nivel_autorizacion', 100)->nullable();
+        });
     }
 
     /**
@@ -25,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('segpras', function (Blueprint $table) {
+            //
+        });
     }
 };
