@@ -29,6 +29,8 @@ use App\Http\Controllers\PrasTurnoController;
 use App\Http\Controllers\RadicacionAutorizacionController;
 use App\Http\Controllers\RadicacionController;
 use App\Http\Controllers\RadicacionValidacionController;
+use App\Http\Controllers\RecomendacionesAccionesController;
+use App\Http\Controllers\RecomendacionesController;
 use App\Http\Controllers\SeguimientoAuditoriaAutorizacionController;
 use App\Http\Controllers\SeguimientoAuditoriaController;
 use App\Http\Controllers\SeguimientoAuditoriaRevision01Controller;
@@ -132,8 +134,14 @@ Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['par
 Route::resource('comparecenciaacta', ComparecenciaActaController::class,['parameters' => ['comparecenciaacta' => 'comparecencia']]);
 // Route::resource('comparecenciarespuesta', ComparecenciaRespuestaController::class,['parameters' => ['comparecenciarespuesta' => 'comparecencia']]);
 
+//acciones
+
 /*pras*/
 Route::resource('pras',PrasController::class,['parameters' => ['pras' => 'auditoria']]);
 /*prasacciones*/
 Route::resource('prasacciones',PrasaccionesController::class,['parameters' => ['prasacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
 Route::resource('prasturno',PrasTurnoController::class,['parameters' => ['prasturno' => 'pras']]);
+/*Recomendaciones*/
+Route::resource('recomendaciones',RecomendacionesController::class,['parameters' => ['recomendaciones' => 'auditoria']]);
+Route::resource('recomendacionesacciones',RecomendacionesAccionesController::class,['parameters' => ['recomendacionesacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
+// Route::resource('recomendacionesdatosatencion',RecomendacionesController::class,['parameters' => ['recomendacionesdatosatencion' => 'recomendaciones']]);

@@ -207,3 +207,18 @@ Breadcrumbs::for('prasturno.create', function (BreadcrumbTrail $trail) {
     $trail->parent('prasacciones.index');
     $trail->push('Turnar PRAS', route('prasturno.create'));
 });    
+
+/*recomendaciones */
+Breadcrumbs::for('recomendaciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Recomendaciones', route('recomendaciones.index'));
+    
+});
+
+
+/*recomendacionesaccion */
+Breadcrumbs::for('recomendacionesacciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('recomendaciones');
+    $trail->push('Acciones', route('recomendaciones.index'));
+    
+});

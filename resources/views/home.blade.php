@@ -420,18 +420,19 @@
                                     PRAS
                                 </a>
                             </li>
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('recomendaciones.index') }}">
+                                    Recomendaciones
+                                </a>
+                            </li>
                             {{-- <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('asignaciondireccion.index') }}">
                                     Solventaciones
                                 </a>
                             </li>
-                            <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('asignaciondepartamento.index') }}">
-                                    Recomendaciones
-                                </a>
-                            </li>
+
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('asignaciondireccion.index') }}">

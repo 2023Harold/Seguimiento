@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-3">
                 {!! BootForm::date('fecha_acuse_oficio','Fecha del oficio: *',old('fecha_acuse_oficio',
-                fecha($pras->fecha_acuse_oficio, 'Y-m-d')),) !!}
+                fecha($pras->fecha_acuse_oficio, 'Y-m-d'))) !!}
             </div>
         </div>
         <div class="row">
@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-md-3">
                 {!! BootForm::date('fecha_proxima_seguimiento','Fecha próxima de seguimiento:
-                *',old('fecha_proxima_seguimiento')) !!}
+                *',old('fecha_proxima_seguimiento',fecha($pras->fecha_proxima_seguimiento, 'Y-m-d'))) !!}
             </div>
         </div>
         <div class="row">
