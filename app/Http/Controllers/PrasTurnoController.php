@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\Directorio\UserDirectorio;
 use App\Models\Movimientos;
 use App\Models\Segpras;
 use App\Models\User;
@@ -16,9 +17,13 @@ class PrasTurnoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $auditoria = Auditoria::find(getSession('prasauditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
+        $prass = Segpras::where('accion_id',getSession('prasauditoriaaccion_id'))->get();
+
+        return view('prasturnos.index',compact('prass','auditoria','accion'));
     }
 
     /**
@@ -27,13 +32,20 @@ class PrasTurnoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        //dd(getSession('prasauditoriaaccion_id'));
+    {        
         $accion=AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
         $pras=new Segpras();
+        $usuariodirectorio=UserDirectorio::where('entidad_fiscalizable_id',$auditoria->entidad_fiscalizable_id)
+                                           ->where('cargo_asociado', 'Contralor Interno')
+                                           ->where('siglas_cargo_asociado', 'OIC')
+                                           ->where('estatus', 'Activo')->first();
+        $nombreuseroic=null;
+        if (!empty($usuariodirectorio)) {
+            $nombreuseroic=$usuariodirectorio->name.' '.$usuariodirectorio->primer_apellido.' '.$usuariodirectorio->segundo_apellido;
+        }     
 
-        return view('prasturnos.form',compact('pras','accion','auditoria'));
+        return view('prasturnos.form',compact('pras','accion','auditoria','nombreuseroic'));
     }
 
     /**
@@ -61,7 +73,7 @@ class PrasTurnoController extends Controller
     $pras= Segpras::create($request->all());
 
     Movimientos::create([
-        'tipo_movimiento' => 'Registro del PRAS',
+        'tipo_movimiento' => 'Registro del turno del PRAS',
         'accion' => 'PRAS',
         'accion_id' => $pras->id,
         'estatus' => 'Aprobado',
@@ -77,17 +89,17 @@ class PrasTurnoController extends Controller
    
     $pras->update(['fase_autorizacion' =>  'En revisión', 'nivel_autorizacion' => $nivel_autorizacion]);      
 
-    $titulo = 'Validación de los datos de radicación';
-    $mensaje = '<strong>Estimado (a) ' . auth()->user()->director->name . ', ' . auth()->user()->director->puesto . ':</strong><br>
-                Ha sido registrada el PRAS de la auditoría No. ' . $pras->auditoria->numero_auditoria . ', por parte del ' . 
-                auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
+    $titulo = 'Revisión del registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria;
+    $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
+                Ha sido registrado el turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria . ', por parte del ' . 
+                auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
 
-    auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
+    auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
 
 
     setMessage('Se han guardado los datos correctamente');
 
-    return redirect()->route('prasacciones.index');
+    return redirect()->route('prasturno.index');
     }
 
     /**
@@ -143,7 +155,7 @@ class PrasTurnoController extends Controller
     $pras->update($request->all());
 
     Movimientos::create([
-        'tipo_movimiento' => 'Registro del PRAS',
+        'tipo_movimiento' => 'Registro del turno del PRAS',
         'accion' => 'PRAS',
         'accion_id' => $pras->id,
         'estatus' => 'Aprobado',
@@ -159,17 +171,17 @@ class PrasTurnoController extends Controller
    
     $pras->update(['fase_autorizacion' =>  'En revisión', 'nivel_autorizacion' => $nivel_autorizacion]);      
 
-    $titulo = 'Validación de los datos de radicación';
-    $mensaje = '<strong>Estimado (a) ' . auth()->user()->director->name . ', ' . auth()->user()->director->puesto . ':</strong><br>
-                Ha sido registrada el PRAS de la auditoría No. ' . $pras->auditoria->numero_auditoria . ', por parte del ' . 
-                auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
+    $titulo = 'Revisión del registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria;
+    $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
+                Ha sido registrado el turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria . ', por parte del ' . 
+                auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
 
-    auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
+    auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
 
 
     setMessage('Se han guardado los datos correctamente');
 
-    return redirect()->route('prasacciones.index');
+    return redirect()->route('prasturno.index');
     
     }
 

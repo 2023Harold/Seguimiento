@@ -67,7 +67,8 @@ class Comparecencia extends Model
         'numero_identificacion_testigo1',
         'nombre_testigo2',
         'cargo_testigo2',
-        'numero_identificacion_testigo2'
+        'numero_identificacion_testigo2',
+        'aplicacion_periodo'
     ];
 
            

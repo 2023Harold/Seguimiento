@@ -125,6 +125,7 @@ class RadicacionController extends Controller
         $radicacion->update($request->all());
         $auditoria=$radicacion->auditoria;
         $comparecencia=$auditoria->comparecencia;
+        $comparecencia->update($request->all());
 
         /*Movimientos::create([
             'tipo_movimiento' => 'Registro de la radicación',

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PRASTurnosRequest extends FormRequest
+class PRASTurnoAcusesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,22 +23,23 @@ class PRASTurnosRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            
-            'nombre_titular_oic'=>'required|string|max:100',
-            'oficio_remision'=>'required|string',
-            'fecha_acuse_oficio'=>'required|date|nullable',
-            'numero_oficio'=>'required|string',
+        return [            
+            'oficio_comprobante'=>'required|string|max:100',
+            'fecha_recepcion'=>'required|date|max:10',
+            'oficio_acuse'=>'required|string|max:100',
+            'fecha_acuse'=>'required|date|max:10',
+            'fecha_proxima_seguimiento'=>'required|date|max:10',
         ];
         
     }
     public function attributes()
     {
         return [
-            'nombre_titular_oic' => 'nombre del titular',
-            'oficio_remision' => 'oficio de turno',
-            'fecha_acuse_oficio' => 'fecha del oficio turno',
-            'numero_oficio' => 'número de oficio',     
+            'oficio_comprobante'=>'comprobante de recepción depto. de notificaciones',
+            'fecha_recepcion'=>'fecha del comprobante',
+            'oficio_acuse'=>'acuse del turno del PRAS',
+            'fecha_acuse'=>'fecha del acuse',
+            'fecha_proxima_seguimiento'=>'fecha próxima de seguimiento',     
         ];
     }
 

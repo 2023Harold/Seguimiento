@@ -37,6 +37,7 @@
                                 <th>No. de auditoría</th>
                                 <th>Entidad fiscalizable</th>
                                 <th>Acto de fiscalización</th>
+                                <th>Número de expediente</th>
                                 <th>Número de acuerdo</th>
                                 <th>Acuerdo de radicación</th>
                                 <th>Acuse del oficio de designación</th>
@@ -62,6 +63,11 @@
                                     <td>
                                         {{ $auditoria->acto_fiscalizacion }}
                                     </td>                                    
+                                    <td class="text-center">                                       
+                                        @if (!empty($auditoria->radicacion))
+                                            {{ $auditoria->radicacion->numero_expediente }}                                     
+                                        @endif                                        
+                                    </td>
                                     <td class="text-center">                                       
                                         @if (!empty($auditoria->radicacion))
                                             {{ $auditoria->radicacion->numero_acuerdo }}                                     

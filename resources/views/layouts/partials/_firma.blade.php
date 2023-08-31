@@ -51,7 +51,7 @@
     //Se finaliza la firma del xml, se genera el pdf con la firma del xml y se inicia el proceso
     //de firma del pdf.
     function finalizarfirma() {
-        var datosConstancia = {!! json_encode($datosConstancia) !!};
+        var datosConstancia = @json($datosConstancia);
         console.log(datosConstancia);
         console.log(signaturepck7);
         var token = '{{ csrf_token() }}'

@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-md-6">
                 {!! BootForm::text('nombre_titular_oic','Nombre del titular del Órgano Interno de Control:
-                *',old('nombre_titular_oic', $pras->nombre_titular_oic),) !!}
+                *',old('nombre_titular_oic', (empty($pras->nombre_titular_oic)?$nombreuseroic:$pras->nombre_titular_oic)),) !!}
             </div>
         </div>
         <div class="row">
@@ -37,13 +37,7 @@
                 {!! BootForm::text('numero_oficio', 'Número del oficio: *', old('numero_oficio', $pras->numero_oficio))
                 !!}
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                {!! BootForm::date('fecha_proxima_seguimiento','Fecha próxima de seguimiento:
-                *',old('fecha_proxima_seguimiento',fecha($pras->fecha_proxima_seguimiento, 'Y-m-d'))) !!}
-            </div>
-        </div>
+        </div>       
         <div class="row">
             <div class="col-md-6">
                 {!! BootForm::text('nombre_unidad','Área de adscripción del firmante:
@@ -64,11 +58,10 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-
-                @btnSubmit('Guardar')
-
+                @canany(['prasturno.store', 'prasturno.update'])
+                    @btnSubmit('Guardar')
+                @endcanany                
                 @btnCancelar('Cancelar', route('prasacciones.index'))
-
             </div>
         </div>
         {!! BootForm::close() !!}

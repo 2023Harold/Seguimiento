@@ -1,13 +1,7 @@
 <div>
     <h3 class="card-title text-primary">Acción</h3>  
     <div class="card-body py-7">    
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                <label>No. consecutivo: </label>
-                <span class="text-primary">
-                    {{ $accion->consecutivo }}
-                </span>
-            </div>
+        <div class="row">            
             <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                 <label>Tipo de acción: </label>
                 <span class="text-primary">

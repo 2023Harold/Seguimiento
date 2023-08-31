@@ -6,10 +6,25 @@ use App\Models\Comparecencia;
 use App\Models\ComparecenciaAgenda;
 use App\Models\Movimientos;
 use App\Models\Radicacion;
+use App\Rules\TiempoRule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ComparecenciaAgendaController extends Controller
 {
+    public $validationRules;
+    public $attributeNames;
+    public $errorMessages;
+    public function __construct()
+    {
+        $this->validationRules = [];
+        $this->attributeNames = [           
+            'hora_fin' => 'Hora aproximada de término',            
+        ];
+        $this->errorMessages = [
+            'required' => 'El campo :attribute es obligatorio.',       
+        ];
+    }
     /**
      * Display a listing of the resource.
      *
@@ -63,9 +78,16 @@ class ComparecenciaAgendaController extends Controller
         $auditoria=$comparecencia->auditoria;
         $radicacion = $auditoria->radicacion;
         $comparecencia = $auditoria->comparecencia;
+        $agenda=$comparecencia->agenda;
+        //dd($agenda->count()>0 && !empty($agenda->sala));
+        $citas=null;
+        if (!empty($agenda) && $agenda->count()>0  ) {
+            $citas=ComparecenciaAgenda::where('fecha',$comparecencia->fecha_comparecencia)->where('sala',$comparecencia->agenda->sala)->get();
+        }
+        
             
 
-        return view('comparecenciaagenda.form', compact('radicacion','auditoria','comparecencia'));
+        return view('comparecenciaagenda.form', compact('radicacion','auditoria','comparecencia','citas'));
     }
 
     /**
@@ -77,10 +99,13 @@ class ComparecenciaAgendaController extends Controller
      */
     public function update(Request $request, Comparecencia $comparecencia)
     {
-        $this->validar($request);       
         $comparecenciaagenda = ComparecenciaAgenda::where('id_comparecencia',$comparecencia->id)->first();
+
+        $this->setValidator($request,$comparecenciaagenda)->validate(); 
+        $request['sala']=intval(str_replace("s", "", $request->sala));   
         
-        if (empty($comparecencia->id_comparecencia)) {
+        
+        if (empty($comparecenciaagenda->id_comparecencia)) {
             $request['usuario_creacion_id'] = auth()->user()->id;
             $request['id_comparecencia'] = $comparecencia->id;
             $comparecenciaagenda = ComparecenciaAgenda::create($request->all());
@@ -138,9 +163,23 @@ class ComparecenciaAgendaController extends Controller
     public function validar(Request $request)
     {
         //dd('hola');
-        $query=new ComparecenciaAgenda();
+        //$query=new ComparecenciaAgenda();
+        
+        //dd($reunionesagendadas);
+
+
+
 
         return $request;
         
+    }
+
+    protected function setValidator(Request $request,ComparecenciaAgenda $agenda = null)
+    {        
+        $idagenda=(empty($agenda)?'N/A':$agenda->id);
+
+        $this->validationRules['hora_fin'] = ['required', 'string', 'max:10',  new TiempoRule($request->hora_inicio,$request->fecha,$request->sala,$idagenda)];
+        
+        return Validator::make($request->all(), $this->validationRules, $this->errorMessages)->setAttributeNames($this->attributeNames);
     }
 }

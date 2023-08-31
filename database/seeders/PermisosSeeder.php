@@ -15,16 +15,15 @@ class PermisosSeeder extends Seeder
      */
     public function run()
     {
-       
-
-
         $actions = ['index', 'create', 'store', 'edit', 'update', 'show', 'destroy'];
         $controllers = ['seguimientoauditoria','seguimientoauditoriaacciones',
                         'seguimientoauditoriarevisionlp','seguimientoauditoriarevision',
                         'seguimientoauditoriavalidacion','seguimientoauditoriaautorizacion',
                         'asignaciondireccion','asignaciondepartamento','asignacionlideranalista',
                         'asignaciondepartamentoencargado','radicacion','radicacionvalidacion',
-                        'radicacionautorizacion','comparecencia','comparecenciaacuse','comparecenciaacta'];
+                        'radicacionautorizacion','comparecencia','comparecenciaacuse','comparecenciaacta',
+                        'pras','prasacciones','prasturno','prasturnorevision','prasturnovalidacion',
+                        'prasturnoautorizacion','prasturnoacuses'];
         $permisosGenerales = [];
         $i = 0;
 
@@ -63,5 +62,6 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'asignacionlideranalista.accionesconsulta']);
         Permission::create(['name' => 'asignacionlideranalista.consulta']);
         Permission::create(['name' => 'radicacion.auditoria']);
+        Permission::create(['name' => 'getAgendaComparecencias']);
     }
 }

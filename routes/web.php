@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccionesController;
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\AsignacionLiderAnalistaController;
 use App\Http\Controllers\AsignacionDepartamentoController;
@@ -25,11 +26,16 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PrasController;
 use App\Http\Controllers\PrasaccionesController;
+use App\Http\Controllers\PrasTurnoAcusesController;
+use App\Http\Controllers\PrasTurnoAutorizacionController;
 use App\Http\Controllers\PrasTurnoController;
+use App\Http\Controllers\PrasTurnoRevisionController;
+use App\Http\Controllers\PrasTurnoValidacionController;
 use App\Http\Controllers\RadicacionAutorizacionController;
 use App\Http\Controllers\RadicacionController;
 use App\Http\Controllers\RadicacionValidacionController;
 use App\Http\Controllers\RecomendacionesAccionesController;
+use App\Http\Controllers\RecomendacionesAtencionController;
 use App\Http\Controllers\RecomendacionesController;
 use App\Http\Controllers\SeguimientoAuditoriaAutorizacionController;
 use App\Http\Controllers\SeguimientoAuditoriaController;
@@ -91,7 +97,6 @@ Route::resource('seguimientoauditoriarevision', SeguimientoAuditoriaRevisionCont
 Route::resource('seguimientoauditoriavalidacion', SeguimientoAuditoriaValidacionController::class, ['parameters' => ['seguimientoauditoriavalidacion' => 'auditoria']]);
 Route::resource('seguimientoauditoriaautorizacion', SeguimientoAuditoriaAutorizacionController::class, ['parameters' => ['seguimientoauditoriaautorizacion' => 'auditoria']]);
 
-
 //Asignaciones 
 /*Direcciones*/ 
 Route::resource('asignaciondireccion', AsignacionDireccionController::class, ['parameters' => ['asignaciondireccion' => 'auditoria']]);
@@ -123,6 +128,7 @@ Route::resource('comparecenciaagenda', ComparecenciaAgendaController::class,['pa
 
 /*Comparecencia*/
 Route::resource('comparecencia', ComparecenciaController::class,['parameters' => ['comparecencia' => 'comparecencia']]);
+Route::post('getAgendaComparecencias', [AjaxController::class, 'getAgendaComparecencias'])->name('getAgendaComparecencias');
 // Route::resource('comparecencianotificacion', ComparecenciaNotificacionController::class,['parameters' => ['comparecencianotificacion' => 'comparecencia']]);
 // Route::resource('comparecenciaanexo', ComparecenciaAnexoController::class,['parameters' => ['comparecenciaanexo' => 'anexo']]);
 // Route::resource('comparecenciacopia', ComparecenciaCopiaController::class,['parameters' => ['comparecenciacopia' => 'copia']]);
@@ -141,7 +147,14 @@ Route::resource('pras',PrasController::class,['parameters' => ['pras' => 'audito
 /*prasacciones*/
 Route::resource('prasacciones',PrasaccionesController::class,['parameters' => ['prasacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
 Route::resource('prasturno',PrasTurnoController::class,['parameters' => ['prasturno' => 'pras']]);
+Route::resource('prasturnorevision',PrasTurnoRevisionController::class,['parameters' => ['prasturnorevision' => 'pras']]);
+Route::resource('prasturnovalidacion',PrasTurnoValidacionController::class,['parameters' => ['prasturnovalidacion' => 'pras']]);
+Route::resource('prasturnoautorizacion',PrasTurnoAutorizacionController::class,['parameters' => ['prasturnoautorizacion' => 'pras']]);
+Route::resource('prasturnoacuses',PrasTurnoAcusesController::class,['parameters' => ['prasturnoacuses' => 'pras']]);
+
 /*Recomendaciones*/
 Route::resource('recomendaciones',RecomendacionesController::class,['parameters' => ['recomendaciones' => 'auditoria']]);
 Route::resource('recomendacionesacciones',RecomendacionesAccionesController::class,['parameters' => ['recomendacionesacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
-// Route::resource('recomendacionesdatosatencion',RecomendacionesController::class,['parameters' => ['recomendacionesdatosatencion' => 'recomendaciones']]);
+Route::resource('recomendacionesatencion',RecomendacionesAtencionController::class,['parameters' => ['recomendacionesatencion' => 'recomendacion']]);
+
+

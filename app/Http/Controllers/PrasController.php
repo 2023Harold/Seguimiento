@@ -101,15 +101,22 @@ class PrasController extends Controller
     public function setQuery(Request $request)
     {
          $query = $this->model;
+         $query = $query->whereHas('comparecencia', function($q){
+            $q->whereNotNull('oficio_acta');
+        });  
+         $query = $query->whereHas('acciones', function($q){
+            $q->where('segtipo_accion_id',4);
+        });  
 
          
         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
             $query = $query->where('usuario_creacion_id',auth()->id());
         }
 
-        if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){    
-            $userLider=auth()->user(); 
-            $query = $query->whereRaw('LOWER(lider_proyecto_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('fase_autorizacion');
+        if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){            
+            $query = $query->whereHas('acciones', function($q){
+                $q->where('lider_asignado_id',auth()->user()->id);
+            });
         }       
 
         if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){     

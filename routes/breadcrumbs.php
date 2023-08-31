@@ -145,7 +145,7 @@ Breadcrumbs::for('radicacion.edit', function (BreadcrumbTrail $trail,$radicacion
 });
 Breadcrumbs::for('comparecenciaagenda.edit', function (BreadcrumbTrail $trail,$comparecencia,$radicacion) {
     $trail->parent('radicacion.edit',$radicacion);
-    $trail->push('Agendar', route('comparecenciaagenda.edit',$comparecencia));
+    $trail->push('Agendar comparecencia', route('comparecenciaagenda.edit',$comparecencia));
 });
 Breadcrumbs::for('radicacionvalidacion.edit', function (BreadcrumbTrail $trail,$radicacion) {
     $trail->parent('radicacion.index');
@@ -206,7 +206,32 @@ Breadcrumbs::for('prasacciones.index', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('prasturno.create', function (BreadcrumbTrail $trail) {
     $trail->parent('prasacciones.index');
     $trail->push('Turnar PRAS', route('prasturno.create'));
-});    
+});  
+
+Breadcrumbs::for('prasturno.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('prasacciones.index');
+    $trail->push('Turnar PRAS', route('prasturno.index'));    
+});
+Breadcrumbs::for('prasturnorevision.edit', function (BreadcrumbTrail $trail,$pras) {
+    $trail->parent('prasturno.index');
+    $trail->push('Revisar', route('prasturnorevision.edit',$pras));    
+});
+Breadcrumbs::for('prasturnovalidacion.edit', function (BreadcrumbTrail $trail,$pras) {
+    $trail->parent('prasturno.index');
+    $trail->push('Validar', route('prasturnovalidacion.edit',$pras));    
+});
+Breadcrumbs::for('prasturnoautorizacion.edit', function (BreadcrumbTrail $trail,$pras) {
+    $trail->parent('prasturno.index');
+    $trail->push('Autorizar-Rechazar', route('prasturnoautorizacion.edit',$pras));    
+});
+Breadcrumbs::for('prasturnoacuses.edit', function (BreadcrumbTrail $trail,$pras) {
+    $trail->parent('prasturno.index');
+    $trail->push('Acuses', route('prasturnoacuses.edit',$pras));    
+});
+Breadcrumbs::for('prasturnoacuses.show', function (BreadcrumbTrail $trail,$pras) {
+    $trail->parent('prasturno.index');
+    $trail->push('Acuses', route('prasturnoacuses.show',$pras));    
+});
 
 /*recomendaciones */
 Breadcrumbs::for('recomendaciones.index', function (BreadcrumbTrail $trail) {
@@ -214,11 +239,13 @@ Breadcrumbs::for('recomendaciones.index', function (BreadcrumbTrail $trail) {
     $trail->push('Recomendaciones', route('recomendaciones.index'));
     
 });
-
-
 /*recomendacionesaccion */
 Breadcrumbs::for('recomendacionesacciones.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('recomendaciones');
-    $trail->push('Acciones', route('recomendaciones.index'));
-    
+    $trail->parent('recomendaciones.index');
+    $trail->push('Acciones', route('recomendacionesacciones.index'));
+});
+
+Breadcrumbs::for('recomendacionesatencion.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('recomendacionesacciones.index');
+    $trail->push('Datos de atención', route('recomendacionesatencion.create'));
 });

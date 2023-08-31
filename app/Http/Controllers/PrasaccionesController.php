@@ -21,16 +21,12 @@ class PrasaccionesController extends Controller
     
         public function index(Request $request)
         {
-        $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
+       
         $auditoria = Auditoria::find(getSession('prasauditoria_id'));
-        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);     
-        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
-        $numero_auditoria=$this->setQuery($request)->orderBy('id')->paginate(30);
-        $entidad_fiscalizable=$this->setQuery($request);
-        $acto_fiscalizacion=$this->setQuery($request);
-        $monto_aclarar=$this->setQuery($request);
+        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);            
         
-        return view('prasacciones.index', compact('numero_auditoria','request','acciones', 'auditoria','auditorias','monto_aclarar','acto_fiscalizacion' ));
+        
+        return view('prasacciones.index', compact('request','acciones', 'auditoria'));
         }
     
     
@@ -42,11 +38,11 @@ class PrasaccionesController extends Controller
      */
     public function create()
     {
-        $accion=AuditoriaAccion::find(getSession('prasaccion_id'));
-        $auditoria=$accion->auditoria;
-        $pras=new Segpras();
+        // $accion=AuditoriaAccion::find(getSession('prasaccion_id'));
+        // $auditoria=$accion->auditoria;
+        // $pras=new Segpras();
 
-        return view('prasacciones.index',compact('pras','accion','auditoria'));
+        // return view('prasacciones.index',compact('pras','accion','auditoria'));
     }
 
     /**
@@ -78,18 +74,14 @@ class PrasaccionesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(AuditoriaAccion $accion)
-    {
-     
-    setSession('prasauditoriaaccion_id',$accion->id);
-    if (empty($accion->pras)) {
-        return redirect()->route('prasturno.create');
-    } else {
-        return redirect()->route('prasturno.edit',$accion->pras);
-    }
-    
-    
-   
-    
+    {     
+        setSession('prasauditoriaaccion_id',$accion->id);
+
+        if (empty($accion->pras)) {
+            return redirect()->route('prasturno.create');
+        }else{
+            return redirect()->route('prasturno.index');
+        }    
     }
 
     /**
@@ -118,7 +110,7 @@ class PrasaccionesController extends Controller
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('prasauditoria_id'));
+         $query = $query->where('segauditoria_id',getSession('prasauditoria_id'))->where('segtipo_accion_id',4);
                 
         if ($request->filled('consecutivo')) {            
             $query = $query->where('consecutivo',$request->consecutivo);

@@ -89,6 +89,26 @@ return [
             'prefix' => '',
         ],
 
+        'directorio' => [
+            'driver' => 'oracle',
+            'tns' => '(DESCRIPTION=
+                    (ADDRESS=(PROTOCOL=tcp)(HOST='.env('DB_HOST_DIR', '127.0.0.1').')(PORT='.env('DB_PORT_DIR', '1521').'))
+                (CONNECT_DATA=
+                    (SID='.env('DB_DATABASE_DIR', 'osdirectorio').')
+                )
+            )',
+            'host' => env('DB_HOST_DIR', ''),
+            'port' => env('DB_PORT_DIR', '1521'),
+            'database' => env('DB_DATABASE_DIR', ''),
+            'username' => env('DB_USERNAME_DIR', ''),
+            'password' => env('DB_PASSWORD_DIR', ''),
+            'charset' => env('DB_CHARSET_DIR', 'AL32UTF8'),
+            'prefix' => env('DB_PREFIX_DIR', ''),
+            'prefix_schema' => env('DB_SCHEMA_PREFIX_DIR', ''),
+            'edition' => env('DB_EDITION_DIR', 'ora$base'),
+            'server_version' => env('DB_SERVER_VERSION_DIR', '11g'),
+        ],
+
     ],
 
     /*

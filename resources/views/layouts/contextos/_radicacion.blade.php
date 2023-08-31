@@ -74,21 +74,23 @@
     <div class="col-lg-4 col-md-5 col-sm-12 col-12">
         <label>Fecha y hora de la comparecencia: </label>
         <span class="text-sistema">
-            {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . $auditoria->comparecencia->hora_comparecencia_inicio . ' - ' . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"00:00":$auditoria->comparecencia->hora_comparecencia_termino) }}
+            {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_inicio)) . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"":"-".date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_termino))) }}
         </span>
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-12 col-12">
-        <label>Hora aproximada de término: </label>
-        <span class="text-sistema">
-            {{ $auditoria->comparecencia->agenda->hora_fin}}
-        </span>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-12 col-12">
-        <label>Sala: </label>
-        <span class="text-sistema">
-            {{ $auditoria->comparecencia->agenda->sala}}
-        </span>
-    </div>
+    @if (!empty($auditoria->comparecencia->agenda->hora_fin))
+        <div class="col-lg-2 col-md-3 col-sm-12 col-12">
+            <label>Hora aproximada de término: </label>
+            <span class="text-sistema">
+                {{ date("g:i a",strtotime($auditoria->comparecencia->agenda->hora_fin))}}
+            </span>
+        </div>    
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+            <label>Sala: </label>
+            <span class="text-sistema">
+                {{ $auditoria->comparecencia->agenda->sala}}
+            </span>
+        </div>
+    @endif
 </div>
 
 <div class="row">
@@ -101,6 +103,7 @@
 </div>
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
         <label>Término de la etapa de aclaración: </label>
         <span class="text-sistema">
             {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion) }}

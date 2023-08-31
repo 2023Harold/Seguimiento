@@ -403,6 +403,7 @@
                 </div>
             </div>
             @endcan
+            @canany(['pras.index'])
             <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">
@@ -442,7 +443,10 @@
                         </div>
                     </div>
                 </div>
-            </div> {{--
+            </div> 
+            @endcan
+            
+            {{--
             <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">

@@ -74,7 +74,11 @@ class Segpras extends Model
 
     public function movimientos()
     {
-        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'PRASAuditoria Turno')->orderBy('id', 'ASC');
+        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'PRAS')->orderBy('id', 'ASC');
+    }
+    public function usuarioCreacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_creacion_id', 'id');
     }
    
 }
