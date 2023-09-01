@@ -34,7 +34,10 @@ class Segpras extends Model
         'usuario_modificacion_id',
         'usuario_firmante_id',
         'nivel_autorizacion',
-        'accion'
+        'accion',
+        'analisis',
+        'oficio_contestacion',
+        'conclusion'
         
             
     ];
