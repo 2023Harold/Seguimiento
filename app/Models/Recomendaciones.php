@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Propaganistas\LaravelFakeId\RoutesWithFakeIds;
 
 
-class Segpras extends Model
+class Recomendaciones extends Model
 {
     use HasFactory;
     use RoutesWithFakeIds;
 
-    protected $table = 'Recomendaciones';
+    protected $table = 'Segrecomendaciones';
 
     protected $fillable = [
         'consecutivo',
@@ -37,9 +37,7 @@ class Segpras extends Model
         'accion',
         'analisis',
         'oficio_contestacion',
-        'conclusion'
-        
-            
+        'conlusion'           
     ];
 
     protected $dates = [
@@ -70,9 +68,4 @@ class Segpras extends Model
         return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'PRASAuditoria Turno')->orderBy('id', 'ASC');
     }
    
-}
-
-class Recomendaciones extends Model
-{
-    use HasFactory;
 }

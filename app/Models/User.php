@@ -94,4 +94,8 @@ class User extends Authenticatable
     {
         return $this->where('unidad_administrativa_id', substr((empty(auth()->user()->unidad_administrativa_id) ? '119' : auth()->user()->unidad_administrativa_id), 0, 3).'000')->first();
     }
+    public function getLiderAttribute()
+    {
+        return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','LP')->first();
+    }
 }

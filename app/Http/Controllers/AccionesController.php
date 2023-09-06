@@ -154,7 +154,9 @@ class AccionesController extends Controller
         $request['segauditoria_id'] = getSession('auditoria_id');
         $request['usuario_actualizacion_id'] = auth()->id();
         $request['accion'] = str_replace("\r\n", "</br>",$request->accion);
-
+        if ($request->segtipo_accion_id==2) {
+            $request['monto_aclarar'] = null;
+        }
         return $request;
 
     }

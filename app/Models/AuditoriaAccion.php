@@ -85,6 +85,10 @@ class AuditoriaAccion extends Model
     {
         return $this->belongsTo(Segpras::class, 'id','accion_id');
     }
+    public function recomendaciones()
+    {
+        return $this->belongsTo(Recomendaciones::class, 'id','accion_id');
+    }
 
     
 }

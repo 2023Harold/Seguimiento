@@ -18,8 +18,9 @@ return new class extends Migration
             $table->integer('consecutivo')->nullable();
             $table->date('fecha_vencimiento');
             $table->date('fecha_compromiso');
-            $table->string('nombre_responsable', 50);
-            $table->string('cargo_responsable', 50);
+            $table->string('nombre_responsable', 150);
+            $table->string('cargo_responsable', 150);
+            // oficio_contestacion',150
             $table->foreignId('departamento_responsable_id')->constrained('segcatunidad_administrativas');
             $table->foreignId('auditoria_id')->constrained('segauditorias'); 
             $table->foreignId('usuario_creacion_id')->constrained('segusers');

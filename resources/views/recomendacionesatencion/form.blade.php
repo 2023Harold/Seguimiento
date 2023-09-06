@@ -22,8 +22,8 @@
             'form',]) !!}
             <div class="row">
                 <div class="col-md-3">
-                    {!! BootForm::date('fecha_compromiso', 'Fecha compromiso de atención: *', old('fecha_compromiso',
-                    $recomendacion->fecha_compromiso)) !!}
+                    {!! BootForm::date('fecha_compromiso', 'Fecha compromiso de atención: *',
+                    old('fecha_compromiso',$recomendacion->fecha_compromiso)) !!}
                 </div>
             </div>
             <div class="row">
@@ -43,12 +43,12 @@
             <div class="row">
                 <div class="col-md-6">
                     {!! BootForm::text('analista_responsable', 'Responsable del seguimiento:*',
-                    old('analista_responsable',$accion->analista_asignado)) !!}
+                    old('analista_responsable',$accion->analista_responsable)) !!}
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-7">
-                    {!! BootForm::text('oficio_contestacion', 'Oficio decontestación de la recomendación: *',
+                <div class="col-md-6">
+                    {!! archivo('oficio_contestacion', 'Oficio de contestacion de la recomendación: *',
                     old('oficio_contestacion', $recomendacion->oficio_contestacion)) !!}
                 </div>
             </div>
@@ -60,30 +60,21 @@
             </div>
             <div class="row">
                 <div class="col-md-10">
-                    {!! BootForm::text('conclusion', 'Conlusión: *',
-                    old('oficio_contestacion', $recomendacion->conclusion)) !!}
+                    {!! BootForm::text('conlusion', 'Conclusión: *',
+                    old('conlusion', $recomendacion->conlusion)) !!}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    {!! BootForm::checkbox('check', ' Se envía a revisión con el superior', '', true, ['class' =>
-                    'i-checks', 'disabled', 'checked']) !!}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    {{-- @canany(['prasturno.store', 'prasturno.update']) --}}
-                    @btnSubmit('Guardar')
-                    {{-- @endcanany --}}
-                    @btnCancelar('Cancelar', route('prasacciones.index'))
+                    @btnSubmit('Guardar',route('recomendacionesatencion.store'))
+                    @btnCancelar('Cancelar', route('recomendacionesacciones.index'))
                 </div>
             </div>
             {!! BootForm::close() !!}
         </div>
-
     </div>
 </div>
 @endsection
 @section('script')
-{!! JsValidator::formRequest('App\Http\Requests\PRASTurnosRequest') !!}
+{!! JsValidator::formRequest('App\Http\Requests\RecomendacionesRequest') !!}
 @endsection

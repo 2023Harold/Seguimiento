@@ -22,13 +22,13 @@
                     <div class="col-md-2">
                         {!! BootForm::text('numero_accion', "No. acción:", old('numero_accion',
                         $request->numero_auditoria)) !!}
-                    </div>                    
+                    </div>
                     <div class="col-md-6 mt-8">
                         <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search"
                                 aria-hidden="true"></i> Buscar</button>
                     </div>
                 </div>
-                {!! BootForm::close() !!}               
+                {!! BootForm::close() !!}
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -43,8 +43,8 @@
                         <tbody>
                             @forelse ($acciones as $accion)
                             <tr>
-                                <td  class="text-center">
-                                  {{$loop->iteration}}
+                                <td class="text-center">
+                                    {{$loop->iteration}}
                                 </td>
                                 <td>
                                     {{ $accion->numero }}
@@ -53,19 +53,26 @@
                                     {{ $accion->tipo}}
                                 </td>
                                 <td style="text-align: right!important;">
-                                    {{ '$'.number_format( $accion->monto_aclarar, 2) }}
+                                    {{'$'.number_format( $accion->monto_aclarar, 2)}}
                                 </td>
                                 <td class="text-center">
-                                    {{-- @if (empty($accion->pras)) --}}
+                                    @if (empty($accion->recomendaciones))
+                                    {{-- @can('recomendacionesacciones.edit') --}}
+                                    <a href="{{ route('recomendacionesacciones.edit',$accion)}}"
+                                        class="btn btn-primary">
+                                        <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Registar
+                                    </a>
+                                    {{-- @endcan --}}
+                                    @else
+                                    @if (!empty($accion->recomendaciones))
+                                    {{-- @can('recomendacionesacciones.edit') --}}
                                     <a href="{{ route('recomendacionesacciones.edit',$accion) }}"
                                         class="btn btn-primary">
-                                        <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Registrar
-                                    </a>
-                                    {{-- @else
-                                    <a href="{{ route('prasacciones.edit',$accion) }}" class="btn btn-primary">
                                         <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Consultar
-                                        @endif --}}
-
+                                    </a>
+                                    {{-- @endcan --}}
+                                    @endif
+                                    @endif
                                 </td>
                             </tr>
                             @empty

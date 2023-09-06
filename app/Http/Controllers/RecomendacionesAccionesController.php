@@ -70,11 +70,13 @@ class RecomendacionesAccionesController extends Controller
     {
         setSession('recomendacionesauditoriaaccion_id',$accion->id);
 
-        // if (empty($accion->pras)) {
+        if (empty($accion->recomendaciones)) {
+            // dd('registrar');
             return redirect()->route('recomendacionesatencion.create');
-        // }else{
-            // return redirect()->route('prasturno.index');
-        // }   
+         }else{
+            // dd('consultar');
+            return redirect()->route('recomendacionesatencion.index');
+        }   
     }
 
     /**
