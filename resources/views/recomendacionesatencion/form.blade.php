@@ -19,7 +19,7 @@
         <div class="row">
             {!! BootForm::open(['model' => $recomendacion,'store' => 'recomendacionesatencion.store','update' =>
             'recomendacionesatencion.update','id' =>
-            'form',]) !!}           
+            'form',]) !!}
             <div class="row">
                 <div class="col-md-6">
                     {!! BootForm::text('nombre_responsable', 'Nombre del responsable de atender las recomendaciones por
@@ -48,13 +48,19 @@
             </div>
             <div class="row">
                 <div class="col-md-10">
-                    {!! BootForm::text('analisis', 'Análisis *',
+                    {!! BootForm::textarea('analisis', 'Análisis *',
                     old('analisis', $recomendacion->analisis)) !!}
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-6">
+                    {!! BootForm::radios("estatus", ' Calificación de la atención: *', ['Atendida', 'No Atendida'],
+                    null,false,['class'=>'i-checks rechazado']); !!}
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-10">
-                    {!! BootForm::text('conclusion', 'Conclusión: *',
+                    {!! BootForm::textarea('conclusion', 'Conclusión: *',
                     old('conclusion', $recomendacion->conclusion)) !!}
                 </div>
             </div>

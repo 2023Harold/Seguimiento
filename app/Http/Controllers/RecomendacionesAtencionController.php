@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RecomendacionesRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
@@ -21,8 +22,8 @@ class RecomendacionesAtencionController extends Controller
         $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendaciones = Recomendaciones::where('accion_id',getSession('recomendacionesauditoriaaccion_id'))->get();
-
-        return view('recomendacionesatencion.index',compact('recomendaciones','auditoria','accion'));
+        $status =Recomendaciones::$request;
+        return view('recomendacionesatencion.index',compact('recomendaciones','auditoria','accion','request'));
     }
 
     /**
