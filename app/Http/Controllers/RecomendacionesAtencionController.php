@@ -18,11 +18,11 @@ class RecomendacionesAtencionController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('prasauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
-        $prass = Recomendaciones::where('accion_id',getSession('prasauditoriaaccion_id'))->get();
+        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $recomendaciones = Recomendaciones::where('accion_id',getSession('recomendacionesauditoriaaccion_id'))->get();
 
-        return view('recomendacionesatencion.index',compact('prass','auditoria','accion'));
+        return view('recomendacionesatencion.index',compact('recomendaciones','auditoria','accion'));
     }
 
     /**
@@ -35,16 +35,7 @@ class RecomendacionesAtencionController extends Controller
         $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
         $recomendacion=new Recomendaciones();
-        //$responsable = $accion->analista;
-        //dd($accion->analista);
-        /*$usuariodirectorio=UserDirectorio::where('entidad_fiscalizable_id',$auditoria->entidad_fiscalizable_id)
-                                           ->where('cargo_asociado', 'Contralor Interno')
-                                           ->where('siglas_cargo_asociado', 'OIC')
-                                           ->where('estatus', 'Activo')->first();
-        $nombreuseroic=null;
-        if (!empty($usuariodirectorio)) {
-            $nombreuseroic=$usuariodirectorio->name.' '.$usuariodirectorio->primer_apellido.' '.$usuariodirectorio->segundo_apellido;
-        }*/     
+      
 
         return view('recomendacionesatencion.form',compact('recomendacion','accion','auditoria'));
     }
@@ -57,7 +48,7 @@ class RecomendacionesAtencionController extends Controller
      */
     public function store(Request $request)
     {
-       $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
         mover_archivos($request, ['oficio_contestacion']);
         $firmante = User::where('unidad_administrativa_id', '122000')->first();
         $request->merge([
@@ -96,7 +87,7 @@ class RecomendacionesAtencionController extends Controller
 
     setMessage('Se han guardado los datos correctamente');
 
-    return redirect()->route('recomendacionesacciones.index');
+    return redirect()->route('recomendacionesatencion.index');
 
         // return redirect()->route('seguimientoauditoriaacciones.index');
     }
@@ -118,9 +109,12 @@ class RecomendacionesAtencionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Recomendaciones $recomendacion)
     {
-        //
+        $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $auditoria=$accion->auditoria;     
+
+        return view('recomendacionesatencion.form',compact('recomendacion','accion','auditoria'));
     }
 
     /**
@@ -142,11 +136,11 @@ class RecomendacionesAtencionController extends Controller
             'accion_id'=>getSession('recomendacionesauditoriaaccion_id'),
             'consecutivo' => 1,
             'departamento_responsable_id'=> auth()->user()->unidad_administrativa_id,
-    ]);
+        ]);
     $recomendacion->update($request->all());
 
     Movimientos::create([
-        'tipo_movimiento' => 'Registro del turno del PRAS',
+        'tipo_movimiento' => 'Registro de atencion de la recomendación',
         'accion' => 'Recomendación',
         'accion_id' => $recomendacion->id,
         'estatus' => 'Aprobado',
@@ -172,7 +166,7 @@ class RecomendacionesAtencionController extends Controller
 
     setMessage('Se han guardado los datos correctamente');
 
-    return redirect()->route('recomendacionesacciones.index');
+    return redirect()->route('recomendacionesatencion.index');
     }
 
     /**

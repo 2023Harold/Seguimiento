@@ -8,6 +8,7 @@ use App\Http\Controllers\AsignacionDepartamentoController;
 use App\Http\Controllers\AsignacionDepartamentoEncargadoController;
 use App\Http\Controllers\AsignacionDireccionController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\CedulaInicialController;
 use App\Http\Controllers\ComparecenciaActaController;
 use App\Http\Controllers\ComparecenciaAcusesController;
 use App\Http\Controllers\ComparecenciaAgendaController;
@@ -35,8 +36,13 @@ use App\Http\Controllers\RadicacionAutorizacionController;
 use App\Http\Controllers\RadicacionController;
 use App\Http\Controllers\RadicacionValidacionController;
 use App\Http\Controllers\RecomendacionesAccionesController;
+use App\Http\Controllers\RecomendacionesAcusesController;
 use App\Http\Controllers\RecomendacionesAtencionController;
+use App\Http\Controllers\RecomendacionesAutorizacionController;
 use App\Http\Controllers\RecomendacionesController;
+use App\Http\Controllers\RecomendacionesRevision01Controller;
+use App\Http\Controllers\RecomendacionesRevisionController;
+use App\Http\Controllers\RecomendacionesValidacionController;
 use App\Http\Controllers\SeguimientoAuditoriaAutorizacionController;
 use App\Http\Controllers\SeguimientoAuditoriaController;
 use App\Http\Controllers\SeguimientoAuditoriaRevision01Controller;
@@ -156,5 +162,15 @@ Route::resource('prasturnoacuses',PrasTurnoAcusesController::class,['parameters'
 Route::resource('recomendaciones',RecomendacionesController::class,['parameters' => ['recomendaciones' => 'auditoria']]);
 Route::resource('recomendacionesacciones',RecomendacionesAccionesController::class,['parameters' => ['recomendacionesacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
 Route::resource('recomendacionesatencion',RecomendacionesAtencionController::class,['parameters' => ['recomendacionesatencion' => 'recomendacion']]);
+
+Route::resource('recomendacionesrevision01',RecomendacionesRevision01Controller::class,['parameters' => ['recomendacionesrevision01' => 'recomendacion']]);
+Route::resource('recomendacionesrevision',RecomendacionesRevisionController::class,['parameters' => ['recomendacionesrevision' => 'recomendacion']]);
+Route::resource('recomendacionesvalidacion',RecomendacionesValidacionController::class,['parameters' => ['recomendacionesvalidacion' => 'recomendacion']]);
+Route::resource('recomendacionesautorizacion',RecomendacionesAutorizacionController::class,['parameters' => ['recomendacionesautorizacion' => 'recomendacion']]);
+Route::resource('recomendacionesacuses',RecomendacionesAcusesController::class,['parameters' => ['recomendacionesacuses' => 'recomendacion']]);
+
+
+Route::resource('cedulainicial',CedulaInicialController::class,['parameters' => ['cedulainicial' => 'auditoria']]);
+
 
 

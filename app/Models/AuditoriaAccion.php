@@ -43,7 +43,13 @@ class AuditoriaAccion extends Model
         'usuario_creacion_id',	
         'usuario_actualizacion_id',	
         'created_at',	
-        'updated_at'
+        'updated_at',
+        'evidencia_recomendacion',
+        'tipo_recomendacion',
+        'tramo_control_recomendacion',
+        'fecha_termino_recomendacion',
+        'plazo_recomendacion',
+        'normativa_infringida',
     ];
 
            
@@ -54,7 +60,8 @@ class AuditoriaAccion extends Model
      */
     protected $casts = [
         'created_at'=>'datetime',
-        'updated_at'=>'datetime'
+        'updated_at'=>'datetime',
+        'fecha_termino_recomendacion'=>'datetime',
     ];       
     
     public function getDepaasignadoAttribute()

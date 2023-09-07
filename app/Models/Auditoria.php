@@ -116,4 +116,24 @@ class Auditoria extends Model
             {
                 return User::where('unidad_administrativa_id',$this->departamento_encargado_id)->first();
             }
+
+            public function totalrecomendacion()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2);
+            }
+
+            public function totalpras()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 4);
+            }
+
+            public function totalsolacl()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 1);
+            }
+            
+            public function totalpliegos()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3);
+            }
 }

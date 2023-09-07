@@ -107,7 +107,11 @@ class RecomendacionesAccionesController extends Controller
          $query = $this->model;
 
          $query = $query->where('segauditoria_id',getSession('recomendacionesauditoria_id'))->where('segtipo_accion_id',2);
-                
+        
+         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
+            $query = $query->where('analista_asignado_id',auth()->user()->id);
+        } 
+
         if ($request->filled('consecutivo')) {            
             $query = $query->where('consecutivo',$request->consecutivo);
          }

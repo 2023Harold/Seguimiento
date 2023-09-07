@@ -24,7 +24,6 @@ class Recomendaciones extends Model
         'auditoria_id',
         'segauditorias',
         'usuario_creacion_id',
-        'segusers',
         'usuario_modificacion_id',
         'accion_id',//accion_id
         'auditoria_id',
@@ -37,7 +36,13 @@ class Recomendaciones extends Model
         'accion',
         'analisis',
         'oficio_contestacion',
-        'conlusion'           
+        'conclusion',
+        'fase_autorizacion',
+        'constancia_autorizacion', 
+        'oficio_comprobante',
+        'fecha_comprobante',
+        'oficio_acuse',
+        'fecha_acuse'          
     ];
 
     protected $dates = [
@@ -45,7 +50,9 @@ class Recomendaciones extends Model
         'fecha_elaboracion_oficio',
         'fecha_recepcion',
         'fecha_acuse',
-        'fecha_proxima_seguimiento'
+        'fecha_proxima_seguimiento',
+        'fecha_comprobante',
+        'fecha_acuse' 
     ];
 
     public function auditoria()
@@ -65,7 +72,7 @@ class Recomendaciones extends Model
 
     public function movimientos()
     {
-        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'PRASAuditoria Turno')->orderBy('id', 'ASC');
+        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Recomendación')->orderBy('id', 'ASC');
     }
    
 }

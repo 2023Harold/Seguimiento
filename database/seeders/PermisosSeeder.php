@@ -23,7 +23,10 @@ class PermisosSeeder extends Seeder
                         'asignaciondepartamentoencargado','radicacion','radicacionvalidacion',
                         'radicacionautorizacion','comparecencia','comparecenciaacuse','comparecenciaacta',
                         'pras','prasacciones','prasturno','prasturnorevision','prasturnovalidacion',
-                        'prasturnoautorizacion','prasturnoacuses'];
+                        'prasturnoautorizacion','prasturnoacuses','recomendaciones','recomendacionesacciones'
+                        ,'recomendacionesatencion','recomendacionesrevision01','recomendacionesrevision'
+                        ,'recomendacionesvalidacion','recomendacionesautorizacion','recomendacionesacuses'
+                        ,'cedulainicial'];
         $permisosGenerales = [];
         $i = 0;
 

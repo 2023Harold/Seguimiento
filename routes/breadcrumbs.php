@@ -249,3 +249,49 @@ Breadcrumbs::for('recomendacionesatencion.create', function (BreadcrumbTrail $tr
     $trail->parent('recomendacionesacciones.index');
     $trail->push('Datos de atención', route('recomendacionesatencion.create'));
 });
+
+Breadcrumbs::for('recomendacionesatencion.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('recomendacionesacciones.index');
+    $trail->push('Atención de la recomendación', route('recomendacionesatencion.index'));
+});
+
+Breadcrumbs::for('recomendacionesrevision01.edit', function (BreadcrumbTrail $trail,$recomedacion) {
+    $trail->parent('recomendacionesatencion.index');
+    $trail->push('Revisar', route('recomendacionesrevision01.edit',$recomedacion));
+});
+
+Breadcrumbs::for('recomendacionesrevision.edit', function (BreadcrumbTrail $trail,$recomedacion) {
+    $trail->parent('recomendacionesatencion.index');
+    $trail->push('Revisar', route('recomendacionesrevision.edit',$recomedacion));
+});
+
+Breadcrumbs::for('recomendacionesvalidacion.edit', function (BreadcrumbTrail $trail,$recomedacion) {
+    $trail->parent('recomendacionesatencion.index');
+    $trail->push('Validar', route('recomendacionesvalidacion.edit',$recomedacion));
+});
+
+Breadcrumbs::for('recomendacionesautorizacion.edit', function (BreadcrumbTrail $trail,$recomedacion) {
+    $trail->parent('recomendacionesatencion.index');
+    $trail->push('Autorizar-Rechazar', route('recomendacionesautorizacion.edit',$recomedacion));
+});
+
+Breadcrumbs::for('recomendacionesacuses.edit', function (BreadcrumbTrail $trail,$recomedacion) {
+    $trail->parent('recomendacionesatencion.index');
+    $trail->push('Acuses', route('recomendacionesacuses.edit',$recomedacion));
+});
+
+Breadcrumbs::for('recomendacionesacuses.show', function (BreadcrumbTrail $trail,$recomedacion) {
+    $trail->parent('recomendacionesatencion.index');
+    $trail->push('Acuses', route('recomendacionesacuses.show',$recomedacion));
+});
+
+Breadcrumbs::for('cedulainicial.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Cédulas iniciales', route('cedulainicial.index'));    
+});
+
+Breadcrumbs::for('cedulainicial.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('cedulainicial.index');
+    $trail->push('Cédula', route('cedulainicial.edit',$auditoria));    
+});
+

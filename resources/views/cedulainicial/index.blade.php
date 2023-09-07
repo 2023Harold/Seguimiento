@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-
-{{ Breadcrumbs::render('recomendaciones.index') }}
+{{ Breadcrumbs::render('cedulainicial.index') }}
 @endsection
 @section('content')
 <div class="row">
@@ -11,12 +10,12 @@
                 <h1 class="card-title">
                     <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;
-                    Recomendaciones
+                    Cédulas Iniciales
                 </h1>
             </div>
             <div class="card-body">
                 @include('flash::message')
-                {!! BootForm::open(['route'=>'pras.index','method'=>'GET']) !!}
+                {!! BootForm::open(['route'=>'cedulainicial.index','method'=>'GET']) !!}
                 <div class="row">
                     <div class="col-md-2">
                         {!! BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria',
@@ -70,10 +69,10 @@
                                     {{ '$'.number_format( $auditoria->total(), 2) }}
                                 </td>
                                 <td class="text-center">
-                                    @can('recomendaciones.edit')
-                                    <a href="{{ route('recomendaciones.edit',$auditoria) }}" class="btn btn-primary">
-                                        <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
-                                    </a>
+                                    @can('pras.edit')
+                                        <a href="{{ route('cedulainicial.edit',$auditoria) }}" class="btn btn-primary">
+                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
+                                        </a>
                                     @endcan                                    
                                 </td>
                             </tr>

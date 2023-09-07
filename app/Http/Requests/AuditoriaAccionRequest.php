@@ -28,8 +28,13 @@ class AuditoriaAccionRequest extends FormRequest
             'segtipo_accion_id' => 'required|integer|max:999999999999',
             'numero' => 'required|string|max:100',
             'cedula' => 'sometimes|nullable|string|max:100',
-            'accion' => 'required|string|max:50000',
-            'monto_aclarar' => 'sometimes|nullable|required_if:segtipo_accion_id,1,3,4|string|max:20|no_js_validation',
+            'accion' => 'required|string|max:50000',    
+            'normativa_infringida' => 'required|string|max:3000',        
+            'evidencia_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:150',
+            'tipo_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
+            'tramo_control_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
+            'fecha_termino_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
+            'plazo_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
         ];        
     }
 
@@ -41,7 +46,13 @@ class AuditoriaAccionRequest extends FormRequest
             'numero' => 'número de acción',
             'cedula' => 'cédula de acción',
             'accion' => 'acción',
+            'normativa_infringida' => 'normativa infringida',
             'monto_aclarar' => 'monto por aclarar',
+            'evidencia_recomendacion' => 'evidencia documental que acredite la atención de la recomendación',
+            'tipo_recomendacion' => 'tipo de recomendación',
+            'tramo_control_recomendacion' => 'tramo de control',
+            'fecha_termino_recomendacion' => 'fecha de término',
+            'plazo_recomendacion' => 'plazo convenido',
         ];
     }
 

@@ -15,17 +15,11 @@
         @include('flash::message')
         @include('layouts.contextos._auditoria')
         @include('layouts.contextos._accion')
-        <h3 class="text-primary">Atención</h3> <br>
+        <h3 class="text-primary">Atención de la recomendación</h3> <br>
         <div class="row">
             {!! BootForm::open(['model' => $recomendacion,'store' => 'recomendacionesatencion.store','update' =>
             'recomendacionesatencion.update','id' =>
-            'form',]) !!}
-            <div class="row">
-                <div class="col-md-3">
-                    {!! BootForm::date('fecha_compromiso', 'Fecha compromiso de atención: *',
-                    old('fecha_compromiso',$recomendacion->fecha_compromiso)) !!}
-                </div>
-            </div>
+            'form',]) !!}           
             <div class="row">
                 <div class="col-md-6">
                     {!! BootForm::text('nombre_responsable', 'Nombre del responsable de atender las recomendaciones por
@@ -43,7 +37,7 @@
             <div class="row">
                 <div class="col-md-6">
                     {!! BootForm::text('analista_responsable', 'Responsable del seguimiento:*',
-                    old('analista_responsable',$accion->analista_responsable)) !!}
+                    old('analista_responsable',$accion->analista->name),['readonly']) !!}
                 </div>
             </div>
             <div class="row">
@@ -60,8 +54,8 @@
             </div>
             <div class="row">
                 <div class="col-md-10">
-                    {!! BootForm::text('conlusion', 'Conclusión: *',
-                    old('conlusion', $recomendacion->conlusion)) !!}
+                    {!! BootForm::text('conclusion', 'Conclusión: *',
+                    old('conclusion', $recomendacion->conclusion)) !!}
                 </div>
             </div>
             <div class="row">
