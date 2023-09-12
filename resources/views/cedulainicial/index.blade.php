@@ -69,7 +69,7 @@
                                     {{ '$'.number_format( $auditoria->total(), 2) }}
                                 </td>
                                 <td class="text-center">
-                                    @can('pras.edit')
+                                    @can('cedulainicial.edit')
                                         <a href="{{ route('cedulainicial.edit',$auditoria) }}" class="btn btn-primary">
                                             <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
                                         </a>

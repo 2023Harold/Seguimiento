@@ -37,7 +37,9 @@ use App\Http\Controllers\RadicacionController;
 use App\Http\Controllers\RadicacionValidacionController;
 use App\Http\Controllers\RecomendacionesAccionesController;
 use App\Http\Controllers\RecomendacionesAcusesController;
+use App\Http\Controllers\RecomendacionesAtencionCalificacionController;
 use App\Http\Controllers\RecomendacionesAtencionController;
+use App\Http\Controllers\RecomendacionesAtencionDocumentosController;
 use App\Http\Controllers\RecomendacionesAutorizacionController;
 use App\Http\Controllers\RecomendacionesController;
 use App\Http\Controllers\RecomendacionesRevision01Controller;
@@ -166,6 +168,8 @@ Route::resource('prasturnoacuses',PrasTurnoAcusesController::class,['parameters'
 Route::resource('recomendaciones',RecomendacionesController::class,['parameters' => ['recomendaciones' => 'auditoria']]);
 Route::resource('recomendacionesacciones',RecomendacionesAccionesController::class,['parameters' => ['recomendacionesacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
 Route::resource('recomendacionesatencion',RecomendacionesAtencionController::class,['parameters' => ['recomendacionesatencion' => 'recomendacion']]);
+Route::resource('recomendacionescalificacion',RecomendacionesAtencionCalificacionController::class,['parameters' => ['recomendacionescalificacion' => 'recomendacion']]);
+Route::resource('recomendacionesdocumentos',RecomendacionesAtencionDocumentosController::class,['parameters' => ['recomendacionesdocumentos' => 'documento']]);
 
 Route::resource('recomendacionesrevision01',RecomendacionesRevision01Controller::class,['parameters' => ['recomendacionesrevision01' => 'recomendacion']]);
 Route::resource('recomendacionesrevision',RecomendacionesRevisionController::class,['parameters' => ['recomendacionesrevision' => 'recomendacion']]);

@@ -125,10 +125,10 @@ class RolesSeeder extends Seeder
         //*********************************************************************************************************************************************************** */
        
         //Permisos Analista
-        $permisosAnalista = array_merge($home, $seguimientoauditoriaAnalista, $seguimientoauditoriaaccionesAnalista,$recomendacionesAnalista,$cedulaInicial);
+        $permisosAnalista = array_merge($home, $seguimientoauditoriaAnalista, $seguimientoauditoriaaccionesAnalista,$recomendacionesAnalista,$cedulaInicial,$radicacionConsulta,$comparecenciaConsulta);
         
         //Permisos Lider de Proyecto
-        $permisosLiderProyecto = array_merge($home, $seguimientoauditoriaLiderProyecto, $seguimientoauditoriaaccionesLiderProyecto,$seguimientoauditoriarevisionLiderProyecto,$prasLider,$recomendacionesLider,$cedulaInicial);
+        $permisosLiderProyecto = array_merge($home, $seguimientoauditoriaLiderProyecto, $seguimientoauditoriaaccionesLiderProyecto,$seguimientoauditoriarevisionLiderProyecto,$prasLider,$recomendacionesLider,$cedulaInicial,$radicacionConsulta,$comparecenciaConsulta);
         
         //Permisos Jefe de Departamento
         $permisosJefeDepartamento = array_merge($home, $seguimientoauditoriaJefeDepartamento, $seguimientoauditoriaaccionesJefeDepartamento, $seguimientoauditoriarevisionJefeDepartamento,$asignacionesLiderAnalistaJefeDepartamento,$radicacionJefeDepartamento,$comparecenciaJefeDepartamento,$prasJefe,$recomendacionesJefe,$cedulaInicial);

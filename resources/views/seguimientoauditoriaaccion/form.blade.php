@@ -41,7 +41,7 @@
         </div>   
         <div class="row">
             <div class="col-md-12">
-                {!! BootForm::textarea('normativa_infringida', 'Normativa infringida: *', old('normativa_infringida', $accion->accion)) !!}
+                {!! BootForm::textarea('normativa_infringida', 'Normativa infringida: *', old('normativa_infringida', $accion->normativa_infringida)) !!}
             </div>
         </div>   
         @php           
@@ -71,7 +71,7 @@
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    {!! BootForm::date('fecha_termino_recomendacion', 'Fecha de término: *', old('fecha_termino_recomendacion', $accion->fecha_termino_recomendacion)) !!}
+                    {!! BootForm::date('fecha_termino_recomendacion', 'Fecha de término: *', old('fecha_termino_recomendacion', fecha($accion->fecha_termino_recomendacion, 'Y-m-d'))) !!}
                 </div>
             </div>
             <div class="row">

@@ -22,7 +22,7 @@ class RecomendacionesAtencionController extends Controller
         $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendaciones = Recomendaciones::where('accion_id',getSession('recomendacionesauditoriaaccion_id'))->get();
-        // $atencion_ =Recomendaciones::$request;
+           
         return view('recomendacionesatencion.index',compact('recomendaciones','auditoria','accion','request'));
     }
 
@@ -51,46 +51,20 @@ class RecomendacionesAtencionController extends Controller
     {
         $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
         mover_archivos($request, ['oficio_contestacion']);
-        $firmante = User::where('unidad_administrativa_id', '122000')->first();
+        //$firmante = User::where('unidad_administrativa_id', '122000')->first();
         $request->merge([
             'auditoria_id' => $auditoria->id,
             'usuario_creacion_id' => auth()->id(),
             'accion_id'=>getSession('recomendacionesauditoriaaccion_id'),
             'consecutivo' => 1,
             'departamento_responsable_id'=> auth()->user()->unidad_administrativa_id,
-    ]);
-    $recomendacion= Recomendaciones::create($request->all());
+        ]);
+        $recomendacion= Recomendaciones::create($request->all());
+        setSession('recomendacioncalificacion_id',$recomendacion->id);
 
-    Movimientos::create([
-        'tipo_movimiento' => 'Registro de atencion de la recomendación',
-        'accion' => 'Recomendación',
-        'accion_id' => $recomendacion->id,
-        'estatus' => 'Aprobado',
-        'usuario_creacion_id' => auth()->id(),
-        'usuario_asignado_id' => auth()->id(),
-    ]);        
+        setMessage('Se han guardado los datos correctamente');
 
-    if (strlen($recomendacion->nivel_autorizacion) == 3) {
-        $nivel_autorizacion = $recomendacion->nivel_autorizacion;
-    } else {
-        $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
-    }
-   
-    $recomendacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);      
-
-    $titulo = 'Revisión del registro de la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-    $mensaje = '<strong>Estimado (a) ' . auth()->user()->lider->name . ', ' . auth()->user()->lider->puesto . ':</strong><br>
-                Ha sido registrada la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria . ', por parte del ' . 
-                auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
-
-    auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->lider->unidad_administrativa_id,auth()->user()->lider->id);
-
-
-    setMessage('Se han guardado los datos correctamente');
-
-    return redirect()->route('recomendacionesatencion.index');
-
-        // return redirect()->route('seguimientoauditoriaacciones.index');
+        return redirect()->route('recomendacionescalificacion.edit',$recomendacion);        
     }
 
     /**
@@ -130,7 +104,7 @@ class RecomendacionesAtencionController extends Controller
            
         $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
         mover_archivos($request, ['oficio_remision'], $recomendacion);
-        $firmante = User::where('unidad_administrativa_id', '122000')->first();
+     
         $request->merge([
             'auditoria_id' => $auditoria->id,
             'usuario_creacion_id' => auth()->id(),
@@ -138,36 +112,15 @@ class RecomendacionesAtencionController extends Controller
             'consecutivo' => 1,
             'departamento_responsable_id'=> auth()->user()->unidad_administrativa_id,
         ]);
-    $recomendacion->update($request->all());
+         $recomendacion->update($request->all());
+         setSession('recomendacioncalificacion_id',$recomendacion->id);
 
-    Movimientos::create([
-        'tipo_movimiento' => 'Registro de atencion de la recomendación',
-        'accion' => 'Recomendación',
-        'accion_id' => $recomendacion->id,
-        'estatus' => 'Aprobado',
-        'usuario_creacion_id' => auth()->id(),
-        'usuario_asignado_id' => auth()->id(),
-    ]);        
+       
 
-    if (strlen($recomendacion->nivel_autorizacion) == 3) {
-        $nivel_autorizacion = $recomendacion->nivel_autorizacion;
-    } else {
-        $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
-    }
-   
-    $recomendacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);      
+        setMessage('Se han guardado los datos correctamente');
 
-    $titulo = 'Revisión del registro de la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-    $mensaje = '<strong>Estimado (a) ' . auth()->user()->lider->name . ', ' . auth()->user()->lider->puesto . ':</strong><br>
-                Ha sido registrada la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria . ', por parte del ' . 
-                auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
-
-    auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->lider->unidad_administrativa_id,auth()->user()->lider->id);
-
-
-    setMessage('Se han guardado los datos correctamente');
-
-    return redirect()->route('recomendacionesatencion.index');
+     
+        return redirect()->route('recomendacionescalificacion.edit',$recomendacion);
     }
 
     /**

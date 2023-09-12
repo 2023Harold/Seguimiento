@@ -37,22 +37,35 @@
                 </span>
             </div>
         </div>
+        @if (!empty($recomendacion->analisis))
         <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                <label>Analisis </label><br>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <label>Analisis: </label><br>
                 <span class="text-primary text-justify">
                     {{$recomendacion->analisis }}
                 </span>
             </div>             
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                <label>Conclusión </label><br>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <label>Calificación de la atención: </label>
+                @if ($recomendacion->calificacion_atencion=='Atendida')
+                    <span class="badge badge-light-success">Atendida</span>
+                @endif
+                @if ($recomendacion->calificacion_atencion=='No Atendida')
+                    <span class="badge badge-light-danger">No Atendida</span>
+                @endif
+            </div>             
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <label>Conclusión: </label><br>
                 <span class="text-primary text-justify">
                     {{$recomendacion->conclusion }}
                 </span>
             </div>             
         </div>
+        @endif        
         <hr/>
     </div>
 </div>

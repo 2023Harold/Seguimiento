@@ -27,9 +27,8 @@ class RecomendacionesRequest extends FormRequest
             'nombre_responsable' => 'required|string|max:150',
             'cargo_responsable' => 'required|string|max:150',
             'oficio_contestacion' => 'required|string|max:150',
-            'analisis' => 'required|string|max:6000',
-            'calificacion_atencion'=>'required|string|max:10',
-            'conclusion' => 'required|string|max:6000',                      
+            // 'analisis' => 'required|string|max:3000',
+            // 'conclusion' => 'required|string|max:3000',                      
         ];
     }
 
@@ -37,11 +36,11 @@ class RecomendacionesRequest extends FormRequest
     {
         return [
             'nombre_responsable' => 'nombre del responsable de atender las recomendaciones por parte de la entidad fiscalizable',
+            'cargo_responsable' => 'cargo del responsable de atender las recomendaciones por parte de la entidad fiscalizable',
             'oficio_contestacion' => 'oficio de contestación de la recomendación',
-            'fecha_oficio_designacion' => 'fecha del oficio',
-            'analisis' => 'análisis',
-            'calificacion_atencion' => 'calificación de la atención',
-            'conclusion' => 'conclusión',            
+            // 'fecha_oficio_designacion' => 'fecha del oficio',
+            // 'analisis' => 'análisis',
+            // 'conclusion' => 'conclusión',            
             
         ];
     }

@@ -127,31 +127,38 @@ class CedulaInicialController extends Controller
     public function setQuery(Request $request)
     {
          $query = $this->model;
-         $query = $query->whereHas('comparecencia', function($q){
-            $q->whereNotNull('oficio_acta');
-        });  
-                  
-        if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
-            $query = $query->where('usuario_creacion_id',auth()->id());
-        }
-
-        if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){            
-            $query = $query->whereHas('acciones', function($q){
-                $q->where('lider_asignado_id',auth()->user()->id);
-            });
-        }       
-
-        if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){     
+         
+        if(in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){     
             $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
-            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
-        }
+            $query = $query->where('fase_autorizacion','Autorizado');
+        } 
 
-        if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())||
-           in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||
-           in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
-           in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){                 
-            $query = $query->whereNotNull('fase_autorizacion');
+        if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){     
+            $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
+            $query = $query->where('direccion_asignada_id',$unidadAdministrativa);
         }
+        
+        $query = $query->whereHas('acciones', function($q){
+            if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){     
+                $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
+                $q = $q->where('departamento_asignado_id',$unidadAdministrativa)->orWhere('departamento_encargado_id',$unidadAdministrativa);
+            } 
+            if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){    
+                $userLider=auth()->user(); 
+                $q = $q->where('lider_asignado_id',$userLider->id);
+            }
+            if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
+                $userAnalista=auth()->user(); 
+                $q = $q->where('analista_asignado_id',$userAnalista->id);
+            }            
+            if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
+               in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
+               in_array("Secretaria Técnica", auth()->user()->getRoleNames()->toArray())){                 
+                $q = $q->whereNotNull('analista_asignado_id');
+            }
+        });        
+
+        
         
                 
         if ($request->filled('numero_auditoria')) {

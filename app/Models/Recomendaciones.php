@@ -34,6 +34,7 @@ class Recomendaciones extends Model
         'usuario_firmante_id',
         'nivel_autorizacion',
         'accion',
+        'calificacion_atencion',
         'analisis',
         'oficio_contestacion',
         'conclusion',
@@ -77,6 +78,11 @@ class Recomendaciones extends Model
     public function movimientos()
     {
         return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Recomendación')->orderBy('id', 'ASC');
+    }
+
+    public function documentos()
+    {
+        return $this->hasMany(RecomendacionesDocumento::class, 'recomendacion_id','id');
     }
    
 }

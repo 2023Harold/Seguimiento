@@ -27,8 +27,9 @@
                                 <th>Cargo del responsable</th>
                                 <th>Responsable del seguimiento</th>
                                 <th>Oficio de la contestación de la recomendación</th>
+                                <th>Listado de Doc.</th>
+                                <th>Calificación</th>
                                 <th>Fase / Constancia</th>
-                                <th>Acuses</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,7 +44,7 @@
                                 <td>
                                     {{$recomendacion->cargo_responsable }}
                                 </td>
-                                <td>
+                                <td>                                    
                                     {{$accion->analista->name }}
                                 </td>
                                 <td class="text-center">
@@ -53,6 +54,19 @@
                                         </a>                      
                                     @endif
                                 </td>                         
+                                <td class="text-center">                             
+                                    <a href="{{ route('recomendacionescalificacion.show', $recomendacion) }}" class="btn btn-secondary popupSinLocation">
+                                        <span class="fa fa-list" aria-hidden="true"></span>
+                                    </a>                                   
+                                </td>
+                                <td class="text-center">
+                                    @if ($recomendacion->calificacion_atencion=='Atendida')
+                                        <span class="badge badge-light-success">Atendida</span>
+                                    @endif
+                                    @if ($recomendacion->calificacion_atencion=='No Atendida')
+                                        <span class="badge badge-light-danger">No Atendida</span>
+                                    @endif
+                                </td>
                                 <td class="text-center">                                                 
                                      @if (empty($recomendacion->fase_autorizacion)||$recomendacion->fase_autorizacion=='Rechazado')   
                                         <span class="badge badge-light-danger">{{ $recomendacion->fase_autorizacion }} </span><br>
@@ -69,7 +83,7 @@
                                                 Revisar
                                             </a>
                                         @else
-                                            <span class="badge badge-light-warning">{{ $recomendacion->fase_autorizacion }} </span>
+                                            <span class="badge badge-light-warning">En revisión</span>
                                         @endcan                                               
                                     @endif
                                     @if ($recomendacion->fase_autorizacion == 'En revisión')                                                
@@ -106,23 +120,6 @@
                                     <span class="badge badge-light-success">{{ $recomendacion->fase_autorizacion }} </span> <br>
                                         @btnFile($recomendacion->constancia)
                                         @btnXml($recomendacion, 'constancia')
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if ($recomendacion->fase_autorizacion=='Autorizado')
-                                        @if (empty($recomendacion->oficio_comprobante))
-                                            @can('recomendacionesacuses.edit')
-                                                <a href="{{ route('recomendacionesacuses.edit', $recomendacion) }}" class="btn btn-primary">
-                                                    <span class="fa fa-file-plus" aria-hidden="true"></span>&nbsp; Adjuntar
-                                                </a>
-                                            @endcan
-                                        @else
-                                            @can('recomendacionesacuses.show')
-                                                <a href="{{ route('recomendacionesacuses.show', $recomendacion) }}" class="btn btn-secondary" >
-                                                    <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
-                                                </a>
-                                            @endcan
-                                        @endif
                                     @endif
                                 </td>
                             </tr>

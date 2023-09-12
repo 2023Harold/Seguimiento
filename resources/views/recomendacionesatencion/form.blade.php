@@ -23,14 +23,14 @@
             <div class="row">
                 <div class="col-md-6">
                     {!! BootForm::text('nombre_responsable', 'Nombre del responsable de atender las recomendaciones por
-                    parte de la entidad fiscalizable: *', old('nombre_responsable',$recomendacion->nombre_responsable))
+                    parte de la entidad fiscalizable: *', old('nombre_responsable',(empty($recomendacion->nombre_responsable)?$auditoria->comparecencia->nombre_representante:$recomendacion->nombre_responsable)))
                     !!}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     {!! BootForm::text('cargo_responsable', 'Cargo del responsable de atender las recomendaciones por
-                    parte de la entidad fiscalizable: *', old('cargo_responsable',$recomendacion->cargo_responsable))
+                    parte de la entidad fiscalizable: *', old('cargo_responsable',(empty($recomendacion->nombre_responsable)?$auditoria->comparecencia->cargo_representante1:$recomendacion->cargo_responsable)))
                     !!}
                 </div>
             </div>
@@ -45,26 +45,7 @@
                     {!! archivo('oficio_contestacion', 'Oficio de contestacion de la recomendación: *',
                     old('oficio_contestacion', $recomendacion->oficio_contestacion)) !!}
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-10">
-                    {!! BootForm::textarea('analisis', 'Análisis *',
-                    old('analisis', $recomendacion->analisis)) !!}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    {!! BootForm::radios("calificacion_atencion", ' Calificación de la atención: *', ['Atendida', 'No
-                    Atendida'],
-                    null,false,['class'=>'i-checks rechazado']); !!}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-10">
-                    {!! BootForm::textarea('conclusion', 'Conclusión: *',
-                    old('conclusion', $recomendacion->conclusion)) !!}
-                </div>
-            </div>
+            </div>           
             <div class="row">
                 <div class="col-md-12">
                     @btnSubmit('Guardar',route('recomendacionesatencion.store'))

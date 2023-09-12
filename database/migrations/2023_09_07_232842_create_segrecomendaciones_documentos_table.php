@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('segrecomendaciones', function (Blueprint $table) {
-            $table->text('analisis')->nullable();
-            $table->string('calificacion_atencion',15)->nullable();
-            $table->text('conclusion')->nullable();
-            $table->string('concluido',2)->default("No");
+        Schema::create('segrecomendaciones_documentos', function (Blueprint $table) {
+            $table->id();
+            $table->integer('consecutivo')->nullable();
+            $table->string('nombre_documento', 500);
+            $table->foreignId('recomendacion_id')->constrained('segrecomendaciones');
+            $table->timestamps();
         });
     }
 
@@ -28,8 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('segrecomendaciones', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('segrecomendaciones_documentos');
     }
 };

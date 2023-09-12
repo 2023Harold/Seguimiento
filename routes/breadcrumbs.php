@@ -250,6 +250,16 @@ Breadcrumbs::for('recomendacionesatencion.create', function (BreadcrumbTrail $tr
     $trail->push('Datos de atención', route('recomendacionesatencion.create'));
 });
 
+Breadcrumbs::for('recomendacionesatencion.edit', function (BreadcrumbTrail $trail,$recomendacion) {
+    $trail->parent('recomendacionesacciones.index');
+    $trail->push('Datos de atención', route('recomendacionesatencion.edit',$recomendacion));
+});
+
+Breadcrumbs::for('recomendacionescalificacion.edit', function (BreadcrumbTrail $trail,$recomendacion) {
+    $trail->parent('recomendacionesatencion.edit',$recomendacion);
+    $trail->push('Calificación de la atención', route('recomendacionescalificacion.edit',$recomendacion));
+});
+
 Breadcrumbs::for('recomendacionesatencion.index', function (BreadcrumbTrail $trail) {
     $trail->parent('recomendacionesacciones.index');
     $trail->push('Atención de la recomendación', route('recomendacionesatencion.index'));
