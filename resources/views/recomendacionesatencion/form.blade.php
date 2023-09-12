@@ -54,7 +54,8 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    {!! BootForm::radios("estatus", ' Calificación de la atención: *', ['Atendida', 'No Atendida'],
+                    {!! BootForm::radios("calificacion_atencion", ' Calificación de la atención: *', ['Atendida', 'No
+                    Atendida'],
                     null,false,['class'=>'i-checks rechazado']); !!}
                 </div>
             </div>

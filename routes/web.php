@@ -48,6 +48,10 @@ use App\Http\Controllers\SeguimientoAuditoriaController;
 use App\Http\Controllers\SeguimientoAuditoriaRevision01Controller;
 use App\Http\Controllers\SeguimientoAuditoriaRevisionController;
 use App\Http\Controllers\SeguimientoAuditoriaValidacionController;
+use App\Http\Controllers\SolicitudesAclaracionAccionesController;
+use App\Http\Controllers\SolicitudesDeAclaracionController;
+use App\Http\Controllers\SolventacionesAccionesController;
+use App\Http\Controllers\SolventacionesController;
 use App\Http\Controllers\Usercontroller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -172,5 +176,6 @@ Route::resource('recomendacionesacuses',RecomendacionesAcusesController::class,[
 
 Route::resource('cedulainicial',CedulaInicialController::class,['parameters' => ['cedulainicial' => 'auditoria']]);
 
-
-
+/*solicitudesaclaracion*/
+Route::resource('solicitudesdeaclaracion',SolicitudesDeAclaracionController::class,['parameters' => ['solicitudesdeaclaracion' => 'auditoria']]);
+Route::resource('solicitudesaclaracionacciones',SolicitudesAclaracionAccionesController::class,['parameters' => ['solicitudesaclaracionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta

@@ -42,7 +42,11 @@ class Recomendaciones extends Model
         'oficio_comprobante',
         'fecha_comprobante',
         'oficio_acuse',
-        'fecha_acuse'          
+        'fecha_acuse',
+        'analisis',
+        'calificacion_atencion',
+        'conclusion',
+        'concluido'
     ];
 
     protected $dates = [

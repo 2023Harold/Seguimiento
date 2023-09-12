@@ -22,7 +22,7 @@ class RecomendacionesAtencionController extends Controller
         $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendaciones = Recomendaciones::where('accion_id',getSession('recomendacionesauditoriaaccion_id'))->get();
-        $status =Recomendaciones::$request;
+        // $atencion_ =Recomendaciones::$request;
         return view('recomendacionesatencion.index',compact('recomendaciones','auditoria','accion','request'));
     }
 

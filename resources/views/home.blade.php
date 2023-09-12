@@ -416,29 +416,29 @@
                     <div class="overflow-auto card-body h-200px">
                         <div class="d-flex flex-column">
                             @can('pras.index')
-                                <li class="py-2 d-flex align-items-center">                                
-                                    <span class="bullet me-5 bg-primary"></span>                                
-                                    <a href="{{ route('pras.index') }}">
-                                        PRAS
-                                    </a>                                
-                                </li>
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('pras.index') }}">
+                                    PRAS
+                                </a>
+                            </li>
                             @endcan
                             @can('recomendaciones.index')
-                                <li class="py-2 d-flex align-items-center"> 
-                                    <span class="bullet me-5 bg-primary"></span>
-                                    <a href="{{ route('recomendaciones.index') }}">
-                                        Recomendaciones
-                                    </a>
-                                </li>
-                            @endcan
-                            {{-- <li class="py-2 d-flex align-items-center">
+                            <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('asignaciondireccion.index') }}">
-                                    Solventaciones
+                                <a href="{{ route('recomendaciones.index') }}">
+                                    Recomendaciones
+                                </a>
+                            </li>
+                            @endcan
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('solicitudesdeaclaracion.index') }}">
+                                    Solicitudes de aclaración
                                 </a>
                             </li>
 
-                            <li class="py-2 d-flex align-items-center">
+                            {{-- <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('asignaciondireccion.index') }}">
                                     Conclusion y archivo
@@ -447,7 +447,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
             @endcan
             @canany(['cedulainicial.index'])
             <div class="mb-3 col-md-3">
@@ -466,7 +466,7 @@
                                 <a href="{{ route('cedulainicial.index') }}">
                                     Cédula inicial
                                 </a>
-                            </li>                            
+                            </li>
                             {{-- <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('asignaciondireccion.index') }}">
@@ -483,9 +483,9 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
             @endcan
-            
+
             {{--
             <div class="mb-3 col-md-3">
                 <div class="card">

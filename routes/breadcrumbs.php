@@ -295,3 +295,14 @@ Breadcrumbs::for('cedulainicial.edit', function (BreadcrumbTrail $trail,$auditor
     $trail->push('Cédula', route('cedulainicial.edit',$auditoria));    
 });
 
+/*solicitudes de aclaracion */
+Breadcrumbs::for('solicitudesdeaclaracion.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Solicitudes', route('solicitudesdeaclaracion.index'));
+});   
+
+/*solicitudesaclaracionacciones */
+Breadcrumbs::for('solicitudesaclaracionacciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('solicitudesdeaclaracion.index');
+    $trail->push('Acciones', route('solicitudesaclaracionacciones.index'));
+});
