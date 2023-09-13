@@ -20,7 +20,7 @@
             {!! BootForm::open(['model' => $recomendacion,'update' =>'recomendacionescalificacion.update','id' =>'form',]) !!}           
             <div class="row">
                 <div class="col-md-12">
-                    <a class="btn btn-primary popupSinLocation" href="{{ route('recomendacionesdocumentos.index') }}">Listado de documentos</a>
+                    <a class="btn btn-light-linkedin popupSinLocation" href="{{ route('recomendacionesdocumentos.index') }}">Listado de documentos</a>
                     {!! BootForm::hidden('documentos','',['id'=>'documentos'])!!}
                 </div>
             </div>

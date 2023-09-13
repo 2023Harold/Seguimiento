@@ -109,15 +109,24 @@ class RolesSeeder extends Seeder
         $prasConsulta=['pras.index','pras.edit','prasacciones.index','prasacciones.edit','prasturno.index','prasturnoacuses.show'];
         
         //Recomendaciones 
-        $recomendacionesAnalista=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionesatencion.create','recomendacionesatencion.store','recomendacionesatencion.edit','recomendacionesatencion.update','recomendacionesacuses.edit','recomendacionesacuses.update','recomendacionesacuses.show'];
-        $recomendacionesLider=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionesacuses.show','recomendacionesrevision01.edit','recomendacionesrevision01.update'];
-        $recomendacionesJefe=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionesacuses.show','recomendacionesrevision.edit','recomendacionesrevision.update'];
-        $recomendacionesDirector=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionesacuses.show','recomendacionesvalidacion.edit','recomendacionesvalidacion.update'];
-        $recomendacionesTitular=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionesacuses.show','recomendacionesautorizacion.edit','recomendacionesautorizacion.update'];
-        $recomendacionesConsulta=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionesacuses.show'];
+        $recomendacionesAnalista=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionesatencion.create','recomendacionesatencion.store','recomendacionesatencion.edit','recomendacionesatencion.update','recomendacionescalificacion.edit','recomendacionescalificacion.update','recomendacionescalificacion.show','recomendacionesdocumentos.index','recomendacionesdocumentos.create','recomendacionesacuses.store','recomendacionesdocumentos.destroy'];
+        $recomendacionesLider=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index', 'recomendacionescalificacion.show','recomendacionesrevision01.edit','recomendacionesrevision01.update'];
+        $recomendacionesJefe=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.show','recomendacionesrevision.edit','recomendacionesrevision.update'];
+        $recomendacionesDirector=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.show','recomendacionesvalidacion.edit','recomendacionesvalidacion.update'];
+        $recomendacionesTitular=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.show','recomendacionesautorizacion.edit','recomendacionesautorizacion.update'];
+        $recomendacionesConsulta=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.show'];
         
         /*Cedula inicial*/  
         $cedulaInicial = ['cedulainicial.index','cedulainicial.edit'];
+
+
+        /*Solicitudes de aclaracion*/
+        $solicitudesAnalista=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracioncontestacion.create','solicitudesaclaracioncontestacion.store','solicitudesaclaracioncontestacion.edit','solicitudesaclaracioncontestacion.update','solicitudesaclaracioncalificacion.index','solicitudesaclaracioncalificacion.edit','solicitudesaclaracioncalificacion.update','solicitudesaclaracioncalificacion.show'];
+        $solicitudesLider=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracioncalificacion.index','solicitudesaclaracioncalificacion.show','solicitudesaclaracionrevision01.edit','solicitudesaclaracionrevision01.update'];
+        $solicitudesJefe=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracioncalificacion.index','solicitudesaclaracioncalificacion.show','solicitudesaclaracionrevision.edit','solicitudesaclaracionrevision.update'];
+        $solicitudesDirector=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracioncalificacion.index','solicitudesaclaracioncalificacion.show','solicitudesaclaracionvalidacion.edit','solicitudesaclaracionvalidacion.update'];
+        $solicitudesTitular=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracioncalificacion.index','solicitudesaclaracioncalificacion.show','solicitudesaclaracionautorizacion.edit','solicitudesaclaracionautorizacion.update'];
+        $solicitudesConsulta=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracioncalificacion.index','solicitudesaclaracioncalificacion.show'];
 
         
         
@@ -125,22 +134,22 @@ class RolesSeeder extends Seeder
         //*********************************************************************************************************************************************************** */
        
         //Permisos Analista
-        $permisosAnalista = array_merge($home, $seguimientoauditoriaAnalista, $seguimientoauditoriaaccionesAnalista,$recomendacionesAnalista,$cedulaInicial,$radicacionConsulta,$comparecenciaConsulta);
+        $permisosAnalista = array_merge($home, $seguimientoauditoriaAnalista, $seguimientoauditoriaaccionesAnalista,$recomendacionesAnalista,$cedulaInicial,$radicacionConsulta,$comparecenciaConsulta,$solicitudesAnalista);
         
         //Permisos Lider de Proyecto
-        $permisosLiderProyecto = array_merge($home, $seguimientoauditoriaLiderProyecto, $seguimientoauditoriaaccionesLiderProyecto,$seguimientoauditoriarevisionLiderProyecto,$prasLider,$recomendacionesLider,$cedulaInicial,$radicacionConsulta,$comparecenciaConsulta);
+        $permisosLiderProyecto = array_merge($home, $seguimientoauditoriaLiderProyecto, $seguimientoauditoriaaccionesLiderProyecto,$seguimientoauditoriarevisionLiderProyecto,$prasLider,$recomendacionesLider,$cedulaInicial,$radicacionConsulta,$comparecenciaConsulta,$solicitudesLider);
         
         //Permisos Jefe de Departamento
-        $permisosJefeDepartamento = array_merge($home, $seguimientoauditoriaJefeDepartamento, $seguimientoauditoriaaccionesJefeDepartamento, $seguimientoauditoriarevisionJefeDepartamento,$asignacionesLiderAnalistaJefeDepartamento,$radicacionJefeDepartamento,$comparecenciaJefeDepartamento,$prasJefe,$recomendacionesJefe,$cedulaInicial);
+        $permisosJefeDepartamento = array_merge($home, $seguimientoauditoriaJefeDepartamento, $seguimientoauditoriaaccionesJefeDepartamento, $seguimientoauditoriarevisionJefeDepartamento,$asignacionesLiderAnalistaJefeDepartamento,$radicacionJefeDepartamento,$comparecenciaJefeDepartamento,$prasJefe,$recomendacionesJefe,$cedulaInicial,$solicitudesJefe);
         
         //Permisos Director
-        $permisosDirector = array_merge($home, $seguimientoauditoriaDirector, $seguimientoauditoriaaccionesDirector, $seguimientoauditoriavalidacionDirector,$asignaciondepartamentoDirector,$asignacionesLiderAnalistaConsulta,$radicacionvalidacionDirector,$asignacionesDepartamentoEncargadoDirector,$comparecenciaDirector,$prasDirector,$recomendacionesDirector,$cedulaInicial);
+        $permisosDirector = array_merge($home, $seguimientoauditoriaDirector, $seguimientoauditoriaaccionesDirector, $seguimientoauditoriavalidacionDirector,$asignaciondepartamentoDirector,$asignacionesLiderAnalistaConsulta,$radicacionvalidacionDirector,$asignacionesDepartamentoEncargadoDirector,$comparecenciaDirector,$prasDirector,$recomendacionesDirector,$cedulaInicial,$solicitudesDirector);
         
         //Permisos Titular
-        $permisosTitular = array_merge($home, $seguimientoauditoriaTitular, $seguimientoauditoriaaccionesTitular, $seguimientoauditoriaautorizacionTitular, $asignaciondireccionTitular, $asignaciondepartamentoTitular,$asignacionesLiderAnalistaConsulta,$radicacionautorizacionTitular,$comparecenciaTitular,$prasTitular,$recomendacionesTitular,$cedulaInicial);
+        $permisosTitular = array_merge($home, $seguimientoauditoriaTitular, $seguimientoauditoriaaccionesTitular, $seguimientoauditoriaautorizacionTitular, $asignaciondireccionTitular, $asignaciondepartamentoTitular,$asignacionesLiderAnalistaConsulta,$radicacionautorizacionTitular,$comparecenciaTitular,$prasTitular,$recomendacionesTitular,$cedulaInicial,$solicitudesTitular);
 
         //Permisos Usuario Consulta
-        $permisosConsulta = array_merge($home, $seguimientoauditoriaConsulta, $seguimientoauditoriaaccionesConsulta,$asignacionesConsulta,$asignacionesLiderAnalistaConsulta,$radicacionConsulta,$comparecenciaConsulta,$prasConsulta,$recomendacionesConsulta,$cedulaInicial);        
+        $permisosConsulta = array_merge($home, $seguimientoauditoriaConsulta, $seguimientoauditoriaaccionesConsulta,$asignacionesConsulta,$asignacionesLiderAnalistaConsulta,$radicacionConsulta,$comparecenciaConsulta,$prasConsulta,$recomendacionesConsulta,$cedulaInicial,$solicitudesConsulta);        
         
         
         Role::create(['name' => 'Administrador TI'])->givePermissionTo(Permission::all());

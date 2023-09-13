@@ -96,6 +96,9 @@ class AuditoriaAccion extends Model
     {
         return $this->belongsTo(Recomendaciones::class, 'id','accion_id');
     }
-
+    public function solicitudesaclaracion()
+    {
+        return $this->belongsTo(SolicitudesAclaracion::class, 'id','accion_id');
+    }
     
 }

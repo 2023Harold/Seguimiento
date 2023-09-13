@@ -433,7 +433,7 @@
                             @endcan
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('solicitudesdeaclaracion.index') }}">
+                                <a href="{{ route('solicitudesaclaracion.index') }}">
                                     Solicitudes de aclaración
                                 </a>
                             </li>

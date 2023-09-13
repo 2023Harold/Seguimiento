@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('solicitudesdeaclaracion.index') }}"><i
+                    <a href="{{ route('solicitudesaclaracion.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;
                     Acciones
@@ -37,7 +37,8 @@
                                 <th>No. de acción</th>
                                 <th>Tipo de acción</th>
                                 <th>Monto por aclarar</th>
-                                <th>Datos de atención</th>
+                                <th>Oficio de la contestación de la solicitud de aclaración</th>
+                                <th>Calificación de la atención</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,28 +57,37 @@
                                     {{'$'.number_format( $accion->monto_aclarar, 2)}}
                                 </td>
                                 <td class="text-center">
-                                    @if(empty($accion->solicitudesdeaclaracion)&&in_array("Analista",
-                                    auth()->user()->getRoleNames()->toArray()))
+                                    @if(empty($accion->solicitudesaclaracion)&&in_array("Analista",auth()->user()->getRoleNames()->toArray()))
                                     {{-- @can('solicitudesaclaracionacciones.edit') --}}
-                                    <a href="{{ route('solicitudesaclaracionacciones.edit',$accion)}}"
-                                        class="btn btn-primary">
-                                        <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Registar
-                                    </a>
+                                        <a href="{{ route('solicitudesaclaracionacciones.edit',$accion)}}"
+                                        class="btn btn-primary popupcontestacion">
+                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Registar
+                                        </a>
                                     {{-- @endcan --}}
                                     @else
-                                    @if(!empty($accion->solicitudesdeaclaracion))
-                                    {{-- @can('solicitudesaclaracionacciones.edit') --}}
-                                    <a href="{{ route('solicitudesaclaracionacciones.edit',$accion) }}"
-                                        class="btn btn-primary">
-                                        <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Consultar
-                                    </a>
-                                    {{-- @endcan --}}
+                                        @if(!empty($accion->solicitudesaclaracion))
+                                            <a href="{{ asset($accion->solicitudesaclaracion->oficio_atencion) }}" target="_blank">
+                                                <?php echo htmlspecialchars_decode(iconoArchivo($accion->solicitudesaclaracion->oficio_atencion)) ?>
+                                            </a> <br>
+                                            <small>{{ fecha($accion->solicitudesaclaracion->fecha_oficio_atencion) }}</small><br>
+                                        @endif
                                     @endif
-                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if (!empty($accion->solicitudesaclaracion))
+                                        @if (empty($accion->solicitudesaclaracion->cumple))
+                                            <a href="{{ route('solicitudesaclaracioncalificacion.edit',$accion->solicitudesaclaracion) }}" class="btn btn-primary">
+                                                <i class="align-middle fas fa-file-plus" aria-hidden="true"></i>Registrar 
+                                            </a>
+                                        @else
+                                            <a href="{{ route('solicitudesaclaracioncalificacion.index') }}" class="btn btn-primary">
+                                                <i class="align-middle fas fa-file-plus" aria-hidden="true"></i>Consultar 
+                                            </a>                                            
+                                        @endif                                        
+                                    @endif                                    
                                 </td>
                             </tr>
                             @empty
-
                             @endforelse
                         </tbody>
                     </table>
@@ -91,4 +101,24 @@
         </div>
     </div>
 </div>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {            
+            $('.popupcontestacion').colorbox({     
+                width:"65%",
+                height:"650px",
+                maxWidth:400,
+                maxHeight:"650px",               
+                iframe: true,                
+                onClosed: function() {
+                    location.reload(true);                    
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"65%",maxWidth:400, height:"650px", maxHeight:"650px"});
+                 $(window).trigger("resize");                
+                }
+            });
+        });
+    </script>
 @endsection

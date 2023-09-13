@@ -6,7 +6,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use Illuminate\Http\Request;
 
-class SolicitudesDeAclaracionController extends Controller
+class SolicitudesAclaracionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,7 +25,7 @@ class SolicitudesDeAclaracionController extends Controller
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
         $acciones = AuditoriaAccion::where('segtipo_accion_id',1)->paginate(30);
                
-        return view('solicitudesdeaclaracion.index', compact('auditorias', 'acciones','request'));
+        return view('solicitudesaclaracion.index', compact('auditorias', 'acciones','request'));
     }
 
     /**

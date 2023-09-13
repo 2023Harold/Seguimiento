@@ -12,14 +12,7 @@ use App\Http\Controllers\CedulaInicialController;
 use App\Http\Controllers\ComparecenciaActaController;
 use App\Http\Controllers\ComparecenciaAcusesController;
 use App\Http\Controllers\ComparecenciaAgendaController;
-use App\Http\Controllers\ComparecenciaAnexoController;
-use App\Http\Controllers\ComparecenciaAutorizacionController;
-use App\Http\Controllers\ComparecenciaCedulaController;
 use App\Http\Controllers\ComparecenciaController;
-use App\Http\Controllers\ComparecenciaCopiaController;
-use App\Http\Controllers\ComparecenciaNotificacionController;
-use App\Http\Controllers\ComparecenciaRespuestaController;
-use App\Http\Controllers\ComparecenciaValidacionController;
 use App\Http\Controllers\ConstanciaController;
 use App\Http\Controllers\CotejamientoController;
 use App\Http\Controllers\FirmaController;
@@ -51,9 +44,14 @@ use App\Http\Controllers\SeguimientoAuditoriaRevision01Controller;
 use App\Http\Controllers\SeguimientoAuditoriaRevisionController;
 use App\Http\Controllers\SeguimientoAuditoriaValidacionController;
 use App\Http\Controllers\SolicitudesAclaracionAccionesController;
-use App\Http\Controllers\SolicitudesDeAclaracionController;
-use App\Http\Controllers\SolventacionesAccionesController;
-use App\Http\Controllers\SolventacionesController;
+use App\Http\Controllers\SolicitudesAclaracionAutorizacionController;
+use App\Http\Controllers\SolicitudesAclaracionCalificacionController;
+use App\Http\Controllers\SolicitudesAclaracionContestacionController;
+use App\Http\Controllers\SolicitudesAclaracionController;
+use App\Http\Controllers\SolicitudesAclaracionDocumentosController;
+use App\Http\Controllers\SolicitudesAclaracionRevision01Controller;
+use App\Http\Controllers\SolicitudesAclaracionRevisionController;
+use App\Http\Controllers\SolicitudesAclaracionValidacionController;
 use App\Http\Controllers\Usercontroller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -91,12 +89,10 @@ Route::post('getCargosAsociados', [SeguimientoAuditoriaController::class, 'getCa
 Route::post('archivo', [ArchivoController::class, 'upload']);
 
 //Firma electrónica
-//Route::resource('firmaarchivodemo', 'FirmaArchivoController');
 Route::post('firmar', [FirmaController::class, 'firmar'])->name('firmar');
 Route::post('finalizarfirma', [FirmaController::class, 'finalizarfirma'])->name('finalizarfirma');
 Route::post('finalizarfirmapdf', [FirmaController::class, 'finalizarfirmapdf'])->name('finalizarfirmapdf');
 Route::get('constancia/mostrarConstancia/{constancia}/{rutaCerrar}', [ConstanciaController::class, 'mostrarConstancia'])->name('constancia.mostrarConstancia');
-// Route::resource('constancia', 'ConstanciaController', ['parameters' => ['constancia' => 'constancia']]);
 
 //Registro de auditorias
 Route::resource('seguimientoauditoria', SeguimientoAuditoriaController::class, ['parameters' => ['seguimientoauditoria' => 'auditoria']]);
@@ -141,21 +137,13 @@ Route::resource('comparecenciaagenda', ComparecenciaAgendaController::class,['pa
 /*Comparecencia*/
 Route::resource('comparecencia', ComparecenciaController::class,['parameters' => ['comparecencia' => 'comparecencia']]);
 Route::post('getAgendaComparecencias', [AjaxController::class, 'getAgendaComparecencias'])->name('getAgendaComparecencias');
-// Route::resource('comparecencianotificacion', ComparecenciaNotificacionController::class,['parameters' => ['comparecencianotificacion' => 'comparecencia']]);
-// Route::resource('comparecenciaanexo', ComparecenciaAnexoController::class,['parameters' => ['comparecenciaanexo' => 'anexo']]);
-// Route::resource('comparecenciacopia', ComparecenciaCopiaController::class,['parameters' => ['comparecenciacopia' => 'copia']]);
 Route::get('auditoriacomparecencia/{auditoria}', [ComparecenciaController::class,'auditoria'])->name('comparecencia.auditoria');
-// Route::resource('comparecenciavalidacion', ComparecenciaValidacionController::class,['parameters' => ['comparecenciavalidacion' => 'comparecencia']]);
-// Route::resource('comparecenciaautorizacion', ComparecenciaAutorizacionController::class,['parameters' => ['comparecenciaautorizacion' => 'comparecencia']]);
 Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['parameters' => ['comparecenciaacuse' => 'comparecencia']]);
-// Route::resource('comparecenciacedula', ComparecenciaCedulaController::class,['parameters' => ['comparecenciacedula' => 'comparecencia']]);
 Route::resource('comparecenciaacta', ComparecenciaActaController::class,['parameters' => ['comparecenciaacta' => 'comparecencia']]);
-// Route::resource('comparecenciarespuesta', ComparecenciaRespuestaController::class,['parameters' => ['comparecenciarespuesta' => 'comparecencia']]);
-
-//acciones
 
 /*pras*/
 Route::resource('pras',PrasController::class,['parameters' => ['pras' => 'auditoria']]);
+
 /*prasacciones*/
 Route::resource('prasacciones',PrasaccionesController::class,['parameters' => ['prasacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
 Route::resource('prasturno',PrasTurnoController::class,['parameters' => ['prasturno' => 'pras']]);
@@ -176,10 +164,16 @@ Route::resource('recomendacionesrevision',RecomendacionesRevisionController::cla
 Route::resource('recomendacionesvalidacion',RecomendacionesValidacionController::class,['parameters' => ['recomendacionesvalidacion' => 'recomendacion']]);
 Route::resource('recomendacionesautorizacion',RecomendacionesAutorizacionController::class,['parameters' => ['recomendacionesautorizacion' => 'recomendacion']]);
 Route::resource('recomendacionesacuses',RecomendacionesAcusesController::class,['parameters' => ['recomendacionesacuses' => 'recomendacion']]);
-
-
 Route::resource('cedulainicial',CedulaInicialController::class,['parameters' => ['cedulainicial' => 'auditoria']]);
 
 /*solicitudesaclaracion*/
-Route::resource('solicitudesdeaclaracion',SolicitudesDeAclaracionController::class,['parameters' => ['solicitudesdeaclaracion' => 'auditoria']]);
+Route::resource('solicitudesaclaracion',SolicitudesAclaracionController::class,['parameters' => ['solicitudesaclaracion' => 'auditoria']]);
 Route::resource('solicitudesaclaracionacciones',SolicitudesAclaracionAccionesController::class,['parameters' => ['solicitudesaclaracionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
+Route::resource('solicitudesaclaracioncontestacion',SolicitudesAclaracionContestacionController::class,['parameters' => ['solicitudesaclaracioncontestacion' => 'solicitud']]);
+Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
+Route::resource('solicitudesaclaraciondocumentos',SolicitudesAclaracionDocumentosController::class,['parameters' => ['solicitudesaclaraciondocumentos' => 'documento']]);
+
+Route::resource('solicitudesaclaracionrevision01',SolicitudesAclaracionRevision01Controller::class,['parameters' => ['solicitudesaclaracionrevision01' => 'solicitud']]);
+Route::resource('solicitudesaclaracionrevision',SolicitudesAclaracionRevisionController::class,['parameters' => ['solicitudesaclaracionrevision' => 'solicitud']]);
+Route::resource('solicitudesaclaracionvalidacion',SolicitudesAclaracionValidacionController::class,['parameters' => ['solicitudesaclaracionvalidacion' => 'solicitud']]);
+Route::resource('solicitudesaclaracionautorizacion',SolicitudesAclaracionAutorizacionController::class,['parameters' => ['solicitudesaclaracionautorizacion' => 'solicitud']]);

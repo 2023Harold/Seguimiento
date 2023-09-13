@@ -306,13 +306,44 @@ Breadcrumbs::for('cedulainicial.edit', function (BreadcrumbTrail $trail,$auditor
 });
 
 /*solicitudes de aclaracion */
-Breadcrumbs::for('solicitudesdeaclaracion.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('solicitudesaclaracion.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Solicitudes', route('solicitudesdeaclaracion.index'));
+    $trail->push('Solicitudes de Aclaración', route('solicitudesaclaracion.index'));
 });   
 
 /*solicitudesaclaracionacciones */
 Breadcrumbs::for('solicitudesaclaracionacciones.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('solicitudesdeaclaracion.index');
+    $trail->parent('solicitudesaclaracion.index');
     $trail->push('Acciones', route('solicitudesaclaracionacciones.index'));
 });
+
+Breadcrumbs::for('solicitudesaclaracioncalificacion.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracionacciones.index');
+    $trail->push('Calificación de la atención', route('solicitudesaclaracioncalificacion.edit',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclaracioncalificacion.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('solicitudesaclaracionacciones.index');
+    $trail->push('Calificación de la atención', route('solicitudesaclaracioncalificacion.index'));
+});
+
+Breadcrumbs::for('solicitudesaclaracionrevision01.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracioncalificacion.index');
+    $trail->push('Revisar', route('solicitudesaclaracionrevision01.edit',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclaracionrevision.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracioncalificacion.index');
+    $trail->push('Revisar', route('solicitudesaclaracionrevision.edit',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclaracionvalidacion.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracioncalificacion.index');
+    $trail->push('Validar', route('solicitudesaclaracionvalidacion.edit',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclaracionautorizacion.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracioncalificacion.index');
+    $trail->push('Autorizar-Rechazar', route('solicitudesaclaracionautorizacion.edit',$solicitud));
+});
+

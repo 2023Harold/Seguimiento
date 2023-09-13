@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use Illuminate\Http\Request;
-use App\Models\SolicitudesdeAclaracion;
+use App\Models\SolicitudesAclaracion;
 
 class SolicitudesAclaracionAccionesController extends Controller
 {
@@ -64,15 +64,16 @@ class SolicitudesAclaracionAccionesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(AuditoriaAccion $accion)
-    {
+    {      
         setSession('solicitudauditoriaaccion_id',$accion->id);
 
-        if (empty($accion->solicitudesdeaclaracion)) {
+        if (empty($accion->solicitudesaclaracion)) {
             // dd('registrar');
-            return redirect()->route('solicitudaclaracionatencion.create');
+            return redirect()->route('solicitudesaclaracioncontestacion.create');
          }else{
+            $solicitud=$accion->solicitudesaclaracion;
             // dd('consultar');
-            return redirect()->route('solixcitudaclaracionatencion.index');
+            return redirect()->route('solicitudesaclaracioncontestacion.edit',$solicitud);
         }   
     }
     /**

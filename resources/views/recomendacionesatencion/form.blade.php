@@ -42,7 +42,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    {!! archivo('oficio_contestacion', 'Oficio de contestacion de la recomendación: *',
+                    {!! archivo('oficio_contestacion', 'Oficio de contestación de la recomendación: *',
                     old('oficio_contestacion', $recomendacion->oficio_contestacion)) !!}
                 </div>
             </div>           

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-
-{{ Breadcrumbs::render('recomendaciones.index') }}
+{{ Breadcrumbs::render('solicitudesaclaracion.index') }}
 @endsection
 @section('content')
 <div class="row">
@@ -11,7 +10,7 @@
                 <h1 class="card-title">
                     <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;
-                    Recomendaciones
+                    Solicitudes de Aclaracion
                 </h1>
             </div>
             <div class="card-body">
@@ -67,12 +66,15 @@
                                     {{ $auditoria->acto_fiscalizacion }}
                                 </td>
                                 <td style="text-align: right!important;">
-                                    {{ '$'.number_format( $auditoria->total(), 2) }}
+                                    {{ '$'.number_format( $auditoria->total(), 1) }}
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('pras.edit',$auditoria) }}" class="btn btn-primary">
+                                    {{-- @can('solicitudesaclaracion.edit') --}}
+                                    <a href="{{ route('solicitudesaclaracion.edit',$auditoria) }}"
+                                        class="btn btn-primary">
                                         <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
                                     </a>
+                                    {{-- @endcan --}}
                                 </td>
                             </tr>
                             @empty

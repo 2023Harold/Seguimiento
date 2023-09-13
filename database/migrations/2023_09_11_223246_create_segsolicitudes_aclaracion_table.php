@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();            
             $table->string('oficio_atencion');    
 	        $table->date('fecha_oficio_atencion');       
-            $table->enum('cumple', ['Atendido', 'No Atendido','Parcialmente Atendido']);
+            $table->enum('cumple', ['Atendida', 'No Atendida','Parcialmente Atendida'])->nullable();
             $table->foreignId('accion_id')->constrained('segauditoria_acciones');
             $table->foreignId('usuario_creacion_id')->constrained('segusers');
             $table->foreignId('usuario_modificacion_id')->nullable()->constrained('segusers');

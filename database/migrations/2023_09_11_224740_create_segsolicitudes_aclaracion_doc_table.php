@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('segsolicitudes_aclaracion_doc', function (Blueprint $table) {
             $table->id();
-            $table->integer('consecutivo');
+            $table->integer('consecutivo')->nullable();
             $table->string('nombre_archivo',500);           
             $table->foreignId('solicitud_aclaracion_id')->constrained('segsolicitudes_aclaracion');            
             $table->timestamps();

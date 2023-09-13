@@ -6,37 +6,35 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Propaganistas\LaravelFakeId\RoutesWithFakeIds;
 
-class SolicitudesdeAclaracion extends Model
+class SolicitudesAclaracion extends Model
 {
     use HasFactory;
     use RoutesWithFakeIds;
 
     protected $table = 'segsolicitudes_aclaracion';
 
-    protected $fillable = [
-        
+    protected $fillable = [        
         'id',
-        'documento_solventacion',
-        'fecha_vencimiento',
-        'nombre_archivo',
+        'oficio_atencion',
+        'fecha_oficio_atencion',
         'cumple',
         'accion_id',        
         'usuario_creacion_id',
         'usuario_modificacion_id',
-        
+        'constancia',
+        'fase_autorizacion',
+        'nivel_autorizacion',
+        'concluido',
+        'monto_solventado'        
     ];
 
     protected $dates = [
-        'fecha_oficio',
+        'fecha_oficio_atencion',
         'created_at',
-        
+        'updated_at'
     ];
 
-    public function auditoria()
-    {
-        return $this->belongsTo(Auditoria::class, 'auditoria_id', 'id');
-    }
-
+   
     public function accion()
     {
         return $this->belongsTo(AuditoriaAccion::class, 'accion_id', 'id');
@@ -47,8 +45,13 @@ class SolicitudesdeAclaracion extends Model
         return $this->belongsTo(User::class, 'usuario_creacion_id');
     }
 
+    public function userModificacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_modificacion_id');
+    }
+
     public function movimientos()
     {
-        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Recomendación')->orderBy('id', 'ASC');
+        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Solicitud de Aclaración')->orderBy('id', 'ASC');
     }
 }
