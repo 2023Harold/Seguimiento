@@ -16,7 +16,7 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 @include('layouts.contextos._accion')
-                <h3 class="card-title text-primary">Atención de la recomendación</h3>
+                <h3 class="card-title text-primary">Atención de la solicitud de aclaración</h3>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>

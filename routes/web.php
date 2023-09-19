@@ -33,7 +33,11 @@ use App\Http\Controllers\RadicacionController;
 use App\Http\Controllers\RadicacionValidacionController;
 use App\Http\Controllers\RecomendacionesAccionesController;
 use App\Http\Controllers\RecomendacionesAcusesController;
+use App\Http\Controllers\RecomendacionesAnalisisController;
+use App\Http\Controllers\RecomendacionesAnalisisEnvioController;
+use App\Http\Controllers\RecomendacionesAnalisisRevisionController;
 use App\Http\Controllers\RecomendacionesAtencionCalificacionController;
+use App\Http\Controllers\RecomendacionesAtencionContestacionController;
 use App\Http\Controllers\RecomendacionesAtencionController;
 use App\Http\Controllers\RecomendacionesAtencionDocumentosController;
 use App\Http\Controllers\RecomendacionesAutorizacionController;
@@ -41,6 +45,7 @@ use App\Http\Controllers\RecomendacionesController;
 use App\Http\Controllers\RecomendacionesRevision01Controller;
 use App\Http\Controllers\RecomendacionesRevisionController;
 use App\Http\Controllers\RecomendacionesValidacionController;
+use App\Http\Controllers\RevisionesRecomendacionesController;
 use App\Http\Controllers\SeguimientoAuditoriaAutorizacionController;
 use App\Http\Controllers\SeguimientoAuditoriaController;
 use App\Http\Controllers\SeguimientoAuditoriaRevision01Controller;
@@ -147,6 +152,7 @@ Route::resource('comparecenciaacta', ComparecenciaActaController::class,['parame
 /*pras*/
 Route::resource('pras',PrasController::class,['parameters' => ['pras' => 'auditoria']]);
 
+
 /*prasacciones*/
 Route::resource('prasacciones',PrasaccionesController::class,['parameters' => ['prasacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
 Route::resource('prasturno',PrasTurnoController::class,['parameters' => ['prasturno' => 'pras']]);
@@ -161,12 +167,18 @@ Route::resource('recomendacionesacciones',RecomendacionesAccionesController::cla
 Route::resource('recomendacionesatencion',RecomendacionesAtencionController::class,['parameters' => ['recomendacionesatencion' => 'recomendacion']]);
 Route::resource('recomendacionescalificacion',RecomendacionesAtencionCalificacionController::class,['parameters' => ['recomendacionescalificacion' => 'recomendacion']]);
 Route::resource('recomendacionesdocumentos',RecomendacionesAtencionDocumentosController::class,['parameters' => ['recomendacionesdocumentos' => 'documento']]);
+Route::resource('recomendacionescontestaciones',RecomendacionesAtencionContestacionController::class,['parameters' => ['recomendacionescontestaciones' => 'contestacion']]);
+Route::resource('recomendacionesanalisis',RecomendacionesAnalisisController::class,['parameters' => ['recomendacionesanalisis' => 'recomendacion']]);
+Route::resource('recomendacionesanalisisenvio',RecomendacionesAnalisisEnvioController::class,['parameters' => ['recomendacionesanalisisenvio' => 'recomendacion']]);
+Route::resource('recomendacionesanalisisrevision',RecomendacionesAnalisisRevisionController::class,['parameters' => ['recomendacionesanalisisrevision' => 'recomendacion']]);
 
 Route::resource('recomendacionesrevision01',RecomendacionesRevision01Controller::class,['parameters' => ['recomendacionesrevision01' => 'recomendacion']]);
 Route::resource('recomendacionesrevision',RecomendacionesRevisionController::class,['parameters' => ['recomendacionesrevision' => 'recomendacion']]);
 Route::resource('recomendacionesvalidacion',RecomendacionesValidacionController::class,['parameters' => ['recomendacionesvalidacion' => 'recomendacion']]);
 Route::resource('recomendacionesautorizacion',RecomendacionesAutorizacionController::class,['parameters' => ['recomendacionesautorizacion' => 'recomendacion']]);
 Route::resource('recomendacionesacuses',RecomendacionesAcusesController::class,['parameters' => ['recomendacionesacuses' => 'recomendacion']]);
+/*Revisiones*/
+Route::resource('revisionesrecomendaciones',RevisionesRecomendacionesController::class,['parameters' => ['revisionesrecomendaciones' => 'comentario']]);
 Route::resource('cedulainicial',CedulaInicialController::class,['parameters' => ['cedulainicial' => 'auditoria']]);
 
 /*solicitudesaclaracion*/

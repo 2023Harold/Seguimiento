@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('cargo_responsable', 150);
             $table->foreignId('departamento_responsable_id')->constrained('segcatunidad_administrativas');
 	        $table->text('analisis')->nullable();
+            $table->string('fase_revision', 40)->nullable();
             $table->string('calificacion_atencion',15)->nullable();
 	        $table->text('conclusion')->nullable();
 	        $table->string('concluido',2)->default("No");

@@ -2,28 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RecomendacionesRequest;
-use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
-use App\Models\Movimientos;
 use App\Models\Recomendaciones;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class RecomendacionesAtencionController extends Controller
+class RecomendacionesAnalisisController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
-        $recomendaciones = Recomendaciones::where('accion_id',getSession('recomendacionesauditoriaaccion_id'))->get();
-           
-        return view('recomendacionesatencion.index',compact('recomendaciones','auditoria','accion','request'));
+        //
     }
 
     /**
@@ -33,7 +25,7 @@ class RecomendacionesAtencionController extends Controller
      */
     public function create()
     {
-      //
+        //
     }
 
     /**
@@ -44,7 +36,7 @@ class RecomendacionesAtencionController extends Controller
      */
     public function store(Request $request)
     {
-      //   
+        //
     }
 
     /**
@@ -53,9 +45,12 @@ class RecomendacionesAtencionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Recomendaciones $recomendacion)
     {
-        //
+        $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $auditoria=$accion->auditoria;     
+
+        return view('recomendacionesatencionanalisis.show',compact('recomendacion','accion','auditoria'));
     }
 
     /**
@@ -66,7 +61,10 @@ class RecomendacionesAtencionController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-       //
+        $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $auditoria=$accion->auditoria;     
+
+        return view('recomendacionesatencionanalisis.form',compact('recomendacion','accion','auditoria'));
     }
 
     /**
@@ -78,7 +76,11 @@ class RecomendacionesAtencionController extends Controller
      */
     public function update(Request $request, Recomendaciones $recomendacion)
     {
-        //       
+        //dd('Hola');
+        $recomendacion->update($request->all());
+        setMessage("Se ha actualizado el análisis.");
+
+        return redirect()->route('recomendacionesatencion.index');
     }
 
     /**

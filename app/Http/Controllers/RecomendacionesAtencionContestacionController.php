@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recomendaciones;
-use App\Models\RecomendacionesDocumento;
+use App\Models\RecomendacionesContestacion;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use File;
 
-class RecomendacionesAtencionDocumentosController extends Controller
+class RecomendacionesAtencionContestacionController extends Controller
 {
     protected $model;
 
-    public function __construct(RecomendacionesDocumento $model)
+    public function __construct(RecomendacionesContestacion $model)
     {       
         $this->model = $model;
     }
@@ -22,9 +22,9 @@ class RecomendacionesAtencionDocumentosController extends Controller
      */
     public function index(Request $request)
     {
-        $documentos = $this->setQuery($request)->paginate(50);
+        $contestaciones = $this->setQuery($request)->paginate(10);
 
-        return view('recomendacionesatenciondocumentos.index', compact('documentos', 'request'));
+        return view('recomendacionesatencioncontestacion.index', compact('contestaciones', 'request'));
     }
 
     /**
@@ -34,11 +34,11 @@ class RecomendacionesAtencionDocumentosController extends Controller
      */
     public function create()
     {
-        $documento = new RecomendacionesDocumento();
+        $contestacion = new RecomendacionesContestacion();
              
         $accion = 'Agregar';
 
-        return view('recomendacionesatenciondocumentos.form', compact('documento', 'accion'));
+        return view('recomendacionesatencioncontestacion.form', compact('contestacion', 'accion'));
     }
 
     /**
@@ -49,19 +49,19 @@ class RecomendacionesAtencionDocumentosController extends Controller
      */
     public function store(Request $request)
     {
+        mover_archivos($request, ['oficio_contestacion']);
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
         
         $request->merge([
             'recomendacion_id' => getSession('recomendacioncalificacion_id'),
+            'usuario_creacion_id' => auth()->id(),
         ]);
-        //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($recomendacion->accion->auditoria->numero_auditoria)).'/Documentos';
-        //mover_archivos_minio($request, ['archivo'], null, $ruta);
-        //mover_archivos($request, ['archivo']);
-        RecomendacionesDocumento::create($request->all());
+       
+        RecomendacionesContestacion::create($request->all());
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');
 
-        return redirect()->route('recomendacionesdocumentos.index');
+        return redirect()->route('recomendacionescontestaciones.index');
     }
 
     /**
@@ -70,11 +70,11 @@ class RecomendacionesAtencionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Recomendaciones $documento)
+    public function show(Recomendaciones $contestacion)
     {
-        $documentos=RecomendacionesDocumento::where('recomendacion_id',$documento->id)->paginate(10);        
-        
-        return view('recomendacionesatenciondocumentos.show',compact('documentos'));
+        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$contestacion->id)->paginate(10); 
+
+        return view('recomendacionesatencioncontestacion.show', compact('contestaciones'));        
     }
 
     /**
@@ -106,13 +106,14 @@ class RecomendacionesAtencionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RecomendacionesDocumento $documento)
+    public function destroy(RecomendacionesContestacion $contestacion)
     {
-        $documento->delete();
+        File::delete($contestacion->oficio_contestacion);
+        $contestacion->delete();
         $this->actualizaProgresivo();
         setMessage('El registro ha sido eliminado');
 
-        return redirect()->route('recomendacionesdocumentos.index');
+        return redirect()->route('recomendacionescontestaciones.index');
     }
 
     private function setQuery($request)

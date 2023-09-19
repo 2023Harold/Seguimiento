@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
 use App\Models\Recomendaciones;
+use App\Models\RecomendacionesContestacion;
 use App\Models\RecomendacionesDocumento;
 use Illuminate\Http\Request;
 
@@ -48,10 +49,11 @@ class RecomendacionesAtencionCalificacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Recomendaciones $recomendacion)
-    {      
-        $documentos=RecomendacionesDocumento::where('recomendacion_id',$recomendacion->id)->paginate(10);        
-        
-        return view('recomendacionesatencioncalificacion.show',compact('documentos'));
+    {        
+        $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $auditoria=$accion->auditoria;     
+
+        return view('recomendacionesatencioncalificacion.show',compact('recomendacion','accion','auditoria'));
     }
 
     /**
@@ -80,6 +82,12 @@ class RecomendacionesAtencionCalificacionController extends Controller
         $documentos = RecomendacionesDocumento::where('recomendacion_id',$recomendacion->id)->get();
         if($documentos->count()==0){
             setMessage('No se ha capturado información en el apartado de listado de documentos.','error');
+            
+            return back()->withInput();
+        }
+        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$recomendacion->id)->get();
+        if($contestaciones->count()==0){
+            setMessage('No se ha capturado información en el apartado de contestaciones.','error');
             
             return back()->withInput();
         }

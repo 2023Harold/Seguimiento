@@ -69,14 +69,25 @@ class RecomendacionesAccionesController extends Controller
     public function edit(AuditoriaAccion $accion)
     {
         setSession('recomendacionesauditoriaaccion_id',$accion->id);
+        $recomendacion=$accion->recomendaciones;
+        if (empty($accion->recomendaciones) && in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+            $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));            
+            $request=new Request();
+            $request->merge([
+                'auditoria_id' => $auditoria->id,
+                'usuario_creacion_id' => auth()->id(),
+                'accion_id'=>getSession('recomendacionesauditoriaaccion_id'),
+                'consecutivo' => 1,
+                'departamento_responsable_id'=> auth()->user()->unidad_administrativa_id,
+                'nombre_responsable'=>$auditoria->comparecencia->nombre_representante,
+                'cargo_responsable'=>$auditoria->comparecencia->cargo_representante1,
+            ]);
+            $recomendacion=Recomendaciones::create($request->all());
+          } 
 
-        if (empty($accion->recomendaciones)) {
-            // dd('registrar');
-            return redirect()->route('recomendacionesatencion.create');
-         }else{
-            // dd('consultar');
-            return redirect()->route('recomendacionesatencion.index');
-        }   
+         setSession('recomendacioncalificacion_id',$recomendacion->id);
+
+         return redirect()->route('recomendacionesatencion.index');
     }
 
     /**

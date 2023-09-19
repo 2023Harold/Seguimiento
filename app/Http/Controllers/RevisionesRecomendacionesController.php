@@ -2,28 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RecomendacionesRequest;
-use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
-use App\Models\Movimientos;
 use App\Models\Recomendaciones;
-use App\Models\User;
+use App\Models\Revisiones;
 use Illuminate\Http\Request;
 
-class RecomendacionesAtencionController extends Controller
+class RevisionesRecomendacionesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
-        $recomendaciones = Recomendaciones::where('accion_id',getSession('recomendacionesauditoriaaccion_id'))->get();
-           
-        return view('recomendacionesatencion.index',compact('recomendaciones','auditoria','accion','request'));
+        //
     }
 
     /**
@@ -33,7 +26,12 @@ class RecomendacionesAtencionController extends Controller
      */
     public function create()
     {
-      //
+        //dd('hola');
+        $comentario = new Revisiones();
+             
+        $accion = 'Agregar';
+
+        return view('revisiones.form', compact('comentario', 'accion'));
     }
 
     /**
@@ -44,7 +42,19 @@ class RecomendacionesAtencionController extends Controller
      */
     public function store(Request $request)
     {
-      //   
+        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $request->merge([
+            'de_usuario_id'=>auth()->user()->id,
+            'para_usuario_id'=>intval($accion->analista_asignado_id),
+            'accion'=>'Recomendación',
+            'accion_id'=>$accion->id,
+            'estatus'=>'Pendiente',
+            'usuario_creacion_id'=>auth()->user()->id,
+        ]);        
+        Revisiones::create($request->all());        
+        setMessage('se ha agregado el comentario correctamente.');
+
+        return view('layouts.close');
     }
 
     /**
@@ -53,9 +63,9 @@ class RecomendacionesAtencionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Revisiones $comentario)
     {
-        //
+        return view('revisiones.show', compact('comentario'));
     }
 
     /**
@@ -64,9 +74,9 @@ class RecomendacionesAtencionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Recomendaciones $recomendacion)
+    public function edit($id)
     {
-       //
+        //
     }
 
     /**
@@ -76,9 +86,9 @@ class RecomendacionesAtencionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Recomendaciones $recomendacion)
+    public function update(Request $request, $id)
     {
-        //       
+        //
     }
 
     /**

@@ -245,8 +245,13 @@ Breadcrumbs::for('recomendacionesacciones.index', function (BreadcrumbTrail $tra
     $trail->push('Acciones', route('recomendacionesacciones.index'));
 });
 
-Breadcrumbs::for('recomendacionesatencion.create', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('recomendacionesatencion.index', function (BreadcrumbTrail $trail) {
     $trail->parent('recomendacionesacciones.index');
+    $trail->push('Atención de la recomendación', route('recomendacionesatencion.index'));
+});
+
+Breadcrumbs::for('recomendacionesatencion.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('recomendacionesatencion.index');
     $trail->push('Datos de atención', route('recomendacionesatencion.create'));
 });
 
@@ -256,13 +261,13 @@ Breadcrumbs::for('recomendacionesatencion.edit', function (BreadcrumbTrail $trai
 });
 
 Breadcrumbs::for('recomendacionescalificacion.edit', function (BreadcrumbTrail $trail,$recomendacion) {
-    $trail->parent('recomendacionesatencion.edit',$recomendacion);
+    $trail->parent('recomendacionesatencion.index');
     $trail->push('Calificación de la atención', route('recomendacionescalificacion.edit',$recomendacion));
 });
 
-Breadcrumbs::for('recomendacionesatencion.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('recomendacionesacciones.index');
-    $trail->push('Atención de la recomendación', route('recomendacionesatencion.index'));
+Breadcrumbs::for('recomendacionesanalisis.edit', function (BreadcrumbTrail $trail,$recomedacion) {
+    $trail->parent('recomendacionesatencion.index');
+    $trail->push('Análisis de la atención', route('recomendacionesanalisis.edit',$recomedacion));
 });
 
 Breadcrumbs::for('recomendacionesrevision01.edit', function (BreadcrumbTrail $trail,$recomedacion) {

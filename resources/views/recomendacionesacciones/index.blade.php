@@ -56,7 +56,12 @@
                                     {{'$'.number_format( $accion->monto_aclarar, 2)}}
                                 </td>
                                 <td class="text-center">
-                                    @if(empty($accion->recomendaciones)&&in_array("Analista", auth()->user()->getRoleNames()->toArray()))
+                                    @can('recomendacionesacciones.edit')
+                                        <a href="{{ route('recomendacionesacciones.edit',$accion) }}" class="btn btn-primary">
+                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
+                                        </a>
+                                    @endcan
+                                    {{-- @if(empty($accion->recomendaciones)&&in_array("Analista", auth()->user()->getRoleNames()->toArray()))
                                         @can('recomendacionesacciones.edit')
                                             <a href="{{ route('recomendacionesacciones.edit',$accion)}}"
                                                 class="btn btn-primary">
@@ -65,14 +70,9 @@
                                         @endcan
                                     @else
                                         @if(!empty($accion->recomendaciones))
-                                            @can('recomendacionesacciones.edit')
-                                                <a href="{{ route('recomendacionesacciones.edit',$accion) }}"
-                                                    class="btn btn-primary">
-                                                    <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Consultar
-                                                </a>
-                                            @endcan
+                                            
                                         @endif
-                                    @endif
+                                    @endif --}}
                                 </td>
                             </tr>
                             @empty

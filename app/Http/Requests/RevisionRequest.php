@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ListaDocumentosRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RecomendacionesCalificacionRequest extends FormRequest
+class RevisionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,21 +21,18 @@ class RecomendacionesCalificacionRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-   
     public function rules()
     {
-        return [                 
-            'conclusion' => 'required|string|max:8000', 
-            'calificacion_atencion' => 'required|string|max:15|in:Atendida,No Atendida'                             
-            ];
+        return [
+            'comentario' => 'required|string|max:1500',           
+        ];
     }
 
     public function attributes()
     {
         return [
-           'conclusion' => 'conclusión',            
-           'calificacion_atencion' => 'calificación de la atención',            
-           ];
+            'comentario' => 'comentario',
+        ];
     }
 
     public function messages()
@@ -44,5 +40,5 @@ class RecomendacionesCalificacionRequest extends FormRequest
         return [
             'required' => 'El campo :attribute es obligatorio.',            
         ];
-    }    
+    }
 }

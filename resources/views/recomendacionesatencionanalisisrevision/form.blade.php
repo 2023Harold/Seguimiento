@@ -1,14 +1,13 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('recomendacionescalificacion.edit',$recomendacion) }}
+{{ Breadcrumbs::render('recomendacionesanalisis.edit',$recomendacion) }}
 @endsection
 @section('content')
 <div class="card">
     <div class="card-header">
         <h1 class="card-title">
-            <a href="{{ route('recomendacionesacciones.edit',$recomendacion) }}"><i
-                    class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-            &nbsp; Calificación de la atención
+            <a href="{{ route('recomendacionesatencion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+            &nbsp; Análisis de la atención
         </h1>
     </div>
     <div class="card-body">
@@ -48,7 +47,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Oficios de contestación: </label>
                         <span class="text-primary">
-                            <a href="{{ route('recomendacionescontestaciones.show', $recomendacion) }}" class="popupSinLocation">
+                            <a href="{{ route('recomendacionescontestaciones.show', 0) }}" class="popupSinLocation">
                                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
                             </a> 
                         </span>
@@ -56,41 +55,62 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Lista de documentos: </label>
                         <span class="text-primary">
-                            <a href="{{ route('recomendacionesdocumentos.show', $recomendacion) }}" class="popupSinLocation">
+                            <a href="{{ route('recomendacionescalificacion.show', $recomendacion) }}" class="popupSinLocation">
                                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
                             </a> 
                         </span>
                     </div>
-                </div>
-               
+                </div>              
+                @if (!empty($recomendacion->calificacion_atencion))
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                        <label>Analisis: </label><br>
-                        {!! BootForm::textarea('analisis', false,old('analisis', $recomendacion->analisis),['rows'=>'3','disabled']) !!}
+                        <label>Calificación de la atención: </label>
+                        @if ($recomendacion->calificacion_atencion=='Atendida')
+                            <span class="badge badge-light-success">Atendida</span>
+                        @endif
+                        @if ($recomendacion->calificacion_atencion=='No Atendida')
+                            <span class="badge badge-light-danger">No Atendida</span>
+                        @endif
                     </div>             
-                </div>                     
+                </div>
+                <div class="row">
+                    <label>Conclusión: </label>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        {!! BootForm::textarea('conclusion', false,old('conclusion', $recomendacion->conclusion),['rows'=>'3','disabled']) !!}
+                    </div>             
+                </div>
+                @endif        
                 <hr/>
             </div>
         </div>
         <div>
-            <h3 class="card-title text-primary">Calificación </h3>  
-            <div class="card-body py-7">  
+            <h3 class="card-title text-primary">Análisis</h3>  
+            <div class="card-body mt-2">
                 <div class="row">
-                    {!! BootForm::open(['model' => $recomendacion,'update' =>'recomendacionescalificacion.update','id' =>'form',]) !!}           
+                    {!! BootForm::open(['model' => $recomendacion,'update' =>'recomendacionesanalisisrevision.update','id' =>'form',]) !!}           
+                    <div class="row">
+                        <div class="col-md-12">
+                            {!! BootForm::textarea('analisis', 'Análisis *',old('analisis', $recomendacion->analisis),['rows'=>'5','disabled']) !!}
+                        </div>
+                    </div>   
                     <div class="row">
                         <div class="col-md-6">
-                            {!! BootForm::radios("calificacion_atencion", ' Calificación de la atención: *', ['Atendida'=>'Atendida', 'No Atendida'=>'No Atendida'],old('calificacion_atencion',$recomendacion->calificacion_atencion),false,['class'=>'i-checks']); !!}
+                            {!! BootForm::radios("estatus", ' ',
+                            [
+                                'Aprobado' => 'Aprobar',
+                                'Rechazado' => 'Rechazar'
+                            ], null,false,['class'=>'i-checks rechazado']); !!}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" id="justificacion" style="display: none;">
                         <div class="col-md-12">
-                            {!! BootForm::textarea('conclusion', 'Conclusión: *',old('conclusion', $recomendacion->conclusion),['rows'=>'20']) !!}
+                            {!! BootForm::textarea('motivo_rechazo','Motivo del rechazo:*','',["rows" => "2", "style" => "rezise:none"])!!}
                         </div>
-                    </div>
+                    </div>         
                     <div class="row">
                         <div class="col-md-12">
-                            @btnSubmit('Guardar y enviar',route('recomendacionesatencion.store'))
-                            @btnCancelar('Cancelar', route('recomendacionesacciones.edit',$recomendacion))
+                            @btnSubmit('Guardar',route('recomendacionesanalisisrevision.update'))
+                            @btnCancelar('Cancelar', route('recomendacionesatencion.index'))
                         </div>
                     </div>
                     {!! BootForm::close() !!}
@@ -101,7 +121,7 @@
 </div>
 @endsection
 @section('script')
-{!! JsValidator::formRequest('App\Http\Requests\RecomendacionesCalificacionRequest') !!}
+{!! JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
 @endsection
 
 

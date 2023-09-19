@@ -21,31 +21,25 @@ class Recomendaciones extends Model
         'cargo_responsable',
         'departamento_responsable_id',
         'segcatunidad_administrativas',
-        'auditoria_id',
         'segauditorias',
         'usuario_creacion_id',
-        'usuario_modificacion_id',
         'accion_id',//accion_id
         'auditoria_id',
         'entidad_fiscalizable_id',
         'usuario_firmante_id',
-        'usuario_creacion_id',
-        'usuario_modificacion_id',
-        'usuario_firmante_id',
+        'usuario_modificacion_id',       
         'nivel_autorizacion',
         'accion',
         'calificacion_atencion',
         'analisis',
-        'oficio_contestacion',
-        'conclusion',
+        'fase_revision',
+        'oficio_contestacion',        
         'fase_autorizacion',
         'constancia_autorizacion', 
         'oficio_comprobante',
         'fecha_comprobante',
         'oficio_acuse',
         'fecha_acuse',
-        'analisis',
-        'calificacion_atencion',
         'conclusion',
         'concluido'
     ];
@@ -54,7 +48,6 @@ class Recomendaciones extends Model
         'fecha_acuse_oficio',
         'fecha_elaboracion_oficio',
         'fecha_recepcion',
-        'fecha_acuse',
         'fecha_proxima_seguimiento',
         'fecha_comprobante',
         'fecha_acuse' 
@@ -82,7 +75,7 @@ class Recomendaciones extends Model
 
     public function documentos()
     {
-        return $this->hasMany(RecomendacionesDocumento::class, 'recomendacion_id','id');
+        return $this->hasMany(RecomendacionesDocumento::class, 'accion_id','id');
     }
    
 }

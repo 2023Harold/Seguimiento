@@ -6,22 +6,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Propaganistas\LaravelFakeId\RoutesWithFakeIds;
 
-class RecomendacionesDocumento extends Model
+class RecomendacionesContestacion extends Model
 {
     use HasFactory;
     use RoutesWithFakeIds;
 
-    protected $table = 'segrecomendaciones_documentos';
+    protected $table = 'segrecomendaciones_contestaciones';
 
     protected $fillable = [
+        'consecutivo',
+        'oficio_contestacion',
+        'fecha_oficio_contestacion',
+        'nombre_archivo',
         'recomendacion_id',
-        'consecutivo',        
-        'nombre_documento', 
-        'created_at',              
-        'updated_at',              
+        'usuario_creacion_id',
+        'usuario_modificacion_id',
+        'created_at',
+        'updated_at',       
     ];
 
     protected $dates = [
+        'fecha_oficio_contestacion',
         'created_at',
         'updated_at',        
     ];

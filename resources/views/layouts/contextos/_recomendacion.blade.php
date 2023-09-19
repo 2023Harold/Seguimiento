@@ -29,23 +29,30 @@
                 </span>
             </div> 
             <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                <label>Oficio de la contestación de la recomendación: </label>
+                <label>Oficios de contestación: </label>
                 <span class="text-primary">
-                    <a href="{{ asset($recomendacion->oficio_contestacion) }}" target="_blank">
-                        <?php echo htmlspecialchars_decode(iconoArchivo($recomendacion->oficio_contestacion)) ?>
-                    </a> <br>      
+                    <a href="{{ route('recomendacionescontestaciones.show', $recomendacion) }}" class="popupSinLocation">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
+                    </a> 
+                </span>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                <label>Lista de documentos: </label>
+                <span class="text-primary">
+                    <a href="{{ route('recomendacionesdocumentos.show', $recomendacion) }}" class="popupSinLocation">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
+                    </a> 
                 </span>
             </div>
         </div>
-        @if (!empty($recomendacion->analisis))
+       
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                 <label>Analisis: </label><br>
-                <span class="text-primary text-justify">
-                    {{$recomendacion->analisis }}
-                </span>
+                {!! BootForm::textarea('analisis', false,old('analisis', $recomendacion->analisis),['rows'=>'3','disabled']) !!}
             </div>             
         </div>
+        @if (!empty($recomendacion->calificacion_atencion))
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                 <label>Calificación de la atención: </label>
@@ -58,11 +65,9 @@
             </div>             
         </div>
         <div class="row">
+            <label>Conclusión: </label>
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                <label>Conclusión: </label><br>
-                <span class="text-primary text-justify">
-                    {{$recomendacion->conclusion }}
-                </span>
+                {!! BootForm::textarea('conclusion', false,old('conclusion', $recomendacion->conclusion),['rows'=>'3','disabled']) !!}
             </div>             
         </div>
         @endif        

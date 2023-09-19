@@ -100,5 +100,10 @@ class AuditoriaAccion extends Model
     {
         return $this->belongsTo(SolicitudesAclaracion::class, 'id','accion_id');
     }
+
+    public function comentarios()
+    {
+        return $this->hasMany(Revisiones::class, 'accion_id', 'id')->where('accion', 'Recomendación')->orderBy('id', 'ASC');
+    }
     
 }
