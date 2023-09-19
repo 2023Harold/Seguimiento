@@ -19,8 +19,10 @@ return new class extends Migration
             $table->dateTime('fecha')->nullable();
             $table->string('hora_inicio', 20);
             $table->string('hora_fin', 20);
+	        $table->integer('sala');
             $table->foreignId('usuario_creacion_id')->nullable();
             $table->foreignId('usuario_actualizacion_id')->nullable();
+   	        $table->timestamps();
         });
     }
 

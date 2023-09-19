@@ -18,6 +18,9 @@ use App\Http\Controllers\CotejamientoController;
 use App\Http\Controllers\FirmaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\PliegosObservacionAccionesController;
+use App\Http\Controllers\PliegosObservacionAtencionController;
+use App\Http\Controllers\PliegosObservacionController;
 use App\Http\Controllers\PrasController;
 use App\Http\Controllers\PrasaccionesController;
 use App\Http\Controllers\PrasTurnoAcusesController;
@@ -105,8 +108,8 @@ Route::resource('seguimientoauditoriarevision', SeguimientoAuditoriaRevisionCont
 Route::resource('seguimientoauditoriavalidacion', SeguimientoAuditoriaValidacionController::class, ['parameters' => ['seguimientoauditoriavalidacion' => 'auditoria']]);
 Route::resource('seguimientoauditoriaautorizacion', SeguimientoAuditoriaAutorizacionController::class, ['parameters' => ['seguimientoauditoriaautorizacion' => 'auditoria']]);
 
-//Asignaciones 
-/*Direcciones*/ 
+//Asignaciones
+/*Direcciones*/
 Route::resource('asignaciondireccion', AsignacionDireccionController::class, ['parameters' => ['asignaciondireccion' => 'auditoria']]);
 Route::get('/asignaciondireccion/acciones/consulta/{auditoria}', [AsignacionDireccionController::class, 'accionesConsulta'])->name('asignaciondireccion.accionesconsulta');
 Route::post('getDirector', [AsignacionDireccionController::class, 'getDirector'])->name('getDirector');
@@ -177,3 +180,9 @@ Route::resource('solicitudesaclaracionrevision01',SolicitudesAclaracionRevision0
 Route::resource('solicitudesaclaracionrevision',SolicitudesAclaracionRevisionController::class,['parameters' => ['solicitudesaclaracionrevision' => 'solicitud']]);
 Route::resource('solicitudesaclaracionvalidacion',SolicitudesAclaracionValidacionController::class,['parameters' => ['solicitudesaclaracionvalidacion' => 'solicitud']]);
 Route::resource('solicitudesaclaracionautorizacion',SolicitudesAclaracionAutorizacionController::class,['parameters' => ['solicitudesaclaracionautorizacion' => 'solicitud']]);
+
+/*pliegosobservacion*/
+Route::resource('pliegosobservacion',PliegosObservacionController::class,['parameters' => ['pliegosobservacion' => 'auditoria']]);
+Route::resource('pliegosobservacionacciones',PliegosObservacionAccionesController::class,['parameters' => ['pliegosobservacionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
+Route::resource('pliegosobservacionatencion',PliegosObservacionAtencionController::class,['parameters' => ['pliegosobservacionatencion' => 'pliegosobservacion']]);
+

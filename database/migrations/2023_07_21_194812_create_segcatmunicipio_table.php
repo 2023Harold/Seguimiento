@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('segcatmunicipio', function (Blueprint $table) {
             $table->id();
             $table->string('descripcion', 60);
+            $table->timestamps();
         });
     }
 

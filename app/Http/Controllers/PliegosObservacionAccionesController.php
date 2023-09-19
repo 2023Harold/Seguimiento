@@ -5,24 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use Illuminate\Http\Request;
-use App\Models\SolicitudesAclaracion;
 
-class SolicitudesAclaracionAccionesController extends Controller
+class PliegosObservacionAccionesController extends Controller
 {
-
     protected $model;
 
     public function __construct(AuditoriaAccion $model)
     {
         $this->model = $model;
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     *
+     */
+
 
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+        $auditoria = Auditoria::find(getSession('pliegosobservacionauditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
 
-        return view('solicitudesaclaracionacciones.index', compact('request','acciones', 'auditoria'));
+        return view('pliegosobservacionacciones.index', compact('request','acciones', 'auditoria'));
     }
 
     /**
@@ -32,7 +37,7 @@ class SolicitudesAclaracionAccionesController extends Controller
      */
     public function create()
     {
-
+        //
     }
 
     /**
@@ -65,17 +70,17 @@ class SolicitudesAclaracionAccionesController extends Controller
      */
     public function edit(AuditoriaAccion $accion)
     {
-        setSession('solicitudauditoriaaccion_id',$accion->id);
+        setSession('pliegosobservacionauditoriaaccion_id',$accion->id);
 
-        if (empty($accion->solicitudesaclaracion)) {
+        if (empty($accion->pliegosobservacion)) {
             // dd('registrar');
-            return redirect()->route('solicitudesaclaracioncontestacion.create');
+            return redirect()->route('pliegosobservacionatencion.create');
          }else{
-            $solicitud=$accion->solicitudesaclaracion;
             // dd('consultar');
-            return redirect()->route('solicitudesaclaracioncontestacion.edit',$solicitud);
+            return redirect()->route('pliegosobservacionatencion.index');
         }
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -94,15 +99,11 @@ class SolicitudesAclaracionAccionesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
     public function setQuery(Request $request)
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('solicitudesaclaracionauditoria_id'))->where('segtipo_accion_id',1);
+         $query = $query->where('segauditoria_id',getSession('recomendacionesauditoria_id'))->where('segtipo_accion_id',3);
 
          if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
             $query = $query->where('analista_asignado_id',auth()->user()->id);

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('descripcion', 100);
             $table->unsignedInteger('direccion_id')->nullable();
-            $table->timestamps();
             $table->foreign('direccion_id')->references('id')->on('segcatunidad_administrativas');
+	        $table->timestamps();
         });
     }
 

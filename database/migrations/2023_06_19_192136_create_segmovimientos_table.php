@@ -25,11 +25,11 @@ return new class extends Migration
             $table->unsignedInteger('usuario_asignado_id');
             $table->unsignedInteger('usuario_creacion_id');
             $table->unsignedInteger('usuario_actualizacion_id')->nullable();
-            $table->timestamps();
             $table->foreign('firmante_id')->references('id')->on('segusers');
             $table->foreign('usuario_asignado_id')->references('id')->on('segusers');
             $table->foreign('usuario_creacion_id')->references('id')->on('segusers');
             $table->foreign('usuario_actualizacion_id')->references('id')->on('segusers');
+	        $table->timestamps();
         });
     }
 

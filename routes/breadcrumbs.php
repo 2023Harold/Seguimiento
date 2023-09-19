@@ -199,45 +199,45 @@ Breadcrumbs::for('pras.create', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('prasacciones.index', function (BreadcrumbTrail $trail) {
     $trail->parent('pras.index');
     $trail->push('Acciones', route('prasacciones.index'));
-    
+
 });
 
 /*prasturno */
 Breadcrumbs::for('prasturno.create', function (BreadcrumbTrail $trail) {
     $trail->parent('prasacciones.index');
     $trail->push('Turnar PRAS', route('prasturno.create'));
-});  
+});
 
 Breadcrumbs::for('prasturno.index', function (BreadcrumbTrail $trail) {
     $trail->parent('prasacciones.index');
-    $trail->push('Turnar PRAS', route('prasturno.index'));    
+    $trail->push('Turnar PRAS', route('prasturno.index'));
 });
 Breadcrumbs::for('prasturnorevision.edit', function (BreadcrumbTrail $trail,$pras) {
     $trail->parent('prasturno.index');
-    $trail->push('Revisar', route('prasturnorevision.edit',$pras));    
+    $trail->push('Revisar', route('prasturnorevision.edit',$pras));
 });
 Breadcrumbs::for('prasturnovalidacion.edit', function (BreadcrumbTrail $trail,$pras) {
     $trail->parent('prasturno.index');
-    $trail->push('Validar', route('prasturnovalidacion.edit',$pras));    
+    $trail->push('Validar', route('prasturnovalidacion.edit',$pras));
 });
 Breadcrumbs::for('prasturnoautorizacion.edit', function (BreadcrumbTrail $trail,$pras) {
     $trail->parent('prasturno.index');
-    $trail->push('Autorizar-Rechazar', route('prasturnoautorizacion.edit',$pras));    
+    $trail->push('Autorizar-Rechazar', route('prasturnoautorizacion.edit',$pras));
 });
 Breadcrumbs::for('prasturnoacuses.edit', function (BreadcrumbTrail $trail,$pras) {
     $trail->parent('prasturno.index');
-    $trail->push('Acuses', route('prasturnoacuses.edit',$pras));    
+    $trail->push('Acuses', route('prasturnoacuses.edit',$pras));
 });
 Breadcrumbs::for('prasturnoacuses.show', function (BreadcrumbTrail $trail,$pras) {
     $trail->parent('prasturno.index');
-    $trail->push('Acuses', route('prasturnoacuses.show',$pras));    
+    $trail->push('Acuses', route('prasturnoacuses.show',$pras));
 });
 
 /*recomendaciones */
 Breadcrumbs::for('recomendaciones.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Recomendaciones', route('recomendaciones.index'));
-    
+
 });
 /*recomendacionesaccion */
 Breadcrumbs::for('recomendacionesacciones.index', function (BreadcrumbTrail $trail) {
@@ -297,19 +297,19 @@ Breadcrumbs::for('recomendacionesacuses.show', function (BreadcrumbTrail $trail,
 
 Breadcrumbs::for('cedulainicial.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Cédulas iniciales', route('cedulainicial.index'));    
+    $trail->push('Cédulas iniciales', route('cedulainicial.index'));
 });
 
 Breadcrumbs::for('cedulainicial.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('cedulainicial.index');
-    $trail->push('Cédula', route('cedulainicial.edit',$auditoria));    
+    $trail->push('Cédula', route('cedulainicial.edit',$auditoria));
 });
 
 /*solicitudes de aclaracion */
 Breadcrumbs::for('solicitudesaclaracion.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Solicitudes de Aclaración', route('solicitudesaclaracion.index'));
-});   
+});
 
 /*solicitudesaclaracionacciones */
 Breadcrumbs::for('solicitudesaclaracionacciones.index', function (BreadcrumbTrail $trail) {
@@ -347,3 +347,14 @@ Breadcrumbs::for('solicitudesaclaracionautorizacion.edit', function (BreadcrumbT
     $trail->push('Autorizar-Rechazar', route('solicitudesaclaracionautorizacion.edit',$solicitud));
 });
 
+/*pliegos de observación */
+Breadcrumbs::for('pliegosobservacion.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Pliegos', route('pliegosobservacion.index'));
+});
+
+/*pliegosobservacionacciones */
+Breadcrumbs::for('pliegosobservacionacciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('pliegosobservacion.index');
+    $trail->push('Acciones', route('pliegosobservacionacciones.index'));
+});

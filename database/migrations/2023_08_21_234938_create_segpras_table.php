@@ -45,6 +45,7 @@ return new class extends Migration
             $table->integer('usuario_creacion_id')->constrained('users');
             $table->integer('usuario_modificacion_id')->nullable()->constrained('users');
             $table->integer('usuario_firmante_id')->constrained('users');
+	        $table->string('nivel_autorizacion', 100)->nullable();
             $table->timestamps();
         });
     }

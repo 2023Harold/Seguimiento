@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('segradicacion', function (Blueprint $table) {
             $table->id();
             $table->foreignId('auditoria_id')->constrained('segauditorias');
+	        $table->string('numero_expediente', 150)->nullable();
             $table->string('numero_acuerdo', 30)->nullable();
             $table->string('oficio_acuerdo', 100)->nullable();
             $table->date('fecha_oficio_acuerdo')->nullable();

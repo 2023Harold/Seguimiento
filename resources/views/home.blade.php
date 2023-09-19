@@ -437,6 +437,12 @@
                                     Solicitudes de aclaración
                                 </a>
                             </li>
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('pliegosobservacion.index') }}">
+                                    Pliegos de observación
+                                </a>
+                            </li>
 
                             {{-- <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>

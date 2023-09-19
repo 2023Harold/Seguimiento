@@ -14,18 +14,23 @@ return new class extends Migration
     public function up()
     {
         Schema::create('segrecomendaciones', function (Blueprint $table) {
-            $table->id();           
+            $table->id();
             $table->integer('consecutivo')->nullable();
-            $table->date('fecha_vencimiento');
-            $table->date('fecha_compromiso');
             $table->string('nombre_responsable', 150);
             $table->string('cargo_responsable', 150);
-            // oficio_contestacion',150
             $table->foreignId('departamento_responsable_id')->constrained('segcatunidad_administrativas');
-            $table->foreignId('auditoria_id')->constrained('segauditorias'); 
+	        $table->text('analisis')->nullable();
+            $table->string('calificacion_atencion',15)->nullable();
+	        $table->text('conclusion')->nullable();
+	        $table->string('concluido',2)->default("No");
+	        $table->string('nivel_autorizacion', 100)->nullable();
+	        $table->string('fase_autorizacion', 40)->nullable();
+            $table->string('constancia_autorizacion', 100)->nullable();
+            $table->foreignId('auditoria_id')->constrained('segauditorias');
+            $table->foreignId('accion_id')->nullable()->constrained('segauditoria_acciones');
             $table->foreignId('usuario_creacion_id')->constrained('segusers');
             $table->foreignId('usuario_modificacion_id')->nullable()->constrained('segusers');
-            $table->timestamps();             
+            $table->timestamps();
         });
     }
 

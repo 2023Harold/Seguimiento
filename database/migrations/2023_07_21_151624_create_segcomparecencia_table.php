@@ -17,7 +17,7 @@ return new class extends Migration
         {
             $table->id();
             $table->foreignId('auditoria_id')->constrained('segauditorias');
-            $table->string('nombre_titular', 120);           
+            $table->string('nombre_titular', 120);
             $table->string('cargo_titular', 120);
             $table->string('oficio_comparecencia')->nullable();
             $table->date('fecha_comparecencia');
@@ -41,16 +41,26 @@ return new class extends Migration
             $table->string('oficio_recepcion', 512)->nullable();
             $table->date('fecha_recepcion')->nullable();
             $table->string('oficio_acuse', 100)->nullable();
-            $table->date('fecha_acuse')->nullable();            
+            $table->date('fecha_acuse')->nullable();
             $table->string('oficio_acta', 100)->nullable();
-            $table->string('numero_acta', 50)->nullable();            
+            $table->string('numero_acta', 50)->nullable();
             $table->date('fecha_acta')->nullable();
             $table->string('oficio_acreditacion', 120)->nullable();
             $table->string('oficio_respuesta', 512)->nullable();
             $table->date('fecha_respuesta')->nullable();
             $table->string('cedula_general', 100)->nullable();
             $table->date('fecha_cedula')->nullable();
-            $table->foreignId('usuario_creacion_id')->constrained('segusers');
+	        $table->string('nombre_testigo1',100)->nullable();
+            $table->string('cargo_testigo1',300)->nullable();
+            $table->string('numero_identificacion_testigo1',100)->nullable();
+            $table->string('nombre_testigo2',100)->nullable();
+            $table->string('cargo_testigo2',300)->nullable();
+            $table->string('numero_identificacion_testigo2',100)->nullable();
+            $table->string('nombre_representante',100)->nullable();
+            $table->string('cargo_representante1',300)->nullable();
+            $table->string('numero_identificacion_representante',100)->nullable();
+	        $table->string('aplicacion_periodo',2)->nullable();
+	        $table->foreignId('usuario_creacion_id')->constrained('segusers');
             $table->foreignId('usuario_modificacion_id')->nullable()->constrained('segusers');
             $table->timestamps();
         });
