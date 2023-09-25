@@ -18,6 +18,13 @@
 <link href="{{asset('vendor/metronic/css/style.bundle.css')}}" rel="stylesheet" type="text/css"/>
 <!-- /metronic -->
 
+<!--FontAwesome-->
+<link href="{{asset('assets/icons/fontawesome/css/fontawesome.css')}}" rel="stylesheet">
+<link href="{{asset('assets/icons/fontawesome/css/brands.css')}}" rel="stylesheet">
+<link href="{{asset('assets/icons/fontawesome/css/solid.css')}}" rel="stylesheet">
+<!--/FontAwesome-->
+
+
 <!-- custom css -->
 <link href="{{asset('assets/css/custom.css')}}" rel="stylesheet" type="text/css"/>
 <link  href="{{ asset('vendor/bootstrap-fileinput/css/fileinput.min.css') }}" rel="stylesheet" type="text/css">

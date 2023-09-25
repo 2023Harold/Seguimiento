@@ -242,7 +242,7 @@ $(document).ready(function() {
     $('.numeric').each(function(index, value){
         new AutoNumeric(this, {
             currencySymbol: '$',
-            maximumValue: '99999999999.99',
+            maximumValue: '9999999999999.99',
             minimumValue: '0.00',
             unformatOnSubmit: true,
         });

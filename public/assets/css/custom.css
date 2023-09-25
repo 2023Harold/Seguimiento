@@ -487,3 +487,10 @@ input[type="time"]:before {
       color: #B5B5C3 !important;
   }
 
+  .icon-hover{
+    color:#A13B71 !important;
+  }
+
+  .icon-hover:hover{
+    color: darkgray !important;
+  }
