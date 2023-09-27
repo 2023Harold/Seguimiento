@@ -36,6 +36,7 @@ use App\Http\Controllers\RecomendacionesAcusesController;
 use App\Http\Controllers\RecomendacionesAnalisisController;
 use App\Http\Controllers\RecomendacionesAnalisisEnvioController;
 use App\Http\Controllers\RecomendacionesAnalisisRevisionController;
+use App\Http\Controllers\RecomendacionesAnalisisRevisionJefeController;
 use App\Http\Controllers\RecomendacionesAtencionCalificacionController;
 use App\Http\Controllers\RecomendacionesAtencionContestacionController;
 use App\Http\Controllers\RecomendacionesAtencionController;
@@ -45,13 +46,20 @@ use App\Http\Controllers\RecomendacionesController;
 use App\Http\Controllers\RecomendacionesRevision01Controller;
 use App\Http\Controllers\RecomendacionesRevisionController;
 use App\Http\Controllers\RecomendacionesValidacionController;
+use App\Http\Controllers\RevisionesRecomendacionesAtencionController;
 use App\Http\Controllers\RevisionesRecomendacionesController;
+use App\Http\Controllers\SeguimientoAuditoriaAccionRevision01Controller;
+use App\Http\Controllers\SeguimientoAuditoriaAccionRevisionController;
 use App\Http\Controllers\SeguimientoAuditoriaAutorizacionController;
 use App\Http\Controllers\SeguimientoAuditoriaController;
 use App\Http\Controllers\SeguimientoAuditoriaRevision01Controller;
 use App\Http\Controllers\SeguimientoAuditoriaRevisionController;
 use App\Http\Controllers\SeguimientoAuditoriaValidacionController;
 use App\Http\Controllers\SolicitudesAclaracionAccionesController;
+use App\Http\Controllers\SolicitudesAclaracionAnalisisController;
+use App\Http\Controllers\SolicitudesAclaracionAnalisisEnvioController;
+use App\Http\Controllers\SolicitudesAclaracionAnalisisRevisionController;
+use App\Http\Controllers\SolicitudesAclaracionAtencionController;
 use App\Http\Controllers\SolicitudesAclaracionAutorizacionController;
 use App\Http\Controllers\SolicitudesAclaracionCalificacionController;
 use App\Http\Controllers\SolicitudesAclaracionContestacionController;
@@ -105,6 +113,8 @@ Route::get('constancia/mostrarConstancia/{constancia}/{rutaCerrar}', [Constancia
 //Registro de auditorias
 Route::resource('seguimientoauditoria', SeguimientoAuditoriaController::class, ['parameters' => ['seguimientoauditoria' => 'auditoria']]);
 Route::resource('seguimientoauditoriaacciones', AccionesController::class, ['parameters' => ['seguimientoauditoriaacciones' => 'accion']]);
+Route::resource('seguimientoauditoriaaccionrevision01', SeguimientoAuditoriaAccionRevision01Controller::class, ['parameters' => ['seguimientoauditoriaaccionrevision01' => 'accion']]);
+Route::resource('seguimientoauditoriaaccionrevision', SeguimientoAuditoriaAccionRevisionController::class, ['parameters' => ['seguimientoauditoriaaccionrevision' => 'accion']]);
 Route::get('/seguimientoauditoria/acciones/{auditoria}', [SeguimientoAuditoriaController::class, 'auditoriaAcciones'])->name('seguimientoauditoria.acciones');
 Route::get('/seguimientoauditoria/{auditoria}', [SeguimientoAuditoriaController::class, 'concluir'])->name('seguimientoauditoria.concluir');
 Route::get('/seguimientoauditoria/acciones/consulta/{auditoria}', [SeguimientoAuditoriaController::class, 'accionesConsulta'])->name('seguimientoauditoria.accionesconsulta');
@@ -168,26 +178,32 @@ Route::resource('recomendacionesatencion',RecomendacionesAtencionController::cla
 Route::resource('recomendacionescalificacion',RecomendacionesAtencionCalificacionController::class,['parameters' => ['recomendacionescalificacion' => 'recomendacion']]);
 Route::resource('recomendacionesdocumentos',RecomendacionesAtencionDocumentosController::class,['parameters' => ['recomendacionesdocumentos' => 'documento']]);
 Route::resource('recomendacionescontestaciones',RecomendacionesAtencionContestacionController::class,['parameters' => ['recomendacionescontestaciones' => 'contestacion']]);
+Route::get('recomendacionescontestacionesoficios/{recomendacion}', [RecomendacionesAtencionContestacionController::class,'oficiosrecomendacion'])->name('recomendacionescontestaciones.oficiosrecomendacion');
 Route::resource('recomendacionesanalisis',RecomendacionesAnalisisController::class,['parameters' => ['recomendacionesanalisis' => 'recomendacion']]);
 Route::resource('recomendacionesanalisisenvio',RecomendacionesAnalisisEnvioController::class,['parameters' => ['recomendacionesanalisisenvio' => 'recomendacion']]);
 Route::resource('recomendacionesanalisisrevision',RecomendacionesAnalisisRevisionController::class,['parameters' => ['recomendacionesanalisisrevision' => 'recomendacion']]);
+Route::resource('recomendacionesanalisisrevision02',RecomendacionesAnalisisRevisionJefeController::class,['parameters' => ['recomendacionesanalisisrevision02' => 'recomendacion']]);
 
-Route::resource('recomendacionesrevision01',RecomendacionesRevision01Controller::class,['parameters' => ['recomendacionesrevision01' => 'recomendacion']]);
-Route::resource('recomendacionesrevision',RecomendacionesRevisionController::class,['parameters' => ['recomendacionesrevision' => 'recomendacion']]);
+// Route::resource('recomendacionesrevision01',RecomendacionesRevision01Controller::class,['parameters' => ['recomendacionesrevision01' => 'recomendacion']]);
+// Route::resource('recomendacionesrevision',RecomendacionesRevisionController::class,['parameters' => ['recomendacionesrevision' => 'recomendacion']]);
 Route::resource('recomendacionesvalidacion',RecomendacionesValidacionController::class,['parameters' => ['recomendacionesvalidacion' => 'recomendacion']]);
 Route::resource('recomendacionesautorizacion',RecomendacionesAutorizacionController::class,['parameters' => ['recomendacionesautorizacion' => 'recomendacion']]);
 Route::resource('recomendacionesacuses',RecomendacionesAcusesController::class,['parameters' => ['recomendacionesacuses' => 'recomendacion']]);
 /*Revisiones*/
 Route::resource('revisionesrecomendaciones',RevisionesRecomendacionesController::class,['parameters' => ['revisionesrecomendaciones' => 'comentario']]);
+Route::resource('revisionesrecomendacionesatencion',RevisionesRecomendacionesAtencionController::class,['parameters' => ['revisionesrecomendacionesatencion' => 'comentario']]);
 Route::resource('cedulainicial',CedulaInicialController::class,['parameters' => ['cedulainicial' => 'auditoria']]);
 
 /*solicitudesaclaracion*/
 Route::resource('solicitudesaclaracion',SolicitudesAclaracionController::class,['parameters' => ['solicitudesaclaracion' => 'auditoria']]);
 Route::resource('solicitudesaclaracionacciones',SolicitudesAclaracionAccionesController::class,['parameters' => ['solicitudesaclaracionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
+Route::resource('solicitudesaclaracionatencion',SolicitudesAclaracionAtencionController::class,['parameters' => ['solicitudesaclaracionatencion' => 'solicitud']]);
 Route::resource('solicitudesaclaracioncontestacion',SolicitudesAclaracionContestacionController::class,['parameters' => ['solicitudesaclaracioncontestacion' => 'solicitud']]);
-Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
 Route::resource('solicitudesaclaraciondocumentos',SolicitudesAclaracionDocumentosController::class,['parameters' => ['solicitudesaclaraciondocumentos' => 'documento']]);
-
+Route::resource('solicitudesaclanalisis',SolicitudesAclaracionAnalisisController::class,['parameters' => ['solicitudesaclanalisis' => 'solicitud']]);
+Route::resource('solicitudesaclanalisisenvio',SolicitudesAclaracionAnalisisEnvioController::class,['parameters' => ['solicitudesaclanalisisenvio' => 'solicitud']]);
+Route::resource('solicitudesaclanalisisrevision',SolicitudesAclaracionAnalisisRevisionController::class,['parameters' => ['solicitudesaclanalisisrevision' => 'solicitud']]);
+Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
 Route::resource('solicitudesaclaracionrevision01',SolicitudesAclaracionRevision01Controller::class,['parameters' => ['solicitudesaclaracionrevision01' => 'solicitud']]);
 Route::resource('solicitudesaclaracionrevision',SolicitudesAclaracionRevisionController::class,['parameters' => ['solicitudesaclaracionrevision' => 'solicitud']]);
 Route::resource('solicitudesaclaracionvalidacion',SolicitudesAclaracionValidacionController::class,['parameters' => ['solicitudesaclaracionvalidacion' => 'solicitud']]);

@@ -78,19 +78,30 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($auditoria->registro_concluido=='Si')
+                                        @if(!empty($auditoria->fase_autorizacion) && auth()->user()->siglas_rol!='ANA')
                                             <a href="{{ route('seguimientoauditoria.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
-                                        @endif                                        
+                                        @endif   
+                                        @if(!empty($auditoria->fase_autorizacion) && $auditoria->fase_autorizacion!='Rechazado' && auth()->user()->siglas_rol=='ANA')
+                                            <a href="{{ route('seguimientoauditoria.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
+                                        @endif                                       
                                     </td>
                                     <td style="text-align: right!important;">
                                         {{ '$'.number_format( $auditoria->total(), 2) }}                                         
                                     </td>
                                     <td class="text-center">
                                         @if ($auditoria->fase_autorizacion == 'En revisión 01')
-                                            En revisión
-                                        @else
-                                            {{ $auditoria->fase_autorizacion }}  
-                                        @endif                                                                                  
+                                            <span class="badge badge-light-warning">En revisión</span>
+                                        @elseif($auditoria->fase_autorizacion == 'En revisión')
+                                            <span class="badge badge-light-warning">{{ $auditoria->fase_autorizacion }}</span>
+                                        @elseif($auditoria->fase_autorizacion == 'En validación')
+                                            <span class="badge badge-light-warning">{{ $auditoria->fase_autorizacion }}</span>
+                                        @elseif($auditoria->fase_autorizacion == 'En autorización')
+                                            <span class="badge badge-light-warning">{{ $auditoria->fase_autorizacion }}</span>
+                                        @elseif($auditoria->fase_autorizacion == 'Rechazado')
+                                            <span class="badge badge-light-danger">{{ $auditoria->fase_autorizacion }}</span>
+                                        @elseif($auditoria->fase_autorizacion == 'Autorizado')
+                                            <span class="badge badge-light-success">{{ $auditoria->fase_autorizacion }}</span>
+                                        @endif         
                                     </td>
                                     <td class="text-center">   
                                         @if (empty($auditoria->fase_autorizacion)||$auditoria->fase_autorizacion=='Rechazado')   

@@ -494,3 +494,10 @@ input[type="time"]:before {
   .icon-hover:hover{
     color: darkgray !important;
   }
+  .icon-hover-active{
+    color:steelblue !important;
+  }
+
+  .icon-hover-active:hover{
+    color:lightskyblue !important;
+  }

@@ -24,10 +24,15 @@ class AuditoriaAccion extends Model
         'consecutivo',	
         'tipo',
         'segtipo_accion_id',
+        'acto_fiscalizacion',
+        'acto_fiscalizacion_id',
         'numero',	
         'cedula',
         'accion',	
-        'monto_aclarar',	
+        'monto_aclarar',
+        'revision_lider',
+        'revision_jefe',
+        'fase_revision',	
         'segauditoria_id',	
         'departamento_asignado_id',   
         'departamento_asignado',
@@ -103,7 +108,12 @@ class AuditoriaAccion extends Model
 
     public function comentarios()
     {
-        return $this->hasMany(Revisiones::class, 'accion_id', 'id')->where('accion', 'Recomendación')->orderBy('id', 'ASC');
+        return $this->hasMany(Revisiones::class, 'accion_id', 'id')->where('accion', 'Recomendación')->whereNull('id_revision')->orderBy('id', 'ASC');
+    }
+
+    public function movimientos()
+    {
+        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Revisión Acción Registro Auditoría')->orderBy('id', 'ASC');
     }
     
 }

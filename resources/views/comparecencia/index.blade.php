@@ -61,7 +61,7 @@
                                         @if (empty($auditoria->comparecencia->oficio_acta))
                                             @can('comparecenciaacta.update') 
                                                 <a href="{{ route('comparecenciaacta.edit',$auditoria->comparecencia) }}"  class="btn btn-primary">
-                                                    <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Adjuntar
+                                                    <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Adjuntar
                                                 </a>  
                                             @endcan
                                         @else

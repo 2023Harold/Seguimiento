@@ -70,7 +70,8 @@ class RecomendacionesAccionesController extends Controller
     {
         setSession('recomendacionesauditoriaaccion_id',$accion->id);
         $recomendacion=$accion->recomendaciones;
-        if (empty($accion->recomendaciones) && in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+        if (empty($accion->recomendaciones)) {
+			if(auth()->user()->siglas_rol=='ANA'){            
             $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));            
             $request=new Request();
             $request->merge([
@@ -83,9 +84,13 @@ class RecomendacionesAccionesController extends Controller
                 'cargo_responsable'=>$auditoria->comparecencia->cargo_representante1,
             ]);
             $recomendacion=Recomendaciones::create($request->all());
-          } 
-
-         setSession('recomendacioncalificacion_id',$recomendacion->id);
+				setSession('recomendacioncalificacion_id',$recomendacion->id);
+			}else{
+				setSession('recomendacioncalificacion_id',null);
+			}            
+          }else{
+			  setSession('recomendacioncalificacion_id',$recomendacion->id);
+		  }           
 
          return redirect()->route('recomendacionesatencion.index');
     }

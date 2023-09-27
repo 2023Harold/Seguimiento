@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use App\Models\Recomendaciones;
 use App\Models\RecomendacionesContestacion;
 use Illuminate\Http\Request;
@@ -23,8 +25,11 @@ class RecomendacionesAtencionContestacionController extends Controller
     public function index(Request $request)
     {
         $contestaciones = $this->setQuery($request)->paginate(10);
+        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
-        return view('recomendacionesatencioncontestacion.index', compact('contestaciones', 'request'));
+        return view('recomendacionesatencioncontestacion.index', compact('contestaciones','auditoria','accion','recomendacion','request'));
     }
 
     /**
@@ -35,10 +40,11 @@ class RecomendacionesAtencionContestacionController extends Controller
     public function create()
     {
         $contestacion = new RecomendacionesContestacion();
-             
-        $accion = 'Agregar';
+        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
-        return view('recomendacionesatencioncontestacion.form', compact('contestacion', 'accion'));
+        return view('recomendacionesatencioncontestacion.form', compact('contestacion','auditoria','recomendacion','accion'));
     }
 
     /**
@@ -73,8 +79,11 @@ class RecomendacionesAtencionContestacionController extends Controller
     public function show(Recomendaciones $contestacion)
     {
         $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$contestacion->id)->paginate(10); 
+        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
-        return view('recomendacionesatencioncontestacion.show', compact('contestaciones'));        
+        return view('recomendacionesatencioncontestacion.show', compact('contestaciones','auditoria','accion','recomendacion'));        
     }
 
     /**
@@ -83,9 +92,13 @@ class RecomendacionesAtencionContestacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit(RecomendacionesContestacion $contestacion)
+    {        
+        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
+
+        return view('recomendacionesatencioncontestacion.form', compact('contestacion','auditoria','recomendacion','accion'));
     }
 
     /**
@@ -95,9 +108,17 @@ class RecomendacionesAtencionContestacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, RecomendacionesContestacion $contestacion)
     {
-        //
+        mover_archivos($request, ['oficio_contestacion'],$contestacion);        
+        $request->merge([          
+            'usuario_modificacion_id' => auth()->id(),
+        ]);       
+        $contestacion->update($request->all());
+        $this->actualizaProgresivo();
+        setMessage('El registro ha sido agregado');
+
+        return redirect()->route('recomendacionescontestaciones.index');        
     }
 
     /**
@@ -140,5 +161,17 @@ class RecomendacionesAtencionContestacionController extends Controller
             $er_record->update(['consecutivo' => $numeroSiguiente]);
             $numeroSiguiente++;
         }
+    }
+
+    public function oficiosrecomendacion(Recomendaciones $recomendacion)
+    {
+        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$recomendacion->id)->paginate(10); 
+        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
+
+        return view('recomendacionesatencioncontestacionoficios.show', compact('contestaciones','auditoria','accion','recomendacion'));        
+
+      
     }
 }

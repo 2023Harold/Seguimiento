@@ -74,6 +74,8 @@ class RecomendacionesAnalisisRevisionController extends Controller
      */
     public function update(Request $request, Recomendaciones $recomendacion)
     {
+        $jefe=auth()->user()->jefe;
+
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -86,20 +88,21 @@ class RecomendacionesAnalisisRevisionController extends Controller
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);       
 
-        $recomendacion->update(['fase_revision' => $request->estatus == 'Aprobado' ? 'Aprobado' : 'Rechazado']);
+        $recomendacion->update(['fase_revision' => $request->estatus == 'Aprobado' ? 'Revisión Jefe' : 'Rechazado']);
         setMessage($request->estatus == 'Aprobado' ?
             'La aprobación ha sido registrada.' :
             'El rechazo ha sido registrado.'
         );
 
+
         if ($request->estatus == 'Aprobado') {           
             $titulo = 'Revisión del análisis de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
                    
-            $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado la actualización del análisis de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             '.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
         } else {           
             $titulo = 'Rechazo del análisis de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'

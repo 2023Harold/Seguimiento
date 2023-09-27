@@ -14,19 +14,27 @@ class RecomendacionesContestacion extends Model
     protected $table = 'segrecomendaciones_contestaciones';
 
     protected $fillable = [
-        'consecutivo',
-        'oficio_contestacion',
-        'fecha_oficio_contestacion',
-        'nombre_archivo',
-        'recomendacion_id',
-        'usuario_creacion_id',
-        'usuario_modificacion_id',
-        'created_at',
-        'updated_at',       
+        'consecutivo'
+        ,'oficio_contestacion'
+        ,'fecha_oficio_contestacion'
+        ,'numero_oficio'
+        ,'nombre_remitente'
+        ,'cargo_remitente'
+        ,'fecha_recepcion_oficialia'
+        ,'folio_correspondencia'
+        ,'fecha_recepcion_seguimiento'
+        ,'nombre_archivo'
+        ,'recomendacion_id'
+        ,'usuario_creacion_id'
+        ,'usuario_modificacion_id'
+        ,'created_at'
+        ,'updated_at'       
     ];
 
     protected $dates = [
         'fecha_oficio_contestacion',
+        'fecha_recepcion_oficialia',
+        'fecha_recepcion_seguimiento',
         'created_at',
         'updated_at',        
     ];

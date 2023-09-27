@@ -139,5 +139,5 @@ class RecomendacionesAtencionDocumentosController extends Controller
             $er_record->update(['consecutivo' => $numeroSiguiente]);
             $numeroSiguiente++;
         }
-    }
+    }   
 }

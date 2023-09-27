@@ -26,6 +26,7 @@ class AuditoriaAccionRequest extends FormRequest
         return [
             'consecutivo' => 'required|string|max:10',
             'segtipo_accion_id' => 'required|integer|max:999999999999',
+            'acto_fiscalizacion_id' => 'required|integer|max:999999999999',
             'numero' => 'required|string|max:100',
             'cedula' => 'sometimes|nullable|string|max:100',
             'accion' => 'required|string|max:50000',    

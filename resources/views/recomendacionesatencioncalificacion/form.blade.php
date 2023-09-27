@@ -48,7 +48,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Oficios de contestación: </label>
                         <span class="text-primary">
-                            <a href="{{ route('recomendacionescontestaciones.show', $recomendacion) }}" class="popupSinLocation">
+                            <a href="{{ route('recomendacionescontestaciones.oficiosrecomendacion', $recomendacion) }}" class="popupSinLocation">
                                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
                             </a> 
                         </span>
@@ -79,7 +79,7 @@
                     {!! BootForm::open(['model' => $recomendacion,'update' =>'recomendacionescalificacion.update','id' =>'form',]) !!}           
                     <div class="row">
                         <div class="col-md-6">
-                            {!! BootForm::radios("calificacion_atencion", ' Calificación de la atención: *', ['Atendida'=>'Atendida', 'No Atendida'=>'No Atendida'],old('calificacion_atencion',$recomendacion->calificacion_atencion),false,['class'=>'i-checks']); !!}
+                            {!! BootForm::radios("calificacion_atencion", ' Calificación de la atención: *', ['Atendida'=>'Atendida', 'No Atendida'=>'No Atendida','Parcialmente Atendida'=>'Parcialmente Atendida'],old('calificacion_atencion',$recomendacion->calificacion_atencion),false,['class'=>'i-checks']); !!}
                         </div>
                     </div>
                     <div class="row">

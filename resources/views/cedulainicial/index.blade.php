@@ -71,7 +71,7 @@
                                 <td class="text-center">
                                     @can('cedulainicial.edit')
                                         <a href="{{ route('cedulainicial.edit',$auditoria) }}" class="btn btn-primary">
-                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
+                                            <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
                                         </a>
                                     @endcan                                    
                                 </td>

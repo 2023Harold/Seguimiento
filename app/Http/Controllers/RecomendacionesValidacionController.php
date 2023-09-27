@@ -82,7 +82,7 @@ class RecomendacionesValidacionController extends Controller
         $this->normalizarDatos($request);
 
         Movimientos::create([
-            'tipo_movimiento' => 'Validación de atención de la recomendación',
+            'tipo_movimiento' => 'Validación de la calificación y conclusión de la atención de la recomendación',
             'accion' => 'Recomendación',
             'accion_id' => $recomendacion->id,
             'estatus' => $request->estatus,
@@ -106,20 +106,20 @@ class RecomendacionesValidacionController extends Controller
         if ($request->estatus == 'Aprobado') {
             $recomendacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
             
-            $titulo = 'Autorización del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+            $titulo = 'Autorización del registro de la calificación y la conclusión de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
                    
             $mensaje = '<strong>Estimado(a) '.$titular->name.', '.$titular->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
+                            '; ha aprobado el registro de la calificación y la conclusión de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $titular->unidad_administrativa_id, $titular->id);
         } else {           
-            $titulo = 'Rechazo del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
+            $titulo = 'Rechazo del registro de la calificación y la conclusión de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$recomendacion->accion->depaasignado->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
+                            .'Ha sido rechazado el registro de la calificación y la conclusión de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($recomendacion->accion->lider->name,$recomendacion->accion->lider->puesto,$recomendacion), now(), $recomendacion->accion->lider->unidad_administrativa_id, $recomendacion->accion->lider->id);
+            // auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
+            // auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($recomendacion->accion->lider->name,$recomendacion->accion->lider->puesto,$recomendacion), now(), $recomendacion->accion->lider->unidad_administrativa_id, $recomendacion->accion->lider->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$recomendacion), now(), $jefe->unidad_administrativa_id, $jefe->id);
         }
 

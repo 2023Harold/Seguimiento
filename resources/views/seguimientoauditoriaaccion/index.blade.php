@@ -75,8 +75,10 @@
                                 <th>Tipo de acción</th>
                                 <th>Número de acción</th>
                                 <th>Cédula de acción</th>
+                                <th>Acción</th>
                                 <th>Monto por aclarar</th>
-                                @if ($auditoria->registro_concluido=='No')
+                                <th>Estatus</th>
+                                @if ($auditoria->registro_concluido=='No'&&auth()->user()->siglas_rol=='ANA')
                                 <th>Editar</th>
                                 @endif
                             </tr>
@@ -96,47 +98,44 @@
                                 <td class="text-center">
                                     @if (!empty($accion->cedula))
                                     <a href="{{ asset($accion->cedula) }}" target="_blank">
-                                        <i class="align-middle fas fa-file-pdf text-primary fa-2x"
-                                            aria-hidden="true"></i>
+                                        <?php echo htmlspecialchars_decode(iconoArchivo($accion->cedula)) ?>
                                     </a>
                                     @endif
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('seguimientoauditoriaacciones.show',$accion) }}" class="popupSinLocation">
+                                        <i class="fa-regular fa-file-lines fa-2x icon-hover"></i>
+                                    </a>
                                 </td>
                                 <td style="text-align: right!important;">
                                     {{ '$'.number_format( $accion->monto_aclarar, 2) }}
                                 </td>
-                                @if ($auditoria->registro_concluido=='No')
+                                <td class="text-center">
+                                    @if (!empty($accion->revision_lider))   
+                                        @if (($accion->revision_lider=='Aprobado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Aprobado'))
+                                            <span class="badge badge-light-success">Aprobada</span>
+                                        @elseif (($accion->revision_lider=='Rechazado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Rechazado'&& $accion->revision_jefe='Rechazado')||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Rechazado'))
+                                            <span class="badge badge-light-danger">Rechazada</span>
+                                        @elseif ($accion->revision_lider=='En revisión 01')
+                                            <span class="badge badge-light-warning">En revisión</span>
+                                        @else
+                                            <span class="badge badge-light-warning">{{ $accion->revision_lider }}</span>
+                                        @endif                                      
+                                    @endif                                    
+                                </td>
+                                @if ($auditoria->registro_concluido=='No'&&auth()->user()->siglas_rol=='ANA')
                                 <td class="text-center">
                                     @can('seguimientoauditoriaacciones.edit')
-                                    <a href="{{ route('seguimientoauditoriaacciones.edit',$accion) }}">
-                                        <i class="align-middle fas fa-edit text-primary" aria-hidden="true"></i>
-                                    </a>
+                                        @if (empty($accion->revision_lider)||$accion->revision_lider=='Rechazado'||$accion->revision_jefe=='Rechazado')
+                                            <a href="{{ route('seguimientoauditoriaacciones.edit',$accion) }}">
+                                                <i class="align-middle fas fa-edit text-primary" aria-hidden="true"></i>
+                                            </a>
+                                        @endif                                    
                                     @endcan
                                 </td>
                                 @endif
-                            </tr>
-                            <tr>
-                                <td colspan="7">
-                                    <div class="row">
-                                        <div class="col-md-12 list-desglose">
-                                            <div class="text-primary pl-4 pt-2" data-bs-toggle="collapse"
-                                                href="#a-detalle-{{ $accion->id }}" aria-expanded="true">
-                                                <i class="fa fa-chevron-down fa-chev"></i> <span
-                                                    class="h5 text-primary">Acción</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="a-detalle-{{ $accion->id }}" class="collapse show">
-                                        <div class="row">
-                                            <div class="col-md-1">
-                                                &nbsp;
-                                            </div>
-                                            <div class="col-md-11 text-justify">
-                                                <?php echo  htmlspecialchars_decode($accion->accion); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            </tr> 
+                            {!! movimientosDesglose($accion->id, 8, $accion->movimientos) !!}                            
                             @empty
                             <tr>
                                 <td class="text-center" colspan="8">

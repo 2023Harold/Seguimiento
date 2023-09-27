@@ -79,6 +79,7 @@ class RecomendacionesAtencionCalificacionController extends Controller
      */
     public function update(Request $request, Recomendaciones $recomendacion)
     {
+        $director=auth()->user()->director;
         $documentos = RecomendacionesDocumento::where('recomendacion_id',$recomendacion->id)->get();
         if($documentos->count()==0){
             setMessage('No se ha capturado información en el apartado de listado de documentos.','error');
@@ -95,7 +96,7 @@ class RecomendacionesAtencionCalificacionController extends Controller
         $recomendacion->update($request->all());
 
          Movimientos::create([
-            'tipo_movimiento' => 'Registro de atención de la recomendación',
+            'tipo_movimiento' => 'Registro de la calificación y la conclusión de la atención de la recomendación',
             'accion' => 'Recomendación',
             'accion_id' => $recomendacion->id,
             'estatus' => 'Aprobado',
@@ -109,14 +110,19 @@ class RecomendacionesAtencionCalificacionController extends Controller
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
     
-        $recomendacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);      
+        $recomendacion->update(['fase_autorizacion' => 'En validación', 'nivel_autorizacion' => $nivel_autorizacion]);
+        setMessage($request->estatus == 'Aprobado' ?
+            'La aprobación ha sido registrada y se ha enviado a validación del superior.' :
+            'El rechazo ha sido registrado.'
+        );
 
-        $titulo = 'Revisión del registro de la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-        $mensaje = '<strong>Estimado (a) ' . auth()->user()->lider->name . ', ' . auth()->user()->lider->puesto . ':</strong><br>
-                    Ha sido registrada la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria . ', por parte del ' . 
-                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
-
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->lider->unidad_administrativa_id,auth()->user()->lider->id);
+        $titulo = 'Registro de la calificación y conclusión de la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+       
+        $mensaje = '<strong>Estimado(a) '.$director->name.', '.$director->puesto.':</strong><br>'
+                            .auth()->user()->name.', '.auth()->user()->puesto.
+                            '; Ha sido registrada la calificación y la conclusión de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
+                            ', por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
         
         return redirect()->route('recomendacionesatencion.index');
     }

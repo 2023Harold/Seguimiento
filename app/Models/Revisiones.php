@@ -46,4 +46,9 @@ class Revisiones extends Model
     {
         return $this->belongsTo(User::class, 'de_usuario_id');
     }
+
+    public function respuestas()
+    {
+        return $this->hasMany(Revisiones::class, 'id_revision','id');
+    }
 }

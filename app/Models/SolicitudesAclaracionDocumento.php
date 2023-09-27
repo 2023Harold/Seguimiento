@@ -11,10 +11,10 @@ class SolicitudesAclaracionDocumento extends Model
     use HasFactory;
     use RoutesWithFakeIds;
 
-    protected $table = 'segsolicitudes_aclaracion_doc';
+    protected $table = 'segsolicitudes_acl_documentos';
 
     protected $fillable = [
-        'solicitud_aclaracion_id',
+        'solicitudaclaracion_id',
         'consecutivo',        
         'nombre_archivo', 
         'created_at',              

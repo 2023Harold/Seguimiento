@@ -136,4 +136,20 @@ class Auditoria extends Model
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3);
             }
+            public function accionesrevisadaslider()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_lider');
+            }
+            public function accionesrechazadaslider()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_lider')->where('revision_lider','Rechazado');
+            }
+            public function accionesrevisadasjefe()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_jefe');
+            }
+            public function accionesrechazadasjefe()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_jefe')->where('revision_jefe','Rechazado');
+            }
 }

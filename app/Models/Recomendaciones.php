@@ -30,6 +30,7 @@ class Recomendaciones extends Model
         'usuario_modificacion_id',       
         'nivel_autorizacion',
         'accion',
+        'calificacion_sugerida',
         'calificacion_atencion',
         'analisis',
         'fase_revision',

@@ -71,7 +71,7 @@
                                     <td class="text-center">
                                         @can('asignaciondepartamento.accionesconsulta')
                                             @if($auditoria->registro_concluido=='Si')
-                                                <a href="{{ route('asignaciondepartamento.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-file-search"></i>Consultar</a>
+                                                <a href="{{ route('asignaciondepartamento.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-magnifying-glass-chart"></i>Consultar</a>
                                             @endif    
                                         @endcan                                    
                                     </td>
@@ -82,7 +82,7 @@
                                             @can('asignaciondepartamento.edit')                                          
                                                 @if ($auditoria->asignacion_departamentos=='Si'|| in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray()))
                                                     <a href="{{ route('asignaciondepartamento.edit',$auditoria) }}" class="btn btn-primary">
-                                                        <i class="fa fa-file-search"></i> Consultar
+                                                        <i class="fa fa-magnifying-glass"></i> Consultar
                                                     </a>
                                                 @else
                                                     @if (empty($auditoria->asignacion_departamentos))

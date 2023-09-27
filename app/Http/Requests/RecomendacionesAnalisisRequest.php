@@ -24,14 +24,16 @@ class RecomendacionesAnalisisRequest extends FormRequest
     public function rules()
     {
         return [            
-            'analisis' => 'required|string|max:8000',                                        
+            'analisis' => 'required|string|max:8000',
+            'calificacion_sugerida' => 'required|string|max:30|in:Atendida,No Atendida,Parcialmente Atendida'                                          
             ];
     }
 
     public function attributes()
     {
         return [
-           'analisis' => 'análisis',                       
+           'analisis' => 'análisis',  
+           'calificacion_sugerida' => 'calificación sugerida de la atención'                     
            ];
     }
 

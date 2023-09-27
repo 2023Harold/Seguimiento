@@ -15,18 +15,20 @@ return new class extends Migration
     {
         Schema::create('segsolicitudes_aclaracion', function (Blueprint $table) {
             $table->id();
-
-            $table->string('oficio_atencion');
-            $table->date('fecha_oficio_atencion');
             $table->enum('cumple', ['Atendida', 'No Atendida','Parcialmente Atendida'])->nullable();
-            $table->foreignId('accion_id')->constrained('segauditoria_acciones');
-            $table->foreignId('usuario_creacion_id')->constrained('segusers');
-            $table->foreignId('usuario_modificacion_id')->nullable()->constrained('segusers');
+            $table->decimal('monto_solventado',11,2)->nullable();
+            $table->text('analisis')->nullable();
+            $table->string('fase_revision', 40)->nullable();
+            $table->text('conclusion')->nullable();
+            $table->string('concluido',2)->default('No'); 
 	        $table->string('constancia', 100)->nullable();
             $table->string('fase_autorizacion', 50)->nullable();
             $table->string('nivel_autorizacion', 5)->nullable();
-            $table->string('concluido',2)->default('No');
-            $table->decimal('monto_solventado',11,2)->nullable();
+            $table->string('constancia_autorizacion', 100)->nullable();
+            $table->foreignId('auditoria_id')->constrained('segauditorias');
+            $table->foreignId('accion_id')->nullable()->constrained('segauditoria_acciones');
+            $table->foreignId('usuario_creacion_id')->constrained('segusers');
+            $table->foreignId('usuario_modificacion_id')->nullable()->constrained('segusers');          
             $table->timestamps();
         });
     }

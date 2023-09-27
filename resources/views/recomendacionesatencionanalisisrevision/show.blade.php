@@ -48,7 +48,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Oficios de contestación: </label>
                         <span class="text-primary">
-                            <a href="{{ route('recomendacionescontestaciones.show', 0) }}" class="popupSinLocation">
+                            <a href="{{ route('recomendacionescontestaciones.oficiosrecomendacion', $recomendacion) }}" class="popupSinLocation">
                                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
                             </a> 
                         </span>
@@ -56,7 +56,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Lista de documentos: </label>
                         <span class="text-primary">
-                            <a href="{{ route('recomendacionescalificacion.show', $recomendacion) }}" class="popupSinLocation">
+                            <a href="{{ route('recomendacionesdocumentos.show', $recomendacion) }}" class="popupSinLocation">
                                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
                             </a> 
                         </span>

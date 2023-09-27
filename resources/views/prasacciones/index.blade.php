@@ -56,7 +56,7 @@
                                     @if (empty($accion->pras)&&in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray()))
                                         @can('prasacciones.edit')
                                             <a href="{{ route('prasacciones.edit',$accion) }}" class="btn btn-primary">
-                                                <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Turnar
+                                                <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Turnar
                                             </a>
                                         @endcan                                    
                                     @else

@@ -90,6 +90,13 @@ class SeguimientoAuditoriaValidacionController extends Controller
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
 
+        if ($request->estatus == 'Rechazado') {            
+            foreach ($auditoria->acciones as $accionrevision) 
+            {
+                $accionrevision->update(['revision_jefe'=>'Rechazado']);
+            }           
+        }
+
         $auditoria->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
         setMessage($request->estatus == 'Aprobado' ?
             'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :

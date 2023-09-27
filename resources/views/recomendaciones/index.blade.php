@@ -72,7 +72,7 @@
                                 <td class="text-center">
                                     @can('recomendaciones.edit')
                                     <a href="{{ route('recomendaciones.edit',$auditoria) }}" class="btn btn-primary">
-                                        <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
+                                        <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
                                     </a>
                                     @endcan                                    
                                 </td>

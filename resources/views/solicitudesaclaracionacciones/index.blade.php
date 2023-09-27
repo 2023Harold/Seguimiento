@@ -61,7 +61,7 @@
                                     {{-- @can('solicitudesaclaracionacciones.edit') --}}
                                         <a href="{{ route('solicitudesaclaracionacciones.edit',$accion)}}"
                                         class="btn btn-primary popupcontestacion">
-                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Registar
+                                            <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Registar
                                         </a>
                                     {{-- @endcan --}}
                                     @else
@@ -77,11 +77,11 @@
                                     @if (!empty($accion->solicitudesaclaracion))
                                         @if (empty($accion->solicitudesaclaracion->cumple))
                                             <a href="{{ route('solicitudesaclaracioncalificacion.edit',$accion->solicitudesaclaracion) }}" class="btn btn-primary">
-                                                <i class="align-middle fas fa-file-plus" aria-hidden="true"></i>Registrar 
+                                                <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i>Registrar 
                                             </a>
                                         @else
                                             <a href="{{ route('solicitudesaclaracioncalificacion.index') }}" class="btn btn-primary">
-                                                <i class="align-middle fas fa-file-plus" aria-hidden="true"></i>Consultar 
+                                                <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i>Consultar 
                                             </a>                                            
                                         @endif                                        
                                     @endif                                    

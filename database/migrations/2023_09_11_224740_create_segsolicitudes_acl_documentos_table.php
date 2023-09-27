@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('segsolicitudes_aclaracion_doc', function (Blueprint $table) {
+        Schema::create('segsolicitudes_acl_documentos', function (Blueprint $table) {
             $table->id();
             $table->integer('consecutivo')->nullable();
             $table->string('nombre_archivo',500);
-            $table->foreignId('solicitud_aclaracion_id')->constrained('segsolicitudes_aclaracion');
+            $table->foreignId('solicitudaclaracion_id')->constrained('segsolicitudes_aclaracion');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('segsolicitudes_aclaracion_doc');
+        Schema::dropIfExists('segsolicitudes_acl_documentos');
     }
 };

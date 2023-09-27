@@ -48,7 +48,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Oficios de contestación: </label>
                         <span class="text-primary">
-                            <a href="{{ route('recomendacionescontestaciones.show', 0) }}" class="popupSinLocation">
+                            <a href="{{ route('recomendacionescontestaciones.oficiosrecomendacion', $recomendacion) }}" class="popupSinLocation">
                                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
                             </a> 
                         </span>
@@ -56,7 +56,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Lista de documentos: </label>
                         <span class="text-primary">
-                            <a href="{{ route('recomendacionescalificacion.show', $recomendacion) }}" class="popupSinLocation">
+                            <a href="{{ route('recomendacionesdocumentos.show', $recomendacion) }}" class="popupSinLocation">
                                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
                             </a> 
                         </span>
@@ -71,6 +71,9 @@
                         @endif
                         @if ($recomendacion->calificacion_atencion=='No Atendida')
                             <span class="badge badge-light-danger">No Atendida</span>
+                        @endif
+                        @if ($recomendacion->calificacion_atencion=='Parcialmente Atendida')
+                            <span class="badge badge-light-warning">Parcialmente Atendida</span>
                         @endif
                     </div>             
                 </div>
@@ -89,9 +92,23 @@
             <div class="card-body mt-2">            
                 <div class="row">          
                     <div class="col-md-12">
-                        {!! BootForm::textarea('analisis', false,old('analisis', $recomendacion->analisis),['rows'=>'30','readonly']) !!}
+                        {!! BootForm::textarea('analisis', false,old('analisis', $recomendacion->analisis),['rows'=>'10','readonly']) !!}
                     </div>
                 </div>         
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <label>Calificación sugerida de la atención: </label>
+                        @if ($recomendacion->calificacion_sugerida=='Atendida')
+                            <span class="badge badge-light-success">Atendida</span>
+                        @endif
+                        @if ($recomendacion->calificacion_sugerida=='No Atendida')
+                            <span class="badge badge-light-danger">No Atendida</span>
+                        @endif
+                        @if ($recomendacion->calificacion_sugerida=='Parcialmente Atendida')
+                            <span class="badge badge-light-warning">Parcialmente Atendida</span>
+                        @endif
+                    </div>             
+                </div>        
             </div>
         </div>
     </div>    

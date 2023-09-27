@@ -113,6 +113,13 @@ class SeguimientoAuditoriaAutorizacionController extends Controller
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);
 
+        if ($request->estatus == 'Rechazado') {            
+            foreach ($auditoria->acciones as $accionrevision) 
+            {
+                $accionrevision->update(['revision_jefe'=>'Rechazado']);
+            }           
+        }
+
         // $auditoria->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado','constancia' => $constancia->constancia_pdf]);
         $auditoria->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado']);
 

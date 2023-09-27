@@ -73,6 +73,12 @@ class SeguimientoAuditoriaRevisionController extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, Auditoria $auditoria)
     {
+        if ($request->estatus == 'Aprobado' && count($auditoria->accionesrechazadasjefe)>0) {
+            setMessage('Si hay acciones rechazadas no se puede aprobar la auditoría.','error');
+
+            return back()->withInput();
+        } 
+
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -84,6 +90,14 @@ class SeguimientoAuditoriaRevisionController extends Controller
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);
+
+        if(empty($auditoria->fase_autorizacion))
+        {        
+            foreach ($auditoria->acciones as $accionrevision) 
+            {
+                $accionrevision->update(['revision_jefe'=>'En revisión']);
+            }
+        }
 
         if (strlen($auditoria->nivel_autorizacion) == 3) {
             $nivel_autorizacion = $auditoria->nivel_autorizacion;

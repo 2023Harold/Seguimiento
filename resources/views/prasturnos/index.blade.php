@@ -100,7 +100,7 @@
                                         @if (empty($pras->oficio_comprobante))
                                             @can('prasturnoacuses.edit')
                                                 <a href="{{ route('prasturnoacuses.edit', $pras) }}" class="btn btn-primary">
-                                                    <span class="fa fa-file-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                                    <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
                                                 </a>
                                             @endcan
                                         @else

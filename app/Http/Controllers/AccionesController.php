@@ -6,6 +6,7 @@ use App\Http\Requests\AuditoriaAccionRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\CatalogoTipoAccion;
+use App\Models\CatalogoTipoAuditoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -25,7 +26,7 @@ class AccionesController extends Controller
     public function index(Request $request)
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);     
+        $acciones =  $this->setQuery($request)->orderBy('consecutivo')->paginate(30);     
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
         $monto_aclarar=$this->setQuery($request)->orderBy('monto_aclarar');
        
@@ -43,8 +44,9 @@ class AccionesController extends Controller
         $numeroconsecutivo=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get()->count()+1;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
         $accion = new AuditoriaAccion();
+        $actosfiscalizacion=CatalogoTipoAuditoria::whereIn('id',[1,2,3,4])->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
 
-        return view('seguimientoauditoriaaccion.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria'));
+        return view('seguimientoauditoriaaccion.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion'));
     }
 
     /**
@@ -70,9 +72,9 @@ class AccionesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(AuditoriaAccion $accion)
     {
-        //
+        return view('seguimientoauditoriaaccion.show',compact('accion'));
     }
 
     /**
@@ -86,9 +88,10 @@ class AccionesController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $numeroconsecutivo=$accion->consecutivo;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id');
+        $actosfiscalizacion=CatalogoTipoAuditoria::whereIn('id',[1,2,3,4])->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
         
 
-        return view('seguimientoauditoriaaccion.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria'));
+        return view('seguimientoauditoriaaccion.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion'));
     }
 
     /**
@@ -150,10 +153,13 @@ class AccionesController extends Controller
     public function normalizarDatos(Request $request)
     {
         $tiposaccion = CatalogoTipoAccion::find($request->segtipo_accion_id);
+        $actosfiscalizacion = CatalogoTipoAuditoria::find($request->acto_fiscalizacion_id);
         $request['tipo'] = $tiposaccion->descripcion;
         $request['segauditoria_id'] = getSession('auditoria_id');
         $request['usuario_actualizacion_id'] = auth()->id();
         $request['accion'] = str_replace("\r\n", "</br>",$request->accion);
+        $request['acto_fiscalizacion'] = $actosfiscalizacion->descripcion;
+        
         if ($request->segtipo_accion_id==2) {
             $request['monto_aclarar'] = null;
         }

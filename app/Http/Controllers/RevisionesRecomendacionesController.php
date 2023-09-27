@@ -74,9 +74,11 @@ class RevisionesRecomendacionesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Revisiones $comentario)
     {
-        //
+        setSession('comentario_id',$comentario->id);
+
+        return redirect()->route('revisionesrecomendacionesatencion.create');
     }
 
     /**

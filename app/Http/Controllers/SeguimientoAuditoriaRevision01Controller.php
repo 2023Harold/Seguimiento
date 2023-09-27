@@ -60,7 +60,7 @@ class SeguimientoAuditoriaRevision01Controller extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-        return view('seguimientoauditoriarevision01.form', compact('auditoria'));
+        return view('seguimientoauditoriarevision01.index', compact('auditoria'));
     }
 
     /**
@@ -72,6 +72,19 @@ class SeguimientoAuditoriaRevision01Controller extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, Auditoria $auditoria)
     {      
+        if ($request->estatus == 'Aprobado' && count($auditoria->accionesrechazadaslider)>0) {
+            setMessage('Si hay acciones rechazadas no se puede aprobar la auditoría.','error');
+
+            return back()->withInput();
+        } 
+
+        if ($request->estatus == 'Aprobado'){                    
+            foreach ($auditoria->acciones as $accionrevision) 
+            {
+                $accionrevision->update(['fase_revision'=>'En revisión']);
+            }           
+        }
+
        $jefe=User::where('unidad_administrativa_id', substr($auditoria->usuarioCreacion->unidad_administrativa_id, 0, 5).'0')->first();
       
         $this->normalizarDatos($request);

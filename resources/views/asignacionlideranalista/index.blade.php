@@ -70,7 +70,7 @@
                                     <td class="text-center">
                                             @if($auditoria->registro_concluido=='Si')
                                                 @can('asignacionlideranalista.accionesconsulta')
-                                                    <a href="{{ route('asignacionlideranalista.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-file-search"></i>Consultar</a>
+                                                    <a href="{{ route('asignacionlideranalista.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-magnifying-glass-chart"></i>Consultar</a>
                                                 @endcan
                                             @endif                                  
                                     </td>
@@ -120,7 +120,7 @@
                                         @endif 
                                         @can('asignacionlideranalista.consulta')
                                             <a href="{{ route('asignacionlideranalista.consulta',$auditoria) }}" class="btn btn-primary">
-                                                <i class="fa fa-file-search"></i> Consultar
+                                                <i class="fa fa-magnifying-glass-chart"></i> Consultar
                                             </a> 
                                         @endcan                                                                        
                                     </td>                                  

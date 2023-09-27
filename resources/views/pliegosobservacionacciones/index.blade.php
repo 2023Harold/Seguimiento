@@ -60,7 +60,7 @@
                                         {{-- @can('pliegosobservacionacciones.edit') --}}
                                             <a href="{{ route('pliegosobservacionacciones.edit',$accion)}}"
                                                 class="btn btn-primary">
-                                                <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Registar
+                                                <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Registar
                                             </a>
                                         {{-- @endcan --}}
                                     @else
@@ -68,7 +68,7 @@
                                             {{-- @can('recomendacionesacciones.edit') --}}
                                                 <a href="{{ route('pliegosobservacionacciones.edit',$accion) }}"
                                                     class="btn btn-primary">
-                                                    <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Consultar
+                                                    <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Consultar
                                                 </a>
                                             {{-- @endcan --}}
                                         @endif

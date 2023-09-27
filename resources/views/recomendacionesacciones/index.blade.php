@@ -58,14 +58,14 @@
                                 <td class="text-center">
                                     @can('recomendacionesacciones.edit')
                                         <a href="{{ route('recomendacionesacciones.edit',$accion) }}" class="btn btn-primary">
-                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
+                                            <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
                                         </a>
                                     @endcan
                                     {{-- @if(empty($accion->recomendaciones)&&in_array("Analista", auth()->user()->getRoleNames()->toArray()))
                                         @can('recomendacionesacciones.edit')
                                             <a href="{{ route('recomendacionesacciones.edit',$accion)}}"
                                                 class="btn btn-primary">
-                                                <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Registar
+                                                <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Registar
                                             </a>
                                         @endcan
                                     @else

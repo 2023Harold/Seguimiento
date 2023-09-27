@@ -94,7 +94,7 @@
                                         @if (empty($auditoria->radicacion))
                                             @can('radicacion.auditoria')
                                                 <a href="{{ route('radicacion.auditoria',$auditoria) }}"  class="btn btn-primary">
-                                                    <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Agregar radicacion
+                                                    <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Agregar radicacion
                                                 </a>
                                             @endcan 
                                         @else                                            
@@ -138,7 +138,7 @@
                                             @if (empty($auditoria->comparecencia->oficio_recepcion))
                                                 @can('comparecenciaacuse.edit')
                                                     <a href="{{ route('comparecenciaacuse.edit', $auditoria->comparecencia) }}" class="btn btn-primary">
-                                                        <span class="fa fa-file-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                                        <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
                                                     </a>
                                                 @endcan
                                             @else

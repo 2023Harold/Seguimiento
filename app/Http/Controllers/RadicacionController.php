@@ -170,14 +170,15 @@ class RadicacionController extends Controller
 
     public function setQuery(Request $request)
     {        
-         $query = new Auditoria;         
+         $query = new Auditoria;  
+         $query = $query->whereNotNull('fase_autorizacion')
+            ->where('fase_autorizacion','Autorizado');       
         
         if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
            in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){   
 
-            $query = $query->whereNotNull('fase_autorizacion')
-            ->where('fase_autorizacion','Autorizado');
+            
 
         }elseif(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
 

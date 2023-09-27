@@ -216,7 +216,7 @@ class SeguimientoAuditoriaController extends Controller
     public function accionesConsulta(Auditoria $auditoria)
     {
         $movimiento='consultar';       
-        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->paginate(30);   
+        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->orderBy('consecutivo')->paginate(30);   
         $request = new Request(); 
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);     
        
@@ -280,6 +280,33 @@ class SeguimientoAuditoriaController extends Controller
 
     public function concluir(Auditoria $auditoria)
     {
+        if(empty($auditoria->fase_autorizacion))
+        {        
+            foreach ($auditoria->acciones as $accionrevision) 
+            {
+                $accionrevision->update(['fase_revision'=>'En revisión 01']);
+            }
+        }else{
+            if (count($auditoria->accionesrechazadaslider)>0) 
+            {
+                foreach ($auditoria->accionesrechazadaslider as $accionrechazada) 
+                {
+                    $accionrechazada->update(['fase_revision'=>'En revisión 01']);
+                    $accionrechazada->update(['revision_lider'=>null]);
+                    $accionrechazada->update(['revision_jefe'=>null]);
+                }                
+            }
+            if (count($auditoria->accionesrechazadasjefe)>0) 
+            {
+                foreach ($auditoria->accionesrechazadasjefe as $accionrechazada) 
+                {
+                    $accionrechazada->update(['fase_revision'=>'En revisión 01']);
+                    $accionrechazada->update(['revision_lider'=>null]);
+                    $accionrechazada->update(['revision_jefe'=>null]);
+                }                
+            }
+        }
+
         Movimientos::create([
             'tipo_movimiento' => 'Registro de la auditoría',
             'accion' => 'Registro de la auditoría',

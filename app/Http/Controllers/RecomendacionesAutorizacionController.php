@@ -100,7 +100,7 @@ class RecomendacionesAutorizacionController extends Controller
         $constancia = guardarConstanciasFirmadas($recomendacion, 'constancia_atencion_recomendacion', $request, 'constancia');
 
         Movimientos::create([
-            'tipo_movimiento' => 'Autorización de atención de la recomendación',
+            'tipo_movimiento' => 'Autorización de la calificación y conclusión de la atención de la recomendación',
             'accion' => 'Recomendación',
             'accion_id' => $recomendacion->id,
             'estatus' => $request->estatus,
@@ -117,19 +117,19 @@ class RecomendacionesAutorizacionController extends Controller
         
         $director=User::where('unidad_administrativa_id',substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+            $titulo = 'Autorización del registro de la calificación y conclusión de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
                        
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($recomendacion->userCreacion->name,$recomendacion->userCreacion->puesto,$recomendacion), now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($recomendacion->accion->depaasignado->name,$recomendacion->accion->depaasignado->puesto,$recomendacion), now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id);
             
             setMessage('Se ha autorizado el registro del turno del PRAS con exito.');
         } else {
-            $titulo = 'Rechazo del registro registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
+            $titulo = 'Rechazo del registro de la calificación y conclusión de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$recomendacion->accion->depaasignado->name.', '.$recomendacion->accion->depaasignado->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro del turno del PRAS  de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);           
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);           
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id);
             
             setMessage('Se ha rechazado el registro del turno del PRAS con exito.');

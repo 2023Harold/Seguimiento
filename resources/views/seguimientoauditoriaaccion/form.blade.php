@@ -25,6 +25,11 @@
             </div>
         </div> 
         <div class="row">
+            <div class="col-md-4">
+                {!! BootForm::select('acto_fiscalizacion_id', 'Acto de fiscalización: *', $actosfiscalizacion->toArray(), old('acto_fiscalizacion_id',$accion->acto_fiscalizacion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+            </div>
+        </div> 
+        <div class="row">
             <div class="col-md-3">
                 {!! BootForm::text('numero', 'Número de acción: *', old('numero_accion', $accion->numero_accion)) !!}
             </div>

@@ -100,7 +100,7 @@
                                         @if (empty($auditoria->radicacion))
                                             @can('radicacion.auditoria')
                                                 <a href="{{ route('radicacion.auditoria',$auditoria) }}"  class="btn btn-primary">
-                                                    <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Agregar radicacion
+                                                    <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Agregar radicacion
                                                 </a>
                                             @endcan 
                                         @else                                            
@@ -108,7 +108,7 @@
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
                                                     @can('radicacion.edit')
                                                         <a href="{{ route('radicacion.edit',$auditoria->radicacion) }}" class="btn btn-primary">
-                                                            <span class="fas fa-edit text-primar" aria-hidden="true"></span>&nbsp; Editar
+                                                            <span class="fas fa-edit text-primary" aria-hidden="true"></span>&nbsp; Editar
                                                         </a>  
                                                     @endcan
                                             @endif  
@@ -144,7 +144,7 @@
                                             @if (empty($auditoria->comparecencia->oficio_recepcion))
                                                 @can('comparecenciaacuse.edit')
                                                     <a href="{{ route('comparecenciaacuse.edit', $auditoria->comparecencia) }}" class="btn btn-primary">
-                                                        <span class="fa fa-file-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                                        <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
                                                     </a>
                                                 @endcan
                                             @else
@@ -162,7 +162,7 @@
                                 @endif                                                                                           
                             @empty
                                 <tr>
-                                    <td class="text-center" colspan="8">
+                                    <td class="text-center" colspan="10">
                                         <span class='text-center'>No hay registros en éste apartado</span>
                                     </td>
                                 </tr>

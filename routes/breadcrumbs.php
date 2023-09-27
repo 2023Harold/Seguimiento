@@ -260,6 +260,21 @@ Breadcrumbs::for('recomendacionesatencion.edit', function (BreadcrumbTrail $trai
     $trail->push('Datos de atención', route('recomendacionesatencion.edit',$recomendacion));
 });
 
+Breadcrumbs::for('recomendacionescontestaciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('recomendacionesatencion.index');
+    $trail->push('Oficios de contestación', route('recomendacionescontestaciones.index'));
+});
+
+Breadcrumbs::for('recomendacionescontestaciones.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('recomendacionescontestaciones.index');
+    $trail->push('Agregar', route('recomendacionescontestaciones.create'));
+});
+
+Breadcrumbs::for('recomendacionescontestaciones.edit', function (BreadcrumbTrail $trail,$contestacion) {
+    $trail->parent('recomendacionescontestaciones.index');
+    $trail->push('Agregar', route('recomendacionescontestaciones.edit',$contestacion));
+});
+
 Breadcrumbs::for('recomendacionescalificacion.edit', function (BreadcrumbTrail $trail,$recomendacion) {
     $trail->parent('recomendacionesatencion.index');
     $trail->push('Calificación de la atención', route('recomendacionescalificacion.edit',$recomendacion));

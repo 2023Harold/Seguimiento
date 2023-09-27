@@ -18,10 +18,15 @@ return new class extends Migration
             $table->integer('consecutivo')->nullable();
             $table->string('tipo', 100)->nullable();
             $table->unsignedBigInteger('segtipo_accion_id')->nullable();
+            $table->string('acto_fiscalizacion', 100)->nullable();
+            $table->unsignedBigInteger('acto_fiscalizacion_id')->nullable();
             $table->string('numero')->nullable();
             $table->string('cedula', 100)->nullable();
             $table->text('accion')->nullable();
-            $table->decimal('monto_aclarar',11,2)->nullable();
+            $table->decimal('monto_aclarar',19,2)->nullable();
+            $table->string('fase_revision')->nullable();
+            $table->string('revision_lider')->nullable();
+            $table->string('revision_jefe')->nullable();
             $table->unsignedBigInteger('segauditoria_id')->nullable();
             $table->string('departamento_asignado')->nullable();
             $table->unsignedBigInteger('departamento_asignado_id')->nullable();
@@ -45,6 +50,7 @@ return new class extends Migration
             $table->unsignedBigInteger('usuario_actualizacion_id')->nullable();
 	        $table->foreign('lider_asignado_id')->references('id')->on('segusers');
             $table->foreign('segtipo_accion_id')->references('id')->on('segcattipo_accion');
+            $table->foreign('acto_fiscalizacion_id')->references('id')->on('segcattipos_auditorias');
             $table->foreign('segauditoria_id')->references('id')->on('segauditorias');
             $table->foreign('departamento_asignado_id')->references('id')->on('segcatunidad_administrativas');
             $table->foreign('usuario_creacion_id')->references('id')->on('segusers');

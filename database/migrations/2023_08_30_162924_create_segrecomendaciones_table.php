@@ -21,7 +21,8 @@ return new class extends Migration
             $table->foreignId('departamento_responsable_id')->constrained('segcatunidad_administrativas');
 	        $table->text('analisis')->nullable();
             $table->string('fase_revision', 40)->nullable();
-            $table->string('calificacion_atencion',15)->nullable();
+            $table->string('calificacion_sugerida',30)->nullable();
+            $table->string('calificacion_atencion',30)->nullable();
 	        $table->text('conclusion')->nullable();
 	        $table->string('concluido',2)->default("No");
 	        $table->string('nivel_autorizacion', 100)->nullable();
