@@ -2,25 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Auditoria;
-use App\Models\AuditoriaAccion;
-use App\Models\SolicitudesAclaracion;
 use Illuminate\Http\Request;
 
-class SolicitudesAclaracionAtencionController extends Controller
+class PliegosObservacionValidacionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
-
-        return view('solicitudesaclaracionatencion.index',compact('solicitudesaclaracion','auditoria','accion','request'));
+        //
     }
 
     /**
@@ -41,11 +34,7 @@ class SolicitudesAclaracionAtencionController extends Controller
      */
     public function store(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('solicitudesaclaracionauditoriaaccion_id'));
-        $pliegosobservacion = PliegosObservacion::where('accion_id',getSession('solicitudesaclaracionauditoriaaccion_id'))->get();
-
-        return view('solicitudesaclaracionatencion.index',compact('solicitudesaclaracion','auditoria','accion','request'));
+        //
     }
 
     /**

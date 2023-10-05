@@ -9,7 +9,6 @@ use App\Models\SolicitudesAclaracion;
 
 class SolicitudesAclaracionAccionesController extends Controller
 {
-
     protected $model;
 
     public function __construct(AuditoriaAccion $model)
@@ -19,6 +18,7 @@ class SolicitudesAclaracionAccionesController extends Controller
 
     public function index(Request $request)
     {
+        // dd(getSession('solicitudesaclaracionauditoria_id'));
         $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
 
@@ -65,17 +65,28 @@ class SolicitudesAclaracionAccionesController extends Controller
      */
     public function edit(AuditoriaAccion $accion)
     {
-        setSession('solicitudauditoriaaccion_id',$accion->id);
 
-        if (empty($accion->solicitudesaclaracion)) {
-            // dd('registrar');
-            return redirect()->route('solicitudesaclaracioncontestacion.create');
-         }else{
-            $solicitud=$accion->solicitudesaclaracion;
-            // dd('consultar');
-            return redirect()->route('solicitudesaclaracioncontestacion.edit',$solicitud);
-        }
-    }
+        setSession('solicitudesauditoriaaccion_id',$accion->id);
+        $solicitudesaclaracion=$accion->solicitudesaclaracion;
+        if (empty($accion->solicitudesaclaracion) && in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+            $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+            $request=new Request();
+            $request->merge([
+                'auditoria_id' => $auditoria->id,
+                'usuario_creacion_id' => auth()->id(),
+                'accion_id'=>getSession('solicitudesauditoriaaccion_id'),
+                'consecutivo' => 1,
+                'departamento_responsable_id'=> auth()->user()->unidad_administrativa_id,
+                'nombre_responsable'=>$auditoria->comparecencia->nombre_representante,
+                'cargo_responsable'=>$auditoria->comparecencia->cargo_representante1,
+            ]);
+            $solicitudesaclaracion=SolicitudesAclaracion::create($request->all());
+          }
+        //   dd();
+         setSession('solicitudesaclaracionatencion_id',$solicitudesaclaracion->id);
+// dd(getSession('solicitudesauditoriaaccion_id'));
+         return redirect()->route('solicitudesaclaracionatencion.index');
+     }
     /**
      * Update the specified resource in storage.
      *
@@ -100,24 +111,24 @@ class SolicitudesAclaracionAccionesController extends Controller
     }
     public function setQuery(Request $request)
     {
-         $query = $this->model;
+        $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('solicitudesaclaracionauditoria_id'))->where('segtipo_accion_id',1);
+        $query = $query->where('segauditoria_id',getSession('solicitudesaclaracionauditoria_id'))->where('segtipo_accion_id',1);
 
-         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
-            $query = $query->where('analista_asignado_id',auth()->user()->id);
+        if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
+           $query = $query->where('analista_asignado_id',auth()->user()->id);
+       }
+
+       if ($request->filled('consecutivo')) {
+           $query = $query->where('consecutivo',$request->consecutivo);
         }
 
-        if ($request->filled('consecutivo')) {
-            $query = $query->where('consecutivo',$request->consecutivo);
-         }
-
-        if ($request->filled('tipo')) {
-            $query = $query->where('tipo',$request->tipo);
-        }
-        if ($request->filled('monto_aclarar')) {
-            $query = $query->where('monto_aclarar',$request->monto_aclarar);
-        }
-        return $query;
+       if ($request->filled('tipo')) {
+           $query = $query->where('tipo',$request->tipo);
+       }
+       if ($request->filled('monto_aclarar')) {
+           $query = $query->where('monto_aclarar',$request->monto_aclarar);
+       }
+       return $query;
     }
 }

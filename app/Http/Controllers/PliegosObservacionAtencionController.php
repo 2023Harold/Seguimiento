@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
+use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
 
 class PliegosObservacionAtencionController extends Controller
@@ -11,9 +14,13 @@ class PliegosObservacionAtencionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+        $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $pliegosobservacion = PliegosObservacion::where('accion_id',getSession('pliegosobservacionauditoriaaccion_id'))->get();
+
+        return view('pliegosobservacionatencion.index',compact('pliegosobservacion','auditoria','accion','request'));
     }
 
     /**
@@ -34,7 +41,11 @@ class PliegosObservacionAtencionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $auditoria = Auditoria::find(getSession('pliegosobservacionauditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('pleigosobservacionauditoriaaccion_id'));
+        $pliegosobservacion = PliegosObservacion::where('accion_id',getSession('pliegosobservacionauditoriaaccion_id'))->get();
+
+        return view('pliegosobservacionatencion.index',compact('pliegosobservacion','auditoria','accion','request'));
     }
 
     /**

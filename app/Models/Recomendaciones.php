@@ -27,16 +27,16 @@ class Recomendaciones extends Model
         'auditoria_id',
         'entidad_fiscalizable_id',
         'usuario_firmante_id',
-        'usuario_modificacion_id',       
+        'usuario_modificacion_id',
         'nivel_autorizacion',
         'accion',
         'calificacion_sugerida',
         'calificacion_atencion',
         'analisis',
         'fase_revision',
-        'oficio_contestacion',        
+        'oficio_contestacion',
         'fase_autorizacion',
-        'constancia_autorizacion', 
+        'constancia_autorizacion',
         'oficio_comprobante',
         'fecha_comprobante',
         'oficio_acuse',
@@ -51,7 +51,7 @@ class Recomendaciones extends Model
         'fecha_recepcion',
         'fecha_proxima_seguimiento',
         'fecha_comprobante',
-        'fecha_acuse' 
+        'fecha_acuse'
     ];
 
     public function auditoria()
@@ -78,5 +78,5 @@ class Recomendaciones extends Model
     {
         return $this->hasMany(RecomendacionesDocumento::class, 'accion_id','id');
     }
-   
+
 }

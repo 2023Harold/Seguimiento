@@ -19,8 +19,19 @@ use App\Http\Controllers\FirmaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PliegosObservacionAccionesController;
+use App\Http\Controllers\PliegosObservacionAcusesController;
+use App\Http\Controllers\PliegosObservacionAnalisisEnvioController;
+use App\Http\Controllers\PliegosObservacionAnalisisRevisionController;
+use App\Http\Controllers\PliegosObservacionAtencionAnalisisController;
+use App\Http\Controllers\PliegosObservacionAtencionCalificacionController;
+use App\Http\Controllers\PliegosObservacionAtencionContestacionController;
 use App\Http\Controllers\PliegosObservacionAtencionController;
+use App\Http\Controllers\PliegosObservacionAtencionDocumentosController;
+use App\Http\Controllers\PliegosObservacionAutorizacionController;
 use App\Http\Controllers\PliegosObservacionController;
+use App\Http\Controllers\PliegosObservacionRevision01Controller;
+use App\Http\Controllers\PliegosObservacionRevisionController;
+use App\Http\Controllers\PliegosObservacionValidacionController;
 use App\Http\Controllers\PrasController;
 use App\Http\Controllers\PrasaccionesController;
 use App\Http\Controllers\PrasTurnoAcusesController;
@@ -47,6 +58,7 @@ use App\Http\Controllers\RecomendacionesRevision01Controller;
 use App\Http\Controllers\RecomendacionesRevisionController;
 use App\Http\Controllers\RecomendacionesValidacionController;
 use App\Http\Controllers\RevisionesRecomendacionesAtencionController;
+use App\Http\Controllers\RevisionesPliegosObservacionController;
 use App\Http\Controllers\RevisionesRecomendacionesController;
 use App\Http\Controllers\SeguimientoAuditoriaAccionRevision01Controller;
 use App\Http\Controllers\SeguimientoAuditoriaAccionRevisionController;
@@ -69,6 +81,7 @@ use App\Http\Controllers\SolicitudesAclaracionRevision01Controller;
 use App\Http\Controllers\SolicitudesAclaracionRevisionController;
 use App\Http\Controllers\SolicitudesAclaracionValidacionController;
 use App\Http\Controllers\Usercontroller;
+use App\Models\PliegosObservacion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -200,7 +213,7 @@ Route::resource('solicitudesaclaracionacciones',SolicitudesAclaracionAccionesCon
 Route::resource('solicitudesaclaracionatencion',SolicitudesAclaracionAtencionController::class,['parameters' => ['solicitudesaclaracionatencion' => 'solicitud']]);
 Route::resource('solicitudesaclaracioncontestacion',SolicitudesAclaracionContestacionController::class,['parameters' => ['solicitudesaclaracioncontestacion' => 'solicitud']]);
 Route::resource('solicitudesaclaraciondocumentos',SolicitudesAclaracionDocumentosController::class,['parameters' => ['solicitudesaclaraciondocumentos' => 'documento']]);
-Route::resource('solicitudesaclanalisis',SolicitudesAclaracionAnalisisController::class,['parameters' => ['solicitudesaclanalisis' => 'solicitud']]);
+Route::resource('solicitudesaclaracionanalisis',SolicitudesAclaracionAnalisisController::class,['parameters' => ['solicitudesaclanalisis' => 'solicitud']]);
 Route::resource('solicitudesaclanalisisenvio',SolicitudesAclaracionAnalisisEnvioController::class,['parameters' => ['solicitudesaclanalisisenvio' => 'solicitud']]);
 Route::resource('solicitudesaclanalisisrevision',SolicitudesAclaracionAnalisisRevisionController::class,['parameters' => ['solicitudesaclanalisisrevision' => 'solicitud']]);
 Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
@@ -212,5 +225,22 @@ Route::resource('solicitudesaclaracionautorizacion',SolicitudesAclaracionAutoriz
 /*pliegosobservacion*/
 Route::resource('pliegosobservacion',PliegosObservacionController::class,['parameters' => ['pliegosobservacion' => 'auditoria']]);
 Route::resource('pliegosobservacionacciones',PliegosObservacionAccionesController::class,['parameters' => ['pliegosobservacionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
-Route::resource('pliegosobservacionatencion',PliegosObservacionAtencionController::class,['parameters' => ['pliegosobservacionatencion' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacionatencion',PliegosObservacionAtencionController::class,['parameters' => ['pliegosobservacionatencion' => 'pliegosobservacionatencion']]);
+Route::resource('pliegosatencioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosobservacioncalificacion' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosobservacioncalificacion' => 'pliegosobservacion']]);
+Route::resource('pliegosobservaciondocumentos',PliegosObservacionAtencionDocumentosController::class,['parameters' => ['pliegosobservaciondocumentos' => 'documento']]);
+Route::resource('pliegosobservacioncontestaciones',PliegosObservacionAtencionContestacionController::class,['parameters' => ['pliegosobservacioncontestaciones' => 'contestacion']]);
+Route::resource('pliegosobservacionanalisis',PliegosObservacionAtencionAnalisisController::class,['parameters' => ['pliegosobservacionanalisis' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacionanalisisenvio',PliegosObservacionAnalisisEnvioController::class,['parameters' => ['pliegosobservacionanalisisenvio' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacionanalisisrevision',PliegosObservacionAnalisisRevisionController::class,['parameters' => ['pliegosobservacionanalisisrevision' => 'pliegosobservacion']]);
+
+/*pliegos Revisiones*/
+Route::resource('pliegosobservacionrevision01',PliegosObservacionRevision01Controller::class,['parameters' => ['pliegosobservacionrevision01' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacionrevision',PliegosObservacionRevisionController::class,['parameters' => ['pliegosobservacionrevision' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacionvalidacion',PliegosObservacionValidacionController::class,['parameters' => ['pliegosobservacionvalidacion' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacionautorizacion',PliegosObservacionAutorizacionController::class,['parameters' => ['pliegosobservacionautorizacion' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacionesacuses',PliegosObservacionAcusesController::class,['parameters' => ['pliegosobservacionacuses' => 'pliegosobservacion']]);
+Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);
+
+
 

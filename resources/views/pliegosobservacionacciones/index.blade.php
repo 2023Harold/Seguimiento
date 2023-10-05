@@ -56,23 +56,23 @@
                                     {{'$'.number_format( $accion->monto_aclarar, 2)}}
                                 </td>
                                 <td class="text-center">
-                                    @if(empty($accion->recomendaciones)&&in_array("Analista", auth()->user()->getRoleNames()->toArray()))
-                                        {{-- @can('pliegosobservacionacciones.edit') --}}
+                                    {{-- @can('pliegosobservacionacciones.edit') --}}
+                                        <a href="{{ route('pliegosobservacionacciones.edit',$accion) }}" class="btn btn-primary">
+                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
+                                        </a>
+                                    {{-- @endcan --}}
+                                    {{-- @if(empty($accion->pliegosobservacion)&&in_array("Analista", auth()->user()->getRoleNames()->toArray()))
+                                     @can('recomendacionesacciones.edit')
                                             <a href="{{ route('pliegosobservacionacciones.edit',$accion)}}"
                                                 class="btn btn-primary">
                                                 <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Registar
                                             </a>
-                                        {{-- @endcan --}}
+                                        @endcan
                                     @else
-                                        @if(!empty($accion->recomendaciones))
-                                            {{-- @can('recomendacionesacciones.edit') --}}
-                                                <a href="{{ route('pliegosobservacionacciones.edit',$accion) }}"
-                                                    class="btn btn-primary">
-                                                    <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Consultar
-                                                </a>
-                                            {{-- @endcan --}}
+                                        @if(!empty($accion->pliegosobservacion))
+
                                         @endif
-                                    @endif
+                                    @endif --}}
                                 </td>
                             </tr>
                             @empty

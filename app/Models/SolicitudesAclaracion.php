@@ -13,28 +13,49 @@ class SolicitudesAclaracion extends Model
 
     protected $table = 'segsolicitudes_aclaracion';
 
-    protected $fillable = [        
+    protected $fillable = [
         'id',
+        'consecutivo',
         'oficio_atencion',
         'fecha_oficio_atencion',
-        'cumple',
-        'accion_id',        
+        'accion_id',
         'usuario_creacion_id',
         'usuario_modificacion_id',
         'constancia',
         'fase_autorizacion',
+        'segauditorias',
+        'auditoria_id',
+        'entidad_fiscalizable_id',
+        'usuario_firmante_id',
         'nivel_autorizacion',
-        'concluido',
-        'monto_solventado'        
+        'accion_id',
+        'calificacion_atencion',
+        'analisis',
+        'fase_revision',
+        'oficio_contestacion',
+        'fase_autorizacion',
+        'constancia_autorizacion',
+        'oficio_comprobante',
+        'fecha_comprobante',
+        'oficio_acuse',
+        'fecha_acuse',
+        'conclusion',
+        'concluido'
     ];
 
     protected $dates = [
-        'fecha_oficio_atencion',
-        'created_at',
-        'updated_at'
+        'fecha_acuse_oficio',
+        'fecha_elaboracion_oficio',
+        'fecha_recepcion',
+        'fecha_proxima_seguimiento',
+        'fecha_comprobante',
+        'fecha_acuse'
     ];
 
-   
+    public function auditoria()
+    {
+        return $this->belongsTo(Auditoria::class, 'auditoria_id', 'id');
+    }
     public function accion()
     {
         return $this->belongsTo(AuditoriaAccion::class, 'accion_id', 'id');
@@ -45,13 +66,13 @@ class SolicitudesAclaracion extends Model
         return $this->belongsTo(User::class, 'usuario_creacion_id');
     }
 
-    public function userModificacion()
-    {
-        return $this->belongsTo(User::class, 'usuario_modificacion_id');
-    }
-
     public function movimientos()
     {
-        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Solicitud de Aclaración')->orderBy('id', 'ASC');
+        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Solicitudes Aclaración')->orderBy('id', 'ASC');
+    }
+
+    public function documentos()
+    {
+        return $this->hasMany(PliegosDocumento::class, 'accion_id','id');
     }
 }

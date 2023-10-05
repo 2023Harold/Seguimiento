@@ -21,20 +21,20 @@ class AuditoriaAccion extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'consecutivo',	
+        'consecutivo',
         'tipo',
         'segtipo_accion_id',
         'acto_fiscalizacion',
         'acto_fiscalizacion_id',
-        'numero',	
+        'numero',
         'cedula',
-        'accion',	
+        'accion',
         'monto_aclarar',
         'revision_lider',
         'revision_jefe',
-        'fase_revision',	
-        'segauditoria_id',	
-        'departamento_asignado_id',   
+        'fase_revision',
+        'segauditoria_id',
+        'departamento_asignado_id',
         'departamento_asignado',
         'reasignacion_departamento',
         'lider_asignado',
@@ -45,9 +45,9 @@ class AuditoriaAccion extends Model
         'analista_asignado_id',
         'reasignacion_analista',
         'analista_anterior_id',
-        'usuario_creacion_id',	
-        'usuario_actualizacion_id',	
-        'created_at',	
+        'usuario_creacion_id',
+        'usuario_actualizacion_id',
+        'created_at',
         'updated_at',
         'evidencia_recomendacion',
         'tipo_recomendacion',
@@ -57,7 +57,7 @@ class AuditoriaAccion extends Model
         'normativa_infringida',
     ];
 
-           
+
     /**
      * The attributes that should be cast.
      *
@@ -67,8 +67,8 @@ class AuditoriaAccion extends Model
         'created_at'=>'datetime',
         'updated_at'=>'datetime',
         'fecha_termino_recomendacion'=>'datetime',
-    ];       
-    
+    ];
+
     public function getDepaasignadoAttribute()
     {
         return User::where('unidad_administrativa_id',$this->departamento_asignado_id)->first();
@@ -80,7 +80,7 @@ class AuditoriaAccion extends Model
     }
 
     public function tipo()
-    {                
+    {
         return $this->hasOne(CatalogoTipoAccion::class, 'id', 'segtipo_accion_id');
     }
 
@@ -105,7 +105,10 @@ class AuditoriaAccion extends Model
     {
         return $this->belongsTo(SolicitudesAclaracion::class, 'id','accion_id');
     }
-
+    public function pliegosobservacion()
+    {
+        return $this->belongsTo(PliegosObservacion::class, 'id','accion_id');
+    }
     public function comentarios()
     {
         return $this->hasMany(Revisiones::class, 'accion_id', 'id')->where('accion', 'Recomendación')->whereNull('id_revision')->orderBy('id', 'ASC');
@@ -115,5 +118,5 @@ class AuditoriaAccion extends Model
     {
         return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Revisión Acción Registro Auditoría')->orderBy('id', 'ASC');
     }
-    
+
 }

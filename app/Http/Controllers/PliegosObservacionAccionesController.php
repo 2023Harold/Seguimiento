@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
 
 class PliegosObservacionAccionesController extends Controller
@@ -18,13 +19,10 @@ class PliegosObservacionAccionesController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     *
      */
-
-
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('pliegosobservacionauditoria_id'));
+        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
 
         return view('pliegosobservacionacciones.index', compact('request','acciones', 'auditoria'));
@@ -71,14 +69,25 @@ class PliegosObservacionAccionesController extends Controller
     public function edit(AuditoriaAccion $accion)
     {
         setSession('pliegosobservacionauditoriaaccion_id',$accion->id);
+        $pliegosobservacion=$accion->pliegosobservacion;
+        if (empty($accion->pliegosobservacion) && in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+            $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+            $request=new Request();
+            $request->merge([
+                'auditoria_id' => $auditoria->id,
+                'usuario_creacion_id' => auth()->id(),
+                'accion_id'=>getSession('pliegosobservacionauditoriaaccion_id'),
+                'consecutivo' => 1,
+                'departamento_responsable_id'=> auth()->user()->unidad_administrativa_id,
+                'nombre_responsable'=>$auditoria->comparecencia->nombre_representante,
+                'cargo_responsable'=>$auditoria->comparecencia->cargo_representante1,
+            ]);
+            $pliegosobservacion=PliegosObservacion::create($request->all());
+          }
+        //   dd();
+         setSession('pliegosobservacionatencion_id',$pliegosobservacion->id);
 
-        if (empty($accion->pliegosobservacion)) {
-            // dd('registrar');
-            return redirect()->route('pliegosobservacionatencion.create');
-         }else{
-            // dd('consultar');
-            return redirect()->route('pliegosobservacionatencion.index');
-        }
+         return redirect()->route('pliegosobservacionatencion.index');
     }
 
     /**
@@ -99,11 +108,16 @@ class PliegosObservacionAccionesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function destroy($id)
+    {
+        //
+    }
+
     public function setQuery(Request $request)
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('recomendacionesauditoria_id'))->where('segtipo_accion_id',3);
+         $query = $query->where('segauditoria_id',getSession('pliegosobservacion_id'))->where('segtipo_accion_id',3);
 
          if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
             $query = $query->where('analista_asignado_id',auth()->user()->id);

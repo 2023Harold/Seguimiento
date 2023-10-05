@@ -67,7 +67,7 @@
                                     {{ $auditoria->acto_fiscalizacion }}
                                 </td>
                                 <td style="text-align: right!important;">
-                                    {{ '$'.number_format( $auditoria->total(), 2) }}
+                                    {{ '$'.number_format( $auditoria->total(), 3) }}
                                 </td>
                                 <td class="text-center">
                                     {{-- @can('recomendaciones.edit') --}}

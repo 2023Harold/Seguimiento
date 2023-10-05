@@ -14,17 +14,17 @@ class SolicitudesAclaracionController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected $model;
-    
+
         public function __construct(Auditoria $model)
         {
             $this->model = $model;
-        } 
+        }
 
     public function index(Request $request)
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
         $acciones = AuditoriaAccion::where('segtipo_accion_id',1)->paginate(30);
-               
+
         return view('solicitudesaclaracion.index', compact('auditorias', 'acciones','request'));
     }
 
@@ -68,9 +68,9 @@ class SolicitudesAclaracionController extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
+
         setSession('solicitudesaclaracionauditoria_id',$auditoria->id);
-   
-        return redirect()->route('solicitudesaclaracionacciones.index'); 
+        return redirect()->route('solicitudesaclaracionacciones.index');
     }
 
     /**
@@ -102,27 +102,27 @@ class SolicitudesAclaracionController extends Controller
          $query = $query->whereHas('acciones', function($q){
             $q->where('segtipo_accion_id',1);
 
-            if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
+            if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
                 $q = $q->where('analista_asignado_id',auth()->user()->id);
             }
-            if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){    
-                $userLider=auth()->user(); 
+            if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
+                $userLider=auth()->user();
                 $q = $q->whereRaw('LOWER(lider_asignado_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('fase_autorizacion');
             }
-            if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){     
+            if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
                 $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
                 $q = $q->whereNotNull('fase_autorizacion')->whereRaw('LOWER(departamento_asignado_id) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
-            }  
-        });          
+            }
+        });
 
         if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())||
            in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||
            in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
-           in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){                 
+           in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){
             $query = $query->whereNotNull('fase_autorizacion');
         }
-        
-                
+
+
         if ($request->filled('numero_auditoria')) {
              $numeroAuditoria=strtolower($request->numero_auditoria);
              $query = $query->whereRaw('LOWER(numero_auditoria) LIKE (?) ',["%{$numeroAuditoria}%"]);

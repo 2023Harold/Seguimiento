@@ -68,7 +68,7 @@ class PliegosObservacionController extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-        setSession('pliegosobservacionauditoria_id',$auditoria->id);
+        setSession('pliegosobservacion_id',$auditoria->id);
 
         return redirect()->route('pliegosobservacionacciones.index');
     }
