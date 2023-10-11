@@ -69,7 +69,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($recomendacion->fase_autorizacion) || $recomendacion->fase_autorizacion=='Rechazado'))
-                                        @if (empty($recomendacion->fase_revision) || ($recomendacion->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión LP'))
+                                        @if (empty($recomendacion->fase_revision) || ($recomendacion->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión Jefe'))
                                             <a href="{{ route('recomendacionesdocumentos.index', $recomendacion) }}" class="icon-hover-active popupSinLocation">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>

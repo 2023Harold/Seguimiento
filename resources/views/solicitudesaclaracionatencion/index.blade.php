@@ -39,7 +39,7 @@
                             <tr>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($solicitud->fase_autorizacion) || $solicitud->fase_autorizacion=='Rechazado'))
-                                       @if (empty($solicitud->fase_revision) || $solicitud->fase_revision!='Pendiente')
+                                       @if (empty($solicitud->fase_revision) || ($solicitud->fase_revision!='Pendiente' && $solicitud->fase_revision!='Revisión Jefe' ))
                                             @can('solicitudesaclaracioncontestacion.index')                               
                                                 <a href="{{ route('solicitudesaclaracioncontestacion.index') }}" class="icon-hover-active">
                                                     <span class="fa fa-list" aria-hidden="true"></span>
@@ -62,7 +62,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($solicitud->fase_autorizacion) || $solicitud->fase_autorizacion=='Rechazado'))
-                                        @if (empty($solicitud->fase_revision) || $solicitud->fase_revision!='Pendiente')
+                                        @if (empty($solicitud->fase_revision) || ($solicitud->fase_revision!='Pendiente' && $solicitud->fase_revision!='Revisión Jefe' ))
                                             @can('solicitudesaclaraciondocumentos.index')
                                             <a href="{{ route('solicitudesaclaraciondocumentos.index', $solicitud) }}" class="icon-hover-active popupSinLocation">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
@@ -85,7 +85,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($solicitud->fase_autorizacion) || $solicitud->fase_autorizacion=='Rechazado'))
-                                        @if (empty($solicitud->fase_revision) || $solicitud->fase_revision!='Pendiente')
+                                        @if (empty($solicitud->fase_revision) || ($solicitud->fase_revision!='Pendiente' && $solicitud->fase_revision!='Revisión Jefe' ))
                                             @can('solicitudesaclaracionanalisis.edit')
                                             <a href="{{ route('solicitudesaclaracionanalisis.edit',$solicitud) }}" class="icon-hover-active">
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
