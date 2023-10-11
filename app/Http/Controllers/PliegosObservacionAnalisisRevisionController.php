@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditoriaAccion;
+use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
 
 class PliegosObservacionAnalisisRevisionController extends Controller
@@ -54,9 +56,12 @@ class PliegosObservacionAnalisisRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(PliegosObservacion $pliegosobservacion)
     {
-        //
+        $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $auditoria=$accion->auditoria;
+
+        return view('pliegosobservacionatencionanalisisrevision.form',compact('pliegosobservacion','accion','auditoria'));
     }
 
     /**
@@ -66,9 +71,46 @@ class PliegosObservacionAnalisisRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, PliegosObservacion $pliegosobservacion)
     {
-        //
+        $jefe=auth()->user()->jefe;
+
+        $this->normalizarDatos($request);
+
+        Movimientos::create([
+            'tipo_movimiento' => 'Revisión de la actualización del análisis',
+            'accion' => 'Pliegos de observación',
+            'accion_id' => $pliegosobservacion->id,
+            'estatus' => $request->estatus,
+            'usuario_creacion_id' => auth()->id(),
+            'usuario_asignado_id' => auth()->id(),
+            'motivo_rechazo' => $request->motivo_rechazo,
+        ]);
+
+        $pliegosobservacion->update(['fase_revision' => $request->estatus == 'Aprobado' ? 'Revisión Jefe' : 'Rechazado']);
+        setMessage($request->estatus == 'Aprobado' ?
+            'La aprobación ha sido registrada.' :
+            'El rechazo ha sido registrado.'
+        );
+
+
+        if ($request->estatus == 'Aprobado') {
+            $titulo = 'Revisión del análisis de la recomendación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
+
+            $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
+                            .auth()->user()->name.', '.auth()->user()->puesto.
+                            '; se ha aprobado la actualización del análisis de Pliegos de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
+                            '.';
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
+        } else {
+            $titulo = 'Rechazo del análisis de Pliegos de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->userCreacion->name.', '.$pliegosobservacion->userCreacion->puesto.':</strong><br>'
+                            .'Ha sido rechazado el del análisis de Pliegos de observación  de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
+                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->userCreacion->unidad_administrativa_id, $pliegosobservacion->userCreacion->id);
+        }
+
+        return redirect()->route('pliegosobservacionatencion.index');
     }
 
     /**
@@ -77,8 +119,12 @@ class PliegosObservacionAnalisisRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy((Request $request)
     {
-        //
+        if ($request->estatus == 'Aprobado') {
+            $request['motivo_rechazo'] = null;
+        }
+
+        return $request;
     }
 }

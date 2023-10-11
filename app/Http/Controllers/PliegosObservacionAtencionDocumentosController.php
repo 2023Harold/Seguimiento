@@ -23,7 +23,7 @@ class PliegosObservacionAtencionDocumentosController extends Controller
     {
         $documentos = $this->setQuery($request)->paginate(50);
 
-        return view('pliegosobservacionatenciondocumentos.index', compact('documentos', 'request'));
+        return view('pliegosobservaciondocumentos.index', compact('documentos', 'request'));
     }
 
     /**
@@ -37,7 +37,7 @@ class PliegosObservacionAtencionDocumentosController extends Controller
 
         $accion = 'Agregar';
 
-        return view('pliegosobservacionatenciondocumentos.form', compact('documento', 'accion'));
+        return view('pliegosobservaciondocumentos.form', compact('documento', 'accion'));
     }
 
     /**
@@ -73,7 +73,7 @@ class PliegosObservacionAtencionDocumentosController extends Controller
     {
         $documentos=PliegosDocumento::where('pliegosobservacion_id',$documento->id)->paginate(10);
 
-        return view('pliegosobservacionatenciondocumentos.show',compact('documentos'));
+        return view('pliegosobservaciondocumentos.show',compact('documentos'));
     }
 
     /**
@@ -111,7 +111,7 @@ class PliegosObservacionAtencionDocumentosController extends Controller
         $this->actualizaProgresivo();
         setMessage('El registro ha sido eliminado');
 
-        return redirect()->route('pliegosobservacionatenciondocumentos.index');
+        return redirect()->route('pliegosobservaciondocumentos.index');
     }
 
     private function setQuery($request)

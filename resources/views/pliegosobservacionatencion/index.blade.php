@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app')oficios
 @section('breadcrums')
 {{ Breadcrumbs::render('pliegosobservacionatencion.index') }}
 @endsection
@@ -19,7 +19,7 @@
                 @include('layouts.contextos._accion')
                 <div class="row">
                     <div class="col-md-12">
-                        <h3 class="card-title text-primary float">Atención de los pliegos de observación</h3>
+                        <h3 class="card-title text-primary float">Atención de pliegos de observación</h3>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -40,28 +40,28 @@
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
                                        @if (empty($pliegos->fase_revision) || $pliegos->fase_revision!='Pendiente')
-                                        <a href="{{ route('pliegosobservacioncontestaciones.index') }}" class="btn btn-light-linkedin popupSinLocation">
-                                            <span class="fa fa-list" aria-hidden="true"></span>
+                                        <a href="{{ route('pliegosobservacionatencioncontestacion.index') }}"  class="icon-hover-active">
+                                            <span class="fa fa-list" aria-hidden="true" ></span>
                                         </a>
                                        @else
-                                        <a href="{{ route('pliegosobservacioncontestaciones.show',$pliegos) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                        <a href="{{ route('pliegosobservacionatencioncontestacion.show',$pliegos) }}"  class="icon-hover-active ">
                                             <span class="fa fa-list" aria-hidden="true"></span>
                                         </a>
                                        @endif
                                     @else
-                                        <a href="{{ route('pliegosobservacioncontestaciones.show',$pliegos) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                        <a href="{{ route('pliegosobservacionatencioncontestacion.show',$pliegos) }}"  class="icon-hover-active">
                                             <span class="fa fa-list" aria-hidden="true"></span>
                                         </a>
                                     @endif
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
-                                        @if (empty($pliegos->fase_revision) || $pliegos->fase_revision!='Pendiente')
-                                            <a href="{{ route('pliegosobservaciondocumentos.index', $pliegos) }}" class="btn btn-light-linkedin popupSinLocation">
+                                        @if (empty($pliegos->fase_revision) || $pliegos->fase_revision!='Pendiente'&& $pliegos->fase_revision!='Revisión LP')
+                                            <a href="{{ route('pliegosobservaciondocumentos.index', $pliegos) }}" class="icon-hover-active popupSinLocation">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>
                                         @else
-                                            <a href="{{ route('pliegosobservaciondocumentos.show', $pliegos) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                            <a href="{{ route('pliegosobservaciondocumentos.show', $pliegos) }}"class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>
                                         @endif
@@ -73,11 +73,11 @@
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
-                                        @if (empty($pliegos->fase_revision) || $pliegos->fase_revision!='Pendiente')
-                                            <a href="{{ route('pliegosobservacionanalisis.edit',$pliegos) }}" class="btn btn-light-linkedin">
-                                                <span class="fa fa-align-justify" aria-hidden="true"></span>
+                                        @if (empty($pliegos->fase_revision) || ($pliegos->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión LP'))
+                                            <a href="{{ route('pliegosobservacionanalisis.edit',$pliegos) }}" class="icon-hover-active">
+                                                <span class="fa fa-align-justify"" aria-hidden="true"></span>
                                             </a>
-                                            <a href="{{ route('pliegosobservacionanalisisenvio.edit',$pliegos) }}" class="btn btn-light-linkedin">
+                                            <a href="{{ route('pliegosobservacionanalisisenvio.edit',$pliegos) }}" class="icon-hover-active">
                                                 <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span>
                                             </a>
                                         @else
@@ -87,7 +87,11 @@
                                         @endif
                                     @else
                                         @if (in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())&&!empty($pliegos->fase_revision)&&$pliegos->fase_revision=='Pendiente')
-                                            <a href="{{ route('pliegosobservacionanalisisrevision.edit',$pliegos) }}" class="btn btn-light-linkedin">
+                                            <a href="{{ route('pliegosobservacionanalisisrevision.edit',$pliegos) }}" class="icon-hover-active">
+                                                <span class="fa fa-gavel" aria-hidden="true"></span>
+                                            </a>
+                                            @elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&!empty($pliegos->fase_revision)&&$pliegos->fase_revision=='Revisión Jefe')
+                                            <a href="{{ route('pliegosobservacionanalisisrevision02.edit',$pliegos) }}" class="icon-hover-active">
                                                 <span class="fa fa-gavel" aria-hidden="true"></span>
                                             </a>
                                         @else
@@ -95,14 +99,9 @@
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
                                             </a>
                                         @endif
-                                    @endif
+                                        @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
-                                        <a href="{{ route('pliegosobservacioncalificacion.edit',$pliegos) }}" class="btn btn-primary">
-                                            <span class="fas fa-check-circle" aria-hidden="true"></span>&nbsp;/&nbsp;<span class="fas fa-times-circle" aria-hidden="true"></span>
-                                        </a>
-                                    @else
                                         @if (!empty($pliegos->calificacion_sugerida))
                                             @if ($pliegos->calificacion_atencion=='Atendida')
                                             <span class="badge badge-light-success">Atendida</span><br>
@@ -113,18 +112,17 @@
                                             <a href="{{ route('pliegosobservacioncalificacion.show',$pliegos) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
                                             </a>
-                                        @endif
                                     @endif
                                 </td>
                                 <td class="text-center">
                                     @if ((in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&empty($pliegos->fase_autorizacion)) || (in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray()) && $recomendacion->fase_autorizacion=='Rechazado'))
-                                    <a href="{{ route('recomendacionescalificacion.edit',$pliegos) }}" class="icon-hover-active">
+                                    <a href="{{ route('pliegosobservacioncalificacion.edit',$pliegos) }}" class="icon-hover-active">
                                         <span class="fa-solid fa-ranking-star fa-2x"></span>
                                     </a>
                                 @else
                                     @if (!empty($pliegos->calificacion_atencion))
 
-                                        <a href="{{ route('recomendacionescalificacion.show',$pliegos) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
+                                        <a href="{{ route('pliegosobservacioncalificacion.show',$pliegos) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
                                             @if ($pliegos->calificacion_atencion=='Atendida')
                                                 <span class="badge badge-light-success">Atendida</span><br>
                                             @endif
@@ -164,7 +162,7 @@
                                         @endcan
                                     @endif
                                     @if ($pliegos->fase_autorizacion == 'En validación')
-                                        @can('pliegosobservacionvalidacion.edit')
+                                        @can('liegosobservacionvalidacion.edit')
                                             <a href="{{ route('pliegosobservacionvalidacion.edit',$pliegos) }}" class="btn btn-primary">
                                                 <li class="fa fa-gavel"></li>
                                                 Validar
@@ -193,23 +191,15 @@
                             {!! movimientosDesglose($pliegos->id, 9, $pliegos->movimientos) !!}
                             @empty
                             <tr>
-                                <td class="text-center">
-                                    {{ fecha($accion->fecha_termino_recomendacion) }}
-                                </td>
-                                <td colspan="3" class="text-center table-active">
-                                    <a class="btn btn-primary" href="{{ route('pliegosobservacionatencion.create') }}">
-                                        Registrar
-                                    </a>
-                                </td>
-                                <td colspan="5" class="text-center table-secondary">
-                                    Aun no se encuentra registrada la fecha de compromiso de atención.
+                                <td colspan="9" class="text-center table-secondary">
+                                    Aun no se encuentra registrada la atención de pliegos de observacion.
                                 </td>
                             </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-
+                @if (auth()->user()->siglas_rol!='ANA')
                 <div class="row">
                     <div class="col-md-12">
                         <span>
@@ -221,6 +211,7 @@
                         </span>
                     </div>
                 </div>
+                @endif
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -232,22 +223,78 @@
                         </thead>
                         <tbody>
                             @forelse ($accion->comentarios as $comentario)
-                             <tr>
+                           <tr>
                                 <td class="text-center">
                                     {{ fecha($comentario->created_at,'d/m/Y H:m:s') }}
                                 </td>
                                 <td>
                                     {{ $comentario->deusuario->name }}
+                                    <br>
+                                    <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('revisionespliegosobservacion.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                    <a href="{{ route('revisionesrecomendaciones.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                         <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
                                     </a>
                                 </td>
+                                <td class="text-center">
+                                    @if ($comentario->estatus=='Pendiente')
+                                        <span class="badge badge-light-primary"> {{ $comentario->estatus }}</span>
+                                    @else
+                                        <span class="badge badge-light-success">{{ $comentario->estatus }}</span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente')
+                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendaciones.edit',$comentario) }}">
+                                            Atender
+                                        </a>
+                                    @endif
+                                </td>
+                           </tr>
+                           @if (count($comentario->respuestas)>0)
+                           <tr>
+                                <td colspan="5">
+                                    <div class="row mb-1">
+                                        <div class="col-md-12 list-desglose">
+                                            <div class="text-primary pl-4 pt-2 collapsed" data-bs-toggle="collapse" href="#a-listrespuesta-{{$comentario->id}}" aria-expanded="true">
+                                                <i class="fa fa-chevron-down fa-chev"></i>Respuesta
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="a-listrespuesta-{{$comentario->id}}" class="collapse">
+                                        <table class="table gray-200">
+                                            <thead class="table-secondary">
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Nombre</th>
+                                                    <th>Comentario</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($comentario->respuestas as $respuesta)
+                                                    <tr>
+                                                        <td class="text-center">{{ fecha($respuesta->created_at,'d/m/Y H:m:s') }}</td>
+                                                        <td>{{ $respuesta->deusuario->name }}
+                                                            <br>
+                                                            <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <a href="{{ route('revisionespliegosobservacion.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                                                <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
                             </tr>
+                           @endif
                            @empty
                             <tr>
-                                <td colspan="4" class="text-center">
+                                <td colspan="5" class="text-center">
                                     Sin comentarios
                                 </td>
                             </tr>

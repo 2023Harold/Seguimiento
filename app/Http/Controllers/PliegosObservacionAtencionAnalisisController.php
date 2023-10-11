@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\AuditoriaAccion;
+use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
 
 class PliegosObservacionAtencionAnalisisController extends Controller
@@ -13,7 +14,7 @@ class PliegosObservacionAtencionAnalisisController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -43,9 +44,12 @@ class PliegosObservacionAtencionAnalisisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(PliegosObservacion $pliegosobservacion)
     {
-        //
+        $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $auditoria=$accion->auditoria;
+
+        return view('pliegosatencionanalisis.show',compact('pliegosobservacion','accion','auditoria'));
     }
 
     /**
@@ -54,9 +58,12 @@ class PliegosObservacionAtencionAnalisisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(PliegosObservacion $pliegosobservacion)
     {
-        //
+        $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $auditoria=$accion->auditoria;
+
+        return view('pliegosatencionanalisis.form',compact('pliegosobservacion','accion','auditoria'));
     }
 
     /**
@@ -66,9 +73,12 @@ class PliegosObservacionAtencionAnalisisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, PliegosObservacion $pliegosobservacion)
     {
-        //
+        $pliegosobservacion->update($request->all());
+        setMessage("Se ha actualizado el análisis.");
+
+        return redirect()->route('pliegosobservacionatencion.index');
     }
 
     /**

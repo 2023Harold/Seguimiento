@@ -23,13 +23,13 @@
                     <div class="col-md-2">
                         {!! BootForm::text('numero_accion', "No. acción:", old('numero_accion',
                         $request->numero_auditoria)) !!}
-                    </div>                    
+                    </div>
                     <div class="col-md-6 mt-8">
                         <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search"
                                 aria-hidden="true"></i> Buscar</button>
                     </div>
                 </div>
-                {!! BootForm::close() !!}                
+                {!! BootForm::close() !!}
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -58,12 +58,12 @@
                                             <a href="{{ route('prasacciones.edit',$accion) }}" class="btn btn-primary">
                                                 <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Turnar
                                             </a>
-                                        @endcan                                    
+                                        @endcan
                                     @else
                                         @if (!empty($accion->pras))
                                             @can('prasacciones.edit')
                                                 <a href="{{ route('prasacciones.edit',$accion) }}" class="btn btn-primary">
-                                                    <i class="align-middle fas fa-file-search" aria-hidden="true"></i> Consultar
+                                                    <i class="align-middle fa fa-magnifying-glass-chart" aria-hidden="true"></i> Consultar
                                                 </a>
                                             @endcan
                                         @endif

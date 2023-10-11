@@ -30,7 +30,7 @@ class PliegosObservacionAtencionController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -42,7 +42,7 @@ class PliegosObservacionAtencionController extends Controller
     public function store(Request $request)
     {
         $auditoria = Auditoria::find(getSession('pliegosobservacionauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('pleigosobservacionauditoriaaccion_id'));
+        $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::where('accion_id',getSession('pliegosobservacionauditoriaaccion_id'))->get();
 
         return view('pliegosobservacionatencion.index',compact('pliegosobservacion','auditoria','accion','request'));
@@ -79,7 +79,7 @@ class PliegosObservacionAtencionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**

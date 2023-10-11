@@ -59,7 +59,7 @@ class PliegosObservacionAtencionContestacionController extends Controller
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');
 
-        return redirect()->route('pliegosobservacioncontestaciones.index');
+        return redirect()->route('pliegosobservacionatencioncontestacion.index');
     }
 
     /**

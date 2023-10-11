@@ -74,7 +74,7 @@
                                         <a href="{{ route('pras.edit',$auditoria) }}" class="btn btn-primary">
                                             <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
                                         </a>
-                                    @endcan                                    
+                                    @endcan
                                 </td>
                             </tr>
                             @empty

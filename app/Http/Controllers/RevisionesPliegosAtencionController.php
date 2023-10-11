@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditoriaAccion;
-use App\Models\PliegosObservacion;
 use App\Models\Revisiones;
 use Illuminate\Http\Request;
 
-class RevisionesPliegosObservacionController extends Controller
+class RevisionesPliegosAtencionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class RevisionesPliegosObservacionController extends Controller
      */
     public function index()
     {
-
+        //
     }
 
     /**
@@ -27,8 +26,10 @@ class RevisionesPliegosObservacionController extends Controller
     public function create()
     {
         $comentario = new Revisiones();
+
         $accion = 'Agregar';
-        return view('revisiones.form', compact('comentario', 'accion'));
+
+        return view('revisionesatencion.form', compact('comentario', 'accion'));
     }
 
     /**
@@ -39,19 +40,21 @@ class RevisionesPliegosObservacionController extends Controller
      */
     public function store(Request $request)
     {
+        $comentario = Revisiones::find(getSession('comentario_id'));
+        $comentario->update(['estatus'=>'Atendido']);
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $request->merge([
+            'id_revision'=>getSession('comentario_id'),
             'de_usuario_id'=>auth()->user()->id,
             'para_usuario_id'=>intval($accion->analista_asignado_id),
-            'accion'=>'Pliegos de Observación',
+            'accion'=>'Pliegos de observación',
             'accion_id'=>$accion->id,
-            'estatus'=>'Pendiente',
             'usuario_creacion_id'=>auth()->user()->id,
         ]);
-        Revisiones::create($request->all());
-        setMessage('se ha agregado el comentario correctamente.');
+            Revisiones::create($request->all());
+            setMessage('se ha agregado el comentario correctamente.');
 
-        return view('layouts.close');
+            return view('layouts.close');
     }
 
     /**
@@ -62,8 +65,7 @@ class RevisionesPliegosObservacionController extends Controller
      */
     public function show($id)
     {
-        return view('revisiones.show', compact('comentario'));
-
+        //
     }
 
     /**
@@ -74,9 +76,7 @@ class RevisionesPliegosObservacionController extends Controller
      */
     public function edit($id)
     {
-        setSession('comentario_id',$comentario->id);
-
-        return redirect()->route('revisionespliegosatencion.create');
+        //
     }
 
     /**

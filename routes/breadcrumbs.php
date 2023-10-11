@@ -411,6 +411,16 @@ Breadcrumbs::for('pliegosobservacionatencion.edit', function (BreadcrumbTrail $t
     $trail->parent('pliegosobservacionacciones.index');
     $trail->push('Datos de atención', route('pliegosobservacionatencion.edit',$pliegosobservacion));
 });
+//solicitud de aclaracion contestaciones
+Breadcrumbs::for('pliegosobservacionatencioncontestacion.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('pliegosobservacionatencion.index');
+    $trail->push('Oficios de contestación', route('pliegosobservacioncontestacion.index'));
+});
+
+Breadcrumbs::for('pliegosobservacionatencioncontestacion.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('pliegosobservacioncontestacion.index');
+    $trail->push('Agregar', route('pliegosobservacioncontestacion.create'));
+});
 
 Breadcrumbs::for('pliegosobservacioncalificacion.edit', function (BreadcrumbTrail $trail,$pliegosobservacion) {
     $trail->parent('pliegosobservacionatencion.index');

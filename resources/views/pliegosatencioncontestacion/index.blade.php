@@ -6,7 +6,7 @@
             Listado de contestaciones
         </h1>
         <div class="card-toolbar">
-            @button('Agregar',route('pliegosobservacioncontestaciones.create'))
+            @button('Agregar',route('pliegosobservacionatencioncontestacion.create'))
         </div>
     </div>
     <div class="card-body">
@@ -46,7 +46,7 @@
                                 </td>
                                 <td class="text-center">
                                     {{-- @can('comparecenciaanexo.destroy') --}}
-                                        @destroy(route('pliegosobservacioncontestaciones.destroy', $contestacion))
+                                        @destroy(route('pliegosobservacionatencioncontestacion.destroy', $contestacion))
                                     {{-- @endcan --}}
                                 </td>
                             </tr>
