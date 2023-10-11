@@ -12,7 +12,6 @@ Breadcrumbs::for('notificaciones', function (BreadcrumbTrail $trail) {
     $trail->push('Notificaciones', route('notificaciones.index'));
 });
 
-
 Breadcrumbs::for('seguimientoauditorias', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Auditorias', route('seguimientoauditoria.index'));
@@ -339,7 +338,7 @@ Breadcrumbs::for('solicitudesaclaracionacciones.index', function (BreadcrumbTrai
 
 Breadcrumbs::for('solicitudesaclaracionatencion.index', function (BreadcrumbTrail $trail) {
     $trail->parent('solicitudesaclaracionacciones.index');
-    $trail->push('Atención de las solciitudes de aclaración', route('solicitudesaclaracionatencion.index'));
+    $trail->push('Atención de las solicitudes de aclaración', route('solicitudesaclaracionatencion.index'));
 });
 
 //solicitud de aclaracion contestaciones
@@ -353,15 +352,41 @@ Breadcrumbs::for('solicitudesaclaracioncontestacion.create', function (Breadcrum
     $trail->push('Agregar', route('solicitudesaclaracioncontestacion.create'));
 });
 
+Breadcrumbs::for('solicitudesaclaracioncontestacion.edit', function (BreadcrumbTrail $trail,$contestacion) {
+    $trail->parent('solicitudesaclaracioncontestacion.index');
+    $trail->push('Agregar', route('solicitudesaclaracioncontestacion.edit',$contestacion));
+});
+
 Breadcrumbs::for('solicitudesaclaracionanalisis.edit', function (BreadcrumbTrail $trail,$solicitud) {
     $trail->parent('solicitudesaclaracionatencion.index');
     $trail->push('Análisis de la atención', route('solicitudesaclaracionanalisis.edit',$solicitud));
 });
 
-// Breadcrumbs::for('solicitudesaclaracioncalificacion.index', function (BreadcrumbTrail $trail) {
-//     $trail->parent('solicitudesaclaracionacciones.index');
-//     $trail->push('Calificación de la atención', route('solicitudesaclaracioncalificacion.index'));
-// });
+Breadcrumbs::for('solicitudesaclanalisisrevision.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracionatencion.index');
+    $trail->push('Revisar', route('solicitudesaclanalisisrevision.edit',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclanalisisrevision02.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracionatencion.index');
+    $trail->push('Revisar', route('solicitudesaclanalisisrevision02.edit',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclaracioncalificacion.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracionatencion.index');
+    $trail->push('Calificación de la atención', route('solicitudesaclaracioncalificacion.edit',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclaracionvalidacion.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracionatencion.index');
+    $trail->push('Validar', route('solicitudesaclaracionvalidacion.edit',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclaracionautorizacion.edit', function (BreadcrumbTrail $trail,$solicitud) {
+    $trail->parent('solicitudesaclaracionatencion.index');
+    $trail->push('Autorizar-Rechazar', route('solicitudesaclaracionautorizacion.edit',$solicitud));
+});
+
 
 // Breadcrumbs::for('solicitudesaclaracionrevision01.edit', function (BreadcrumbTrail $trail,$solicitud) {
 //     $trail->parent('solicitudesaclaracioncalificacion.index');

@@ -22,7 +22,6 @@
                                     href="{{ route('user.index') }}">Usuarios</a>
                             </li>
                             @endcan
-
                         </div>
                     </div>
                 </div>
@@ -431,12 +430,14 @@
                                 </a>
                             </li>
                             @endcan
+                            @can('solicitudesaclaracion.index')
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('solicitudesaclaracion.index') }}">
                                     Solicitudes de aclaración
                                 </a>
                             </li>
+                            @endcan
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('pliegosobservacion.index') }}">

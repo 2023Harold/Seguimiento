@@ -14,42 +14,30 @@ class SolicitudesAclaracion extends Model
     protected $table = 'segsolicitudes_aclaracion';
 
     protected $fillable = [
-        'id',
-        'consecutivo',
-        'oficio_atencion',
-        'fecha_oficio_atencion',
-        'accion_id',
-        'usuario_creacion_id',
-        'usuario_modificacion_id',
-        'constancia',
-        'fase_autorizacion',
-        'segauditorias',
-        'auditoria_id',
-        'entidad_fiscalizable_id',
-        'usuario_firmante_id',
-        'nivel_autorizacion',
-        'accion_id',
-        'calificacion_atencion',
-        'analisis',
-        'fase_revision',
-        'oficio_contestacion',
-        'fase_autorizacion',
-        'constancia_autorizacion',
-        'oficio_comprobante',
-        'fecha_comprobante',
-        'oficio_acuse',
-        'fecha_acuse',
-        'conclusion',
-        'concluido'
+        'id', 
+        'cumple', 
+        'monto_solventado', 
+        'analisis', 
+        'fase_revision', 
+        'conclusion', 
+        'concluido', 
+        'constancia', 
+        'fase_autorizacion', 
+        'nivel_autorizacion', 
+        'constancia_autorizacion', 
+        'auditoria_id', 
+        'accion_id', 
+        'usuario_creacion_id', 
+        'usuario_modificacion_id', 
+        'created_at', 
+        'updated_at', 
+        'calificacion_sugerida', 
+        'calificacion_atencion'
     ];
 
     protected $dates = [
-        'fecha_acuse_oficio',
-        'fecha_elaboracion_oficio',
-        'fecha_recepcion',
-        'fecha_proxima_seguimiento',
-        'fecha_comprobante',
-        'fecha_acuse'
+         'created_at', 
+        'updated_at', 
     ];
 
     public function auditoria()
@@ -68,7 +56,7 @@ class SolicitudesAclaracion extends Model
 
     public function movimientos()
     {
-        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Solicitudes Aclaración')->orderBy('id', 'ASC');
+        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Solicitud de Aclaración')->orderBy('id', 'ASC');
     }
 
     public function documentos()

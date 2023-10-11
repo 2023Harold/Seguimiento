@@ -47,11 +47,11 @@ class SolicitudesAclaracionDocumentosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $solicitud = SolicitudesAclaracion::find(getSession('solicitudaclaracion_id'));
+    {        
+        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
         
         $request->merge([
-            'solicitud_aclaracion_id' => getSession('solicitudaclaracion_id'),
+            'solicitudaclaracion_id' => getSession('solicitudesaclaracionatencion_id'),
         ]);
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($recomendacion->accion->auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['archivo'], null, $ruta);
@@ -69,9 +69,11 @@ class SolicitudesAclaracionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(SolicitudesAclaracion $documento)
     {
-        //
+        $documentos=SolicitudesAclaracionDocumento::where('solicitudaclaracion_id',$documento->id)->paginate(10);        
+        
+        return view('solicitudesaclaraciondocumentos.show',compact('documentos'));
     }
 
     /**
@@ -115,7 +117,7 @@ class SolicitudesAclaracionDocumentosController extends Controller
     private function setQuery($request)
     {
         $query = $this->model;
-        $query = $query->where('solicitud_aclaracion_id', getSession('solicitudaclaracion_id'))->orderBy('consecutivo');
+        $query = $query->where('solicitudaclaracion_id', getSession('solicitudesaclaracionatencion_id'))->orderBy('consecutivo');
 
         if ($request->filled('consecutivo')) {
             $query = $query->where('consecutivo',$request->consecutivo);
@@ -130,7 +132,7 @@ class SolicitudesAclaracionDocumentosController extends Controller
     {
         $numeroSiguiente = 1;
         $modelName = $this->model;
-        $er_records = $modelName::where('solicitud_aclaracion_id', getSession('solicitudaclaracion_id'));
+        $er_records = $modelName::where('solicitudaclaracion_id', getSession('solicitudesaclaracionatencion_id'));
         $er_records = $er_records->orderBy('id')->get();
         foreach ($er_records as $er_record) {
             $er_record->update(['consecutivo' => $numeroSiguiente]);

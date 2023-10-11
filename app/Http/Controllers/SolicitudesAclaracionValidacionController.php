@@ -62,7 +62,7 @@ class SolicitudesAclaracionValidacionController extends Controller
     public function edit(SolicitudesAclaracion $solicitud)
     {
         $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
-        $accion=AuditoriaAccion::find(getSession('solicitudauditoriaaccion_id'));
+        $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
 
         return view('solicitudesaclaracionvalidacion.form', compact('solicitud','auditoria','accion'));
     }
@@ -123,7 +123,7 @@ class SolicitudesAclaracionValidacionController extends Controller
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$solicitud), now(), $jefe->unidad_administrativa_id, $jefe->id);
         }
 
-        return redirect()->route('solicitudesaclaracioncalificacion.index');
+        return redirect()->route('solicitudesaclaracionatencion.index');
     }
 
     /**

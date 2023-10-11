@@ -24,16 +24,28 @@ class SolicitudesAclaracionContestacionRequest extends FormRequest
     public function rules()
     {
         return [                
-            'oficio_atencion' => 'required|string|max:150',
-            'fecha_oficio_atencion' => 'required|date|max:10',                    
+            'oficio_contestacion'=>'required|string|max:100',
+            'fecha_oficio_contestacion'=>'required|date|max:10',
+            'numero_oficio'=>'required|string|max:250',
+            'nombre_remitente'=>'required|string|max:500',
+            'cargo_remitente'=>'required|string|max:500',
+            'fecha_recepcion_oficialia'=>'required|date|max:10',
+            'folio_correspondencia'=>'required|integer|max:9999999999',
+            'fecha_recepcion_seguimiento'=>'required|date|max:10'                    
         ];
     }
 
     public function attributes()
     {
         return [           
-            'oficio_atencion' => 'oficio de contestación de la solicitud de aclaración',
-            'fecha_oficio_atencion' => 'fecha del oficio de contestación',
+            'oficio_contestacion'=>'oficio de contestación de la recomendación',
+            'fecha_oficio_contestacion'=>'fecha del oficio de contestación',
+            'numero_oficio'=>'número del oficio',
+            'nombre_remitente'=>'remitente',
+            'cargo_remitente'=>'cargo del remitente',
+            'fecha_recepcion_oficialia'=>'fecha de recepción en oficialía',
+            'folio_correspondencia'=>'folio de correspondencia',
+            'fecha_recepcion_seguimiento'=>'fecha de recepción en la unidad de seguimiento',
         ];
     }
 

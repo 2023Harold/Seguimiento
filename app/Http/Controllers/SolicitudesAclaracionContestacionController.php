@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use App\Models\SolicitudesAclaracion;
 use App\Models\SolicitudesAclaracionContestacion;
 use Illuminate\Http\Request;
+use File;
 
 class SolicitudesAclaracionContestacionController extends Controller
 {
@@ -39,7 +41,7 @@ class SolicitudesAclaracionContestacionController extends Controller
         $contestacion = new SolicitudesAclaracionContestacion();
         $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracioncalificacion_id'));
+        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
 
         return view('solicitudesaclaracioncontestacion.form', compact('contestacion','auditoria','solicitud','accion'));
     }
@@ -53,10 +55,10 @@ class SolicitudesAclaracionContestacionController extends Controller
     public function store(Request $request)
     {
         mover_archivos($request, ['oficio_contestacion']);
-        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracioncalificacion_id'));
+        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
 
         $request->merge([
-            'solicitudes_id' => getSession('solicitudesaclaracioncalificacion_id'),
+            'solicitudaclaracion_id' => getSession('solicitudesaclaracionatencion_id'),
             'usuario_creacion_id' => auth()->id(),
         ]);
 
@@ -75,11 +77,11 @@ class SolicitudesAclaracionContestacionController extends Controller
      */
     public function show(SolicitudesAclaracion $contestacion)
     {
-        $contestaciones = SolicitudesAclaracionContestacion::where('solicitudesaclaracion_id',$contestacion->id)->paginate(10);
+        $contestaciones = SolicitudesAclaracionContestacion::where('solicitudaclaracion_id',$contestacion->id)->paginate(10);
         $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracioncalificacion_id'));
-
+        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
+        
         return view('solicitudesaclaracioncontestacion.show', compact('contestaciones','auditoria','accion','solicitud'));
     }
 
@@ -90,10 +92,10 @@ class SolicitudesAclaracionContestacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(SolicitudesAclaracionContestacion $contestacion)
-    {
+    {     
         $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracioncalificacion_id'));
+        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
 
         return view('solicitudesaclaracioncontestacion.form', compact('contestacion','auditoria','solicitud','accion'));
     }
@@ -115,7 +117,7 @@ class SolicitudesAclaracionContestacionController extends Controller
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');
 
-        return redirect()->route('solicitudesaclaracioncontestaciones.index');
+        return redirect()->route('solicitudesaclaracioncontestacion.index');
     }
 
     /**
@@ -131,13 +133,13 @@ class SolicitudesAclaracionContestacionController extends Controller
         $this->actualizaProgresivo();
         setMessage('El registro ha sido eliminado');
 
-        return redirect()->route('solicitudesaclaracioncontestaciones.index');
+        return redirect()->route('solicitudesaclaracioncontestacion.index');
     }
 
     private function setQuery($request)
     {
         $query = $this->model;
-        $query = $query->where('recomendacion_id', getSession('recomendacioncalificacion_id'))->orderBy('consecutivo');
+        $query = $query->where('solicitudaclaracion_id', getSession('solicitudesaclaracionatencion_id'))->orderBy('consecutivo');
 
         if ($request->filled('consecutivo')) {
             $query = $query->where('consecutivo',$request->consecutivo);
@@ -152,7 +154,7 @@ class SolicitudesAclaracionContestacionController extends Controller
     {
         $numeroSiguiente = 1;
         $modelName = $this->model;
-        $er_records = $modelName::where('recomendacion_id', getSession('recomendacioncalificacion_id'));
+        $er_records = $modelName::where('solicitudaclaracion_id', getSession('solicitudesaclaracionatencion_id'));
         $er_records = $er_records->orderBy('id')->get();
         foreach ($er_records as $er_record) {
             $er_record->update(['consecutivo' => $numeroSiguiente]);
@@ -160,16 +162,14 @@ class SolicitudesAclaracionContestacionController extends Controller
         }
     }
 
-    public function oficiosrecomendacion(Recomendaciones $recomendacion)
+    public function oficiossolicitudes(SolicitudesAclaracion $solicitud)
     {
-        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$recomendacion->id)->paginate(10);
+        $contestaciones = SolicitudesAclaracionContestacion::where('solicitudaclaracion_id',$solicitud->id)->paginate(10);
         $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
-        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
+        $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
+        $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
 
-        return view('recomendacionesatencioncontestacionoficios.show', compact('contestaciones','auditoria','accion','recomendacion'));
-
-
+        return view('solicitudesaclaracioncontestacionoficios.show', compact('contestaciones','auditoria','accion','solicitud'));
     }
 
 }

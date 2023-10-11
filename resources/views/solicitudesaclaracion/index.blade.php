@@ -69,12 +69,12 @@
                                     {{ '$'.number_format( $auditoria->total(), 1) }}
                                 </td>
                                 <td class="text-center">
-                                    {{-- @can('solicitudesaclaracion.edit') --}}
+                                    @can('solicitudesaclaracion.edit')
                                     <a href="{{ route('solicitudesaclaracion.edit',$auditoria) }}"
                                         class="btn btn-primary">
                                         <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
                                     </a>
-                                    {{-- @endcan --}}
+                                    @endcan
                                 </td>
                             </tr>
                             @empty

@@ -1,22 +1,14 @@
-@extends('layouts.app')
-@section('breadcrums')
-{{ Breadcrumbs::render('solicitudesaclaracioncontestacion.index') }}
-@endsection
+@extends('layouts.appPopup')
 @section('content')
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('solicitudesaclaracionatencion.index') }}"><i
-                            class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;Oficios de contestación
                 </h1>
             </div>
-            <div class="card-body">
-                @include('flash::message')  
-                @include('layouts.contextos._auditoria')
-                @include('layouts.contextos._accion')                             
+            <div class="card-body">                      
                 <div class="table-responsive">
                     <table class="table">
                         <thead>

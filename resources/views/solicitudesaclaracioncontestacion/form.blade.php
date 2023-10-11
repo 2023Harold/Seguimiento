@@ -19,39 +19,9 @@
         </h1>
     </div>
     <div class="card-body">
-        @include('flash::message')
-        <div class="col-md-12">
-            <h3 class="card-title text-primary float">Atención de las Solicitudes de Aclaraciones</h3>
-        </div>
-        <div class="card-body py-7">
-            <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                    <label>Fecha compromiso de atención: </label>
-                    <span class="text-primary">
-                        {{ fecha($accion->fecha_termino_solicitud) }}
-                    </span>
-                </div>
-                <div class="col-lg-8 col-md-8 col-sm-12 col-12">
-                    <label>Nombre del responsable de la entidad fiscalizable: </label>
-                    <span class="text-primary">
-                        {{$solicitud->nombre_responsable }}
-                    </span>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                    <label>Cargo del responsable: </label>
-                    <span class="text-primary">
-                        {{$solicitud->cargo_responsable }}
-                    </span>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                    <label>Responsable del seguimiento: </label>
-                    <span class="text-primary">
-                        {{$accion->analista->name }}
-                    </span>
-                </div>
-            </div>
-            <hr/>
-        </div>
+        @include('flash::message')  
+        @include('layouts.contextos._auditoria')
+        @include('layouts.contextos._accion')     
         {!! BootForm::open(['model' => $contestacion, 'store' => 'solicitudesaclaracioncontestacion.store', 'update' => 'solicitudesaclaracioncontestacion.update', 'id' => 'form']) !!}
             <div class="row">
                 <div class="col-md-6">

@@ -14,9 +14,18 @@
                 </h1>
             </div>
             <div class="card-body">
-                @include('flash::message')  
+                @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                @include('layouts.contextos._accion')                             
+                @include('layouts.contextos._accion')
+                <div class="row">   
+                    <div class="col-md-12">                          
+                        <span>                            
+                            <a class="btn btn-primary float-end" href="{{ route('solicitudesaclaracioncontestacion.create') }}">
+                                Agregar
+                            </a>                        
+                        </span>                     
+                    </div>                    
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -26,6 +35,8 @@
                                 <th>Remitente</th>
                                 <th>Recepción en oficialía</th>
                                 <th>Fecha de recepción en la unidad de seguimiento</th>
+                                <th>Editar</th>
+                                <th>Eliminar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,7 +44,15 @@
                                 @foreach($contestaciones as $contestacion)
                                     <tr>
                                         <td class="text-center">
-                                            {{ str_pad($contestacion->consecutivo, 3, '0', STR_PAD_LEFT) }}                                          
+                                            
+                                            {{-- @can('comparecenciaanexo.edit') --}}
+
+                                                {{-- <a href="{{route('comparecenciaanexo.edit', $anexo)}}"> --}}
+                                                    {{ str_pad($contestacion->consecutivo, 3, '0', STR_PAD_LEFT) }}
+                                                {{-- </a> --}}
+                                            {{-- @else
+                                                {{ str_pad($anexo->numero, 3, '0', STR_PAD_LEFT) }}
+                                            @endcan --}}
                                         </td>  
                                         <td class="text-center">
                                             <a href="{{ asset($contestacion->oficio_contestacion) }}" target="_blank">
@@ -52,7 +71,17 @@
                                          </td>
                                         <td class="text-center">
                                             {{ fecha($contestacion->fecha_recepcion_seguimiento) }}                                            
-                                         </td>                                        
+                                         </td>
+                                        <td class="text-center">
+                                            <a href="{{route('solicitudesaclaracioncontestacion.edit', $contestacion)}}" class="icon-hover">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            {{-- @can('comparecenciaanexo.destroy') --}}
+                                                @destroy(route('solicitudesaclaracioncontestacion.destroy', $contestacion))
+                                            {{-- @endcan --}}
+                                        </td>
                                     </tr>
                                 @endforeach
                             @else
@@ -64,7 +93,7 @@
                     </table>
                 </div>
                 <div class="pagination">
-                    {{ $contestaciones->links('vendor.pagination.bootstrap-5') }}
+                    {{ $contestaciones->appends(['consecutivo'=>$request->consecutivo,'nombre_documento'=>$request->nombre_documento])->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>

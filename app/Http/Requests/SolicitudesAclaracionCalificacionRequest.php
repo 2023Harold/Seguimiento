@@ -24,15 +24,17 @@ class SolicitudesAclaracionCalificacionRequest extends FormRequest
     public function rules()
     {
         return [
-            'cumple' => 'required|string|max:30|in:Atendida,No Atendida,Parcialmente Atendida',                             
-            'monto_solventado' => 'sometimes|nullable|required_if:cumple,Parcialmente Atendida'                             
+            'calificacion_atencion' => 'required|string|max:30|in:Solventada,No Solventada,Solventada Parcialmente', 
+            'conclusion' => 'required|string|max:8000',
+            'monto_solventado' => 'sometimes|nullable|required_if:calificacion_atencion,Solventada Parcialmente'                             
             ];
     }
 
     public function attributes()
     {
         return [                    
-           'cumple' => 'calificación de la atención',
+           'calificacion_atencion' => 'calificación de la atención',
+           'conclusion' => 'conclusión',
            'monto_solventado'=>'monto solventado'            
            ];
     }

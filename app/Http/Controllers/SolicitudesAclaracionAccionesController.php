@@ -68,23 +68,29 @@ class SolicitudesAclaracionAccionesController extends Controller
 
         setSession('solicitudesauditoriaaccion_id',$accion->id);
         $solicitudesaclaracion=$accion->solicitudesaclaracion;
-        if (empty($accion->solicitudesaclaracion) && in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
-            $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
-            $request=new Request();
-            $request->merge([
-                'auditoria_id' => $auditoria->id,
-                'usuario_creacion_id' => auth()->id(),
-                'accion_id'=>getSession('solicitudesauditoriaaccion_id'),
-                'consecutivo' => 1,
-                'departamento_responsable_id'=> auth()->user()->unidad_administrativa_id,
-                'nombre_responsable'=>$auditoria->comparecencia->nombre_representante,
-                'cargo_responsable'=>$auditoria->comparecencia->cargo_representante1,
-            ]);
-            $solicitudesaclaracion=SolicitudesAclaracion::create($request->all());
-          }
-        //   dd();
-         setSession('solicitudesaclaracionatencion_id',$solicitudesaclaracion->id);
-// dd(getSession('solicitudesauditoriaaccion_id'));
+        if (empty($accion->solicitudesaclaracion)) {
+            if (in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+                $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+                $request=new Request();
+                $request->merge([
+                    'auditoria_id' => $auditoria->id,
+                    'usuario_creacion_id' => auth()->id(),
+                    'accion_id'=>getSession('solicitudesauditoriaaccion_id'),
+                    'consecutivo' => 1,
+                    'departamento_responsable_id'=> auth()->user()->unidad_administrativa_id,
+                    'nombre_responsable'=>$auditoria->comparecencia->nombre_representante,
+                    'cargo_responsable'=>$auditoria->comparecencia->cargo_representante1,
+                ]);
+                $solicitudesaclaracion=SolicitudesAclaracion::create($request->all());
+                setSession('solicitudesaclaracionatencion_id',$solicitudesaclaracion->id);
+            }
+            else{
+                setSession('solicitudesaclaracionatencion_id',null);
+            }
+        }else{
+            setSession('solicitudesaclaracionatencion_id',$solicitudesaclaracion->id);
+        }  
+        
          return redirect()->route('solicitudesaclaracionatencion.index');
      }
     /**

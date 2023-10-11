@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('segsolicitudes_aclaracion', function (Blueprint $table) {
             $table->id();
-            $table->enum('cumple', ['Atendida', 'No Atendida','Parcialmente Atendida'])->nullable();
+            $table->enum('calificacion_sugerida', ['Solventada', 'No Solventada','Solventada Parcialmente'])->nullable();
+            $table->enum('calificacion_atencion', ['Solventada', 'No Solventada','Solventada Parcialmente'])->nullable();
             $table->decimal('monto_solventado',11,2)->nullable();
             $table->text('analisis')->nullable();
             $table->string('fase_revision', 40)->nullable();

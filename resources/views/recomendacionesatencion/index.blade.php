@@ -51,8 +51,8 @@
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($recomendacion->fase_autorizacion) || $recomendacion->fase_autorizacion=='Rechazado'))
-
-                                        @if (empty($recomendacion->fase_revision) || ($recomendacion->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión LP'))
+                                       
+                                        @if (empty($recomendacion->fase_revision) || ($recomendacion->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión Jefe'))
                                         <a href="{{ route('recomendacionescontestaciones.index') }}" class="icon-hover-active">
                                             <span class="fa fa-list" aria-hidden="true"></span>
                                         </a>
@@ -86,10 +86,10 @@
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($recomendacion->fase_autorizacion) || $recomendacion->fase_autorizacion=='Rechazado'))
-                                        @if (empty($recomendacion->fase_revision) || ($recomendacion->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión LP'))
+                                        @if (empty($recomendacion->fase_revision) || ($recomendacion->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión Jefe'))
                                             <a href="{{ route('recomendacionesanalisis.edit',$recomendacion) }}" class="icon-hover-active">
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
-                                            </a> |
+                                            </a> &nbsp;|&nbsp; 
                                             <a href="{{ route('recomendacionesanalisisenvio.edit',$recomendacion) }}" class="icon-hover-active">
                                                 <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span>
                                             </a>

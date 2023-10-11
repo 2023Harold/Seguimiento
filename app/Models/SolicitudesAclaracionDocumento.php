@@ -28,6 +28,6 @@ class SolicitudesAclaracionDocumento extends Model
 
     public function solicitud()
     {
-        return $this->belongsTo(SolicitudesAclaracion::class, 'solicitud_aclaracion_id', 'id');
+        return $this->belongsTo(SolicitudesAclaracion::class, 'solicitudaclaracion_id', 'id');
     }
 }

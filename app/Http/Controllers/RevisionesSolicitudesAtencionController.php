@@ -2,25 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
-use App\Models\SolicitudesAclaracion;
+use App\Models\Revisiones;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class SolicitudesAclaracionAtencionController extends Controller
+class RevisionesSolicitudesAtencionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
-
-        return view('solicitudesaclaracionatencion.index',compact('solicitudesaclaracion','auditoria','accion','request'));
+        //
     }
 
     /**
@@ -30,7 +26,11 @@ class SolicitudesAclaracionAtencionController extends Controller
      */
     public function create()
     {
-        //
+        $comentario = new Revisiones();
+             
+        $accion = 'Agregar';
+
+        return view('revisionessolicitudesatencion.form', compact('comentario', 'accion'));
     }
 
     /**
@@ -41,7 +41,22 @@ class SolicitudesAclaracionAtencionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $comentario = Revisiones::find(getSession('comentario_id'));       
+        $comentario->update(['estatus'=>'Atendido']);
+        $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
+        $request->merge([
+            'id_revision'=>getSession('comentario_id'),
+            'de_usuario_id'=>auth()->user()->id,
+            'para_usuario_id'=>intval($accion->analista_asignado_id),
+            'accion'=>'Solicitud de Aclaración',
+            'accion_id'=>$accion->id,            
+            'usuario_creacion_id'=>auth()->user()->id,
+        ]);        
+        Revisiones::create($request->all()); 
+            
+        setMessage('se ha agregado el comentario correctamente.');
+
+        return view('layouts.close');
     }
 
     /**

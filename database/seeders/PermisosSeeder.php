@@ -27,9 +27,11 @@ class PermisosSeeder extends Seeder
                         ,'recomendacionesatencion','recomendacionescalificacion','recomendacionesdocumentos'
                         ,'recomendacionesrevision01','recomendacionesrevision','recomendacionesvalidacion'
                         ,'recomendacionesautorizacion','recomendacionesacuses','cedulainicial'
-                        ,'solicitudesaclaracion','solicitudesaclaracionacciones','solicitudesaclaracioncontestacion'
-                        ,'solicitudesaclaracioncalificacion','solicitudesaclaraciondocumentos','solicitudesaclaracionrevision01'
-                        ,'solicitudesaclaracionrevision','solicitudesaclaracionvalidacion','solicitudesaclaracionautorizacion'];
+                        ,'solicitudesaclaracion','solicitudesaclaracionacciones','solicitudesaclaracionatencion',
+                        'solicitudesaclaracioncontestacion','solicitudesaclaraciondocumentos','solicitudesaclaracionanalisis',
+                        'solicitudesaclanalisisenvio','solicitudesaclanalisisrevision','solicitudesaclanalisisrevision02',
+                        'solicitudesaclaracioncalificacion','solicitudesaclaracionvalidacion','solicitudesaclaracionautorizacion',
+                        'revisionessolicitudes','revisionessolicitudesatencion'];
         $permisosGenerales = [];
         $i = 0;
 
@@ -69,5 +71,6 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'asignacionlideranalista.consulta']);
         Permission::create(['name' => 'radicacion.auditoria']);
         Permission::create(['name' => 'getAgendaComparecencias']);
+        Permission::create(['name' => 'solicitudescontestaciones.oficiossolicitud']);
     }
 }
