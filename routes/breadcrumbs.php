@@ -436,7 +436,7 @@ Breadcrumbs::for('pliegosobservacionatencion.edit', function (BreadcrumbTrail $t
     $trail->parent('pliegosobservacionacciones.index');
     $trail->push('Datos de atención', route('pliegosobservacionatencion.edit',$pliegosobservacion));
 });
-//solicitud de aclaracion contestaciones
+//pliegos observacion contestaciones
 Breadcrumbs::for('pliegosatencioncontestacion.index', function (BreadcrumbTrail $trail) {
     $trail->parent('pliegosobservacionatencion.index');
     $trail->push('Oficios de contestación', route('pliegosatencioncontestacion.index'));

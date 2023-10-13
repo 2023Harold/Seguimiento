@@ -55,7 +55,7 @@ class PliegosObservacionAtencionContestacionController extends Controller
     public function store(Request $request)
     {
         mover_archivos($request, ['oficio_contestacion']);
-        $solicitud = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
+        $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
 
         $request->merge([
             'pliegosobservacion_id' => getSession('pliegosobservacionatencion_id'),

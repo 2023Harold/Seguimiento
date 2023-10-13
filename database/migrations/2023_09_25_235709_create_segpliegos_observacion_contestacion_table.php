@@ -18,12 +18,17 @@ return new class extends Migration
             $table->integer('consecutivo')->nullable();
             $table->string('oficio_contestacion',150);
             $table->date('fecha_oficio_contestacion');
+            $table->string('numero_oficio',250);
+            $table->string('nombre_remitente',500);
+            $table->string('cargo_remitente',500);
+            $table->date('fecha_recepcion_oficialia');
+            $table->integer('folio_correspondencia');
+            $table->date('fecha_recepcion_seguimiento');
             $table->string('nombre_archivo',500)->nullable();
             $table->foreignId('pliegosobservacion_id')->constrained('segpliegos_observacion');
             $table->foreignId('usuario_creacion_id')->constrained('segusers');
             $table->foreignId('usuario_modificacion_id')->nullable()->constrained('segusers');
             $table->timestamps();
-
         });
     }
 
