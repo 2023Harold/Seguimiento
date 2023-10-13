@@ -67,25 +67,25 @@ class UsersSeeder extends Seeder
             'curp' => 'RORH920920DS8',
             'email' => 'karem.rios@osfem.gob.mx',
             'password' => Hash::make('desa'),
-            'puesto' => 'Director del la Dirección de Seguimiento "A"',
+            'puesto' => 'Director de la Dirección de Seguimiento "A"',
             'unidad_administrativa_id' => 122100,
             'siglas_rol'=>'DS',
             'estatus' => 'Activo',
             'usuario_creacion_id' => 1,
-        ])->assignRole('Director de Seguimiento');     
+        ])->assignRole('Director de Seguimiento');
         //Dirección B
         User::create([
             'name' => 'Edgar Castellanos Álvarez ',
             'curp' => 'RORH920920DS8',
             'email' => 'edgar.castellanos@osfem.gob.mx',
             'password' => Hash::make('desa'),
-            'puesto' => 'Director del la Dirección de Seguimiento "B"',
+            'puesto' => 'Director de la Dirección de Seguimiento "B"',
             'unidad_administrativa_id' => 122200,
             'siglas_rol'=>'DS',
             'estatus' => 'Activo',
             'usuario_creacion_id' => 1,
-        ])->assignRole('Director de Seguimiento'); 
-        
+        ])->assignRole('Director de Seguimiento');
+
         Excel::import(new UserImport, base_path().'/database/seeders/Usuarios.xlsx');
     }
 }

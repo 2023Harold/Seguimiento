@@ -1,4 +1,4 @@
-@extends('layouts.app')oficios
+@extends('layouts.app')
 @section('breadcrums')
 {{ Breadcrumbs::render('pliegosobservacionatencion.index') }}
 @endsection
@@ -40,16 +40,16 @@
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
                                        @if (empty($pliegos->fase_revision) || $pliegos->fase_revision!='Pendiente')
-                                        <a href="{{ route('pliegosobservacionatencioncontestacion.index') }}"  class="icon-hover-active">
+                                        <a href="{{ route('pliegosatencioncontestacion.index') }}"  class="icon-hover-active">
                                             <span class="fa fa-list" aria-hidden="true" ></span>
                                         </a>
                                        @else
-                                        <a href="{{ route('pliegosobservacionatencioncontestacion.show',$pliegos) }}"  class="icon-hover-active ">
+                                        <a href="{{ route('pliegosatencioncontestacion.show',$pliegos) }}"  class="icon-hover-active ">
                                             <span class="fa fa-list" aria-hidden="true"></span>
                                         </a>
                                        @endif
                                     @else
-                                        <a href="{{ route('pliegosobservacionatencioncontestacion.show',$pliegos) }}"  class="icon-hover-active">
+                                        <a href="{{ route('pliegosatencioncontestacion.show',$pliegos) }}"  class="icon-hover-active">
                                             <span class="fa fa-list" aria-hidden="true"></span>
                                         </a>
                                     @endif
@@ -73,7 +73,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
-                                        @if (empty($pliegos->fase_revision) || ($pliegos->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión LP'))
+                                        @if (empty($pliegos->fase_revision) || ($pliegos->fase_revision!='Pendiente'&& $pliegos->fase_revision!='Revisión LP'))
                                             <a href="{{ route('pliegosobservacionanalisis.edit',$pliegos) }}" class="icon-hover-active">
                                                 <span class="fa fa-align-justify"" aria-hidden="true"></span>
                                             </a>
@@ -102,20 +102,20 @@
                                         @endif
                                 </td>
                                 <td class="text-center">
-                                        @if (!empty($pliegos->calificacion_sugerida))
-                                            @if ($pliegos->calificacion_atencion=='Atendida')
-                                            <span class="badge badge-light-success">Atendida</span><br>
-                                            @endif
-                                            @if ($pliegos->calificacion_sugerida=='No Atendida')
-                                                <span class="badge badge-light-danger">No Atendida</span><br>
-                                            @endif
-                                            <a href="{{ route('pliegosobservacioncalificacion.show',$pliegos) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
-                                                <span class="fa fa-align-justify" aria-hidden="true"></span>
-                                            </a>
+                                    @if (!empty($pliegos->calificacion_sugerida))
+                                    @if ($pliegos->calificacion_sugerida=='Atendida')
+                                        <span class="badge badge-light-success">Atendida</span><br>
                                     @endif
-                                </td>
-                                <td class="text-center">
-                                    @if ((in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&empty($pliegos->fase_autorizacion)) || (in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray()) && $recomendacion->fase_autorizacion=='Rechazado'))
+                                    @if ($pliegos->calificacion_sugerida=='No Atendida')
+                                            <span class="badge badge-light-danger">No Atendida</span><br>
+                                    @endif
+                                    @if ($pliegos->calificacion_sugerida=='Parcialmente Atendida')
+                                            <span class="badge badge-light-warning">Parcialmente Atendida</span><br>
+                                    @endif
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if ((in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&empty($pliegos->fase_autorizacion)) || (in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray()) && $pliegos->fase_autorizacion=='Rechazado'))
                                     <a href="{{ route('pliegosobservacioncalificacion.edit',$pliegos) }}" class="icon-hover-active">
                                         <span class="fa-solid fa-ranking-star fa-2x"></span>
                                     </a>
@@ -147,8 +147,8 @@
                                                 <li class="fa fa-gavel"></li>
                                                 Revisar
                                             </a>
-                                        @else
-                                            <span class="badge badge-light-warning">En revisión</span>
+                                        {{-- @else --}}
+                                            {{-- <span class="badge badge-light-warning">En revisión</span> --}}
                                         {{-- @endcan --}}
                                     @endif
                                     @if ($pliegos->fase_autorizacion == 'En revisión')
@@ -233,7 +233,7 @@
                                     <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('revisionesrecomendaciones.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                    <a href="{{ route('revisionespliegosobservacion.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                         <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
                                     </a>
                                 </td>
@@ -246,7 +246,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente')
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendaciones.edit',$comentario) }}">
+                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosobservacion.edit',$comentario) }}">
                                             Atender
                                         </a>
                                     @endif

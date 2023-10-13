@@ -1,0 +1,17 @@
+@extends('layouts.appPopup')
+@section('content')
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">           
+            Comentario
+        </h1>
+    </div>
+    <div class="card-body">        
+        <div class="row">
+            <div class="col-md-12">
+                {!! BootForm::textarea('comentario', false, old("comentario", $comentario->comentario),['disabled'])!!}
+            </div>
+        </div>           
+    </div>
+</div>
+@endsection

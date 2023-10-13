@@ -26,7 +26,7 @@ class SeguimientoAuditoriaController extends Controller
     public function index(Request $request)
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-               
+
         return view('seguimientoauditoria.index', compact('auditorias', 'request'));
     }
 
@@ -43,7 +43,7 @@ class SeguimientoAuditoriaController extends Controller
         $auditorias=Auditoria::all()->count();
         $consecutivo=$auditorias+1;
         $entidades = EntidadFiscalizableIntra::where('NivEntFis', 1)->where('StsEntFis', 1)->whereNotIN('PkCveEntFis', [607, 608])->get()->pluck('NomEntFis', 'PkCveEntFis');
-        $tipos = CatalogoTipoAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');      
+        $tipos = CatalogoTipoAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
         $tiporevision = [null=>'','Cumplimiento Financiero'=>'Cumplimiento Financiero','Inversión Física'=>'Inversión Física','Financiera'=>'Financiera','Obra'=>'Obra','Desempeño'=>'Desempeño'];
         $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022'];
         //$lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->director->unidad_administrativa_id)->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
@@ -51,7 +51,7 @@ class SeguimientoAuditoriaController extends Controller
         $entidad1 = null;
         $entidad2 = null;
         $entidad3 = null;
-        $cargosasociadosIntra = null;            
+        $cargosasociadosIntra = null;
 
         return view('seguimientoauditoria.form', compact('ejercicios','auditoria','accion','consecutivo','entidades', 'entidad1', 'entidad2', 'entidad3','tipos','tiporevision','periodorevision','lideresProyecto'));
     }
@@ -64,12 +64,12 @@ class SeguimientoAuditoriaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->normalizarDatos($request);       
+        $this->normalizarDatos($request);
         mover_archivos($request, ['informe_auditoria'], null);
         $request['usuario_creacion_id'] = auth()->user()->id;
         $request['unidad_administrativa_registro']=auth()->user()->unidad_administrativa_id;
         $auditoria = Auditoria::create($request->all());
-       
+
         setMessage('La auditoría se ha registrado correctamente.');
 
         return redirect()->route('seguimientoauditoria.acciones', $auditoria);
@@ -93,11 +93,11 @@ class SeguimientoAuditoriaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Auditoria $auditoria)
-    {       
-        
-        $accion = 'Editar';      
+    {
+
+        $accion = 'Editar';
         $entidades = EntidadFiscalizableIntra::where('NivEntFis', 1)->where('StsEntFis', 1)->whereNotIN('PkCveEntFis', [607, 608])->get()->pluck('NomEntFis', 'PkCveEntFis');
-        $tipos = CatalogoTipoAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');      
+        $tipos = CatalogoTipoAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
         $tiporevision = [null=>'','Cumplimiento Financiero'=>'Cumplimiento Financiero','Inversión Física'=>'Inversión Física','Financiera'=>'Financiera','Obra'=>'Obra','Desempeño'=>'Desempeño'];
         $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022'];
         $lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->jefe->unidad_administrativa_id)->get()->pluck('name','id');
@@ -108,13 +108,13 @@ class SeguimientoAuditoriaController extends Controller
         $entidad3 = null;
 
         $entidadFiscalizable = EntidadFiscalizableIntra::find($auditoria->entidad_fiscalizable_id);
-            
+
         if ($entidadFiscalizable->NivEntFis == 3) {
             $entidad3 = $entidadFiscalizable->PkCveEntFis;
             $entidades3 = EntidadFiscalizableIntra::where('NivEntFis', 3)->where('FkCveEntFis', $entidadFiscalizable->FkCveEntFis)->where('StsEntFis', 1)->get()->pluck('NomEntFis', 'PkCveEntFis');
 
             $entidadFiscalizable2 = EntidadFiscalizableIntra::find($entidadFiscalizable->FkCveEntFis);
-            $entidad2 = $entidadFiscalizable2->PkCveEntFis;              
+            $entidad2 = $entidadFiscalizable2->PkCveEntFis;
             $entidades2 = EntidadFiscalizableIntra::where('NivEntFis', 2)->where('FkCveEntFis', $entidadFiscalizable2->FkCveEntFis)->where('StsEntFis', 1)->get()->pluck('NomEntFis', 'PkCveEntFis');
 
             $entidadFiscalizable1 = EntidadFiscalizableIntra::find($entidadFiscalizable2->FkCveEntFis);
@@ -126,7 +126,7 @@ class SeguimientoAuditoriaController extends Controller
             if ($entidadFiscalizable->FkCveEntFis == 611) {
                     $entidades2 = $entidades2->whereNotNull('CveEntFis');
                 }
-                $entidades2 = $entidades2->get()->pluck('NomEntFis', 'PkCveEntFis');              
+                $entidades2 = $entidades2->get()->pluck('NomEntFis', 'PkCveEntFis');
 
                 $entidadFiscalizable1 = EntidadFiscalizableIntra::find($entidadFiscalizable->FkCveEntFis);
                 $entidad1 = $entidadFiscalizable1->PkCveEntFis;
@@ -135,7 +135,7 @@ class SeguimientoAuditoriaController extends Controller
                 $entidad1 = $entidadFiscalizable->PkCveEntFis;
             }
 
-        return view('seguimientoauditoria.form', compact('auditoria', 'accion','entidades', 'entidades2', 'entidades3', 'entidad1', 'entidad2', 'entidad3','tipos','tiporevision','periodorevision','lideresProyecto'));        
+        return view('seguimientoauditoria.form', compact('auditoria', 'accion','entidades', 'entidades2', 'entidades3', 'entidad1', 'entidad2', 'entidad3','tipos','tiporevision','periodorevision','lideresProyecto'));
     }
 
     /**
@@ -147,10 +147,10 @@ class SeguimientoAuditoriaController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        $this->normalizarDatos($request);       
+        $this->normalizarDatos($request);
         mover_archivos($request, ['informe_auditoria'], $auditoria);
         $auditoria->update($request->all());
-       
+
         setMessage('La auditoría se ha modificado correctamente.');
 
         return redirect()->route('seguimientoauditoria.acciones', $auditoria);
@@ -171,17 +171,17 @@ class SeguimientoAuditoriaController extends Controller
     {
          $query = $this->model;
 
-         
-        if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
+
+        if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
             $query = $query->where('usuario_creacion_id',auth()->id());
         }
 
-        if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){    
-            $userLider=auth()->user(); 
+        if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
+            $userLider=auth()->user();
             $query = $query->whereRaw('LOWER(lider_proyecto_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('fase_autorizacion');
-        }       
+        }
 
-        if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){     
+        if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
             $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
             $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
         }
@@ -189,12 +189,12 @@ class SeguimientoAuditoriaController extends Controller
         if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())||
            in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||
            in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
-           in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){                 
-            $unidadAdministrativa=rtrim(auth()->user()->unidad_administrativa_id, 0);			
+           in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){
+            $unidadAdministrativa=rtrim(auth()->user()->unidad_administrativa_id, 0);
             $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"]);
         }
-        
-                
+
+
         if ($request->filled('numero_auditoria')) {
              $numeroAuditoria=strtolower($request->numero_auditoria);
              $query = $query->whereRaw('LOWER(numero_auditoria) LIKE (?) ',["%{$numeroAuditoria}%"]);
@@ -215,11 +215,11 @@ class SeguimientoAuditoriaController extends Controller
 
     public function accionesConsulta(Auditoria $auditoria)
     {
-        $movimiento='consultar';       
-        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->orderBy('consecutivo')->paginate(30);   
-        $request = new Request(); 
-        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);     
-       
+        $movimiento='consultar';
+        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->orderBy('consecutivo')->paginate(30);
+        $request = new Request();
+        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);
+
         return view('seguimientoauditoriaaccion.index', compact('acciones', 'request', 'auditoria','movimiento','tiposaccion'));
     }
 
@@ -241,7 +241,7 @@ class SeguimientoAuditoriaController extends Controller
             foreach ($entidadesIntra as $entidadIntra) {
                 $entidades[] = ['id' => $entidadIntra->PkCveEntFis, 'text' => $entidadIntra->NomEntFis];
             }
-        }       
+        }
 
         $datos[1] = $entidades;
 
@@ -251,22 +251,22 @@ class SeguimientoAuditoriaController extends Controller
     public function normalizarDatos(Request $request)
     {
        $entidad=EntidadFiscalizableIntra::where('PkCveEntFis',$request->entidad_fiscalizable_id)->first();
-       $tipoauditoria=CatalogoTipoAuditoria::find($request->tipo_auditoria_id);   
+       $tipoauditoria=CatalogoTipoAuditoria::find($request->tipo_auditoria_id);
        $entidadCompleta='';
 
         if ($entidad->NivEntFis == 3){
-            $entidadCompleta=$entidad->entidadFiscalizableN1->NomEntFis.' - '.$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis;    
-        }elseif ($entidad->NivEntFis == 2){                
-            $entidadCompleta=$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis; 
+            $entidadCompleta=$entidad->entidadFiscalizableN1->NomEntFis.' - '.$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis;
+        }elseif ($entidad->NivEntFis == 2){
+            $entidadCompleta=$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis;
         }elseif ($entidad->NivEntFis == 1){
-            $entidadCompleta=$entidad->NomEntFis;    
+            $entidadCompleta=$entidad->NomEntFis;
         }
-       
+
        $request['entidad_fiscalizable'] = $entidadCompleta;
        $request['tipo_entidad']=$entidad->Ambito;
        $request['siglas_entidad']=$entidad->SigEntFis;
        $request['ejercicio']=0;
-       $request['acto_fiscalizacion']=$tipoauditoria->descripcion;       
+       $request['acto_fiscalizacion']=$tipoauditoria->descripcion;
 
        return  $request;
     }
@@ -274,36 +274,36 @@ class SeguimientoAuditoriaController extends Controller
     public function auditoriaAcciones(Auditoria $auditoria)
     {
         setSession('auditoria_id',$auditoria->id);
-        
+
         return  redirect()->route('seguimientoauditoriaacciones.index');
     }
 
     public function concluir(Auditoria $auditoria)
     {
         if(empty($auditoria->fase_autorizacion))
-        {        
-            foreach ($auditoria->acciones as $accionrevision) 
+        {
+            foreach ($auditoria->acciones as $accionrevision)
             {
                 $accionrevision->update(['fase_revision'=>'En revisión 01']);
             }
         }else{
-            if (count($auditoria->accionesrechazadaslider)>0) 
+            if (count($auditoria->accionesrechazadaslider)>0)
             {
-                foreach ($auditoria->accionesrechazadaslider as $accionrechazada) 
+                foreach ($auditoria->accionesrechazadaslider as $accionrechazada)
                 {
                     $accionrechazada->update(['fase_revision'=>'En revisión 01']);
                     $accionrechazada->update(['revision_lider'=>null]);
                     $accionrechazada->update(['revision_jefe'=>null]);
-                }                
+                }
             }
-            if (count($auditoria->accionesrechazadasjefe)>0) 
+            if (count($auditoria->accionesrechazadasjefe)>0)
             {
-                foreach ($auditoria->accionesrechazadasjefe as $accionrechazada) 
+                foreach ($auditoria->accionesrechazadasjefe as $accionrechazada)
                 {
                     $accionrechazada->update(['fase_revision'=>'En revisión 01']);
                     $accionrechazada->update(['revision_lider'=>null]);
                     $accionrechazada->update(['revision_jefe'=>null]);
-                }                
+                }
             }
         }
 
@@ -321,20 +321,20 @@ class SeguimientoAuditoriaController extends Controller
         } else {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 5);
         }
-       
 
-        $auditoria->update(['registro_concluido' => 'Si', 'fase_autorizacion' => 'En revisión 01']);        
+
+        $auditoria->update(['registro_concluido' => 'Si', 'fase_autorizacion' => 'En revisión 01']);
 
         $titulo = 'Registro de auditoría';
         $mensaje = '<strong>Estimado (a) ' . $auditoria->lider->name . ', ' . $auditoria->lider->puesto . ':</strong><br>
-                    Ha sido registrada la auditoría No. ' . $auditoria->numero_auditoria . ', por parte del Analista ' . 
-                    auth()->user()->name . ', por lo que se requiere realice la revisión oportuna del la auditoría.';
+                    Ha sido registrada la auditoría No. ' . $auditoria->numero_auditoria . ', por parte del Analista ' .
+                    auth()->user()->name . ', por lo que se requiere realice la revisión oportuna de la auditoría.';
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->lider->unidad_administrativa_id,$auditoria->lider->id);
 
         setMessage('El registro auditoría se ha concluido y enviado a revisión.');
 
 
-             
+
         return  redirect()->route('seguimientoauditoria.index');
     }
 }

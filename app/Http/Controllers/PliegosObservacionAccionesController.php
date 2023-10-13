@@ -70,7 +70,8 @@ class PliegosObservacionAccionesController extends Controller
     {
         setSession('pliegosobservacionauditoriaaccion_id',$accion->id);
         $pliegosobservacion=$accion->pliegosobservacion;
-        if (empty($accion->pliegosobservacion) && in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+        if (empty($accion->pliegosobservacion)) {
+            if (in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
             $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
             $request=new Request();
             $request->merge([
@@ -83,9 +84,15 @@ class PliegosObservacionAccionesController extends Controller
                 'cargo_responsable'=>$auditoria->comparecencia->cargo_representante1,
             ]);
             $pliegosobservacion=PliegosObservacion::create($request->all());
-          }
+            setSession('pliegosobservacionatencion_id',$pliegosobservacion->id);
+        }
+        else{
+            setSession('pliegosobservacionatencion_id',null);
+        }
+          }else{
+            setSession('pliegosobservacionatencion_id',$pliegosobservacion->id);
+        }
         //   dd();
-         setSession('pliegosobservacionatencion_id',$pliegosobservacion->id);
 
          return redirect()->route('pliegosobservacionatencion.index');
     }

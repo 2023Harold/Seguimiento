@@ -99,6 +99,10 @@ class PliegosObservacionController extends Controller
     {
          $query = $this->model;
 
+         $query = $query->whereHas('comparecencia', function($q){
+            $q->whereNotNull('oficio_acta');
+        });
+
          $query = $query->whereHas('acciones', function($q){
             $q->where('segtipo_accion_id',3);
 

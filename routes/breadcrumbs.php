@@ -437,14 +437,19 @@ Breadcrumbs::for('pliegosobservacionatencion.edit', function (BreadcrumbTrail $t
     $trail->push('Datos de atención', route('pliegosobservacionatencion.edit',$pliegosobservacion));
 });
 //solicitud de aclaracion contestaciones
-Breadcrumbs::for('pliegosobservacionatencioncontestacion.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('pliegosatencioncontestacion.index', function (BreadcrumbTrail $trail) {
     $trail->parent('pliegosobservacionatencion.index');
-    $trail->push('Oficios de contestación', route('pliegosobservacioncontestacion.index'));
+    $trail->push('Oficios de contestación', route('pliegosatencioncontestacion.index'));
 });
 
-Breadcrumbs::for('pliegosobservacionatencioncontestacion.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('pliegosobservacioncontestacion.index');
-    $trail->push('Agregar', route('pliegosobservacioncontestacion.create'));
+Breadcrumbs::for('pliegosatencioncontestacion.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('pliegosatencioncontestacion.index');
+    $trail->push('Agregar', route('pliegosatencioncontestacion.create'));
+});
+
+Breadcrumbs::for('pliegosatencioncontestacion.edit', function (BreadcrumbTrail $trail,$contestacion) {
+    $trail->parent('solicitudesaclaracioncontestacion.index');
+    $trail->push('Agregar', route('pliegosatencioncontestacion.edit',$contestacion));
 });
 
 Breadcrumbs::for('pliegosobservacioncalificacion.edit', function (BreadcrumbTrail $trail,$pliegosobservacion) {
