@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->enum('calificacion_sugerida', ['Solventada', 'No Solventada','Solventada Parcialmente'])->nullable();
             $table->enum('calificacion_atencion', ['Solventada', 'No Solventada','Solventada Parcialmente'])->nullable();
-            $table->decimal('monto_solventado',11,2)->nullable();
+            $table->decimal('monto_solventado',19,2)->nullable();
             $table->text('analisis')->nullable();
             $table->string('fase_revision', 40)->nullable();
             $table->text('conclusion')->nullable();

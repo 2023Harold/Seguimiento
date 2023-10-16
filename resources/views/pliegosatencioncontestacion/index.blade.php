@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('pliegosobservacion.index') }}
+{{ Breadcrumbs::render('pliegosobservacionatencioncontestacion.index') }}
 @endsection
 @section('content')
 <div class="row">
@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <span>
-                            <a class="btn btn-primary float-end" href="{{ route('pliegosatencioncontestacion.create') }}">
+                            <a class="btn btn-primary float-end" href="{{ route('pliegosobservacionatencioncontestacion.create') }}">
                                 Agregar
                             </a>
                         </span>
@@ -73,13 +73,13 @@
                                             {{ fecha($contestacion->fecha_recepcion_seguimiento) }}
                                          </td>
                                         <td class="text-center">
-                                            <a href="{{route('pliegosatencioncontestacion.edit', $contestacion)}}" class="icon-hover">
+                                            <a href="{{route('pliegosobservacionatencioncontestacion.edit', $contestacion)}}" class="icon-hover">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
                                         </td>
                                         <td class="text-center">
                                             {{-- @can('comparecenciaanexo.destroy') --}}
-                                                @destroy(route('pliegosatencioncontestacion.destroy', $contestacion))
+                                                @destroy(route('pliegosobservacionatencioncontestacion.destroy', $contestacion))
                                             {{-- @endcan --}}
                                         </td>
                                     </tr>

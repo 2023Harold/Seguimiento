@@ -26,10 +26,10 @@ class RevisionesPliegosAtencionController extends Controller
     public function create()
     {
         $comentario = new Revisiones();
-
+             
         $accion = 'Agregar';
 
-        return view('revisionesatencion.form', compact('comentario', 'accion'));
+        return view('revisionespliegosatencion.form', compact('comentario', 'accion'));
     }
 
     /**
@@ -40,21 +40,22 @@ class RevisionesPliegosAtencionController extends Controller
      */
     public function store(Request $request)
     {
-        $comentario = Revisiones::find(getSession('comentario_id'));
+        $comentario = Revisiones::find(getSession('comentario_id'));       
         $comentario->update(['estatus'=>'Atendido']);
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $request->merge([
             'id_revision'=>getSession('comentario_id'),
             'de_usuario_id'=>auth()->user()->id,
             'para_usuario_id'=>intval($accion->analista_asignado_id),
-            'accion'=>'Pliegos de observación',
-            'accion_id'=>$accion->id,
+            'accion'=>'Pliego de Observación',
+            'accion_id'=>$accion->id,            
             'usuario_creacion_id'=>auth()->user()->id,
-        ]);
-            Revisiones::create($request->all());
-            setMessage('se ha agregado el comentario correctamente.');
+        ]);        
+        Revisiones::create($request->all()); 
+            
+        setMessage('se ha agregado el comentario correctamente.');
 
-            return view('layouts.close');
+        return view('layouts.close');
     }
 
     /**

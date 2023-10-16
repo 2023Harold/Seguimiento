@@ -15,7 +15,7 @@
             </div>
             <div class="card-body">
                 @include('flash::message')
-                {!! BootForm::open(['route'=>'pras.index','method'=>'GET']) !!}
+                {!! BootForm::open(['route'=>'solicitudesaclaracion.index','method'=>'GET']) !!}
                 <div class="row">
                     <div class="col-md-2">
                         {!! BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria',

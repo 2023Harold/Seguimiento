@@ -69,7 +69,7 @@ class PliegosObservacionAtencionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(PliegosDocumento $documento)
     {
         $documentos=PliegosDocumento::where('pliegosobservacion_id',$documento->id)->paginate(10);
 

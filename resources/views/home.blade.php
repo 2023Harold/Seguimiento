@@ -367,8 +367,16 @@
                             Seguimiento
                         </h1>
                     </div>
+
+                    
                     <div class="overflow-auto card-body h-200px">
                         <div class="d-flex flex-column">
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('auditoriaseguimiento.index') }}">
+                                    Auditorias
+                                </a>
+                            </li>
                             @can('radicacion.index')
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
@@ -438,12 +446,14 @@
                                 </a>
                             </li>
                             @endcan
+                            @can('pliegosobservacion.index')
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('pliegosobservacion.index') }}">
                                     Pliegos de observación
                                 </a>
                             </li>
+                            @endcan
 
                             {{-- <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>

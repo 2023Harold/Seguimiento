@@ -6,7 +6,9 @@
             Listado de documentos
         </h1>
         <div class="card-toolbar">
-            @button('Agregar',route('pliegosobservaciondocumentos.create'))
+            @can('pliegosobservaciondocumentos.create')
+                @button('Agregar',route('pliegosobservaciondocumentos.create'))
+            @endcan
         </div>
     </div>
     <div class="card-body">
@@ -25,22 +27,15 @@
                         @foreach($documentos as $documento)
                             <tr>
                                 <td class="text-center">
-                                    {{-- @can('comparecenciaanexo.edit') --}}
-
-                                        {{-- <a href="{{route('comparecenciaanexo.edit', $anexo)}}"> --}}
-                                            {{ str_pad($documento->consecutivo, 3, '0', STR_PAD_LEFT) }}
-                                        {{-- </a> --}}
-                                    {{-- @else
-                                        {{ str_pad($anexo->numero, 3, '0', STR_PAD_LEFT) }}
-                                    @endcan --}}
+                                    {{ str_pad($documento->consecutivo, 3, '0', STR_PAD_LEFT) }}
                                 </td>
                                 <td>
                                     {{ $documento->nombre_documento }}
                                 </td>
                                 <td class="text-center">
-                                    {{-- @can('comparecenciaanexo.destroy') --}}
+                                    @can('pliegosobservaciondocumentos.destroy')
                                         @destroy(route('pliegosobservaciondocumentos.destroy', $documento))
-                                    {{-- @endcan --}}
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

@@ -117,6 +117,10 @@ class AuditoriaAccion extends Model
     {
         return $this->hasMany(Revisiones::class, 'accion_id','id')->where('accion', 'Solicitud de Aclaración')->whereNull('id_revision')->orderBy('id', 'ASC');
     }
+    public function comentariospliegos()
+    {
+        return $this->hasMany(Revisiones::class, 'accion_id','id')->where('accion', 'Pliego de Observación')->whereNull('id_revision')->orderBy('id', 'ASC');
+    }
 
     public function movimientos()
     {

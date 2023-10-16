@@ -39,131 +39,139 @@
                             <tr>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
-                                       @if (empty($pliegos->fase_revision) || $pliegos->fase_revision!='Pendiente')
-                                        <a href="{{ route('pliegosatencioncontestacion.index') }}"  class="icon-hover-active">
-                                            <span class="fa fa-list" aria-hidden="true" ></span>
-                                        </a>
+                                       @if (empty($pliegos->fase_revision) || ($pliegos->fase_revision!='Pendiente' && $pliegos->fase_revision!='Revisión Jefe' ))
+                                            @can('pliegosobservacionatencioncontestacion.edit')
+                                                <a href="{{ route('pliegosobservacionatencioncontestacion.index') }}"  class="icon-hover-active">
+                                                    <span class="fa fa-list" aria-hidden="true" ></span>
+                                                </a>
+                                            @endcan
                                        @else
-                                        <a href="{{ route('pliegosatencioncontestacion.show',$pliegos) }}"  class="icon-hover-active ">
-                                            <span class="fa fa-list" aria-hidden="true"></span>
-                                        </a>
+                                            @can('pliegosobservacionatencioncontestacion.show')
+                                                <a href="{{ route('pliegosobservacionatencioncontestacion.show',$pliegos) }}"  class="btn btn-link btn-color-muted btn-active-color-primary">
+                                                    <span class="fa fa-list" aria-hidden="true"></span>
+                                                </a>
+                                            @endcan
                                        @endif
                                     @else
-                                        <a href="{{ route('pliegosatencioncontestacion.show',$pliegos) }}"  class="icon-hover-active">
-                                            <span class="fa fa-list" aria-hidden="true"></span>
-                                        </a>
+                                        @can('pliegosobservacionatencioncontestacion.show')
+                                            <a href="{{ route('pliegosobservacionatencioncontestacion.show',$pliegos) }}"  class="btn btn-link btn-color-muted btn-active-color-primary">
+                                                <span class="fa fa-list" aria-hidden="true"></span>
+                                            </a>
+                                        @endcan
                                     @endif
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
                                         @if (empty($pliegos->fase_revision) || $pliegos->fase_revision!='Pendiente'&& $pliegos->fase_revision!='Revisión LP')
+                                            @can('pliegosobservaciondocumentos.index')    
                                             <a href="{{ route('pliegosobservaciondocumentos.index', $pliegos) }}" class="icon-hover-active popupSinLocation">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>
+                                            @endcan
                                         @else
-                                            <a href="{{ route('pliegosobservaciondocumentos.show', $pliegos) }}"class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                            @can('pliegosobservaciondocumentos.show')
+                                            <a href="{{ route('pliegosobservaciondocumentos.index') }}"class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>
+                                            @endcan
                                         @endif
                                     @else
-                                        <a href="{{ route('pliegosobservaciondocumentos.show', $pliegos) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                        @can('pliegosobservaciondocumentos.show')
+                                        <a href="{{ route('pliegosobservaciondocumentos.index') }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                             <span class="fa fa-list" aria-hidden="true"></span>
                                         </a>
+                                        @endcan
                                     @endif
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
-                                        @if (empty($pliegos->fase_revision) || ($pliegos->fase_revision!='Pendiente'&& $pliegos->fase_revision!='Revisión LP'))
+                                        @if (empty($pliegos->fase_revision) || ($pliegos->fase_revision!='Pendiente'&& $pliegos->fase_revision!='Revisión Jefe'))
+                                            @can('pliegosobservacionanalisis.edit')
                                             <a href="{{ route('pliegosobservacionanalisis.edit',$pliegos) }}" class="icon-hover-active">
                                                 <span class="fa fa-align-justify"" aria-hidden="true"></span>
                                             </a>
+                                            @endcan
+                                            &nbsp;|&nbsp;
+                                            @can('pliegosobservacionanalisisenvio.edit')
                                             <a href="{{ route('pliegosobservacionanalisisenvio.edit',$pliegos) }}" class="icon-hover-active">
                                                 <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span>
                                             </a>
+                                            @endcan
                                         @else
+                                            @can('pliegosobservacionanalisis.show')
                                             <a href="{{ route('pliegosobservacionanalisis.show',$pliegos) }}" class="btn btn btn-link btn-color-muted btn-active-color-primary">
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
                                             </a>
+                                            @endcan
                                         @endif
                                     @else
                                         @if (in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())&&!empty($pliegos->fase_revision)&&$pliegos->fase_revision=='Pendiente')
+                                            @can('pliegosobservacionanalisisrevision.edit')
                                             <a href="{{ route('pliegosobservacionanalisisrevision.edit',$pliegos) }}" class="icon-hover-active">
                                                 <span class="fa fa-gavel" aria-hidden="true"></span>
                                             </a>
-                                            @elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&!empty($pliegos->fase_revision)&&$pliegos->fase_revision=='Revisión Jefe')
+                                            @endcan
+                                        @elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&!empty($pliegos->fase_revision)&&$pliegos->fase_revision=='Revisión Jefe')
+                                           @can('pliegosobservacionanalisisrevision02.edit')
                                             <a href="{{ route('pliegosobservacionanalisisrevision02.edit',$pliegos) }}" class="icon-hover-active">
                                                 <span class="fa fa-gavel" aria-hidden="true"></span>
                                             </a>
+                                            @endcan
                                         @else
+                                            @can('pliegosobservacionanalisis.show')
                                             <a href="{{ route('pliegosobservacionanalisis.show',$pliegos) }}" class="btn btn btn-link btn-color-muted btn-active-color-primary">
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
                                             </a>
+                                            @endcan
                                         @endif
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                        @if (!empty($pliegos->calificacion_sugerida))
+                                            @if ($pliegos->calificacion_sugerida=='Solventado')
+                                            <span class="badge badge-light-success">Solventado</span><br>
+                                            @endif
+                                            @if ($pliegos->calificacion_sugerida=='No Solventado')
+                                                <span class="badge badge-light-danger">No Solventado</span><br>
+                                            @endif
+                                            @if ($pliegos->calificacion_sugerida=='Solventado Parcialmente')
+                                                <span class="badge badge-light-warning">Solventado Parcialmente</span><br>
+                                            @endif                                           
                                         @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (!empty($pliegos->calificacion_sugerida))
-                                    @if ($pliegos->calificacion_sugerida=='Atendida')
-                                        <span class="badge badge-light-success">Atendida</span><br>
-                                    @endif
-                                    @if ($pliegos->calificacion_sugerida=='No Atendida')
-                                            <span class="badge badge-light-danger">No Atendida</span><br>
-                                    @endif
-                                    @if ($pliegos->calificacion_sugerida=='Parcialmente Atendida')
-                                            <span class="badge badge-light-warning">Parcialmente Atendida</span><br>
-                                    @endif
-                                @endif
-                            </td>
-                            <td class="text-center">
                                 @if ((in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&empty($pliegos->fase_autorizacion)) || (in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray()) && $pliegos->fase_autorizacion=='Rechazado'))
-                                    <a href="{{ route('pliegosobservacioncalificacion.edit',$pliegos) }}" class="icon-hover-active">
+                                    @can('pliegosatencioncalificacion.edit')
+                                    <a href="{{ route('pliegosatencioncalificacion.edit',$pliegos) }}" class="icon-hover-active">
                                         <span class="fa-solid fa-ranking-star fa-2x"></span>
                                     </a>
+                                    @endcan
                                 @else
                                     @if (!empty($pliegos->calificacion_atencion))
-
-                                        <a href="{{ route('pliegosobservacioncalificacion.show',$pliegos) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
-                                            @if ($pliegos->calificacion_atencion=='Atendida')
-                                                <span class="badge badge-light-success">Atendida</span><br>
+                                        @can('pliegosatencioncalificacion.show')
+                                        <a href="{{ route('pliegosatencioncalificacion.show',$pliegos) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
+                                            @if ($pliegos->calificacion_atencion=='Solventado')
+                                                <span class="badge badge-light-success">Solventado</span><br>
                                             @endif
-                                            @if ($pliegos->calificacion_atencion=='No Atendida')
-                                                <span class="badge badge-light-danger">No Atendida</span><br>
+                                            @if ($pliegos->calificacion_atencion=='No Solventado')
+                                                <span class="badge badge-light-danger">No Solventado</span><br>
                                             @endif
-                                            @if ($pliegos->calificacion_atencion=='Parcialmente Atendida')
-                                                <span class="badge badge-light-warning">Parcialmente Atendida</span><br>
+                                            @if ($pliegos->calificacion_atencion=='Solventado Parcialmente')
+                                                <span class="badge badge-light-warning">Solventado Parcialmente</span><br>
                                             @endif
                                             <span class="fa fa-align-justify" aria-hidden="true"></span>
                                         </a>
+                                        @endcan
                                     @endif
                                 @endif
                                 </td>
                                 <td class="text-center">
                                     @if ($pliegos->fase_autorizacion == 'Rechazado')
                                         <span class="badge badge-light-danger">{{ $pliegos->fase_autorizacion }}</span>
-                                    @endif
-                                    @if ($pliegos->fase_autorizacion == 'En revisión 01')
-                                        {{-- @can('pliegosobservacionrevision01.edit') --}}
-                                            <a href="{{ route('pliegosobservacionrevision01.edit',$pliegos) }}" class="btn btn-primary">
-                                                <li class="fa fa-gavel"></li>
-                                                Revisar
-                                            </a>
-                                        {{-- @else --}}
-                                            {{-- <span class="badge badge-light-warning">En revisión</span> --}}
-                                        {{-- @endcan --}}
-                                    @endif
-                                    @if ($pliegos->fase_autorizacion == 'En revisión')
-                                        @can('pliegosobservacionrevision.edit')
-                                            <a href="{{ route('pliegosobservacionrevision.edit',$pliegos) }}" class="btn btn-primary">
-                                                <li class="fa fa-gavel"></li>
-                                                Revisar
-                                            </a>
-                                        @else
-                                            <span class="badge badge-light-warning">{{ $pliegos->fase_autorizacion }} </span>
-                                        @endcan
-                                    @endif
+                                    @endif                                    
                                     @if ($pliegos->fase_autorizacion == 'En validación')
-                                        @can('liegosobservacionvalidacion.edit')
-                                            <a href="{{ route('pliegosobservacionvalidacion.edit',$pliegos) }}" class="btn btn-primary">
+                                        @can('pliegosatencioncalificacionvalidacion.edit')
+                                            <a href="{{ route('pliegosatencioncalificacionvalidacion.edit',$pliegos) }}" class="btn btn-primary">
                                                 <li class="fa fa-gavel"></li>
                                                 Validar
                                             </a>
@@ -172,8 +180,8 @@
                                         @endcan
                                     @endif
                                     @if ($pliegos->fase_autorizacion == 'En autorización')
-                                        @can('pliegosobservacionautorizacion.edit')
-                                            <a href="{{ route('pliegosobservacionautorizacion.edit',$pliegos) }}" class="btn btn-primary">
+                                        @can('pliegosatencioncalificacionautorizacion.edit')
+                                            <a href="{{ route('pliegosatencioncalificacionautorizacion.edit',$pliegos) }}" class="btn btn-primary">
                                                 <li class="fa fa-gavel"></li>
                                                 Autorizar
                                             </a>
@@ -201,15 +209,15 @@
                 </div>
                 @if (auth()->user()->siglas_rol!='ANA')
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12">                          
                         <span>
                             <h3 class="card-title text-primary float">Comentarios
-                            <a class="btn btn-primary float-end popupcomentario" href="{{ route('revisionespliegosobservacion.create') }}">
+                            <a class="btn btn-primary float-end popupcomentario" href="{{ route('revisionespliegos.create') }}">
                                 Agregar
                             </a>
-                        </h3>
-                        </span>
-                    </div>
+                        </h3> 
+                        </span>                     
+                    </div>                    
                 </div>
                 @endif
                 <div class="table-responsive">
@@ -219,21 +227,23 @@
                                 <th>Fecha</th>
                                 <th>Nombre</th>
                                 <th>Comentario</th>
+                                <th>Estatus</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($accion->comentarios as $comentario)
-                           <tr>
-                                <td class="text-center">
+                            {{-- {{ dd($accion,$accion->comentariossolicitudes) }} --}}
+                            @forelse ($accion->comentariospliegos as $comentario)
+                             <tr>
+                                <td>
                                     {{ fecha($comentario->created_at,'d/m/Y H:m:s') }}
                                 </td>
                                 <td>
-                                    {{ $comentario->deusuario->name }}
-                                    <br>
+                                    {{ $comentario->deusuario->name }} <br>
                                     <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('revisionespliegosobservacion.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                    <a href="{{ route('revisionespliegos.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                         <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
                                     </a>
                                 </td>
@@ -246,13 +256,13 @@
                                 </td>
                                 <td class="text-center">
                                     @if(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente')
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosobservacion.edit',$comentario) }}">
+                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegos.edit',$comentario) }}">
                                             Atender
                                         </a>
-                                    @endif
+                                    @endif 
                                 </td>
-                           </tr>
-                           @if (count($comentario->respuestas)>0)
+                            </tr>
+                            @if (count($comentario->respuestas)>0)
                            <tr>
                                 <td colspan="5">
                                     <div class="row mb-1">
@@ -262,7 +272,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="a-listrespuesta-{{$comentario->id}}" class="collapse">
+                                    <div id="a-listrespuesta-{{$comentario->id}}" class="collapse">                           
                                         <table class="table gray-200">
                                             <thead class="table-secondary">
                                                 <tr>
@@ -275,26 +285,26 @@
                                                 @foreach ($comentario->respuestas as $respuesta)
                                                     <tr>
                                                         <td class="text-center">{{ fecha($respuesta->created_at,'d/m/Y H:m:s') }}</td>
-                                                        <td>{{ $respuesta->deusuario->name }}
-                                                            <br>
+                                                        <td>
+                                                            {{ $respuesta->deusuario->name }} <br>
                                                             <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
                                                         </td>
                                                         <td class="text-center">
-                                                            <a href="{{ route('revisionespliegosobservacion.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                                            <a href="{{ route('revisionespliegos.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                                                 <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
-                                                            </a>
+                                                            </a> 
                                                         </td>
                                                     </tr>
-                                                @endforeach
+                                                @endforeach                                    
                                             </tbody>
-                                        </table>
+                                        </table>                            
                                     </div>
                                 </td>
-                            </tr>
-                           @endif
+                            </tr>                               
+                           @endif 
                            @empty
                             <tr>
-                                <td colspan="5" class="text-center">
+                                <td colspan="4" class="text-center">
                                     Sin comentarios
                                 </td>
                             </tr>

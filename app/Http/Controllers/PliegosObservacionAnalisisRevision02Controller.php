@@ -7,7 +7,7 @@ use App\Models\Movimientos;
 use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
 
-class PliegosObservacionAnalisisRevisionController extends Controller
+class PliegosObservacionAnalisisRevision02Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -60,9 +60,9 @@ class PliegosObservacionAnalisisRevisionController extends Controller
     public function edit(PliegosObservacion $pliegosobservacion)
     {
         $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
-        $auditoria=$accion->auditoria;
+        $auditoria=$accion->auditoria; 
 
-        return view('pliegosobservacionatencionanalisisrevision.form',compact('pliegosobservacion','accion','auditoria'));
+        return view('pliegosobservacionatencionanalisisrevision02.form',compact('pliegosobservacion','accion','auditoria'));
     }
 
     /**
@@ -74,8 +74,6 @@ class PliegosObservacionAnalisisRevisionController extends Controller
      */
     public function update(Request $request, PliegosObservacion $pliegosobservacion)
     {
-        $jefe=auth()->user()->jefe;
-
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -86,27 +84,27 @@ class PliegosObservacionAnalisisRevisionController extends Controller
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
-        ]);
+        ]);       
 
-        $pliegosobservacion->update(['fase_revision' => $request->estatus == 'Aprobado' ? 'Revisión Jefe' : 'Rechazado']);
+        $pliegosobservacion->update(['fase_revision' => $request->estatus == 'Aprobado' ? 'Aprobado' : 'Rechazado']);
         setMessage($request->estatus == 'Aprobado' ?
             'La aprobación ha sido registrada.' :
             'El rechazo ha sido registrado.'
         );
 
 
-        if ($request->estatus == 'Aprobado') {
+        if ($request->estatus == 'Aprobado') {           
             $titulo = 'Revisión del análisis del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
-
-            $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
+                   
+            $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->userCreacion->name.', '.$pliegosobservacion->userCreacion->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado la actualización del análisis del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
+                            '; se ha aprobado la actualización del análisis de la solicitud de la aclaración de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             '.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
-        } else {
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->userCreacion->unidad_administrativa_id, $pliegosobservacion->userCreacion->id);
+        } else {           
             $titulo = 'Rechazo del análisis del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->userCreacion->name.', '.$pliegosobservacion->userCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el análisis del pliego de observación  de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
+                            .'Ha sido rechazado del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->userCreacion->unidad_administrativa_id, $pliegosobservacion->userCreacion->id);
         }
@@ -120,7 +118,11 @@ class PliegosObservacionAnalisisRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-   
+    public function destroy($id)
+    {
+        //
+    }
+
     private function normalizarDatos(Request $request)
     {
         if ($request->estatus == 'Aprobado') {

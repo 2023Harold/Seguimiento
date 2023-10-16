@@ -7,6 +7,7 @@ use App\Http\Controllers\AsignacionLiderAnalistaController;
 use App\Http\Controllers\AsignacionDepartamentoController;
 use App\Http\Controllers\AsignacionDepartamentoEncargadoController;
 use App\Http\Controllers\AsignacionDireccionController;
+use App\Http\Controllers\AuditoriaSeguimientoController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\CedulaInicialController;
 use App\Http\Controllers\ComparecenciaActaController;
@@ -21,9 +22,12 @@ use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PliegosObservacionAccionesController;
 use App\Http\Controllers\PliegosObservacionAcusesController;
 use App\Http\Controllers\PliegosObservacionAnalisisEnvioController;
+use App\Http\Controllers\PliegosObservacionAnalisisRevision02Controller;
 use App\Http\Controllers\PliegosObservacionAnalisisRevisionController;
 use App\Http\Controllers\PliegosObservacionAtencionAnalisisController;
+use App\Http\Controllers\PliegosObservacionAtencionCalificacionAutorizacionController;
 use App\Http\Controllers\PliegosObservacionAtencionCalificacionController;
+use App\Http\Controllers\PliegosObservacionAtencionCalificacionValidacionController;
 use App\Http\Controllers\PliegosObservacionAtencionContestacionController;
 use App\Http\Controllers\PliegosObservacionAtencionController;
 use App\Http\Controllers\PliegosObservacionAtencionDocumentosController;
@@ -57,6 +61,8 @@ use App\Http\Controllers\RecomendacionesController;
 use App\Http\Controllers\RecomendacionesRevision01Controller;
 use App\Http\Controllers\RecomendacionesRevisionController;
 use App\Http\Controllers\RecomendacionesValidacionController;
+use App\Http\Controllers\RevisionesPliegosAtencionController;
+use App\Http\Controllers\RevisionesPliegosController;
 use App\Http\Controllers\RevisionesRecomendacionesAtencionController;
 use App\Http\Controllers\RevisionesPliegosObservacionController;
 use App\Http\Controllers\RevisionesRecomendacionesController;
@@ -161,6 +167,11 @@ Route::get('/asignacionlideranalista/acciones/consulta/{auditoria}', [Asignacion
 Route::get('/asignacionlideranalista/consulta/{auditoria}', [AsignacionLiderAnalistaController::class, 'consulta'])->name('asignacionlideranalista.consulta');
 /*Departamento Encargado*/
 Route::resource('asignaciondepartamentoencargado', AsignacionDepartamentoEncargadoController::class, ['parameters' => ['asignaciondepartamentoencargado' => 'auditoria']]);
+
+
+/*Auditoria Seguimiento*/
+Route::resource('auditoriaseguimiento', AuditoriaSeguimientoController::class);
+
 /*Radicación*/
 Route::resource('radicacion', RadicacionController::class);
 Route::get('auditoriaradicacion/{auditoria}', [RadicacionController::class,'auditoria'])->name('radicacion.auditoria');
@@ -233,21 +244,26 @@ Route::resource('revisionessolicitudesatencion',RevisionesSolicitudesAtencionCon
 Route::resource('pliegosobservacion',PliegosObservacionController::class,['parameters' => ['pliegosobservacion' => 'auditoria']]);
 Route::resource('pliegosobservacionacciones',PliegosObservacionAccionesController::class,['parameters' => ['pliegosobservacionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
 Route::resource('pliegosobservacionatencion',PliegosObservacionAtencionController::class,['parameters' => ['pliegosobservacionatencion' => 'pliegosobservacionatencion']]);
-Route::resource('pliegosatencioncontestacion',PliegosObservacionAtencionContestacionController::class,['parameters' => ['pliegosatencioncontestacion' => 'contestacion']]);
-Route::get('pliegosobservacioncontestacionoficios/{pliegosobservacion}', [PliegosObservacionAtencionContestacionController::class,'oficiospliegosobservacion'])->name('pliegosobservacioncontestacion.oficiospliegosobservacion');
+//Route::resource('pliegosobservacioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosobservacioncalificacion' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacionatencioncontestacion',PliegosObservacionAtencionContestacionController::class,['parameters' => ['pliegosobservacionatencioncontestacion' => 'contestacion']]);
 Route::resource('pliegosobservaciondocumentos',PliegosObservacionAtencionDocumentosController::class,['parameters' => ['pliegosobservaciondocumentos' => 'documento']]);
 Route::resource('pliegosobservacionanalisis',PliegosObservacionAtencionAnalisisController::class,['parameters' => ['pliegosobservacionanalisis' => 'pliegosobservacion']]);
 Route::resource('pliegosobservacionanalisisenvio',PliegosObservacionAnalisisEnvioController::class,['parameters' => ['pliegosobservacionanalisisenvio' => 'pliegosobservacion']]);
 Route::resource('pliegosobservacionanalisisrevision',PliegosObservacionAnalisisRevisionController::class,['parameters' => ['pliegosobservacionanalisisrevision' => 'pliegosobservacion']]);
-Route::resource('pliegosobservacionrevision01',PliegosObservacionRevision01Controller::class,['parameters' => ['pliegosobservacionrevision01' => 'pliegosobservacion']]);
+Route::resource('pliegosobservacionanalisisrevision02',PliegosObservacionAnalisisRevision02Controller::class,['parameters' => ['pliegosobservacionanalisisrevision02' => 'pliegosobservacion']]);
+Route::resource('pliegosatencioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosatencioncalificacion' => 'pliegosobservacion']]);
+Route::resource('pliegosatencioncalificacionvalidacion',PliegosObservacionAtencionCalificacionValidacionController::class,['parameters' => ['pliegosatencioncalificacionvalidacion' => 'pliegosobservacion']]);
+Route::resource('pliegosatencioncalificacionautorizacion',PliegosObservacionAtencionCalificacionAutorizacionController::class,['parameters' => ['pliegosatencioncalificacionautorizacion' => 'pliegosobservacion']]);
+//Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
+Route::get('pliegosobservacioncontestacionoficios/{pliegosobservacion}', [PliegosObservacionAtencionContestacionController::class,'oficiospliegosobservacion'])->name('pliegosobservacioncontestacion.oficiospliegosobservacion');
+Route::resource('revisionespliegos',RevisionesPliegosController::class,['parameters' => ['revisionespliegos' => 'comentario']]);
+Route::resource('revisionespliegosatencion',RevisionesPliegosAtencionController::class,['parameters' => ['revisionespliegosatencion' => 'comentario']]);
 
-// Route::resource('pliegosobservacionrevision',PliegosObservacionRevisionController::class,['parameters' => ['pliegosobservacionrevision' => 'pliegosobservacion']]);
-Route::resource('pliegosatencioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosobservacioncalificacion' => 'pliegosobservacion']]);
-// Route::resource('pliegosobservacioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosobservacioncalificacion' => 'pliegosobservacion']]);
-Route::resource('pliegosobservacionvalidacion',PliegosObservacionValidacionController::class,['parameters' => ['pliegosobservacionvalidacion' => 'pliegosobservacion']]);
-Route::resource('pliegosobservacionautorizacion',PliegosObservacionAutorizacionController::class,['parameters' => ['pliegosobservacionautorizacion' => 'pliegosobservacion']]);
-Route::resource('pliegosobservacionesacuses',PliegosObservacionAcusesController::class,['parameters' => ['pliegosobservacionacuses' => 'pliegosobservacion']]);
-Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);
+/*pliegos Revisiones*/
+
+
+// Route::resource('pliegosobservacionesacuses',PliegosObservacionAcusesController::class,['parameters' => ['pliegosobservacionacuses' => 'pliegosobservacion']]);
+// Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);
 
 
 

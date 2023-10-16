@@ -1,16 +1,16 @@
 @extends('layouts.app')
 @section('breadcrums')
     @if (empty($contestacion->oficio_contestacion))
-    {{ Breadcrumbs::render('pliegosatencioncontestacion.create') }}
+    {{ Breadcrumbs::render('pliegosobservacionatencioncontestacion.create') }}
     @else
-    {{ Breadcrumbs::render('pliegosatencioncontestacion.edit',$contestacion) }}
+    {{ Breadcrumbs::render('pliegosobservacionatencioncontestacion.edit',$contestacion) }}
     @endif
 @endsection
 @section('content')
 <div class="card">
     <div class="card-header">
         <h1 class="card-title">
-            <a href="{{ route('pliegosatencioncontestacion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+            <a href="{{ route('pliegosobservacionatencioncontestacion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
             @if (empty($contestacion->oficio_contestacion))
                 &nbsp; Agregar
             @else
@@ -22,7 +22,7 @@
         @include('flash::message')
         @include('layouts.contextos._auditoria')
         @include('layouts.contextos._accion')
-        {!! BootForm::open(['model' => $contestacion, 'store' => 'pliegosatencioncontestacion.store', 'update' => 'pliegosatencioncontestacion.update', 'id' => 'form']) !!}
+        {!! BootForm::open(['model' => $contestacion, 'store' => 'pliegosobservacionatencioncontestacion.store', 'update' => 'pliegosobservacionatencioncontestacion.update', 'id' => 'form']) !!}
             <div class="row">
                 <div class="col-md-6">
                     {!! archivo('oficio_contestacion', 'Oficio de contestación de los pliegos de observación: *', old('oficio_contestacion', $contestacion->oficio_contestacion)) !!}
@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col-md-12">
                     @btnSubmit("Guardar")
-                    @btnCancelar('Cancelar', route('pliegosatencioncontestacion.index'))
+                    @btnCancelar('Cancelar', route('pliegosobservacionatencioncontestacion.index'))
                 </div>
             </div>
         {!! BootForm::close() !!}

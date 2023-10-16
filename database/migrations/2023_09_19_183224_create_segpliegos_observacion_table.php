@@ -15,9 +15,11 @@ return new class extends Migration
     {
         Schema::create('segpliegos_observacion', function (Blueprint $table) {
             $table->id();
+            $table->enum('calificacion_sugerida', ['Solventado', 'No Solventado','Solventado Parcialmente'])->nullable();
+            $table->enum('calificacion_atencion', ['Solventado', 'No Solventado','Solventado Parcialmente'])->nullable();
+            $table->decimal('monto_solventado',19,2)->nullable();
             $table->text('analisis')->nullable();
-            $table->string('fase_revision', 40)->nullable();
-            $table->enum('calificacion_atencion', ['Atendida', 'No Atendida','Parcialmente Atendida'])->nullable();
+            $table->string('fase_revision', 40)->nullable();            
 	        $table->text('conclusion')->nullable();
 	        $table->string('concluido',2)->default("No");
 	        $table->string('nivel_autorizacion', 100)->nullable();

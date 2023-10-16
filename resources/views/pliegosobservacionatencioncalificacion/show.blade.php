@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('recomendacionescalificacion.edit',$recomendacion) }}
+{{ Breadcrumbs::render('pliegosatencioncalificacion.edit',$pliegosobservacion) }}
 @endsection
 @section('content')
 <div class="card">
     <div class="card-header">
         <h1 class="card-title">
-            <a href="{{ route('recomendacionesacciones.edit',$recomendacion) }}"><i
+            <a href="{{ route('pliegosobservacionatencion.index') }}"><i
                     class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
             &nbsp; Calificación de la atención
         </h1>
@@ -15,7 +15,7 @@
         @include('flash::message')
         @include('layouts.contextos._auditoria')
         @include('layouts.contextos._accion')
-        @include('layouts.contextos._recomendacion')                
+        @include('layouts.contextos._pliego')                
     </div>
 </div>
 @endsection

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('pliegosatencionanalisis.edit',$pliegosobservacion) }}
+{{ Breadcrumbs::render('pliegosobservacionanalisis.edit',$pliegosobservacion) }}
 @endsection
 @section('content')
 <div class="card">
@@ -15,35 +15,9 @@
         @include('layouts.contextos._auditoria')
         @include('layouts.contextos._accion')
         <div>
-            <h3 class="card-title text-primary">Atención de los Pliegos de observacion </h3>
-            <div class="card-body py-7">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                        <label>Fecha compromiso de atención: </label>
-                        <span class="text-primary">
-                            {{ fecha($accion->fecha_termino_recomendacion) }}
-                        </span>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                        <label>Nombre del responsable por parte de la entidad: </label>
-                        <span class="text-primary">
-                            {{$pliegosoobservacion->nombre_responsable }}
-                        </span>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                        <label>Cargo del responsable por parte de la entidad: </label>
-                        <span class="text-primary">
-                            {{$pliegosobservacion->cargo_responsable }}
-                        </span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                        <label>Responsable del seguimiento: </label>
-                        <span class="text-primary">
-                            {{$accion->analista->name }}
-                        </span>
-                    </div>
+            <h3 class="card-title text-primary">Atención del pliego de observación </h3>
+            <div class="card-body py-7">               
+                <div class="row">                   
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Oficios de contestación: </label>
                         <span class="text-primary">
@@ -55,13 +29,13 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Lista de documentos: </label>
                         <span class="text-primary">
-                            <a href="{{ route('pliegosobservaciondocumentos.show', $pliegosobservacion) }}" class="popupSinLocation">
+                            <a href="{{ route('pliegosobservaciondocumentos.show',$pliegosobservacion) }}" class="popupSinLocation">
                                 &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
                             </a>
                         </span>
                     </div>
                 </div>
-                @if (!empty($pleigosobservacion->calificacion_atencion))
+                @if (!empty($pliegosobservacion->calificacion_atencion))
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <label>Calificación de la atención: </label>
@@ -87,7 +61,7 @@
             <h3 class="card-title text-primary">Análisis</h3>
             <div class="card-body mt-2">
                 <div class="row">
-                    {!! BootForm::open(['model' => $pliegosobservacion,'update' =>'pliegosobservacionatencionanalisisrevision.update','id' =>'form',]) !!}
+                    {!! BootForm::open(['model' => $pliegosobservacion,'update' =>'pliegosobservacionanalisisrevision.update','id' =>'form',]) !!}
                     <div class="row">
                         <div class="col-md-12">
                             {!! BootForm::textarea('analisis', 'Análisis *',old('analisis', $pliegosobservacion->analisis),['rows'=>'5','disabled']) !!}
@@ -96,14 +70,14 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                             <label>Calificación sugerida de la atención: </label>
-                            @if ($pliegosobservacion->calificacion_sugerida=='Atendida')
-                                <span class="badge badge-light-success">Atendida</span>
+                            @if ($pliegosobservacion->calificacion_sugerida=='Solventado')
+                                <span class="badge badge-light-success">Solventado</span>
                             @endif
-                            @if ($pliegosobservacion->calificacion_sugerida=='No Atendida')
-                                <span class="badge badge-light-danger">No Atendida</span>
+                            @if ($pliegosobservacion->calificacion_sugerida=='No Solventado')
+                                <span class="badge badge-light-danger">No Solventado</span>
                             @endif
-                            @if ($pliegosobservacion->calificacion_sugerida=='Parcialmente Atendida')
-                                <span class="badge badge-light-warning">Parcialmente Atendida</span>
+                            @if ($pliegosobservacion->calificacion_sugerida=='Solventado Parcialmente')
+                                <span class="badge badge-light-warning">Solventado Parcialmente</span>
                             @endif
                         </div>
                     </div>
@@ -123,7 +97,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            @btnSubmit('Guardar',route('pliegosobservacionatencionanalisisrevision.update'))
+                            @btnSubmit('Guardar',route('pliegosobservacionanalisisrevision.update'))
                             @btnCancelar('Cancelar', route('pliegosobservacionatencion.index'))
                         </div>
                     </div>

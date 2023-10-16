@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditoriaAccion;
+use App\Models\Movimientos;
 use App\Models\PliegosContestacion;
 use App\Models\PliegosDocumento;
 use App\Models\PliegosObservacion;
@@ -47,12 +48,12 @@ class PliegosObservacionAtencionCalificacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(PliegosObservacion $pliegosObservacion)
+    public function show(PliegosObservacion $pliegosobservacion)
     {
         $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
 
-        return view('pliegosobservacioncalificacion.show',compact('pliegosobservacion','accion','auditoria'));
+        return view('pliegosobservacionatencioncalificacion.show',compact('pliegosobservacion','accion','auditoria'));
     }
 
     /**
@@ -62,10 +63,10 @@ class PliegosObservacionAtencionCalificacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(PliegosObservacion $pliegosobservacion)
-    {
+    {            
         $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
-
+       
         return view('pliegosobservacionatencioncalificacion.form',compact('pliegosobservacion','accion','auditoria'));
 
     }
@@ -86,18 +87,42 @@ class PliegosObservacionAtencionCalificacionController extends Controller
 
             return back()->withInput();
         }
-        $contestaciones = PliegosContestacion::where('pliegosobservacion_id',$pliegosobservacion->id)->get();
-        if($contestaciones->count()==0){
-            setMessage('No se ha capturado información en el apartado de contestaciones.','error');
+        // $contestaciones = PliegosContestacion::where('pliegosobservacion_id',$pliegosobservacion->id)->get();
+        // if($contestaciones->count()==0){
+        //     setMessage('No se ha capturado información en el apartado de contestaciones.','error');
 
-            return back()->withInput();
+        //     return back()->withInput();
+        // }
+
+        if ($request->calificacion_atencion=='Solventado') {
+            $request['monto_solventado'] = $pliegosobservacion->accion->monto_aclarar;
+        }else if($request->calificacion_atencion=='No Solventado'){
+            $request['monto_solventado'] = 0.00;
+        }else{
+            $monto_aclarar = $pliegosobservacion->accion->monto_aclarar;
+            $montostrpesos = str_replace('$','',$request->monto_solventado); 
+            $montostrcomas = str_replace(',','',$montostrpesos); 
+            $monto=(float) $montostrcomas;
+            //dd($monto,$request->monto_solventado);
+            if($monto==0.00){
+                setMessage('El monto solventado debe ser mayor a $0.00.','error');
+            
+                return back()->withInput();
+            }
+            if($monto > $monto_aclarar){
+                setMessage('El monto solventado debe ser menor al monto por aclarar','error');
+            
+                return back()->withInput();
+            }
+            $request['monto_solventado'] = $monto;
         }
+
         $request['concluido']='Si';
-        $pliegosobservacion->update($request->all());
+        $pliegosobservacion->update($request->all());       
 
          Movimientos::create([
-            'tipo_movimiento' => 'Registro de la calificación y la conclusión de la atención de los pliegos de observación',
-            'accion' => 'Pliegos observacion',
+            'tipo_movimiento' => 'Registro de la calificación y la conclusión del pliego de observación',
+            'accion' => 'Pliegos de observación',
             'accion_id' => $pliegosobservacion->id,
             'estatus' => 'Aprobado',
             'usuario_creacion_id' => auth()->id(),
@@ -116,15 +141,15 @@ class PliegosObservacionAtencionCalificacionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
-        $titulo = 'Registro de la calificación y conclusión de la atención de los pliegos de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
+        $titulo = 'Registro de la calificación y conclusión de la atención del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
 
         $mensaje = '<strong>Estimado(a) '.$director->name.', '.$director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; Ha sido registrada la calificación y la conclusión de la atención de los pliegos de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
+                            '; Ha sido registrada la calificación y la conclusión de la atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
 
-        return redirect()->route('pliegosobservacionsatencion.index');
+        return redirect()->route('pliegosobservacionatencion.index');
     }
 
     /**

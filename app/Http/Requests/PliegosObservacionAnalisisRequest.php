@@ -25,7 +25,7 @@ class PliegosObservacionAnalisisRequest extends FormRequest
     {
         return [
             'analisis' => 'required|string|max:8000',
-            'calificacion_sugerida' => 'required|string|max:30|in:Atendida,No Atendida,Parcialmente Atendida'
+            'calificacion_sugerida' => 'required|string|max:30|in:Solventado,No Solventado,Solventado Parcialmente'
             ];
     }
 

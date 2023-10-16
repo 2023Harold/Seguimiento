@@ -56,23 +56,11 @@
                                     {{'$'.number_format( $accion->monto_aclarar, 2)}}
                                 </td>
                                 <td class="text-center">
-                                    {{-- @can('pliegosobservacionacciones.edit') --}}
+                                    @can('pliegosobservacionacciones.edit')
                                         <a href="{{ route('pliegosobservacionacciones.edit',$accion) }}" class="btn btn-primary">
-                                            <i class="align-middle fas fa-file-plus" aria-hidden="true"></i> Ingresar
-                                        </a>
-                                    {{-- @endcan --}}
-                                    {{-- @if(empty($accion->pliegosobservacion)&&in_array("Analista", auth()->user()->getRoleNames()->toArray()))
-                                     @can('recomendacionesacciones.edit')
-                                            <a href="{{ route('pliegosobservacionacciones.edit',$accion)}}"
-                                                class="btn btn-primary">
-                                                <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Registar
-                                            </a>
-                                        @endcan
-                                    @else
-                                        @if(!empty($accion->pliegosobservacion))
-
-                                        @endif
-                                    @endif --}}
+                                            <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
+                                        </a>  
+                                    @endcan                                 
                                 </td>
                             </tr>
                             @empty
