@@ -64,6 +64,13 @@ class SeguimientoAuditoriaController extends Controller
      */
     public function store(Request $request)
     {
+        $auditoria=Auditoria::where('numero_auditoria',$request->numero_auditoria)->first();
+        if(!empty($auditoria)){
+
+            setMessage('El número de auditoría ya se encuentra registrado favor de verificar.','error');
+
+            return redirect()->back()->withInput();
+        }
         $this->normalizarDatos($request);
         mover_archivos($request, ['informe_auditoria'], null);
         $request['usuario_creacion_id'] = auth()->user()->id;
@@ -147,6 +154,17 @@ class SeguimientoAuditoriaController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
+        if($auditoria->numero_auditoria != $request->numero_auditoria){
+
+            $auditorianueva=Auditoria::where('numero_auditoria',$request->numero_auditoria)->first();
+
+            if(!empty($auditorianueva)){
+
+                setMessage('El número de auditoría ya se encuentra registrado favor de verificar.','error');
+    
+                return redirect()->back()->withInput();
+            }
+        }
         $this->normalizarDatos($request);
         mover_archivos($request, ['informe_auditoria'], $auditoria);
         $auditoria->update($request->all());

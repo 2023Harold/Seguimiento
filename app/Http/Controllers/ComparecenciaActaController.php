@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auditoria;
 use App\Models\Comparecencia;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,10 @@ class ComparecenciaActaController extends Controller
      */
     public function index()
     {
-        //
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $comparecencia = $auditoria->comparecencia;      
+               
+        return view('comparecenciaacta.show', compact('auditoria','comparecencia'));
     }
 
     /**

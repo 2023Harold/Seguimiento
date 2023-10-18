@@ -30,10 +30,7 @@ class AuditoriaAccionRequest extends FormRequest
             'numero' => 'required|string|max:100',
             'cedula' => 'sometimes|nullable|string|max:100',
             'accion' => 'required|string|max:50000',    
-            'normativa_infringida' => 'required|string|max:3000',        
-            'evidencia_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:150',
-            'tipo_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
-            'tramo_control_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
+            'normativa_infringida' => 'required|string|max:3000',      
             'fecha_termino_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
             'plazo_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
         ];        

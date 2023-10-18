@@ -18,17 +18,17 @@
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    @if (!empty($movimiento)&&$movimiento=='consultar')
+                    @if (!empty($movimiento)&&$movimiento=='consultar')                    
                     <a href="{{ route('seguimientoauditoria.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                    @elseif (!empty($movimiento)&&$movimiento=='direccionconsultar')
+                    @elseif (!empty($movimiento)&&$movimiento=='direccionconsultar')                    
                     <a href="{{ route('asignaciondireccion.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                    @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')
+                    @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')                   
                     <a href="{{ route('asignaciondepartamento.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                    @else
-                    <a href="{{ route('seguimientoauditoria.edit',$auditoria) }}"><i
+                    @else                  
+                        <a href="{{ route('seguimientoauditoria.edit',$auditoria) }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     @endif
                     &nbsp; Acciones
@@ -71,11 +71,12 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th> </th>
                                 <th>No. Consecutivo</th>
                                 <th>Tipo de acción</th>
+                                <th>Acto de fiscalización</th>
                                 <th>Número de acción</th>
                                 <th>Cédula de acción</th>
-                                <th>Acción</th>
                                 <th>Monto por aclarar</th>
                                 <th>Estatus</th>
                                 @if ($auditoria->registro_concluido=='No'&&auth()->user()->siglas_rol=='ANA')
@@ -87,10 +88,24 @@
                             @forelse ($acciones as $accion)
                             <tr>
                                 <td class="text-center">
+                                    @if (($accion->revision_lider=='Rechazado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Rechazado'&& $accion->revision_jefe='Rechazado')||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Rechazado'))
+                                        <a href="{{ route('seguimientoauditoriaacciones.accion',$accion) }}">
+                                            <i class="fa-regular fa-eye icon-hover"></i>
+                                        </a>                                        
+                                    @else
+                                        <a href="{{ route('seguimientoauditoriaacciones.show',$accion) }}">
+                                            <i class="fa-regular fa-eye icon-hover"></i>
+                                        </a>                                        
+                                    @endif 
+                                </td>
+                                <td class="text-center">
                                     {{ str_pad($accion->consecutivo, 3, '0', STR_PAD_LEFT) }}
                                 </td>
                                 <td>
                                     {{ $accion->tipo }}
+                                </td>
+                                <td>
+                                    {{ $accion->acto_fiscalizacion }}
                                 </td>
                                 <td class="text-center">
                                     {{ $accion->numero }}
@@ -102,11 +117,16 @@
                                     </a>
                                     @endif
                                 </td>
-                                <td class="text-center">
+                                {{-- <td class="text-center">
                                     <a href="{{ route('seguimientoauditoriaacciones.show',$accion) }}" class="popupSinLocation">
                                         <i class="fa-regular fa-file-lines fa-2x icon-hover"></i>
                                     </a>
-                                </td>
+                                </td> --}}
+                                {{-- <td class="text-center">
+                                    <a href="{{ route('seguimientoauditoriaacciones.show',$accion) }}" class="popupSinLocation">
+                                        <i class="fa-regular fa-file-lines fa-2x icon-hover"></i>
+                                    </a>
+                                </td> --}}
                                 <td style="text-align: right!important;">
                                     {{ '$'.number_format( $accion->monto_aclarar, 2) }}
                                 </td>
@@ -147,11 +167,10 @@
                     </table>
                 </div>
                 @if ($auditoria->registro_concluido=='No')
-                @can('seguimientoauditoria.concluir')
+                @can('seguimientoauditoria.concluir')                
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="{{ route('seguimientoauditoria.concluir',$auditoria) }}"
-                            class="btn btn-primary">Concluir</a>
+                        <a href="{{ route('seguimientoauditoria.concluir',$auditoria) }}" class="btn btn-primary" onclick="return  confirm('Al concluir con el registro de la auditoría, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?');">Concluir</a>
                     </div>
                 </div>
                 @endcan

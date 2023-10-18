@@ -127,14 +127,14 @@
                                         @endif
                                         @if ($auditoria->fase_autorizacion == 'En validación')
                                             @can('seguimientoauditoriavalidacion.edit')
-                                                <a href="{{ route('seguimientoauditoriavalidacion.edit',$auditoria) }}" class="btn btn-primary">
+                                                <a href="{{ route('seguimientoauditoriavalidacion.edit',$auditoria) }}" class="btn btn-primary popuprevisar">
                                                     Validar
                                                 </a>
                                             @endcan
                                         @endif
                                         @if ($auditoria->fase_autorizacion == 'En autorización')
                                             @can('seguimientoauditoriaautorizacion.edit')
-                                                <a href="{{ route('seguimientoauditoriaautorizacion.edit',$auditoria) }}" class="btn btn-primary">
+                                                <a href="{{ route('seguimientoauditoriaautorizacion.edit',$auditoria) }}" class="btn btn-primary popuprevisar">
                                                     Autorizar
                                                 </a>
                                             @endcan                                           
@@ -160,3 +160,25 @@
     </div>
 </div>
 @endsection
+@section('script')   
+    {!! JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
+    <script>
+        $(document).ready(function() {            
+            $('.popuprevisar').colorbox({     
+                width:"65%",
+                height:"650px",
+                maxWidth:400,
+                maxHeight:"650px",               
+                iframe: true,                
+                onClosed: function() {
+                    location.reload(true);                    
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"65%",maxWidth:400, height:"650px", maxHeight:"650px"});
+                 $(window).trigger("resize");                
+                }
+            });
+        });
+    </script>    
+@endsection
+

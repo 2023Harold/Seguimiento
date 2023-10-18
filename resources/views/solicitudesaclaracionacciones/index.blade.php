@@ -1,27 +1,28 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('solicitudesaclaracionacciones.index') }}
+{{ Breadcrumbs::render('solicitudesaclaracionacciones.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    @include('layouts.partials._menu')
+    <div class="col-md-9 mt-2">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('solicitudesaclaracion.index') }}"><i
+                    <a href="{{ route('auditoriaseguimiento.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;
-                    Acciones
+                    Solicitudes de aclaración
                 </h1>
             </div>
             <div class="card-body">
                 @include('layouts.contextos._auditoria')
                 @include('flash::message')
-                {!! BootForm::open(['route'=>'pras.index','method'=>'GET']) !!}
+                {!! BootForm::open(['route'=>'solicitudesaclaracionacciones.index','method'=>'GET']) !!}
                 <div class="row">
                     <div class="col-md-2">
                         {!! BootForm::text('numero_accion', "No. acción:", old('numero_accion',
-                        $request->numero_auditoria)) !!}
+                        $request->numero_accion)) !!}
                     </div>
                     <div class="col-md-6 mt-8">
                         <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search"
@@ -56,14 +57,21 @@
                                     {{'$'.number_format( $accion->monto_aclarar, 2)}}
                                 </td>
                                 <td class="text-center">
-                                    @can('solicitudesaclaracionacciones.edit')
-                                        <a href="{{ route('solicitudesaclaracionacciones.edit',$accion) }}" class="btn btn-primary">
-                                            <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
-                                        </a>
-                                    @endcan                                    
+                                    @if (!empty($accion->auditoria->comparecencia)&&!empty($accion->auditoria->comparecencia->oficio_acta))
+                                        @can('solicitudesaclaracionacciones.edit')
+                                            <a href="{{ route('solicitudesaclaracionacciones.edit',$accion) }}" class="btn btn-primary">
+                                                <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
+                                            </a>
+                                        @endcan  
+                                    @endif                                  
                                 </td>
                             </tr>
                             @empty
+                            <tr>
+                                <td class="text-center" colspan="5">
+                                    No se encuentran registros en este apartado.
+                                </td>
+                            </tr>
 
                             @endforelse
                         </tbody>
@@ -71,7 +79,7 @@
                 </div>
                 <div class="pagination">
                     {{
-                    $acciones->appends(['numero_auditoria'=>$request->numero_auditoria,'monto_aclarar'=>$request->monto_aclarar,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5')
+                    $acciones->appends(['numero_accion'=>$request->numero_accion])->links('vendor.pagination.bootstrap-5')
                     }}
                 </div>
             </div>

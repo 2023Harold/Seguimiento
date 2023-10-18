@@ -88,8 +88,9 @@ class SeguimientoAuditoriaAccionRevision01Controller extends Controller
         $accion->update(['revision_lider' => $request->estatus == 'Aprobado' ? 'Aprobado' : 'Rechazado']);
 
         setMessage('Se ha revisado correctamenta la accion');
+        $auditoria=$accion->auditoria;
 
-        return view('layouts.close');
+        return redirect()->route('seguimientoauditoriarevisionlp.edit',$auditoria);
 
     }
 

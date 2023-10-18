@@ -1,20 +1,14 @@
-@extends('layouts.app')
-@section('breadcrums')
-    {{ Breadcrumbs::render('seguimientoauditoriavalidacion.edit', $auditoria)}}
-@endsection
+@extends('layouts.appPopup')
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="card-title">
-                        <a href="{{ route('seguimientoauditoria.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
+                    <h1 class="card-title">                      
                         Validar
                     </h1>
                 </div>
-                <div class="card-body">
-                    @include('flash::message')
-                    @include('layouts.contextos._auditoria', $auditoria)
+                <div class="card-body">                   
                     {!! BootForm::open(['model' => $auditoria,'update'=>'seguimientoauditoriavalidacion.update','id'=>'form'] )!!}
                         <div class="row">
                             <div class="col-md-6">
@@ -37,8 +31,7 @@
                         </div>                     
                         <div class="row mt-3">
                             <div class="col-md-6 justify-content-end">
-                                <button type="submit" class="btn btn-primary">Guardar</button>
-                                <a href="{{ route('seguimientoauditoria.index') }}" class="btn btn-secondary me-2">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Guardar</button>                               
                             </div>
                         </div>
                     {!! BootForm::close() !!}

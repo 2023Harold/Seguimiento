@@ -98,10 +98,7 @@ class SeguimientoAuditoriaValidacionController extends Controller
         }
 
         $auditoria->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
-        setMessage($request->estatus == 'Aprobado' ?
-            'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
-            'El rechazo ha sido registrado.'
-        );
+      
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la auditoria No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
@@ -122,8 +119,12 @@ class SeguimientoAuditoriaValidacionController extends Controller
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id);
         
         }
+        setMessage($request->estatus == 'Aprobado' ?
+        'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
+        'El rechazo ha sido registrado.'
+        );
 
-        return redirect()->route('seguimientoauditoria.index');
+        return view('layouts.close');
     }
 
     /**

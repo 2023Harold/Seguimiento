@@ -7,6 +7,7 @@ use App\Http\Controllers\AsignacionLiderAnalistaController;
 use App\Http\Controllers\AsignacionDepartamentoController;
 use App\Http\Controllers\AsignacionDepartamentoEncargadoController;
 use App\Http\Controllers\AsignacionDireccionController;
+use App\Http\Controllers\AuditoriaSeguimientoAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\CedulaInicialController;
@@ -139,6 +140,7 @@ Route::resource('seguimientoauditoriaacciones', AccionesController::class, ['par
 Route::resource('seguimientoauditoriaaccionrevision01', SeguimientoAuditoriaAccionRevision01Controller::class, ['parameters' => ['seguimientoauditoriaaccionrevision01' => 'accion']]);
 Route::resource('seguimientoauditoriaaccionrevision', SeguimientoAuditoriaAccionRevisionController::class, ['parameters' => ['seguimientoauditoriaaccionrevision' => 'accion']]);
 Route::get('/seguimientoauditoria/acciones/{auditoria}', [SeguimientoAuditoriaController::class, 'auditoriaAcciones'])->name('seguimientoauditoria.acciones');
+Route::get('/seguimientoauditoria/acciones/accion/{accion}', [AccionesController::class, 'accion'])->name('seguimientoauditoriaacciones.accion');
 Route::get('/seguimientoauditoria/{auditoria}', [SeguimientoAuditoriaController::class, 'concluir'])->name('seguimientoauditoria.concluir');
 Route::get('/seguimientoauditoria/acciones/consulta/{auditoria}', [SeguimientoAuditoriaController::class, 'accionesConsulta'])->name('seguimientoauditoria.accionesconsulta');
 Route::resource('seguimientoauditoriarevisionlp', SeguimientoAuditoriaRevision01Controller::class, ['parameters' => ['seguimientoauditoriarevisionlp' => 'auditoria']]);
@@ -170,7 +172,10 @@ Route::resource('asignaciondepartamentoencargado', AsignacionDepartamentoEncarga
 
 
 /*Auditoria Seguimiento*/
-Route::resource('auditoriaseguimiento', AuditoriaSeguimientoController::class);
+Route::resource('auditoriaseguimiento', AuditoriaSeguimientoController::class,['parameters' => ['auditoriaseguimiento' => 'auditoria']]);
+Route::get('/auditoriaseguimiento/acciones/consulta/{auditoria}', [AuditoriaSeguimientoController::class, 'accionesConsulta'])->name('auditoriaseguimiento.accionesconsulta');
+Route::resource('auditoriaseguimientoacciones', AuditoriaSeguimientoAccionesController::class,['parameters' => ['auditoriaseguimientoacciones' => 'accion']]);
+
 
 /*Radicación*/
 Route::resource('radicacion', RadicacionController::class);

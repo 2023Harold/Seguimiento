@@ -7,15 +7,31 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\CatalogoTipoAccion;
 use App\Models\CatalogoTipoAuditoria;
+use App\Rules\RecomendacionRegistroRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class AccionesController extends Controller
 {
+    public $validationRules;
+    public $attributeNames;
+    public $errorMessages;
     protected $model;
+    
 
     public function __construct(AuditoriaAccion $model)
     {
+        $this->validationRules = [];
+        $this->attributeNames = [           
+            'evidencia_recomendacion' => 'evidencia documental que acredite la atención de la recomendación',
+            'tipo_recomendacion' => 'tipo de recomendación',
+            'tramo_control_recomendacion' => 'tramo de control',           
+        ];
+        $this->errorMessages = [
+            'required' => 'El campo :attribute es obligatorio.',       
+        ];
+
         $this->model = $model;
     }
     /**
@@ -55,8 +71,9 @@ class AccionesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AuditoriaAccionRequest $request)
-    {
+    public function store(Request $request)
+    {        
+        $this->setValidator($request)->validate(); 
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $this->normalizarDatos($request);       
         mover_archivos($request, ['cedula'], null);
@@ -74,7 +91,8 @@ class AccionesController extends Controller
      */
     public function show(AuditoriaAccion $accion)
     {
-        return view('seguimientoauditoriaaccion.show',compact('accion'));
+        $auditoria = $accion->auditoria;
+        return view('seguimientoauditoriaaccion.showacciones',compact('accion','auditoria'));
     }
 
     /**
@@ -84,7 +102,7 @@ class AccionesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(AuditoriaAccion $accion)
-    {
+    {        
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $numeroconsecutivo=$accion->consecutivo;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id');
@@ -103,6 +121,7 @@ class AccionesController extends Controller
      */
     public function update(AuditoriaAccionRequest $request, AuditoriaAccion $accion)
     {
+        $this->setValidator($request)->validate(); 
         $this->normalizarDatos($request);       
         mover_archivos($request, ['cedula'], $accion);
         $accion->update($request->all());
@@ -180,5 +199,21 @@ class AccionesController extends Controller
             $er_record->update(['consecutivo' => $numeroSiguiente]);
             $numeroSiguiente++;
         }
+    }
+
+    protected function setValidator(Request $request,AuditoriaAccion $accion = null)
+    {        
+        $this->validationRules['evidencia_recomendacion'] = [new RecomendacionRegistroRule($request->segtipo_accion_id,$request->acto_fiscalizacion_id)];
+        $this->validationRules['tipo_recomendacion'] = [new RecomendacionRegistroRule($request->segtipo_accion_id,$request->acto_fiscalizacion_id)];
+        $this->validationRules['tramo_control_recomendacion'] = [new RecomendacionRegistroRule($request->segtipo_accion_id,$request->acto_fiscalizacion_id)];
+        
+        return Validator::make($request->all(), $this->validationRules, $this->errorMessages)->setAttributeNames($this->attributeNames);
+    }
+
+    protected function accion(AuditoriaAccion $accion)
+    {        
+        $auditoria = $accion->auditoria;
+
+        return view('seguimientoauditoriaaccion.show',compact('accion','auditoria'));
     }
 }

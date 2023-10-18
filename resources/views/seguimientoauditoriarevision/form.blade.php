@@ -20,12 +20,12 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th></th>                                
                                         <th>No. Consecutivo</th>
                                         <th>Tipo de acción</th>
                                         <th>Acto de fiscalización</th>
                                         <th>Número de acción</th>
                                         <th>Cédula de acción</th>
-                                        <th>Acción</th>
                                         <th>Monto por aclarar</th>
                                         <th>Revisar</th>
                                     </tr>
@@ -33,6 +33,11 @@
                                 <tbody>
                                     @forelse ($auditoria->acciones as $accion)
                                     <tr>
+                                        <td class="text-center">
+                                            <a href="{{ route('seguimientoauditoriarevision.show',$accion) }}">
+                                                <i class="fa-regular fa-eye icon-hover"></i>
+                                            </a>
+                                        </td>                               
                                         <td class="text-center">
                                             {{ str_pad($accion->consecutivo, 3, '0', STR_PAD_LEFT) }}
                                         </td>
@@ -52,18 +57,13 @@
                                                     aria-hidden="true"></i>
                                             </a>
                                             @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ route('seguimientoauditoriaacciones.show',$accion) }}" class="popupSinLocation">
-                                                <i class="fa-regular fa-file-lines fa-2x icon-hover"></i>
-                                            </a>
-                                        </td>
+                                        </td>                                        
                                         <td style="text-align: right!important;">
                                             {{ '$'.number_format( $accion->monto_aclarar, 2) }}
                                         </td>
                                         <td class="text-center">
                                             @if ($accion->fase_revision=='En revisión'&&empty($accion->revision_jefe))
-                                                <a href="{{ route('seguimientoauditoriaaccionrevision.edit',$accion) }}" class="btn btn-primary popuprevisar">
+                                                <a href="{{ route('seguimientoauditoriaaccionrevision.edit',$accion) }}" class="btn btn-primary">
                                                     Revisar
                                                 </a>
                                             @else

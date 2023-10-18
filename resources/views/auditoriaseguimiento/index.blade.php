@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('seguimientoauditorias') }}
+    {{ Breadcrumbs::render('auditoriaseguimiento.index') }}
 @endsection
 @section('content')
 <div class="row">
@@ -14,7 +14,7 @@
             </div>
             <div class="card-body">
                 @include('flash::message')
-                {!! BootForm::open(['route'=>'seguimientoauditoria.index','method'=>'GET']) !!}
+                {!! BootForm::open(['route'=>'auditoriaseguimiento.index','method'=>'GET']) !!}
                     <div class="row">
                         <div class="col-md-2">
                             {!! BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria)) !!}
@@ -29,16 +29,7 @@
                             <button type="submit" class="btn btn-primary">Buscar</button>                           
                         </div>
                     </div>
-                {!! BootForm::close() !!}
-                @can('seguimientoauditoria.create')
-                    <div class="row">
-                        <div class="col-md-12">
-                            <a class="btn btn-primary float-end" href="{{ route('seguimientoauditoria.create') }}">
-                                Agregar auditoria
-                            </a>
-                        </div>                    
-                    </div> 
-                @endcan          
+                {!! BootForm::close() !!}                       
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -78,10 +69,10 @@
                                     </td>
                                     <td class="text-center">
                                         @if(!empty($auditoria->fase_autorizacion) && auth()->user()->siglas_rol!='ANA')
-                                            <a href="{{ route('seguimientoauditoria.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
+                                            <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
                                         @endif   
                                         @if(!empty($auditoria->fase_autorizacion) && $auditoria->fase_autorizacion!='Rechazado' && auth()->user()->siglas_rol=='ANA')
-                                            <a href="{{ route('seguimientoauditoria.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
+                                            <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
                                         @endif                                       
                                     </td>
                                     <td style="text-align: right!important;">

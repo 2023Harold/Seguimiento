@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
 use Illuminate\Http\Request;
 
@@ -46,9 +47,12 @@ class SeguimientoAuditoriaRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(AuditoriaAccion $auditoria)
     {
-        //
+        $accion = $auditoria;
+        $auditoria = $accion->auditoria;
+
+        return view('seguimientoauditoriarevision.show',compact('accion','auditoria')); 
     }
 
     /**

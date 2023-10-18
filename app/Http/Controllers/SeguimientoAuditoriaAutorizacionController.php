@@ -149,7 +149,7 @@ class SeguimientoAuditoriaAutorizacionController extends Controller
         
 
         // return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'citardenunciantecita.index']);
-        return redirect()->route('seguimientoauditoria.index');
+        return view('layouts.close');
     }
 
     /**

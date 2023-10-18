@@ -226,16 +226,16 @@ class RolesSeeder extends Seeder
         $permisosTitular = array_merge($home, $seguimientoauditoriaTitular, $seguimientoauditoriaaccionesTitular, $seguimientoauditoriaautorizacionTitular, $asignaciondireccionTitular, $asignaciondepartamentoTitular,$asignacionesLiderAnalistaConsulta,$radicacionautorizacionTitular,$comparecenciaTitular,$prasTitular,$recomendacionesTitular,$cedulaInicial,$solicitudesTitular,$solicitudesContestacionesTitular,$solicitudesDocumentosTitular,$solicitudesAnalisisTitular,$solicitudesCalificacionTitular,$solicitudesCalificacionAutorizacionTitular,$pliegosTitular,$pliegosContestacionesTitular,$pliegosDocumentosTitular,$pliegosAnalisisTitular,$pliegosCalificacionTitular,$pliegosCalificacionAutorizacionTitular);
 
         //Permisos Usuario Consulta
-        $permisosConsulta = array_merge($home, $seguimientoauditoriaConsulta, $seguimientoauditoriaaccionesConsulta,$asignacionesConsulta,$asignacionesLiderAnalistaConsulta,$radicacionConsulta,$comparecenciaConsulta,$prasConsulta,$recomendacionesConsulta,$cedulaInicial,$solicitudesConsulta,$solicitudesContestacionesConsulta,$solicitudesDocumentosConsulta,$solicitudesAnalisisConsulta,$solicitudesCalificacionConsulta,$pliegosConsulta,$pliegosContestacionesConsulta,$pliegosDocumentosConsulta,$pliegosAnalisisConsulta,$pliegosCalificacionConsulta);
-
-
+        $permisosConsulta = array_merge($home, $seguimientoauditoriaConsulta, $seguimientoauditoriaaccionesConsulta,$asignacionesConsulta,$asignacionesLiderAnalistaConsulta,$radicacionConsulta,$comparecenciaConsulta,$prasConsulta,$recomendacionesConsulta,$cedulaInicial,$solicitudesConsulta,$solicitudesContestacionesConsulta,$solicitudesDocumentosConsulta,$solicitudesAnalisisConsulta,$solicitudesCalificacionConsulta,$pliegosConsulta,$pliegosContestacionesConsulta,$pliegosDocumentosConsulta,$pliegosAnalisisConsulta,$pliegosCalificacionConsulta);        
+        
+        
         Role::create(['name' => 'Administrador TI'])->givePermissionTo(Permission::all());
         Role::create(['name' => 'Auditor Superior'])->givePermissionTo($permisosConsulta);
         Role::create(['name' => 'Administrador del Sistema'])->givePermissionTo($permisosConsulta);
         Role::create(['name' => 'Titular Unidad de Seguimiento'])->givePermissionTo($permisosTitular);
         Role::create(['name' => 'Director de Seguimiento'])->givePermissionTo($permisosDirector);
         Role::create(['name' => 'Jefe de Departamento de Seguimiento'])->givePermissionTo($permisosJefeDepartamento);
-        Role::create(['name' => 'Lider de Proyecto'])->givePermissionTo($permisosLiderProyecto);
+        Role::create(['name' => 'Lider de Proyecto'])->givePermissionTo($permisosLiderProyecto);        
         Role::create(['name' => 'Analista'])->givePermissionTo($permisosAnalista);
 
 
@@ -245,7 +245,7 @@ class RolesSeeder extends Seeder
         // Role::where('name','Titular Unidad de Seguimiento')->first()->givePermissionTo($permisosTitular);
         // Role::where('name','Director de Seguimiento')->first()->givePermissionTo($permisosDirector);
         // Role::where('name','Jefe de Departamento de Seguimiento')->first()->givePermissionTo($permisosJefeDepartamento);
-        // Role::where('name','Lider de Proyecto')->first()->givePermissionTo($permisosLiderProyecto);
+        // Role::where('name','Lider de Proyecto')->first()->givePermissionTo($permisosLiderProyecto);        
         // Role::where('name','Analista')->first()->givePermissionTo($permisosAnalista);
     }
 }

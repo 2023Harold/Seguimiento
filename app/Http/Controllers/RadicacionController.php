@@ -17,9 +17,9 @@ class RadicacionController extends Controller
      */
     public function index(Request $request)
     {
-         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
+         $auditoria = Auditoria::find(getSession('auditoria_id'));
                
-        return view('radicacion.index', compact('auditorias', 'request'));
+        return view('radicacion.index', compact('auditoria', 'request'));
     }
 
     /**

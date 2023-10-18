@@ -19,7 +19,7 @@ class SolicitudesAclaracionAccionesController extends Controller
     public function index(Request $request)
     {
         // dd(getSession('solicitudesaclaracionauditoria_id'));
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
 
         return view('solicitudesaclaracionacciones.index', compact('request','acciones', 'auditoria'));
@@ -70,7 +70,7 @@ class SolicitudesAclaracionAccionesController extends Controller
         $solicitudesaclaracion=$accion->solicitudesaclaracion;
         if (empty($accion->solicitudesaclaracion)) {
             if (in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
-                $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+                $auditoria = Auditoria::find(getSession('auditoria_id'));
                 $request=new Request();
                 $request->merge([
                     'auditoria_id' => $auditoria->id,
@@ -119,7 +119,7 @@ class SolicitudesAclaracionAccionesController extends Controller
     {
         $query = $this->model;
 
-        $query = $query->where('segauditoria_id',getSession('solicitudesaclaracionauditoria_id'))->where('segtipo_accion_id',1);
+        $query = $query->where('segauditoria_id',getSession('auditoria_id'))->where('segtipo_accion_id',1);
 
         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
            $query = $query->where('analista_asignado_id',auth()->user()->id);

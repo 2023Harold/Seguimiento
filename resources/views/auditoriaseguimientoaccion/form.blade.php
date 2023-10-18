@@ -12,7 +12,6 @@
     </div>
     <div class="card-body">
         @include('flash::message')
-        @include('layouts.contextos._auditoria')
         {!! BootForm::open(['model' => $accion,'store' => 'seguimientoauditoriaacciones.store','update' => 'seguimientoauditoriaacciones.update','id' => 'form']) !!}
           
         <div class="row">
@@ -109,21 +108,6 @@
                 }else{
                     $('#div_monto').show();
                     $('#div_recomendacion').hide();
-                }        
-            }); 
-
-            $("#acto_fiscalizacion_id").select2().on('change', function(e) {
-                var actofiscalizacion = $(this).children("option:selected").text();              
-                if(actofiscalizacion=='Desempeño' || actofiscalizacion=='Legalidad'){
-                    // alert('entra');  
-                    $("label[for=evidencia_recomendacion] span").text('*');
-                    $("label[for=tipo_recomendacion] span").text('*');
-                    $("label[for=tramo_control_recomendacion] span").text('*');              
-                }else{
-                    // alert('no entra');
-                    $("label[for=evidencia_recomendacion] span").text(' ');
-                    $("label[for=tipo_recomendacion] span").text(' ');
-                    $("label[for=tramo_control_recomendacion] span").text(' ');
                 }        
             });        
         });

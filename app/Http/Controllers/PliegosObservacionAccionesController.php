@@ -22,7 +22,7 @@ class PliegosObservacionAccionesController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
 
         return view('pliegosobservacionacciones.index', compact('request','acciones', 'auditoria'));
@@ -72,7 +72,7 @@ class PliegosObservacionAccionesController extends Controller
         $pliegosobservacion=$accion->pliegosobservacion;
         if (empty($accion->pliegosobservacion)) {
             if (in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
-            $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+            $auditoria = Auditoria::find(getSession('auditoria_id'));
             $request=new Request();
             $request->merge([
                 'auditoria_id' => $auditoria->id,
@@ -124,7 +124,7 @@ class PliegosObservacionAccionesController extends Controller
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('pliegosobservacion_id'))->where('segtipo_accion_id',3);
+         $query = $query->where('segauditoria_id',getSession('auditoria_id'))->where('segtipo_accion_id',3);
 
          if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
             $query = $query->where('analista_asignado_id',auth()->user()->id);

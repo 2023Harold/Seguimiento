@@ -22,7 +22,7 @@ class RecomendacionesAccionesController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);       
         
         return view('recomendacionesacciones.index', compact('request','acciones', 'auditoria'));
@@ -72,7 +72,7 @@ class RecomendacionesAccionesController extends Controller
         $recomendacion=$accion->recomendaciones;
         if (empty($accion->recomendaciones)) {
 			if(auth()->user()->siglas_rol=='ANA'){            
-            $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));            
+            $auditoria = Auditoria::find(getSession('auditoria_id'));            
             $request=new Request();
             $request->merge([
                 'auditoria_id' => $auditoria->id,
@@ -122,7 +122,7 @@ class RecomendacionesAccionesController extends Controller
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('recomendacionesauditoria_id'))->where('segtipo_accion_id',2);
+         $query = $query->where('segauditoria_id',getSession('auditoria_id'))->where('segtipo_accion_id',2);
         
          if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
             $query = $query->where('analista_asignado_id',auth()->user()->id);
