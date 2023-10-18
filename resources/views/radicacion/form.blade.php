@@ -27,10 +27,10 @@
         </div>
         <div class="row">
             <div class="col-md-3">
-                {!! BootForm::text('numero_acuerdo', 'Número de acuerdo: *', old('numero_acuerdo',
+                {!! BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoria: *', old('numero_acuerdo',
                 $radicacion->numero_acuerdo)) !!}
             </div>
-        </div>        
+        </div>
         <div class="row">
             <div class="col-md-6">
                 {!! archivo('oficio_acuerdo', 'Acuerdo de radicación: *', old('oficio_acuerdo',
@@ -41,7 +41,7 @@
                 fecha($radicacion->fecha_oficio_acuerdo, 'Y-m-d')),) !!}
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-6">
                 {!! archivo('oficio_designacion', 'Oficio de designación: *', old('oficio_designacion',
                 $radicacion->oficio_designacion)) !!}
@@ -50,7 +50,7 @@
                 {!! BootForm::date('fecha_oficio_designacion','Fecha del oficio: *',old('fecha_oficio_designacion',
                 fecha($radicacion->fecha_oficio_designacion, 'Y-m-d')),) !!}
             </div>
-        </div>
+        </div> --}}
         <div class="row">
             <div class="col-md-4">
                 {!! BootForm::text('nombre_titular','Nombre del titular a quien se dirige la comparecencia:
@@ -112,7 +112,7 @@
               //     return (date.getDay() === 0 || date.getDay() === 6);
               // }
               // $("#fecha_comparecencia").flatpickr({
-              //     dateFormat: "d-m-Y",                
+              //     dateFormat: "d-m-Y",
               //     disable: [rmydays],
               // });
               $("#fecha_comparecencia").prop('readonly', false);
@@ -131,20 +131,25 @@
                   var dd = String(date.getDate()).padStart(2, '0');
                   var mm = String(date.getMonth() + 1).padStart(2, '0');
                   var yyyy = date.getFullYear();
-                  today = yyyy + '-' + mm + '-' + dd;              
+                  today = yyyy + '-' + mm + '-' + dd;
                   $("#fecha_inicio_aclaracion").val(today);
                   fechaTermino();
               });
-  
+
               function fechaTermino() {
                   let pickedDate = $("#fecha_inicio_aclaracion").val();
                   let date = new Date(pickedDate);
-                  date.setDate(date.getDate() + 2);
-                  for (let index = 1; index < 30; index++) {
-                      date.setDate(date.getDate() + 1);
-                      if (date.getDay() == 6 || date.getDay() == 0)
-                          index--;
+                //   date.setDate(date.getDate() + 2);
+                  for (let index = 1; index <= 30; index++) {
+
+                      if (date.getDay() == 5 ) {
+                        date.setDate(date.getDate() + 3);
+                      }else {
+                          date.setDate(date.getDate() + 1);
+                      }
                   }
+
+
                   var dd = String(date.getDate()).padStart(2, '0');
                   var mm = String(date.getMonth() + 1).padStart(2, '0');
                   var yyyy = date.getFullYear();
@@ -153,7 +158,7 @@
               }
 
                 $('input[name="aplicacion_periodo"]').on('ifChanged', function(event) {
-                    if (event.target.value == 'Si') { 
+                    if (event.target.value == 'Si') {
                         document.getElementById("fecha_termino_aclaracion").readOnly = true;
                     }else{
                         document.getElementById("fecha_termino_aclaracion").readOnly = false;

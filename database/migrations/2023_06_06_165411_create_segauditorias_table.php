@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('segauditorias', function (Blueprint $table) {
             $table->id();
-            $table->string('numero_auditoria', 100);
+            $table->string('numero_auditoria', 100)->unique();
             $table->integer('entidad_fiscalizable_id')->nullable();
             $table->string('entidad_fiscalizable', 500)->nullable();
             $table->string('tipo_entidad', 500)->nullable();

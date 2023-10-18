@@ -17,7 +17,7 @@ class PermisosSeeder extends Seeder
     {
         $actions = ['index', 'create', 'store', 'edit', 'update', 'show', 'destroy'];
         $controllers = [
-                        /*'seguimientoauditoria','seguimientoauditoriaacciones',
+                        'seguimientoauditoria','seguimientoauditoriaacciones',
                         'seguimientoauditoriarevisionlp','seguimientoauditoriarevision',
                         'seguimientoauditoriavalidacion','seguimientoauditoriaautorizacion',
                         'asignaciondireccion','asignaciondepartamento','asignacionlideranalista',
@@ -32,7 +32,7 @@ class PermisosSeeder extends Seeder
                         'solicitudesaclaracioncontestacion','solicitudesaclaraciondocumentos','solicitudesaclaracionanalisis',
                         'solicitudesaclanalisisenvio','solicitudesaclanalisisrevision','solicitudesaclanalisisrevision02',
                         'solicitudesaclaracioncalificacion','solicitudesaclaracionvalidacion','solicitudesaclaracionautorizacion',
-                        'revisionessolicitudes','revisionessolicitudesatencion',*/
+                        'revisionessolicitudes','revisionessolicitudesatencion',
                         'pliegosobservacion','pliegosobservacionacciones','pliegosobservacionatencion','pliegosobservacionatencioncontestacion',
                         'pliegosobservaciondocumentos','pliegosobservacionanalisis','pliegosobservacionanalisisenvio',
                         'pliegosobservacionanalisisrevision','pliegosobservacionanalisisrevision02','pliegosatencioncalificacion',
@@ -51,7 +51,7 @@ class PermisosSeeder extends Seeder
         }
 
         Permission::insert($permisosGenerales);
-       /* Permission::create(['name' => 'home']);
+        Permission::create(['name' => 'home']);
         Permission::create(['name' => 'auth.logout']);
         Permission::create(['name' => 'firmar']);
         Permission::create(['name' => 'finalizarfirma']);
@@ -78,7 +78,7 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'asignacionlideranalista.consulta']);
         Permission::create(['name' => 'radicacion.auditoria']);
         Permission::create(['name' => 'getAgendaComparecencias']);
-        Permission::create(['name' => 'solicitudescontestaciones.oficiossolicitud']);*/
+        Permission::create(['name' => 'solicitudescontestaciones.oficiossolicitud']);
         Permission::create(['name' => 'pliegosobservacioncontestacion.oficiospliegosobservacion']);
     }
 }

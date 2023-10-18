@@ -23,24 +23,26 @@ class SolicitudesAclaracionAnalisisRequest extends FormRequest
      */
     public function rules()
     {
-        return [            
+        return [
             'analisis' => 'required|string|max:8000',
-            'calificacion_sugerida' => 'required|string|max:30|in:Solventada,No Solventada,Solventada Parcialmente'                                          
+            'conclusion' => 'required|string|max:8000',
+            'calificacion_sugerida' => 'required|string|max:30|in:Solventada,No Solventada,Solventada Parcialmente'
             ];
     }
 
     public function attributes()
     {
         return [
-           'analisis' => 'análisis',  
-           'calificacion_sugerida' => 'calificación sugerida de la atención'                     
+           'analisis' => 'análisis',
+           'conclusion'=> 'conclusión',
+           'calificacion_sugerida' => 'calificación sugerida de la atención'
            ];
     }
 
     public function messages()
     {
         return [
-            'required' => 'El campo :attribute es obligatorio.',            
+            'required' => 'El campo :attribute es obligatorio.',
         ];
     }
 }

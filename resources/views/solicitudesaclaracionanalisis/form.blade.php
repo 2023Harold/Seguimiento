@@ -15,22 +15,27 @@
         @include('flash::message')
         @include('layouts.contextos._auditoria')
         @include('layouts.contextos._accion')
-        <div>        
         <div>
-            <h3 class="card-title text-primary">Análisis</h3>  
+        <div>
+            <h3 class="card-title text-primary">Análisis</h3>
             <div class="card-body mt-2">
                 <div class="row">
-                    {!! BootForm::open(['model' => $solicitud,'update' =>'solicitudesaclaracionanalisis.update','id' =>'form',]) !!}           
+                    {!! BootForm::open(['model' => $solicitud,'update' =>'solicitudesaclaracionanalisis.update','id' =>'form',]) !!}
                     <div class="row">
                         <div class="col-md-12">
                             {!! BootForm::textarea('analisis', 'Análisis *',old('analisis', $solicitud->analisis),['rows'=>'10']) !!}
                         </div>
-                    </div>            
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusion', $solicitud->conclusion),['rows'=>'10']) !!}
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             {!! BootForm::radios("calificacion_sugerida", ' Calificación sugerida de la atención: *', ['Solventada'=>'Solventada', 'No Solventada'=>'No Solventada','Solventada Parcialmente'=>'Solventada Parcialmente'],old('calificacion_atencion',$solicitud->calificacion_atencion),false,['class'=>'i-checks']); !!}
                         </div>
-                    </div>            
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             @btnSubmit('Guardar',route('solicitudesaclaracionanalisis.update'))
@@ -49,4 +54,3 @@
 @endsection
 
 
-   

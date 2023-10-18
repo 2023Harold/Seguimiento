@@ -95,6 +95,11 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-12">
+                            {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusión', $recomendacion->analisis),['rows'=>'10']) !!}
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             {!! BootForm::radios("calificacion_sugerida", ' Calificación sugerida de la atención: *', ['Atendida'=>'Atendida', 'No Atendida'=>'No Atendida','Parcialmente Atendida'=>'Parcialmente Atendida'],old('calificacion_atencion',$recomendacion->calificacion_atencion),false,['class'=>'i-checks']); !!}
                         </div>

@@ -25,7 +25,8 @@ class PliegosObservacionAnalisisRequest extends FormRequest
     {
         return [
             'analisis' => 'required|string|max:8000',
-            'calificacion_sugerida' => 'required|string|max:30|in:Solventado,No Solventado,Solventado Parcialmente'
+            'calificacion_sugerida' => 'required|string|max:30|in:Solventado,No Solventado,Solventado Parcialmente',
+            'conclusion' => 'required|string|max:8000'
             ];
     }
 
@@ -33,7 +34,8 @@ class PliegosObservacionAnalisisRequest extends FormRequest
     {
         return [
            'analisis' => 'análisis',
-           'calificacion_sugerida' => 'calificación sugerida de la atención'
+           'calificacion_sugerida' => 'calificación sugerida de la atención',
+           'conclusion'=>'conclusión'
            ];
     }
 

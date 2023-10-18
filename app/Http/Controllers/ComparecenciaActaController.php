@@ -24,7 +24,8 @@ class ComparecenciaActaController extends Controller
      */
     public function create()
     {
-        //
+        $tipo_identificacion= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional'];
+        return view('comparecencia.form', compact('tipo_identificacion'));
     }
 
     /**
@@ -60,8 +61,12 @@ class ComparecenciaActaController extends Controller
     public function edit(Comparecencia $comparecencia)
     {
         $auditoria=$comparecencia->auditoria;
+        $tipo_identificacion= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional'];
+        $tipo_identificacion1= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional'];
+        $tipo_identificacion2= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional'];
 
-        return view('comparecenciaacta.form', compact('comparecencia', 'auditoria'));
+
+        return view('comparecenciaacta.form', compact('comparecencia', 'auditoria','tipo_identificacion','tipo_identificacion1','tipo_identificacion2'));
     }
 
     /**
@@ -76,7 +81,7 @@ class ComparecenciaActaController extends Controller
         $request['usuario_modificacion_id'] = auth()->id();
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($comparecencia->auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['cedula_general'], null, $ruta);
-        mover_archivos($request, ['oficio_acta','oficio_acreditacion']);
+        mover_archivos($request, ['oficio_acta','oficio_designacion']);
         $comparecencia->update($request->all());
         setMessage('El acta se han guardado correctamente');
 

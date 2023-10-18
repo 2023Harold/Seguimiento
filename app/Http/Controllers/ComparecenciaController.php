@@ -18,7 +18,7 @@ class ComparecenciaController extends Controller
     public function index(Request $request)
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-               
+
         return view('comparecencia.index', compact('auditorias', 'request'));
     }
 
@@ -30,7 +30,7 @@ class ComparecenciaController extends Controller
     public function create()
     {
         $auditoria = Auditoria::find(getSession('comparecencia_auditoria_id'));
-        $comparecencia = new Comparecencia();      
+        $comparecencia = new Comparecencia();
         $mindate = Carbon::now()->format('Y-m-d');
         $horas = ['' => 'Seleccionar hora'];
         $accion='Agregar';
@@ -49,8 +49,8 @@ class ComparecenciaController extends Controller
         $auditoria = Auditoria::find(getSession('comparecencia_auditoria_id'));
         mover_archivos($request, ['acta_comparecencia']);
         $request['usuario_creacion_id'] = auth()->id();
-        $request['auditoria_id'] = $auditoria->id;   
-       
+        $request['auditoria_id'] = $auditoria->id;
+
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_comparecencia'], null, $ruta);
 
@@ -67,8 +67,8 @@ class ComparecenciaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Comparecencia $comparecencia)
-    {     
-        $auditoria = $comparecencia->auditoria; 
+    {
+        $auditoria = $comparecencia->auditoria;
 
         return view('comparecencia.show', compact('auditoria', 'comparecencia'));
     }
@@ -81,10 +81,10 @@ class ComparecenciaController extends Controller
      */
     public function edit(Comparecencia $comparecencia)
     {
-        $auditoria = $comparecencia->auditoria;     
+        $auditoria = $comparecencia->auditoria;
         $mindate = Carbon::now()->format('Y-m-d');
         $horas = ['' => 'Seleccionar hora'];
-        $accion='Editar';       
+        $accion='Editar';
 
         return view('comparecencia.form', compact('auditoria', 'comparecencia', 'mindate', 'horas','accion'));
     }
@@ -99,16 +99,16 @@ class ComparecenciaController extends Controller
     public function update(Request $request, Comparecencia $comparecencia)
     {
         $auditoria = Auditoria::find(getSession('comparecencia_auditoria_id'));
-        mover_archivos($request, ['oficio_acta'],$comparecencia);       
+        mover_archivos($request, ['oficio_acta'],$comparecencia);
 
-        $request['usuario_modificacion_id'] = auth()->id();     
-   
-       
+        $request['usuario_modificacion_id'] = auth()->id();
+
+
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_comparecencia'], null, $ruta);
 
         $comparecencia->update($request->all());
-       
+
         setMessage('Los datos se han guardado correctamente');
 
         return redirect()->route('comparecencianotificacion.edit', $comparecencia);
@@ -126,16 +126,16 @@ class ComparecenciaController extends Controller
     }
 
     public function setQuery(Request $request)
-    {        
-         $query = new Auditoria;         
+    {
+         $query = new Auditoria;
 
          $query= $query->whereHas('comparecencia', function (Builder $q) {
                 $q->whereNotNull('oficio_acuse');
             });
-        
+
         if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
-           in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){   
+           in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){
 
             $query = $query->whereNotNull('fase_autorizacion')
             ->where('fase_autorizacion','Autorizado');
@@ -145,12 +145,12 @@ class ComparecenciaController extends Controller
             $query = $query->whereNotNull('fase_autorizacion')
                         ->where('fase_autorizacion','Autorizado')
                         ->whereNotNull('direccion_asignada_id')
-                        ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);  
+                        ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);
         }elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
             $query = $query->whereNotNull('departamento_encargado_id')
-                        ->where('departamento_encargado_id',auth()->user()->unidad_administrativa_id);  
+                        ->where('departamento_encargado_id',auth()->user()->unidad_administrativa_id);
         }
-                
+
         if ($request->filled('numero_auditoria')) {
              $numeroAuditoria=strtolower($request->numero_auditoria);
              $query = $query->whereRaw('LOWER(numero_auditoria) LIKE (?) ',["%{$numeroAuditoria}%"]);

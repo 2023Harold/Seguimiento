@@ -20,7 +20,7 @@ class Comparecencia extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [        
+    protected $fillable = [
         'auditoria_id',
         'oficio_acreditacion',
         'nombre_titular',
@@ -47,7 +47,7 @@ class Comparecencia extends Model
         'oficio_recepcion',
         'fecha_recepcion',
         'oficio_acuse',
-        'fecha_acuse',            
+        'fecha_acuse',
         'oficio_acta',
         'numero_acta',
         'fecha_acta',
@@ -68,10 +68,15 @@ class Comparecencia extends Model
         'nombre_testigo2',
         'cargo_testigo2',
         'numero_identificacion_testigo2',
-        'aplicacion_periodo'
+        'aplicacion_periodo',
+        'tipo_identificacion',
+        'tipo_identificacion1',
+        'tipo_identificacion2',
+        'oficio_designacion',
+        'fecha_oficio_designacion'
     ];
 
-           
+
     /**
      * The attributes that should be cast.
      *
@@ -82,7 +87,8 @@ class Comparecencia extends Model
         'fecha_inicio_aclaracion'=>'date',
         'fecha_termino_aclaracion'=>'date',
         'fecha_recepcion'=>'date',
-        'fecha_acuse'=>'date',  
+        'fecha_oficio_designacion'=>'date',
+        'fecha_acuse'=>'date',
         'fecha_acta'=>'date',
         'fecha_respuesta'=>'date',
         'fecha_cedula'=>'date',

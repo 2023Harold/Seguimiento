@@ -17,8 +17,8 @@
         @include('layouts.contextos._accion')
         <div>
             <h3 class="card-title text-primary">Atención de los pliegos de observacion </h3>
-            <div class="card-body py-7">                
-                <div class="row">                   
+            <div class="card-body py-7">
+                <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Oficios de contestación: </label>
                         <span class="text-primary">
@@ -66,6 +66,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             {!! BootForm::textarea('analisis', 'Análisis *',old('analisis', $pliegosobservacion->analisis),['rows'=>'10']) !!}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusion', $pliegosobservacion->analisis),['rows'=>'10']) !!}
                         </div>
                     </div>
                     <div class="row">

@@ -24,7 +24,7 @@
                             <th>Fecha y hora de la comparecencia</th>
                             <th>Periodo de la etapa de aclaración</th>
                             <th>Comprobante de recepción depto. de notificaciones</th>
-                            <th>Acuse de la radicación y comparecencia</th>
+                            <th>Acuse de notificación de informe de auditoría</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,7 +71,7 @@
                     <thead>
                         <tr>
                             <th>Acta de comparecencia</th>
-                            <th>Oficio de acreditación</th>
+                            <th>Oficio de designación</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,17 +86,19 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                @if (!empty($auditoria->comparecencia->oficio_acreditacion))
-                                <a href="{{ asset($auditoria->comparecencia->oficio_acreditacion) }}" target="_blank">
-                                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_acreditacion)) ?>
-                                </a>
+                                @if (!empty($auditoria->comparecencia->oficio_designacion))
+                                <a href="{{ asset($auditoria->comparecencia->oficio_designacion) }}" target="_blank">
+                                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_designacion)) ?>
+                                </a><br>
+                                <small>{{ fecha($auditoria->comparecencia->fecha_oficio_designacion)}}</small><br>
                                 @endif
                             </td>
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Nombre del representante</th>
+                                        <th>Nombre del titular o representante</th>
                                         <th>Cargo del representante</th>
+                                        <th>Tipo de identificación</th>
                                         <th>Número de identificación del representante</th>
                                     </tr>
                                 </thead>
@@ -109,6 +111,9 @@
                                             {{ $auditoria->comparecencia->cargo_representante1 }}
                                         </td>
                                         <td>
+                                            {{ $auditoria->comparecencia->tipo_identificacion }}
+                                        </td>
+                                        <td>
                                             {{ $auditoria->comparecencia->numero_identificacion_representante }}
                                         </td>
                                     </tr>
@@ -119,6 +124,7 @@
                                         <tr>
                                             <th>Nombre del testigo 1</th>
                                             <th>Cargo del testigo 1</th>
+                                            <th>Tipo de identificación 1</th>
                                             <th>Número de identificación del testigo 1</th>
                                         </tr>
                                     </thead>
@@ -131,6 +137,9 @@
                                                 {{ $auditoria->comparecencia->cargo_testigo1 }}
                                             </td>
                                             <td>
+                                                {{ $auditoria->comparecencia->tipo_identificacion1 }}
+                                            </td>
+                                            <td>
                                                 {{ $auditoria->comparecencia->numero_identificacion_testigo1 }}
                                             </td>
                                         </tr>
@@ -140,6 +149,7 @@
                                             <tr>
                                                 <th>Nombre del testigo 2</th>
                                                 <th>Cargo del testigo 2</th>
+                                                <th>Tipo de identificación 2</th>
                                                 <th>Número de identificación del testigo 2</th>
                                             </tr>
                                         </thead>
@@ -152,14 +162,13 @@
                                                     {{ $auditoria->comparecencia->cargo_testigo2 }}
                                                 </td>
                                                 <td>
+                                                    {{ $auditoria->comparecencia->tipo_identificacion2 }}
+                                                </td>
+                                                <td>
                                                     {{ $auditoria->comparecencia->numero_identificacion_testigo2 }}
                                                 </td>
                                             </tr>
                                         </tbody>
-
-
-
-
                     </tbody>
                 </table>
             </div>

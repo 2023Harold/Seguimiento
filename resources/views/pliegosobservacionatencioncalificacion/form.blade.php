@@ -16,8 +16,8 @@
         @include('layouts.contextos._accion')
         <div>
             <h3 class="card-title text-primary">Atención del pliego de observación </h3>
-            <div class="card-body py-7">                
-                <div class="row">                   
+            <div class="card-body py-7">
+                <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Oficios de contestación: </label>
                         <span class="text-primary">
@@ -54,8 +54,8 @@
                         @if ($pliegosobservacion->calificacion_sugerida=='Solventado Parcialmente')
                             <span class="badge badge-light-warning">Solventado Parcialmente</span>
                         @endif
-                    </div>             
-                </div>              
+                    </div>
+                </div>
                 @endif
                 <hr/>
             </div>
@@ -75,14 +75,14 @@
                             {!! BootForm::textarea('conclusion', 'Conclusión: *',old('conclusion', $pliegosobservacion->conclusion),['rows'=>'20']) !!}
                         </div>
                     </div>
-                    @php           
+                    @php
                         $mostrarDivMonto = ((!empty(old('calificacion_atencion', $pliegosobservacion->calificacion_atencion))&&old('calificacion_atencion', $pliegosobservacion->calificacion_atencion)=='Solventada Parcialmente')?'block':'none');
                     @endphp
                     <div class="row" id="id_monto_solventa" style="display:{!! $mostrarDivMonto !!}">
                         <div class="col-md-6">
                             {!! BootForm::text('monto_solventado', 'Monto solventado: *', old('monto_solventado', $pliegosobservacion->monto_solventado),['class' => 'numeric']) !!}
                         </div>
-                    </div>          
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             @btnSubmit('Guardar y enviar',route('pliegosatencioncalificacion.update'))
@@ -101,15 +101,15 @@
     $(document).ready(function() {
         $('input[name=calificacion_atencion]').on('ifChanged', function(event){
             if(event.target.value=='Solventado'){
-                $('#id_monto_solventa').hide();                   
+                $('#id_monto_solventa').hide();
             } else if(event.target.value=='No Solventado') {
                 $('#id_monto_solventa').hide();
             }else if(event.target.value=='Solventado Parcialmente'){
                 $('#id_monto_solventa').show();
             }
-        });        
+        });
     });
-</script>  
+</script>
 {!! JsValidator::formRequest('App\Http\Requests\PliegosObservacionCalificacionRequest') !!}
 @endsection
 

@@ -40,35 +40,43 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! archivo('oficio_acreditacion', 'Oficio de acreditación: *', old('oficio_acreditacion',
-                $comparecencia->oficio_acreditacion)) !!}
+                {!! archivo('oficio_designacion', 'Oficio de designación: *', old('oficio_designacion',
+                $comparecencia->oficio_designacion)) !!}
+            </div>
+            <div class="col-md-3">
+                {!! BootForm::date('fecha_oficio_designacion', 'Fecha del oficio de designacion: *', old('fecha_oficio_designacion',
+                fecha($comparecencia->fecha_oficio_designacion, 'Y-m-d'))); !!}
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-3">
-                {!! BootForm::text('nombre_representante','Nombre del representante: *',old('nombre_representante',
+                {!! BootForm::text('nombre_representante','Nombre del titular o representante: *',old('nombre_representante',
                 $comparecencia->nombre_representante),)!!}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 {!! BootForm::text('cargo_representante1','Cargo del representante 1: *',old('cargo_representante',
                 $comparecencia->cargo_representante),) !!}
             </div>
+            <div class="col-md-2">
+                {!! BootForm::select('tipo_identificacion', 'Tipo de identificación: *', $tipo_identificacion , old('tipo_identificacion',$auditoria->tipo_identificacion), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+            </div>
             <div class="col-md-4">
-                {!! BootForm::text('numero_identificacion_representante','Número de identificación del
-                representante:
-                *',old('numero de identificacion_testigo1', $comparecencia->numero_identificacion_representante),)
+                {!! BootForm::text('numero_identificacion_representante','Número de identificación del representante: *',old('numero de identificacion_testigo1', $comparecencia->numero_identificacion_representante),)
                 !!}
             </div>
+
         </div>
         <div class="row">
             <div class="col-md-3">
                 {!! BootForm::text('nombre_testigo1','Nombre del testigo 1: *',old('nombre_testigo1',
                 $comparecencia->nombre_testigo1),)!!}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 {!! BootForm::text('cargo_testigo1','Cargo del testigo 1: *',old('cargo_testigo1',
                 $comparecencia->cargo_testigo1),) !!}
+            </div>
+            <div class="col-md-2">
+                {!! BootForm::select('tipo_identificacion1', 'Tipo de identificación: *', $tipo_identificacion1 , old('tipo_identificacion',$auditoria->tipo_identificacion1), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
             <div class="col-md-4">
                 {!! BootForm::text('numero_identificacion_testigo1','Número de identificación del testigo 1:
@@ -80,13 +88,15 @@
                 {!! BootForm::text('nombre_testigo2','Nombre del testigo 2: *',old('nombre_testigo2',
                 $comparecencia->nombre_testigo1),) !!}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 {!! BootForm::text('cargo_testigo2','Cargo del testigo 2: *',old('cargo_testigo2',
                 $comparecencia->cargo_testigo2),) !!}
             </div>
+            <div class="col-md-2">
+                {!! BootForm::select('tipo_identificacion2', 'Tipo de identificación: *', $tipo_identificacion2 , old('tipo_identificacion',$auditoria->tipo_identificacion2), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+            </div>
             <div class="col-md-4">
-                {!! BootForm::text('numero_identificacion_testigo2','Número de identificación del testigo 2:
-                *',old('numero de identificacion_testigo1', $comparecencia->numero_identificacion_testigo2),) !!}
+                {!! BootForm::text('numero_identificacion_testigo2','Número de identificación del testigo 2: *',old('numero de identificacion_testigo1', $comparecencia->numero_identificacion_testigo2),) !!}
             </div>
         </div>
 

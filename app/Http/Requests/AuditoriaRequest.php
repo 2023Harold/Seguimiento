@@ -29,8 +29,8 @@ class AuditoriaRequest extends FormRequest
             'entidad_n2' => 'sometimes|nullable|required_without:entidad_fiscalizable_id|integer|max:999999999999',
             'entidad_n3' => 'sometimes|nullable|required_without:entidad_fiscalizable_id|integer|max:999999999999',
             'periodo_revision' => 'required|string|max:100',
-            'tipo_auditoria_id' => 'required|integer|max:9999999999',      
-            'lider_proyecto_id' => 'required|integer|max:9999999999',      
+            'tipo_auditoria_id' => 'required|integer|max:9999999999',
+            'lider_proyecto_id' => 'required|integer|max:9999999999',
         ];
     }
 
@@ -43,6 +43,7 @@ class AuditoriaRequest extends FormRequest
             'entidad_n3' => 'entidad fiscalizable',
             'periodo_revision' => 'periodo de la revisión',
             'tipo_auditoria_id' => 'acto de fiscalización',
+
         ];
     }
 

@@ -48,8 +48,7 @@ class SolicitudesAclaracionAnalisisController extends Controller
     public function show(SolicitudesAclaracion $solicitud)
     {
         $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $auditoria=$accion->auditoria;     
-
+        $auditoria=$accion->auditoria;
         return view('solicitudesaclaracionanalisis.show',compact('solicitud','accion','auditoria'));
     }
 
@@ -62,7 +61,7 @@ class SolicitudesAclaracionAnalisisController extends Controller
     public function edit(SolicitudesAclaracion $solicitud)
     {
         $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $auditoria=$accion->auditoria;     
+        $auditoria=$accion->auditoria;
 
         return view('solicitudesaclaracionanalisis.form',compact('solicitud','accion','auditoria'));
     }
@@ -75,7 +74,7 @@ class SolicitudesAclaracionAnalisisController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, SolicitudesAclaracion $solicitud)
-    {       
+    {
         $solicitud->update($request->all());
         setMessage("Se ha actualizado el análisis.");
 
