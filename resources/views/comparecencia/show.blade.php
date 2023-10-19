@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{-- {{ Breadcrumbs::render('comparecencia.show',$comparecencia) }} --}}
+    {{ Breadcrumbs::render('comparecencia.show',$comparecencia,$auditoria) }}
 @endsection
 @section('content')
     <div class="row">
@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header">
                     <h1 class="card-title">
-                        <a href="{{ route('auditoriaseguimiento.index') }}"><i
+                        <a href="{{ route('radicacion.index') }}"><i
                                 class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                         &nbsp; Datos de comparecencia
                     </h1>
@@ -17,42 +17,7 @@
                 <div class="card-body">
                     @include('flash::message')
                     @include('layouts.contextos._auditoria')
-                    <h3 class="card-title text-primary">Radicación</h3> 
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                            <label>Acuerdo de radicación: </label>
-                            <span class="text-primary">
-                                <a href="{{ asset($auditoria->radicacion->oficio_acuerdo) }}" target="_blank">
-                                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->radicacion->oficio_acuerdo)); ?>
-                                </a>
-                            </span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                            <label>Acuse del oficio de designación: </label>
-                            <span class="text-primary">
-                                <a href="{{ asset($auditoria->radicacion->oficio_designacion) }}" target="_blank">
-                                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->radicacion->oficio_designacion)); ?>
-                                </a> <br>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                            <label>Fecha del acuerdo de radicación: </label>
-                            <span class="text-primary">
-                                {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}
-                            </span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                            <label>Fecha del oficio de designación: </label>
-                            <span class="text-primary">
-                                {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12"><hr></div>
-                    </div>
+                    @include('layouts.contextos._radicacion')                    
                     <h4 class="text-primary">Comparecencia</h3>
                         <div class="table-responsive">
                             <table class="table">

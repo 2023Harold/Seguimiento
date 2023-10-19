@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('radicacionvalidacion.edit', $radicacion)}}
+    {{ Breadcrumbs::render('radicacionvalidacion.edit', $radicacion, $auditoria)}}
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        @include('layouts.partials._menu')
+        <div class="col-md-9 mt-2">      
             <div class="card">
                 <div class="card-header">
                     <h1 class="card-title">
@@ -14,6 +15,7 @@
                 </div>
                 <div class="card-body">
                     @include('flash::message')
+                    @include('layouts.contextos._auditoria')
                     @include('layouts.contextos._radicacion')
                     {!! BootForm::open(['model' => $radicacion,'update'=>'radicacionvalidacion.update','id'=>'form'] )!!}
                         <div class="row">

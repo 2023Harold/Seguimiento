@@ -16,14 +16,25 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
+                @if (empty($auditoria->radicacion))
+                    @can('radicacion.auditoria')
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="{{ route('radicacion.auditoria',$auditoria) }}"  class="btn btn-primary float-end">
+                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar radicacion
+                                </a>
+                            </div>                    
+                        </div>
+                    @endcan                 
+                @endif  
+                  
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>                               
                                 <th>Número de expediente</th>
                                 <th>Número de oficio de notificación del informe de auditoria</th>
-                                <th>Acuerdo de radicación</th>
-                                <th>Acuse del oficio de designación</th>                                
+                                <th>Acuerdo de radicación</th>                         
                                 <th>Fase / Acción / Constancia</th>
                                 <th>Acuses</th>
                             </tr>
@@ -49,34 +60,12 @@
                                         <small>{{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}</small>
                                         @endif
                                     </td>
-                                    {{-- <td class="text-center">
-                                        @if (!empty($auditoria->radicacion))
-                                            <a href="{{ asset($auditoria->radicacion->oficio_designacion) }}" target="_blank">
-                                                <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->radicacion->oficio_designacion)) ?>
-                                            </a> <br>
-                                            <small> {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }} </small>
-                                        @endif
-                                    </td>  --}}
-                                    <td class="text-center">
-                                        @if (!empty($auditoria->comparecencia))
-                                        <a href="{{ route('comparecencia.show', $auditoria->comparecencia) }}" class="btn btn-secondary" data-title="Consultar">
-                                            <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
-                                        </a>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        @if (empty($auditoria->radicacion))
-                                            @can('radicacion.auditoria')
-                                                <a href="{{ route('radicacion.auditoria',$auditoria) }}"  class="btn btn-primary">
-                                                    <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Agregar radicacion
-                                                </a>
-                                            @endcan
-                                        @else
+                                    <td class="text-center">                                        
                                             @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
                                                     @can('radicacion.edit')
                                                         <a href="{{ route('radicacion.edit',$auditoria->radicacion) }}" class="btn btn-primary">
-                                                            <span class="fas fa-edit text-primary" aria-hidden="true"></span>&nbsp; Editar
+                                                            <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
                                                         </a>
                                                     @endcan
                                             @endif
@@ -105,7 +94,7 @@
                                                 @btnFile($auditoria->radicacion->constancia)
                                                 @btnXml($auditoria->radicacion, 'constancia')
                                             @endif
-                                        @endif
+                                        
                                     </td>
                                     <td class="text-center">
                                         @if (!empty($auditoria->radicacion->fase_autorizacion)&&$auditoria->radicacion->fase_autorizacion=='Autorizado')

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\CatalogoTipoIdentificacion;
 use App\Models\Comparecencia;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class ComparecenciaActaController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $comparecencia = $auditoria->comparecencia;      
                
-        return view('comparecenciaacta.show', compact('auditoria','comparecencia'));
+        return view('comparecenciaacta.index', compact('auditoria','comparecencia'));
     }
 
     /**
@@ -28,7 +29,8 @@ class ComparecenciaActaController extends Controller
      */
     public function create()
     {
-        $tipo_identificacion= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional'];
+        $tipo_identificacion=CatalogoTipoIdentificacion::all()->pluck('descripcion','descripcion');
+        //$tipo_identificacion= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional'];
         return view('comparecencia.form', compact('tipo_identificacion'));
     }
 
@@ -89,7 +91,7 @@ class ComparecenciaActaController extends Controller
         $comparecencia->update($request->all());
         setMessage('El acta se han guardado correctamente');
 
-        return redirect()->route('comparecencia.index');
+        return redirect()->route('comparecenciaacta.index');
     }
 
     /**

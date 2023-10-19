@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('radicacionautorizacion.edit', $radicacion)}}
+    {{ Breadcrumbs::render('radicacionautorizacion.edit', $radicacion,$auditoria)}}
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        @include('layouts.partials._menu')
+        <div class="col-md-9 mt-2">  
             <div class="card">
                 <div class="card-header">
                     <h1 class="card-title">

@@ -103,7 +103,6 @@ class AuditoriaSeguimientoController extends Controller
                 $queryJDE->where('departamento_encargado_id', auth()->user()->unidad_administrativa_id)
                 ->orWhere(function ($queryJDA) {
                     $queryJDA->whereHas('acciones', function($q){
-                        $q->where('segtipo_accion_id',3); 
                             $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
                             $q = $q->whereNotNull('fase_autorizacion')->whereRaw('LOWER(departamento_asignado_id) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
                         
@@ -115,8 +114,6 @@ class AuditoriaSeguimientoController extends Controller
          }
 
          $query = $query->whereHas('acciones', function($q){
-            $q->where('segtipo_accion_id',3);
-
             if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
                 $q = $q->where('analista_asignado_id',auth()->user()->id);
             }

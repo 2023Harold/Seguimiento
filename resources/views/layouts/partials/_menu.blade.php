@@ -1,5 +1,5 @@
 
-<div class="col-md-3 mt-2">
+<div class="col-md-3 mt-2" style="height: 100% !important;">
     <div class="card p-2">
         <div class="card-body">
             <div class="menu menu-rounded menu-column menu-gray-800 menu-hover-light menu-here-light menu-show-light menu-state-bg-primary fw-bold w-175p" data-kt-menu="true">
@@ -13,7 +13,7 @@
                     </a>
                     <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3 show">
                         <div class="menu-item mb-1">
-                            <a href="{{ route('radicacion.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'radicacion') || str_contains(Route::current()->getName(), 'comparecenciaacuse')) ? 'active' : '' }}">
+                            <a href="{{ route('radicacion.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'radicacion') || str_contains(Route::current()->getName(), 'comparecenciaacuse')|| str_contains(Route::current()->getName(), 'comparecenciaagenda')) ? 'active' : '' }}">
                                 <span class="menu-bullet">
                                     <span class="fa fa-file-text"></span>
                                 </span>

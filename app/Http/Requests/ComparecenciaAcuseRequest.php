@@ -36,7 +36,7 @@ class ComparecenciaAcuseRequest extends FormRequest
         return [
             'oficio_recepcion' => 'comprobante de recepción depto. de notificaciones',
             'fecha_recepcion' => 'fecha de recepción',
-            'oficio_acuse' => 'acuse de la radicación y comparecencia',
+            'oficio_acuse' => 'acuse de notificación de informe de auditoría',
             'fecha_acuse' => 'fecha del acuse',
         ];
     }

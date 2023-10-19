@@ -183,17 +183,61 @@ Breadcrumbs::for('radicacion.index', function (BreadcrumbTrail $trail,$auditoria
     $trail->push('Radicación', route('radicacion.index'));
 });
 
-Breadcrumbs::for('comparecenciaacuse.show', function (BreadcrumbTrail $trail,$comparecencia) {
-    $trail->parent('radicacion.index');
+Breadcrumbs::for('comparecenciaacuse.show', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
+    $trail->parent('radicacion.index',$auditoria);
     $trail->push('Acuses', route('comparecenciaacuse.show',$comparecencia));
 });
 
+Breadcrumbs::for('radicacion.create', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('radicacion.index',$auditoria);
+    $trail->push('Agregar', route('radicacion.create'));
+});
+
+Breadcrumbs::for('radicacion.edit', function (BreadcrumbTrail $trail,$radicacion,$auditoria) {
+    $trail->parent('radicacion.index',$auditoria);
+    $trail->push('Editar', route('radicacion.edit',$radicacion));
+});
+
+Breadcrumbs::for('comparecenciaagenda.edit', function (BreadcrumbTrail $trail,$comparecencia,$radicacion,$auditoria) {
+    $trail->parent('radicacion.edit',$radicacion,$auditoria);
+    $trail->push('Agendar comparecencia', route('comparecenciaagenda.edit',$comparecencia));
+});
+
+Breadcrumbs::for('comparecencia.show', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
+    $trail->parent('radicacion.index',$auditoria);
+    $trail->push('Datos de comparecencia', route('comparecencia.show',$comparecencia));
+});
+
+Breadcrumbs::for('radicacionvalidacion.edit', function (BreadcrumbTrail $trail,$radicacion,$auditoria) {
+    $trail->parent('radicacion.index',$auditoria);
+    $trail->push('Validar', route('radicacionvalidacion.edit',$radicacion));
+});
+
+Breadcrumbs::for('radicacionautorizacion.edit', function (BreadcrumbTrail $trail,$radicacion,$auditoria) {
+    $trail->parent('radicacion.index',$auditoria);
+    $trail->push('Autorizar', route('radicacionautorizacion.edit',$radicacion));
+});
+
+Breadcrumbs::for('comparecenciaacuse.edit', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
+    $trail->parent('radicacion.index',$auditoria);
+    $trail->push('Acuses', route('comparecenciaacuse.edit',$comparecencia));
+});
+
+
+
 
 /*Comparecencia*/
-Breadcrumbs::for('comparecenciaacta.show', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
+Breadcrumbs::for('comparecenciaacta.index', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
     $trail->parent('auditoriaseguimiento.edit',$auditoria);
-    $trail->push('Comparecencia', route('comparecenciaacta.show',$comparecencia));
+    $trail->push('Comparecencia', route('comparecenciaacta.index',$comparecencia));
 });
+
+Breadcrumbs::for('comparecenciaacta.edit', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
+    $trail->parent('comparecenciaacta.index',$comparecencia,$auditoria);
+    $trail->push('Acta', route('comparecenciaacta.edit',$comparecencia));
+});
+
+
 
 Breadcrumbs::for('comparecenciaacta2.show', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('auditoriaseguimiento.edit',$auditoria);
@@ -235,34 +279,12 @@ Breadcrumbs::for('pliegosobservacionacciones.index', function (BreadcrumbTrail $
 
 
 
-Breadcrumbs::for('radicacion.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('radicacion.index');
-    $trail->push('Agregar', route('radicacion.create'));
-});
-Breadcrumbs::for('radicacion.edit', function (BreadcrumbTrail $trail,$radicacion) {
-    $trail->parent('radicacion.index');
-    $trail->push('Editar', route('radicacion.edit',$radicacion));
-});
-Breadcrumbs::for('comparecenciaagenda.edit', function (BreadcrumbTrail $trail,$comparecencia,$radicacion) {
-    $trail->parent('radicacion.edit',$radicacion);
-    $trail->push('Agendar comparecencia', route('comparecenciaagenda.edit',$comparecencia));
-});
-Breadcrumbs::for('radicacionvalidacion.edit', function (BreadcrumbTrail $trail,$radicacion) {
-    $trail->parent('radicacion.index');
-    $trail->push('Validar', route('radicacionvalidacion.edit',$radicacion));
-});
-Breadcrumbs::for('radicacionautorizacion.edit', function (BreadcrumbTrail $trail,$radicacion) {
-    $trail->parent('radicacion.index');
-    $trail->push('Autorizar', route('radicacionautorizacion.edit',$radicacion));
-});
-Breadcrumbs::for('comparecenciaacuse.edit', function (BreadcrumbTrail $trail,$comparecencia) {
-    $trail->parent('radicacion.index');
-    $trail->push('Acuses', route('comparecenciaacuse.edit',$comparecencia));
-});
-Breadcrumbs::for('comparecencia.show', function (BreadcrumbTrail $trail,$comparecencia) {
-    $trail->parent('radicacion.index');
-    $trail->push('Datos de comparecencia', route('comparecencia.show',$comparecencia));
-});
+
+
+
+
+
+
 
 
 
@@ -270,10 +292,6 @@ Breadcrumbs::for('comparecencia.show', function (BreadcrumbTrail $trail,$compare
 Breadcrumbs::for('comparecencia.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Comparecencia', route('comparecencia.index'));
-});
-Breadcrumbs::for('comparecenciaacta.edit', function (BreadcrumbTrail $trail,$comparecencia) {
-    $trail->parent('comparecencia.index');
-    $trail->push('Acta', route('comparecenciaacta.edit',$comparecencia));
 });
 
 

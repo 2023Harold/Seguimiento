@@ -377,34 +377,6 @@
                                     Auditorias
                                 </a>
                             </li>
-                            @can('radicacion.index')
-                            <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('radicacion.index') }}">
-                                    Radicación
-                                </a>
-                            </li>
-                            @endcan
-                            @can('comparecencia.index')
-                            <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('comparecencia.index') }}">
-                                    Comparecencia
-                                </a>
-                            </li>
-                            @endcan
-                            {{-- <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('asignaciondepartamento.index') }}">
-                                    Requerimientos
-                                </a>
-                            </li>
-                            <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('asignaciondepartamento.index') }}">
-                                    Verificaciones e inspecciones
-                                </a>
-                            </li> --}}
                         </div>
                     </div>
                 </div>

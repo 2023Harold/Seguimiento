@@ -3,7 +3,7 @@
 @if (empty($comparecencia))
     {{ Breadcrumbs::render('comparecenciaacta2.show',$auditoria) }}
 @else
-    {{ Breadcrumbs::render('comparecenciaacta.show',$comparecencia,$auditoria) }}
+    {{ Breadcrumbs::render('comparecenciaacta.index',$comparecencia,$auditoria) }}
 @endif
 @endsection
 @section('content')
@@ -28,9 +28,11 @@
                                     <th>Nombre del titular a quien se dirige</th>
                                     <th>Cargo del titular a quien se dirige</th>
                                     <th>Fecha y hora de la comparecencia</th>
+                                    <th>Hora aproximada de término</th>
+                                    <th>Sala</th>
                                     <th>Periodo de la etapa de aclaración</th>
                                     <th>Comprobante de recepción depto. de notificaciones</th>
-                                    <th>Acuse de la radicación y comparecencia</th>
+                                    <th>Acuse de notificación de informe de auditoría</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,6 +51,9 @@
                                             $auditoria->comparecencia->hora_comparecencia_termino }}
                                         </span>
                                     </td>
+                                    <td class="text-center">
+                                        {{ date('g:i a', strtotime($auditoria->comparecencia->agenda->hora_fin)) }}</td>
+                                    <td class="text-center">{{ $auditoria->comparecencia->agenda->sala }}</td>
                                     <td class="text-center">
                                         {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion) . ' - '
                                         .fecha($auditoria->comparecencia->fecha_termino_aclaracion) }}
@@ -82,12 +87,23 @@
                             </tbody>
                         </table>
                     </div>
+                    @if (empty($auditoria->comparecencia->oficio_acta)&&!empty($auditoria->comparecencia->oficio_acuse))
+                        @can('comparecenciaacta.edit')
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="{{ route('comparecenciaacta.edit',$auditoria->comparecencia) }}"  class="btn btn-primary float-end">
+                                        <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar acta
+                                    </a>
+                                </div>                    
+                            </div>
+                        @endcan                 
+                    @endif  
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>Acta de comparecencia</th>
-                                    <th>Oficio de acreditación</th>
+                                    <th>Oficio de designación</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -103,11 +119,12 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if (!empty($auditoria->comparecencia->oficio_acreditacion))
-                                        <a href="{{ asset($auditoria->comparecencia->oficio_acreditacion) }}"
+                                        @if (!empty($auditoria->comparecencia->oficio_designacion))
+                                        <a href="{{ asset($auditoria->comparecencia->oficio_designacion) }}"
                                             target="_blank">
-                                            <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_acreditacion)) ?>
-                                        </a>
+                                            <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_designacion)) ?>
+                                        </a><br>
+                                        <small>{{ fecha($auditoria->comparecencia->fecha_oficio_designacion) }}</small>
                                         @endif
                                     </td>
                                 </tr>
@@ -121,7 +138,8 @@
                                 @endif
                             </tbody>
                         </table>
-                        <table class="table">
+                        
+                        {{-- <table class="table">
                             <thead>
                                 <tr>
                                     <th>Nombre del representante</th>
@@ -211,8 +229,97 @@
                                 </tr>                                    
                                 @endif
                             </tbody>
-                        </table>
+                        </table> --}}
                     </div>
+                    @if (!empty($auditoria->comparecencia->oficio_acta))
+                    <h4 class="text-primary">Titular o representante  </h4><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Nombre:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->nombre_representante }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Cargo:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->cargo_representante1 }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Tipo de identificación:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->tipo_identificacion }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Número de identificación:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->numero_identificacion_representante }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">                    
+                        <div class="col-md-12"><hr></div>
+                    </div>
+                    <h4 class="text-primary">Primer testigo  </h4><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Nombre:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->nombre_testigo1 }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Cargo:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->cargo_testigo1 }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Tipo de identificación:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->tipo_identificacion1 }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Número de identificación:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->numero_identificacion_testigo1 }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">                    
+                        <div class="col-md-12"><hr></div>
+                    </div>
+                    <h4 class="text-primary">Segundo testigo  </h4><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Nombre:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->nombre_testigo2 }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Cargo:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->cargo_testigo2 }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Tipo de identificación:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->tipo_identificacion2 }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Número de identificación:</label>
+                            <span class="text-primary">
+                                {{ $auditoria->comparecencia->numero_identificacion_testigo2 }}
+                            </span>
+                        </div>
+                    </div>
+                    @endif
             </div>
         </div>
     </div>

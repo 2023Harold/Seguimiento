@@ -132,6 +132,7 @@ class RadicacionAutorizacionController extends Controller
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$radicacion->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
             
             setMessage('Se ha rechazado el registro de la radicación de la auditoría con exito.');
+            
         }
 
         return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'radicacion.index']);

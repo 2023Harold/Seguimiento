@@ -13,9 +13,7 @@
             <span class="text-sistema">
                 {{ $auditoria->comparecencia->cargo_titular }}                
             </span>
-        </div>
-    </div>
-    <div class="row">
+        </div>    
         <div class="col-lg-5 col-md-6 col-sm-12 col-12">
             <label>Fecha y hora de la comparecencia: </label>
             <span class="text-sistema">
@@ -33,19 +31,14 @@
             <span class="text-sistema">
                 {{ $auditoria->comparecencia->agenda->sala}}
             </span>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+        </div>    
+        <div class="col-lg-5 col-md-6 col-sm-12 col-12">
             <label>Inicio de la etapa de aclaración: </label>
             <span class="text-sistema">
                 {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion)  }}
             </span>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="col-lg-7 col-md-6 col-sm-12 col-12">
             <label>Término de la etapa de aclaración: </label>
             <span class="text-sistema">
                 {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion) }}
@@ -55,7 +48,7 @@
     @if (!empty($auditoria->comparecencia->oficio_recepcion))
     <h3 class="card-title text-primary">Acuses</h3> 
     <div class="row">        
-        <div class="col-lg-3 col-md-5 col-sm-12 col-12">
+        <div class="col-lg-5 col-md-6 col-sm-12 col-12">
             <label>Comprobante de recepción depto. de notificaciones: </label>
             <span class="text-sistema">
                 <a href="{{ asset($auditoria->comparecencia->oficio_recepcion) }}" target="_blank">
@@ -63,23 +56,21 @@
                 </a> 
             </span>
         </div>
-        <div class="col-lg-2 col-md-6 col-sm-12 col-12">
+        <div class="col-lg-7 col-md-6 col-sm-12 col-12">
             <label>Fecha de recepción: </label>
             <span class="text-sistema">
                 {{ fecha($auditoria->comparecencia->fecha_recepcion) }}
             </span>
-        </div>
-    </div>
-    <div class="row">        
-        <div class="col-lg-3 col-md-6 col-sm-12 col-12">
-            <label>Acuse de la radicación y comparecencia: </label>
+        </div>         
+        <div class="col-lg-5 col-md-6 col-sm-12 col-12">
+            <label>Acuse de notificación de informe de auditoría: </label>
             <span class="text-sistema">
                 <a href="{{ asset($auditoria->comparecencia->oficio_acuse) }}" target="_blank">
                     <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_acuse)) ?>
                 </a> 
             </span>
         </div>
-        <div class="col-lg-2 col-md-6 col-sm-12 col-12">
+        <div class="col-lg-7 col-md-6 col-sm-12 col-12">
             <label>Fecha del acuse: </label>
             <span class="text-sistema">
                 {{ fecha($auditoria->comparecencia->fecha_acuse) }}

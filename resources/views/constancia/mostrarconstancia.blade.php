@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render($rutaCerrar) }}
+    {{ Breadcrumbs::render($rutaCerrar,$auditoria) }}
 @endsection
 @section('content')   
             <div class="card">
