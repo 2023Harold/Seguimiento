@@ -21,7 +21,7 @@ class AuditoriaSeguimientoController extends Controller
     public function index(Request $request)
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-               
+
         return view('auditoriaseguimiento.index', compact('auditorias', 'request'));
     }
 
@@ -105,7 +105,7 @@ class AuditoriaSeguimientoController extends Controller
                     $queryJDA->whereHas('acciones', function($q){
                             $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
                             $q = $q->whereNotNull('fase_autorizacion')->whereRaw('LOWER(departamento_asignado_id) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
-                        
+
                     });
                 });
 
@@ -128,8 +128,8 @@ class AuditoriaSeguimientoController extends Controller
             in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
             in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){
             $query = $query->whereNotNull('fase_autorizacion')->where('fase_autorizacion','Autorizado');
-        }        
-                
+        }
+
         if ($request->filled('numero_auditoria')) {
              $numeroAuditoria=strtolower($request->numero_auditoria);
              $query = $query->whereRaw('LOWER(numero_auditoria) LIKE (?) ',["%{$numeroAuditoria}%"]);
