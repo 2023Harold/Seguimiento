@@ -59,7 +59,7 @@ class UserDirectorio extends Model
         'updated_at',
     ];
 
-    
+
 
     protected $dates = [
         'fecha_oficio_memo',
@@ -71,5 +71,51 @@ class UserDirectorio extends Model
         'email_verified_at',
         'created_at',
         'updated_at',
-    ];    
+    ];
+    protected $casts = [
+        'created_at'=>'datetime',
+        'updated_at'=>'datetime',
+        'fecha_termino_recomendacion'=>'datetime',
+    ];
+
+    public function get_declared_classes()
+    {
+        return User::where('unidad_administrativa_id',$this->departamento_asignado_id)->first();
+    }
+
+    public function auditoria()
+    {
+        return $this->belongsTo(Auditoria::class, 'segauditoria_id','id');
+    }
+
+    public function tipo()
+    {
+        return $this->hasOne(CatalogoTipoAccion::class, 'id', 'segtipo_accion_id');
+    }
+
+    public function lider()
+    {
+        return $this->belongsTo(User::class, 'lider_asignado_id', 'id');
+    }
+
+    public function analista()
+    {
+        return $this->belongsTo(User::class, 'analista_asignado_id', 'id');
+    }
+    public function pras()
+    {
+        return $this->belongsTo(Segpras::class, 'id','accion_id');
+    }
+    public function recomendaciones()
+    {
+        return $this->belongsTo(Recomendaciones::class, 'id','accion_id');
+    }
+    public function solicitudesaclaracion()
+    {
+        return $this->belongsTo(SolicitudesAclaracion::class, 'id','accion_id');
+    }
+    public function pliegosobservacion()
+    {
+        return $this->belongsTo(PliegosObservacion::class, 'id','accion_id');
+    }
 }

@@ -80,11 +80,11 @@ class PrasTurnoAutorizacionController extends Controller
          $preconstancia = reporte($pras->id, 'Fiscalizacion/Seguimiento/prasauditoriaconstancia', $params, 'pdf');
          $archivorutaxml = reporte($pras->id, 'Fiscalizacion/Seguimiento/prasauditoriaconstancia', $params, 'xml');
          $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutaxml)));
-         $auditoria = Auditoria::find(getSession('prasauditoria_id'));
-         $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id')); 
+         $auditoria = Auditoria::find(getSession('auditoria_id'));
+         $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
 
          return view('prasturnosautorizacion.form', compact('pras', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
-        
+
     }
 
     /**
@@ -108,31 +108,31 @@ class PrasTurnoAutorizacionController extends Controller
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
-        ]);       
-       
+        ]);
+
         $pras->update([
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
             'constancia' => $constancia->constancia_pdf,
         ]);
 
-        
+
         $director=User::where('unidad_administrativa_id',substr($pras->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria;
-            
+
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($pras->userCreacion->name,$pras->userCreacion->puesto,$pras), now(), $pras->userCreacion->unidad_administrativa_id, $pras->userCreacion->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$pras), now(), $director->unidad_administrativa_id, $director->id);
-            
+
             setMessage('Se ha autorizado el registro del turno del PRAS con exito.');
         } else {
             $titulo = 'Rechazo del registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$pras->userCreacion->name.', '.$pras->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pras->userCreacion->unidad_administrativa_id, $pras->userCreacion->id);           
+
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pras->userCreacion->unidad_administrativa_id, $pras->userCreacion->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$pras), now(), $director->unidad_administrativa_id, $director->id);
-            
+
             setMessage('Se ha rechazado el registro del turno del PRAS con exito.');
         }
 
@@ -162,7 +162,7 @@ class PrasTurnoAutorizacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, Segpras $pras)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria.'.';    
+                    .'Ha sido rechazado el registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria.'.';
 
         return $mensaje;
     }
@@ -171,7 +171,7 @@ class PrasTurnoAutorizacionController extends Controller
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
                     .' Ha sido autorizado el registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria.
-                    ', por parte del Titular.';       
+                    ', por parte del Titular.';
 
         return $mensaje;
     }

@@ -60,8 +60,8 @@ class PrasTurnoRevisionController extends Controller
      */
     public function edit(Segpras $pras)
     {
-        $auditoria = Auditoria::find(getSession('prasauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));       
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
 
         return view('prasturnosrevision.form', compact('auditoria','accion','pras'));
     }
@@ -108,12 +108,12 @@ class PrasTurnoRevisionController extends Controller
                             '; se ha aprobado la revisión del registro del turno del PRAS de la accion No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la validación oportuna en el apartado de PRAS.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
-        } else {           
+        } else {
             $titulo = 'Rechazo del registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$pras->userCreacion->name.', '.$pras->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-           
+
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pras->userCreacion->unidad_administrativa_id, $pras->userCreacion->id);
             //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($auditoria->lider->name,$auditoria->lider->puesto,$auditoria->numero_auditoria), now(), $auditoria->lider->unidad_administrativa_id, $auditoria->lider->id);
         }
@@ -139,5 +139,5 @@ class PrasTurnoRevisionController extends Controller
         }
 
         return $request;
-    }    
+    }
 }

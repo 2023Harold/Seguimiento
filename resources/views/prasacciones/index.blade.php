@@ -74,7 +74,7 @@
                             <tr>
                                 <td class="text-center" colspan="4">
                                     No se encuentran registros en este apartado.
-                                </td>                                
+                                </td>
                             </tr>
 
                             @endforelse

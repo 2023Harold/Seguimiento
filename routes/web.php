@@ -7,6 +7,7 @@ use App\Http\Controllers\AsignacionLiderAnalistaController;
 use App\Http\Controllers\AsignacionDepartamentoController;
 use App\Http\Controllers\AsignacionDepartamentoEncargadoController;
 use App\Http\Controllers\AsignacionDireccionController;
+use App\Http\Controllers\AuditoriaConsultaAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -175,6 +176,7 @@ Route::resource('asignaciondepartamentoencargado', AsignacionDepartamentoEncarga
 Route::resource('auditoriaseguimiento', AuditoriaSeguimientoController::class,['parameters' => ['auditoriaseguimiento' => 'auditoria']]);
 Route::get('/auditoriaseguimiento/acciones/consulta/{auditoria}', [AuditoriaSeguimientoController::class, 'accionesConsulta'])->name('auditoriaseguimiento.accionesconsulta');
 Route::resource('auditoriaseguimientoacciones', AuditoriaSeguimientoAccionesController::class,['parameters' => ['auditoriaseguimientoacciones' => 'accion']]);
+Route::resource('auditoriaconsultaacciones', AuditoriaConsultaAccionesController::class,['parameters' => ['auditoriaconsultaacciones' => 'accion']]);
 
 
 /*Radicación*/

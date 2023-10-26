@@ -9,7 +9,7 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('auditoriaseguimiento.index') }}"><i
-                            class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>                    
+                            class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp; Acciones promovidas
                 </h1>
             </div>
@@ -34,22 +34,33 @@
                         <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
                 </div>
-                {!! BootForm::close() !!}                
+                {!! BootForm::close() !!}
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
+                                <th> </th>
                                 <th>No. Consecutivo</th>
                                 <th>Tipo de acción</th>
                                 <th>Número de acción</th>
                                 <th>Cédula de acción</th>
-                                <th>Acción</th>
-                                <th>Monto por aclarar</th>                                
+                                <th>Monto por aclarar</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($acciones as $accion)
                             <tr>
+                                 <td class="text-center">
+                                    @if (($accion->revision_lider=='Rechazado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Rechazado'&& $accion->revision_jefe='Rechazado')||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Rechazado'))
+                                        <a href="{{ route('auditoriaconsultaacciones.show',$accion) }}">
+                                            <i class="fa-regular fa-eye icon-hover"></i>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('auditoriaconsultaacciones.show',$accion) }}">
+                                            <i class="fa-regular fa-eye icon-hover"></i>
+                                        </a>
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     {{ str_pad($accion->consecutivo, 3, '0', STR_PAD_LEFT) }}
                                 </td>
@@ -66,15 +77,10 @@
                                     </a>
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                    <a href="{{ route('seguimientoauditoriaacciones.show',$accion) }}" class="popupSinLocation">
-                                        <i class="fa-regular fa-file-lines fa-2x icon-hover"></i>
-                                    </a>
-                                </td>
                                 <td style="text-align: right!important;">
                                     {{ '$'.number_format( $accion->monto_aclarar, 2) }}
-                                </td>                        
-                            </tr>                                         
+                                </td>
+                            </tr>
                             @empty
                             <tr>
                                 <td class="text-center" colspan="8">
@@ -84,7 +90,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                </div>               
+                </div>
                 <div class="pagination">
                     {{
                     $acciones->appends(['consecutivo'=>$request->consecutivo,'segtipo_accion_id'=>$request->segtipo_accion_id,'numero'=>$request->numero])->links('vendor.pagination.bootstrap-5')

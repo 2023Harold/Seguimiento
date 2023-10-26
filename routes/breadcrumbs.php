@@ -47,6 +47,18 @@ Breadcrumbs::for('seguimientoauditoriaacciones.show', function (BreadcrumbTrail 
     $trail->push('Acción', route('seguimientoauditoriaacciones.show',$accion));
 });
 
+//////audioriaseguimientoacciones
+Breadcrumbs::for('auditoriaseguimientoacciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Acciones', route('auditoriaseguimientoacciones.index'));
+});
+
+Breadcrumbs::for('auditoriaconsultaacciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('auditoriaseguimientoacciones.index');
+    $trail->push('Accion', route('auditoriaconsultaacciones.index'));
+});
+
+
 Breadcrumbs::for('seguimientoauditoriarevisionlp.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('seguimientoauditorias');
     $trail->push('Revisar', route('seguimientoauditoriarevisionlp.edit',$auditoria));
@@ -171,10 +183,7 @@ Breadcrumbs::for('auditoriaseguimiento.edit', function (BreadcrumbTrail $trail,$
     $trail->push('Auditoría', route('auditoriaseguimiento.edit',$auditoria));
 });
 
-Breadcrumbs::for('auditoriaseguimientoacciones.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('auditoriaseguimiento.index');
-    $trail->push('Acciones', route('auditoriaseguimientoacciones.index'));
-});
+
 
 
 /*Radicacion*/
@@ -237,13 +246,10 @@ Breadcrumbs::for('comparecenciaacta.edit', function (BreadcrumbTrail $trail,$com
     $trail->push('Acta', route('comparecenciaacta.edit',$comparecencia));
 });
 
-
-
 Breadcrumbs::for('comparecenciaacta2.show', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('auditoriaseguimiento.edit',$auditoria);
     $trail->push('Comparecencia', route('comparecenciaacta.create'));
 });
-
 
 /*PRAS*/
 Breadcrumbs::for('prasacciones.index', function (BreadcrumbTrail $trail,$auditoria) {
@@ -269,75 +275,58 @@ Breadcrumbs::for('pliegosobservacionacciones.index', function (BreadcrumbTrail $
     $trail->push('Pliegos de observación', route('pliegosobservacionacciones.index'));
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*Comparecencia*/
 Breadcrumbs::for('comparecencia.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Comparecencia', route('comparecencia.index'));
 });
 
-
 /*pras */
-Breadcrumbs::for('pras.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('home');
-    $trail->push('PRAS', route('pras.index'));
-});
+// Breadcrumbs::for('pras.index', function (BreadcrumbTrail $trail) {
+//     $trail->parent('home');
+//     $trail->push('PRAS', route('pras.index'));
+// });
 
-Breadcrumbs::for('pras.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('pras.index');
-    $trail->push('Turnar PRAS a OIC o equivalente', route('pras.index'));
-});
+
+// Breadcrumbs::for('pras.create', function (BreadcrumbTrail $trail) {
+//     $trail->parent('pras.index');
+//     $trail->push('Turnar PRAS a OIC o equivalente', route('pras.index'));
+// });
 
 /*prasaccion */
 
 
 /*prasturno */
-Breadcrumbs::for('prasturno.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('prasacciones.index');
+Breadcrumbs::for('prasturno.create', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('prasacciones.index',$auditoria);
     $trail->push('Turnar PRAS', route('prasturno.create'));
 });
 
-Breadcrumbs::for('prasturno.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('prasacciones.index');
+Breadcrumbs::for('prasturno.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('prasacciones.index',$auditoria);
     $trail->push('Turnar PRAS', route('prasturno.index'));
 });
-Breadcrumbs::for('prasturnorevision.edit', function (BreadcrumbTrail $trail,$pras) {
-    $trail->parent('prasturno.index');
+
+Breadcrumbs::for('prasturnorevision.edit', function (BreadcrumbTrail $trail,$auditoria,$pras) {
+    $trail->parent('prasturno.index',$auditoria);
     $trail->push('Revisar', route('prasturnorevision.edit',$pras));
 });
-Breadcrumbs::for('prasturnovalidacion.edit', function (BreadcrumbTrail $trail,$pras) {
-    $trail->parent('prasturno.index');
+
+Breadcrumbs::for('prasturnovalidacion.edit', function (BreadcrumbTrail $trail,$auditoria,$pras) {
+    $trail->parent('prasturno.index',$auditoria);
     $trail->push('Validar', route('prasturnovalidacion.edit',$pras));
 });
-Breadcrumbs::for('prasturnoautorizacion.edit', function (BreadcrumbTrail $trail,$pras) {
-    $trail->parent('prasturno.index');
+Breadcrumbs::for('prasturnoautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria,$pras) {
+    $trail->parent('prasturno.index',$auditoria);
     $trail->push('Autorizar-Rechazar', route('prasturnoautorizacion.edit',$pras));
 });
-Breadcrumbs::for('prasturnoacuses.edit', function (BreadcrumbTrail $trail,$pras) {
-    $trail->parent('prasturno.index');
+Breadcrumbs::for('prasturnoacuses.edit', function (BreadcrumbTrail $trail,$auditoria,$pras) {
+    $trail->parent('prasturno.index',$auditoria);
     $trail->push('Acuses', route('prasturnoacuses.edit',$pras));
 });
-Breadcrumbs::for('prasturnoacuses.show', function (BreadcrumbTrail $trail,$pras) {
-    $trail->parent('prasturno.index');
-    $trail->push('Acuses', route('prasturnoacuses.show',$pras));
+Breadcrumbs::for('prasturnoacuses.show', function (BreadcrumbTrail $trail,$auditoria,$pras) {
+    $trail->parent('prasturno.index',$auditoria);
+    $trail->push('Acuses', route('prasturnoacuses.show',$auditoria,$pras));
 });
 
 /*recomendaciones */
@@ -436,7 +425,6 @@ Breadcrumbs::for('solicitudesaclaracion.index', function (BreadcrumbTrail $trail
 });
 
 /*solicitudesaclaracionacciones */
-
 
 Breadcrumbs::for('solicitudesaclaracionatencion.index', function (BreadcrumbTrail $trail) {
     $trail->parent('solicitudesaclaracionacciones.index');

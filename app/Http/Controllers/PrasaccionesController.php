@@ -12,24 +12,24 @@ class PrasaccionesController extends Controller
 {
 
     protected $model;
-    
+
         public function __construct(AuditoriaAccion $model)
         {
             $this->model = $model;
         }
-    
-    
+
+
         public function index(Request $request)
         {
-       
+
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);            
-        
-        
+        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
+
+
         return view('prasacciones.index', compact('request','acciones', 'auditoria'));
         }
-    
-    
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -38,11 +38,11 @@ class PrasaccionesController extends Controller
      */
     public function create()
     {
-        // $accion=AuditoriaAccion::find(getSession('prasaccion_id'));
-        // $auditoria=$accion->auditoria;
-        // $pras=new Segpras();
+        $accion=AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
+        $auditoria=$accion->auditoria;
+        $pras=new Segpras();
 
-        // return view('prasacciones.index',compact('pras','accion','auditoria'));
+        return view('prasacciones.index',compact('pras','accion','auditoria'));
     }
 
     /**
@@ -74,14 +74,14 @@ class PrasaccionesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(AuditoriaAccion $accion)
-    {     
+    {
         setSession('prasauditoriaaccion_id',$accion->id);
-
         if (empty($accion->pras)) {
             return redirect()->route('prasturno.create');
+            // dd($accion);
         }else{
             return redirect()->route('prasturno.index');
-        }    
+        }
     }
 
     /**
@@ -104,15 +104,15 @@ class PrasaccionesController extends Controller
      */
     public function destroy($id)
     {
-        
-    } 
+
+    }
     public function setQuery(Request $request)
     {
          $query = $this->model;
 
          $query = $query->where('segauditoria_id',getSession('auditoria_id'))->where('segtipo_accion_id',4);
-                
-        if ($request->filled('consecutivo')) {            
+
+        if ($request->filled('consecutivo')) {
             $query = $query->where('consecutivo',$request->consecutivo);
          }
 
@@ -125,5 +125,5 @@ class PrasaccionesController extends Controller
         return $query;
     }
 
-  
+
 }

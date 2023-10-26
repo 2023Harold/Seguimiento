@@ -1,11 +1,14 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('prasturno.create') }}
+{{ Breadcrumbs::render('prasturno.create',$auditoria) }}
 @endsection
 @section('content')
-<div class="card">
-    <div class="card-header">
-        <h1 class="card-title">
+<div class="row">
+@include('layouts.partials._menu')
+<div class="col-md-9 mt-2">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">
             <a href="{{ route('prasacciones.index') }}"><i
                     class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
             &nbsp; Turnar PRAS a OIC o equivalente
@@ -37,7 +40,7 @@
                 {!! BootForm::text('numero_oficio', 'Número del oficio: *', old('numero_oficio', $pras->numero_oficio))
                 !!}
             </div>
-        </div>       
+        </div>
         <div class="row">
             <div class="col-md-6">
                 {!! BootForm::text('nombre_unidad','Área de adscripción del firmante:
@@ -60,7 +63,7 @@
             <div class="col-md-12">
                 @canany(['prasturno.store', 'prasturno.update'])
                     @btnSubmit('Guardar')
-                @endcanany                
+                @endcanany
                 @btnCancelar('Cancelar', route('prasacciones.index'))
             </div>
         </div>

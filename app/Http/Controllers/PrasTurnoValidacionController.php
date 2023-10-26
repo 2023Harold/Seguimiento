@@ -61,8 +61,8 @@ class PrasTurnoValidacionController extends Controller
      */
     public function edit(Segpras $pras)
     {
-        $auditoria = Auditoria::find(getSession('prasauditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));       
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
 
         return view('prasturnosvalidacion.form', compact('auditoria','accion','pras'));
     }
@@ -108,15 +108,15 @@ class PrasTurnoValidacionController extends Controller
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
         } else {
             $jefe=User::where('unidad_administrativa_id',$pras->accion->auditoria->unidad_administrativa_registro)->where('siglas_rol','JD')->first();
-            
+
             $titulo = 'Rechazo del registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$pras->userCreacion->name.', '.$pras->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pras->userCreacion->unidad_administrativa_id, $pras->userCreacion->id);            
+
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pras->userCreacion->unidad_administrativa_id, $pras->userCreacion->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$pras), now(), $jefe->unidad_administrativa_id, $jefe->id);
-        
+
         }
 
         return redirect()->route('prasturno.index');
@@ -140,12 +140,12 @@ class PrasTurnoValidacionController extends Controller
         }
 
         return $request;
-    } 
+    }
 
     private function mensajeRechazo(String $nombre, String $puesto, Segpras $pras)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-        .'Ha sido rechazado el registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria;       
+        .'Ha sido rechazado el registro del turno del PRAS  de la Acción No. '.$pras->accion->numero.' de la Auditoría No. '.$pras->accion->auditoria->numero_auditoria;
 
         return $mensaje;
     }

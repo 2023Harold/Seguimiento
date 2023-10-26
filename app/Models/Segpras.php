@@ -80,5 +80,5 @@ class Segpras extends Model
     {
         return $this->belongsTo(User::class, 'usuario_creacion_id', 'id');
     }
-   
+
 }

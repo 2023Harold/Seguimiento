@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
-use App\Models\Segpras;
+use App\Models\CatalogoTipoAccion;
 use Illuminate\Http\Request;
 
-class PrasTurnoAcusesController extends Controller
+class AuditoriaConsultaAccionesController extends Controller
 {
+    protected $model;
+
+    public function __construct(AuditoriaAccion $model)
+    {
+        $this->model = $model;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -46,12 +52,11 @@ class PrasTurnoAcusesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Segpras $pras)
+    public function show(AuditoriaAccion $accion)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
+        $auditoria = Auditoria::find(getSession('acciones_auditoria_id'));
 
-        return view('prasturnoacuses.show', compact('auditoria', 'accion','pras'));
+        return view('auditoriaconsultaacciones.index', compact('accion', 'auditoria'));
     }
 
     /**
@@ -60,12 +65,9 @@ class PrasTurnoAcusesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Segpras $pras)
+    public function edit($id)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
-
-        return view('prasturnoacuses.form', compact('auditoria', 'accion','pras'));
+        //
     }
 
     /**
@@ -75,16 +77,9 @@ class PrasTurnoAcusesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Segpras $pras)
+    public function update(Request $request, $id)
     {
-        $request['usuario_modificacion_id'] = auth()->id();
-        //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($comparecencia->auditoria->numero_auditoria)).'/Documentos';
-        //mover_archivos_minio($request, ['oficio_recepcion', 'oficio_acuse'], null, $ruta);
-        mover_archivos($request, ['oficio_comprobante', 'oficio_acuse']);
-        $pras->update($request->all());
-        setMessage('Los acuses se han guardado correctamente');
-
-        return redirect()->route('prasturno.index');
+        //
     }
 
     /**
@@ -97,4 +92,30 @@ class PrasTurnoAcusesController extends Controller
     {
         //
     }
+
+    public function setQuery(Request $request)
+    {
+    $query = $this->model;
+
+    $query = $query->where('segauditoria_id',getSession('acciones_auditoria_id'));
+
+   if ($request->filled('consecutivo')) {
+       $query = $query->where('consecutivo',$request->consecutivo);
+    }
+
+   if ($request->filled('segtipo_accion_id') && $request->segtipo_accion_id!=0) {
+       $query = $query->where('segtipo_accion_id',$request->segtipo_accion_id);
+   }
+
+   if ($request->filled('numero')) {
+       $numeroAcccion=strtolower($request->numero);
+       $query = $query->whereRaw('LOWER(numero) LIKE (?) ',["%{$numeroAcccion}%"]);
+   }
+   if ($request->filled('monto_aclarar')) {
+       $query = $query->where('monto_aclarar',$request->monto_aclarar);;
+   }
+
+
+   return $query;
+}
 }

@@ -1,13 +1,14 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('prasturnoautorizacion.edit', $pras)}}
+    {{ Breadcrumbs::render('prasturnoautorizacion.edit', $auditoria,$pras)}}
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h1 class="card-title">
+<div class="row">
+    @include('layouts.partials._menu')
+    <div class="col-md-9 mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">
                         <a href="{{ route('prasturno.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
                         Autorizar
                     </h1>
@@ -15,9 +16,9 @@
                 <div class="card-body">
                     <div class="card-body">
                         @include('flash::message')
-                        @include('layouts.contextos._auditoriaaut')                    
-                        @include('layouts.contextos._accionaut')                    
-                        @include('layouts.contextos._pras')                    
+                        @include('layouts.contextos._auditoriaaut')
+                        @include('layouts.contextos._accionaut')
+                        @include('layouts.contextos._pras')
                         <div class="row">
                             <div class="col-md-12">
                                 <div id="body_loader" class="body_loader" style="display:none;">
@@ -66,7 +67,7 @@
                                 </div>
                             </div>
                         {!! BootForm::close() !!}
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>

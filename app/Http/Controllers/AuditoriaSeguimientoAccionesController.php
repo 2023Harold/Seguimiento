@@ -22,11 +22,11 @@ class AuditoriaSeguimientoAccionesController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $acciones =  $this->setQuery($request)->orderBy('consecutivo')->paginate(30);     
-        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
+        $auditoria = Auditoria::find(getSession('acciones_auditoria_id'));
+        $acciones =  $this->setQuery($request)->orderBy('consecutivo')->paginate(30);
+        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);
         $monto_aclarar=$this->setQuery($request)->orderBy('monto_aclarar');
-       
+
         return view('auditoriaseguimientoaccion.index', compact('acciones', 'request', 'auditoria','tiposaccion','monto_aclarar'));
     }
 
@@ -101,8 +101,8 @@ class AuditoriaSeguimientoAccionesController extends Controller
          $query = $this->model;
 
          $query = $query->where('segauditoria_id',getSession('acciones_auditoria_id'));
-                
-        if ($request->filled('consecutivo')) {            
+
+        if ($request->filled('consecutivo')) {
             $query = $query->where('consecutivo',$request->consecutivo);
          }
 

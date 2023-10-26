@@ -1,13 +1,14 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('prasturnorevision.edit', $pras)}}
+    {{ Breadcrumbs::render('prasturnorevision.edit', $auditoria,$pras)}}
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h1 class="card-title">
+<div class="row">
+    @include('layouts.partials._menu')
+    <div class="col-md-9 mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">
                         <a href="{{ route('prasturno.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
                         Revisar
                     </h1>
@@ -37,7 +38,7 @@
                                 {!! BootForm::checkbox('reenviar', 'Se envía al superior para su validación', '', true, ['class' => 'i-checks', 'disabled']) !!}
                             </div>
                         </div>
-                     
+
                         <div class="row mt-3">
                             <div class="col-md-6 justify-content-end">
                                 <button type="submit" class="btn btn-primary">Guardar</button>
@@ -50,7 +51,7 @@
         </div>
     </div>
 @endsection
-@section('script')   
+@section('script')
     {!! JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
 @endsection
 

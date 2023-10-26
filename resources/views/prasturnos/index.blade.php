@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('prasturno.index') }}
+{{ Breadcrumbs::render('prasturno.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    @include('layouts.partials._menu')
+    <div class="col-md-9 mt-2">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
@@ -14,10 +15,10 @@
                 </h1>
             </div>
             <div class="card-body">
-                @include('flash::message') 
+                @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 @include('layouts.contextos._accion')
-                <h3 class="card-title text-primary">Turno</h3> 
+                <h3 class="card-title text-primary">Turno</h3>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -41,7 +42,7 @@
                                         <a href="{{ asset($pras->oficio_remision) }}" target="_blank">
                                             <?php echo htmlspecialchars_decode(iconoArchivo($pras->oficio_remision)) ?>
                                         </a> <br>
-                                        <small>{{ fecha($pras->fecha_acuse_oficio) }}</small>                                   
+                                        <small>{{ fecha($pras->fecha_acuse_oficio) }}</small>
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -50,16 +51,16 @@
                                 <td class="text-center">
                                     {{ fecha($pras->fecha_proxima_seguimiento) }}
                                 </td>
-                                <td class="text-center">                                                                           
-                                    @if (empty($pras->fase_autorizacion)||$pras->fase_autorizacion=='Rechazado')   
+                                <td class="text-center">
+                                    @if (empty($pras->fase_autorizacion)||$pras->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $pras->fase_autorizacion }} </span><br>
                                             @can('prasturno.edit')
                                                 <a href="{{ route('prasturno.edit',$pras) }}" class="btn btn-primary">
                                                     <span class="fas fa-edit text-primar" aria-hidden="true"></span>&nbsp; Editar
-                                                </a>  
+                                                </a>
                                             @endcan
-                                    @endif  
-                                    @if ($pras->fase_autorizacion == 'En revisión')                                                
+                                    @endif
+                                    @if ($pras->fase_autorizacion == 'En revisión')
                                         @can('prasturnorevision.edit')
                                             <a href="{{ route('prasturnorevision.edit',$pras) }}" class="btn btn-primary">
                                                 <li class="fa fa-gavel"></li>
@@ -67,9 +68,9 @@
                                             </a>
                                         @else
                                             <span class="badge badge-light-warning">{{ $pras->fase_autorizacion }} </span>
-                                        @endcan                                               
+                                        @endcan
                                     @endif
-                                    @if ($pras->fase_autorizacion == 'En validación')                                                
+                                    @if ($pras->fase_autorizacion == 'En validación')
                                         @can('prasturnovalidacion.edit')
                                             <a href="{{ route('prasturnovalidacion.edit',$pras) }}" class="btn btn-primary">
                                                 <li class="fa fa-gavel"></li>
@@ -77,18 +78,18 @@
                                             </a>
                                         @else
                                             <span class="badge badge-light-warning">{{ $pras->fase_autorizacion }} </span>
-                                        @endcan                                               
+                                        @endcan
                                     @endif
-                                    @if ($pras->fase_autorizacion == 'En autorización')                                                
+                                    @if ($pras->fase_autorizacion == 'En autorización')
                                         @can('prasturnoautorizacion.edit')
                                             <a href="{{ route('prasturnoautorizacion.edit',$pras) }}" class="btn btn-primary">
                                                 <li class="fa fa-gavel"></li>
                                                 Autorizar
-                                            </a> 
+                                            </a>
                                         @else
-                                            <span class="badge badge-light-warning">{{ $pras->fase_autorizacion }} </span>                                           
+                                            <span class="badge badge-light-warning">{{ $pras->fase_autorizacion }} </span>
                                         @endcan
-                                    @endif                                     
+                                    @endif
                                     @if ($pras->fase_autorizacion=='Autorizado')
                                     <span class="badge badge-light-success">{{ $pras->fase_autorizacion }} </span> <br>
                                         @btnFile($pras->constancia)
@@ -121,7 +122,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                </div>                
+                </div>
             </div>
         </div>
     </div>

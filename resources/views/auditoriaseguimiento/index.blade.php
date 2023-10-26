@@ -26,10 +26,10 @@
                             {!! BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion)) !!}
                         </div>
                         <div class="col-md-6 mt-8">
-                            <button type="submit" class="btn btn-primary">Buscar</button>                           
+                            <button type="submit" class="btn btn-primary">Buscar</button>
                         </div>
                     </div>
-                {!! BootForm::close() !!}                       
+                {!! BootForm::close() !!}
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -39,8 +39,8 @@
                                 <th>Acto de fiscalización</th>
                                 <th>Informe de auditoría</th>
                                 <th>Acciones promovidas</th>
-                                <th>Monto por aclarar</th> 
-                                <th>Seguimiento</th>  
+                                <th>Monto por aclarar</th>
+                                <th>Seguimiento</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,37 +51,37 @@
                                     </td>
                                     <td  width='40%'>
                                         @php
-                                            $entidadparciales = explode("-", $auditoria->entidad_fiscalizable);                                            
+                                            $entidadparciales = explode("-", $auditoria->entidad_fiscalizable);
                                         @endphp
                                         @foreach ($entidadparciales as $entidadparcial)
                                             {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8"); }}<br>
-                                        @endforeach                                        
+                                        @endforeach
                                     </td>
                                     <td>
                                         {{ $auditoria->acto_fiscalizacion }}
-                                    </td>                                    
+                                    </td>
                                     <td class="text-center">
                                         @if (!empty($auditoria->informe_auditoria))
                                             <a href="{{ asset($auditoria->informe_auditoria) }}" target="_blank">
                                                 <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->informe_auditoria)) ?>
-                                            </a>                                    
+                                            </a>
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         @if(!empty($auditoria->fase_autorizacion) && auth()->user()->siglas_rol!='ANA')
                                             <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
-                                        @endif   
+                                        @endif
                                         @if(!empty($auditoria->fase_autorizacion) && $auditoria->fase_autorizacion!='Rechazado' && auth()->user()->siglas_rol=='ANA')
                                             <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
-                                        @endif                                       
+                                        @endif
                                     </td>
                                     <td style="text-align: right!important;">
-                                        {{ '$'.number_format( $auditoria->total(), 2) }}                                         
+                                        {{ '$'.number_format( $auditoria->total(), 2) }}
                                     </td>
-                                    <td class="text-center"> 
-                                        <a href="{{ route('auditoriaseguimiento.edit', $auditoria) }}" class="btn btn-primary">Ingresar</a>                          
-                                    </td>                                  
-                                </tr>                       
+                                    <td class="text-center">
+                                        <a href="{{ route('auditoriaseguimiento.edit', $auditoria) }}" class="btn btn-primary">Ingresar</a>
+                                    </td>
+                                </tr>
                             @empty
                                 <tr>
                                     <td class="text-center" colspan="8">
