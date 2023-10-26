@@ -25,7 +25,7 @@ class RecomendacionesAtencionContestacionController extends Controller
     public function index(Request $request)
     {
         $contestaciones = $this->setQuery($request)->paginate(10);
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
@@ -40,7 +40,7 @@ class RecomendacionesAtencionContestacionController extends Controller
     public function create()
     {
         $contestacion = new RecomendacionesContestacion();
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
@@ -79,7 +79,7 @@ class RecomendacionesAtencionContestacionController extends Controller
     public function show(Recomendaciones $contestacion)
     {
         $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$contestacion->id)->paginate(10); 
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
@@ -94,7 +94,7 @@ class RecomendacionesAtencionContestacionController extends Controller
      */
     public function edit(RecomendacionesContestacion $contestacion)
     {        
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
@@ -166,7 +166,7 @@ class RecomendacionesAtencionContestacionController extends Controller
     public function oficiosrecomendacion(Recomendaciones $recomendacion)
     {
         $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$recomendacion->id)->paginate(10); 
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 

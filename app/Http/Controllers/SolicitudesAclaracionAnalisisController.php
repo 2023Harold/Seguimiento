@@ -75,6 +75,30 @@ class SolicitudesAclaracionAnalisisController extends Controller
      */
     public function update(Request $request, SolicitudesAclaracion $solicitud)
     {
+        if ($request->calificacion_sugerida=='Solventada') {
+            $request['monto_solventado'] = $solicitud->accion->monto_aclarar;
+        }else if($request->calificacion_sugerida=='No Solventada'){
+            $request['monto_solventado'] = 0.00;
+        }else{
+            $monto_aclarar = $solicitud->accion->monto_aclarar;
+            $montostrpesos = str_replace('$','',$request->monto_solventado);
+            $montostrcomas = str_replace(',','',$montostrpesos);
+            $monto=(float) $montostrcomas;
+            //dd($monto,$request->monto_solventado);
+            if($monto==0.00){
+                setMessage('El monto solventado debe ser mayor a $0.00.','error');
+
+                return back()->withInput();
+            }
+            if($monto > $monto_aclarar){
+                setMessage('El monto solventado debe ser menor al monto por aclarar','error');
+
+                return back()->withInput();
+            }
+            $request['monto_solventado'] = $monto;
+        }
+
+
         $solicitud->update($request->all());
         setMessage("Se ha actualizado el análisis.");
 

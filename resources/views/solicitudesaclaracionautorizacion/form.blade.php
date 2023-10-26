@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('solicitudesaclaracionautorizacion.edit', $solicitud)}}
+    {{ Breadcrumbs::render('solicitudesaclaracionautorizacion.edit', $solicitud,$auditoria)}}
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        @include('layouts.partials._menu')
+        <div class="col-md-9 mt-2">
             <div class="card">
                 <div class="card-header">
                     <h1 class="card-title">
@@ -15,7 +16,7 @@
                 <div class="card-body">
                     @include('flash::message')
                     @include('layouts.contextos._auditoria')
-                    @include('layouts.contextos._accion')
+                    @include('layouts.contextos._accionsolicitud')
                     @include('layouts.contextos._solicitud')
                     <div class="row">
                         <div class="col-md-12">
@@ -27,7 +28,7 @@
                         </div>
                     </div>
                     <div class="" style="padding-left: 2rem; ">
-                        <div class="row">                        
+                        <div class="row">
                             {!! BootForm::open(['model' => $solicitud,'update'=>'solicitudesaclaracionautorizacion.update','id'=>'form'] )!!}
                             {!! BootForm::hidden('archivo_firmar',$b64archivoxml,['id'=>'archivo_firmar'])!!}
                                 <div id="campos">

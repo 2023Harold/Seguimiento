@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('solicitudesaclaracioncontestacion.index') }}
+{{ Breadcrumbs::render('solicitudesaclaracioncontestacion.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    @include('layouts.partials._menu')
+    <div class="col-md-9">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
@@ -14,9 +15,9 @@
                 </h1>
             </div>
             <div class="card-body">
-                @include('flash::message')  
+                @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                @include('layouts.contextos._accion')                             
+                @include('layouts.contextos._accionsolicitud')
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -33,26 +34,26 @@
                                 @foreach($contestaciones as $contestacion)
                                     <tr>
                                         <td class="text-center">
-                                            {{ str_pad($contestacion->consecutivo, 3, '0', STR_PAD_LEFT) }}                                          
-                                        </td>  
+                                            {{ str_pad($contestacion->consecutivo, 3, '0', STR_PAD_LEFT) }}
+                                        </td>
                                         <td class="text-center">
                                             <a href="{{ asset($contestacion->oficio_contestacion) }}" target="_blank">
                                                 <?php echo htmlspecialchars_decode(iconoArchivo($contestacion->oficio_contestacion)) ?>
                                             </a> <br>
                                             <small>Número de oficio: {{ $contestacion->numero_oficio }}</small> <br>
-                                            <small>Fecha: {{ fecha($contestacion->fecha_oficio_contestacion) }}</small> 
-                                        </td>                                                              
+                                            <small>Fecha: {{ fecha($contestacion->fecha_oficio_contestacion) }}</small>
+                                        </td>
                                         <td>
                                            {{ $contestacion->nombre_remitente }} <br>
-                                           <span class="badge-light-dark text-gray-500">{{ $contestacion->cargo_remitente }}</span> 
+                                           <span class="badge-light-dark text-gray-500">{{ $contestacion->cargo_remitente }}</span>
                                         </td>
                                         <td class="text-center">
                                             CRR: {{ $contestacion->folio_correspondencia }} <br>
-                                            Fecha: {{ fecha($contestacion->fecha_recepcion_oficialia) }}                                            
+                                            Fecha: {{ fecha($contestacion->fecha_recepcion_oficialia) }}
                                          </td>
                                         <td class="text-center">
-                                            {{ fecha($contestacion->fecha_recepcion_seguimiento) }}                                            
-                                         </td>                                        
+                                            {{ fecha($contestacion->fecha_recepcion_seguimiento) }}
+                                         </td>
                                     </tr>
                                 @endforeach
                             @else

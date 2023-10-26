@@ -69,11 +69,13 @@ class PliegosObservacionAtencionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(PliegosDocumento $documento)
+    public function show(PliegosObservacion $documento)
     {
-        $documentos=PliegosDocumento::where('pliegosobservacion_id',$documento->id)->paginate(10);
+        $pliegos = $documento;
+        $accion=$pliegos->accion;
+        $auditoria=$accion->auditoria;
 
-        return view('pliegosobservaciondocumentos.show',compact('documentos'));
+        return view('pliegosobservaciondocumentos.show',compact('pliegos','accion','auditoria'));
     }
 
     /**
@@ -82,9 +84,13 @@ class PliegosObservacionAtencionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(PliegosObservacion $documento)
     {
-        //
+        $pliegos = $documento;
+        $accion=$pliegos->accion;
+        $auditoria=$accion->auditoria;
+
+        return view('pliegosobservaciondocumentos.form',compact('pliegos','accion','auditoria'));
     }
 
     /**
@@ -94,9 +100,12 @@ class PliegosObservacionAtencionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, PliegosObservacion $documento)
     {
-        //
+      $documento->update($request->all());
+      setMessage("Se ha actualizado el listado de documentos.");
+
+      return redirect()->route('pliegosobservacionatencion.index');
     }
 
     /**

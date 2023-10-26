@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('recomendacionesautorizacion.edit', $recomendacion)}}
+    {{ Breadcrumbs::render('recomendacionesautorizacion.edit', $recomendacion,$auditoria)}}
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+      @include('layouts.partials._menu')
+        <div class="col-md-9">
             <div class="card">
                 <div class="card-header">
                     <h1 class="card-title">
@@ -15,9 +16,9 @@
                 <div class="card-body">
                     <div class="card-body">
                         @include('flash::message')
-                        @include('layouts.contextos._auditoriaaut')                    
-                        @include('layouts.contextos._accionaut')                    
-                        @include('layouts.contextos._recomendacion')                    
+                        @include('layouts.contextos._auditoriaaut')
+                        @include('layouts.contextos._accionaut')
+                        @include('layouts.contextos._recomendacion')
                         <div class="row">
                             <div class="col-md-12">
                                 <div id="body_loader" class="body_loader" style="display:none;">
@@ -66,7 +67,7 @@
                                 </div>
                             </div>
                         {!! BootForm::close() !!}
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>

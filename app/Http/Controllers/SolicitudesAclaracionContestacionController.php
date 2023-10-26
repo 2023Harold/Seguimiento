@@ -24,7 +24,7 @@ class SolicitudesAclaracionContestacionController extends Controller
     public function index(Request $request)
     {
         $contestaciones = $this->setQuery($request)->paginate(10);
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $solicitud= SolicitudesAclaracion::find(getSession('solicitudesaclaracioncalificacion_id'));
 
@@ -39,7 +39,7 @@ class SolicitudesAclaracionContestacionController extends Controller
     public function create()
     {
         $contestacion = new SolicitudesAclaracionContestacion();
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
 
@@ -78,10 +78,10 @@ class SolicitudesAclaracionContestacionController extends Controller
     public function show(SolicitudesAclaracion $contestacion)
     {
         $contestaciones = SolicitudesAclaracionContestacion::where('solicitudaclaracion_id',$contestacion->id)->paginate(10);
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
-        
+
         return view('solicitudesaclaracioncontestacion.show', compact('contestaciones','auditoria','accion','solicitud'));
     }
 
@@ -92,8 +92,8 @@ class SolicitudesAclaracionContestacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(SolicitudesAclaracionContestacion $contestacion)
-    {     
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+    {
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
 
@@ -165,7 +165,7 @@ class SolicitudesAclaracionContestacionController extends Controller
     public function oficiossolicitudes(SolicitudesAclaracion $solicitud)
     {
         $contestaciones = SolicitudesAclaracionContestacion::where('solicitudaclaracion_id',$solicitud->id)->paginate(10);
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
 

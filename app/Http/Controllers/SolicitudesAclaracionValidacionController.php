@@ -61,7 +61,7 @@ class SolicitudesAclaracionValidacionController extends Controller
      */
     public function edit(SolicitudesAclaracion $solicitud)
     {
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
 
         return view('solicitudesaclaracionvalidacion.form', compact('solicitud','auditoria','accion'));
@@ -78,7 +78,7 @@ class SolicitudesAclaracionValidacionController extends Controller
     {
         $titular=auth()->user()->titular;
         $jefe=User::where('unidad_administrativa_id', substr($solicitud->userCreacion->unidad_administrativa_id, 0, 5).'0')->first();
-      
+
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -105,15 +105,15 @@ class SolicitudesAclaracionValidacionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $solicitud->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
-            
+
             $titulo = 'Autorización del registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
-                   
+
             $mensaje = '<strong>Estimado(a) '.$titular->name.', '.$titular->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $titular->unidad_administrativa_id, $titular->id);
-        } else {           
+        } else {
             $titulo = 'Rechazo del registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$solicitud->userCreacion->name.', '.$solicitud->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
@@ -149,7 +149,7 @@ class SolicitudesAclaracionValidacionController extends Controller
      private function mensajeRechazo(String $nombre, String $puesto, SolicitudesAclaracion $solicitud)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-        .'Ha sido rechazado el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;     
+        .'Ha sido rechazado el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
 
         return $mensaje;
     }

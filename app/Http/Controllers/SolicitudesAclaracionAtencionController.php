@@ -16,7 +16,7 @@ class SolicitudesAclaracionAtencionController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
 

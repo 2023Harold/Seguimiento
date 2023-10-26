@@ -60,8 +60,8 @@ class SolicitudesAclaracionRevision01Controller extends Controller
      */
     public function edit(SolicitudesAclaracion $solicitud)
     {
-        $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
-        $accion=AuditoriaAccion::find(getSession('solicitudauditoriaaccion_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion=$solicitud->accion;
 
         return view('solicitudesaclaracionrevision01.form', compact('solicitud','auditoria','accion'));
     }
@@ -76,7 +76,7 @@ class SolicitudesAclaracionRevision01Controller extends Controller
     public function update(Request $request, SolicitudesAclaracion $solicitud)
     {
         $jefe=auth()->user()->jefe;
-      
+
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -103,24 +103,24 @@ class SolicitudesAclaracionRevision01Controller extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $solicitud->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
-            
+
             $titulo = 'Revisión del registro de atención de la recomendación de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
-                   
+
             $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
-        } else {     
-            $solicitud->update(['concluido'=>'No']);      
+        } else {
+            $solicitud->update(['concluido'=>'No']);
             $titulo = 'Rechazo del registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$solicitud->userCreacion->name.', '.$solicitud->userCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el registro de atención de la recomendación de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
+                            .'Ha sido rechazado el registro de atención de la la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->userCreacion->unidad_administrativa_id, $solicitud->userCreacion->id);
         }
 
-        return redirect()->route('solicitudesaclaracioncalificacion.index');
+        return redirect()->route('solicitudesaclaracionatencion.index');
     }
 
     /**

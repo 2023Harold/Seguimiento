@@ -36,10 +36,10 @@ class PrasTurnoController extends Controller
         $accion=AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
         $pras=new Segpras();
-        // $usuariodirectorio=UserDirectorio::where('entidad_fiscalizable_id',$auditoria->entidad_fiscalizable_id)
-        //                                    ->where('cargo_asociado', 'Contralor Interno')
-        //                                    ->where('siglas_cargo_asociado', 'OIC')
-        //                                    ->where('estatus', 'Activo')->first();
+        $usuariodirectorio=UserDirectorio::where('entidad_fiscalizable_id',$auditoria->entidad_fiscalizable_id)
+                                           ->where('cargo_asociado', 'Contralor Interno')
+                                           ->where('siglas_cargo_asociado', 'OIC')
+                                           ->where('estatus', 'Activo')->first();
         $nombreuseroic=null;
         if (!empty($usuariodirectorio)) {
             $nombreuseroic=$usuariodirectorio->name.' '.$usuariodirectorio->primer_apellido.' '.$usuariodirectorio->segundo_apellido;

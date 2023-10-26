@@ -26,7 +26,8 @@ class PliegosObservacionAnalisisRequest extends FormRequest
         return [
             'analisis' => 'required|string|max:8000',
             'calificacion_sugerida' => 'required|string|max:30|in:Solventado,No Solventado,Solventado Parcialmente',
-            'conclusion' => 'required|string|max:8000'
+            'conclusion' => 'required|string|max:8000',
+            'monto_solventado' => 'sometimes|nullable|required_if:calificacion_sugerida,Solventado Parcialmente'
             ];
     }
 
@@ -35,7 +36,8 @@ class PliegosObservacionAnalisisRequest extends FormRequest
         return [
            'analisis' => 'análisis',
            'calificacion_sugerida' => 'calificación sugerida de la atención',
-           'conclusion'=>'conclusión'
+           'conclusion'=>'conclusión',
+           'monto_solventado'=>'monto solventado'
            ];
     }
 
@@ -43,6 +45,7 @@ class PliegosObservacionAnalisisRequest extends FormRequest
     {
         return [
             'required' => 'El campo :attribute es obligatorio.',
+            'monto_solventado.required_if' => 'El campo :attribute es obligatorio.',
         ];
     }
 }

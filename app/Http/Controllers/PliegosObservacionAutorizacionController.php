@@ -11,7 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class PliegosObservacionAtencionCalificacionAutorizacionController extends Controller
+class PliegosObservacionAutorizacionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -81,12 +81,12 @@ class PliegosObservacionAtencionCalificacionAutorizacionController extends Contr
          $preconstancia = reporte($pliegosobservacion->id, 'Fiscalizacion/Seguimiento/atencionpliegoobservacionconstancia', $params, 'pdf');
          $archivorutaxml = reporte($pliegosobservacion->id, 'Fiscalizacion/Seguimiento/atencionpliegoobservacionconstancia', $params, 'xml');
          $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutaxml)));
-         
+
          $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
          $auditoria = $accion->auditoria;
 
 
-         return view('pliegosobservacionatencioncalificacionautorizacion.form', compact('pliegosobservacion', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
+         return view('pliegosobservacionautorizacion.form', compact('pliegosobservacion', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
     }
 
     /**
@@ -103,38 +103,47 @@ class PliegosObservacionAtencionCalificacionAutorizacionController extends Contr
         $constancia = guardarConstanciasFirmadas($pliegosobservacion, 'constancia_atencion_pliego', $request, 'constancia');
 
         Movimientos::create([
-            'tipo_movimiento' => 'Autorización de la calificación y conclusión de la atención del pliego de observación',
+            'tipo_movimiento' => 'Autorización de la atención del pliego de observación',
             'accion' => 'Pliegos de observación',
             'accion_id' => $pliegosobservacion->id,
             'estatus' => $request->estatus,
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
-        ]);       
-       
+        ]);
+
         $pliegosobservacion->update([
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
             'constancia_autorizacion' => $constancia->constancia_pdf,
         ]);
 
-        
+
         $director=User::where('unidad_administrativa_id',substr($pliegosobservacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+        $jefe=$pliegosobservacion->accion->depaasignado;
+        $lider=$pliegosobservacion->accion->lider;
+        $analista=$pliegosobservacion->accion->analista;
+
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la calificación y conclusión del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
-                       
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($pliegosobservacion->accion->depaasignado->name,$pliegosobservacion->accion->depaasignado->puesto,$pliegosobservacion), now(), $pliegosobservacion->accion->depaasignado->unidad_administrativa_id, $pliegosobservacion->accion->depaasignado->id);
+
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($analista->name,$analista->puesto,$pliegosobservacion), now(), $analista->unidad_administrativa_id, $analista->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$pliegosobservacion), now(), $director->unidad_administrativa_id, $director->id);
-            
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name,$jefe->puesto,$pliegosobservacion), now(), $jefe->unidad_administrativa_id, $jefe->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($lider->name,$lider->puesto,$pliegosobservacion), now(), $lider->unidad_administrativa_id, $lider->id);
+
             setMessage('Se ha autorizado el registro de la calificación y conclusión de la atención del pliego de observación.');
         } else {
             $titulo = 'Rechazo del registro de la calificación y conclusión de la atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->accion->depaasignado->name.', '.$pliegosobservacion->accion->depaasignado->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la calificación y conclusión de la atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->accion->depaasignado->unidad_administrativa_id, $pliegosobservacion->accion->depaasignado->id);           
+
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$pliegosobservacion), now(), $director->unidad_administrativa_id, $director->id);
-            
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$pliegosobservacion), now(), $jefe->unidad_administrativa_id, $jefe->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$pliegosobservacion), now(), $lider->unidad_administrativa_id, $lider->id);
+
+
             setMessage('Se ha rechazado el registro de la calificación y conclusión del pliego de observación.');
         }
 
@@ -164,7 +173,7 @@ class PliegosObservacionAtencionCalificacionAutorizacionController extends Contr
     private function mensajeRechazo(String $nombre, String $puesto, PliegosObservacion $pliegosobservacion)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.'.';    
+                    .'Ha sido rechazado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.'.';
 
         return $mensaje;
     }
@@ -173,7 +182,7 @@ class PliegosObservacionAtencionCalificacionAutorizacionController extends Contr
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
                     .' Ha sido autorizado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
-                    ', por parte del Titular.';       
+                    ', por parte del Titular.';
 
         return $mensaje;
     }

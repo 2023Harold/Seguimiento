@@ -80,7 +80,7 @@ class RecomendacionesAutorizacionController extends Controller
          $preconstancia = reporte($recomendacion->id, 'Fiscalizacion/Seguimiento/atencionrecomendacionconstancia', $params, 'pdf');
          $archivorutaxml = reporte($recomendacion->id, 'Fiscalizacion/Seguimiento/atencionrecomendacionconstancia', $params, 'xml');
          $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutaxml)));
-         $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+         $auditoria = Auditoria::find(getSession('auditoria_id'));
          $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
 
          return view('recomendacionesatencionautorizacion.form', compact('recomendacion', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
@@ -107,32 +107,32 @@ class RecomendacionesAutorizacionController extends Controller
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
-        ]);       
-       
+        ]);
+
         $recomendacion->update([
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
             'constancia_autorizacion' => $constancia->constancia_pdf,
         ]);
 
-        
+
         $director=User::where('unidad_administrativa_id',substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del registro de la calificación y conclusión de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-                       
+            $titulo = 'Autorización del registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($recomendacion->accion->depaasignado->name,$recomendacion->accion->depaasignado->puesto,$recomendacion), now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id);
-            
-            setMessage('Se ha autorizado el registro del turno del PRAS con exito.');
+
+            setMessage('Se ha autorizado la atención de la recomendación con exito.');
         } else {
-            $titulo = 'Rechazo del registro de la calificación y conclusión de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+            $titulo = 'Rechazo del registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$recomendacion->accion->depaasignado->name.', '.$recomendacion->accion->depaasignado->puesto.':</strong><br>'
-                            .'Ha sido rechazado el registro del turno del PRAS  de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
+                            .'Ha sido rechazado el registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);           
+
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id);
-            
-            setMessage('Se ha rechazado el registro del turno del PRAS con exito.');
+
+            setMessage('Se ha rechazado el registro de la atencion con exito.');
         }
 
         return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'recomendacionesatencion.index']);
@@ -161,7 +161,7 @@ class RecomendacionesAutorizacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, Recomendaciones $recomendacion)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.'.';    
+                    .'Ha sido rechazado el el registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.'.';
 
         return $mensaje;
     }
@@ -169,8 +169,8 @@ class RecomendacionesAutorizacionController extends Controller
     private function mensajeAprobado(String $nombre, String $puesto, Recomendaciones $recomendacion)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .' Ha sido autorizado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
-                    ', por parte del Titular.';       
+                    .' Ha sido autorizado el registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
+                    ', por parte del Titular.';
 
         return $mensaje;
     }

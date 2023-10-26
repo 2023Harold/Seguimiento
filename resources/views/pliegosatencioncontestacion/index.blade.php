@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('pliegosobservacionatencioncontestacion.index') }}
+{{ Breadcrumbs::render('pliegosobservacionatencioncontestacion.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+  @include('layouts.partials._menu')
+    <div class="col-md-9 mt-2">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
@@ -16,7 +17,7 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                @include('layouts.contextos._accion')
+                @include('layouts.contextos._accionpliego')
                 <div class="row">
                     <div class="col-md-12">
                         <span>

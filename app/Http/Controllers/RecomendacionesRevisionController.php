@@ -60,7 +60,7 @@ class RecomendacionesRevisionController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
 
 
@@ -77,7 +77,7 @@ class RecomendacionesRevisionController extends Controller
     public function update(Request $request, Recomendaciones $recomendacion)
     {
         $director=auth()->user()->director;
-      
+
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -106,15 +106,15 @@ class RecomendacionesRevisionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $recomendacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
-            
+
             $titulo = 'Validación del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-                   
+
             $mensaje = '<strong>Estimado(a) '.$director->name.', '.$director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
-        } else {           
+        } else {
             $titulo = 'Rechazo del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
@@ -140,7 +140,7 @@ class RecomendacionesRevisionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, Recomendaciones $recomendacion)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-        .'Ha sido rechazado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;     
+        .'Ha sido rechazado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
 
         return $mensaje;
     }

@@ -16,7 +16,7 @@ class PliegosObservacionAtencionController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::where('accion_id',getSession('pliegosobservacionauditoriaaccion_id'))->get();
 

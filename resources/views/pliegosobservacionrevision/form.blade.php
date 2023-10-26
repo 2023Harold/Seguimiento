@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('recomendacionesrevision.edit', $recomendacion, $auditoria)}}
+    {{ Breadcrumbs::render('pliegosobservacionrevision.edit', $pliegosobservacion, $auditoria)}}
 @endsection
 @section('content')
     <div class="row">
@@ -9,16 +9,16 @@
             <div class="card">
                 <div class="card-header">
                     <h1 class="card-title">
-                        <a href="{{ route('recomendacionesatencion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
+                        <a href="{{ route('pliegosobservacionatencion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
                         Revisar
                     </h1>
                 </div>
                 <div class="card-body">
                     @include('flash::message')
                     @include('layouts.contextos._auditoria')
-                    @include('layouts.contextos._accion')
-                    @include('layouts.contextos._recomendacion')
-                    {!! BootForm::open(['model' => $recomendacion,'update'=>'recomendacionesrevision.update','id'=>'form'] )!!}
+                    @include('layouts.contextos._accionpliego')
+                    @include('layouts.contextos._pliego')
+                    {!! BootForm::open(['model' => $pliegosobservacion,'update'=>'pliegosobservacionrevision.update','id'=>'form'] )!!}
                         <div class="row" style="padding-left: 2rem;">
                             <div class="col-md-6">
                                 {!! BootForm::radios("estatus", ' ',
@@ -41,7 +41,7 @@
                         <div class="row mt-3" style="padding-left: 2rem;">
                             <div class="col-md-6 justify-content-end">
                                 <button type="submit" class="btn btn-primary">Guardar</button>
-                                <a href="{{ route('recomendacionesatencion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
+                                <a href="{{ route('pliegosobservacionatencion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                             </div>
                         </div>
                     {!! BootForm::close() !!}

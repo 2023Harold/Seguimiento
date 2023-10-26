@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('recomendacionesatencion.index') }}
+{{ Breadcrumbs::render('recomendacionesatencion.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    @include('layouts.partials._menu')
+    <div class="col-md-9 mt-2">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
@@ -16,7 +17,7 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                @include('layouts.contextos._accion')
+                @include('layouts.contextos._accionrecomendacion')
                 <div class="row">
                     <div class="col-md-12">
                         <h3 class="card-title text-primary float">Atención de la recomendación</h3>
@@ -32,8 +33,7 @@
                                 <th>Oficios de contestación</th>
                                 <th>Listado de Doc.</th>
                                 <th>Análisis</th>
-                                <th>Calificación sugerida</th>
-                                <th>Calificación definitiva</th>
+                                <th>Calificación</th>
                                 <th>Fase / Constancia</th>
                             </tr>
                         </thead>
@@ -51,11 +51,10 @@
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($recomendacion->fase_autorizacion) || $recomendacion->fase_autorizacion=='Rechazado'))
-                                       
+
                                         @if (empty($recomendacion->fase_revision) || ($recomendacion->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión Jefe'))
-                                        <a href="{{ route('recomendacionescontestaciones.index') }}" class="icon-hover-active">
+                                        <a href="{{ route('recomendacionescontestaciones.index') }}" class="btn btn-light-primary">
                                             <span class="fa fa-list" aria-hidden="true"></span>
-                                        </a>
                                        @else
                                         <a href="{{ route('recomendacionescontestaciones.show',$recomendacion) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
                                             <span class="fa fa-list" aria-hidden="true"></span>
@@ -70,16 +69,16 @@
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($recomendacion->fase_autorizacion) || $recomendacion->fase_autorizacion=='Rechazado'))
                                         @if (empty($recomendacion->fase_revision) || ($recomendacion->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión Jefe'))
-                                            <a href="{{ route('recomendacionesdocumentos.index', $recomendacion) }}" class="icon-hover-active popupSinLocation">
+                                            <a href="{{ route('recomendacionesdocumentos.edit', $recomendacion) }}" class="btn btn-light-primary">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>
                                         @else
-                                            <a href="{{ route('recomendacionesdocumentos.show', $recomendacion) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                            <a href="{{ route('recomendacionesdocumentos.show', $recomendacion) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>
                                         @endif
                                     @else
-                                        <a href="{{ route('recomendacionesdocumentos.show', $recomendacion) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                        <a href="{{ route('recomendacionesdocumentos.show', $recomendacion) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary">
                                             <span class="fa fa-list" aria-hidden="true"></span>
                                         </a>
                                     @endif
@@ -87,11 +86,8 @@
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($recomendacion->fase_autorizacion) || $recomendacion->fase_autorizacion=='Rechazado'))
                                         @if (empty($recomendacion->fase_revision) || ($recomendacion->fase_revision!='Pendiente'&& $recomendacion->fase_revision!='Revisión Jefe'))
-                                            <a href="{{ route('recomendacionesanalisis.edit',$recomendacion) }}" class="icon-hover-active">
+                                            <a href="{{ route('recomendacionesanalisis.edit',$recomendacion) }}" class="btn btn-light-primary">
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
-                                            </a> &nbsp;|&nbsp; 
-                                            <a href="{{ route('recomendacionesanalisisenvio.edit',$recomendacion) }}" class="icon-hover-active">
-                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span>
                                             </a>
                                         @else
                                             <a href="{{ route('recomendacionesanalisis.show',$recomendacion) }}" class="btn btn btn-link btn-color-muted btn-active-color-primary">
@@ -99,60 +95,54 @@
                                             </a>
                                         @endif
                                     @else
-                                        @if (in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())&&!empty($recomendacion->fase_revision)&&$recomendacion->fase_revision=='Pendiente')
-                                            <a href="{{ route('recomendacionesanalisisrevision.edit',$recomendacion) }}" class="icon-hover-active">
-                                                <span class="fa fa-gavel" aria-hidden="true"></span>
-                                            </a>
-                                        @elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&!empty($recomendacion->fase_revision)&&$recomendacion->fase_revision=='Revisión Jefe')
-                                            <a href="{{ route('recomendacionesanalisisrevision02.edit',$recomendacion) }}" class="icon-hover-active">
-                                                <span class="fa fa-gavel" aria-hidden="true"></span>
-                                            </a>
-                                        @else
-                                            <a href="{{ route('recomendacionesanalisis.show',$recomendacion) }}" class="btn btn btn-link btn-color-muted btn-active-color-primary">
-                                                <span class="fa fa-align-justify" aria-hidden="true"></span>
-                                            </a>
-                                        @endif
+                                        <a href="{{ route('recomendacionesanalisis.show',$recomendacion) }}" class="btn btn btn-link btn-color-muted btn-active-color-primary">
+                                            <span class="fa fa-align-justify" aria-hidden="true"></span>
+                                        </a>
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (!empty($recomendacion->calificacion_sugerida))
-                                        @if ($recomendacion->calificacion_sugerida=='Atendida')
-                                            <span class="badge badge-light-success">Atendida</span><br>
-                                        @endif
-                                        @if ($recomendacion->calificacion_sugerida=='No Atendida')
+                                    @if (!empty($recomendacion->calificacion_atencion))
+                                        <a href="{{ route('recomendacionescalificacion.show',$recomendacion) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
+                                            @if ($recomendacion->calificacion_atencion=='Atendida')
+                                                <span class="badge badge-light-success">Atendida</span><br>
+                                            @endif
+                                            @if ($recomendacion->calificacion_atencion=='No Atendida')
                                                 <span class="badge badge-light-danger">No Atendida</span><br>
-                                        @endif
-                                        @if ($recomendacion->calificacion_sugerida=='Parcialmente Atendida')
+                                            @endif
+                                            @if ($recomendacion->calificacion_atencion=='Parcialmente Atendida')
                                                 <span class="badge badge-light-warning">Parcialmente Atendida</span><br>
-                                        @endif
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if ((in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&empty($recomendacion->fase_autorizacion)) || (in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray()) && $recomendacion->fase_autorizacion=='Rechazado'))
-                                        <a href="{{ route('recomendacionescalificacion.edit',$recomendacion) }}" class="icon-hover-active">
-                                            <span class="fa-solid fa-ranking-star fa-2x"></span>
+                                            @endif
+                                            <span class="fa fa-align-justify" aria-hidden="true"></span>
                                         </a>
                                     @else
-                                        @if (!empty($recomendacion->calificacion_atencion))
-
-                                            <a href="{{ route('recomendacionescalificacion.show',$recomendacion) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
-                                                @if ($recomendacion->calificacion_atencion=='Atendida')
-                                                    <span class="badge badge-light-success">Atendida</span><br>
-                                                @endif
-                                                @if ($recomendacion->calificacion_atencion=='No Atendida')
-                                                    <span class="badge badge-light-danger">No Atendida</span><br>
-                                                @endif
-                                                @if ($recomendacion->calificacion_atencion=='Parcialmente Atendida')
-                                                    <span class="badge badge-light-warning">Parcialmente Atendida</span><br>
-                                                @endif
-                                                <span class="fa fa-align-justify" aria-hidden="true"></span>
-                                            </a>
+                                        @if (!empty($recomendacion->calificacion_sugerida))
+                                            @if ($recomendacion->calificacion_sugerida=='Atendida')
+                                                <span class="badge badge-light-success">Atendida</span><br>
+                                            @endif
+                                            @if ($recomendacion->calificacion_sugerida=='No Atendida')
+                                                <span class="badge badge-light-danger">No Atendida</span><br>
+                                            @endif
+                                            @if ($recomendacion->calificacion_sugerida=='Parcialmente Atendida')
+                                                <span class="badge badge-light-warning">Parcialmente Atendida</span><br>
+                                            @endif
                                         @endif
                                     @endif
                                 </td>
                                 <td class="text-center">
+                                    @if (empty($recomendacion->fase_autorizacion))
+                                        @can('recomendacionesanalisisenvio.edit')
+                                            <a href="{{ route('recomendacionesanalisisenvio.edit',$recomendacion) }}" class="btn btn-primary">
+                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                            </a>
+                                        @endcan
+                                    @endif
                                     @if ($recomendacion->fase_autorizacion == 'Rechazado')
                                         <span class="badge badge-light-danger">{{ $recomendacion->fase_autorizacion }}</span>
+                                        @if (auth()->user()->siglas_rol=='ANA')
+                                            <a href="{{ route('recomendacionesanalisisenvio.edit',$recomendacion) }}" class="btn btn-primary">
+                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                            </a>
+                                        @endif
                                     @endif
                                     @if ($recomendacion->fase_autorizacion == 'En revisión 01')
                                         @can('recomendacionesrevision01.edit')

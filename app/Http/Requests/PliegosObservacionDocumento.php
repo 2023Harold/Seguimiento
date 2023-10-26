@@ -24,21 +24,21 @@ class pliegosObservacionDocumentoRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre_documento'=>'required|string|max:200'
+            'listado_documentos'=>'required|string|max:8000'
         ];
     }
 
     public function attributes()
     {
         return [
-            'nombre_documento' => 'nombre del documento',
+            'listado_documentos' => 'listado de documentos',
         ];
     }
 
     public function messages()
     {
         return [
-            'required' => 'El campo :attribute es obligatorio.',
+            'required' => 'El campo :attribute es obligatorio.', 
         ];
     }
 }

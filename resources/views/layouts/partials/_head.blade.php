@@ -37,9 +37,7 @@
 @if (auth()->check())
     <meta name="api-token" content="{{auth()->user()->api_token}}">
 @endif
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="sweetalert2.min.js"></script>
-<link rel="stylesheet" href="sweetalert2.min.css">
+
 
 <style type="text/css">
    [data-title]:hover:after {
@@ -59,11 +57,11 @@
     left: 100%;
     white-space: nowrap;
     box-shadow: 1px 1px 3px #ffffff00;
-    opacity: 0;  
+    opacity: 0;
     z-index: 99999;
     visibility: hidden;
     border-radius: 6px;
-    
+
 }
 [data-title] {
     position: relative;

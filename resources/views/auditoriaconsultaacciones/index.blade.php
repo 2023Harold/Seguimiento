@@ -6,7 +6,7 @@
 <div class="card">
     <div class="card-header">
         <h1 class="card-title">
-            <a href="{{ route('seguimientoauditoria.accionesconsulta',$auditoria) }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+            <a href="{{ route('auditoriaseguimientoacciones.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
             &nbsp; Acción
         </h1>
     </div>

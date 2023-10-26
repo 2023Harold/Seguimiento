@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('pliegosobservacionatencioncontestacion.index') }}
+{{ Breadcrumbs::render('pliegosobservacionatencioncontestacion.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+  @include('layouts.partials._menu')
+    <div class="col-md-9 mt-2">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
@@ -16,7 +17,7 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                @include('layouts.contextos._accion')                
+                @include('layouts.contextos._accionpliego')
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -25,16 +26,16 @@
                                 <th>Oficio</th>
                                 <th>Remitente</th>
                                 <th>Recepción en oficialía</th>
-                                <th>Fecha de recepción en la unidad de seguimiento</th>                               
+                                <th>Fecha de recepción en la unidad de seguimiento</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if(count($contestaciones)>0)
                                 @foreach($contestaciones as $contestacion)
                                     <tr>
-                                        <td class="text-center">                                           
-                                            {{ str_pad($contestacion->consecutivo, 3, '0', STR_PAD_LEFT) }}    
-                                        </td>                                            
+                                        <td class="text-center">
+                                            {{ str_pad($contestacion->consecutivo, 3, '0', STR_PAD_LEFT) }}
+                                        </td>
                                         <td class="text-center">
                                             <a href="{{ asset($contestacion->oficio_contestacion) }}" target="_blank">
                                                 <?php echo htmlspecialchars_decode(iconoArchivo($contestacion->oficio_contestacion)) ?>
@@ -52,7 +53,7 @@
                                          </td>
                                         <td class="text-center">
                                             {{ fecha($contestacion->fecha_recepcion_seguimiento) }}
-                                         </td>                                       
+                                         </td>
                                     </tr>
                                 @endforeach
                             @else

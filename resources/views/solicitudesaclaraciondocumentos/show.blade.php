@@ -1,43 +1,26 @@
-@extends('layouts.appPopup')
+@extends('layouts.app')
+@section('breadcrums')
+{{ Breadcrumbs::render('solicitudesaclaraciondocumentos.edit',$solicitud,$auditoria) }}
+@endsection
 @section('content')
-<div class="card">
-    <div class="card-header">
-        <h1 class="card-title">
-            Listado de documentos
-        </h1>       
-    </div>
-    <div class="card-body">
-        @include('flash::message')
-        <div class="pt-4">
-            <table class="table">
-                 <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Nombre del documento</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if(count($documentos)>0)
-                        @foreach($documentos as $documento)
-                            <tr>
-                                <td class="text-center">                                   
-                                    {{ str_pad($documento->consecutivo, 3, '0', STR_PAD_LEFT) }}                                        
-                                </td>                                
-                                <td>
-                                    {{ $documento->nombre_archivo }}
-                                </td>                               
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td class='text-center' colspan="4">No hay datos registrados en este apartado.</td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
-        </div>
-        <div class="pagination">
-            {{ $documentos->links('vendor.pagination.bootstrap-5') }}
+<div class="row">
+    @include('layouts.partials._menu')
+    <div class="col-md-9 mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">
+                    <a href="{{ route('solicitudesaclaracionatencion.index') }}"><i
+                        class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+                        &nbsp; Listado de documentos
+                </h1>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        {!! BootForm::textarea('listado_documentos', 'Listado de documentos ',old('listado_documentos', $solicitud->listado_documentos),['rows'=>'10','disabled']) !!}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

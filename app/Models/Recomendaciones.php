@@ -42,7 +42,8 @@ class Recomendaciones extends Model
         'oficio_acuse',
         'fecha_acuse',
         'conclusion',
-        'concluido'
+        'concluido',
+        'listado_documentos'
     ];
 
     protected $dates = [

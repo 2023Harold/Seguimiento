@@ -26,7 +26,8 @@ class SolicitudesAclaracionAnalisisRequest extends FormRequest
         return [
             'analisis' => 'required|string|max:8000',
             'conclusion' => 'required|string|max:8000',
-            'calificacion_sugerida' => 'required|string|max:30|in:Solventada,No Solventada,Solventada Parcialmente'
+            'calificacion_sugerida' => 'required|string|max:30|in:Solventada,No Solventada,Solventada Parcialmente',
+            'monto_solventado' => 'sometimes|nullable|required_if:calificacion_sugerida,Solventada Parcialmente'
             ];
     }
 
@@ -35,7 +36,8 @@ class SolicitudesAclaracionAnalisisRequest extends FormRequest
         return [
            'analisis' => 'análisis',
            'conclusion'=> 'conclusión',
-           'calificacion_sugerida' => 'calificación sugerida de la atención'
+           'calificacion_sugerida' => 'calificación sugerida de la atención',
+           'monto_solventado'=>'monto solventado'
            ];
     }
 
@@ -43,6 +45,7 @@ class SolicitudesAclaracionAnalisisRequest extends FormRequest
     {
         return [
             'required' => 'El campo :attribute es obligatorio.',
+            'monto_solventado.required_if' => 'El campo :attribute es obligatorio.',
         ];
     }
 }

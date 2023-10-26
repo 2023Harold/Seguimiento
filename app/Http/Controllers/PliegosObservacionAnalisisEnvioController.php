@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movimientos;
 use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
+use App\Models\PliegosContestacion;
 
 class PliegosObservacionAnalisisEnvioController extends Controller
 {
@@ -58,27 +59,49 @@ class PliegosObservacionAnalisisEnvioController extends Controller
      */
     public function edit(PliegosObservacion $pliegosobservacion)
     {
-        $pliegosobservacion->update(['fase_revision'=>'Pendiente']);
+      $request=new Request();
+      if(empty($pliegosobservacion->listado_documentos)){
+          setMessage('No se ha capturado información en el apartado de listado de documentos.','error');
 
-        Movimientos::create([
-            'tipo_movimiento' => 'Actualización del análisis',
-            'accion' => 'Pliegos de observación',
-            'accion_id' => $pliegosobservacion->id,
-            'estatus' => 'Aprobado',
-            'usuario_creacion_id' => auth()->id(),
-            'usuario_asignado_id' => auth()->id(),
-        ]);
+          return back()->withInput();
+      }
+      $contestaciones = PliegosContestacion::where('pliegosobservacion_id',$pliegosobservacion->id)->get();
+      if($contestaciones->count()==0){
+          setMessage('No se ha capturado información en el apartado de contestaciones.','error');
 
-        $titulo = 'Revisión del análisis del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
-        $mensaje = '<strong>Estimado (a) ' . $pliegosobservacion->accion->lider->name . ', ' . $pliegosobservacion->accion->lider->puesto . ':</strong><br>
-                    Se ha actualizado el análisis del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria . ', por parte del ' .
-                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+          return back()->withInput();
+      }
+      $request['concluido']='Si';
+      $pliegosobservacion->update($request->all());
 
-        setMessage('Se ha enviado la notificación al líder de proyecto para la revisión del análisis.');
 
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->accion->lider->unidad_administrativa_id,$pliegosobservacion->accion->lider->id);
+      Movimientos::create([
+         'tipo_movimiento' => 'Registro de la atención del pliego de observación.',
+         'accion' => 'Pliegos de observación',
+         'accion_id' => $pliegosobservacion->id,
+         'estatus' => 'Aprobado',
+         'usuario_creacion_id' => auth()->id(),
+         'usuario_asignado_id' => auth()->id(),
+     ]);
 
-        return redirect()->route('pliegosobservacionatencion.index');
+     if (strlen($pliegosobservacion->nivel_autorizacion) == 3) {
+         $nivel_autorizacion = $pliegosobservacion->nivel_autorizacion;
+     } else {
+         $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
+     }
+
+     $pliegosobservacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
+
+     $titulo = 'Revisión del registro de la atención del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
+     $mensaje = '<strong>Estimado (a) ' . $pliegosobservacion->accion->lider->name . ', ' . $pliegosobservacion->accion->lider->puesto . ':</strong><br>
+                 Ha sido registrada la atención del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria . ', por parte del ' .
+                 auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+
+     auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->accion->lider->unidad_administrativa_id,$pliegosobservacion->accion->lider->id);
+
+     setMessage('Se han enviado la información de la atención del pliego de observación a revisión');
+
+    return redirect()->route('pliegosobservacionatencion.index');
     }
 
     /**

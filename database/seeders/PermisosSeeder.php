@@ -24,19 +24,18 @@ class PermisosSeeder extends Seeder
                         'asignaciondepartamentoencargado','radicacion','radicacionvalidacion',
                         'radicacionautorizacion','comparecencia','comparecenciaacuse','comparecenciaacta',
                         'pras','prasacciones','prasturno','prasturnorevision','prasturnovalidacion',
-                        'prasturnoautorizacion','prasturnoacuses','recomendaciones','recomendacionesacciones'
-                        ,'recomendacionesatencion','recomendacionescalificacion','recomendacionesdocumentos'
-                        ,'recomendacionesrevision01','recomendacionesrevision','recomendacionesvalidacion'
-                        ,'recomendacionesautorizacion','recomendacionesacuses','cedulainicial'
-                        ,'solicitudesaclaracion','solicitudesaclaracionacciones','solicitudesaclaracionatencion',
+                        'prasturnoautorizacion','prasturnoacuses','recomendaciones','recomendacionesacciones',
+                        'recomendacionesatencion','recomendacionescalificacion','recomendacionesdocumentos',
+                        'recomendacionesanalisisenvio','recomendacionesrevision01','recomendacionesrevision',
+                        'recomendacionesvalidacion','recomendacionesautorizacion','recomendacionesacuses','cedulainicial',
+                        'solicitudesaclaracion','solicitudesaclaracionacciones','solicitudesaclaracionatencion',
                         'solicitudesaclaracioncontestacion','solicitudesaclaraciondocumentos','solicitudesaclaracionanalisis',
-                        'solicitudesaclanalisisenvio','solicitudesaclanalisisrevision','solicitudesaclanalisisrevision02',
-                        'solicitudesaclaracioncalificacion','solicitudesaclaracionvalidacion','solicitudesaclaracionautorizacion',
-                        'revisionessolicitudes','revisionessolicitudesatencion',
-                        'pliegosobservacion','pliegosobservacionacciones','pliegosobservacionatencion','pliegosobservacionatencioncontestacion',
-                        'pliegosobservaciondocumentos','pliegosobservacionanalisis','pliegosobservacionanalisisenvio',
-                        'pliegosobservacionanalisisrevision','pliegosobservacionanalisisrevision02','pliegosatencioncalificacion',
-                        'pliegosatencioncalificacionvalidacion','pliegosatencioncalificacionautorizacion','revisionespliegos',
+                        'solicitudesaclanalisisenvio','solicitudesaclaracionrevision01','solicitudesaclaracionrevision',
+                        'solicitudesaclaracionvalidacion','solicitudesaclaracionautorizacion','revisionessolicitudes',
+                        'revisionessolicitudesatencion','pliegosobservacion','pliegosobservacionacciones','pliegosobservacionatencion',
+                        'pliegosobservacionatencioncontestacion','pliegosobservaciondocumentos','pliegosobservacionanalisis',
+                        'pliegosobservacionanalisisenvio','pliegosobservacionrevision01','pliegosobservacionrevision',
+                        'pliegosobservacionvalidacion','pliegosobservacionautorizacion','revisionespliegos',
                         'revisionespliegosatencion'
                     ];
         $permisosGenerales = [];

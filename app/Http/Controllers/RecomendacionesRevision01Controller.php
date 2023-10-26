@@ -61,7 +61,7 @@ class RecomendacionesRevision01Controller extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-        $auditoria = Auditoria::find(getSession('recomendacionesauditoria_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
 
 

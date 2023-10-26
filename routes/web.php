@@ -216,61 +216,59 @@ Route::resource('recomendacionescontestaciones',RecomendacionesAtencionContestac
 Route::get('recomendacionescontestacionesoficios/{recomendacion}', [RecomendacionesAtencionContestacionController::class,'oficiosrecomendacion'])->name('recomendacionescontestaciones.oficiosrecomendacion');
 Route::resource('recomendacionesanalisis',RecomendacionesAnalisisController::class,['parameters' => ['recomendacionesanalisis' => 'recomendacion']]);
 Route::resource('recomendacionesanalisisenvio',RecomendacionesAnalisisEnvioController::class,['parameters' => ['recomendacionesanalisisenvio' => 'recomendacion']]);
-Route::resource('recomendacionesanalisisrevision',RecomendacionesAnalisisRevisionController::class,['parameters' => ['recomendacionesanalisisrevision' => 'recomendacion']]);
-Route::resource('recomendacionesanalisisrevision02',RecomendacionesAnalisisRevisionJefeController::class,['parameters' => ['recomendacionesanalisisrevision02' => 'recomendacion']]);
+//Route::resource('recomendacionesanalisisrevision',RecomendacionesAnalisisRevisionController::class,['parameters' => ['recomendacionesanalisisrevision' => 'recomendacion']]);
+//Route::resource('recomendacionesanalisisrevision02',RecomendacionesAnalisisRevisionJefeController::class,['parameters' => ['recomendacionesanalisisrevision02' => 'recomendacion']]);
 
-// Route::resource('recomendacionesrevision01',RecomendacionesRevision01Controller::class,['parameters' => ['recomendacionesrevision01' => 'recomendacion']]);
-// Route::resource('recomendacionesrevision',RecomendacionesRevisionController::class,['parameters' => ['recomendacionesrevision' => 'recomendacion']]);
-Route::resource('recomendacionesvalidacion',RecomendacionesValidacionController::class,['parameters' => ['recomendacionesvalidacion' => 'recomendacion']]);
-Route::resource('recomendacionesautorizacion',RecomendacionesAutorizacionController::class,['parameters' => ['recomendacionesautorizacion' => 'recomendacion']]);
-Route::resource('recomendacionesacuses',RecomendacionesAcusesController::class,['parameters' => ['recomendacionesacuses' => 'recomendacion']]);
-/*Revisiones*/
-Route::resource('revisionesrecomendaciones',RevisionesRecomendacionesController::class,['parameters' => ['revisionesrecomendaciones' => 'comentario']]);
-Route::resource('revisionesrecomendacionesatencion',RevisionesRecomendacionesAtencionController::class,['parameters' => ['revisionesrecomendacionesatencion' => 'comentario']]);
-Route::resource('cedulainicial',CedulaInicialController::class,['parameters' => ['cedulainicial' => 'auditoria']]);
+ Route::resource('recomendacionesrevision01',RecomendacionesRevision01Controller::class,['parameters' => ['recomendacionesrevision01' => 'recomendacion']]);
+ Route::resource('recomendacionesrevision',RecomendacionesRevisionController::class,['parameters' => ['recomendacionesrevision' => 'recomendacion']]);
+ Route::resource('recomendacionesvalidacion',RecomendacionesValidacionController::class,['parameters' => ['recomendacionesvalidacion' => 'recomendacion']]);
+ Route::resource('recomendacionesautorizacion',RecomendacionesAutorizacionController::class,['parameters' => ['recomendacionesautorizacion' => 'recomendacion']]);
+ Route::resource('recomendacionesacuses',RecomendacionesAcusesController::class,['parameters' => ['recomendacionesacuses' => 'recomendacion']]);
+  /*Revisiones*/
+ Route::resource('revisionesrecomendaciones',RevisionesRecomendacionesController::class,['parameters' => ['revisionesrecomendaciones' => 'comentario']]);
+ Route::resource('revisionesrecomendacionesatencion',RevisionesRecomendacionesAtencionController::class,['parameters' => ['revisionesrecomendacionesatencion' => 'comentario']]);
+ Route::resource('cedulainicial',CedulaInicialController::class,['parameters' => ['cedulainicial' => 'auditoria']]);
 
-/*solicitudesaclaracion*/
-Route::resource('solicitudesaclaracion',SolicitudesAclaracionController::class,['parameters' => ['solicitudesaclaracion' => 'auditoria']]);
-Route::resource('solicitudesaclaracionacciones',SolicitudesAclaracionAccionesController::class,['parameters' => ['solicitudesaclaracionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
-Route::resource('solicitudesaclaracionatencion',SolicitudesAclaracionAtencionController::class,['parameters' => ['solicitudesaclaracionatencion' => 'solicitud']]);
-Route::resource('solicitudesaclaracioncontestacion',SolicitudesAclaracionContestacionController::class,['parameters' => ['solicitudesaclaracioncontestacion' => 'contestacion']]);
-Route::get('solicitudesaclaracioncontestacionoficios/{solicitud}', [SolicitudesAclaracionContestacionController::class,'oficiossolicitudes'])->name('solicitudescontestaciones.oficiossolicitud');
-Route::resource('solicitudesaclaraciondocumentos',SolicitudesAclaracionDocumentosController::class,['parameters' => ['solicitudesaclaraciondocumentos' => 'documento']]);
-Route::resource('solicitudesaclaracionanalisis',SolicitudesAclaracionAnalisisController::class,['parameters' => ['solicitudesaclaracionanalisis' => 'solicitud']]);
-Route::resource('solicitudesaclanalisisenvio',SolicitudesAclaracionAnalisisEnvioController::class,['parameters' => ['solicitudesaclanalisisenvio' => 'solicitud']]);
-Route::resource('solicitudesaclanalisisrevision',SolicitudesAclaracionAnalisisRevisionController::class,['parameters' => ['solicitudesaclanalisisrevision' => 'solicitud']]);
-Route::resource('solicitudesaclanalisisrevision02',SolicitudesAclaracionAnalisisRevisionJefeController::class,['parameters' => ['solicitudesaclanalisisrevision02' => 'solicitud']]);
-Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
-Route::resource('solicitudesaclaracionvalidacion',SolicitudesAclaracionValidacionController::class,['parameters' => ['solicitudesaclaracionvalidacion' => 'solicitud']]);
-Route::resource('solicitudesaclaracionautorizacion',SolicitudesAclaracionAutorizacionController::class,['parameters' => ['solicitudesaclaracionautorizacion' => 'solicitud']]);
-Route::resource('revisionessolicitudes',RevisionesSolicitudesController::class,['parameters' => ['revisionessolicitudes' => 'comentario']]);
-Route::resource('revisionessolicitudesatencion',RevisionesSolicitudesAtencionController::class,['parameters' => ['revisionessolicitudesatencion' => 'comentario']]);
-
-
-/*pliegosobservacion*/
-Route::resource('pliegosobservacion',PliegosObservacionController::class,['parameters' => ['pliegosobservacion' => 'auditoria']]);
-Route::resource('pliegosobservacionacciones',PliegosObservacionAccionesController::class,['parameters' => ['pliegosobservacionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
-Route::resource('pliegosobservacionatencion',PliegosObservacionAtencionController::class,['parameters' => ['pliegosobservacionatencion' => 'pliegosobservacionatencion']]);
-//Route::resource('pliegosobservacioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosobservacioncalificacion' => 'pliegosobservacion']]);
-Route::resource('pliegosobservacionatencioncontestacion',PliegosObservacionAtencionContestacionController::class,['parameters' => ['pliegosobservacionatencioncontestacion' => 'contestacion']]);
-Route::resource('pliegosobservaciondocumentos',PliegosObservacionAtencionDocumentosController::class,['parameters' => ['pliegosobservaciondocumentos' => 'documento']]);
-Route::resource('pliegosobservacionanalisis',PliegosObservacionAtencionAnalisisController::class,['parameters' => ['pliegosobservacionanalisis' => 'pliegosobservacion']]);
-Route::resource('pliegosobservacionanalisisenvio',PliegosObservacionAnalisisEnvioController::class,['parameters' => ['pliegosobservacionanalisisenvio' => 'pliegosobservacion']]);
-Route::resource('pliegosobservacionanalisisrevision',PliegosObservacionAnalisisRevisionController::class,['parameters' => ['pliegosobservacionanalisisrevision' => 'pliegosobservacion']]);
-Route::resource('pliegosobservacionanalisisrevision02',PliegosObservacionAnalisisRevision02Controller::class,['parameters' => ['pliegosobservacionanalisisrevision02' => 'pliegosobservacion']]);
-Route::resource('pliegosatencioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosatencioncalificacion' => 'pliegosobservacion']]);
-Route::resource('pliegosatencioncalificacionvalidacion',PliegosObservacionAtencionCalificacionValidacionController::class,['parameters' => ['pliegosatencioncalificacionvalidacion' => 'pliegosobservacion']]);
-Route::resource('pliegosatencioncalificacionautorizacion',PliegosObservacionAtencionCalificacionAutorizacionController::class,['parameters' => ['pliegosatencioncalificacionautorizacion' => 'pliegosobservacion']]);
-//Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
-Route::get('pliegosobservacioncontestacionoficios/{pliegosobservacion}', [PliegosObservacionAtencionContestacionController::class,'oficiospliegosobservacion'])->name('pliegosobservacioncontestacion.oficiospliegosobservacion');
-Route::resource('revisionespliegos',RevisionesPliegosController::class,['parameters' => ['revisionespliegos' => 'comentario']]);
-Route::resource('revisionespliegosatencion',RevisionesPliegosAtencionController::class,['parameters' => ['revisionespliegosatencion' => 'comentario']]);
-
-/*pliegos Revisiones*/
+  /*solicitudesaclaracion*/
+ Route::resource('solicitudesaclaracion',SolicitudesAclaracionController::class,['parameters' => ['solicitudesaclaracion' => 'auditoria']]);
+ Route::resource('solicitudesaclaracionacciones',SolicitudesAclaracionAccionesController::class,['parameters' => ['solicitudesaclaracionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
+ Route::resource('solicitudesaclaracionatencion',SolicitudesAclaracionAtencionController::class,['parameters' => ['solicitudesaclaracionatencion' => 'solicitud']]);
+ Route::resource('solicitudesaclaracioncontestacion',SolicitudesAclaracionContestacionController::class,['parameters' => ['solicitudesaclaracioncontestacion' => 'contestacion']]);
+ Route::get('solicitudesaclaracioncontestacionoficios/{solicitud}', [SolicitudesAclaracionContestacionController::class,'oficiossolicitudes'])->name('solicitudescontestaciones.oficiossolicitud');
+ Route::resource('solicitudesaclaraciondocumentos',SolicitudesAclaracionDocumentosController::class,['parameters' => ['solicitudesaclaraciondocumentos' => 'documento']]);
+ Route::resource('solicitudesaclaracionanalisis',SolicitudesAclaracionAnalisisController::class,['parameters' => ['solicitudesaclaracionanalisis' => 'solicitud']]);
+ Route::resource('solicitudesaclanalisisenvio',SolicitudesAclaracionAnalisisEnvioController::class,['parameters' => ['solicitudesaclanalisisenvio' => 'solicitud']]);
+ Route::resource('solicitudesaclaracionrevision01',SolicitudesAclaracionRevision01Controller::class,['parameters' => ['solicitudesaclaracionrevision01' => 'solicitud']]);
+ Route::resource('solicitudesaclaracionrevision',SolicitudesAclaracionRevisionController::class,['parameters' => ['solicitudesaclaracionrevision' => 'solicitud']]);
+ //Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
+ Route::resource('solicitudesaclaracionvalidacion',SolicitudesAclaracionValidacionController::class,['parameters' => ['solicitudesaclaracionvalidacion' => 'solicitud']]);
+ Route::resource('solicitudesaclaracionautorizacion',SolicitudesAclaracionAutorizacionController::class,['parameters' => ['solicitudesaclaracionautorizacion' => 'solicitud']]);
+ Route::resource('revisionessolicitudes',RevisionesSolicitudesController::class,['parameters' => ['revisionessolicitudes' => 'comentario']]);
+ Route::resource('revisionessolicitudesatencion',RevisionesSolicitudesAtencionController::class,['parameters' => ['revisionessolicitudesatencion' => 'comentario']]);
 
 
-// Route::resource('pliegosobservacionesacuses',PliegosObservacionAcusesController::class,['parameters' => ['pliegosobservacionacuses' => 'pliegosobservacion']]);
-// Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);
+  /*pliegosobservacion*/
+  Route::resource('pliegosobservacion',PliegosObservacionController::class,['parameters' => ['pliegosobservacion' => 'auditoria']]);
+  Route::resource('pliegosobservacionacciones',PliegosObservacionAccionesController::class,['parameters' => ['pliegosobservacionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
+  Route::resource('pliegosobservacionatencion',PliegosObservacionAtencionController::class,['parameters' => ['pliegosobservacionatencion' => 'pliegosobservacionatencion']]);
+  //Route::resource('pliegosobservacioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosobservacioncalificacion' => 'pliegosobservacion']]);
+  Route::resource('pliegosobservacionatencioncontestacion',PliegosObservacionAtencionContestacionController::class,['parameters' => ['pliegosobservacionatencioncontestacion' => 'contestacion']]);
+  Route::resource('pliegosobservaciondocumentos',PliegosObservacionAtencionDocumentosController::class,['parameters' => ['pliegosobservaciondocumentos' => 'documento']]);
+  Route::resource('pliegosobservacionanalisis',PliegosObservacionAtencionAnalisisController::class,['parameters' => ['pliegosobservacionanalisis' => 'pliegosobservacion']]);
+  Route::resource('pliegosobservacionanalisisenvio',PliegosObservacionAnalisisEnvioController::class,['parameters' => ['pliegosobservacionanalisisenvio' => 'pliegosobservacion']]);
+  Route::resource('pliegosobservacionrevision01',PliegosObservacionRevision01Controller::class,['parameters' => ['pliegosobservacionrevision01' => 'pliegosobservacion']]);
+  Route::resource('pliegosobservacionrevision',PliegosObservacionRevisionController::class,['parameters' => ['pliegosobservacionrevision' => 'pliegosobservacion']]);
+  Route::resource('pliegosobservacionvalidacion',PliegosObservacionValidacionController::class,['parameters' => ['pliegosobservacionvalidacion' => 'pliegosobservacion']]);
+  Route::resource('pliegosobservacionautorizacion',PliegosObservacionAutorizacionController::class,['parameters' => ['pliegosobservacionautorizacion' => 'pliegosobservacion']]);
+  //Route::resource('pliegosatencioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosatencioncalificacion' => 'pliegosobservacion']]);
+  //Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
+
+  Route::get('pliegosobservacioncontestacionoficios/{pliegosobservacion}', [PliegosObservacionAtencionContestacionController::class,'oficiospliegosobservacion'])->name('pliegosobservacioncontestacion.oficiospliegosobservacion');
+  Route::resource('revisionespliegos',RevisionesPliegosController::class,['parameters' => ['revisionespliegos' => 'comentario']]);
+  Route::resource('revisionespliegosatencion',RevisionesPliegosAtencionController::class,['parameters' => ['revisionespliegosatencion' => 'comentario']]);
+
+  /*pliegos Revisiones*/
 
 
-
+  // Route::resource('pliegosobservacionesacuses',PliegosObservacionAcusesController::class,['parameters' => ['pliegosobservacionacuses' => 'pliegosobservacion']]);
+  // Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);

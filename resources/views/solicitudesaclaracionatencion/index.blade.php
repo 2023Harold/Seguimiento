@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('solicitudesaclaracionatencion.index') }}
+{{ Breadcrumbs::render('solicitudesaclaracionatencion.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    @include('layouts.partials._menu')
+    <div class="col-md-9">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
@@ -16,7 +17,7 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                @include('layouts.contextos._accion')
+                @include('layouts.contextos._accionsolicitud')
                 <div class="row">
                     <div class="col-md-12">
                         <h3 class="card-title text-primary float">Atención de las solicitudes de aclaración</h3>
@@ -29,8 +30,7 @@
                                 <th>Oficios de contestación</th>
                                 <th>Listado de Doc.</th>
                                 <th>Análisis</th>
-                                <th>Calificación Sugerida</th>
-                                <th>Calificación Definitiva</th>
+                                <th>Calificación de la atención</th>
                                 <th>Fase / Constancia</th>
                             </tr>
                         </thead>
@@ -40,8 +40,8 @@
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($solicitud->fase_autorizacion) || $solicitud->fase_autorizacion=='Rechazado'))
                                        @if (empty($solicitud->fase_revision) || ($solicitud->fase_revision!='Pendiente' && $solicitud->fase_revision!='Revisión Jefe' ))
-                                            @can('solicitudesaclaracioncontestacion.index')                               
-                                                <a href="{{ route('solicitudesaclaracioncontestacion.index') }}" class="icon-hover-active">
+                                            @can('solicitudesaclaracioncontestacion.index')
+                                                <a href="{{ route('solicitudesaclaracioncontestacion.index') }}" class="btn btn-light-primary">
                                                     <span class="fa fa-list" aria-hidden="true"></span>
                                                 </a>
                                             @endcan
@@ -63,21 +63,21 @@
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($solicitud->fase_autorizacion) || $solicitud->fase_autorizacion=='Rechazado'))
                                         @if (empty($solicitud->fase_revision) || ($solicitud->fase_revision!='Pendiente' && $solicitud->fase_revision!='Revisión Jefe' ))
-                                            @can('solicitudesaclaraciondocumentos.index')
-                                            <a href="{{ route('solicitudesaclaraciondocumentos.index', $solicitud) }}" class="icon-hover-active popupSinLocation">
+                                            {{-- @can('solicitudesaclaraciondocumentos.edit') --}}
+                                            <a href="{{ route('solicitudesaclaraciondocumentos.edit', $solicitud) }}" class="btn btn-light-primary">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>
-                                            @endcan
+                                            {{-- @endcan --}}
                                         @else
                                             @can('solicitudesaclaraciondocumentos.show')
-                                            <a href="{{ route('solicitudesaclaraciondocumentos.show', $solicitud) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                            <a href="{{ route('solicitudesaclaraciondocumentos.show', $solicitud) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>
                                             @endcan
                                         @endif
                                     @else
                                         @can('solicitudesaclaraciondocumentos.show')
-                                        <a href="{{ route('solicitudesaclaraciondocumentos.show', $solicitud) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                        <a href="{{ route('solicitudesaclaraciondocumentos.show', $solicitud) }}" class="btn btn btn btn-link btn-color-muted btn-active-color-primary">
                                             <span class="fa fa-list" aria-hidden="true"></span>
                                         </a>
                                         @endcan
@@ -87,14 +87,8 @@
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($solicitud->fase_autorizacion) || $solicitud->fase_autorizacion=='Rechazado'))
                                         @if (empty($solicitud->fase_revision) || ($solicitud->fase_revision!='Pendiente' && $solicitud->fase_revision!='Revisión Jefe' ))
                                             @can('solicitudesaclaracionanalisis.edit')
-                                            <a href="{{ route('solicitudesaclaracionanalisis.edit',$solicitud) }}" class="icon-hover-active">
+                                            <a href="{{ route('solicitudesaclaracionanalisis.edit',$solicitud) }}" class="btn btn-light-primary">
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
-                                            </a>
-                                            @endcan
-                                            &nbsp;|&nbsp; 
-                                            @can('solicitudesaclanalisisenvio.edit')
-                                            <a href="{{ route('solicitudesaclanalisisenvio.edit',$solicitud) }}" class="icon-hover-active">
-                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span>
                                             </a>
                                             @endcan
                                         @else
@@ -105,69 +99,52 @@
                                             @endcan
                                         @endif
                                     @else
-                                        @if (in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())&&!empty($solicitud->fase_revision)&&$solicitud->fase_revision=='Pendiente')
-                                            @can('solicitudesaclanalisisrevision.edit')
-                                            <a href="{{ route('solicitudesaclanalisisrevision.edit',$solicitud) }}" class="icon-hover-active">
-                                                <span class="fa fa-gavel" aria-hidden="true"></span>
-                                            </a>
-                                            @endcan
-                                        @elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&!empty($solicitud->fase_revision)&&$solicitud->fase_revision=='Revisión Jefe')
-                                            @can('solicitudesaclanalisisrevision02.edit')
-                                            <a href="{{ route('solicitudesaclanalisisrevision02.edit',$solicitud) }}" class="icon-hover-active">
-                                                <span class="fa fa-gavel" aria-hidden="true"></span>
-                                            </a>
-                                            @endcan 
-                                        @else
-                                            @can('solicitudesaclaracionanalisis.show')
+                                        @can('solicitudesaclaracionanalisis.show')
                                             <a href="{{ route('solicitudesaclaracionanalisis.show',$solicitud) }}" class="btn btn btn-link btn-color-muted btn-active-color-primary">
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
                                             </a>
-                                            @endcan
-                                        @endif
+                                        @endcan
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (!empty($solicitud->calificacion_sugerida))
+                                    @if (empty($solicitud->calificacion_atencion))
                                         @if ($solicitud->calificacion_sugerida=='Solventada')
                                             <span class="badge badge-light-success">Solventada</span><br>
                                         @endif
                                         @if ($solicitud->calificacion_sugerida=='No Solventada')
                                                 <span class="badge badge-light-danger">No Solventada</span><br>
-                                        @endif                                        
+                                        @endif
                                         @if ($solicitud->calificacion_sugerida=='Solventada Parcialmente')
                                                 <span class="badge badge-light-warning">Solventada Parcialmente</span><br>
-                                        @endif                               
+                                        @endif
+                                    @else
+                                        @if ($solicitud->calificacion_atencion=='Solventada')
+                                            <span class="badge badge-light-success">Solventada</span><br>
+                                        @endif
+                                        @if ($solicitud->calificacion_atencion=='No Solventada')
+                                            <span class="badge badge-light-danger">No Solventada</span><br>
+                                        @endif
+                                        @if ($solicitud->calificacion_atencion=='Solventada Parcialmente')
+                                            <span class="badge badge-light-warning">Solventada Parcialmente</span><br>
+                                        @endif
                                     @endif
-                                </td>
-                                <td class="text-center">                                   
-                                @if ((in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())&&empty($solicitud->fase_autorizacion)) || (in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray()) && $solicitud->fase_autorizacion=='Rechazado'))
-                                    @can('solicitudesaclaracioncalificacion.edit')
-                                    <a href="{{ route('solicitudesaclaracioncalificacion.edit',$solicitud) }}" class="icon-hover-active">
-                                        <span class="fa-solid fa-ranking-star fa-2x"></span>
-                                    </a>
-                                    @endcan
-                                @else
-                                    @if (!empty($solicitud->calificacion_atencion))
-                                        @can('solicitudesaclaracioncalificacion.show')
-                                        <a href="{{ route('solicitudesaclaracioncalificacion.show',$solicitud) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
-                                            @if ($solicitud->calificacion_atencion=='Solventada')
-                                                <span class="badge badge-light-success">Solventada</span><br>
-                                            @endif
-                                            @if ($solicitud->calificacion_atencion=='No Solventada')
-                                                <span class="badge badge-light-danger">No Solventada</span><br>
-                                            @endif
-                                            @if ($solicitud->calificacion_atencion=='Solventada Parcialmente')
-                                                <span class="badge badge-light-warning">Solventada Parcialmente</span><br>
-                                            @endif
-                                            <span class="fa fa-align-justify" aria-hidden="true"></span>
-                                        </a>
-                                        @endcan
-                                    @endif
-                                @endif
                                 </td>
                                 <td class="text-center">
+                                    @if (empty($solicitud->fase_autorizacion))
+                                        @can('solicitudesaclanalisisenvio.edit')
+                                            <a href="{{ route('solicitudesaclanalisisenvio.edit',$solicitud) }}" class="btn btn-primary">
+                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                            </a>
+                                        @endcan
+                                    @endif
                                     @if ($solicitud->fase_autorizacion == 'Rechazado')
                                         <span class="badge badge-light-danger">{{ $solicitud->fase_autorizacion }}</span>
+                                        @can('solicitudesaclanalisisenvio.edit')
+                                            <br>
+                                            <a href="{{ route('solicitudesaclanalisisenvio.edit',$solicitud) }}" class="btn btn-primary">
+                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                            </a>
+                                        @endcan
                                     @endif
                                     @if ($solicitud->fase_autorizacion == 'En revisión 01')
                                         @can('solicitudesaclaracionrevision01.edit')
@@ -218,7 +195,7 @@
                             </tr>
                             {!! movimientosDesglose($solicitud->id, 9, $solicitud->movimientos) !!}
                             @empty
-                            <tr>                                
+                            <tr>
                                 <td colspan="7" class="text-center table-secondary">
                                     Aun no se encuentra registrada la fecha de compromiso de atención.
                                 </td>
@@ -229,15 +206,15 @@
                 </div>
                 @if (auth()->user()->siglas_rol!='ANA')
                 <div class="row">
-                    <div class="col-md-12">                          
+                    <div class="col-md-12">
                         <span>
                             <h3 class="card-title text-primary float">Comentarios
                             <a class="btn btn-primary float-end popupcomentario" href="{{ route('revisionessolicitudes.create') }}">
                                 Agregar
                             </a>
-                        </h3> 
-                        </span>                     
-                    </div>                    
+                        </h3>
+                        </span>
+                    </div>
                 </div>
                 @endif
                 <div class="table-responsive">
@@ -279,7 +256,7 @@
                                         <a class="btn btn-primary popupcomentario" href="{{ route('revisionessolicitudes.edit',$comentario) }}">
                                             Atender
                                         </a>
-                                    @endif 
+                                    @endif
                                 </td>
                             </tr>
                             @if (count($comentario->respuestas)>0)
@@ -292,7 +269,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="a-listrespuesta-{{$comentario->id}}" class="collapse">                           
+                                    <div id="a-listrespuesta-{{$comentario->id}}" class="collapse">
                                         <table class="table gray-200">
                                             <thead class="table-secondary">
                                                 <tr>
@@ -312,16 +289,16 @@
                                                         <td class="text-center">
                                                             <a href="{{ route('revisionessolicitudes.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                                                 <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
-                                                            </a> 
+                                                            </a>
                                                         </td>
                                                     </tr>
-                                                @endforeach                                    
+                                                @endforeach
                                             </tbody>
-                                        </table>                            
+                                        </table>
                                     </div>
                                 </td>
-                            </tr>                               
-                           @endif 
+                            </tr>
+                           @endif
                            @empty
                             <tr>
                                 <td colspan="4" class="text-center">

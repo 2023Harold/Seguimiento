@@ -72,9 +72,11 @@ class RecomendacionesAtencionDocumentosController extends Controller
      */
     public function show(Recomendaciones $documento)
     {
-        $documentos=RecomendacionesDocumento::where('recomendacion_id',$documento->id)->paginate(10);        
+        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
+        $accion=$recomendacion->accion;
+        $auditoria=$accion->auditoria;        
         
-        return view('recomendacionesatenciondocumentos.show',compact('documentos'));
+        return view('recomendacionesatenciondocumentos.show',compact('recomendacion','accion','auditoria'));
     }
 
     /**
@@ -83,9 +85,13 @@ class RecomendacionesAtencionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Recomendaciones $documento)
     {
-        //
+        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
+        $accion=$recomendacion->accion;
+        $auditoria=$accion->auditoria;
+
+        return view('recomendacionesatenciondocumentos.form',compact('recomendacion','accion','auditoria'));
     }
 
     /**
@@ -95,9 +101,12 @@ class RecomendacionesAtencionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Recomendaciones $documento)
     {
-        //
+        $documento->update($request->all());
+        setMessage("Se ha actualizado el listado de documentos.");
+
+        return redirect()->route('recomendacionesatencion.index');
     }
 
     /**

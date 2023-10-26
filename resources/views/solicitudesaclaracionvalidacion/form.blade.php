@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('solicitudesaclaracionvalidacion.edit', $solicitud)}}
+    {{ Breadcrumbs::render('solicitudesaclaracionvalidacion.edit', $solicitud,$auditoria)}}
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        @include('layouts.partials._menu')
+        <div class="col-md-9">
             <div class="card">
                 <div class="card-header">
                     <h1 class="card-title">
@@ -15,10 +16,10 @@
                 <div class="card-body">
                     @include('flash::message')
                     @include('layouts.contextos._auditoria')
-                    @include('layouts.contextos._accion')
+                    @include('layouts.contextos._accionsolicitud')
                     @include('layouts.contextos._solicitud')
                     <div class="" style="padding-left: 2rem; ">
-                        <div class="row">                        
+                        <div class="row">
                             {!! BootForm::open(['model' => $solicitud,'update'=>'solicitudesaclaracionvalidacion.update','id'=>'form'] )!!}
                                 <div class="row">
                                     <div class="col-md-6">
@@ -38,7 +39,7 @@
                                     <div class="col-md-6 mb-3">
                                         {!! BootForm::checkbox('reenviar', 'Se envía al superior para su revisión', '', true, ['class' => 'i-checks', 'disabled']) !!}
                                     </div>
-                                </div>                     
+                                </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6 justify-content-end">
                                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -53,7 +54,7 @@
         </div>
     </div>
 @endsection
-@section('script')   
+@section('script')
     {!! JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
 @endsection
 

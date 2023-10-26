@@ -60,7 +60,7 @@ class SolicitudesAclaracionAnalisisRevisionJefeController extends Controller
     public function edit(SolicitudesAclaracion $solicitud)
     {
         $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $auditoria=$accion->auditoria; 
+        $auditoria=$accion->auditoria;
 
         return view('solicitudesaclaracionanalisisrevision02.form',compact('solicitud','accion','auditoria'));
     }
@@ -84,7 +84,7 @@ class SolicitudesAclaracionAnalisisRevisionJefeController extends Controller
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
-        ]);       
+        ]);
 
         $solicitud->update(['fase_revision' => $request->estatus == 'Aprobado' ? 'Aprobado' : 'Rechazado']);
         setMessage($request->estatus == 'Aprobado' ?
@@ -93,15 +93,15 @@ class SolicitudesAclaracionAnalisisRevisionJefeController extends Controller
         );
 
 
-        if ($request->estatus == 'Aprobado') {           
+        if ($request->estatus == 'Aprobado') {
             $titulo = 'Revisión del análisis de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
-                   
+
             $mensaje = '<strong>Estimado(a) '.$solicitud->userCreacion->name.', '.$solicitud->userCreacion->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado la actualización del análisis de la solicitud de la aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             '.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->userCreacion->unidad_administrativa_id, $solicitud->userCreacion->id);
-        } else {           
+        } else {
             $titulo = 'Rechazo del análisis de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$solicitud->userCreacion->name.', '.$solicitud->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el del análisis de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.

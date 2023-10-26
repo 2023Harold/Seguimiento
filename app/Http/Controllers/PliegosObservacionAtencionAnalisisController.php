@@ -75,6 +75,29 @@ class PliegosObservacionAtencionAnalisisController extends Controller
      */
     public function update(Request $request, PliegosObservacion $pliegosobservacion)
     {
+        if ($request->calificacion_sugerida=='Solventado') {
+            $request['monto_solventado'] = $pliegosobservacion->accion->monto_aclarar;
+        }else if($request->calificacion_sugerida=='No Solventado'){
+            $request['monto_solventado'] = 0.00;
+        }else{
+            $monto_aclarar = $pliegosobservacion->accion->monto_aclarar;
+            $montostrpesos = str_replace('$','',$request->monto_solventado);
+            $montostrcomas = str_replace(',','',$montostrpesos);
+            $monto=(float) $montostrcomas;
+            //dd($monto,$request->monto_solventado);
+            if($monto==0.00){
+                setMessage('El monto solventado debe ser mayor a $0.00.','error');
+
+                return back()->withInput();
+            }
+            if($monto > $monto_aclarar){
+                setMessage('El monto solventado debe ser menor al monto por aclarar','error');
+
+                return back()->withInput();
+            }
+            $request['monto_solventado'] = $monto;
+        }
+
         $pliegosobservacion->update($request->all());
         setMessage("Se ha actualizado el análisis.");
 

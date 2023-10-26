@@ -25,7 +25,7 @@ class PliegosObservacionAtencionContestacionController extends Controller
     public function index(Request $request)
     {
         $contestaciones = $this->setQuery($request)->paginate(10);
-        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion= PliegosObservacion::find(getSession('pliegosobservacioncalificacion_id'));
 
@@ -40,7 +40,7 @@ class PliegosObservacionAtencionContestacionController extends Controller
     public function create()
     {
         $contestacion = new PliegosContestacion();
-        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
 
@@ -78,7 +78,7 @@ class PliegosObservacionAtencionContestacionController extends Controller
     public function show(PliegosObservacion $contestacion)
     {
         $contestaciones = PliegosContestacion::where('pliegosobservacion_id',$contestacion->id)->paginate(10);
-        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
 
@@ -93,7 +93,7 @@ class PliegosObservacionAtencionContestacionController extends Controller
      */
     public function edit(PliegosContestacion $contestacion)
     {
-        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
 
@@ -164,8 +164,8 @@ class PliegosObservacionAtencionContestacionController extends Controller
     public function oficiospliegosobservacion(PliegosObservacion $pliegosobservacion)
     {
         $contestaciones = PliegosContestacion::where('pliegosobservacion_id',$pliegosobservacion->id)->paginate(10);
-        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
-        $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));        
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
 
         return view('pliegosatencioncontestacionoficios.show', compact('contestaciones','auditoria','accion','pliegosobservacion'));
     }

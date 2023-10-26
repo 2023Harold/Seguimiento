@@ -80,8 +80,8 @@ class SolicitudesAclaracionAutorizacionController extends Controller
          $preconstancia = reporte($solicitud->id, 'Fiscalizacion/Seguimiento/atencionsolicitudesaclaracionconstancia', $params, 'pdf');
          $archivorutaxml = reporte($solicitud->id, 'Fiscalizacion/Seguimiento/atencionsolicitudesaclaracionconstancia', $params, 'xml');
          $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutaxml)));
-         
-         $auditoria = Auditoria::find(getSession('solicitudesaclaracionauditoria_id'));
+
+         $auditoria = Auditoria::find(getSession('auditoria_id'));
          $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
 
          return view('solicitudesaclaracionautorizacion.form', compact('solicitud', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
@@ -101,38 +101,46 @@ class SolicitudesAclaracionAutorizacionController extends Controller
         $constancia = guardarConstanciasFirmadas($solicitud, 'constancia_atencion_solicitud', $request, 'constancia');
 
         Movimientos::create([
-            'tipo_movimiento' => 'Autorización de la calificación y conclusión de la atención de la solicitud de aclaración',
+            'tipo_movimiento' => 'Autorización de la atención de la solicitud de aclaración',
             'accion' => 'Solicitud de Aclaración',
             'accion_id' => $solicitud->id,
             'estatus' => $request->estatus,
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
-        ]);       
-       
+        ]);
+
         $solicitud->update([
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
             'constancia_autorizacion' => $constancia->constancia_pdf,
         ]);
 
-        
+
         $director=User::where('unidad_administrativa_id',substr($solicitud->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+        $jefe=$solicitud->accion->depaasignado;
+        $lider=$solicitud->accion->lider;
+        $analista=$solicitud->accion->analista;
+
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del registro de la calificación y conclusión de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
-                       
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($solicitud->accion->depaasignado->name,$solicitud->accion->depaasignado->puesto,$solicitud), now(), $solicitud->accion->depaasignado->unidad_administrativa_id, $solicitud->accion->depaasignado->id);
+            $titulo = 'Autorización del registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
+
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($analista->name,$analista->puesto,$solicitud), now(), $analista->unidad_administrativa_id, $analista->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$solicitud), now(), $director->unidad_administrativa_id, $director->id);
-            
-            setMessage('Se ha autorizado el registro de la calificación y conclusión de la atención de la solicitud de aclaración.');
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name,$jefe->puesto,$solicitud), now(), $jefe->unidad_administrativa_id, $jefe->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($lider->name,$lider->puesto,$solicitud), now(), $lider->unidad_administrativa_id, $lider->id);
+
+            setMessage('Se ha autorizado el registro de la atención de la solicitud de aclaración.');
         } else {
-            $titulo = 'Rechazo del registro de la calificación y conclusión de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
+            $titulo = 'Rechazo del registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$solicitud->accion->depaasignado->name.', '.$solicitud->accion->depaasignado->puesto.':</strong><br>'
-                            .'Ha sido rechazado el registro de la calificación y conclusión de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
+                            .'Ha sido rechazado el registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->accion->depaasignado->unidad_administrativa_id, $solicitud->accion->depaasignado->id);           
+
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$solicitud), now(), $director->unidad_administrativa_id, $director->id);
-            
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$solicitud), now(), $jefe->unidad_administrativa_id, $jefe->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$solicitud), now(), $lider->unidad_administrativa_id, $lider->id);
+
             setMessage('Se ha rechazado el registro de la calificación y conclusión de la atención de la solicitud de aclaración.');
         }
 
@@ -162,7 +170,7 @@ class SolicitudesAclaracionAutorizacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, SolicitudesAclaracion $solicitud)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.'.';    
+                    .'Ha sido rechazado el el registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.'.';
 
         return $mensaje;
     }
@@ -170,8 +178,8 @@ class SolicitudesAclaracionAutorizacionController extends Controller
     private function mensajeAprobado(String $nombre, String $puesto, SolicitudesAclaracion $solicitud)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .' Ha sido autorizado el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
-                    ', por parte del Titular.';       
+                    .' Ha sido autorizado el registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
+                    ', por parte del Titular.';
 
         return $mensaje;
     }

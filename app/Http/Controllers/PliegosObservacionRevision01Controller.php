@@ -60,11 +60,11 @@ class PliegosObservacionRevision01Controller extends Controller
      */
     public function edit(PliegosObservacion $pliegosobservacion)
     {
-        $auditoria = Auditoria::find(getSession('pliegosobservacion_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
 
 
-        return view('pliegosobservacionatencionrevision01.form', compact('pliegosobservacion','auditoria','accion'));
+        return view('pliegosobservacionrevision01.form', compact('pliegosobservacion','auditoria','accion'));
     }
 
     /**
@@ -81,7 +81,7 @@ class PliegosObservacionRevision01Controller extends Controller
         $this->normalizarDatos($request);
 
         Movimientos::create([
-            'tipo_movimiento' => 'Revisión de atención de pliegos de observación',
+            'tipo_movimiento' => 'Revisión de atención del pliego de observación',
             'accion' => 'Pliegos de observación',
             'accion_id' => $pliegosobservacion->id,
             'estatus' => $request->estatus,
@@ -105,17 +105,17 @@ class PliegosObservacionRevision01Controller extends Controller
         if ($request->estatus == 'Aprobado') {
             $pliegosobservacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
 
-            $titulo = 'Revisión del registro de atención de pliegos de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
+            $titulo = 'Revisión del registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
 
             $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado el registro de atención de pliegos de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
+                            '; se ha aprobado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
         } else {
-            $titulo = 'Rechazo del registro de atención de pliegos de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
+            $titulo = 'Rechazo del registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->userCreacion->name.', '.$pliegosobservacion->userCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el registro de atención de pliegosobservación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
+                            .'Ha sido rechazado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->userCreacion->unidad_administrativa_id, $pliegosobservacion->userCreacion->id);
         }
@@ -132,5 +132,14 @@ class PliegosObservacionRevision01Controller extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function normalizarDatos(Request $request)
+    {
+        if ($request->estatus == 'Aprobado') {
+            $request['motivo_rechazo'] = null;
+        }
+
+        return $request;
     }
 }

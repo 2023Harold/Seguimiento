@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Movimientos;
 use App\Models\Recomendaciones;
+use App\Models\RecomendacionesContestacion;
 use Illuminate\Http\Request;
 
 class RecomendacionesAnalisisEnvioController extends Controller
@@ -58,10 +59,23 @@ class RecomendacionesAnalisisEnvioController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-        $recomendacion->update(['fase_revision'=>'Pendiente']);
+        $request=new Request();
+        if(empty($recomendacion->listado_documentos)){
+            setMessage('No se ha capturado información en el apartado de listado de documentos.','error');
 
-        Movimientos::create([
-            'tipo_movimiento' => 'Actualización del análisis',
+            return back()->withInput();
+        }
+        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$recomendacion->id)->get();
+        if($contestaciones->count()==0){
+            setMessage('No se ha capturado información en el apartado de contestaciones.','error');
+
+            return back()->withInput();
+        }
+        $request['concluido']='Si';
+        $recomendacion->update($request->all());
+
+         Movimientos::create([
+            'tipo_movimiento' => 'Registro de la atención de la recomendación',
             'accion' => 'Recomendación',
             'accion_id' => $recomendacion->id,
             'estatus' => 'Aprobado',
@@ -69,15 +83,23 @@ class RecomendacionesAnalisisEnvioController extends Controller
             'usuario_asignado_id' => auth()->id(),
         ]);
 
-        $titulo = 'Revisión del análisis de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-        $mensaje = '<strong>Estimado (a) ' . $recomendacion->accion->lider->name . ', ' . $recomendacion->accion->lider->puesto . ':</strong><br>
-                    Se ha actualizado el análisis de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria . ', por parte del ' . 
-                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+        if (strlen($recomendacion->nivel_autorizacion) == 3) {
+            $nivel_autorizacion = $recomendacion->nivel_autorizacion;
+        } else {
+            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
+        }
 
-        setMessage('Se ha enviado la notificación al líder de proyecto para la revisión del análisis.');
+        $recomendacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
+
+        $titulo = 'Revisión del registro de la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+        $mensaje = '<strong>Estimado (a) ' . $recomendacion->accion->lider->name . ', ' . $recomendacion->accion->lider->puesto . ':</strong><br>
+                    Ha sido registrada la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria . ', por parte del ' .
+                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
 
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->lider->unidad_administrativa_id,$recomendacion->accion->lider->id);
 
+        setMessage('Se han enviado la información de la recomendación a revisión');
+        
         return redirect()->route('recomendacionesatencion.index');
     }
 

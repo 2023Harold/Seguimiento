@@ -15,28 +15,29 @@ class PliegosObservacion extends Model
 
     protected $fillable = [
         'id',
-        'monto_solventado', 
-        'analisis', 
-        'fase_revision', 
-        'conclusion', 
-        'concluido', 
-        'constancia', 
-        'fase_autorizacion', 
-        'nivel_autorizacion', 
-        'constancia_autorizacion', 
-        'auditoria_id', 
-        'accion_id', 
-        'usuario_creacion_id', 
-        'usuario_modificacion_id', 
-        'created_at', 
-        'updated_at', 
-        'calificacion_sugerida', 
-        'calificacion_atencion'
+        'monto_solventado',
+        'analisis',
+        'fase_revision',
+        'conclusion',
+        'concluido',
+        'constancia',
+        'fase_autorizacion',
+        'nivel_autorizacion',
+        'constancia_autorizacion',
+        'auditoria_id',
+        'accion_id',
+        'usuario_creacion_id',
+        'usuario_modificacion_id',
+        'created_at',
+        'updated_at',
+        'calificacion_sugerida',
+        'calificacion_atencion',
+        'listado_documentos'
     ];
 
     protected $dates = [
-        'created_at', 
-        'updated_at', 
+        'created_at',
+        'updated_at',
     ];
 
     public function auditoria()

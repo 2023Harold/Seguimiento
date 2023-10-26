@@ -34,7 +34,7 @@ class RecomendacionesAnalisisRequest extends FormRequest
     {
         return [
            'analisis' => 'análisis',
-           'calificacion_sugerida' => 'calificación sugerida de la atención',
+           'calificacion_sugerida' => 'calificación de la atención',
            'conclusion'=>'conclusión'
            ];
     }

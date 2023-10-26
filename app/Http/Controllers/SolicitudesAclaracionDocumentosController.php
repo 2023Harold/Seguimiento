@@ -11,7 +11,7 @@ class SolicitudesAclaracionDocumentosController extends Controller
     protected $model;
 
     public function __construct(SolicitudesAclaracionDocumento $model)
-    {       
+    {
         $this->model = $model;
     }
     /**
@@ -34,7 +34,7 @@ class SolicitudesAclaracionDocumentosController extends Controller
     public function create()
     {
         $documento = new SolicitudesAclaracionDocumento();
-             
+
         $accion = 'Agregar';
 
         return view('solicitudesaclaraciondocumentos.form', compact('documento', 'accion'));
@@ -47,9 +47,9 @@ class SolicitudesAclaracionDocumentosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
+    {
         $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
-        
+
         $request->merge([
             'solicitudaclaracion_id' => getSession('solicitudesaclaracionatencion_id'),
         ]);
@@ -71,9 +71,11 @@ class SolicitudesAclaracionDocumentosController extends Controller
      */
     public function show(SolicitudesAclaracion $documento)
     {
-        $documentos=SolicitudesAclaracionDocumento::where('solicitudaclaracion_id',$documento->id)->paginate(10);        
-        
-        return view('solicitudesaclaraciondocumentos.show',compact('documentos'));
+        $solicitud = $documento;
+        $accion=$solicitud->accion;
+        $auditoria=$accion->auditoria;
+
+        return view('solicitudesaclaraciondocumentos.show',compact('solicitud','accion','auditoria'));
     }
 
     /**
@@ -82,9 +84,13 @@ class SolicitudesAclaracionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(SolicitudesAclaracion $documento)
     {
-        //
+        $solicitud = $documento;
+        $accion=$solicitud->accion;
+        $auditoria=$accion->auditoria;
+
+        return view('solicitudesaclaraciondocumentos.form',compact('solicitud','accion','auditoria'));
     }
 
     /**
@@ -94,9 +100,12 @@ class SolicitudesAclaracionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, SolicitudesAclaracion $documento)
     {
-        //
+      $documento->update($request->all());
+      setMessage("Se ha actualizado el listado de documentos.");
+
+      return redirect()->route('solicitudesaclaracionatencion.index');
     }
 
     /**
