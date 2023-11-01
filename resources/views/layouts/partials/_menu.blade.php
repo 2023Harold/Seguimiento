@@ -12,7 +12,8 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3 show">
-                        <div class="menu-item mb-1">
+                        @can('radicacion.index')
+                        <div class="menu-item mb-1">                     
                             <a href="{{ route('radicacion.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'radicacion') || str_contains(Route::current()->getName(), 'comparecenciaacuse')|| str_contains(Route::current()->getName(), 'comparecenciaagenda')) ? 'active' : '' }}">
                                 <span class="menu-bullet">
                                     <span class="fa fa-file-text"></span>
@@ -20,6 +21,8 @@
                                 <span class="menu-title">Radicación</span>
                             </a>
                         </div>
+                        @endcan
+                        @can('comparecenciaacta.index')
                         <div class="menu-item mb-1">
                             <a href="{{ route('comparecenciaacta.index') }}" class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'comparecenciaacta') ? 'active' : '' }}">
                                 <span class="menu-bullet">
@@ -28,6 +31,8 @@
                                 <span class="menu-title">Comparecencia</span>
                             </a>
                         </div>
+                        @endcan
+                        @can('prasacciones.index')
                         <div class="menu-item mb-1">
                             <a href="{{ route('prasacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'prasacciones')||
                                                                                                   str_contains(Route::current()->getName(), 'prasturno')
@@ -38,6 +43,8 @@
                                 <span class="menu-title">PRAS</span>
                             </a>
                         </div>
+                        @endcan
+                        @can('recomendacionesacciones.index')
                         <div class="menu-item mb-1">
                             <a href="{{ route('recomendacionesacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'recomendacionesacciones')||
                                                                                                              str_contains(Route::current()->getName(), 'recomendacionesatencion')||
@@ -55,6 +62,8 @@
                                 <span class="menu-title">Recomendaciones</span>
                             </a>
                         </div>
+                        @endcan
+                        @can('solicitudesaclaracionacciones.index')
                         <div class="menu-item mb-1">
                             <a href="{{ route('solicitudesaclaracionacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'solicitudesaclaracionacciones')||
                                                                                                                    str_contains(Route::current()->getName(), 'solicitudesaclaracionatencion')||
@@ -71,6 +80,8 @@
                                 <span class="menu-title">Solicitudes de aclaración</span>
                             </a>
                         </div>
+                        @endcan
+                        @can('pliegosobservacionacciones.index')
                         <div class="menu-item mb-1">
                             <a href="{{ route('pliegosobservacionacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'pliegosobservacionacciones')||
                                                                                                                 str_contains(Route::current()->getName(), 'pliegosobservacionatencion')||
@@ -86,6 +97,7 @@
                                 <span class="menu-title">Pliegos de observación</span>
                             </a>
                         </div>
+                        @endcan
                     </div>
                 </div>
             </div>

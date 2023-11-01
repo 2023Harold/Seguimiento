@@ -112,8 +112,8 @@
                                             @endcan                                                                              
                                         @endif  
                                         @if ($auditoria->fase_autorizacion == 'En revisión 01')
-                                            @can('seguimientoauditoriarevisionlp.edit')
-                                                <a href="{{ route('seguimientoauditoriarevisionlp.edit',$auditoria) }}" class="btn btn-primary">
+                                            @can('seguimientoauditoriarevision01.edit')
+                                                <a href="{{ route('seguimientoauditoriarevision01.edit',$auditoria) }}" class="btn btn-primary">
                                                     Revisar
                                                 </a>
                                             @endcan

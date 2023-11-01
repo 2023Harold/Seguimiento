@@ -501,3 +501,15 @@ input[type="time"]:before {
   .icon-hover-active:hover{
     color:lightskyblue !important;
   }
+
+  .modal2 {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1055 !important;    
+    width: 100% !important;
+    height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    outline: 0 !important;
+}

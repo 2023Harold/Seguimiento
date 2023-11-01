@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{str_replace('_', '-', app()->getLocale())}}">
     <head>
-        @include('layouts.partials._head')
+        @include('layouts.partials._headlog')
     </head>
     <body id="kt_body" class="bg-body">
         <div class="d-flex flex-column flex-root">

@@ -16,7 +16,7 @@
                     @include('flash::message')
                     @include('layouts.contextos._auditoria', $auditoria)
 
-                    {!! BootForm::open(['model' => $auditoria,'update'=>'seguimientoauditoriarevisionlp.update','id'=>'form'] )!!}
+                    {!! BootForm::open(['model' => $auditoria,'update'=>'seguimientoauditoriarevision01.update','id'=>'form'] )!!}
                         <div class="row">
                             <div class="col-md-6">
                                 {!! BootForm::radios("estatus", ' ',

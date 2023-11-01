@@ -16,7 +16,7 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                {!! BootForm::open(['route'=>'seguimientoauditoriaacciones.index','method'=>'GET']) !!}
+                {!! BootForm::open(['route'=>'auditoriaseguimientoacciones.index','method'=>'GET']) !!}
                 <div class="row">
                     <div class="col-md-2">
                         {!! BootForm::number('consecutivo', "No. Consecutivo:", old('consecutivo',

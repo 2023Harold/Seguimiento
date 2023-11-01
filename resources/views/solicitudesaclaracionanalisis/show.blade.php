@@ -32,7 +32,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                            <label>Calificación sugerida de la atención: </label>
+                            <label>Calificación de la atención: </label>
                             @if ($solicitud->calificacion_sugerida=='Solventada')
                                 <span class="badge badge-light-success">Solventada</span>
                             @endif
@@ -43,25 +43,25 @@
                                 <span class="badge badge-light-warning">Solventada Parcialmente</span>
                             @endif
                         </div>
-                    </div>
+                    </div>                    
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                            <label class="h6">Importe promovido: </label>
-                            <span class="text-primary h3">
-                                {{ '$'.number_format( $accion->monto_aclarar, 2) }}
-                            </span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                            <label class="h6">Importe solventado: </label>
-                            <span class="text-primary h5">
-                                {{ '$'.number_format( $solicitud->monto_solventado, 2) }}
-                            </span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                            <label class="h6">Importe no solventado: </label>
-                            <span class="text-primary h3">
-                                {{ '$'.number_format( ($accion->monto_aclarar - $solicitud->monto_solventado), 2) }}
-                            </span>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Importe promovido</th>
+                                        <th>Importe solventado</th>
+                                        <th>Importe no solventado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: right!important;">{{ '$'.number_format( $accion->monto_aclarar, 2) }}</td>
+                                        <td style="text-align: right!important;">{{ '$'.number_format( $solicitud->monto_solventado, 2) }}</td>
+                                        <td style="text-align: right!important;">{{ '$'.number_format( ($accion->monto_aclarar - $solicitud->monto_solventado), 2) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -5,7 +5,7 @@
             <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                 <label>Oficios de contestación: </label>
                 <span class="text-primary">
-                    <a href="{{ route('pliegosobservacioncontestacion.oficiospliegosobservacion', $solicitud) }}" class="popupSinLocation">
+                    <a href="{{ route('solicitudescontestaciones.oficiossolicitud', $solicitud) }}" class="popupSinLocation">
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
                     </a>
                 </span>
@@ -64,7 +64,7 @@
                         <tr>
                             <th>Importe promovido</th>
                             <th>Importe solventado</th>
-                            <th>Importe solventado</th>
+                            <th>Importe no solventado</th>
                         </tr>
                     </thead>
                     <tbody>

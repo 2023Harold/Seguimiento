@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('seguimientoauditoriarevisionlp.edit', $auditoria)}}
+    {{ Breadcrumbs::render('seguimientoauditoriarevision01.edit', $auditoria)}}
 @endsection
 @section('content')
     <div class="row">
@@ -16,7 +16,7 @@
                 <div class="card-body">
                     @include('flash::message')
                     @include('layouts.contextos._auditoria', $auditoria)
-                    {!! BootForm::open(['model' => $auditoria,'update'=>'seguimientoauditoriarevisionlp.update','id'=>'form'] )!!}
+                    {!! BootForm::open(['model' => $auditoria,'update'=>'seguimientoauditoriarevision01.update','id'=>'form'] )!!}
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -35,7 +35,7 @@
                                     @forelse ($auditoria->acciones as $accion)
                                     <tr>         
                                         <td class="text-center">
-                                            <a href="{{ route('seguimientoauditoriarevisionlp.show',$accion) }}">
+                                            <a href="{{ route('seguimientoauditoriarevision01.show',$accion) }}">
                                                 <i class="fa-regular fa-eye icon-hover"></i>
                                             </a>
                                         </td>                               

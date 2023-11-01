@@ -21,12 +21,36 @@
                                 <span class="bullet me-5 bg-primary"></span> <a
                                     href="{{ route('user.index') }}">Usuarios</a>
                             </li>
+                            @endcan                            
+                            @can('rol.index')
+                                <li class="d-flex align-items-center py-2">
+                                    <span class="bullet me-5 bg-primary"></span>
+                                    <a href="{{ route('rol.index') }}">
+                                        Roles
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('permiso.index')
+                                <li class="d-flex align-items-center py-2">
+                                    <span class="bullet me-5 bg-primary"></span>
+                                    <a href="{{ route('permiso.index') }}">
+                                        Permisos
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('acceso.index')
+                                <li class="d-flex align-items-center py-2">
+                                    <span class="bullet me-5 bg-primary"></span>
+                                    <a href="{{ route('acceso.index') }}">
+                                        Accesos
+                                    </a>
+                                </li>
                             @endcan
                         </div>
                     </div>
                 </div>
             </div>
-            @endcan
+            @endcanany
             {{-- @canany(['catrequerimiento.index', 'user.index', 'rol.index', 'permiso.index', 'acceso.index',
             'ejercicio.index'])
             <div class="mb-3 col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12">

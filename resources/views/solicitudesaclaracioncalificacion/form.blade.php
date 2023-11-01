@@ -46,7 +46,7 @@
                 @if (!empty($solicitud->calificacion_sugerida))
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                        <label>Calificación sugerida de la atención: </label>
+                        <label>Calificación de la atención: </label>
                         @if ($solicitud->calificacion_sugerida=='Solventada')
                             <span class="badge badge-light-success">Solventado</span>
                         @endif

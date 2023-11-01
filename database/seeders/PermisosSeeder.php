@@ -17,17 +17,21 @@ class PermisosSeeder extends Seeder
     {
         $actions = ['index', 'create', 'store', 'edit', 'update', 'show', 'destroy'];
         $controllers = [
+                        'user','permiso','rol','acceso',
                         'seguimientoauditoria','seguimientoauditoriaacciones',
-                        'seguimientoauditoriarevisionlp','seguimientoauditoriarevision',
+                        'seguimientoauditoriarevision01','seguimientoauditoriarevision',
                         'seguimientoauditoriavalidacion','seguimientoauditoriaautorizacion',
+                        'seguimientoauditoriaaccionrevision01','seguimientoauditoriaaccionrevision',
                         'asignaciondireccion','asignaciondepartamento','asignacionlideranalista',
-                        'asignaciondepartamentoencargado','radicacion','radicacionvalidacion',
-                        'radicacionautorizacion','comparecencia','comparecenciaacuse','comparecenciaacta',
+                        'asignaciondepartamentoencargado','auditoriaseguimiento','auditoriaseguimientoacciones',
+                        'auditoriaconsultaacciones','radicacion','radicacionvalidacion',
+                        'radicacionautorizacion','comparecencia','comparecenciaacuse','comparecenciaacta','comparecenciaagenda',
                         'pras','prasacciones','prasturno','prasturnorevision','prasturnovalidacion',
                         'prasturnoautorizacion','prasturnoacuses','recomendaciones','recomendacionesacciones',
-                        'recomendacionesatencion','recomendacionescalificacion','recomendacionesdocumentos',
-                        'recomendacionesanalisisenvio','recomendacionesrevision01','recomendacionesrevision',
-                        'recomendacionesvalidacion','recomendacionesautorizacion','recomendacionesacuses','cedulainicial',
+                        'recomendacionesatencion','recomendacionescontestaciones','recomendacionescalificacion','recomendacionesdocumentos',
+                        'recomendacionesanalisis','recomendacionesanalisisenvio','recomendacionesrevision01','recomendacionesrevision',
+                        'recomendacionesvalidacion','recomendacionesautorizacion','recomendacionesacuses',
+                        'revisionesrecomendaciones','revisionesrecomendacionesatencion','cedulainicial',
                         'solicitudesaclaracion','solicitudesaclaracionacciones','solicitudesaclaracionatencion',
                         'solicitudesaclaracioncontestacion','solicitudesaclaraciondocumentos','solicitudesaclaracionanalisis',
                         'solicitudesaclanalisisenvio','solicitudesaclaracionrevision01','solicitudesaclaracionrevision',
@@ -51,6 +55,7 @@ class PermisosSeeder extends Seeder
 
         Permission::insert($permisosGenerales);
         Permission::create(['name' => 'home']);
+        Permission::create(['name' => 'setPermission']);
         Permission::create(['name' => 'auth.logout']);
         Permission::create(['name' => 'firmar']);
         Permission::create(['name' => 'finalizarfirma']);
@@ -79,5 +84,7 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'getAgendaComparecencias']);
         Permission::create(['name' => 'solicitudescontestaciones.oficiossolicitud']);
         Permission::create(['name' => 'pliegosobservacioncontestacion.oficiospliegosobservacion']);
+        Permission::create(['name' => 'auditoriaseguimiento.accionesconsulta']);
+        Permission::create(['name' => 'recomendacionescontestaciones.oficiosrecomendacion']);
     }
 }

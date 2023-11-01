@@ -18,7 +18,7 @@ class RolesSeeder extends Seeder
     {
         //home
         $home = ['home','auth.logout','notificaciones.index','marcarleido','getCargosAsociados','cotejamiento','firmar','finalizarfirma','finalizarfirmapdf','constancia.mostrarConstancia'];
-
+       
         //Seguimiento Auditoria
         $seguimientoauditoriaAnalista=['seguimientoauditoria.index','seguimientoauditoria.create','seguimientoauditoria.store','seguimientoauditoria.edit','seguimientoauditoria.update','seguimientoauditoria.show','seguimientoauditoria.destroy','seguimientoauditoria.acciones','seguimientoauditoria.concluir','seguimientoauditoria.accionesconsulta'];
         $seguimientoauditoriaLiderProyecto=['seguimientoauditoria.index','seguimientoauditoria.show','seguimientoauditoria.acciones','seguimientoauditoria.accionesconsulta'];
@@ -28,18 +28,18 @@ class RolesSeeder extends Seeder
         $seguimientoauditoriaConsulta=['seguimientoauditoria.index','seguimientoauditoria.show','seguimientoauditoria.acciones','seguimientoauditoria.accionesconsulta'];
 
         //Seguimiento Auditoria Acciones
-        $seguimientoauditoriaaccionesAnalista=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.create','seguimientoauditoriaacciones.store','seguimientoauditoriaacciones.edit','seguimientoauditoriaacciones.update','seguimientoauditoriaacciones.show','seguimientoauditoriaacciones.destroy'];
-        $seguimientoauditoriaaccionesLiderProyecto=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show'];
-        $seguimientoauditoriaaccionesJefeDepartamento=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show'];
-        $seguimientoauditoriaaccionesDirector=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show'];
-        $seguimientoauditoriaaccionesTitular=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show'];
-        $seguimientoauditoriaaccionesConsulta=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show'];
+        $seguimientoauditoriaaccionesAnalista=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.create','seguimientoauditoriaacciones.store','seguimientoauditoriaacciones.edit','seguimientoauditoriaacciones.update','seguimientoauditoriaacciones.show','seguimientoauditoriaacciones.destroy','auditoriaseguimiento.accionesconsulta','auditoriaseguimientoacciones.index','auditoriaconsultaacciones.show'];
+        $seguimientoauditoriaaccionesLiderProyecto=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show','auditoriaseguimiento.accionesconsulta','auditoriaseguimientoacciones.index','auditoriaconsultaacciones.show'];
+        $seguimientoauditoriaaccionesJefeDepartamento=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show','auditoriaseguimiento.accionesconsulta','auditoriaseguimientoacciones.index','auditoriaconsultaacciones.show'];
+        $seguimientoauditoriaaccionesDirector=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show','auditoriaseguimiento.accionesconsulta','auditoriaseguimientoacciones.index','auditoriaconsultaacciones.show'];
+        $seguimientoauditoriaaccionesTitular=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show','auditoriaseguimiento.accionesconsulta','auditoriaseguimientoacciones.index','auditoriaconsultaacciones.show'];
+        $seguimientoauditoriaaccionesConsulta=['seguimientoauditoriaacciones.index','seguimientoauditoriaacciones.show','auditoriaseguimiento.accionesconsulta','auditoriaseguimientoacciones.index','auditoriaconsultaacciones.show'];
 
         //Seguimiento Auditoria Revision Lider Proyecto
-        $seguimientoauditoriarevisionLiderProyecto=['seguimientoauditoriarevisionlp.edit','seguimientoauditoriarevisionlp.update'];
+        $seguimientoauditoriarevisionLiderProyecto=['seguimientoauditoriarevision01.edit','seguimientoauditoriarevision01.update','seguimientoauditoriaaccionrevision01.edit','seguimientoauditoriaaccionrevision01.update'];
 
         //Seguimiento Auditoria Revisión Jefe de Departamento
-        $seguimientoauditoriarevisionJefeDepartamento=['seguimientoauditoriarevision.edit','seguimientoauditoriarevision.update'];
+        $seguimientoauditoriarevisionJefeDepartamento=['seguimientoauditoriarevision.edit','seguimientoauditoriarevision.update','seguimientoauditoriaaccionrevision.edit','seguimientoauditoriaaccionrevision.update'];
 
         //Seguimiento Auditoria Validación
         $seguimientoauditoriavalidacionDirector=['seguimientoauditoriavalidacion.edit','seguimientoauditoriavalidacion.update'];
@@ -68,6 +68,9 @@ class RolesSeeder extends Seeder
         //Asignacion Departamento Encargado
         $asignacionesDepartamentoEncargadoDirector=['asignaciondepartamentoencargado.edit','asignaciondepartamentoencargado.update'];
 
+        //Auditoria Seguimiento
+        $auditoriaSeguimiento=['auditoriaseguimiento.index','auditoriaseguimiento.edit','auditoriaseguimiento.show'];
+
         //Radicacion
         $radicacionJefeDepartamento=['radicacion.index','radicacion.auditoria','radicacion.create','radicacion.store','radicacion.edit','radicacion.update','comparecencia.show','comparecenciaacuse.show','comparecenciaacuse.edit','comparecenciaacuse.update'];
 
@@ -81,20 +84,20 @@ class RolesSeeder extends Seeder
         $radicacionConsulta=['radicacion.index','comparecencia.show','comparecenciaacuse.show'];
 
         //Comparecencia Titular
-        $comparecenciaTitular=['comparecencia.index','comparecenciaacta.show'];
+        $comparecenciaTitular=['comparecenciaacta.index','comparecenciaacta.show'];
 
         //Comparecencia Director
-        $comparecenciaDirector=['comparecencia.index','comparecenciaacta.show'];
+        $comparecenciaDirector=['comparecenciaacta.index','comparecenciaacta.show'];
 
         //Comparecencia Jefe de Departamento
-        $comparecenciaJefeDepartamento=['comparecencia.index','comparecenciaacta.show','comparecenciaacta.edit','comparecenciaacta.update','getAgendaComparecencias'];
+        $comparecenciaJefeDepartamento=['comparecenciaacta.index','comparecenciaacta.show','comparecenciaacta.edit','comparecenciaacta.update','getAgendaComparecencias','comparecenciaagenda.edit','comparecenciaagenda.update'];
 
 
         //Comparecencia Consulta
-        $comparecenciaConsulta=['comparecencia.index','comparecenciaacta.show'];
+        $comparecenciaConsulta=['comparecenciaacta.index','comparecenciaacta.show'];
 
         //PRASLider
-        $prasLider=['pras.index','pras.edit','prasacciones.index','prasacciones.edit','prasturno.index','prasturno.create','prasturno.edit','prasturno.update','prasturnoacuses.edit','prasturnoacuses.update','prasturnoacuses.show'];
+        $prasLider=['pras.index','pras.edit','prasacciones.index','prasacciones.edit','prasturno.index','prasturno.create','prasturno.store','prasturno.edit','prasturno.update','prasturnoacuses.edit','prasturnoacuses.update','prasturnoacuses.show'];
 
         //PRASJefe
         $prasJefe=['pras.index','pras.edit','prasacciones.index','prasacciones.edit','prasturno.index','prasturnorevision.edit','prasturnorevision.update','prasturnoacuses.show'];
@@ -109,11 +112,11 @@ class RolesSeeder extends Seeder
         $prasConsulta=['pras.index','pras.edit','prasacciones.index','prasacciones.edit','prasturno.index','prasturnoacuses.show'];
 
         //Recomendaciones
-        $recomendacionesAnalista=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionesatencion.create','recomendacionesatencion.store','recomendacionesatencion.edit','recomendacionesatencion.update','recomendacionesdocumentos.index','recomendacionesdocumentos.create','recomendacionesacuses.store','recomendacionesdocumentos.destroy','recomendacionesanalisisenvio.edit'];
-        $recomendacionesLider=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index', 'recomendacionescalificacion.show','recomendacionesrevision01.edit','recomendacionesrevision01.update'];
-        $recomendacionesJefe=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.edit','recomendacionescalificacion.update','recomendacionescalificacion.show','recomendacionesrevision.edit','recomendacionesrevision.update'];
-        $recomendacionesDirector=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.show','recomendacionesvalidacion.edit','recomendacionesvalidacion.update'];
-        $recomendacionesTitular=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.show','recomendacionesautorizacion.edit','recomendacionesautorizacion.update'];
+        $recomendacionesAnalista=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionesatencion.create','recomendacionesatencion.store','recomendacionesatencion.edit','recomendacionesatencion.update','recomendacionesdocumentos.index','recomendacionesdocumentos.create','recomendacionesacuses.store','recomendacionesdocumentos.destroy','recomendacionesanalisisenvio.edit','revisionesrecomendacionesatencion.create','revisionesrecomendacionesatencion.store','revisionesrecomendaciones.edit','revisionesrecomendaciones.show','recomendacionescontestaciones.index','recomendacionescontestaciones.create','recomendacionescontestaciones.store','recomendacionescontestaciones.show','recomendacionescontestaciones.edit','recomendacionescontestaciones.update','recomendacionescontestaciones.destroy','recomendacionesdocumentos.edit','recomendacionesdocumentos.update','recomendacionesdocumentos.show','recomendacionesanalisis.edit','recomendacionesanalisis.update','recomendacionesanalisis.show'];
+        $recomendacionesLider=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index', 'recomendacionescalificacion.show','recomendacionesrevision01.edit','recomendacionesrevision01.update','revisionesrecomendaciones.create','revisionesrecomendaciones.store','revisionesrecomendaciones.show','recomendacionescontestaciones.show','recomendacionesdocumentos.show','recomendacionesanalisis.show','recomendacionescontestaciones.oficiosrecomendacion'];
+        $recomendacionesJefe=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.edit','recomendacionescalificacion.update','recomendacionescalificacion.show','recomendacionesrevision.edit','recomendacionesrevision.update','revisionesrecomendaciones.create','revisionesrecomendaciones.store','recomendacionescontestaciones.show','recomendacionesdocumentos.show','recomendacionesanalisis.show','recomendacionescontestaciones.oficiosrecomendacion'];
+        $recomendacionesDirector=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.show','recomendacionesvalidacion.edit','recomendacionesvalidacion.update','revisionesrecomendaciones.create','revisionesrecomendaciones.store','revisionesrecomendaciones.show','recomendacionescontestaciones.show','recomendacionesdocumentos.show','recomendacionesanalisis.show','recomendacionescontestaciones.oficiosrecomendacion'];
+        $recomendacionesTitular=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.show','recomendacionesautorizacion.edit','recomendacionesautorizacion.update','revisionesrecomendaciones.create','revisionesrecomendaciones.store','revisionesrecomendaciones.show','recomendacionescontestaciones.show','recomendacionesdocumentos.show','recomendacionesanalisis.show','recomendacionescontestaciones.oficiosrecomendacion'];
         $recomendacionesConsulta=['recomendaciones.index','recomendaciones.edit','recomendacionesacciones.index','recomendacionesacciones.edit','recomendacionesatencion.index','recomendacionescalificacion.show'];
 
         /*Cedula inicial*/
@@ -126,126 +129,122 @@ class RolesSeeder extends Seeder
         $solicitudesDocumentosAnalista=['solicitudesaclaraciondocumentos.index','solicitudesaclaraciondocumentos.create','solicitudesaclaraciondocumentos.store','solicitudesaclaraciondocumentos.show','solicitudesaclaraciondocumentos.destroy','solicitudesaclaraciondocumentos.edit','solicitudesaclaraciondocumentos.update'];
         $solicitudesAnalisisAnalista=['solicitudesaclaracionanalisis.edit','solicitudesaclaracionanalisis.update','solicitudesaclaracionanalisis.show'];
         $solicitudesAnalisisEnvioAnalista=['solicitudesaclanalisisenvio.edit'];
-        $solicitudesCalificacionAnalista=['solicitudesaclaracioncalificacion.show'];
+
+        $solicitudesComentarios=['revisionessolicitudes.create','revisionessolicitudes.store','revisionessolicitudes.show'];
+        $solicitudesComentariosAtencion=['revisionessolicitudesatencion.create','revisionessolicitudesatencion.store','revisionessolicitudes.edit','revisionessolicitudes.show'];
+  
 
         $solicitudesLider=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracionatencion.index'];
         $solicitudesContestacionesLider=['solicitudesaclaracioncontestacion.index','solicitudesaclaracioncontestacion.show','solicitudescontestaciones.oficiossolicitud'];
         $solicitudesDocumentosLider=['solicitudesaclaraciondocumentos.index','solicitudesaclaraciondocumentos.show'];
         $solicitudesAnalisisLider=['solicitudesaclaracionanalisis.show'];
         $solicitudesAnalisisRevisionLider=['solicitudesaclaracionrevision01.edit','solicitudesaclaracionrevision01.update'];
-        $solicitudesCalificacionLider=['solicitudesaclaracioncalificacion.show'];
+    
 
         $solicitudesJefe=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracionatencion.index'];
         $solicitudesContestacionesJefe=['solicitudesaclaracioncontestacion.index','solicitudesaclaracioncontestacion.show','solicitudescontestaciones.oficiossolicitud'];
         $solicitudesDocumentosJefe=['solicitudesaclaraciondocumentos.index','solicitudesaclaraciondocumentos.show'];
         $solicitudesAnalisisJefe=['solicitudesaclaracionanalisis.show'];
         $solicitudesAnalisisRevisionJefe=['solicitudesaclaracionrevision.edit','solicitudesaclaracionrevision.update'];
-        $solicitudesCalificacionJefe=['solicitudesaclaracioncalificacion.show','solicitudesaclaracioncalificacion.edit','solicitudesaclaracioncalificacion.update'];
+        
 
         $solicitudesDirector=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracionatencion.index'];
         $solicitudesContestacionesDirector=['solicitudesaclaracioncontestacion.index','solicitudesaclaracioncontestacion.show','solicitudescontestaciones.oficiossolicitud'];
         $solicitudesDocumentosDirector=['solicitudesaclaraciondocumentos.index','solicitudesaclaraciondocumentos.show'];
-        $solicitudesAnalisisDirector=['solicitudesaclaracionanalisis.show'];
-        $solicitudesCalificacionDirector=['solicitudesaclaracioncalificacion.show'];
+        $solicitudesAnalisisDirector=['solicitudesaclaracionanalisis.show'];       
         $solicitudesCalificacionValidacionDirector=['solicitudesaclaracionvalidacion.edit','solicitudesaclaracionvalidacion.update'];
 
         $solicitudesTitular=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracionatencion.index'];
         $solicitudesContestacionesTitular=['solicitudesaclaracioncontestacion.index','solicitudesaclaracioncontestacion.show','solicitudescontestaciones.oficiossolicitud'];
         $solicitudesDocumentosTitular=['solicitudesaclaraciondocumentos.index','solicitudesaclaraciondocumentos.show'];
-        $solicitudesAnalisisTitular=['solicitudesaclaracionanalisis.show'];
-        $solicitudesCalificacionTitular=['solicitudesaclaracioncalificacion.show'];
+        $solicitudesAnalisisTitular=['solicitudesaclaracionanalisis.show'];        
         $solicitudesCalificacionAutorizacionTitular=['solicitudesaclaracionautorizacion.edit','solicitudesaclaracionautorizacion.update'];
 
         $solicitudesConsulta=['solicitudesaclaracion.index','solicitudesaclaracion.edit','solicitudesaclaracionacciones.index','solicitudesaclaracionacciones.edit','solicitudesaclaracionatencion.index'];
         $solicitudesContestacionesConsulta=['solicitudesaclaracioncontestacion.index','solicitudesaclaracioncontestacion.show','solicitudescontestaciones.oficiossolicitud'];
         $solicitudesDocumentosConsulta=['solicitudesaclaraciondocumentos.index','solicitudesaclaraciondocumentos.show'];
         $solicitudesAnalisisConsulta=['solicitudesaclaracionanalisis.show'];
-        $solicitudesCalificacionConsulta=['solicitudesaclaracioncalificacion.show'];
-
-
 
         /*Pliegos de observacion*/
         $pliegosAnalista=['pliegosobservacion.index','pliegosobservacion.edit','pliegosobservacionacciones.index','pliegosobservacionacciones.edit','pliegosobservacionatencion.index'];
         $pliegosContestacionesAnalista=['pliegosobservacionatencioncontestacion.index','pliegosobservacionatencioncontestacion.create','pliegosobservacionatencioncontestacion.store','pliegosobservacionatencioncontestacion.show','pliegosobservacionatencioncontestacion.edit','pliegosobservacionatencioncontestacion.update','pliegosobservacionatencioncontestacion.destroy','pliegosobservacioncontestacion.oficiospliegosobservacion'];
-        $pliegosDocumentosAnalista=['pliegosobservaciondocumentos.index','pliegosobservaciondocumentos.create','pliegosobservaciondocumentos.store','pliegosobservaciondocumentos.show','pliegosobservaciondocumentos.destroy'];
+        $pliegosDocumentosAnalista=['pliegosobservaciondocumentos.index','pliegosobservaciondocumentos.edit','pliegosobservaciondocumentos.update','pliegosobservaciondocumentos.show'];
         $pliegosAnalisisAnalista=['pliegosobservacionanalisis.edit','pliegosobservacionanalisis.update','pliegosobservacionanalisis.show'];
         $pliegosAnalisisEnvioAnalista=['pliegosobservacionanalisisenvio.edit'];
-        $pliegosCalificacionAnalista=['pliegosatencioncalificacion.show'];
+
+        $pliegosComentarios=['revisionespliegos.create','revisionespliegos.store','revisionespliegos.show'];
+        $pliegosComentariosAtencion=['revisionespliegosatencion.create','revisionespliegosatencion.store','revisionespliegos.edit','revisionespliegos.show'];
+       
 
         $pliegosLider=['pliegosobservacion.index','pliegosobservacion.edit','pliegosobservacionacciones.index','pliegosobservacionacciones.edit','pliegosobservacionatencion.index'];
         $pliegosContestacionesLider=['pliegosobservacionatencioncontestacion.index','pliegosobservacionatencioncontestacion.show','pliegosobservacioncontestacion.oficiospliegosobservacion'];
         $pliegosDocumentosLider=['pliegosobservaciondocumentos.index','pliegosobservaciondocumentos.show'];
         $pliegosAnalisisLider=['pliegosobservacionanalisis.show'];
         $pliegosAnalisisRevisionLider=['pliegosobservacionrevision01.edit','pliegosobservacionrevision01.update'];
-        $pliegosCalificacionLider=['pliegosatencioncalificacion.show'];
+        
 
         $pliegosJefe=['pliegosobservacion.index','pliegosobservacion.edit','pliegosobservacionacciones.index','pliegosobservacionacciones.edit','pliegosobservacionatencion.index'];
         $pliegosContestacionesJefe=['pliegosobservacionatencioncontestacion.index','pliegosobservacionatencioncontestacion.show','pliegosobservacioncontestacion.oficiospliegosobservacion'];
         $pliegosDocumentosJefe=['pliegosobservaciondocumentos.index','pliegosobservaciondocumentos.show'];
         $pliegosAnalisisJefe=['pliegosobservacionanalisis.show'];
         $pliegosAnalisisRevisionJefe=['pliegosobservacionrevision.edit','pliegosobservacionrevision.update'];
-        $pliegosCalificacionJefe=['pliegosatencioncalificacion.show','pliegosatencioncalificacion.edit','pliegosatencioncalificacion.update'];
+        
 
         $pliegosDirector=['pliegosobservacion.index','pliegosobservacion.edit','pliegosobservacionacciones.index','pliegosobservacionacciones.edit','pliegosobservacionatencion.index'];
         $pliegosContestacionesDirector=['pliegosobservacionatencioncontestacion.index','pliegosobservacionatencioncontestacion.show','pliegosobservacioncontestacion.oficiospliegosobservacion'];
         $pliegosDocumentosDirector=['pliegosobservaciondocumentos.index','pliegosobservaciondocumentos.show'];
-        $pliegosAnalisisDirector=['pliegosobservacionanalisis.show'];
-        $pliegosCalificacionDirector=['pliegosatencioncalificacion.show'];
+        $pliegosAnalisisDirector=['pliegosobservacionanalisis.show'];       
         $pliegosCalificacionValidacionDirector=['pliegosobservacionvalidacion.edit','pliegosobservacionvalidacion.update'];
 
         $pliegosTitular=['pliegosobservacion.index','pliegosobservacion.edit','pliegosobservacionacciones.index','pliegosobservacionacciones.edit','pliegosobservacionatencion.index'];
         $pliegosContestacionesTitular=['pliegosobservacionatencioncontestacion.index','pliegosobservacionatencioncontestacion.show','pliegosobservacioncontestacion.oficiospliegosobservacion'];
         $pliegosDocumentosTitular=['pliegosobservaciondocumentos.index','pliegosobservaciondocumentos.show'];
-        $pliegosAnalisisTitular=['pliegosobservacionanalisis.show'];
-        $pliegosCalificacionTitular=['pliegosatencioncalificacion.show'];
+        $pliegosAnalisisTitular=['pliegosobservacionanalisis.show'];        
         $pliegosCalificacionAutorizacionTitular=['pliegosobservacionautorizacion.edit','pliegosobservacionautorizacion.update'];
 
         $pliegosConsulta=['pliegosobservacion.index','pliegosobservacion.edit','pliegosobservacionacciones.index','pliegosobservacionacciones.edit','pliegosobservacionatencion.index'];
         $pliegosContestacionesConsulta=['pliegosobservacionatencioncontestacion.index','pliegosobservacionatencioncontestacion.show','pliegosobservacioncontestacion.oficiospliegosobservacion'];
         $pliegosDocumentosConsulta=['pliegosobservaciondocumentos.index','pliegosobservaciondocumentos.show'];
         $pliegosAnalisisConsulta=['pliegosobservacionanalisis.show'];
-        $pliegosCalificacionConsulta=['pliegosatencioncalificacion.show'];
-
-
-
+       
         //*********************************************************************************************************************************************************** */
 
         //Permisos Analista
-        $permisosAnalista = array_merge($home,$seguimientoauditoriaAnalista, $seguimientoauditoriaaccionesAnalista,$recomendacionesAnalista,$cedulaInicial,$radicacionConsulta,$comparecenciaConsulta,$solicitudesAnalista,$solicitudesContestacionesAnalista,$solicitudesDocumentosAnalista,$solicitudesAnalisisAnalista,$solicitudesAnalisisEnvioAnalista,$solicitudesCalificacionAnalista,$pliegosAnalista,$pliegosContestacionesAnalista,$pliegosDocumentosAnalista,$pliegosAnalisisAnalista,$pliegosAnalisisEnvioAnalista,$pliegosCalificacionAnalista);
+        $permisosAnalista = array_merge($home,$seguimientoauditoriaAnalista, $seguimientoauditoriaaccionesAnalista,$auditoriaSeguimiento,$recomendacionesAnalista,$cedulaInicial,$radicacionConsulta,$comparecenciaConsulta,$solicitudesAnalista,$solicitudesContestacionesAnalista,$solicitudesDocumentosAnalista,$solicitudesAnalisisAnalista,$solicitudesAnalisisEnvioAnalista,$solicitudesComentariosAtencion,$pliegosAnalista,$pliegosContestacionesAnalista,$pliegosDocumentosAnalista,$pliegosAnalisisAnalista,$pliegosAnalisisEnvioAnalista,$pliegosComentariosAtencion);
 
         //Permisos Lider de Proyecto
-        $permisosLiderProyecto = array_merge($home, $seguimientoauditoriaLiderProyecto, $seguimientoauditoriaaccionesLiderProyecto,$seguimientoauditoriarevisionLiderProyecto,$prasLider,$recomendacionesLider,$cedulaInicial,$radicacionConsulta,$comparecenciaConsulta,$solicitudesLider,$solicitudesContestacionesLider,$solicitudesDocumentosLider,$solicitudesAnalisisLider,$solicitudesAnalisisRevisionLider,$solicitudesCalificacionLider,$pliegosLider,$pliegosContestacionesLider,$pliegosDocumentosLider,$pliegosAnalisisLider,$pliegosAnalisisRevisionLider,$pliegosCalificacionLider);
+        $permisosLiderProyecto = array_merge($home, $seguimientoauditoriaLiderProyecto, $seguimientoauditoriaaccionesLiderProyecto,$seguimientoauditoriarevisionLiderProyecto,$prasLider,$recomendacionesLider,$cedulaInicial,$auditoriaSeguimiento,$radicacionConsulta,$comparecenciaConsulta,$solicitudesLider,$solicitudesContestacionesLider,$solicitudesDocumentosLider,$solicitudesAnalisisLider,$solicitudesAnalisisRevisionLider,$solicitudesComentarios,$pliegosLider,$pliegosContestacionesLider,$pliegosDocumentosLider,$pliegosAnalisisLider,$pliegosAnalisisRevisionLider,$pliegosComentarios);
 
         //Permisos Jefe de Departamento
-        $permisosJefeDepartamento = array_merge($home, $seguimientoauditoriaJefeDepartamento, $seguimientoauditoriaaccionesJefeDepartamento, $seguimientoauditoriarevisionJefeDepartamento,$asignacionesLiderAnalistaJefeDepartamento,$radicacionJefeDepartamento,$comparecenciaJefeDepartamento,$prasJefe,$recomendacionesJefe,$cedulaInicial,$solicitudesJefe,$solicitudesContestacionesJefe,$solicitudesDocumentosJefe,$solicitudesAnalisisJefe,$solicitudesAnalisisRevisionJefe,$solicitudesCalificacionJefe,   $pliegosJefe,$pliegosContestacionesJefe,$pliegosDocumentosJefe,$pliegosAnalisisJefe,$pliegosAnalisisRevisionJefe,$pliegosCalificacionJefe);
+        $permisosJefeDepartamento = array_merge($home, $seguimientoauditoriaJefeDepartamento, $seguimientoauditoriaaccionesJefeDepartamento, $seguimientoauditoriarevisionJefeDepartamento,$asignacionesLiderAnalistaJefeDepartamento,$auditoriaSeguimiento,$radicacionJefeDepartamento,$comparecenciaJefeDepartamento,$prasJefe,$recomendacionesJefe,$cedulaInicial,$solicitudesJefe,$solicitudesContestacionesJefe,$solicitudesDocumentosJefe,$solicitudesAnalisisJefe,$solicitudesAnalisisRevisionJefe,$solicitudesComentarios,$pliegosJefe,$pliegosContestacionesJefe,$pliegosDocumentosJefe,$pliegosAnalisisJefe,$pliegosAnalisisRevisionJefe,$pliegosComentarios);
 
         //Permisos Director
-        $permisosDirector = array_merge($home, $seguimientoauditoriaDirector, $seguimientoauditoriaaccionesDirector, $seguimientoauditoriavalidacionDirector,$asignaciondepartamentoDirector,$asignacionesLiderAnalistaConsulta,$radicacionvalidacionDirector,$asignacionesDepartamentoEncargadoDirector,$comparecenciaDirector,$prasDirector,$recomendacionesDirector,$cedulaInicial,$solicitudesDirector,$solicitudesContestacionesDirector,$solicitudesDocumentosDirector,$solicitudesAnalisisDirector,$solicitudesCalificacionDirector,$solicitudesCalificacionValidacionDirector,$pliegosDirector,$pliegosContestacionesDirector,$pliegosDocumentosDirector,$pliegosAnalisisDirector,$pliegosCalificacionDirector,$pliegosCalificacionValidacionDirector);
+        $permisosDirector = array_merge($home, $seguimientoauditoriaDirector, $seguimientoauditoriaaccionesDirector, $seguimientoauditoriavalidacionDirector,$asignaciondepartamentoDirector,$asignacionesLiderAnalistaConsulta,$auditoriaSeguimiento,$radicacionvalidacionDirector,$asignacionesDepartamentoEncargadoDirector,$comparecenciaDirector,$prasDirector,$recomendacionesDirector,$cedulaInicial,$solicitudesDirector,$solicitudesContestacionesDirector,$solicitudesDocumentosDirector,$solicitudesAnalisisDirector,$solicitudesCalificacionValidacionDirector,$solicitudesComentarios,$pliegosDirector,$pliegosContestacionesDirector,$pliegosDocumentosDirector,$pliegosAnalisisDirector,$pliegosCalificacionValidacionDirector,$pliegosComentarios);
 
         //Permisos Titular
-        $permisosTitular = array_merge($home, $seguimientoauditoriaTitular, $seguimientoauditoriaaccionesTitular, $seguimientoauditoriaautorizacionTitular, $asignaciondireccionTitular, $asignaciondepartamentoTitular,$asignacionesLiderAnalistaConsulta,$radicacionautorizacionTitular,$comparecenciaTitular,$prasTitular,$recomendacionesTitular,$cedulaInicial,$solicitudesTitular,$solicitudesContestacionesTitular,$solicitudesDocumentosTitular,$solicitudesAnalisisTitular,$solicitudesCalificacionTitular,$solicitudesCalificacionAutorizacionTitular,$pliegosTitular,$pliegosContestacionesTitular,$pliegosDocumentosTitular,$pliegosAnalisisTitular,$pliegosCalificacionTitular,$pliegosCalificacionAutorizacionTitular);
+        $permisosTitular = array_merge($home, $seguimientoauditoriaTitular, $seguimientoauditoriaaccionesTitular, $seguimientoauditoriaautorizacionTitular, $asignaciondireccionTitular, $asignaciondepartamentoTitular,$asignacionesLiderAnalistaConsulta,$auditoriaSeguimiento,$radicacionautorizacionTitular,$comparecenciaTitular,$prasTitular,$recomendacionesTitular,$cedulaInicial,$solicitudesTitular,$solicitudesContestacionesTitular,$solicitudesDocumentosTitular,$solicitudesAnalisisTitular,$solicitudesCalificacionAutorizacionTitular,$solicitudesComentarios,$pliegosTitular,$pliegosContestacionesTitular,$pliegosDocumentosTitular,$pliegosAnalisisTitular,$pliegosCalificacionAutorizacionTitular,$pliegosComentarios);
 
         //Permisos Usuario Consulta
-        $permisosConsulta = array_merge($home, $seguimientoauditoriaConsulta, $seguimientoauditoriaaccionesConsulta,$asignacionesConsulta,$asignacionesLiderAnalistaConsulta,$radicacionConsulta,$comparecenciaConsulta,$prasConsulta,$recomendacionesConsulta,$cedulaInicial,$solicitudesConsulta,$solicitudesContestacionesConsulta,$solicitudesDocumentosConsulta,$solicitudesAnalisisConsulta,$solicitudesCalificacionConsulta,$pliegosConsulta,$pliegosContestacionesConsulta,$pliegosDocumentosConsulta,$pliegosAnalisisConsulta,$pliegosCalificacionConsulta);
+        $permisosConsulta = array_merge($home, $seguimientoauditoriaConsulta, $seguimientoauditoriaaccionesConsulta,$asignacionesConsulta,$asignacionesLiderAnalistaConsulta,$auditoriaSeguimiento,$radicacionConsulta,$comparecenciaConsulta,$prasConsulta,$recomendacionesConsulta,$cedulaInicial,$solicitudesConsulta,$solicitudesContestacionesConsulta,$solicitudesDocumentosConsulta,$solicitudesAnalisisConsulta,$solicitudesComentarios,$pliegosConsulta,$pliegosContestacionesConsulta,$pliegosDocumentosConsulta,$pliegosAnalisisConsulta,$pliegosComentarios);
 
 
-        // Role::create(['name' => 'Administrador TI'])->givePermissionTo(Permission::all());
-        // Role::create(['name' => 'Auditor Superior'])->givePermissionTo($permisosConsulta);
-        // Role::create(['name' => 'Administrador del Sistema'])->givePermissionTo($permisosConsulta);
-        // Role::create(['name' => 'Titular Unidad de Seguimiento'])->givePermissionTo($permisosTitular);
-        // Role::create(['name' => 'Director de Seguimiento'])->givePermissionTo($permisosDirector);
-        // Role::create(['name' => 'Jefe de Departamento de Seguimiento'])->givePermissionTo($permisosJefeDepartamento);
-        // Role::create(['name' => 'Lider de Proyecto'])->givePermissionTo($permisosLiderProyecto);
-        // Role::create(['name' => 'Analista'])->givePermissionTo($permisosAnalista);
+        Role::create(['name' => 'Administrador TI'])->givePermissionTo(Permission::all());
+        Role::create(['name' => 'Auditor Superior'])->givePermissionTo($permisosConsulta);
+        Role::create(['name' => 'Administrador del Sistema'])->givePermissionTo($permisosConsulta);
+        Role::create(['name' => 'Titular Unidad de Seguimiento'])->givePermissionTo($permisosTitular);
+        Role::create(['name' => 'Director de Seguimiento'])->givePermissionTo($permisosDirector);
+        Role::create(['name' => 'Jefe de Departamento de Seguimiento'])->givePermissionTo($permisosJefeDepartamento);
+        Role::create(['name' => 'Lider de Proyecto'])->givePermissionTo($permisosLiderProyecto);
+        Role::create(['name' => 'Analista'])->givePermissionTo($permisosAnalista);
 
 
-        Role::where('name','Administrador TI')->first()->givePermissionTo(Permission::all());
+        /*Role::where('name','Administrador TI')->first()->givePermissionTo(Permission::all());
         Role::where('name','Auditor Superior')->first()->givePermissionTo($permisosConsulta);
         Role::where('name','Administrador del Sistema')->first()->givePermissionTo($permisosConsulta);
         Role::where('name','Titular Unidad de Seguimiento')->first()->givePermissionTo($permisosTitular);
         Role::where('name','Director de Seguimiento')->first()->givePermissionTo($permisosDirector);
         Role::where('name','Jefe de Departamento de Seguimiento')->first()->givePermissionTo($permisosJefeDepartamento);
         Role::where('name','Lider de Proyecto')->first()->givePermissionTo($permisosLiderProyecto);
-        Role::where('name','Analista')->first()->givePermissionTo($permisosAnalista);
+        Role::where('name','Analista')->first()->givePermissionTo($permisosAnalista);*/
     }
 }

@@ -6,7 +6,7 @@
 <div class="card">
     <div class="card-header">
         <h1 class="card-title">
-            <a href="{{ route('seguimientoauditoriarevisionlp.edit',$auditoria) }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
+            <a href="{{ route('seguimientoauditoriarevision01.edit',$auditoria) }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
             &nbsp; Revisar acción
         </h1>
     </div>
@@ -131,7 +131,7 @@
             <div class="row mt-3">
                 <div class="col-md-6 justify-content-end">
                     <button type="submit" class="btn btn-primary">Guardar</button>    
-                    <a href="{{ route('seguimientoauditoriarevisionlp.edit',$auditoria) }}" class="btn btn-secondary me-2">Cancelar</a>                          
+                    <a href="{{ route('seguimientoauditoriarevision01.edit',$auditoria) }}" class="btn btn-secondary me-2">Cancelar</a>                          
                 </div>
             </div>
         {!! BootForm::close() !!}

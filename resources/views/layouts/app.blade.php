@@ -68,13 +68,32 @@
                                 </span>
 								Calle Mariano Matamoros No. 106, Delegación Centro Histórico, Colonia Centro Toluca, Estado de México C.P. 50000. Tels. (772)-167-8450
 							</div>
+							<input type="hidden" value="{{config('session.lifetime')}}" id="tiempo"/>        
+							<div class="modal" id="create" role="dialog">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-body">
+											<span id="countdown" class="text-primary font-weight-bold"></span>
+										</div>
+										<div class="modal-footer">
+											<input type="submit" class="btn btn-primary" value="Actualizar">
+										</div>                   
+									</div>
+								</div>
+							</div>        
+							<a href="#" class=""  id="conteo_cierre" data-toggle="modal" data-target="#create"></a>												
 							<!--end::Copyright-->
 							<!--begin::Menu-->
 							<!--end::Menu-->
 						</div>
 						<!--end::Container-->
 					</div>
-					<!--end::Footer--> 					
+					<!--end::Footer-->
+					
+					<!--<aside class="left-sidebar">
+						{{--@include('layouts.partials._aside')--}}
+					</aside>--> 
+					
 				</div>
 				<!--end::Wrapper-->
 			</div>

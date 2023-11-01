@@ -56,8 +56,6 @@ class PrasTurnoController extends Controller
      */
     public function store(Request $request)
     {
-
-
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         mover_archivos($request, ['oficio_remision'], null);
         $firmante = User::where('unidad_administrativa_id', '122000')->first();

@@ -90,7 +90,7 @@ class SeguimientoAuditoriaAccionRevision01Controller extends Controller
         setMessage('Se ha revisado correctamenta la accion');
         $auditoria=$accion->auditoria;
 
-        return redirect()->route('seguimientoauditoriarevisionlp.edit',$auditoria);
+        return redirect()->route('seguimientoauditoriarevision01.edit',$auditoria);
 
     }
 

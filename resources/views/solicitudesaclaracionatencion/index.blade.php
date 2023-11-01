@@ -18,6 +18,28 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 @include('layouts.contextos._accionsolicitud')
+                @if (count($solicitudesaclaracion)>0 && !empty($solicitudesaclaracion[0]->fase_autorizacion))
+                   <div class="row">
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Importe promovido</th>
+										<th>Importe solventado</th>
+										<th>Importe no solventado</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="text-align: right!important;">{{ '$'.number_format( $accion->monto_aclarar, 2) }}</td>
+										<td style="text-align: right!important;">{{ '$'.number_format( $solicitudesaclaracion[0]->monto_solventado, 2) }}</td>
+										<td style="text-align: right!important;">{{ '$'.number_format( ($accion->monto_aclarar - $solicitudesaclaracion[0]->monto_solventado), 2) }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         <h3 class="card-title text-primary float">Atención de las solicitudes de aclaración</h3>

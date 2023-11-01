@@ -47,17 +47,13 @@
                         <hr/>
                     </div>
                 </div>
-                <div>                   
-                    <div class="card-body mt-2">
+                                
+                    
                         <div class="row">
                             <div class="col-md-12">
                                 {!! BootForm::textarea('listado_documentoslb', 'Listado de documentos',old('listado_documentoslb', $recomendacion->listado_documentos),['rows'=>'10','disabled']) !!}
                             </div>
-                        </div>                           
-                        
-                            
-                    </div>
-                </div>
+                        </div>   
             </div>
         </div>
     </div>
