@@ -17,13 +17,13 @@
         <div class="col-lg-5 col-md-6 col-sm-12 col-12">
             <label>Fecha y hora de la comparecencia: </label>
             <span class="text-sistema">
-                {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . $auditoria->comparecencia->hora_comparecencia_inicio . ' - ' . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"00:00":$auditoria->comparecencia->hora_comparecencia_termino) }}
+                {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . date('g:i a', strtotime($auditoria->comparecencia->hora_comparecencia_inicio))  . ' - ' . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"00:00":date('g:i a', strtotime($auditoria->comparecencia->hora_comparecencia_termino))) }}
             </span>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-12">
             <label>Hora aproximada de término: </label>
             <span class="text-sistema">
-                {{ $auditoria->comparecencia->agenda->hora_fin}}
+                {{ date('g:i a', strtotime($auditoria->comparecencia->agenda->hora_fin))}}
             </span>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-12">

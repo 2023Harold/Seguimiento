@@ -46,9 +46,9 @@
                                     </td>
                                     <td class="text-center">
                                         <span>
-                                            {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' .
-                                            $auditoria->comparecencia->hora_comparecencia_inicio . ' - ' .
-                                            $auditoria->comparecencia->hora_comparecencia_termino }}
+                                            {{ fecha($auditoria->comparecencia->fecha_comparecencia)  }} <br>
+                                            {{date('g:i a', strtotime($auditoria->comparecencia->hora_comparecencia_inicio))  . ' - ' .
+                                              (empty($auditoria->comparecencia->hora_comparecencia_termino)?"00:00":date('g:i a', strtotime($auditoria->comparecencia->hora_comparecencia_termino)))  }}
                                         </span>
                                     </td>
                                     <td class="text-center">

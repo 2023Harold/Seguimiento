@@ -14,10 +14,11 @@ class UserImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return User::create([
+            'usuario_plataforma_id'=>$row['plataforma_id'],
             'name' => $row['nombre'],
             'curp' =>'xxxxxxxxxxxxxxxxxx',
             'email' => $row['email'],            
-            'password' => Hash::make('desa'),
+            'password' => Hash::make('d3s42023'),
             'puesto' => $row['puesto'],
             'unidad_administrativa_id' => $row['unidad_administrativa'],
             'siglas_rol'=>$row['siglas_rol'],
