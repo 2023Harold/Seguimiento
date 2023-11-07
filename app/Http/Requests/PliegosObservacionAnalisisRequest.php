@@ -27,7 +27,9 @@ class PliegosObservacionAnalisisRequest extends FormRequest
             'analisis' => 'required|string|max:8000',
             'calificacion_sugerida' => 'required|string|max:30|in:Solventado,No Solventado,Solventado Parcialmente',
             'conclusion' => 'required|string|max:8000',
-            'monto_solventado' => 'sometimes|nullable|required_if:calificacion_sugerida,Solventado Parcialmente'
+            'monto_solventado' => 'sometimes|nullable|required_if:calificacion_sugerida,Solventado Parcialmente',
+            'segtipo_accion_id' => 'sometimes|nullable|string|max:8000|required_if:calificacion_sugerida,Solventada Parcialmente,No Solventada',
+            'monto_promocion' => 'sometimes|nullable|required_if:segtipo_accion_id,1',
             ];
     }
 
@@ -37,7 +39,9 @@ class PliegosObservacionAnalisisRequest extends FormRequest
            'analisis' => 'análisis',
            'calificacion_sugerida' => 'calificación sugerida de la atención',
            'conclusion'=>'conclusión',
-           'monto_solventado'=>'monto solventado'
+           'monto_solventado'=>'monto solventado',
+           'segtipo_accion_id'=>'promoción',
+           'monto_promocion'=>'monto promoción'
            ];
     }
 
@@ -46,6 +50,8 @@ class PliegosObservacionAnalisisRequest extends FormRequest
         return [
             'required' => 'El campo :attribute es obligatorio.',
             'monto_solventado.required_if' => 'El campo :attribute es obligatorio.',
+            'segtipo_accion_id.required_if'=> 'El campo :attribute es obligatorio.',
+            'monto_promocion.required_if' => 'El campo :attribute es obligatorio.',
         ];
     }
 }

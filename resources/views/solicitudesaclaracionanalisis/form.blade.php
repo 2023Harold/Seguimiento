@@ -47,11 +47,27 @@
                                     {!! BootForm::text('monto_solventado', 'Monto solventado: *', old('monto_solventado', $solicitud->monto_solventado),['class' => 'numeric']) !!}
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @btnSubmit('Guardar',route('solicitudesaclaracionanalisis.update'))
-                                    @btnCancelar('Cancelar', route('solicitudesaclaracionatencion.index'))
+                            <div id="div_promocion" style="display:none">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                    {!! BootForm::select('segtipo_accion_id', 'Promoción: *', $promocion->toArray(), old('segtipo_accion_id',$solicitud->segtipo_accion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                                    </div>
                                 </div>
+                                @php
+                                $mostrarDivMontoPromo = ((!empty(old('segtipo_accion_id', $accion->segtipo_accion_id))&&old('segtipo_accion_id', $accion->segtipo_accion_id)!='2')?'block':'none');
+                                // $mostrarDivRecomendaciones = ((!empty(old('segtipo_accion_id', $accion->segtipo_accion_id))&&old('segtipo_accion_id', $accion->segtipo_accion_id)=='2')?'block':'none');
+                                @endphp
+                                <div class="row" id="id_monto_promocion">
+                                    <div class="col-md-6">
+                                        {!! BootForm::text('monto_promocion', 'Monto de la promoción: *', old('monto_promocion', $solicitud->monto_promocion),['class' => 'numeric']) !!}
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @btnSubmit('Guardar',route('solicitudesaclaracionanalisis.update'))
+                                        @btnCancelar('Cancelar', route('solicitudesaclaracionatencion.index'))
+                                    </div>
                             </div>
                             {!! BootForm::close() !!}
                         </div>
@@ -70,10 +86,22 @@
                 $('#id_monto_solventa').hide();
             } else if(event.target.value=='No Solventada') {
                 $('#id_monto_solventa').hide();
+                $('#div_promocion').show();
             }else if(event.target.value=='Solventada Parcialmente'){
                 $('#id_monto_solventa').show();
+                $('#div_promocion').show();
             }
         });
+        $("#segtipo_accion_id").select().on('change', function(e) {
+                var tipoaccionseleccionado = $(this).children("option:selected").text();
+                if(tipoaccionseleccionado=='Recomendación'){
+                    $('#div_monto_promocion').hide();
+                    $('#div_recomendacion').show();
+                }else{
+                    $('#div_monto_promocion').show();
+                    $('#div_recomendacion').hide();
+                }
+           });
     });
 </script>
 {!! JsValidator::formRequest('App\Http\Requests\SolicitudesAclaracionAnalisisRequest') !!}

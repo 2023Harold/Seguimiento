@@ -32,7 +32,9 @@ class PliegosObservacion extends Model
         'updated_at',
         'calificacion_sugerida',
         'calificacion_atencion',
-        'listado_documentos'
+        'listado_documentos',
+        'promocion',
+        'monto_promocion',
     ];
 
     protected $dates = [

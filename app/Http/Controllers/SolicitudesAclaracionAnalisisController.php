@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditoriaAccion;
+use App\Models\CatalogoTipoAccion;
 use App\Models\SolicitudesAclaracion;
 use Illuminate\Http\Request;
 
@@ -15,17 +16,16 @@ class SolicitudesAclaracionAnalisisController extends Controller
      */
     public function index()
     {
-        //
-    }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+    }
     public function create()
     {
-        //
+
     }
 
     /**
@@ -49,7 +49,8 @@ class SolicitudesAclaracionAnalisisController extends Controller
     {
         $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
-        return view('solicitudesaclaracionanalisis.show',compact('solicitud','accion','auditoria'));
+        // $promocion=$accion->promocion;
+        return view('solicitudesaclaracionanalisis.form',compact('solicitud','accion','auditoria'));
     }
 
     /**
@@ -62,8 +63,10 @@ class SolicitudesAclaracionAnalisisController extends Controller
     {
         $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
+        $promocion=CatalogoTipoAccion::whereNotIn ('id',[1])->get()->pluck('descripcion','id')->prepend('Seleccione una opción', '');
 
-        return view('solicitudesaclaracionanalisis.form',compact('solicitud','accion','auditoria'));
+        return view('solicitudesaclaracionanalisis.form',compact('solicitud','accion','auditoria','promocion'));
+
     }
 
     /**
@@ -97,6 +100,11 @@ class SolicitudesAclaracionAnalisisController extends Controller
             }
             $request['monto_solventado'] = $monto;
         }
+            $montostrpesospromo = str_replace('$','',$request->monto_promocion);
+            $montostrcomaspromo = str_replace(',','',$montostrpesospromo);
+            $montopromo=(float) $montostrcomaspromo;
+
+            $request['monto_promocion'] = $montopromo;
 
 
         $solicitud->update($request->all());

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\AuditoriaAccion;
+use App\Models\CatalogoTipoAccion;
 use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
 
@@ -62,8 +63,9 @@ class PliegosObservacionAtencionAnalisisController extends Controller
     {
         $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
+        $promocion=CatalogoTipoAccion::whereNotIn ('id',[3])->get()->pluck('descripcion','id')->prepend('Seleccione una opción', '');
 
-        return view('pliegosatencionanalisis.form',compact('pliegosobservacion','accion','auditoria'));
+        return view('pliegosatencionanalisis.form',compact('pliegosobservacion','accion','auditoria','promocion'));
     }
 
     /**
@@ -97,6 +99,12 @@ class PliegosObservacionAtencionAnalisisController extends Controller
             }
             $request['monto_solventado'] = $monto;
         }
+          $montostrpesospromo = str_replace('$','',$request->monto_promocion);
+          $montostrcomaspromo = str_replace(',','',$montostrpesospromo);
+          $montopromo=(float) $montostrcomaspromo;
+
+            $request['monto_promocion'] = $montopromo;
+
 
         $pliegosobservacion->update($request->all());
         setMessage("Se ha actualizado el análisis.");
