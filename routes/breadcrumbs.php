@@ -147,10 +147,23 @@ Breadcrumbs::for('asignaciondireccion.index', function (BreadcrumbTrail $trail) 
     $trail->parent('home');
     $trail->push('Asignación de Auditorias a Direcciones', route('asignaciondireccion.index'));
 });
+
 Breadcrumbs::for('asignaciondireccion.accionesconsulta', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('asignaciondireccion.index');
     $trail->push('Acciones', route('asignaciondireccion.accionesconsulta',$auditoria));
 });
+
+Breadcrumbs::for('asignacion.accion', function (BreadcrumbTrail $trail,$accion,$movimiento,$auditoria) {
+    $trail->parent('asignaciondireccion.accionesconsulta',$auditoria);
+    $trail->push('Accion', route('asignacion.accion',['accion'=>$accion,'movimiento'=>$movimiento]));
+});
+
+Breadcrumbs::for('seguimientoauditoriaaccion.accionesconsulta', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('asignaciondepartamento.accionesconsulta');
+    $trail->push('Accion', route('seguimientoauditoriaaccion.accionesconsulta',$auditoria));
+});
+
+
 Breadcrumbs::for('asignaciondireccion.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('asignaciondireccion.index');
     $trail->push('Asignación', route('asignaciondireccion.edit',$auditoria));
@@ -169,6 +182,12 @@ Breadcrumbs::for('asignaciondepartamento.accionesconsulta', function (Breadcrumb
     $trail->parent('asignaciondepartamento.index');
     $trail->push('Acciones', route('asignaciondepartamento.accionesconsulta',$auditoria));
 });
+
+Breadcrumbs::for('asignacion.acciondepa', function (BreadcrumbTrail $trail,$accion,$movimiento,$auditoria) {
+    $trail->parent('asignaciondepartamento.accionesconsulta',$auditoria);
+    $trail->push('Accion', route('asignacion.accion',['accion'=>$accion,'movimiento'=>$movimiento]));
+});
+
 Breadcrumbs::for('asignaciondepartamento.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('asignaciondepartamento.index');
     $trail->push('Asignación', route('asignaciondepartamento.edit',$auditoria));
@@ -194,6 +213,11 @@ Breadcrumbs::for('asignacionlideranalista.accionesconsulta', function (Breadcrum
     $trail->push('Acciones', route('asignacionlideranalista.accionesconsulta',$auditoria));
 });
 
+Breadcrumbs::for('asignacion.accionlider', function (BreadcrumbTrail $trail,$accion,$movimiento,$auditoria) {
+    $trail->parent('asignacionlideranalista.accionesconsulta',$auditoria);
+    $trail->push('Acción', route('asignacion.accion',['accion'=>$accion,'movimiento'=>$movimiento]));
+});
+
 Breadcrumbs::for('asignacionlideranalista.consulta', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('asignacionlideranalista.index');
     $trail->push('Consulta de Asignaciones de Lideres y Analistas', route('asignacionlideranalista.consulta',$auditoria));
@@ -208,6 +232,9 @@ Breadcrumbs::for('asignacionlideranalista.reasignaranalista', function (Breadcru
     $trail->parent('asignacionlideranalista.index');
     $trail->push('Reasignación del Analista', route('asignacionlideranalista.reasignaranalista',$auditoria));
 });
+
+
+
 /*Asignación del departamento encargado */
 Breadcrumbs::for('asignaciondepartamentoencargado.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('asignacionlideranalista.index');

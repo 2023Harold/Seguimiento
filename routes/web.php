@@ -4,6 +4,7 @@ use App\Http\Controllers\AccesoController;
 use App\Http\Controllers\AccionesController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
+use App\Http\Controllers\AsignacionAccionController;
 use App\Http\Controllers\AsignacionLiderAnalistaController;
 use App\Http\Controllers\AsignacionDepartamentoController;
 use App\Http\Controllers\AsignacionDepartamentoEncargadoController;
@@ -138,7 +139,7 @@ Route::get('/969fdf1xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class,
 Route::middleware(['auth', CheckPermission::class])->group(function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    
+
     Route::get('notificaciones',[NotificacionController::class, 'index'])->name('notificaciones.index');
     Route::get('marcarleido', [NotificacionController::class, 'marcarleido'])->name('marcarleido');
 
@@ -166,6 +167,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     /*Direcciones*/
     Route::resource('asignaciondireccion', AsignacionDireccionController::class, ['parameters' => ['asignaciondireccion' => 'auditoria']]);
     Route::get('/asignaciondireccion/acciones/consulta/{auditoria}', [AsignacionDireccionController::class, 'accionesConsulta'])->name('asignaciondireccion.accionesconsulta');
+    Route::get('/asignacionaccion/{accion}/{movimiento}', [AsignacionAccionController::class, 'accionesConsulta'])->name('asignacion.accion');//revisar si esta bien
     Route::post('getDirector', [AsignacionDireccionController::class, 'getDirector'])->name('getDirector');
     Route::get('/asignaciondireccion/reasignacion/{auditoria}', [AsignacionDireccionController::class, 'reasignar'])->name('asignaciondireccion.reasignar');
     /*Departamentos*/

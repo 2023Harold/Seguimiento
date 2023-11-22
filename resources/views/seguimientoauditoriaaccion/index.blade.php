@@ -18,16 +18,16 @@
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    @if (!empty($movimiento)&&$movimiento=='consultar')                    
+                    @if (!empty($movimiento)&&$movimiento=='consultar')
                     <a href="{{ route('seguimientoauditoria.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                    @elseif (!empty($movimiento)&&$movimiento=='direccionconsultar')                    
+                    @elseif (!empty($movimiento)&&$movimiento=='direccionconsultar')
                     <a href="{{ route('asignaciondireccion.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                    @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')                   
+                    @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')
                     <a href="{{ route('asignaciondepartamento.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                    @else                  
+                    @else
                         <a href="{{ route('seguimientoauditoria.edit',$auditoria) }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     @endif
@@ -89,14 +89,14 @@
                             <tr>
                                 <td class="text-center">
                                     @if (($accion->revision_lider=='Rechazado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Rechazado'&& $accion->revision_jefe='Rechazado')||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Rechazado'))
-                                        <a href="{{ route('seguimientoauditoriaacciones.accion',$accion) }}">
+                                        <a href="{{ route('asignacion.accion',$accion) }}">
                                             <i class="fa-regular fa-eye icon-hover"></i>
-                                        </a>                                        
+                                        </a>
                                     @else
-                                        <a href="{{ route('seguimientoauditoriaacciones.show',$accion) }}">
+                                        <a href="{{ route('asignacion.accion',['accion'=>$accion->id,'movimiento'=>$movimiento]) }}">
                                             <i class="fa-regular fa-eye icon-hover"></i>
-                                        </a>                                        
-                                    @endif 
+                                        </a>
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     {{ str_pad($accion->consecutivo, 3, '0', STR_PAD_LEFT) }}
@@ -131,7 +131,7 @@
                                     {{ '$'.number_format( $accion->monto_aclarar, 2) }}
                                 </td>
                                 <td class="text-center">
-                                    @if (!empty($accion->revision_lider))   
+                                    @if (!empty($accion->revision_lider))
                                         @if (($accion->revision_lider=='Aprobado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Aprobado'))
                                             <span class="badge badge-light-success">Aprobada</span>
                                         @elseif (($accion->revision_lider=='Rechazado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Rechazado'&& $accion->revision_jefe='Rechazado')||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Rechazado'))
@@ -140,8 +140,8 @@
                                             <span class="badge badge-light-warning">En revisión</span>
                                         @else
                                             <span class="badge badge-light-warning">{{ $accion->revision_lider }}</span>
-                                        @endif                                      
-                                    @endif                                    
+                                        @endif
+                                    @endif
                                 </td>
                                 @if ($auditoria->registro_concluido=='No'&&auth()->user()->siglas_rol=='ANA')
                                 <td class="text-center">
@@ -150,12 +150,12 @@
                                             <a href="{{ route('seguimientoauditoriaacciones.edit',$accion) }}">
                                                 <i class="align-middle fas fa-edit text-primary" aria-hidden="true"></i>
                                             </a>
-                                        @endif                                    
+                                        @endif
                                     @endcan
                                 </td>
                                 @endif
-                            </tr> 
-                            {!! movimientosDesglose($accion->id, 8, $accion->movimientos) !!}                            
+                            </tr>
+                            {!! movimientosDesglose($accion->id, 8, $accion->movimientos) !!}
                             @empty
                             <tr>
                                 <td class="text-center" colspan="8">
@@ -167,7 +167,7 @@
                     </table>
                 </div>
                 @if ($auditoria->registro_concluido=='No')
-                @can('seguimientoauditoria.concluir')                
+                @can('seguimientoauditoria.concluir')
                 <div class="row">
                     <div class="col-md-6">
                         <a href="{{ route('seguimientoauditoria.concluir',$auditoria) }}" class="btn btn-primary" onclick="return  confirm('Al concluir con el registro de la auditoría, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?');">Concluir</a>

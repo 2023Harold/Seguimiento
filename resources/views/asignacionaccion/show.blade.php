@@ -1,12 +1,36 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('seguimientoauditoriaacciones.show',$auditoria,$accion) }}
+@if (!empty($movimiento)&&$movimiento=='consultar')
+{{ Breadcrumbs::render('seguimientoauditoriaacciones.consulta',$auditoria) }}
+@elseif (!empty($movimiento)&&$movimiento=='direccionconsultar')
+
+{{ Breadcrumbs::render('asignacion.accion',$accion->id,$movimiento,$auditoria) }}
+
+@elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')
+{{ Breadcrumbs::render('asignacion.acciondepa',$accion->id,$movimiento,$auditoria) }}
+@elseif(!empty($movimiento)&&$movimiento=='lideranalistaconsultar')
+{{ Breadcrumbs::render('asignacion.accionlider',$accion->id,$movimiento,$auditoria) }}
+@else
+{{ Breadcrumbs::render('seguimientoauditoriaacciones.index',$auditoria) }}
+@endif
 @endsection
 @section('content')
 <div class="card">
     <div class="card-header">
         <h1 class="card-title">
-            <a href="{{ route('seguimientoauditoria.accionesconsulta',$auditoria) }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+            {{-- <a href="{{ route('asignaciondireccion.accionesconsulta',$auditoria) }}">
+            <i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> --}}
+
+            @if (!empty($movimiento)&&$movimiento=='direccionconsultar')
+            <a href="{{ route('asignaciondireccion.accionesconsulta',$auditoria) }}"><i
+                    class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+            @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')
+            <a href="{{ route('asignaciondepartamento.accionesconsulta',$auditoria) }}"><i
+                    class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+            @else
+                <a href="{{ route('asignacionlideranalista.accionesconsulta',$auditoria) }}"><i
+                    class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+            @endif
             &nbsp; Acción
         </h1>
     </div>
