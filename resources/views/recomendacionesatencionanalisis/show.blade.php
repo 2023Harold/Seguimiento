@@ -56,27 +56,37 @@
                                 {!! BootForm::textarea('analisis', false,old('analisis', $recomendacion->analisis),['rows'=>'10','readonly']) !!}
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span>
+                                    <a class="btn btn-primary float-end" href="{{ route('recomendacionesanexos.show',['anexo'=>$recomendacion]) }}">
+                                        Anexos
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                            <div>
-                                <h3 class="card-title text-primary">Conclusión</h3>
-                            <div class="card-body mt-2">
+                    <div>
+                        <h3 class="card-title text-primary">Conclusión</h3>
+                        <div class="card-body mt-2">
                             <div class="row">
                                 <div class="col-md-12">
                                     {!! BootForm::textarea('conclusion', false,old('conclusion', $recomendacion->conclusion),['rows'=>'10','readonly']) !!}
                                 </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                <label>Calificación de la atención: </label>
-                                @if ($recomendacion->calificacion_sugerida=='Atendida')
-                                    <span class="badge badge-light-success">Atendida</span>
-                                @endif
-                                @if ($recomendacion->calificacion_sugerida=='No Atendida')
-                                    <span class="badge badge-light-danger">No Atendida</span>
-                                @endif
-                                @if ($recomendacion->calificacion_sugerida=='Parcialmente Atendida')
-                                    <span class="badge badge-light-warning">Parcialmente Atendida</span>
-                                @endif
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <label>Calificación de la atención: </label>
+                                    @if ($recomendacion->calificacion_sugerida=='Atendida')
+                                        <span class="badge badge-light-success">Atendida</span>
+                                    @endif
+                                    @if ($recomendacion->calificacion_sugerida=='No Atendida')
+                                        <span class="badge badge-light-danger">No Atendida</span>
+                                    @endif
+                                    @if ($recomendacion->calificacion_sugerida=='Parcialmente Atendida')
+                                        <span class="badge badge-light-warning">Parcialmente Atendida</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

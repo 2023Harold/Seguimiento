@@ -175,7 +175,7 @@
                                                 Revisar
                                             </a>
                                         @else
-                                            <span class="badge badge-light-warning">{{ $pliegos->fase_autorizacion }} </span>
+                                            <span class="badge badge-light-warning">En revisión</span>
                                         @endcan
                                     @endif
 

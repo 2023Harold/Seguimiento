@@ -40,6 +40,8 @@
                                                                  str_contains(Route::current()->getName(), 'recomendacionescontestaciones')||
                                                                  str_contains(Route::current()->getName(), 'recomendacionesdocumentos')||
                                                                  str_contains(Route::current()->getName(), 'recomendacionesanalisis')||
+                                                                 str_contains(Route::current()->getName(), 'recomendacionesanexos')||
+                                                                 str_contains(Route::current()->getName(), 'recomendacion.anexos')||
                                                                  str_contains(Route::current()->getName(), 'recomendacionesrevision01')||
                                                                  str_contains(Route::current()->getName(), 'recomendacionesrevision')||
                                                                  str_contains(Route::current()->getName(), 'recomendacionesvalidacion')||
@@ -49,6 +51,7 @@
                                                                  str_contains(Route::current()->getName(), 'solicitudesaclaracioncontestacion')||
                                                                  str_contains(Route::current()->getName(), 'solicitudesaclaraciondocumentos')||
                                                                  str_contains(Route::current()->getName(), 'solicitudesaclaracionanalisis')||
+                                                                 str_contains(Route::current()->getName(), 'solicitudesaclaracionanexos')||
                                                                  str_contains(Route::current()->getName(), 'solicitudesaclaracionrevision')||
                                                                  str_contains(Route::current()->getName(), 'solicitudesaclaracionvalidacion')||
                                                                  str_contains(Route::current()->getName(), 'solicitudesaclaracionautorizacion')||
@@ -56,9 +59,11 @@
                                                                  str_contains(Route::current()->getName(), 'pliegosobservacionatencion')||
                                                                  str_contains(Route::current()->getName(), 'pliegosobservaciondocumentos')||
                                                                  str_contains(Route::current()->getName(), 'pliegosobservacionanalisis')||
+                                                                 str_contains(Route::current()->getName(), 'pliegosobservacionanexos')||
                                                                  str_contains(Route::current()->getName(), 'pliegosobservacionrevision')||
                                                                  str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
-                                                                 str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')
+                                                                 str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')||
+                                                                 str_contains(Route::current()->getName(), 'informeprimeraetapa')
                                                                 ) ? 'show' : ''  }}" 
                                                                 data-kt-menu-trigger="click">
                             <a href="#" class="menu-link py-3" >
@@ -75,6 +80,8 @@
                                                                         str_contains(Route::current()->getName(), 'recomendacionescontestaciones')||
                                                                         str_contains(Route::current()->getName(), 'recomendacionesdocumentos')||
                                                                         str_contains(Route::current()->getName(), 'recomendacionesanalisis')||
+                                                                        str_contains(Route::current()->getName(), 'recomendacionesanexos')||
+                                                                        str_contains(Route::current()->getName(), 'recomendacion.anexos')||
                                                                         str_contains(Route::current()->getName(), 'recomendacionesrevision01')||
                                                                         str_contains(Route::current()->getName(), 'recomendacionesrevision')||
                                                                         str_contains(Route::current()->getName(), 'recomendacionesvalidacion')||
@@ -87,13 +94,16 @@
                                                                         str_contains(Route::current()->getName(), 'solicitudesaclaracionrevision')||
                                                                         str_contains(Route::current()->getName(), 'solicitudesaclaracionvalidacion')||
                                                                         str_contains(Route::current()->getName(), 'solicitudesaclaracionautorizacion')||
+                                                                        str_contains(Route::current()->getName(), 'solicitudesaclaracionanexos')||
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionacciones')||
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionatencion')||
                                                                         str_contains(Route::current()->getName(), 'pliegosobservaciondocumentos')||
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionanalisis')||
+                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionanexos')||
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionrevision')||
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
-                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')
+                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')||
+                                                                        str_contains(Route::current()->getName(), 'informeprimeraetapa')
                                                                         ) ? 'show' : ''  }} mx-5 me-0 pt-3">
                                 @can('prasacciones.index')
                                 <div class="menu-item mb-1">
@@ -114,6 +124,8 @@
                                                                                                                      str_contains(Route::current()->getName(), 'recomendacionescontestaciones')||
                                                                                                                      str_contains(Route::current()->getName(), 'recomendacionesdocumentos')||
                                                                                                                      str_contains(Route::current()->getName(), 'recomendacionesanalisis')||
+                                                                                                                     str_contains(Route::current()->getName(), 'recomendacion.anexos')||
+                                                                                                                     str_contains(Route::current()->getName(), 'recomendacionesanexos')||
                                                                                                                      str_contains(Route::current()->getName(), 'recomendacionesrevision01')||
                                                                                                                      str_contains(Route::current()->getName(), 'recomendacionesrevision')||
                                                                                                                      str_contains(Route::current()->getName(), 'recomendacionesvalidacion')||
@@ -135,7 +147,8 @@
                                                                                                                            str_contains(Route::current()->getName(), 'solicitudesaclaracionanalisis')||
                                                                                                                            str_contains(Route::current()->getName(), 'solicitudesaclaracionrevision')||
                                                                                                                            str_contains(Route::current()->getName(), 'solicitudesaclaracionvalidacion')||
-                                                                                                                           str_contains(Route::current()->getName(), 'solicitudesaclaracionautorizacion')
+                                                                                                                           str_contains(Route::current()->getName(), 'solicitudesaclaracionautorizacion')||
+                                                                                                                           str_contains(Route::current()->getName(), 'solicitudesaclaracionanexos')
                                                                                                                         ) ? 'active' : '' }}">
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
@@ -150,6 +163,7 @@
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionatencion')||
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservaciondocumentos')||
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionanalisis')||
+                                                                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionanexos')||
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionrevision')||
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')
@@ -162,7 +176,7 @@
                                 </div>
                                 @endcan    
                                 <div class="menu-item mb-1">
-                                    <a href="#"
+                                    <a href="{{ route('informeprimeraetapa.index') }}"
                                         class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'informeprimeraetapa') ? 'active' : '' }}">
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
@@ -173,7 +187,7 @@
                             </div>
                         </div>     
                         <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
-                            <a href="#" class="menu-link py-3" >
+                            <a href="{{ route('pliegosobservacionacciones.index') }}" class="menu-link py-3" >
                                 <span class="menu-icon">
                                     <i class="fa fa-folder-open fs-3"></i>
                                 </span>
@@ -200,17 +214,7 @@
                                         <span class="menu-title">Recomendaciones</span>
                                     </a>
                                 </div>
-                                @endcan
-                                @can('solicitudesaclaracionacciones.index')
-                                <div class="menu-item mb-1">
-                                    <a href="#" class="menu-link py-3">
-                                        <span class="menu-bullet">
-                                            <span class="fa fa-file-text"></span>
-                                        </span>
-                                        <span class="menu-title">Solicitudes de aclaración</span>
-                                    </a>
-                                </div>
-                                @endcan
+                                @endcan                               
                                 @can('pliegosobservacionacciones.index')
                                 <div class="menu-item mb-1">
                                     <a href="#" class="menu-link py-3">

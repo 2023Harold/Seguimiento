@@ -26,6 +26,16 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                <label>Anexos: </label>
+                <span class="text-primary">
+                    <a href="{{ route('pliegos.anexos', $pliegosobservacion) }}" class="popupSinLocation">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                 <label>Conclusión: </label><br>
                 {!! BootForm::textarea('conclusion', false,old('analisis', $pliegosobservacion->conclusion),['rows'=>'3','disabled']) !!}
@@ -55,6 +65,30 @@
                         <span class="badge badge-light-warning">Solventado Parcialmente</span>
                     @endif
                 @endif
+            </div>
+        </div>
+        @php
+            $mostrarDivPromocion = ((!empty(old('calificacion_sugerida', $pliegosobservacion->calificacion_sugerida))&&old('calificacion_sugerida', $pliegosobservacion->calificacion_sugerida)!='Solventado')?'block':'none');
+        @endphp 
+        <div id="div_promocion" style="display:{!! $mostrarDivPromocion !!}">
+            <div class="row">
+                <div class="col-md-12">                                
+                    <label>Promoción: </label>
+                    <span class="text-primary">
+                        {{ (!empty($pliegosobservacion->promocionaccion->descripcion)?$pliegosobservacion->promocionaccion->descripcion:"")}}
+                    </span>
+                </div>
+            </div>
+            @php
+                $mostrarDivMontoPromo = ((!empty(old('promocion', $pliegosobservacion->promocion))&&old('promocion', $pliegosobservacion->promocion)!='2')?'block':'none');                           
+            @endphp
+            <div class="row" id="div_monto_promocion" style="display:{!! $mostrarDivMontoPromo !!}">
+                <div class="col-md-12">                                
+                    <label>Monto de la promoción: </label>
+                    <span class="text-primary">
+                        {{ (!empty($pliegosobservacion->monto_promocion)?'$'.number_format( $pliegosobservacion->monto_promocion, 2):"")}}
+                    </span> 
+                </div>
             </div>
         </div>
         <div class="row">

@@ -81,6 +81,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
+                                    <span>
+                                        <a class="btn btn-primary float-end" href="{{ route('recomendacionesanexos.index') }}">
+                                            Agregar anexos
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
                                     {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusión', $recomendacion->analisis),['rows'=>'10']) !!}
                                 </div>
                             </div>

@@ -54,6 +54,16 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                <label>Anexos: </label>
+                <span class="text-primary">
+                    <a href="{{ route('recomendacion.anexos', $recomendacion) }}" class="popupSinLocation">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                 <label>Conclusión: </label><br>
                 {!! BootForm::textarea('conclusionlb', false,old('conclusionlb', $recomendacion->conclusion),['rows'=>'3','disabled']) !!}
@@ -84,13 +94,7 @@
                   @endif
                 @endif
             </div>
-        </div>          
-        <div class="row">
-            <label>Conclusión: </label>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                {!! BootForm::textarea('conclusion', false,old('conclusion', $recomendacion->conclusion),['rows'=>'3','disabled']) !!}
-            </div>
-        </div>
+        </div>  
         <hr/>
     </div>
 </div>

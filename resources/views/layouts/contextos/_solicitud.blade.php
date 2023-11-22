@@ -26,6 +26,16 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                <label>Anexos: </label>
+                <span class="text-primary">
+                    <a href="{{ route('solicitudes.anexos', $solicitud) }}" class="popupSinLocation">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-list" aria-hidden="true"></span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                 <label>Calificación de la atención: </label>
                 @if (empty($solicitud->calificacion_atencion))
@@ -56,6 +66,32 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                 {!! BootForm::textarea('conclusion', false,old('conclusion', $solicitud->conclusion),['rows'=>'3','disabled']) !!}
             </div>
+        </div>
+        @php
+            $mostrarDivPromocion = ((!empty(old('calificacion_sugerida', $solicitud->calificacion_sugerida))&&old('calificacion_sugerida', $solicitud->calificacion_sugerida)!='Solventada')?'block':'none');
+        @endphp                         
+        <div id="div_promocion" style="display:{!! $mostrarDivPromocion !!}">
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Promoción: </label>
+                    <span class="text-primary">
+                        {{ (!empty($solicitud->promocionaccion->descripcion)?$solicitud->promocionaccion->descripcion:"")}}
+                    </span>
+                </div>
+            </div>
+            @php
+                $mostrarDivMontoPromo = ((!empty(old('promocion', $solicitud->promocion))&&old('promocion', $solicitud->promocion)!='2')?'block':'none');                           
+            @endphp
+            <div id="div_monto_promocion" style="display:{!! $mostrarDivMontoPromo !!}">
+                <div class="row" id="id_monto_promocion">
+                    <div class="col-md-12">
+                        <label>Monto de la promoción: </label>
+                        <span class="text-primary">
+                            {{ (!empty($solicitud->monto_promocion)?'$'.number_format( $solicitud->monto_promocion, 2):"")}}
+                        </span>                                   
+                    </div>
+                </div>
+            </div>                                
         </div>
         <div class="row">
             <div class="table-responsive">

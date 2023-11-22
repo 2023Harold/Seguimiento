@@ -42,7 +42,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                {!! BootForm::textarea('accion', 'Acción: *', old('accion', $accion->accion)) !!}
+                {!! BootForm::textarea('accion', 'Acción: *', old('accion', $accion->accion),['class'=>'editor']) !!}
             </div>
         </div>   
         <div class="row">
@@ -99,6 +99,13 @@
 </div>
 @endsection
 @section('script')
+    {{-- <script>
+        ClassicEditor
+            .create(document.querySelector('.editor'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script> --}}
     <script>
         $(document).ready(function() {
             $("#segtipo_accion_id").select2().on('change', function(e) {

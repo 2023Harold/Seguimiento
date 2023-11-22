@@ -63,7 +63,7 @@ class PliegosObservacionAtencionAnalisisController extends Controller
     {
         $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
-        $promocion=CatalogoTipoAccion::whereNotIn ('id',[3])->get()->pluck('descripcion','id')->prepend('Seleccione una opción', '');
+        $promocion=CatalogoTipoAccion::whereNotIn ('id',[3,1])->get()->pluck('descripcion','id')->prepend('Seleccione una opción', '');
 
         return view('pliegosatencionanalisis.form',compact('pliegosobservacion','accion','auditoria','promocion'));
     }
@@ -104,6 +104,7 @@ class PliegosObservacionAtencionAnalisisController extends Controller
           $montopromo=(float) $montostrcomaspromo;
 
             $request['monto_promocion'] = $montopromo;
+            $request = $this->normalizarDatos($request,$pliegosobservacion->accion);  
 
 
         $pliegosobservacion->update($request->all());
@@ -121,5 +122,31 @@ class PliegosObservacionAtencionAnalisisController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function normalizarDatos(Request $request, AuditoriaAccion $accion)
+    {
+        if($request->calificacion_sugerida=='Solventado'){
+            $request['monto_solventado'] = $accion->monto_aclarar;
+            $request['promocion'] = null;
+            $request['monto_promocion'] = null;
+        }
+        if($request->calificacion_sugerida=='No Solventado'){
+            $request['monto_solventado'] = null;
+            $request['monto_promocion'] = $accion->monto_aclarar;
+
+            if($request->promocion==2){
+                $request['monto_promocion'] = null;
+            }
+        }
+        if($request->calificacion_sugerida=='Solventado Parcialmente'){            
+            $request['monto_promocion'] = $accion->monto_aclarar-$request['monto_solventado']; 
+            if($request->promocion==2){
+                $request['monto_promocion'] = null;
+            }
+        }
+
+        return $request;
+        
     }
 }

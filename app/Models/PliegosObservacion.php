@@ -66,5 +66,9 @@ class PliegosObservacion extends Model
     {
         return $this->hasMany(PliegosDocumento::class, 'accion_id','id');
     }
+    public function promocionaccion()
+    {
+        return $this->belongsTo(CatalogoTipoAccion::class, 'promocion','id');
+    }
 
 }

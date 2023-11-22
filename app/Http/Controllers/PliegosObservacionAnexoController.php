@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
-use App\Models\PliegosContestacion;
+use App\Models\PliegosAnexos;
 use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
 use File;
 
-class PliegosObservacionAtencionContestacionController extends Controller
+class PliegosObservacionAnexoController extends Controller
 {
     protected $model;
 
-    public function __construct(PliegosContestacion $model)
+    public function __construct(PliegosAnexos $model)
     {
         $this->model = $model;
     }
@@ -24,12 +24,13 @@ class PliegosObservacionAtencionContestacionController extends Controller
      */
     public function index(Request $request)
     {
-        $contestaciones = $this->setQuery($request)->paginate(10);
+        $anexos = $this->setQuery($request)->paginate(10);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion= PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
+        //d($pliegosobservacion);
 
-        return view('pliegosatencioncontestacion.index', compact('contestaciones','auditoria','accion','pliegosobservacion','request'));
+        return view('pliegosobservacionanexos.index', compact('anexos','auditoria','accion','pliegosobservacion','request'));
     }
 
     /**
@@ -39,12 +40,12 @@ class PliegosObservacionAtencionContestacionController extends Controller
      */
     public function create()
     {
-        $contestacion = new PliegosContestacion();
+        $anexo = new PliegosAnexos();
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
 
-        return view('pliegosatencioncontestacion.form', compact('contestacion','auditoria','pliegosobservacion','accion'));
+        return view('pliegosobservacionanexos.form', compact('anexo','auditoria','pliegosobservacion','accion'));
     }
 
     /**
@@ -55,18 +56,18 @@ class PliegosObservacionAtencionContestacionController extends Controller
      */
     public function store(Request $request)
     {
-        mover_archivos($request, ['oficio_contestacion']);
+        mover_archivos($request, ['archivo']);
         $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
 
         $request->merge([
             'pliegosobservacion_id' => getSession('pliegosobservacionatencion_id'),
             'usuario_creacion_id' => auth()->id(),
         ]);
-        PliegosContestacion::create($request->all());
+        PliegosAnexos::create($request->all());
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');
 
-        return redirect()->route('pliegosobservacionatencioncontestacion.index');
+        return redirect()->route('pliegosobservacionanexos.index');
     }
 
     /**
@@ -75,14 +76,15 @@ class PliegosObservacionAtencionContestacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(PliegosObservacion $contestacion)
+    public function show(PliegosObservacion $anexo)
     {
-        $contestaciones = PliegosContestacion::where('pliegosobservacion_id',$contestacion->id)->paginate(10);
+        $anexos = PliegosAnexos::where('pliegosobservacion_id', getSession('pliegosobservacionatencion_id'))->paginate(10);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
-        $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
+        $pliegosobservacion= PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
+        //d($pliegosobservacion);
 
-        return view('pliegosatencioncontestacion.show', compact('contestaciones','auditoria','accion','pliegosobservacion'));
+        return view('pliegosobservacionanexos.show', compact('anexos','auditoria','accion','pliegosobservacion'));
     }
 
     /**
@@ -91,13 +93,9 @@ class PliegosObservacionAtencionContestacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(PliegosContestacion $contestacion)
+    public function edit($id)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
-        $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
-
-        return view('pliegosatencioncontestacion.form', compact('contestacion','auditoria','pliegosobservacion','accion'));
+        //
     }
 
     /**
@@ -107,34 +105,28 @@ class PliegosObservacionAtencionContestacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PliegosContestacion $contestacion)
+    public function update(Request $request, $id)
     {
-        mover_archivos($request, ['oficio_contestacion'],$contestacion);
-        $request->merge([
-            'usuario_modificacion_id' => auth()->id(),
-        ]);
-        $contestacion->update($request->all());
-        $this->actualizaProgresivo();
-        setMessage('El registro ha sido agregado');
-
-        return redirect()->route('pliegosobservacionatencioncontestacion.index');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Responsecontestacion
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(PliegosContestacion $contestacion)
+    public function destroy(PliegosAnexos $anexo)
     {
-        File::delete($contestacion->oficio_contestacion);
-        $contestacion->delete();
+        File::delete($anexo->archivo);
+        $anexo->delete();
+
         $this->actualizaProgresivo();
         setMessage('El registro ha sido eliminado');
 
-        return redirect()->route('pliegosobservacionatencioncontestacion.index');
+        return redirect()->route('pliegosobservacionanexos.index');
     }
+
     private function setQuery($request)
     {
         $query = $this->model;
@@ -143,8 +135,8 @@ class PliegosObservacionAtencionContestacionController extends Controller
         if ($request->filled('consecutivo')) {
             $query = $query->where('consecutivo',$request->consecutivo);
         }
-        if ($request->filled('nombre_documento')) {
-           $query = $query->whereRaw('LOWER(nombre_documento) LIKE (?) ',["%{$request->nombre_documento}%"]);
+        if ($request->filled('nombre_archivo')) {
+           $query = $query->whereRaw('LOWER(nombre_archivo) LIKE (?) ',["%{$request->nombre_archivo}%"]);
         }
         return $query;
     }
@@ -161,14 +153,13 @@ class PliegosObservacionAtencionContestacionController extends Controller
         }
     }
 
-    public function oficiospliegosobservacion(PliegosObservacion $pliegosobservacion)
+    public function anexos(PliegosObservacion $pliegosobservacion)
     {
-        $contestaciones = PliegosContestacion::where('pliegosobservacion_id',$pliegosobservacion->id)->paginate(10);
+        $anexos = PliegosAnexos::where('pliegosobservacion_id',$pliegosobservacion->id)->paginate(10);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+       
 
-        return view('pliegosatencioncontestacionoficios.show', compact('contestaciones','auditoria','accion','pliegosobservacion'));
+        return view('pliegosobsanexos.show', compact('anexos','auditoria','accion','pliegosobservacion'));
     }
-
-
 }

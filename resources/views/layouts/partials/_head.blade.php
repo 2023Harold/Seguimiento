@@ -35,6 +35,7 @@
 <link href="{{ asset('vendor/jquery-colorbox/archivos/colorbox.css') }}" rel="stylesheet">
 
 <script src="{{ asset('assets/js/cierre.js') }}"></script>
+{{-- <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script> --}}
 
 @if (auth()->check())
     <meta name="api-token" content="{{auth()->user()->api_token}}">

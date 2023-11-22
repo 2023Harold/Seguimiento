@@ -390,6 +390,26 @@ Breadcrumbs::for('recomendacionesanalisis.edit', function (BreadcrumbTrail $trai
     $trail->push('Análisis de la atención', route('recomendacionesanalisis.edit',$recomedacion));
 });
 
+Breadcrumbs::for('recomendacionesanexos.index', function (BreadcrumbTrail $trail,$recomedacion,$auditoria) {
+    $trail->parent('recomendacionesanalisis.edit',$recomedacion,$auditoria);
+    $trail->push('Anexos', route('recomendacionesanexos.index'));
+});
+
+Breadcrumbs::for('recomendacionesanexos.create', function (BreadcrumbTrail $trail,$recomedacion,$auditoria) {
+    $trail->parent('recomendacionesanexos.index',$recomedacion,$auditoria);
+    $trail->push('Agregar', route('recomendacionesanexos.create'));
+});
+
+Breadcrumbs::for('recomendacionesanalisis.show', function (BreadcrumbTrail $trail,$recomedacion,$auditoria) {
+    $trail->parent('recomendacionesatencion.index',$auditoria);
+    $trail->push('Análisis de la atención', route('recomendacionesanalisis.show',$recomedacion));
+});
+
+Breadcrumbs::for('recomendacionesanexos.show', function (BreadcrumbTrail $trail,$recomedacion,$auditoria) {
+    $trail->parent('recomendacionesanalisis.show',$recomedacion,$auditoria);
+    $trail->push('Anexos', route('recomendacionesanexos.show',$recomedacion));
+});
+
 Breadcrumbs::for('recomendacionesrevision01.edit', function (BreadcrumbTrail $trail,$recomedacion,$auditoria) {
     $trail->parent('recomendacionesatencion.index',$auditoria);
     $trail->push('Revisar', route('recomendacionesrevision01.edit',$recomedacion));
@@ -444,6 +464,26 @@ Breadcrumbs::for('solicitudesaclaraciondocumentos.edit', function (BreadcrumbTra
 Breadcrumbs::for('solicitudesaclaracionanalisis.edit', function (BreadcrumbTrail $trail,$solicitud,$auditoria) {
     $trail->parent('solicitudesaclaracionatencion.index',$auditoria);
     $trail->push('Análisis de la atención', route('solicitudesaclaracionanalisis.edit',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclaracionanalisis.show', function (BreadcrumbTrail $trail,$solicitud,$auditoria) {
+    $trail->parent('solicitudesaclaracionatencion.index',$auditoria);
+    $trail->push('Análisis de la atención', route('solicitudesaclaracionanalisis.show',$solicitud));
+});
+
+Breadcrumbs::for('solicitudesaclaracionanexos.index', function (BreadcrumbTrail $trail,$solicitud,$auditoria) {
+    $trail->parent('solicitudesaclaracionanalisis.edit',$solicitud,$auditoria);
+    $trail->push('Anexos', route('solicitudesaclaracionanexos.index'));
+});
+
+Breadcrumbs::for('solicitudesaclaracionanexos.create', function (BreadcrumbTrail $trail,$solicitud,$auditoria) {
+    $trail->parent('solicitudesaclaracionanexos.index',$solicitud,$auditoria);
+    $trail->push('Agregar', route('solicitudesaclaracionanexos.create'));
+});
+
+Breadcrumbs::for('solicitudesaclaracionanexos.show', function (BreadcrumbTrail $trail,$solicitud,$auditoria) {
+    $trail->parent('solicitudesaclaracionanalisis.show',$solicitud,$auditoria);
+    $trail->push('Anexos', route('solicitudesaclaracionanexos.show',$solicitud));
 });
 
 Breadcrumbs::for('solicitudesaclaracionrevision01.edit', function (BreadcrumbTrail $trail,$solicitud,$auditoria) {
@@ -501,6 +541,28 @@ Breadcrumbs::for('pliegosobservacionanalisis.edit', function (BreadcrumbTrail $t
     $trail->parent('pliegosobservacionatencion.index',$auditoria);
     $trail->push('Análisis de la atención', route('pliegosobservacionanalisis.edit',$pliegosobservacion));
 });
+
+Breadcrumbs::for('pliegosobservacionanexos.index', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
+    $trail->parent('pliegosobservacionanalisis.edit',$pliegosobservacion,$auditoria);
+    $trail->push('Anexos', route('pliegosobservacionanexos.index'));
+});
+
+Breadcrumbs::for('pliegosobservacionanexos.create', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
+    $trail->parent('pliegosobservacionanexos.index',$pliegosobservacion,$auditoria);
+    $trail->push('Agregar', route('pliegosobservacionanexos.create'));
+});
+
+Breadcrumbs::for('pliegosobservacionanalisis.show', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
+    $trail->parent('pliegosobservacionatencion.index',$auditoria);
+    $trail->push('Análisis de la atención', route('pliegosobservacionanalisis.show',$pliegosobservacion));
+});
+
+Breadcrumbs::for('pliegosobservacionanexos.show', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
+    $trail->parent('pliegosobservacionanalisis.show',$pliegosobservacion,$auditoria);
+    $trail->push('Anexos', route('pliegosobservacionanexos.show',$pliegosobservacion));
+});
+
+
 
 Breadcrumbs::for('pliegosobservacionrevision01.edit', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
     $trail->parent('pliegosobservacionatencion.index',$auditoria);

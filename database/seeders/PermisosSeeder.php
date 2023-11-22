@@ -29,18 +29,18 @@ class PermisosSeeder extends Seeder
                         'pras','prasacciones','prasturno','prasturnorevision','prasturnovalidacion',
                         'prasturnoautorizacion','prasturnoacuses','recomendaciones','recomendacionesacciones',
                         'recomendacionesatencion','recomendacionescontestaciones','recomendacionescalificacion','recomendacionesdocumentos',
-                        'recomendacionesanalisis','recomendacionesanalisisenvio','recomendacionesrevision01','recomendacionesrevision',
+                        'recomendacionesanalisis','recomendacionesanexos','recomendacionesanalisisenvio','recomendacionesrevision01','recomendacionesrevision',
                         'recomendacionesvalidacion','recomendacionesautorizacion','recomendacionesacuses',
                         'revisionesrecomendaciones','revisionesrecomendacionesatencion','cedulainicial',
                         'solicitudesaclaracion','solicitudesaclaracionacciones','solicitudesaclaracionatencion',
-                        'solicitudesaclaracioncontestacion','solicitudesaclaraciondocumentos','solicitudesaclaracionanalisis',
+                        'solicitudesaclaracioncontestacion','solicitudesaclaraciondocumentos','solicitudesaclaracionanalisis','solicitudesaclaracionanexos',
                         'solicitudesaclanalisisenvio','solicitudesaclaracionrevision01','solicitudesaclaracionrevision',
                         'solicitudesaclaracionvalidacion','solicitudesaclaracionautorizacion','revisionessolicitudes',
                         'revisionessolicitudesatencion','pliegosobservacion','pliegosobservacionacciones','pliegosobservacionatencion',
-                        'pliegosobservacionatencioncontestacion','pliegosobservaciondocumentos','pliegosobservacionanalisis',
+                        'pliegosobservacionatencioncontestacion','pliegosobservaciondocumentos','pliegosobservacionanalisis','pliegosobservacionanexos',
                         'pliegosobservacionanalisisenvio','pliegosobservacionrevision01','pliegosobservacionrevision',
                         'pliegosobservacionvalidacion','pliegosobservacionautorizacion','revisionespliegos',
-                        'revisionespliegosatencion'
+                        'revisionespliegosatencion','informeprimeraetapa'
                     ];
         $permisosGenerales = [];
         $i = 0;
@@ -86,5 +86,8 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'pliegosobservacioncontestacion.oficiospliegosobservacion']);
         Permission::create(['name' => 'auditoriaseguimiento.accionesconsulta']);
         Permission::create(['name' => 'recomendacionescontestaciones.oficiosrecomendacion']);
+        Permission::create(['name' => 'solicitudes.anexos']);
+        Permission::create(['name' => 'pliegos.anexos']);
+        Permission::create(['name' => 'recomendacion.anexos']);
     }
 }

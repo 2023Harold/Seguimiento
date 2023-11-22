@@ -49,8 +49,10 @@ class SolicitudesAclaracionAnalisisController extends Controller
     {
         $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $auditoria=$accion->auditoria;
+
+        
         // $promocion=$accion->promocion;
-        return view('solicitudesaclaracionanalisis.form',compact('solicitud','accion','auditoria'));
+        return view('solicitudesaclaracionanalisis.show',compact('solicitud','accion','auditoria'));
     }
 
     /**
@@ -106,6 +108,8 @@ class SolicitudesAclaracionAnalisisController extends Controller
 
             $request['monto_promocion'] = $montopromo;
 
+            $request = $this->normalizarDatos($request,$solicitud->accion);     
+
 
         $solicitud->update($request->all());
         setMessage("Se ha actualizado el análisis.");
@@ -122,5 +126,31 @@ class SolicitudesAclaracionAnalisisController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function normalizarDatos(Request $request, AuditoriaAccion $accion)
+    {
+        if($request->calificacion_sugerida=='Solventada'){
+            $request['monto_solventado'] = $accion->monto_aclarar;
+            $request['promocion'] = null;
+            $request['monto_promocion'] = null;
+        }
+        if($request->calificacion_sugerida=='No Solventada'){
+            $request['monto_solventado'] = null;
+            $request['monto_promocion'] = $accion->monto_aclarar;
+
+            if($request->promocion==2){
+                $request['monto_promocion'] = null;
+            }
+        }
+        if($request->calificacion_sugerida=='Solventada Parcialmente'){  
+            $request['monto_promocion'] = $accion->monto_aclarar-$request['monto_solventado'];       
+            if($request->promocion==2){
+                $request['monto_promocion'] = null;
+            }
+        }
+
+        return $request;
+        
     }
 }

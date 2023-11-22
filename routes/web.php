@@ -22,6 +22,7 @@ use App\Http\Controllers\ConstanciaController;
 use App\Http\Controllers\CotejamientoController;
 use App\Http\Controllers\FirmaController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InformePrimeraEtapaController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\PliegosObservacionAccionesController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\PliegosObservacionAcusesController;
 use App\Http\Controllers\PliegosObservacionAnalisisEnvioController;
 use App\Http\Controllers\PliegosObservacionAnalisisRevision02Controller;
 use App\Http\Controllers\PliegosObservacionAnalisisRevisionController;
+use App\Http\Controllers\PliegosObservacionAnexoController;
 use App\Http\Controllers\PliegosObservacionAtencionAnalisisController;
 use App\Http\Controllers\PliegosObservacionAtencionCalificacionAutorizacionController;
 use App\Http\Controllers\PliegosObservacionAtencionCalificacionController;
@@ -58,6 +60,7 @@ use App\Http\Controllers\RecomendacionesAnalisisController;
 use App\Http\Controllers\RecomendacionesAnalisisEnvioController;
 use App\Http\Controllers\RecomendacionesAnalisisRevisionController;
 use App\Http\Controllers\RecomendacionesAnalisisRevisionJefeController;
+use App\Http\Controllers\RecomendacionesAnexoController;
 use App\Http\Controllers\RecomendacionesAtencionCalificacionController;
 use App\Http\Controllers\RecomendacionesAtencionContestacionController;
 use App\Http\Controllers\RecomendacionesAtencionController;
@@ -87,6 +90,7 @@ use App\Http\Controllers\SolicitudesAclaracionAnalisisController;
 use App\Http\Controllers\SolicitudesAclaracionAnalisisEnvioController;
 use App\Http\Controllers\SolicitudesAclaracionAnalisisRevisionController;
 use App\Http\Controllers\SolicitudesAclaracionAnalisisRevisionJefeController;
+use App\Http\Controllers\SolicitudesAclaracionAnexoController;
 use App\Http\Controllers\SolicitudesAclaracionAtencionController;
 use App\Http\Controllers\SolicitudesAclaracionAutorizacionController;
 use App\Http\Controllers\SolicitudesAclaracionCalificacionController;
@@ -101,6 +105,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Middleware\CheckPermission;
 use App\Http\Requests\PliegosObservacionContestacionRequest;
 use App\Models\PliegosObservacion;
+use App\Models\Recomendaciones;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -230,6 +235,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('recomendacionescontestaciones',RecomendacionesAtencionContestacionController::class,['parameters' => ['recomendacionescontestaciones' => 'contestacion']]);
     Route::get('recomendacionescontestacionesoficios/{recomendacion}', [RecomendacionesAtencionContestacionController::class,'oficiosrecomendacion'])->name('recomendacionescontestaciones.oficiosrecomendacion');
     Route::resource('recomendacionesanalisis',RecomendacionesAnalisisController::class,['parameters' => ['recomendacionesanalisis' => 'recomendacion']]);
+    Route::get('recomendacionanexos/{recomendacion}', [RecomendacionesAnexoController::class,'anexos'])->name('recomendacion.anexos');
+    Route::resource('recomendacionesanexos',RecomendacionesAnexoController::class,['parameters' => ['recomendacionesanexos' => 'anexo']]);
     Route::resource('recomendacionesanalisisenvio',RecomendacionesAnalisisEnvioController::class,['parameters' => ['recomendacionesanalisisenvio' => 'recomendacion']]);
     //Route::resource('recomendacionesanalisisrevision',RecomendacionesAnalisisRevisionController::class,['parameters' => ['recomendacionesanalisisrevision' => 'recomendacion']]);
     //Route::resource('recomendacionesanalisisrevision02',RecomendacionesAnalisisRevisionJefeController::class,['parameters' => ['recomendacionesanalisisrevision02' => 'recomendacion']]);
@@ -258,6 +265,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Route::resource('solicitudesaclaracioncalificacion',SolicitudesAclaracionCalificacionController::class,['parameters' => ['solicitudesaclaracioncalificacion' => 'solicitud']]);
     Route::resource('solicitudesaclaracionvalidacion',SolicitudesAclaracionValidacionController::class,['parameters' => ['solicitudesaclaracionvalidacion' => 'solicitud']]);
     Route::resource('solicitudesaclaracionautorizacion',SolicitudesAclaracionAutorizacionController::class,['parameters' => ['solicitudesaclaracionautorizacion' => 'solicitud']]);
+    Route::get('solicitudesaclanexos/{solicitud}', [SolicitudesAclaracionAnexoController::class,'anexos'])->name('solicitudes.anexos');
+    Route::resource('solicitudesaclaracionanexos',SolicitudesAclaracionAnexoController::class,['parameters' => ['solicitudesaclaracionanexos' => 'anexo']]);
     Route::resource('revisionessolicitudes',RevisionesSolicitudesController::class,['parameters' => ['revisionessolicitudes' => 'comentario']]);
     Route::resource('revisionessolicitudesatencion',RevisionesSolicitudesAtencionController::class,['parameters' => ['revisionessolicitudesatencion' => 'comentario']]);
 
@@ -266,10 +275,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('pliegosobservacion',PliegosObservacionController::class,['parameters' => ['pliegosobservacion' => 'auditoria']]);
     Route::resource('pliegosobservacionacciones',PliegosObservacionAccionesController::class,['parameters' => ['pliegosobservacionacciones' => 'accion']]);/// sirve para cambiar la variable que acepta esa ruta
     Route::resource('pliegosobservacionatencion',PliegosObservacionAtencionController::class,['parameters' => ['pliegosobservacionatencion' => 'pliegosobservacionatencion']]);
-    //Route::resource('pliegosobservacioncalificacion',PliegosObservacionAtencionCalificacionController::class,['parameters' => ['pliegosobservacioncalificacion' => 'pliegosobservacion']]);
     Route::resource('pliegosobservacionatencioncontestacion',PliegosObservacionAtencionContestacionController::class,['parameters' => ['pliegosobservacionatencioncontestacion' => 'contestacion']]);
     Route::resource('pliegosobservaciondocumentos',PliegosObservacionAtencionDocumentosController::class,['parameters' => ['pliegosobservaciondocumentos' => 'documento']]);
     Route::resource('pliegosobservacionanalisis',PliegosObservacionAtencionAnalisisController::class,['parameters' => ['pliegosobservacionanalisis' => 'pliegosobservacion']]);
+    Route::get('pliegosobsanexos/{pliegosobservacion}', [PliegosObservacionAnexoController::class,'anexos'])->name('pliegos.anexos');
+    Route::resource('pliegosobservacionanexos',PliegosObservacionAnexoController::class,['parameters' => ['pliegosobservacionanexos' => 'anexo']]);
     Route::resource('pliegosobservacionanalisisenvio',PliegosObservacionAnalisisEnvioController::class,['parameters' => ['pliegosobservacionanalisisenvio' => 'pliegosobservacion']]);
     Route::resource('pliegosobservacionrevision01',PliegosObservacionRevision01Controller::class,['parameters' => ['pliegosobservacionrevision01' => 'pliegosobservacion']]);
     Route::resource('pliegosobservacionrevision',PliegosObservacionRevisionController::class,['parameters' => ['pliegosobservacionrevision' => 'pliegosobservacion']]);
@@ -287,6 +297,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
     // Route::resource('pliegosobservacionesacuses',PliegosObservacionAcusesController::class,['parameters' => ['pliegosobservacionacuses' => 'pliegosobservacion']]);
     // Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);
+    //Informe Primera Etapa
+    Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
 
 
 });
