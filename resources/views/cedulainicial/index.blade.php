@@ -45,6 +45,7 @@
                                 <th>Acto de fiscalización</th>
                                 <th>Monto por aclarar</th>
                                 <th>Acciones</th>
+                                <td></td>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,6 +75,11 @@
                                             <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
                                         </a>
                                     @endcan                                    
+                                </td>
+                                <td>
+                                    <a href="{{ route('cedulainicialprimera.edit',$auditoria) }}" target="_blank" class="btn btn-primary" >
+                                        <i class="align-middle fa fa-file-circle-plus" aria-hidden="true"></i> Ingresar
+                                    </a>
                                 </td>
                             </tr>
                             @empty

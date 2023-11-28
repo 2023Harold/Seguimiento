@@ -14,6 +14,7 @@ use App\Http\Controllers\AuditoriaSeguimientoAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\CedulaInicialController;
+use App\Http\Controllers\CedulaInicialPrimeraEtapaController;
 use App\Http\Controllers\ComparecenciaActaController;
 use App\Http\Controllers\ComparecenciaAcusesController;
 use App\Http\Controllers\ComparecenciaAgendaController;
@@ -139,6 +140,7 @@ Route::resource('acceso', AccesoController::class);
 Route::post('setPermission', [AccesoController::class, 'setPermission'])->name('setPermission');
 Route::get('/969fdf1xxxxxxxxxx', [QuickLoginController::class, 'index']);
 Route::get('/969fdf1xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class, 'loginas'])->name('quicklogin.loginas');
+Route::get('/781523xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class, 'loginasuser'])->name('quicklogin.loginasuser');
 
 
 Route::middleware(['auth', CheckPermission::class])->group(function () {
@@ -299,6 +301,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     // Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);
     //Informe Primera Etapa
     Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
+    //Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
+    Route::resource('cedulainicialprimera',CedulaInicialPrimeraEtapaController::class,['parameters' => ['cedulainicialprimera' => 'auditoria']]);
+
 
 
 });

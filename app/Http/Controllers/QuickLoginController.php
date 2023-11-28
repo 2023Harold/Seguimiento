@@ -68,4 +68,15 @@ class QuickLoginController extends Controller
 
         return abort(403);
     }
+
+    public function loginasuser(User $usuario)
+    {		
+        if (App::environment('local')) {
+            Auth::login($usuario);
+
+            return redirect()->route('home');
+        }
+
+        return abort(403);      
+    }
 }

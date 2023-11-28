@@ -50,6 +50,7 @@ class AuditoriaAccion extends Model
         'created_at',
         'updated_at',
         'evidencia_recomendacion',
+        'evidencia_resumen',
         'tipo_recomendacion',
         'tramo_control_recomendacion',
         'fecha_termino_recomendacion',

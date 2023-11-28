@@ -45,7 +45,7 @@
                                 <tr>
                                     <td>
                                         {!! ($usuario->inactivo == 'X') ? '<i class="fa fa-circle" style="color: red;"></i>' : '<i class=" fa fa-circle" style="color: green;"></i>' !!}
-                                        <a href="{{ route('quicklogin.loginas', $usuario) }}" title="Ingresar como" class="btn-link">
+                                        <a href="{{ route('quicklogin.loginasuser', $usuario) }}" title="Ingresar como" class="btn-link">
                                                 {{ $usuario->name }}
                                         </a>
                                     </td>

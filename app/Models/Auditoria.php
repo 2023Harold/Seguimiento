@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\SUTIC\EntidadFiscalizableIntra;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -66,6 +67,11 @@ class Auditoria extends Model
             public function acciones()
             {                       
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id');
+            }
+
+            public function accionesall()
+            {                       
+                return $this->belongsTo(AuditoriaAccion::class, 'id','segauditoria_id');
             }
 
             public function accionesDepartamento()
@@ -136,6 +142,76 @@ class Auditoria extends Model
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3);
             }
+
+            public function totalsolventadorecomendacion()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2)
+                            ->whereHas('recomendaciones', function (Builder $query) {
+                                $query->where('calificacion_sugerida','Atendida');
+                            });
+            }
+           
+            public function totalsolventadopras()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2)
+                            ->whereHas('pras', function (Builder $query) {
+                                $query->whereNotNull('constancia_turno');
+                            });
+            }
+
+           
+            public function totalsolventadosolacl()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 1)
+                            ->whereHas('solicitudesaclaracion', function (Builder $query) {
+                                $query->where('calificacion_sugerida', 'Solventada');
+                            });
+            }
+            
+            public function totalsolventadopliegos()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3)
+                            ->whereHas('pliegosobservacion', function (Builder $query) {
+                                $query->where('calificacion_sugerida', 'Solventado');
+                            });
+            }
+
+            public function totalNOsolventadorecomendacion()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2)
+                            ->whereHas('recomendaciones', function (Builder $query) {
+                                $query->whereNotIn('calificacion_sugerida',['Atendida']);
+                            });
+            }
+           
+            public function totalNOsolventadopras()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2)
+                            ->whereHas('pras', function (Builder $query) {
+                                $query->whereNull('constancia_turno');
+                            });
+            }
+
+           
+            public function totalNOsolventadosolacl()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 1)
+                            ->whereHas('solicitudesaclaracion', function (Builder $query) {
+                                $query->whereNotIn('calificacion_sugerida', ['Solventada']);
+                            });
+            }
+            
+            public function totalNOsolventadopliegos()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3)
+                            ->whereHas('pliegosobservacion', function (Builder $query) {
+                                $query->whereNotIn('calificacion_sugerida', ['Solventado']);
+                            });
+            }
+
+
+
+
             public function accionesrevisadaslider()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_lider');

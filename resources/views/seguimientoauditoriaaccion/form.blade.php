@@ -61,18 +61,23 @@
         </div> 
         <div id="div_recomendacion" style="display:{!! $mostrarDivRecomendaciones !!}">
             <div class="row" >
+                <div class="col-md-12">
+                    {!! BootForm::textarea('evidencia_resumen', 'Evidencia documental que acredite la atención de la recomendación: ', old('evidencia_resumen', $accion->evidencia_resumen)) !!}
+                </div>
+            </div>
+            <div class="row" >
                 <div class="col-md-6">
-                    {!! archivo('evidencia_recomendacion', 'Evidencia documental que acredite la atención de la recomendación: *',  old('evidencia_recomendacion', $accion->evidencia_recomendacion)) !!}
+                    {!! archivo('evidencia_recomendacion', 'Soporte de la evidencia documental que acredite la atención de la recomendación: ',  old('evidencia_recomendacion', $accion->evidencia_recomendacion)) !!}
+                </div>
+            </div>              
+            <div class="row">
+                <div class="col-md-6">
+                    {!! BootForm::text('tipo_recomendacion', 'Tipo de recomendación: ', old('tipo_recomendacion', $accion->tipo_recomendacion)) !!}
                 </div>
             </div> 
             <div class="row">
                 <div class="col-md-6">
-                    {!! BootForm::text('tipo_recomendacion', 'Tipo de recomendación: *', old('tipo_recomendacion', $accion->tipo_recomendacion)) !!}
-                </div>
-            </div> 
-            <div class="row">
-                <div class="col-md-6">
-                    {!! BootForm::text('tramo_control_recomendacion', 'Tramo de control: *', old('tramo_control_recomendacion', $accion->tramo_control_recomendacion)) !!}
+                    {!! BootForm::text('tramo_control_recomendacion', 'Tramo de control: ', old('tramo_control_recomendacion', $accion->tramo_control_recomendacion)) !!}
                 </div>
             </div>
             <div class="row">
