@@ -57,11 +57,11 @@
                         </div>
                         @php
                             $mostrarDivPromocion = ((!empty(old('calificacion_sugerida', $pliegosobservacion->calificacion_sugerida))&&old('calificacion_sugerida', $pliegosobservacion->calificacion_sugerida)!='Solventado')?'block':'none');
-                        @endphp 
+                        @endphp
                         <div id="div_promocion" style="display:{!! $mostrarDivPromocion !!}">
                             <div class="row">
                                 <div class="col-md-4">
-                                {!! BootForm::select('promocion', 'Promoción: *', $promocion->toArray(), old('promocion',$pliegosobservacion->promocion),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                                {!! BootForm::select('promocion', 'Promoción: ', $promocion->toArray(), old('promocion',$pliegosobservacion->promocion),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
                                 </div>
                             </div>
                             @php
@@ -97,8 +97,8 @@
                 $('#div_promocion').hide();
             } else if(event.target.value=='No Solventado') {
                 $('#id_monto_solventa').hide();
-                $('#div_promocion').show();     
-                $('#monto_promocion').val('@php  echo '$'.number_format( $accion->monto_aclarar, 2);   @endphp'); 
+                $('#div_promocion').show();
+                $('#monto_promocion').val('@php  echo '$'.number_format( $accion->monto_aclarar, 2);   @endphp');
                 $('#div_monto_promocion').hide();
             }else if(event.target.value=='Solventado Parcialmente'){
                 $('#id_monto_solventa').show();
@@ -131,7 +131,7 @@
             return number.toString().replace(exp,rep);
             }
 
-            $('#monto_promocion').val('$'+formatoMexico(montoacls.toFixed(2))); 
+            $('#monto_promocion').val('$'+formatoMexico(montoacls.toFixed(2)));
         });
     });
 </script>

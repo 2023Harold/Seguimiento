@@ -73,6 +73,10 @@ Breadcrumbs::for('seguimientoauditoriaacciones.index', function (BreadcrumbTrail
     $trail->parent('seguimientoauditorias.edit',$auditoria);
     $trail->push('Acciones', route('seguimientoauditoriaacciones.index'));
 });
+Breadcrumbs::for('asignacion.accion', function (BreadcrumbTrail $trail,$auditoria,$accion) {
+    $trail->parent('seguimientoauditoriaacciones.index',$auditoria);
+    $trail->push('Acción', route('asignacion.accion',$accion));
+});
 
 Breadcrumbs::for('seguimientoauditoriaacciones.create', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('seguimientoauditoriaacciones.index',$auditoria);
@@ -153,7 +157,7 @@ Breadcrumbs::for('asignaciondireccion.accionesconsulta', function (BreadcrumbTra
     $trail->push('Acciones', route('asignaciondireccion.accionesconsulta',$auditoria));
 });
 
-Breadcrumbs::for('asignacion.accion', function (BreadcrumbTrail $trail,$accion,$movimiento,$auditoria) {
+Breadcrumbs::for('asignaciondireccion.accion', function (BreadcrumbTrail $trail,$accion,$movimiento,$auditoria) {
     $trail->parent('asignaciondireccion.accionesconsulta',$auditoria);
     $trail->push('Accion', route('asignacion.accion',['accion'=>$accion,'movimiento'=>$movimiento]));
 });

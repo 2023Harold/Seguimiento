@@ -172,7 +172,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     /*Direcciones*/
     Route::resource('asignaciondireccion', AsignacionDireccionController::class, ['parameters' => ['asignaciondireccion' => 'auditoria']]);
     Route::get('/asignaciondireccion/acciones/consulta/{auditoria}', [AsignacionDireccionController::class, 'accionesConsulta'])->name('asignaciondireccion.accionesconsulta');
-    Route::get('/asignacionaccion/{accion}/{movimiento}', [AsignacionAccionController::class, 'accionesConsulta'])->name('asignacion.accion');//revisar si esta bien
+    Route::get('/asignacionaccion/{accion}/{movimiento?}', [AsignacionAccionController::class, 'accionesConsulta'])->name('asignacion.accion');//revisar si esta bien
     Route::post('getDirector', [AsignacionDireccionController::class, 'getDirector'])->name('getDirector');
     Route::get('/asignaciondireccion/reasignacion/{auditoria}', [AsignacionDireccionController::class, 'reasignar'])->name('asignaciondireccion.reasignar');
     /*Departamentos*/

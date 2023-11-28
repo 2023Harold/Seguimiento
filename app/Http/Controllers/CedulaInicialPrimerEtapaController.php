@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Auditoria;
-use App\Models\AuditoriaAccion;
 use Illuminate\Http\Request;
 
-class AsignacionAccionController extends Controller
+class CedulaInicialPrimerEtapaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +13,7 @@ class AsignacionAccionController extends Controller
      */
     public function index()
     {
-
+        //
     }
 
     /**
@@ -47,7 +45,7 @@ class AsignacionAccionController extends Controller
      */
     public function show($id)
     {
-
+        //
     }
 
     /**
@@ -56,9 +54,8 @@ class AsignacionAccionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($auditoria)
     {
-
 
     }
 
@@ -69,10 +66,9 @@ class AsignacionAccionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Auditoria $auditoria)
+    public function update(Request $request, $id)
     {
-
-
+        //
     }
 
     /**
@@ -85,20 +81,4 @@ class AsignacionAccionController extends Controller
     {
         //
     }
-    public function setQuery(Request $request)
-    {
-
-    }
-
-    public function accionesConsulta(Request $request)
-    {
-
-        $accion=AuditoriaAccion::find($request->accion);
-        $auditoria= Auditoria::find($accion->segauditoria_id);
-        $movimiento=$request->movimiento;
-
-
-       return view('asignacionaccion.show',compact('auditoria','accion','movimiento'));
-    }
-
 }

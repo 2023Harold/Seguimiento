@@ -92,8 +92,12 @@
                                         <a href="{{ route('asignacion.accion',$accion) }}">
                                             <i class="fa-regular fa-eye icon-hover"></i>
                                         </a>
-                                    @else
+                                    @elseif(!empty($movimiento))
                                         <a href="{{ route('asignacion.accion',['accion'=>$accion->id,'movimiento'=>$movimiento]) }}">
+                                            <i class="fa-regular fa-eye icon-hover"></i>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('asignacion.accion',['accion'=>$accion->id,'movimiento'=>null]) }}">
                                             <i class="fa-regular fa-eye icon-hover"></i>
                                         </a>
                                     @endif

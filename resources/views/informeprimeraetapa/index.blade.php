@@ -12,7 +12,7 @@
                     <a href="{{ route('auditoriaseguimiento.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;
-                    Informe 
+                    Informe
                 </h1>
             </div>
             <div class="card-body">
@@ -40,9 +40,9 @@
                                 <th>Monto por aclarar</th>
                                 <th>Monto solventado</th>
                                 <th>Monto no solventado</th>
-                                <th>Calificación</th>                                
-                                <th>Promoción</th>                                
-                                <th>Monto de la promoción</th>                                
+                                <th>Calificación</th>
+                                <th>Promoción</th>
+                                <th>Monto de la promoción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,9 +67,9 @@
                                         {{'$'.number_format( 0, 2)}}
                                     @elseif($accion->tipo=='Pliego de observación')
                                         {{(!empty($accion->pliegosobservacion->monto_solventado)?'$'.number_format( $accion->pliegosobservacion->monto_solventado, 2):'$'.number_format( 0, 2))}}
-                                    @elseif($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')                                           
+                                    @elseif($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')
                                         {{'$'.number_format( 0, 2)}}
-                                    @endif             
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     @if ($accion->tipo=='Solicitud de aclaración')
@@ -85,7 +85,7 @@
                                             @endif
                                         @else
                                             {{ '$'.number_format( 0, 2) }}
-                                        @endif                                       
+                                        @endif
                                     @elseif($accion->tipo=='Recomendación')
                                         {{'$'.number_format( 0, 2)}}
                                     @elseif($accion->tipo=='Pliego de observación')
@@ -101,10 +101,10 @@
                                             @endif
                                         @else
                                             {{ '$'.number_format( 0, 2) }}
-                                        @endif                                       
-                                    @elseif($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')                                           
+                                        @endif
+                                    @elseif($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')
                                         {{'$'.number_format( 0, 2)}}
-                                    @endif                           
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     @if ($accion->tipo=='Solicitud de aclaración')
@@ -113,48 +113,49 @@
                                         {{((!empty($accion->recomendaciones->fase_autorizacion)&&$accion->recomendaciones->fase_autorizacion=='Autorizado')? $accion->recomendaciones->calificacion_sugerida:'Pendiente')}}
                                     @elseif($accion->tipo=='Pliego de observación')
                                         {{((!empty($accion->pliegosobservacion->fase_autorizacion)&&$accion->pliegosobservacion->fase_autorizacion=='Autorizado')?$accion->pliegosobservacion->calificacion_sugerida:'Pendiente')}}
-                                    @elseif($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')                                           
-                                        {{((!empty($accion->pras->fase_autorizacion)&&$accion->pras->fase_autorizacion=='Autorizado')? 'Turnado':'')}}
-                                    @endif          
+                                    @elseif($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')
+                                        {{((!empty($accion->pras->fase_autorizacion)&&$accion->pras->fase_autorizacion=='Autorizado')? 'Turnado':'Sin turnar')}}
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     @if ($accion->tipo=='Solicitud de aclaración')
                                         {{((!empty($accion->solicitudesaclaracion->fase_autorizacion)&&
                                             $accion->solicitudesaclaracion->fase_autorizacion=='Autorizado'&&
                                             $accion->solicitudesaclaracion->calificacion_sugerida!='Solventada'
-                                            )? $accion->solicitudesaclaracion->promocionaccion->descripcion:'Sin promoción')}}                      
+                                            )? $accion->solicitudesaclaracion->promocionaccion->descripcion:'Sin promoción')}}
                                     @elseif($accion->tipo=='Pliego de observación')
                                         {{((!empty($accion->pliegosobservacion->fase_autorizacion)&&
                                             $accion->pliegosobservacion->fase_autorizacion=='Autorizado'&&
-                                            $accion->pliegosobservacion->calificacion_sugerida!='Solventado'
+                                            $accion->pliegosobservacion->calificacion_sugerida!='Solventado'&&
+                                            !empty($accion->pliegosobservacion->promocionaccion)
                                             )?$accion->pliegosobservacion->promocionaccion->descripcion:'Sin promoción')}}
                                     @else
-                                        Sin promoción                                    
-                                    @endif                    
+                                        Sin promoción
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     @if ($accion->tipo=='Solicitud de aclaración')
                                         {{((!empty($accion->solicitudesaclaracion->fase_autorizacion)&&
                                             $accion->solicitudesaclaracion->fase_autorizacion=='Autorizado'&&
-                                            !empty($accion->solicitudesaclaracion->promocion)&& 
+                                            !empty($accion->solicitudesaclaracion->promocion)&&
                                             ($accion->solicitudesaclaracion->promocion==3 || $accion->solicitudesaclaracion->promocion==4)
-                                            )?'$'.number_format( $accion->solicitudesaclaracion->monto_promocion, 2):'$'.number_format( 0, 2))}}                      
+                                            )?'$'.number_format( $accion->solicitudesaclaracion->monto_promocion, 2):'$'.number_format( 0, 2))}}
                                     @elseif($accion->tipo=='Pliego de observación')
                                         {{((!empty($accion->pliegosobservacion->fase_autorizacion)&&
                                             $accion->pliegosobservacion->fase_autorizacion=='Autorizado'&&
-                                            !empty($accion->pliegosobservacion->promocion)&& 
+                                            !empty($accion->pliegosobservacion->promocion)&&
                                             ($accion->pliegosobservacion->promocion==1 || $accion->pliegosobservacion->promocion==4)
                                             )?'$'.number_format( $accion->pliegosobservacion->monto_promocion, 2):'$'.number_format( 0, 2))}}
                                     @else
-                                    {{'$'.number_format( 0, 2)}}                                  
-                                    @endif                 
+                                    {{'$'.number_format( 0, 2)}}
+                                    @endif
                                 </td>
                             </tr>
                             @empty
                             <tr>
                                 <td class="text-center" colspan="5">
                                     No se encuentran registros en este apartado.
-                                </td>                               
+                                </td>
                             </tr>
                             @endforelse
                         </tbody>

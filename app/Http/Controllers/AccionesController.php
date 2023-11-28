@@ -18,18 +18,18 @@ class AccionesController extends Controller
     public $attributeNames;
     public $errorMessages;
     protected $model;
-    
+
 
     public function __construct(AuditoriaAccion $model)
     {
         $this->validationRules = [];
-        $this->attributeNames = [           
+        $this->attributeNames = [
             'evidencia_recomendacion' => 'evidencia documental que acredite la atención de la recomendación',
             'tipo_recomendacion' => 'tipo de recomendación',
-            'tramo_control_recomendacion' => 'tramo de control',           
+            'tramo_control_recomendacion' => 'tramo de control',
         ];
         $this->errorMessages = [
-            'required' => 'El campo :attribute es obligatorio.',       
+            'required' => 'El campo :attribute es obligatorio.',
         ];
 
         $this->model = $model;
@@ -42,11 +42,12 @@ class AccionesController extends Controller
     public function index(Request $request)
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $acciones =  $this->setQuery($request)->orderBy('consecutivo')->paginate(30);     
-        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
+        $acciones =  $this->setQuery($request)->orderBy('consecutivo')->paginate(30);
+        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);
         $monto_aclarar=$this->setQuery($request)->orderBy('monto_aclarar');
-       
-        return view('seguimientoauditoriaaccion.index', compact('acciones', 'request', 'auditoria','tiposaccion','monto_aclarar'));
+        $movimiento=null;
+
+        return view('seguimientoauditoriaaccion.index', compact('acciones', 'request', 'auditoria','tiposaccion','monto_aclarar','movimiento'));
     }
 
     /**
@@ -72,12 +73,12 @@ class AccionesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
-        $this->setValidator($request)->validate(); 
+    {
+        $this->setValidator($request)->validate();
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $this->normalizarDatos($request);       
+        $this->normalizarDatos($request);
         mover_archivos($request, ['cedula'], null);
-        $accion  = AuditoriaAccion::create($request->all());        
+        $accion  = AuditoriaAccion::create($request->all());
         setMessage('El registro ha sido agregado');
 
         return redirect()->route('seguimientoauditoriaacciones.index');
@@ -102,12 +103,12 @@ class AccionesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(AuditoriaAccion $accion)
-    {        
+    {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $numeroconsecutivo=$accion->consecutivo;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id');
         $actosfiscalizacion=CatalogoTipoAuditoria::whereIn('id',[1,2,3,4])->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
-        
+
 
         return view('seguimientoauditoriaaccion.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion'));
     }
@@ -121,11 +122,11 @@ class AccionesController extends Controller
      */
     public function update(AuditoriaAccionRequest $request, AuditoriaAccion $accion)
     {
-        $this->setValidator($request)->validate(); 
-        $this->normalizarDatos($request);       
+        $this->setValidator($request)->validate();
+        $this->normalizarDatos($request);
         mover_archivos($request, ['cedula'], $accion);
         $accion->update($request->all());
-       
+
         setMessage('La acción se ha modificado correctamente.');
 
         return redirect()->route('seguimientoauditoriaacciones.index');
@@ -147,8 +148,8 @@ class AccionesController extends Controller
          $query = $this->model;
 
          $query = $query->where('segauditoria_id',getSession('auditoria_id'));
-                
-        if ($request->filled('consecutivo')) {            
+
+        if ($request->filled('consecutivo')) {
             $query = $query->where('consecutivo',$request->consecutivo);
          }
 
@@ -178,7 +179,7 @@ class AccionesController extends Controller
         $request['usuario_actualizacion_id'] = auth()->id();
         $request['accion'] = str_replace("\r\n", "</br>",$request->accion);
         $request['acto_fiscalizacion'] = $actosfiscalizacion->descripcion;
-        
+
         if ($request->segtipo_accion_id==2) {
             $request['monto_aclarar'] = null;
         }
@@ -202,16 +203,16 @@ class AccionesController extends Controller
     }
 
     protected function setValidator(Request $request,AuditoriaAccion $accion = null)
-    {        
+    {
         $this->validationRules['evidencia_recomendacion'] = [new RecomendacionRegistroRule($request->segtipo_accion_id,$request->acto_fiscalizacion_id)];
         $this->validationRules['tipo_recomendacion'] = [new RecomendacionRegistroRule($request->segtipo_accion_id,$request->acto_fiscalizacion_id)];
         $this->validationRules['tramo_control_recomendacion'] = [new RecomendacionRegistroRule($request->segtipo_accion_id,$request->acto_fiscalizacion_id)];
-        
+
         return Validator::make($request->all(), $this->validationRules, $this->errorMessages)->setAttributeNames($this->attributeNames);
     }
 
     protected function accion(AuditoriaAccion $accion)
-    {        
+    {
         $auditoria = $accion->auditoria;
 
         return view('seguimientoauditoriaaccion.show',compact('accion','auditoria'));

@@ -3,15 +3,13 @@
 @if (!empty($movimiento)&&$movimiento=='consultar')
 {{ Breadcrumbs::render('seguimientoauditoriaacciones.consulta',$auditoria) }}
 @elseif (!empty($movimiento)&&$movimiento=='direccionconsultar')
-
-{{ Breadcrumbs::render('asignacion.accion',$accion->id,$movimiento,$auditoria) }}
-
+{{ Breadcrumbs::render('asignaciondireccion.accion',$accion->id,$movimiento,$auditoria) }}
 @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')
 {{ Breadcrumbs::render('asignacion.acciondepa',$accion->id,$movimiento,$auditoria) }}
 @elseif(!empty($movimiento)&&$movimiento=='lideranalistaconsultar')
 {{ Breadcrumbs::render('asignacion.accionlider',$accion->id,$movimiento,$auditoria) }}
 @else
-{{ Breadcrumbs::render('seguimientoauditoriaacciones.index',$auditoria) }}
+{{ Breadcrumbs::render('asignacion.accion',$auditoria,$accion) }}
 @endif
 @endsection
 @section('content')
