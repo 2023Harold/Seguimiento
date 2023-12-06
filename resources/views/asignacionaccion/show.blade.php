@@ -87,16 +87,24 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <label>Monto por aclarar: </label>
                     <span class="text-primary">
                         {{ '$'.number_format( $accion->monto_aclarar, 2) }}
                     </span>
                 </div>
                 @if ($accion->tipo=='Recomendación')
-                    @if (!empty($accion->evidencia_recomendacion))
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                            <label>Evidencia documental que acredite la atención de la recomendación: </label>
+                @if (!empty($accion->evidencia_recomendacion))
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <label>Evidencia documental que acredite la atención de la recomendación: </label>
+                        <span class="text-primary">
+                            {!! BootForm::textarea('evidencia_resumen', false,old('evidencia_resumen', $accion->evidencia_resumen),['rows'=>'3','disabled']) !!}
+                        </span>
+                    </div>
+                </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <label>Soporte de la evidencia documental que acredite la atención de la recomendación: </label>
                             <span class="text-primary">
                                 <a href="{{ asset($accion->evidencia_recomendacion) }}" target="_blank">
                                     <?php echo htmlspecialchars_decode(iconoArchivo($accion->evidencia_recomendacion)) ?>

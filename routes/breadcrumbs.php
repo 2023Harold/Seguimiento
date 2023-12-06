@@ -101,7 +101,7 @@ Breadcrumbs::for('auditoriaseguimientoacciones.index', function (BreadcrumbTrail
 
 Breadcrumbs::for('auditoriaconsultaacciones.index', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimientoacciones.index');
-    $trail->push('Accion', route('auditoriaconsultaacciones.index'));
+    $trail->push('Acción', route('auditoriaconsultaacciones.index'));
 });
 
 
