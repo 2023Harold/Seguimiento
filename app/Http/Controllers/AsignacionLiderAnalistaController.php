@@ -24,7 +24,7 @@ class AsignacionLiderAnalistaController extends Controller
     public function index(Request $request)
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-               
+
         return view('asignacionlideranalista.index', compact('auditorias', 'request'));
     }
 
@@ -70,9 +70,9 @@ class AsignacionLiderAnalistaController extends Controller
     {
         $lideres=User::where('siglas_rol','LP')->where('unidad_administrativa_id', auth()->user()->jefe->unidad_administrativa_id)->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $analistas=User::where('siglas_rol','ANA')->where('unidad_administrativa_id', auth()->user()->unidad_administrativa_id)->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
-        $accion="asignar"; 
-                     
-        return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));      
+        $accion="asignar";
+
+        return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
     }
 
     /**
@@ -84,41 +84,41 @@ class AsignacionLiderAnalistaController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        
+
         if($request->accion=='reasignarlider'){
 
             $userLider=User::find($request->lider_asignado_id);
-            foreach ($auditoria->accionesDepartamento  as $accion) {   
+            foreach ($auditoria->accionesDepartamento  as $accion) {
                 $requestlider=new Request();
                 $requestlider['lider_anterior_id']=$accion->lider_asignado_id;
                 $requestlider['reasignacion_lider']='Si';
                 $requestlider['lider_asignado_id']=$request->lider_asignado_id;
                 $requestlider['lider_asignado']=$request->lider_asignado;
 
-                $accion->update($requestlider->all());               
+                $accion->update($requestlider->all());
 
                 $titulo = 'Reasignación de la accion No. '.$accion->numero.'  de la auditoría '.$auditoria->numero_auditoria;
                 $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha reasignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
-                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id); 
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id);
             }
-            setMessage('Se ha realizado la reasignación del lider de proyecto correctamente.');   
+            setMessage('Se ha realizado la reasignación del lider de proyecto correctamente.');
 
         }elseif($request->accion=='reasignaranalista'){
 
             $userAnalista=User::find($request->analista_asignado_id);
 
-            foreach ($auditoria->accionesDepartamento  as $accion) {  
-                $requestanalista=new Request(); 
+            foreach ($auditoria->accionesDepartamento  as $accion) {
+                $requestanalista=new Request();
                 $requestanalista['analista_anterior_id']=$accion->analista_asignado_id;
                 $requestanalista['reasignacion_analista']='Si';
                 $requestanalista['analista_asignado_id']=$request->analista_asignado_id;
                 $requestanalista['analista_asignado']=$request->analista_asignado;
 
-                $accion->update($requestanalista->all());               
+                $accion->update($requestanalista->all());
 
                 $titulo = 'Reasignación de la accion No. '.$accion->numero.'  de la auditoría '.$auditoria->numero_auditoria;
                 $mensaje = '<strong>Estimado(a) ' . $userAnalista->name . ', ' . $userAnalista->puesto . '.</strong><br>Se le ha reasignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para darle seguimiento a las acciones asignadas.';
-                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userAnalista->unidad_adscripcion_id, $userAnalista->id); 
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userAnalista->unidad_adscripcion_id, $userAnalista->id);
             }
             setMessage('Se ha realizado la reasignación del analista correctamente.');
 
@@ -127,21 +127,22 @@ class AsignacionLiderAnalistaController extends Controller
             $userLider=User::find($request->lider_asignado_id);
             $userAnalista=User::find($request->analista_asignado_id);
 
-            foreach ($auditoria->accionesDepartamento  as $accion) { 
-                $accion->update($request->all());                
+            foreach ($auditoria->accionesDepartamento  as $accion) {
+                $accion->update($request->all());
 
                 $titulo = 'Asignación de la accion No. '.$accion->numero.'  de la auditoría '.$auditoria->numero_auditoria;
                 $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
-                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id);   
-                
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id);
+
                 $titulo = 'Asignación de la accion No. '.$accion->numero.'  de la auditoría '.$auditoria->numero_auditoria;
                 $mensaje = '<strong>Estimado(a) ' . $userAnalista->name . ', ' . $userAnalista->puesto . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para darle seguimiento a las acciones asignadas.';
-                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userAnalista->unidad_adscripcion_id, $userAnalista->id);
+                auth()->user()->insertNotificacion($titulo, $mensaje,
+                now(), $userAnalista->unidad_adscripcion_id, $userAnalista->id);
 
             }
 
-            setMessage('Se ha realizado la asignación del lider y analista correctamente.');   
-            $auditoria->update(['asignacion_lider_analista'=>'Si']);        
+            setMessage('Se ha realizado la asignación del lider y analista correctamente.');
+            $auditoria->update(['asignacion_lider_analista'=>'Si']);
         }
 
         return redirect()->route('asignacionlideranalista.index');
@@ -162,46 +163,46 @@ class AsignacionLiderAnalistaController extends Controller
     {
         $lideres=User::where('siglas_rol','LP')->where('unidad_administrativa_id', auth()->user()->director->unidad_administrativa_id)->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $analistas=User::where('siglas_rol','ANA')->where('unidad_administrativa_id', auth()->user()->unidad_administrativa_id)->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
-        $accion="reasignarlider";             
-        return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));      
+        $accion="reasignarlider";
+        return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
     }
 
     public function reasignaranalista(Auditoria $auditoria)
-    {       
+    {
         $lideres=User::where('siglas_rol','LP')->where('unidad_administrativa_id', auth()->user()->director->unidad_administrativa_id)->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $analistas=User::where('siglas_rol','ANA')->where('unidad_administrativa_id', auth()->user()->unidad_administrativa_id)->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
-        $accion="reasignaranalista"; 
-                     
-        return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));      
+        $accion="reasignaranalista";
+
+        return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
     }
 
     public function accionesConsulta(Auditoria $auditoria)
     {
-        $movimiento='lideranalistaconsultar';       
-        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->paginate(30);   
-        $request = new Request(); 
-        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);     
-       
+        $movimiento='lideranalistaconsultar';
+        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->paginate(30);
+        $request = new Request();
+        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);
+
         return view('seguimientoauditoriaaccion.index', compact('acciones', 'request', 'auditoria','movimiento','tiposaccion'));
     }
 
     public function consulta(Auditoria $auditoria)
     {
-        $movimiento='lideranalistaconsultar';       
-        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->paginate(30);   
-        $request = new Request(); 
-        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);     
-       
+        $movimiento='lideranalistaconsultar';
+        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->paginate(30);
+        $request = new Request();
+        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);
+
         return view('asignacionlideranalistaconsulta.index', compact('acciones', 'request', 'auditoria','movimiento','tiposaccion'));
     }
 
     public function setQuery(Request $request)
     {
-         $query = $this->model;         
-        
+         $query = $this->model;
+
         if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
-           in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){   
+           in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){
 
             $query = $query->whereNotNull('fase_autorizacion')
             ->where('fase_autorizacion','Autorizado');
@@ -210,15 +211,15 @@ class AsignacionLiderAnalistaController extends Controller
             $query = $query->whereNotNull('fase_autorizacion')
                         ->where('fase_autorizacion','Autorizado')
                         ->whereNotNull('direccion_asignada_id')
-                        ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);  
+                        ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);
 
         }elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
 
             $query = $query->whereHas('acciones', function($q){
                 $q->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
-            });  
+            });
         }
-                
+
         if ($request->filled('numero_auditoria')) {
              $numeroAuditoria=strtolower($request->numero_auditoria);
              $query = $query->whereRaw('LOWER(numero_auditoria) LIKE (?) ',["%{$numeroAuditoria}%"]);
@@ -243,13 +244,13 @@ class AsignacionLiderAnalistaController extends Controller
         $usuario = [];
         $cargosasociados = [];
 
-        $users = User::where('id',$request->userid)->get();     
+        $users = User::where('id',$request->userid)->get();
 
         if (!empty($users) && count($users) > 0) {
             foreach ($users as $user) {
                 $usuario[] = ['id' => $user->id, 'nombre' => $user->name,'puesto'=> $user->puesto,'unidad'=>$request->unidad];
             }
-        }       
+        }
 
         $datos[1] = $usuario;
 
@@ -262,13 +263,13 @@ class AsignacionLiderAnalistaController extends Controller
         $usuario = [];
         $cargosasociados = [];
 
-        $users = User::where('id',$request->useranalistaid)->get();     
+        $users = User::where('id',$request->useranalistaid)->get();
 
         if (!empty($users) && count($users) > 0) {
             foreach ($users as $user) {
                 $usuario[] = ['id' => $user->id, 'nombre' => $user->name,'puesto'=> $user->puesto,'unidad'=>$request->unidad];
             }
-        }       
+        }
 
         $datos[1] = $usuario;
 
