@@ -32,7 +32,6 @@
                             </a>
                         </div>
                         @endcan
-
                         <div class="menu-item menu-accordion {{ (str_contains(Route::current()->getName(), 'prasacciones')||
                                                                  str_contains(Route::current()->getName(), 'prasturno')||
                                                                  str_contains(Route::current()->getName(), 'recomendacionesacciones')||
@@ -63,7 +62,12 @@
                                                                  str_contains(Route::current()->getName(), 'pliegosobservacionrevision')||
                                                                  str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
                                                                  str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')||
-                                                                 str_contains(Route::current()->getName(), 'informeprimeraetapa')
+                                                                 str_contains(Route::current()->getName(), 'informeprimeraetapa')||
+                                                                 str_contains(Route::current()->getName(), 'cedulainicial')||
+                                                                 str_contains(Route::current()->getName(), 'cedulageneralrecomendacion')||
+                                                                 str_contains(Route::current()->getName(), 'cedulageneralpras')||
+                                                                 str_contains(Route::current()->getName(), 'cedulaanalitica')||
+                                                                 str_contains(Route::current()->getName(), 'cedulaanaliticarecomendacion')
                                                                 ) ? 'show' : ''  }}" 
                                                                 data-kt-menu-trigger="click">
                             <a href="#" class="menu-link py-3" >
@@ -103,7 +107,12 @@
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionrevision')||
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')||
-                                                                        str_contains(Route::current()->getName(), 'informeprimeraetapa')
+                                                                        str_contains(Route::current()->getName(), 'informeprimeraetapa')||
+                                                                        str_contains(Route::current()->getName(), 'cedulainicial')||
+                                                                        str_contains(Route::current()->getName(), 'cedulageneralrecomendacion')||
+                                                                        str_contains(Route::current()->getName(), 'cedulageneralpras')||
+                                                                        str_contains(Route::current()->getName(), 'cedulaanalitica')||
+                                                                        str_contains(Route::current()->getName(), 'cedulaanaliticarecomendacion')
                                                                         ) ? 'show' : ''  }} mx-5 me-0 pt-3">
                                 @can('prasacciones.index')
                                 <div class="menu-item mb-1">
@@ -174,7 +183,21 @@
                                         <span class="menu-title">Pliegos de observación</span>
                                     </a>
                                 </div>
-                                @endcan    
+                                @endcan  
+                                <div class="menu-item mb-1">
+                                    <a href="{{ route('cedulainicial.index') }}"
+                                        class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'cedulainicial')||
+                                                                  str_contains(Route::current()->getName(), 'cedulageneralrecomendacion')||
+                                                                  str_contains(Route::current()->getName(), 'cedulageneralpras')||
+                                                                  str_contains(Route::current()->getName(), 'cedulaanalitica')||
+                                                                  str_contains(Route::current()->getName(), 'cedulaanaliticarecomendacion')
+                                                                 ) ? 'active' : '' }}">
+                                        <span class="menu-bullet">
+                                            <span class="fa fa-file-text"></span>
+                                        </span>
+                                        <span class="menu-title">Cédulas</span>
+                                    </a>
+                                </div>   
                                 <div class="menu-item mb-1">
                                     <a href="{{ route('informeprimeraetapa.index') }}"
                                         class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'informeprimeraetapa') ? 'active' : '' }}">

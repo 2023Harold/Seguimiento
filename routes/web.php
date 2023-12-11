@@ -13,6 +13,10 @@ use App\Http\Controllers\AuditoriaConsultaAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\CedulaAnaliticaController;
+use App\Http\Controllers\CedulaAnaliticaDesempenoController;
+use App\Http\Controllers\CedulaGeneralPRASController;
+use App\Http\Controllers\CedulaGeneralRecomendacionesController;
 use App\Http\Controllers\CedulaInicialController;
 use App\Http\Controllers\CedulaInicialPrimeraEtapaController;
 use App\Http\Controllers\ComparecenciaActaController;
@@ -295,17 +299,16 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('revisionespliegosatencion',RevisionesPliegosAtencionController::class,['parameters' => ['revisionespliegosatencion' => 'comentario']]);
 
     /*pliegos Revisiones*/
-
-
     // Route::resource('pliegosobservacionesacuses',PliegosObservacionAcusesController::class,['parameters' => ['pliegosobservacionacuses' => 'pliegosobservacion']]);
     // Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);
     //Informe Primera Etapa
     Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
     //Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
     Route::resource('cedulainicialprimera',CedulaInicialPrimeraEtapaController::class,['parameters' => ['cedulainicialprimera' => 'auditoria']]);
-
-
-
+    Route::resource('cedulageneralrecomendacion',CedulaGeneralRecomendacionesController::class,['parameters' => ['cedulageneralrecomendacion' => 'auditoria']]);
+    Route::resource('cedulageneralpras',CedulaGeneralPRASController::class,['parameters' => ['cedulageneralpras' => 'auditoria']]);
+    Route::resource('cedulaanalitica',CedulaAnaliticaController::class,['parameters' => ['cedulaanalitica' => 'auditoria']]);
+    Route::resource('cedulaanaliticarecomendacion',CedulaAnaliticaDesempenoController::class,['parameters' => ['cedulaanaliticarecomendacion' => 'auditoria']]);
 });
 //usuarios
 

@@ -17,7 +17,7 @@ class RolesSeeder extends Seeder
     public function run()
     {
         //home
-        $home = ['home','auth.logout','notificaciones.index','marcarleido','getCargosAsociados','cotejamiento','firmar','finalizarfirma','finalizarfirmapdf','constancia.mostrarConstancia','informeprimeraetapa.index'];
+        $home = ['home','auth.logout','notificaciones.index','marcarleido','getCargosAsociados','cotejamiento','firmar','finalizarfirma','finalizarfirmapdf','constancia.mostrarConstancia','informeprimeraetapa.index','cedulainicialprimera.edit','cedulageneralrecomendacion.edit','cedulageneralpras.edit','cedulaanalitica.edit','cedulaanaliticarecomendacion.edit','asignacion.accion'];
 
         //Seguimiento Auditoria
         $seguimientoauditoriaAnalista=['seguimientoauditoria.index','seguimientoauditoria.create','seguimientoauditoria.store','seguimientoauditoria.edit','seguimientoauditoria.update','seguimientoauditoria.show','seguimientoauditoria.destroy','seguimientoauditoria.acciones','seguimientoauditoria.concluir','seguimientoauditoria.accionesconsulta'];

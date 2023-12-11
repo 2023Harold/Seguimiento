@@ -95,7 +95,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    {!! BootForm::radios("calificacion_sugerida", ' Calificación de la atención: *', ['Atendida'=>'Atendida', 'No Atendida'=>'No Atendida','Parcialmente Atendida'=>'Parcialmente Atendida'],old('calificacion_atencion',$recomendacion->calificacion_atencion),false,['class'=>'i-checks']); !!}
+                                    {!! BootForm::radios("calificacion_sugerida", ' Calificación de la atención: *', ['Atendida'=>'Atendida', 'No Atendida'=>'No Atendida'],old('calificacion_atencion',$recomendacion->calificacion_atencion),false,['class'=>'i-checks']); !!}
                                 </div>
                             </div>
                             <div class="row">

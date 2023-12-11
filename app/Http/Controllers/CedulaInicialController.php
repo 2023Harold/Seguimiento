@@ -22,10 +22,9 @@ class CedulaInicialController extends Controller
      */
     public function index(Request $request)
     {
-        $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-        
+        $auditoria = Auditoria::find(getSession('auditoria_id'));        
                
-        return view('cedulainicial.index', compact('auditorias', 'request'));
+        return view('cedulainicial.index', compact('auditoria', 'request'));
     }
 
     /**

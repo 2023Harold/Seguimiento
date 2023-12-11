@@ -56,6 +56,7 @@ class AuditoriaAccion extends Model
         'fecha_termino_recomendacion',
         'plazo_recomendacion',
         'normativa_infringida',
+        'antecedentes_accion'
     ];
 
 

@@ -19,7 +19,7 @@
         @include('layouts.contextos._auditoria')
         @include('layouts.contextos._accion')
         {!! BootForm::open(['model' => $auditoria,'update' => 'asignaciondepartamento.update','id' => 'form']) !!}
-        {!! BootForm::hidden('accion',$acciondep) !!}
+        {!! BootForm::hidden('acciond',$acciondep) !!}
         {!! BootForm::hidden('usuario_id',null,['id'=>'usuario_id']) !!}
         {!! BootForm::hidden('accion_id',$accion->id,['id'=>'accion_id']) !!}
         <div class="row">

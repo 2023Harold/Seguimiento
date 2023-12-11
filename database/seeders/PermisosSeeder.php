@@ -40,7 +40,8 @@ class PermisosSeeder extends Seeder
                         'pliegosobservacionatencioncontestacion','pliegosobservaciondocumentos','pliegosobservacionanalisis','pliegosobservacionanexos',
                         'pliegosobservacionanalisisenvio','pliegosobservacionrevision01','pliegosobservacionrevision',
                         'pliegosobservacionvalidacion','pliegosobservacionautorizacion','revisionespliegos',
-                        'revisionespliegosatencion','informeprimeraetapa'
+                        'revisionespliegosatencion','informeprimeraetapa','cedulainicialprimera','cedulageneralrecomendacion','cedulageneralpras',
+                        'cedulaanalitica','cedulaanaliticarecomendacion'
                     ];
         $permisosGenerales = [];
         $i = 0;
@@ -89,5 +90,6 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'solicitudes.anexos']);
         Permission::create(['name' => 'pliegos.anexos']);
         Permission::create(['name' => 'recomendacion.anexos']);
+        Permission::create(['name' => 'asignacion.accion']);
     }
 }

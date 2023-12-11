@@ -39,12 +39,17 @@
             <div class="col-md-6">
                 {!! archivo('cedula', 'Cédula de acción: ',  old('numero_accion', $accion->cedula)) !!}
             </div>
-        </div>
+        </div>         
         <div class="row">
             <div class="col-md-12">
                 {!! BootForm::textarea('accion', 'Acción: *', old('accion', $accion->accion),['class'=>'editor']) !!}
             </div>
         </div>   
+        <div class="row">
+            <div class="col-md-12">
+                {!! BootForm::textarea('antecedentes_accion', 'Antecedentes de la acción: *', old('antecedentes_accion', $accion->antecedentes_accion),['class'=>'editor']) !!}
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 {!! BootForm::textarea('normativa_infringida', 'Normativa infringida: *', old('normativa_infringida', $accion->normativa_infringida)) !!}
@@ -96,7 +101,7 @@
                 @canany(['seguimientoauditoriaacciones.store','seguimientoauditoriaacciones.update'])             
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 @endcanany
-                <a href="{{ route('seguimientoauditoria.index') }}" class="btn btn-secondary me-2">Cancelar</a>
+                <a href="{{ route('seguimientoauditoriaacciones.index') }}" class="btn btn-secondary me-2">Cancelar</a>
             </div>
         </div>
         {!! BootForm::close() !!}

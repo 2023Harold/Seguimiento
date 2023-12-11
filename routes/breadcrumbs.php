@@ -555,47 +555,53 @@ Breadcrumbs::for('pliegosobservacionanexos.create', function (BreadcrumbTrail $t
     $trail->parent('pliegosobservacionanexos.index',$pliegosobservacion,$auditoria);
     $trail->push('Agregar', route('pliegosobservacionanexos.create'));
 });
-
 Breadcrumbs::for('pliegosobservacionanalisis.show', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
     $trail->parent('pliegosobservacionatencion.index',$auditoria);
     $trail->push('Análisis de la atención', route('pliegosobservacionanalisis.show',$pliegosobservacion));
 });
-
 Breadcrumbs::for('pliegosobservacionanexos.show', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
     $trail->parent('pliegosobservacionanalisis.show',$pliegosobservacion,$auditoria);
     $trail->push('Anexos', route('pliegosobservacionanexos.show',$pliegosobservacion));
 });
-
-
-
 Breadcrumbs::for('pliegosobservacionrevision01.edit', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
     $trail->parent('pliegosobservacionatencion.index',$auditoria);
     $trail->push('Revisar', route('pliegosobservacionrevision01.edit',$pliegosobservacion));
 });
-
 Breadcrumbs::for('pliegosobservacionrevision.edit', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
     $trail->parent('pliegosobservacionatencion.index',$auditoria);
     $trail->push('Revisar', route('pliegosobservacionrevision.edit',$pliegosobservacion));
 });
-
 Breadcrumbs::for('pliegosobservacionvalidacion.edit', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
     $trail->parent('pliegosobservacionatencion.index',$auditoria);
     $trail->push('Validar', route('pliegosobservacionvalidacion.edit',$pliegosobservacion));
 });
-
 Breadcrumbs::for('pliegosobservacionautorizacion.edit', function (BreadcrumbTrail $trail,$pliegosobservacion,$auditoria) {
     $trail->parent('pliegosobservacionatencion.index',$auditoria);
     $trail->push('Autorizar-Rechazar', route('pliegosobservacionautorizacion.edit',$pliegosobservacion));
 });
-
-Breadcrumbs::for('cedulainicial.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('home');
-    $trail->push('Cédulas iniciales', route('cedulainicial.index'));
+Breadcrumbs::for('cedulainicial.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('auditoriaseguimiento.edit',$auditoria);
+    $trail->push('Cédulas', route('cedulainicial.index'));
 });
-
-Breadcrumbs::for('cedulainicial.edit', function (BreadcrumbTrail $trail,$auditoria) {
-    $trail->parent('cedulainicial.index');
-    $trail->push('Cédula', route('cedulainicial.edit',$auditoria));
+Breadcrumbs::for('cedulainicial.show', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('cedulainicial.index',$auditoria);
+    $trail->push('Cédula General', route('cedulainicial.show',$auditoria));
+});
+Breadcrumbs::for('cedulageneralrecomendacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('cedulainicial.index',$auditoria);
+    $trail->push('Cédula General Recomendaciones', route('cedulageneralrecomendacion.edit',$auditoria));
+});
+Breadcrumbs::for('cedulageneralpras.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('cedulainicial.index',$auditoria);
+    $trail->push('Cédula General PRAS', route('cedulageneralpras.edit',$auditoria));
+});
+Breadcrumbs::for('cedulaanalitica.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('cedulainicial.index',$auditoria);
+    $trail->push('Cédula Analitica', route('cedulaanalitica.edit',$auditoria));
+});
+Breadcrumbs::for('cedulaanaliticarecomendacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('cedulainicial.index',$auditoria);
+    $trail->push('Cédula Analitica Desempeño', route('cedulaanaliticarecomendacion.edit',$auditoria));
 });
 
 

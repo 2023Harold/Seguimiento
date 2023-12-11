@@ -66,7 +66,7 @@ class Auditoria extends Model
 
             public function acciones()
             {                       
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id');
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->orderBy('numero');
             }
 
             public function accionesall()
@@ -153,7 +153,7 @@ class Auditoria extends Model
            
             public function totalsolventadopras()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 4)
                             ->whereHas('pras', function (Builder $query) {
                                 $query->whereNotNull('constancia_turno');
                             });
@@ -186,7 +186,7 @@ class Auditoria extends Model
            
             public function totalNOsolventadopras()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 4)
                             ->whereHas('pras', function (Builder $query) {
                                 $query->whereNull('constancia_turno');
                             });

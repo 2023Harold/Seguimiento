@@ -1,42 +1,79 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('cedulainicial.index') }}
+{{ Breadcrumbs::render('cedulainicial.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    @include('layouts.partials._menu')
+    <div class="col-md-9 mt-2">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+                    <a href="{{ route('auditoriaseguimiento.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;
-                    Cédulas Iniciales
+                    Cédulas
                 </h1>
             </div>
             <div class="card-body">
                 @include('flash::message')
-                {!! BootForm::open(['route'=>'cedulainicial.index','method'=>'GET']) !!}
+                @include('layouts.contextos._auditoria')
                 <div class="row">
-                    <div class="col-md-2">
-                        {!! BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria',
-                        $request->numero_auditoria)) !!}
-                    </div>
-                    <div class="col-md-2">
-                        {!! BootForm::text('entidad_fiscalizable', "Entidad fiscalizable:", old('entidad_fiscalizable',
-                        $request->entidad_fiscalizable)) !!}
-                    </div>
-                    <div class="col-md-2">
-                        {!! BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion',
-                        $request->acto_fiscalizacion)) !!}
-                    </div>
-                    <div class="col-md-6 mt-8">
-                        <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search"
-                                aria-hidden="true"></i> Buscar</button>
-                    </div>
+                    <div class="col-md-4">
+                        <a href="{{ route('cedulainicialprimera.edit',$auditoria) }}" rel="noopener noreferrer">
+                            <div class="card">                           
+                                <div class="card-body overflow-auto h-50px btn btn-secondary">
+                                    <div class="d-flex flex-column"> Cédula General de Seguimiento
+                                    </div>
+                                </div>
+                            </div>
+                        </a>                        
+                    </div>                    
+                    <div class="col-md-4">
+                        <a href="{{ route('cedulageneralrecomendacion.edit',$auditoria) }}" rel="noopener noreferrer">
+                            <div class="card">                           
+                                <div class="card-body overflow-auto h-50px btn btn-secondary">
+                                    <div class="d-flex flex-column">Cédula General Recomendaciones
+                                    </div>
+                                </div>
+                            </div>
+                        </a>                        
+                    </div>                    
+                    <div class="col-md-4">
+                        <a href="{{ route('cedulageneralpras.edit',$auditoria) }}" rel="noopener noreferrer">
+                            <div class="card">                           
+                                <div class="card-body overflow-auto h-50px btn btn-secondary">
+                                    <div class="d-flex flex-column">Cédula General PRAS
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>     
                 </div>
-                {!! BootForm::close() !!}
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="{{ route('cedulaanalitica.edit',$auditoria) }}" rel="noopener noreferrer">
+                            <div class="card">                           
+                                <div class="card-body overflow-auto h-50px btn btn-secondary">
+                                    <div class="d-flex flex-column">Cédula analitica
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>   
+                    <div class="col-md-4">
+                        <a href="{{ route('cedulaanaliticarecomendacion.edit',$auditoria) }}" rel="noopener noreferrer">
+                            <div class="card">                           
+                                <div class="card-body overflow-auto h-50px btn btn-secondary">
+                                    <div class="d-flex flex-column">Cédula analitica desempeño
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>   
+                </div>
+                
 
-                <div class="table-responsive">
+                {{-- <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
@@ -91,12 +128,12 @@
                             @endforelse
                         </tbody>
                     </table>
-                </div>
-                <div class="pagination">
+                </div> --}}
+                {{-- <div class="pagination">
                     {{
                     $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5')
                     }}
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

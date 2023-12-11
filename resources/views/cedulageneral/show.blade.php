@@ -27,7 +27,7 @@
                                 <img alt="Logo" src="{{asset('assets/img/logo1.png')}}" width="80%" />
                             </td>
                             <td style="width:46%; vertical-align:middle;text-align: center;">
-                                <span style="color: #960048;font-size: 0.6rem;">Unidad de Seguimiento</span>
+                                <span style="color: #960048;font-size: 0.6rem;"><strong>Unidad de Seguimiento</strong></span>
                             </td>
                             <td style="width:27%; vertical-align:middle;text-align: center;">
                                 <img alt="Logo" src="{{asset('assets/img/logoh.png')}}" width="80%" />
@@ -298,7 +298,7 @@
                     @foreach ($auditoria->totalsolacl as $solacl)
                         <tr>
                             <td style="text-align: center; width: 5%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong> {{ $loop->iteration }}</strong></span></td>
-                            <td style="text-align: center; width: 35%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $solacl->accion }}</strong></span></td>
+                            <td style="text-align: justify;; width: 35%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $solacl->accion }}</strong></span></td>
                             <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $solacl->numero }}</strong></span></td>
                             <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->monto_aclarar, 2) }}</strong></span></td>
                             <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->solicitudesaclaracion->monto_solventado, 2) }}</strong></span></td>
@@ -327,7 +327,7 @@
                     @foreach ($auditoria->totalpliegos as $pliegos)
                         <tr>
                             <td style="text-align: center; width: 5%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong> {{ $loop->iteration }}</strong></span></td>
-                            <td style="text-align: center; width: 35%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $pliegos->accion }}</strong></span></td>
+                            <td style="text-align: justify; width: 35%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $pliegos->accion }}</strong></span></td>
                             <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $pliegos->numero }}</strong></span></td>
                             <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->monto_aclarar, 2) }}</strong></span></td>
                             <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->pliegosobservacion->monto_solventado, 2) }}</strong></span></td>
