@@ -46,7 +46,13 @@ class Segpras extends Model
         'usuario_creacion_id',
         'usuario_modificacion_id',
         'usuario_firmante_id',
-        'nivel_autorizacion'
+        'nivel_autorizacion',
+        'oficio_contestacion',
+        'fecha_acuse_contestacion',
+        'estatus_cumplimiento',
+        'conlusion_pras',
+        'oficio_medida_apremio',
+        'fecha_acuse_medida_apremio',
     ];
 
     protected $dates = [
@@ -54,7 +60,9 @@ class Segpras extends Model
         'fecha_elaboracion_oficio',
         'fecha_recepcion',
         'fecha_acuse',
-        'fecha_proxima_seguimiento'
+        'fecha_proxima_seguimiento',
+        'fecha_acuse_contestacion',
+        'fecha_acuse_medida_apremio',
     ];
 
     public function auditoria()

@@ -209,9 +209,6 @@ class Auditoria extends Model
                             });
             }
 
-
-
-
             public function accionesrevisadaslider()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_lider');
@@ -227,5 +224,18 @@ class Auditoria extends Model
             public function accionesrechazadasjefe()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_jefe')->where('revision_jefe','Rechazado');
+            }
+
+            public function cedulageneralseguimiento()
+            {                       
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Seguimiento');
+            }
+            public function cedulageneralrecomendaciones()
+            {                       
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Recomendaciones');
+            }
+            public function cedulageneralpras()
+            {                       
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General PRAS');
             }
 }

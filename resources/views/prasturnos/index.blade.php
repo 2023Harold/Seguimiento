@@ -29,6 +29,8 @@
                                 <th>Fecha proxima de seguimiento</th>
                                 <th>Fase / Constancia</th>
                                 <th>Acuses</th>
+                                <th>Seguimiento</th>
+                                <th>Medida</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -112,6 +114,39 @@
                                             @endcan
                                         @endif
                                     @endif
+                                </td>
+                                <td class="text-center">  
+                                    @if (!empty($pras->oficio_comprobante))
+                                        @if (empty($pras->estatus_cumplimiento))
+                                            <a href="{{ route('prasseguimiento.edit', $pras) }}" class="btn btn-primary">
+                                                <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Ingresar
+                                            </a>
+                                        @else
+                                            <a href="{{ route('prasseguimiento.show', $pras) }}" class="btn btn-secondary">
+                                                <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                            </a>
+                                        @endif                                        
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if (!empty($pras->estatus_cumplimiento))
+                                        @if ($pras->estatus_cumplimiento=='No Atendido')
+                                            <span class="badge badge-light-danger">{{ $pras->estatus_cumplimiento }} </span><br>
+                                        @else
+                                            <span class="badge badge-light-success">{{ $pras->estatus_cumplimiento }} </span><br>
+                                        @endif
+                                    @endif
+                                    @if (!empty($pras->estatus_cumplimiento) && $pras->estatus_cumplimiento=='No Atendido')  
+                                        @if (empty($pras->oficio_medida_apremio))
+                                            <a href="{{ route('prasmedida.edit', $pras) }}" class="btn btn-primary">
+                                                <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                            </a>
+                                        @else
+                                            <a href="{{ route('prasmedida.show', $pras) }}" class="btn btn-secondary">
+                                                <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                            </a>
+                                        @endif                                        
+                                    @endif                                    
                                 </td>
                             </tr>
                             {!! movimientosDesglose($pras->id, 6, $pras->movimientos) !!}

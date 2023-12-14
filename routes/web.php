@@ -17,8 +17,12 @@ use App\Http\Controllers\CedulaAnaliticaController;
 use App\Http\Controllers\CedulaAnaliticaDesempenoController;
 use App\Http\Controllers\CedulaGeneralPRASController;
 use App\Http\Controllers\CedulaGeneralRecomendacionesController;
+use App\Http\Controllers\CedulaInicialAutorizacionController;
 use App\Http\Controllers\CedulaInicialController;
 use App\Http\Controllers\CedulaInicialPrimeraEtapaController;
+use App\Http\Controllers\CedulaInicialRevision01Controller;
+use App\Http\Controllers\CedulaInicialRevisionController;
+use App\Http\Controllers\CedulaInicialValidacionController;
 use App\Http\Controllers\ComparecenciaActaController;
 use App\Http\Controllers\ComparecenciaAcusesController;
 use App\Http\Controllers\ComparecenciaAgendaController;
@@ -50,6 +54,8 @@ use App\Http\Controllers\PliegosObservacionRevisionController;
 use App\Http\Controllers\PliegosObservacionValidacionController;
 use App\Http\Controllers\PrasController;
 use App\Http\Controllers\PrasaccionesController;
+use App\Http\Controllers\PrasMedidaController;
+use App\Http\Controllers\PrasSeguimientoController;
 use App\Http\Controllers\PrasTurnoAcusesController;
 use App\Http\Controllers\PrasTurnoAutorizacionController;
 use App\Http\Controllers\PrasTurnoController;
@@ -231,6 +237,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('prasturnovalidacion',PrasTurnoValidacionController::class,['parameters' => ['prasturnovalidacion' => 'pras']]);
     Route::resource('prasturnoautorizacion',PrasTurnoAutorizacionController::class,['parameters' => ['prasturnoautorizacion' => 'pras']]);
     Route::resource('prasturnoacuses',PrasTurnoAcusesController::class,['parameters' => ['prasturnoacuses' => 'pras']]);
+    Route::resource('prasseguimiento',PrasSeguimientoController::class,['parameters' => ['prasseguimiento' => 'pras']]);
+    Route::resource('prasmedida',PrasMedidaController::class,['parameters' => ['prasmedida' => 'pras']]);
 
     /*Recomendaciones*/
     Route::resource('recomendaciones',RecomendacionesController::class,['parameters' => ['recomendaciones' => 'auditoria']]);
@@ -305,10 +313,23 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
     //Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
     Route::resource('cedulainicialprimera',CedulaInicialPrimeraEtapaController::class,['parameters' => ['cedulainicialprimera' => 'auditoria']]);
+
+    Route::resource('cedulainicialprimerarevision01',CedulaInicialRevision01Controller::class,['parameters' => ['cedulainicialprimerarevision01' => 'cedula']]);
+    Route::resource('cedulainicialprimerarevision',CedulaInicialRevisionController::class,['parameters' => ['cedulainicialprimerarevision' => 'cedula']]);
+    Route::resource('cedulainicialprimeravalidacion',CedulaInicialValidacionController::class,['parameters' => ['cedulainicialprimeravalidacion' => 'cedula']]);
+    Route::resource('cedulainicialprimeraautorizacion',CedulaInicialAutorizacionController::class,['parameters' => ['cedulainicialprimeraautorizacion' => 'cedula']]);
+
+
+
+
+
     Route::resource('cedulageneralrecomendacion',CedulaGeneralRecomendacionesController::class,['parameters' => ['cedulageneralrecomendacion' => 'auditoria']]);
     Route::resource('cedulageneralpras',CedulaGeneralPRASController::class,['parameters' => ['cedulageneralpras' => 'auditoria']]);
     Route::resource('cedulaanalitica',CedulaAnaliticaController::class,['parameters' => ['cedulaanalitica' => 'auditoria']]);
     Route::resource('cedulaanaliticarecomendacion',CedulaAnaliticaDesempenoController::class,['parameters' => ['cedulaanaliticarecomendacion' => 'auditoria']]);
+
+
+
 });
 //usuarios
 

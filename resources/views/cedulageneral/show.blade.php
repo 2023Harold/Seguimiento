@@ -338,32 +338,34 @@
                 </table>
             </td>                       
         </tr> 
+        @if (count($auditoria->cedulageneralseguimiento)>0 && $auditoria->cedulageneralseguimiento[0]->fase_autorizacion=='Autorizado')
         <tr></tr>
         <tr>
             <td colspan="1"></td>
             <td colspan="6">
-                <table style="border: 1px solid; border-collapse:collapse;" width="100%">
+                <table style="border-collapse:collapse;" width="100%">
                     <tr>
-                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ: <br><br><br> ANALISTA</strong></span></td>
-                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ<br><br><br>LÍDER DE PROYECTO</strong></span></td>
-                        <td colspan="2" style="text-align: center; color: black; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ<br><br><br>JEFE DE DEPARTAMENTO</strong></span></td>
+                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:  <br><br><br><br><br>  {{ $auditoria->cedulageneralseguimiento[0]->userCreacion->name }} <br> ANALISTA</strong></span></td>
+                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ:<br><br><br><br><br>  {{ $auditoria->cedulageneralseguimiento[0]->userCreacion->name }} <br>LÍDER DE PROYECTO</strong></span></td>
+                        <td colspan="2" style="text-align: center; color: black; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:   <br><br><br><br><br>  {{ $jefe->name }} <br>JEFE DE DEPARTAMENTO</strong></span></td>
                     </tr>
                     <tr>
-                        <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ<br><br><br>DIRECTOR</strong></span></td>
-                        <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ<br><br><br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
+                        <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ: <br><br><br><br><br>  {{ $director->name }} <br>DIRECTOR</strong></span></td>
+                        <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ:<br><br><br><br><br>  {{ auth()->user()->titular->name }} <br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="width: 20%; border: 0px; border-color: white;"></td>
-                        <td style="width: 15%; border: 0px; border-color: white;"></td>
-                        <td style="width: 15%; border: 0px; border-color: white;"></td>
-                        <td style="width: 15%; border: 0px; border-color: white;"></td>
-                        <td style="width: 15%; border: 0px; border-color: white;"></td>
-                        <td style="width: 20%; border: 0px; border-color: white;"></td>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 20%;"></td>
                     </tr>
                 </table>
             </td>  
             <td colspan="1"></td>          
         </tr> 
+        @endif        
     </table>
 </body>
 </html>

@@ -18,6 +18,15 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 <embed src="{{asset('storage/temporales/'.$nombre)}}" type="application/pdf" width="100%" height="600px"/>
+                {!! BootForm::open(['model' => $auditoria, 'store' => 'cedulageneralpras.store', 'update' => 'cedulageneralpras.update','id'=>'form']) !!}            
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{-- @if (auth()->user()->can('permiso.store') || auth()->user()->can('permiso.update')) --}}
+                            <button type="submit" name="enviar" class="btn btn-primary">Enviar a revisión</button>
+                            {{-- @endif --}}
+                        </div>
+                    </div>
+                {!! BootForm::close() !!}
             </div>
         </div>
     </div>

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
+use App\Models\Segpras;
 use Illuminate\Http\Request;
 
-class CedulaInicialPrimerEtapaController extends Controller
+class PrasSeguimientoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -43,9 +46,12 @@ class CedulaInicialPrimerEtapaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Segpras $pras)
     {
-        //
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
+
+        return view('prasseguimiento.show', compact('auditoria', 'accion','pras'));
     }
 
     /**
@@ -54,9 +60,12 @@ class CedulaInicialPrimerEtapaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($auditoria)
+    public function edit(Segpras $pras)
     {
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
 
+        return view('prasseguimiento.form', compact('auditoria', 'accion','pras'));
     }
 
     /**
@@ -66,9 +75,16 @@ class CedulaInicialPrimerEtapaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Segpras $pras)
     {
-        //
+        $request['usuario_modificacion_id'] = auth()->id();
+        //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($comparecencia->auditoria->numero_auditoria)).'/Documentos';
+        //mover_archivos_minio($request, ['oficio_recepcion', 'oficio_acuse'], null, $ruta);
+        mover_archivos($request, ['oficio_contestacion']);
+        $pras->update($request->all());
+        setMessage('Se han guardado los cambios correctamente.');
+
+        return redirect()->route('prasturno.index');
     }
 
     /**

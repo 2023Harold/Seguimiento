@@ -89,13 +89,13 @@
                 <span style="font-size: .6rem;"><strong>Fecha de Inicio</strong></span>
             </td>
             <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha($auditoria->totalpras[0]->pras->fecha_acuse) }}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha($fechainicio) }}</strong></span>
             </td>    
             <td style="text-align: center; width: 10%; color: white; background-color: #960048; vertical-align: middle;"> 
                 <span style="font-size: .6rem;"><strong>Fecha de Vencimiento</strong></span>
             </td>
             <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha($auditoria->totalpras[0]->pras->fecha_proxima_seguimiento) }}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha($fechavencimiento) }}</strong></span>
             </td>
         </tr> 
         <tr></tr>

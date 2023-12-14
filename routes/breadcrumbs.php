@@ -362,6 +362,22 @@ Breadcrumbs::for('prasturnoacuses.show', function (BreadcrumbTrail $trail,$audit
     $trail->parent('prasturno.index',$auditoria);
     $trail->push('Acuses', route('prasturnoacuses.show',$auditoria,$pras));
 });
+Breadcrumbs::for('prasseguimiento.edit', function (BreadcrumbTrail $trail,$auditoria,$pras) {
+    $trail->parent('prasturno.index',$auditoria);
+    $trail->push('Seguimiento', route('prasseguimiento.edit',$auditoria,$pras));
+});
+Breadcrumbs::for('prasseguimiento.show', function (BreadcrumbTrail $trail,$auditoria,$pras) {
+    $trail->parent('prasturno.index',$auditoria);
+    $trail->push('Seguimiento', route('prasseguimiento.show',$auditoria,$pras));
+});
+Breadcrumbs::for('prasmedida.edit', function (BreadcrumbTrail $trail,$auditoria,$pras) {
+    $trail->parent('prasturno.index',$auditoria);
+    $trail->push('Medida de apremio', route('prasmedida.edit',$auditoria,$pras));
+});
+Breadcrumbs::for('prasmedida.show', function (BreadcrumbTrail $trail,$auditoria,$pras) {
+    $trail->parent('prasturno.index',$auditoria);
+    $trail->push('Medida de apremio', route('prasmedida.show',$auditoria,$pras));
+});
 
 /*Recomendaciones*/
 Breadcrumbs::for('recomendacionesacciones.index', function (BreadcrumbTrail $trail,$auditoria) {

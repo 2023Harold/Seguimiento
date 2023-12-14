@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CedulaGeneralRecomendacionesController extends Controller
@@ -58,8 +60,10 @@ class CedulaGeneralRecomendacionesController extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-                    
-        $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneralrecomendaciones.show',compact('auditoria'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+        $registroconfechamaxima=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->max('fecha_termino_recomendacion');    
+        $rfm = Carbon::parse($registroconfechamaxima); 
+                      
+        $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneralrecomendaciones.show',compact('auditoria','rfm'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
         $nombre='CedulaGeneralRecomendaciones'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
         $pdfgenrado = file_put_contents('storage/temporales/'.$nombre, $pdf);
         

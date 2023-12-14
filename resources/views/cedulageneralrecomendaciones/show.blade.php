@@ -93,7 +93,7 @@
                 <span style="font-size: .6rem;"><strong>Fecha de Vencimiento</strong></span>
             </td>
             <td colspan="2" style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;120 Días</strong></span>
+                <span style="font-size: 0.6rem"><strong>{{ fecha($rfm) }}</strong></span>
             </td>
         </tr> 
         <tr></tr>

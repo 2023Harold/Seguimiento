@@ -84,6 +84,20 @@ class PrasTurnoAcusesController extends Controller
         $pras->update($request->all());
         setMessage('Los acuses se han guardado correctamente');
 
+
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $titular->unidad_administrativa_id, $titular->id);
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $titular->unidad_administrativa_id, $titular->id);
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $titular->unidad_administrativa_id, $titular->id);
+
+
+
+
+
+
+
+
+
+
         return redirect()->route('prasturno.index');
     }
 

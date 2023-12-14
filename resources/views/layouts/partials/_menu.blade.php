@@ -34,6 +34,8 @@
                         @endcan
                         <div class="menu-item menu-accordion {{ (str_contains(Route::current()->getName(), 'prasacciones')||
                                                                  str_contains(Route::current()->getName(), 'prasturno')||
+                                                                 str_contains(Route::current()->getName(), 'prasseguimiento')||
+                                                                 str_contains(Route::current()->getName(), 'prasmedida')||
                                                                  str_contains(Route::current()->getName(), 'recomendacionesacciones')||
                                                                  str_contains(Route::current()->getName(), 'recomendacionesatencion')||
                                                                  str_contains(Route::current()->getName(), 'recomendacionescontestaciones')||
@@ -79,6 +81,8 @@
                             </a>
                             <div class="menu-sub menu-sub-accordion {{ (str_contains(Route::current()->getName(), 'prasacciones')||
                                                                         str_contains(Route::current()->getName(), 'prasturno')||
+                                                                        str_contains(Route::current()->getName(), 'prasseguimiento')||
+                                                                        str_contains(Route::current()->getName(), 'prasmedida')||
                                                                         str_contains(Route::current()->getName(), 'recomendacionesacciones')||
                                                                         str_contains(Route::current()->getName(), 'recomendacionesatencion')||
                                                                         str_contains(Route::current()->getName(), 'recomendacionescontestaciones')||
@@ -117,7 +121,9 @@
                                 @can('prasacciones.index')
                                 <div class="menu-item mb-1">
                                     <a href="{{ route('prasacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'prasacciones')||
-                                                                                                          str_contains(Route::current()->getName(), 'prasturno')
+                                                                                                          str_contains(Route::current()->getName(), 'prasturno')||
+                                                                                                          str_contains(Route::current()->getName(), 'prasseguimiento')||
+                                                                                                          str_contains(Route::current()->getName(), 'prasmedida')
                                                                                                          ) ? 'active' : '' }}">
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>

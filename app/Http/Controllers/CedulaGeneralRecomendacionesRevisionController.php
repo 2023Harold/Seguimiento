@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Auditoria;
-use App\Models\Segpras;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class CedulaGeneralPRASController extends Controller
+class CedulaGeneralRecomendacionesRevisionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -58,18 +54,9 @@ class CedulaGeneralPRASController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Auditoria $auditoria)
-    { 
-        $fechaminima=Segpras::where('auditoria_id',$auditoria->id)->min('fecha_acuse_oficio');
-        $fechainicio = Carbon::parse($fechaminima); 
-        $fechamaxima=Segpras::where('auditoria_id',$auditoria->id)->max('fecha_proxima_seguimiento');
-        $fechavencimiento = Carbon::parse($fechamaxima); 
-        
-        $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneralpras.show',compact('auditoria','fechainicio','fechavencimiento'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
-        $nombre='CedulaGeneralPRAS'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
-        $pdfgenrado = file_put_contents('storage/temporales/'.$nombre, $pdf);
-        
-        return view('cedulageneralpras.form',compact('nombre','auditoria'));
+    public function edit($id)
+    {
+        //
     }
 
     /**

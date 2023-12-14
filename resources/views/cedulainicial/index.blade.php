@@ -18,7 +18,7 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4  mt-2">
                         <a href="{{ route('cedulainicialprimera.edit',$auditoria) }}" rel="noopener noreferrer">
                             <div class="card">                           
                                 <div class="card-body overflow-auto h-50px btn btn-secondary">
@@ -27,8 +27,9 @@
                                 </div>
                             </div>
                         </a>                        
-                    </div>                    
-                    <div class="col-md-4">
+                    </div>     
+                    @if (count($auditoria->totalrecomendacion)>0)
+                    <div class="col-md-4  mt-2">
                         <a href="{{ route('cedulageneralrecomendacion.edit',$auditoria) }}" rel="noopener noreferrer">
                             <div class="card">                           
                                 <div class="card-body overflow-auto h-50px btn btn-secondary">
@@ -37,8 +38,10 @@
                                 </div>
                             </div>
                         </a>                        
-                    </div>                    
-                    <div class="col-md-4">
+                    </div>
+                    @endif    
+                    @if (count($auditoria->totalpras)>0)                    
+                    <div class="col-md-4  mt-2">
                         <a href="{{ route('cedulageneralpras.edit',$auditoria) }}" rel="noopener noreferrer">
                             <div class="card">                           
                                 <div class="card-body overflow-auto h-50px btn btn-secondary">
@@ -47,10 +50,9 @@
                                 </div>
                             </div>
                         </a>
-                    </div>     
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
+                    </div>  
+                    @endif                  
+                    <div class="col-md-4  mt-2">
                         <a href="{{ route('cedulaanalitica.edit',$auditoria) }}" rel="noopener noreferrer">
                             <div class="card">                           
                                 <div class="card-body overflow-auto h-50px btn btn-secondary">
@@ -60,7 +62,8 @@
                             </div>
                         </a>
                     </div>   
-                    <div class="col-md-4">
+                    @if (count($auditoria->totalrecomendacion)>0)
+                    <div class="col-md-4 mt-2">
                         <a href="{{ route('cedulaanaliticarecomendacion.edit',$auditoria) }}" rel="noopener noreferrer">
                             <div class="card">                           
                                 <div class="card-body overflow-auto h-50px btn btn-secondary">
@@ -69,7 +72,8 @@
                                 </div>
                             </div>
                         </a>
-                    </div>   
+                    </div>  
+                    @endif 
                 </div>
                 
 

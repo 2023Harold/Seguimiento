@@ -133,7 +133,21 @@
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                         <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ACCIÓN PROMOVIDA:</strong></span></td>
+                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ANTECEDENTES DE LA ACCIÓN PROMOVIDA:</strong></span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
+                                <span style="font-size: 0.6rem"><strong>{{ $accion->antecedentes_accion }}</strong></span> 
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>       
+            <tr>
+                <td colspan="8">
+                    <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
+                        <tr>
+                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DESCRIPCIÓN DE LA ACCIÓN PROMOVIDA::</strong></span></td>
                         </tr>
                         <tr>
                             <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
@@ -142,7 +156,7 @@
                         </tr>
                     </table>
                 </td>
-            </tr>       
+            </tr>
             <tr>
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
@@ -157,20 +171,22 @@
                     </table>
                 </td>
             </tr>
+            @if ($accion->tipo=='Recomendación')
             <tr>
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                         <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DESCRIPCIÓN DE LA ACCIÓN PROMOVIDA:</strong></span></td>
+                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL QUE ACREDITE LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
                         </tr>
                         <tr>
                             <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
-                                <span style="font-size: 0.6rem"><strong></strong></span> 
+                                <span style="font-size: 0.6rem"><strong>{{ $accion->evidencia_resumen }}</strong></span> 
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
+            @endif
             <tr>
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
@@ -227,7 +243,7 @@
         @php
             $i=$i+1;
         @endphp
-        @if(count($auditoria->acciones) != $i)       
+        @if(count($auditoria->acciones)-count($auditoria->totalpras) != $i)       
             <div style="page-break-after:always;"></div>
         @endif
     @endif
