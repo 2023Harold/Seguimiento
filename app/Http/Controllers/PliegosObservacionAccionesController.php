@@ -126,10 +126,16 @@ class PliegosObservacionAccionesController extends Controller
 
          $query = $query->where('segauditoria_id',getSession('auditoria_id'))->where('segtipo_accion_id',3);
 
-         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
+         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
             $query = $query->where('analista_asignado_id',auth()->user()->id);
-        }
-
+         } 
+         if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){           
+            $query = $query->where('lider_asignado_id',auth()->user()->id);
+         } 
+         if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){           
+            $query = $query->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
+         }
+         
         if ($request->filled('consecutivo')) {
             $query = $query->where('consecutivo',$request->consecutivo);
          }
