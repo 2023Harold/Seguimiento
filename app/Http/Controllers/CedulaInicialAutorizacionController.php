@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuditoriaRequest;
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use App\Models\Cedula;
 use App\Models\Movimientos;
 use App\Models\User;
@@ -64,7 +65,7 @@ class CedulaInicialAutorizacionController extends Controller
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $nombre=$cedula->cedula;
-        
+       
         return view('cedulageneralautorizacion.form',compact('nombre','auditoria','cedula'));
     }
 
@@ -77,9 +78,7 @@ class CedulaInicialAutorizacionController extends Controller
      */
     public function update(Request $request, Cedula $cedula)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-
-        
+        $auditoria = Auditoria::find(getSession('auditoria_id'));        
 
         $this->normalizarDatos($request);
 
@@ -99,6 +98,24 @@ class CedulaInicialAutorizacionController extends Controller
             $director=User::where('unidad_administrativa_id',substr($cedula->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
             $jefe=User::where('unidad_administrativa_id',substr($cedula->userCreacion->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','JD')->first();
 
+               
+            $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedini_analista')->where('segauditoria_id',$auditoria->id)->get(); 
+            $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();  
+            $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedini_jefe')->where('segauditoria_id',$auditoria->id)->get();    
+            $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());
+            $nombresanalistasL=array_unique($accionesanalistasListos->pluck('analista_asignado', 'id')->toArray());
+            $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());
+            $nombreslideresL=array_unique($accionesLideresListos->pluck('lider_asignado', 'id')->toArray());
+            $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());
+            $nombresJefesL=[];
+
+            if(count($jefesL)>0){            
+                foreach($jefesL as $jefeid){
+                    $jefe=User::where('unidad_administrativa_id',$jefeid)->first();
+                    $nombresJefesL[$jefe->id] = $jefe->name;
+                }
+            }
+            
             $TSP=0;
             $TSPS=0;
             $TSPNS=0;
@@ -123,12 +140,9 @@ class CedulaInicialAutorizacionController extends Controller
             $TAPS=$TSPS+$TPPS;
             $TAPNS=$TSPNS+$TPPNS;
                 
-            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneral.show',compact('auditoria','TAP','TAPS','TAPNS','TSP','TSPS','TSPNS','TPP','TPPS','TPPNS','director','jefe'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
-            $nombre='storage/archivos/cedula-'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
-            $pdfgenrado = file_put_contents($nombre, $pdf);
-
-       
-       
+            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneral.show',compact('auditoria','TAP','TAPS','TAPNS','TSP','TSPS','TSPNS','TPP','TPPS','TPPNS','director','nombresanalistasL','nombreslideresL','nombresJefesL'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+            $nombre='storage/archivos/cedula-l'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+            $pdfgenrado = file_put_contents($nombre, $pdf);       
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
@@ -139,6 +153,7 @@ class CedulaInicialAutorizacionController extends Controller
 
             setMessage('Se ha autorizado la Cédula General de Seguimiento.');
         } else {
+            AuditoriaAccion::where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_jefe'=>null,'aprobar_cedini_lider'=>null,'aprobar_cedini_analista'=>null]);
             $titulo = 'Rechazo de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$cedula->userCreacion->name.', '.$cedula->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.

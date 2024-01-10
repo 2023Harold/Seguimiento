@@ -17,6 +17,7 @@ use App\Http\Controllers\CedulaAnaliticaController;
 use App\Http\Controllers\CedulaAnaliticaDesempenoController;
 use App\Http\Controllers\CedulaGeneralPRASController;
 use App\Http\Controllers\CedulaGeneralRecomendacionesController;
+use App\Http\Controllers\CedulaInicialAprobarAnalistaController;
 use App\Http\Controllers\CedulaInicialAutorizacionController;
 use App\Http\Controllers\CedulaInicialController;
 use App\Http\Controllers\CedulaInicialPrimeraEtapaController;
@@ -313,15 +314,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
     //Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
     Route::resource('cedulainicialprimera',CedulaInicialPrimeraEtapaController::class,['parameters' => ['cedulainicialprimera' => 'auditoria']]);
+    Route::resource('cedulainicialprimeraanalista',CedulaInicialAprobarAnalistaController::class,['parameters' => ['cedulainicialprimeraanalista' => 'cedula']]);
 
     Route::resource('cedulainicialprimerarevision01',CedulaInicialRevision01Controller::class,['parameters' => ['cedulainicialprimerarevision01' => 'cedula']]);
     Route::resource('cedulainicialprimerarevision',CedulaInicialRevisionController::class,['parameters' => ['cedulainicialprimerarevision' => 'cedula']]);
     Route::resource('cedulainicialprimeravalidacion',CedulaInicialValidacionController::class,['parameters' => ['cedulainicialprimeravalidacion' => 'cedula']]);
     Route::resource('cedulainicialprimeraautorizacion',CedulaInicialAutorizacionController::class,['parameters' => ['cedulainicialprimeraautorizacion' => 'cedula']]);
-
-
-
-
 
     Route::resource('cedulageneralrecomendacion',CedulaGeneralRecomendacionesController::class,['parameters' => ['cedulageneralrecomendacion' => 'auditoria']]);
     Route::resource('cedulageneralpras',CedulaGeneralPRASController::class,['parameters' => ['cedulageneralpras' => 'auditoria']]);

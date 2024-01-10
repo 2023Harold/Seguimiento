@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use App\Models\Cedula;
 use App\Models\Movimientos;
 use Illuminate\Http\Request;
@@ -75,49 +76,83 @@ class CedulaInicialRevision01Controller extends Controller
      */
     public function update(Request $request, Cedula $cedula)
     {
-        $jefe=auth()->user()->jefe;
         $auditoria = Auditoria::find(getSession('auditoria_id'));
 
-        $this->normalizarDatos($request);
+        $accioneslideres=AuditoriaAccion::whereNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();   
+        $lideres=array_unique($accioneslideres->pluck('lider_asignado_id', 'id')->toArray()); 
 
-        Movimientos::create([
-            'tipo_movimiento' => 'Revisión de la Cédula General de Seguimiento',
-            'accion' => 'Cédula General de Seguimiento',
-            'accion_id' => $auditoria->id,
-            'estatus' => $request->estatus,
-            'usuario_creacion_id' => auth()->id(),
-            'usuario_asignado_id' => auth()->id(),
-            'motivo_rechazo' => $request->motivo_rechazo,
-        ]);       
+        if(count($lideres)>1){
+            if($request->estatus=='Aprobado'){
+                AuditoriaAccion::where('lider_asignado_id',auth()->user()->id)->where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_lider'=>'Si']);
+            }else{               
+                AuditoriaAccion::where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_lider'=>null,'aprobar_cedini_analista'=>null]);
+                $cedula->update(['fase_autorizacion' => 'Rechazado']);
+            }
+            $this->normalizarDatos($request);
 
-        if (strlen($cedula->nivel_autorizacion) == 3 || strlen($cedula->nivel_autorizacion) == 4) {
-            $nivel_autorizacion = $cedula->nivel_autorizacion;
-        } else {
-            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 5);
-        }
+            Movimientos::create([
+                'tipo_movimiento' => 'Revisión de la Cédula General de Seguimiento',
+                'accion' => 'Cédula General de Seguimiento',
+                'accion_id' => $auditoria->id,
+                'estatus' => $request->estatus,
+                'usuario_creacion_id' => auth()->id(),
+                'usuario_asignado_id' => auth()->id(),
+                'motivo_rechazo' => $request->motivo_rechazo,
+            ]);
 
-        $cedula->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En revisión' : 'Rechazado']);
-        setMessage($request->estatus == 'Aprobado' ?
-            'La aprobación ha sido registrada y se ha enviado a revisión del superior.' :
-            'El rechazo ha sido registrado.'
-        );
+            setMessage($request->estatus == 'Aprobado' ?
+                'La aprobación ha sido registrada.' :
+                'El rechazo ha sido registrado.'
+            );
 
-        if ($request->estatus == 'Aprobado') {
-            $cedula->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
+            //Mensajes de rechazo
 
-            $titulo = 'Revisión de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
+        }else{
+            $jefe=auth()->user()->jefe;
+            $this->normalizarDatos($request);
 
-            $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
-                            .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado el registro de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.
-                            ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
-        } else {          
-            $titulo = 'Rechazo de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$cedula->userCreacion->name.', '.$cedula->userCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el registro de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.
-                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $cedula->userCreacion->unidad_administrativa_id, $cedula->userCreacion->id);
+            Movimientos::create([
+                'tipo_movimiento' => 'Revisión de la Cédula General de Seguimiento',
+                'accion' => 'Cédula General de Seguimiento',
+                'accion_id' => $auditoria->id,
+                'estatus' => $request->estatus,
+                'usuario_creacion_id' => auth()->id(),
+                'usuario_asignado_id' => auth()->id(),
+                'motivo_rechazo' => $request->motivo_rechazo,
+            ]);       
+
+            if (strlen($cedula->nivel_autorizacion) == 3 || strlen($cedula->nivel_autorizacion) == 4) {
+                $nivel_autorizacion = $cedula->nivel_autorizacion;
+            } else {
+                $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 5);
+            }
+
+            $cedula->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En revisión' : 'Rechazado']);
+            setMessage($request->estatus == 'Aprobado' ?
+                'La aprobación ha sido registrada y se ha enviado a revisión del superior.' :
+                'El rechazo ha sido registrado.'
+            );
+
+            if ($request->estatus == 'Aprobado') {
+                AuditoriaAccion::where('lider_asignado_id',auth()->user()->id)->where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_lider'=>'Si']);
+                $cedula->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
+
+                $titulo = 'Revisión de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
+
+                $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
+                                .auth()->user()->name.', '.auth()->user()->puesto.
+                                '; se ha aprobado el registro de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.
+                                ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
+            } else {       
+                AuditoriaAccion::where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_lider'=>null,'aprobar_cedini_analista'=>null]);   
+                $titulo = 'Rechazo de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
+                $mensaje = '<strong>Estimado(a) '.$cedula->userCreacion->name.', '.$cedula->userCreacion->puesto.':</strong><br>'
+                                .'Ha sido rechazado el registro de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.
+                                ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $cedula->userCreacion->unidad_administrativa_id, $cedula->userCreacion->id);
+            }
+
         }
 
         return view('layouts.close');

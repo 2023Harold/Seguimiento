@@ -345,9 +345,28 @@
             <td colspan="6">
                 <table style="border-collapse:collapse;" width="100%">
                     <tr>
-                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:  <br><br><br><br><br>  {{ $auditoria->cedulageneralseguimiento[0]->userCreacion->name }} <br> ANALISTA</strong></span></td>
-                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ:<br><br><br><br><br>  {{ $auditoria->cedulageneralseguimiento[0]->userCreacion->name }} <br>LÍDER DE PROYECTO</strong></span></td>
-                        <td colspan="2" style="text-align: center; color: black; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:   <br><br><br><br><br>  {{ $jefe->name }} <br>JEFE DE DEPARTAMENTO</strong></span></td>
+                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:</strong></span></td>
+                    </tr>
+                    <tr>
+                        @foreach ($nombresanalistasL as $analista)
+                        <td colspan="{{(count($nombresanalistasL)==3?'2': (count($nombresanalistasL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>{{ $analista }} <br> ANALISTA</strong></span></td>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ:</strong></span></td>
+                    </tr>
+                    <tr>
+                        @foreach ($nombreslideresL as $lider)
+                        <td colspan="{{(count($nombreslideresL)==3?'2': (count($nombreslideresL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $lider }} <br> LÍDER DE PROYECTO</strong></span></td>                            
+                        @endforeach                        
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
+                    </tr>
+                    <tr>
+                        @foreach ($nombresJefesL as $jefe)
+                        <td colspan="{{(count($nombresJefesL)==3?'2': (count($nombresJefesL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
+                        @endforeach 
                     </tr>
                     <tr>
                         <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ: <br><br><br><br><br>  {{ $director->name }} <br>DIRECTOR</strong></span></td>

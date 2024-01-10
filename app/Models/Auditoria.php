@@ -68,7 +68,7 @@ class Auditoria extends Model
             {                       
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->orderBy('numero');
             }
-
+           
             public function accionesall()
             {                       
                 return $this->belongsTo(AuditoriaAccion::class, 'id','segauditoria_id');
@@ -225,7 +225,6 @@ class Auditoria extends Model
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_jefe')->where('revision_jefe','Rechazado');
             }
-
             public function cedulageneralseguimiento()
             {                       
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Seguimiento');
@@ -237,5 +236,10 @@ class Auditoria extends Model
             public function cedulageneralpras()
             {                       
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General PRAS');
+            }
+
+            public function movimientosCedulaGeneral()
+            {
+                return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General de Seguimiento')->orderBy('id', 'ASC');
             }
 }

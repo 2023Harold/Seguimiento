@@ -56,7 +56,10 @@ class AuditoriaAccion extends Model
         'fecha_termino_recomendacion',
         'plazo_recomendacion',
         'normativa_infringida',
-        'antecedentes_accion'
+        'antecedentes_accion',
+        'aprobar_cedini_analista',
+        'aprobar_cedini_lider',
+        'aprobar_cedini_jefe',
     ];
 
 

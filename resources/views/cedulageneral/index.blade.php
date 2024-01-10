@@ -36,21 +36,24 @@
                     @endif
                     @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion == 'En revisión 01')
                         @can('cedulainicialprimerarevision01.edit')
-                       
-                            <a href="{{ route('cedulainicialprimerarevision01.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar float-end">
-                                <li class="fa fa-gavel"></li>
-                                Revisar
-                            </a><br><br><br>
+                            @if(in_array(auth()->user()->id, $lideresF))
+                                <a href="{{ route('cedulainicialprimerarevision01.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar float-end">
+                                    <li class="fa fa-gavel"></li>
+                                    Revisar
+                                </a><br><br><br>
+                            @endif
                         @else
                             <span class="alert alert-warning float-end">En revisión</span><br><br>
                         @endcan
                     @endif
                    @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion == 'En revisión')
                         @can('cedulainicialprimerarevision.edit')
-                            <a href="{{ route('cedulainicialprimerarevision.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar float-end">
-                                <li class="fa fa-gavel"></li>
-                                Revisar
-                            </a><br><br><br>
+                            @if(in_array(auth()->user()->unidad_administrativa_id, $jefesF))
+                                <a href="{{ route('cedulainicialprimerarevision.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar float-end">
+                                    <li class="fa fa-gavel"></li>
+                                    Revisar
+                                </a><br><br><br>
+                            @endif
                         @else
                             <span class="alert alert-warning float-end">{{ $auditoria->cedulageneralseguimiento[0]->fase_autorizacion}} </span><br><br>
                         @endcan
@@ -78,19 +81,44 @@
                     @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion=='Autorizado')
                         <span class="alert alert-success float-end">{{ $auditoria->cedulageneralseguimiento[0]->fase_autorizacion }} </span><br><br>
                     @endif
+                    
+                    @if(count($analistasF)>0 && count($analistasL)== 0 && empty($auditoria->cedulageneralseguimiento[0]->fase_autorizacion))
+                        {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulainicialprimera.update','id'=>'form']) !!}            
+                        <div class="row">
+                            <div class="col-md-12">                         
+                                {!! BootForm::hidden('cedula2',$nombre)!!}                            
+                                @if (auth()->user()->can('cedulainicialprimera.update'))
+                                <button type="submit" name="enviar" class="btn btn-primary float-end">Iniciar revisión</button>
+                                @endif 
+                            </div>
+                        </div>
+                        {!! BootForm::close() !!}
+                    @elseif(in_array(auth()->user()->id, $analistasF) && count($analistasL)>0)
+                        <a href="{{ route('cedulainicialprimeraanalista.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar float-end">
+                            <li class="fa fa-gavel"></li>
+                            Aprobar
+                        </a><br><br><br>
+                    @endif
                 @else                
                     {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulainicialprimera.update','id'=>'form']) !!}            
                     <div class="row">
                         <div class="col-md-12">                         
                             {!! BootForm::hidden('cedula2',$nombre)!!}                            
-                            {{-- @if (auth()->user()->can('permiso.store') || auth()->user()->can('permiso.update')) --}}
-                            <button type="submit" name="enviar" class="btn btn-primary float-end">Enviar a revisión</button>
-                            {{-- @endif --}}
+                            @if (auth()->user()->can('cedulainicialprimera.update'))
+                                <button type="submit" name="enviar" class="btn btn-primary float-end">Iniciar revisión</button>
+                            @endif
                         </div>
                     </div>
                     {!! BootForm::close() !!}
                 @endif                  
                 <embed src="{{asset($nombre)}}" type="application/pdf" width="100%" height="600px"/>   
+                <div class="table-responsive">
+                    <table class="table">                        
+                        <tbody>     							
+                            {!! movimientosDesglose($auditoria->id, 1, $auditoria->movimientosCedulaGeneral) !!}                            
+                        </tbody>
+                    </table>
+				</div>
             </div>
         </div>
     </div>

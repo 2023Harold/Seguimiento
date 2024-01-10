@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use App\Models\Cedula;
 use App\Models\Movimientos;
 use Illuminate\Http\Request;
@@ -74,7 +75,6 @@ class CedulaInicialValidacionController extends Controller
      */
     public function update(Request $request, Cedula $cedula)
     {
-       
         $auditoria = Auditoria::find(getSession('auditoria_id'));
 
         $this->normalizarDatos($request);
@@ -111,7 +111,8 @@ class CedulaInicialValidacionController extends Controller
                             '; se ha aprobado la validación de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
-        } else {          
+        } else {  
+            AuditoriaAccion::where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_jefe'=>null,'aprobar_cedini_lider'=>null,'aprobar_cedini_analista'=>null]);        
             $titulo = 'Rechazo de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$cedula->userCreacion->name.', '.$cedula->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.
