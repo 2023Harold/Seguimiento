@@ -141,8 +141,12 @@ class CedulaInicialAutorizacionController extends Controller
             $TAPNS=$TSPNS+$TPPNS;
                 
             $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneral.show',compact('auditoria','TAP','TAPS','TAPNS','TSP','TSPS','TSPNS','TPP','TPPS','TPPNS','director','nombresanalistasL','nombreslideresL','nombresJefesL'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
-            $nombre='storage/archivos/cedula-l'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
-            $pdfgenrado = file_put_contents($nombre, $pdf);       
+            $nombre='storage/temporales/CedulaGeneral'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+            $pdfgenrado = file_put_contents($nombre, $pdf);
+            
+
+            $request['cedula']=$nombre;
+            mover_archivos($request, ['cedula']);
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;

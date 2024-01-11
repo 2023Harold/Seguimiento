@@ -317,21 +317,21 @@
                         <td colspan="8" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observación</strong></span></td> 
                     </tr>
                     <tr>
-                        <td colspan="3" style="text-align: center; width: 40%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acción Promovida</strong></span></td>
-                        <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Número</strong></span></td>
-                        <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Promovido</strong></span></td> 
-                        <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Solventado</strong></span></td>
-                        <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe No Solventado</strong></span></td>
+                        <td colspan="3" style="text-align: center; width: 50%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acción Promovida</strong></span></td>
+                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Número</strong></span></td>
+                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Promovido</strong></span></td> 
+                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Solventado</strong></span></td>
+                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe No Solventado</strong></span></td>
                         <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Estatus</strong></span></td>
                     </tr>
                     @foreach ($auditoria->totalpliegos as $pliegos)
                         <tr>
                             <td style="text-align: center; width: 5%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong> {{ $loop->iteration }}</strong></span></td>
-                            <td style="text-align: justify; width: 35%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $pliegos->accion }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $pliegos->numero }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->monto_aclarar, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->pliegosobservacion->monto_solventado, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->monto_aclarar-$pliegos->pliegosobservacion->monto_solventado, 2) }}</strong></span></td>
+                            <td style="text-align: justify; width: 45%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $pliegos->accion }}</strong></span></td>
+                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $pliegos->numero }}</strong></span></td>
+                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->monto_aclarar, 2) }}</strong></span></td>
+                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->pliegosobservacion->monto_solventado, 2) }}</strong></span></td>
+                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->monto_aclarar-$pliegos->pliegosobservacion->monto_solventado, 2) }}</strong></span></td>
                             <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $pliegos->pliegosobservacion->calificacion_sugerida }}</td>
                         </tr>                        
                     @endforeach
