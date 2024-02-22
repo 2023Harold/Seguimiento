@@ -116,31 +116,33 @@ class SeguimientoAuditoriaController extends Controller
 
         $entidadFiscalizable = EntidadFiscalizableIntra::find($auditoria->entidad_fiscalizable_id);
 
-        if ($entidadFiscalizable->NivEntFis == 3) {
-            $entidad3 = $entidadFiscalizable->PkCveEntFis;
-            $entidades3 = EntidadFiscalizableIntra::where('NivEntFis', 3)->where('FkCveEntFis', $entidadFiscalizable->FkCveEntFis)->where('StsEntFis', 1)->get()->pluck('NomEntFis', 'PkCveEntFis');
+        if(!empty($entidadFiscalizable)){
+            if ($entidadFiscalizable->NivEntFis == 3) {
+                $entidad3 = $entidadFiscalizable->PkCveEntFis;
+                $entidades3 = EntidadFiscalizableIntra::where('NivEntFis', 3)->where('FkCveEntFis', $entidadFiscalizable->FkCveEntFis)->where('StsEntFis', 1)->get()->pluck('NomEntFis', 'PkCveEntFis');
 
-            $entidadFiscalizable2 = EntidadFiscalizableIntra::find($entidadFiscalizable->FkCveEntFis);
-            $entidad2 = $entidadFiscalizable2->PkCveEntFis;
-            $entidades2 = EntidadFiscalizableIntra::where('NivEntFis', 2)->where('FkCveEntFis', $entidadFiscalizable2->FkCveEntFis)->where('StsEntFis', 1)->get()->pluck('NomEntFis', 'PkCveEntFis');
+                $entidadFiscalizable2 = EntidadFiscalizableIntra::find($entidadFiscalizable->FkCveEntFis);
+                $entidad2 = $entidadFiscalizable2->PkCveEntFis;
+                $entidades2 = EntidadFiscalizableIntra::where('NivEntFis', 2)->where('FkCveEntFis', $entidadFiscalizable2->FkCveEntFis)->where('StsEntFis', 1)->get()->pluck('NomEntFis', 'PkCveEntFis');
 
-            $entidadFiscalizable1 = EntidadFiscalizableIntra::find($entidadFiscalizable2->FkCveEntFis);
-            $entidad1 = empty($entidadFiscalizable1->PkCveEntFis)?'':$entidadFiscalizable1->PkCveEntFis;
-        }
-        if ($entidadFiscalizable->NivEntFis == 2) {
-            $entidad2 = $entidadFiscalizable->PkCveEntFis;
-            $entidades2 = EntidadFiscalizableIntra::where('NivEntFis', 2)->where('FkCveEntFis', $entidadFiscalizable->FkCveEntFis)->where('StsEntFis', 1);
-            if ($entidadFiscalizable->FkCveEntFis == 611) {
-                    $entidades2 = $entidades2->whereNotNull('CveEntFis');
-                }
-                $entidades2 = $entidades2->get()->pluck('NomEntFis', 'PkCveEntFis');
+                $entidadFiscalizable1 = EntidadFiscalizableIntra::find($entidadFiscalizable2->FkCveEntFis);
+                $entidad1 = empty($entidadFiscalizable1->PkCveEntFis)?'':$entidadFiscalizable1->PkCveEntFis;
+            }
+            if ($entidadFiscalizable->NivEntFis == 2) {
+                $entidad2 = $entidadFiscalizable->PkCveEntFis;
+                $entidades2 = EntidadFiscalizableIntra::where('NivEntFis', 2)->where('FkCveEntFis', $entidadFiscalizable->FkCveEntFis)->where('StsEntFis', 1);
+                if ($entidadFiscalizable->FkCveEntFis == 611) {
+                        $entidades2 = $entidades2->whereNotNull('CveEntFis');
+                    }
+                    $entidades2 = $entidades2->get()->pluck('NomEntFis', 'PkCveEntFis');
 
-                $entidadFiscalizable1 = EntidadFiscalizableIntra::find($entidadFiscalizable->FkCveEntFis);
-                $entidad1 = $entidadFiscalizable1->PkCveEntFis;
+                    $entidadFiscalizable1 = EntidadFiscalizableIntra::find($entidadFiscalizable->FkCveEntFis);
+                    $entidad1 = $entidadFiscalizable1->PkCveEntFis;
             }
             if ($entidadFiscalizable->NivEntFis == 1) {
-                $entidad1 = $entidadFiscalizable->PkCveEntFis;
+                    $entidad1 = $entidadFiscalizable->PkCveEntFis;
             }
+        }
 
         return view('seguimientoauditoria.form', compact('auditoria', 'accion','entidades', 'entidades2', 'entidades3', 'entidad1', 'entidad2', 'entidad3','tipos','tiporevision','periodorevision','lideresProyecto'));
     }
@@ -234,7 +236,7 @@ class SeguimientoAuditoriaController extends Controller
     public function accionesConsulta(Auditoria $auditoria)
     {
         $movimiento='consultar';
-        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->orderBy('consecutivo')->paginate(30);
+        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->orderBy('consecutivo')->paginate(30);
         $request = new Request();
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);
 
@@ -280,6 +282,10 @@ class SeguimientoAuditoriaController extends Controller
             $entidadCompleta=$entidad->NomEntFis;
         }
 
+        if(!empty($request->entidad_descripcion)){
+            $entidadCompleta=$entidadCompleta.' - '.$request->entidad_descripcion;
+        }
+
        $request['entidad_fiscalizable'] = $entidadCompleta;
        $request['tipo_entidad']=$entidad->Ambito;
        $request['siglas_entidad']=$entidad->SigEntFis;
@@ -313,6 +319,18 @@ class SeguimientoAuditoriaController extends Controller
                     $accionrechazada->update(['revision_lider'=>null]);
                     $accionrechazada->update(['revision_jefe'=>null]);
                 }
+
+                $accionesnuevas=AuditoriaAccion::where('segauditoria_id',getSession('auditoria_id'))->whereNull('fase_revision')->get();
+
+                if (count($accionesnuevas)>0)
+                {
+                    foreach ($accionesnuevas as $accionnueva)
+                    {
+                        $accionnueva->update(['fase_revision'=>'En revisión 01']);
+                        $accionnueva->update(['revision_lider'=>null]);
+                        $accionnueva->update(['revision_jefe'=>null]);
+                    }
+                }
             }
             if (count($auditoria->accionesrechazadasjefe)>0)
             {
@@ -321,6 +339,18 @@ class SeguimientoAuditoriaController extends Controller
                     $accionrechazada->update(['fase_revision'=>'En revisión 01']);
                     $accionrechazada->update(['revision_lider'=>null]);
                     $accionrechazada->update(['revision_jefe'=>null]);
+                }
+
+                $accionesnuevas=AuditoriaAccion::where('segauditoria_id',getSession('auditoria_id'))->whereNull('fase_revision')->get();
+
+                if (count($accionesnuevas)>0)
+                {
+                    foreach ($accionesnuevas as $accionnueva)
+                    {
+                        $accionnueva->update(['fase_revision'=>'En revisión 01']);
+                        $accionnueva->update(['revision_lider'=>null]);
+                        $accionnueva->update(['revision_jefe'=>null]);
+                    }
                 }
             }
         }

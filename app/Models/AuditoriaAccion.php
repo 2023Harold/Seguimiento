@@ -60,6 +60,7 @@ class AuditoriaAccion extends Model
         'aprobar_cedini_analista',
         'aprobar_cedini_lider',
         'aprobar_cedini_jefe',
+        'eliminado'
     ];
 
 

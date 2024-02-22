@@ -25,9 +25,10 @@ class AuditoriaRequest extends FormRequest
     {
         return [
             'numero_auditoria' => 'required|string|max:100',
-            'entidad_n1' => 'required|integer|max:999999999999',
-            'entidad_n2' => 'sometimes|nullable|required_without:entidad_fiscalizable_id|integer|max:999999999999',
-            'entidad_n3' => 'sometimes|nullable|required_without:entidad_fiscalizable_id|integer|max:999999999999',
+            'entidad_n1' => 'sometimes|nullable|required_without:entidad_descripcion|integer|max:999999999999',
+            'entidad_n2' => 'sometimes|nullable|required_without_all:entidad_fiscalizable_id,entidad_descripcion|integer|max:999999999999',
+            'entidad_n3' => 'sometimes|nullable|required_without_all:entidad_fiscalizable_id,entidad_descripcion|integer|max:999999999999',
+            'entidad_descripcion'=>'sometimes|nullable|required_without:entidad_fiscalizable_id|string|max:2000',
             'periodo_revision' => 'required|string|max:100',
             'tipo_auditoria_id' => 'required|integer|max:9999999999',
             'lider_proyecto_id' => 'required|integer|max:9999999999',
@@ -48,6 +49,7 @@ class AuditoriaRequest extends FormRequest
     }
 
     public function messages()
+    
     {
         return [
             'required' => 'El campo :attribute es obligatorio.',

@@ -24,7 +24,7 @@
             </div>
         </div>       
             {!! BootForm::label('lb_ebtidad','Entidad Fiscalizable: *') !!}
-        <div class="row">
+        <div class="row">           
             <div class="col-md-3 mb-4">
                 {!! BootForm::select('entidad_n1', false, $entidades->prepend('Seleccionar una opción','')->toArray() , old('entidad_n1',$entidad1), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
@@ -39,8 +39,13 @@
             @endphp
             <div class="col-md-5 mb-4" id="div_ent_3" style="display:{!! $mostrarDivEntidad3 !!}">
                 {!! BootForm::select('entidad_n3', false, (!empty($entidades3)?$entidades3->toArray():[]) , old('entidad_n3',$entidad3), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+            </div>           
+        </div>    
+        <div class="row">
+            <div class="col-md-8">
+                {!! BootForm::text('entidad_descripcion', false, old('entidad_descripcion',$auditoria->entidad_descripcion)) !!}
             </div>
-        </div>        
+        </div>    
         <div class="row">
             <div class="col-md-4">
                 {!! BootForm::select('periodo_revision', 'Periodo de la revisión: *', $periodorevision , old('periodo_revision',$auditoria->periodo_revision), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}

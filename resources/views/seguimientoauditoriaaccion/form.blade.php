@@ -17,7 +17,7 @@
           
         <div class="row">
             <div class="col-md-2">
-                {!! BootForm::text('consecutivo', 'Número consecutivo: *', old('consecutivo', $accion->consecutivo?str_pad($accion->consecutivo, 3, '0', STR_PAD_LEFT) : str_pad($numeroconsecutivo, 3, '0', STR_PAD_LEFT)),['readonly']) !!}
+                {!! BootForm::text('consecutivo', 'Número consecutivo: *', old('consecutivo', $accion->consecutivo?str_pad($accion->consecutivo, 3, '0', STR_PAD_LEFT) : str_pad($numeroconsecutivo, 3, '0', STR_PAD_LEFT))) !!}
             </div>
         </div>       
         <div class="row">

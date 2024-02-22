@@ -58,7 +58,7 @@ class AccionesController extends Controller
     public function create()
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $numeroconsecutivo=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get()->count()+1;
+        $numeroconsecutivo=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->get()->count()+1;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
         $accion = new AuditoriaAccion();
         $actosfiscalizacion=CatalogoTipoAuditoria::whereIn('id',[1,2,3,4])->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
@@ -79,6 +79,7 @@ class AccionesController extends Controller
         $this->normalizarDatos($request);
         mover_archivos($request, ['cedula'], null);
         $accion  = AuditoriaAccion::create($request->all());
+        $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');
 
         return redirect()->route('seguimientoauditoriaacciones.index');
@@ -126,6 +127,7 @@ class AccionesController extends Controller
         $this->normalizarDatos($request);
         mover_archivos($request, ['cedula'], $accion);
         $accion->update($request->all());
+        $this->actualizaProgresivo();
 
         setMessage('La acción se ha modificado correctamente.');
 
@@ -140,14 +142,16 @@ class AccionesController extends Controller
      */
     public function destroy(AuditoriaAccion $accion)
     {
-        //
+        $accion->update(['eliminado'=>'X']);
+
+        return redirect()->route('seguimientoauditoriaacciones.index');
     }
 
     public function setQuery(Request $request)
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('auditoria_id'));
+         $query = $query->where('segauditoria_id',getSession('auditoria_id'))->whereNull('eliminado');
 
         if ($request->filled('consecutivo')) {
             $query = $query->where('consecutivo',$request->consecutivo);
@@ -192,9 +196,9 @@ class AccionesController extends Controller
         $numeroSiguiente = 1;
         $modelName = $this->model;
 
-        $er_records = $modelName::where('auditoria_id', getSession('auditoria_id'));
+        $er_records = $modelName::where('segauditoria_id', getSession('auditoria_id'))->whereNull('eliminado');
 
-        $er_records = $er_records->orderBy('id')->get();
+        $er_records = $er_records->orderBy('consecutivo')->get();
 
         foreach ($er_records as $er_record) {
             $er_record->update(['consecutivo' => $numeroSiguiente]);

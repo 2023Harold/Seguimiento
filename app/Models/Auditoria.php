@@ -48,6 +48,7 @@ class Auditoria extends Model
                 'asignacion_lider_analista',
                 'departamento_encargado',            
                 'departamento_encargado_id',       
+                'entidad_descripcion',    
                 'created_at',
                 'updated_at',
             ];
@@ -66,7 +67,7 @@ class Auditoria extends Model
 
             public function acciones()
             {                       
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->orderBy('numero');
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->orderBy('consecutivo');
             }
            
             public function accionesall()

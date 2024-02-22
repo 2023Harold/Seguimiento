@@ -81,6 +81,7 @@
                                 <th>Estatus</th>
                                 @if ($auditoria->registro_concluido=='No'&&auth()->user()->siglas_rol=='ANA')
                                 <th>Editar</th>
+                                <th>Eliminar</th>
                                 @endif
                             </tr>
                         </thead>
@@ -158,11 +159,18 @@
                                     @endcan
                                 </td>
                                 @endif
+                                @if ($auditoria->registro_concluido=='No'&&auth()->user()->siglas_rol=='ANA')
+                                <td class="text-center">
+                                    @can('seguimientoauditoriaacciones.edit')
+                                       @destroy(route('seguimientoauditoriaacciones.destroy',$accion))
+                                    @endcan
+                                </td>
+                                @endif
                             </tr>
                             {!! movimientosDesglose($accion->id, 8, $accion->movimientos) !!}
                             @empty
                             <tr>
-                                <td class="text-center" colspan="8">
+                                <td class="text-center" colspan="9">
                                     <span class='text-center'>No hay registros en éste apartado</span>
                                 </td>
                             </tr>
