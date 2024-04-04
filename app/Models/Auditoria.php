@@ -24,36 +24,38 @@ class Auditoria extends Model
              */
             protected $fillable = [
                 'numero_auditoria',
-                'entidad_fiscalizable_id',	
+                'entidad_fiscalizable_id',
                 'entidad_fiscalizable',
-                'tipo_entidad',	
+                'tipo_entidad',
                 'siglas_entidad',
                 'ejercicio',
-                'periodo_revision',	
+                'periodo_revision',
                 'tipo_auditoria_id',
-                'acto_fiscalizacion',                
+                'acto_fiscalizacion',
                 'informe_auditoria',
                 'registro_concluido',
                 'constancia',
                 'fase_autorizacion',
                 'nivel_autorizacion',
                 'unidad_administrativa_registro',
-                'lider_proyecto_id',                
+                'lider_proyecto_id',
                 'usuario_creacion_id',
                 'usuario_actualizacion_id',
-                'direccion_asignada_id',   
+                'direccion_asignada_id',
                 'direccion_asignada',
-                'reasignacion_direccion', 
-                'asignacion_departamentos',           
+                'reasignacion_direccion',
+                'asignacion_departamentos',
                 'asignacion_lider_analista',
-                'departamento_encargado',            
-                'departamento_encargado_id',       
-                'entidad_descripcion',    
+                'departamento_encargado',
+                'departamento_encargado_id',
+                'entidad_descripcion',
+                'tipologia_id',
+                'tipologia',
                 'created_at',
                 'updated_at',
             ];
-        
-                   
+
+
             /**
              * The attributes that should be cast.
              *
@@ -62,21 +64,21 @@ class Auditoria extends Model
             protected $casts = [
                 'created_at'=>'datetime',
                 'updated_at'=>'datetime'
-            ];            
-            
+            ];
+
 
             public function acciones()
-            {                       
+            {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->orderBy('consecutivo');
             }
-           
+
             public function accionesall()
-            {                       
+            {
                 return $this->belongsTo(AuditoriaAccion::class, 'id','segauditoria_id');
             }
 
             public function accionesDepartamento()
-            {                       
+            {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('departamento_asignado_id',substr(auth()->user()->unidad_administrativa_id, 0, 5).'0')->orderBy('consecutivo');
             }
 
@@ -91,12 +93,12 @@ class Auditoria extends Model
             }
 
             public function total()
-            {                       
+            {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->sum('monto_aclarar');
             }
 
             public function entidadFiscalizable()
-            {                
+            {
                 return $this->hasOne(EntidadFiscalizableIntra::class, 'PkCveEntFis', 'entidad_fiscalizable_id');
             }
 
@@ -117,8 +119,8 @@ class Auditoria extends Model
             public function getDirectorasignadoAttribute()
             {
                 return User::where('unidad_administrativa_id',$this->direccion_asignada_id)->first();
-            } 
-            
+            }
+
             public function getJefedepartamentoencargadoAttribute()
             {
                 return User::where('unidad_administrativa_id',$this->departamento_encargado_id)->first();
@@ -138,7 +140,7 @@ class Auditoria extends Model
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 1);
             }
-            
+
             public function totalpliegos()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3);
@@ -151,7 +153,7 @@ class Auditoria extends Model
                                 $query->where('calificacion_sugerida','Atendida');
                             });
             }
-           
+
             public function totalsolventadopras()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 4)
@@ -160,7 +162,7 @@ class Auditoria extends Model
                             });
             }
 
-           
+
             public function totalsolventadosolacl()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 1)
@@ -168,7 +170,7 @@ class Auditoria extends Model
                                 $query->where('calificacion_sugerida', 'Solventada');
                             });
             }
-            
+
             public function totalsolventadopliegos()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3)
@@ -184,7 +186,7 @@ class Auditoria extends Model
                                 $query->whereNotIn('calificacion_sugerida',['Atendida']);
                             });
             }
-           
+
             public function totalNOsolventadopras()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 4)
@@ -193,7 +195,7 @@ class Auditoria extends Model
                             });
             }
 
-           
+
             public function totalNOsolventadosolacl()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 1)
@@ -201,7 +203,7 @@ class Auditoria extends Model
                                 $query->whereNotIn('calificacion_sugerida', ['Solventada']);
                             });
             }
-            
+
             public function totalNOsolventadopliegos()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3)
@@ -227,20 +229,24 @@ class Auditoria extends Model
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_jefe')->where('revision_jefe','Rechazado');
             }
             public function cedulageneralseguimiento()
-            {                       
+            {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Seguimiento');
             }
             public function cedulageneralrecomendaciones()
-            {                       
+            {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Recomendaciones');
             }
             public function cedulageneralpras()
-            {                       
+            {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General PRAS');
             }
 
             public function movimientosCedulaGeneral()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General de Seguimiento')->orderBy('id', 'ASC');
+            }
+            public function tipologiadesc()
+            {
+                return $this->belongsTo(CatalogoTipologiaAuditoria::class, 'tipologia_id', 'id');
             }
 }

@@ -21,7 +21,7 @@
                                 <span class="bullet me-5 bg-primary"></span> <a
                                     href="{{ route('user.index') }}">Usuarios</a>
                             </li>
-                            @endcan                            
+                            @endcan
                             @can('rol.index')
                                 <li class="d-flex align-items-center py-2">
                                     <span class="bullet me-5 bg-primary"></span>
@@ -332,6 +332,14 @@
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('seguimientoauditoria.index') }}">
                                     Registro
+                                </a>
+                            </li>
+                            @endcan
+                            @can('tipologiaauditorias.index')
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('tipologiaauditorias.index') }}">
+                                    Tipología Auditorias
                                 </a>
                             </li>
                             @endcan

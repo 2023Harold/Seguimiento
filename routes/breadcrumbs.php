@@ -47,17 +47,35 @@ Breadcrumbs::for('permiso.edit', function (BreadcrumbTrail $trail,$rol) {
     $trail->push('Editar', route('permiso.edit',$rol));
 });
 
+//home
+
 Breadcrumbs::for('acceso.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Accesos', route('acceso.index'));
 });
 
-
-
 Breadcrumbs::for('seguimientoauditorias', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Auditorias', route('seguimientoauditoria.index'));
 });
+
+//tipologiaauditorias
+
+Breadcrumbs::for('tipologiaauditorias', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Tipología Auditorias', route('tipologiaauditorias.index'));
+});
+
+Breadcrumbs::for('tipologiaauditorias.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('tipologiaauditorias.index');
+    $trail->push('Auditoría', route('tipologiaauditorias.edit',$auditoria));
+});
+
+Breadcrumbs::for('tipologiaauditorias.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('tipologiaauditorias');
+    $trail->push('Auditoría', route('tipologiaauditorias.create'));
+});
+
 
 Breadcrumbs::for('seguimientoauditorias.create', function (BreadcrumbTrail $trail) {
     $trail->parent('seguimientoauditorias');

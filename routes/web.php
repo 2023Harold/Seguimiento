@@ -112,6 +112,7 @@ use App\Http\Controllers\SolicitudesAclaracionDocumentosController;
 use App\Http\Controllers\SolicitudesAclaracionRevision01Controller;
 use App\Http\Controllers\SolicitudesAclaracionRevisionController;
 use App\Http\Controllers\SolicitudesAclaracionValidacionController;
+use App\Http\Controllers\TipologiaAuditoriasController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\CheckPermission;
@@ -180,6 +181,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('seguimientoauditoriarevision', SeguimientoAuditoriaRevisionController::class, ['parameters' => ['seguimientoauditoriarevision' => 'auditoria']]);
     Route::resource('seguimientoauditoriavalidacion', SeguimientoAuditoriaValidacionController::class, ['parameters' => ['seguimientoauditoriavalidacion' => 'auditoria']]);
     Route::resource('seguimientoauditoriaautorizacion', SeguimientoAuditoriaAutorizacionController::class, ['parameters' => ['seguimientoauditoriaautorizacion' => 'auditoria']]);
+
+    //Tipología de auditoria
+    Route::resource('tipologiaauditorias', TipologiaAuditoriasController::class, ['parameters' => ['tipologiaauditorias' => 'auditoria']]);
+
 
     //Asignaciones
     /*Direcciones*/
