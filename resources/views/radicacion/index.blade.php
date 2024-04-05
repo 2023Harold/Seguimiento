@@ -98,13 +98,13 @@
                                     </td>
                                     <td class="text-center">
                                         @if (!empty($auditoria->radicacion->fase_autorizacion)&&$auditoria->radicacion->fase_autorizacion=='Autorizado')
-                                            @if (empty($auditoria->comparecencia->oficio_recepcion))
+                                            @if (empty($auditoria->comparecencia->oficio_recepcion))                                            
                                                 @can('comparecenciaacuse.edit')
                                                     <a href="{{ route('comparecenciaacuse.edit', $auditoria->comparecencia) }}" class="btn btn-primary">
                                                         <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
                                                     </a>
                                                 @endcan
-                                            @else
+                                            @else                                           
                                                 @can('comparecenciaacuse.show')
                                                     <a href="{{ route('comparecenciaacuse.show', $auditoria->comparecencia) }}" class="btn btn-secondary" >
                                                         <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />

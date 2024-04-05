@@ -82,9 +82,9 @@ class CedulaInicialPrimeraEtapaController extends Controller
             $TSPNS=0;
     
             foreach ($auditoria->totalsolacl as $solicitud) {
-                $TSP=$TSP+$solicitud->monto_aclarar;
-                $TSPS=$TSPS+$solicitud->solicitudesaclaracion->monto_solventado;
-                $TSPNS=$TSPNS+($solicitud->monto_aclarar-$solicitud->solicitudesaclaracion->monto_solventado);
+                $TSP= $TSP  +  $solicitud->monto_aclarar;
+                $TSPS=  $TSPS  +  ((!empty($solicitud->solicitudesaclaracion)&&!empty($solicitud->solicitudesaclaracion->monto_solventado)) ? $solicitud->solicitudesaclaracion->monto_solventado:0);
+                $TSPNS= $TSPNS + ($solicitud->monto_aclarar - ((!empty($solicitud->solicitudesaclaracion)&& !empty($solicitud->solicitudesaclaracion->monto_solventado))? $solicitud->solicitudesaclaracion->monto_solventado:0));
             }
     
             //dd($totalSolicitudesPromovidas,$totalSolicitudesPromovidasSolventadas,$totalSolicitudesPromovidasNoSolventadas);
@@ -94,8 +94,8 @@ class CedulaInicialPrimeraEtapaController extends Controller
     
             foreach ($auditoria->totalpliegos as $pliego) {
                 $TPP=$TPP+$pliego->monto_aclarar;
-                $TPPS=$TPPS+$pliego->pliegosobservacion->monto_solventado;
-                $TPPNS=$TPPNS+($pliego->monto_aclarar-$pliego->pliegosobservacion->monto_solventado);
+                $TPPS=$TPPS+((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0);
+                $TPPNS=$TPPNS+($pliego->monto_aclarar-((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0));
             }
     
             $TAP=$TSP+$TPP;
@@ -129,25 +129,50 @@ class CedulaInicialPrimeraEtapaController extends Controller
         if(count($auditoria->cedulageneralseguimiento)==0){
             $request['auditoria_id']=$auditoria->id;
             $request['cedula_tipo']='Cedula General Seguimiento';
+            
             $request['usuario_creacion_id']=auth()->id();        
             $request['cedula']=$request->cedula2;
+
             mover_archivos($request, ['cedula']);
             $cedula=Cedula::create($request->all());            
             $analistas=array_unique($auditoria->acciones->pluck('analista_asignado_id', 'id')->toArray());
+
+            if(count($analistas)==1){
+                    //AuditoriaAccion::where('analista_asignado_id',auth()->user()->id)->where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_analista'=>'Si']);
+                  
+                    if (strlen($cedula->nivel_autorizacion) == 3) {
+                        $nivel_autorizacion = $cedula->nivel_autorizacion;
+                    } else {
+                        $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
+                    }
             
-            foreach ($analistas as $analista) {           
-                if(auth()->user()->id != $analista){
-                    $usuario=User::find($analista);
+                $cedula->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
+        
+                $titulo = 'Revisión del la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
+                $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
+                            Ha sido registrada la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria . ', por parte del ' .
+                            auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+    
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
 
-                    $titulo = 'Revisión del la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
-                    $mensaje = '<strong>Estimado (a) ' . $usuario->name . ', ' . $usuario->puesto . ':</strong><br>
-                                Ha sido registrada la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria . ', por parte del ' .
-                                auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
-
-                    auth()->user()->insertNotificacion($titulo, $mensaje, now(), $usuario->unidad_administrativa_id,$usuario->id);
-                }          
+            }else{
+                $analistas=array_unique($auditoria->acciones->pluck('analista_asignado_id', 'id')->toArray());
+            
+                foreach ($analistas as $analista) {           
+                    if(auth()->user()->id != $analista){
+                        $usuario=User::find($analista);
+    
+                        $titulo = 'Revisión del la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
+                        $mensaje = '<strong>Estimado (a) ' . $usuario->name . ', ' . $usuario->puesto . ':</strong><br>
+                                    Ha sido registrada la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria . ', por parte del ' .
+                                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+    
+                        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $usuario->unidad_administrativa_id,$usuario->id);
+                    }          
+                }
             }
-
+            
+            
             AuditoriaAccion::where('analista_asignado_id',auth()->user()->id)->where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_analista'=>'Si']);
 
             
@@ -165,22 +190,41 @@ class CedulaInicialPrimeraEtapaController extends Controller
             $cedula=$auditoria->cedulageneralseguimiento[0];
 
             $analistas=array_unique($auditoria->acciones->pluck('analista_asignado_id', 'id')->toArray());
-            
-            foreach ($analistas as $analista) {           
-                if(auth()->user()->id != $analista){
-                    $usuario=User::find($analista);
 
-                    $titulo = 'Revisión del la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
-                    $mensaje = '<strong>Estimado (a) ' . $usuario->name . ', ' . $usuario->puesto . ':</strong><br>
-                                Ha sido registrada la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria . ', por parte del ' .
-                                auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+            if(count($analistas)==1){
+                if (strlen($cedula->nivel_autorizacion) == 3) {
+                    $nivel_autorizacion = $cedula->nivel_autorizacion;
+                } else {
+                    $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
+                }
+        
+                $cedula->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
+        
+                $titulo = 'Revisión del la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
+                $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
+                            Ha sido registrada la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria . ', por parte del ' .
+                            auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
 
-                    auth()->user()->insertNotificacion($titulo, $mensaje, now(), $usuario->unidad_administrativa_id,$usuario->id);
-                }          
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
+                
+            }else{
+                foreach ($analistas as $analista) {           
+                    if(auth()->user()->id != $analista){
+                        $usuario=User::find($analista);
+    
+                        $titulo = 'Revisión del la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;
+                        $mensaje = '<strong>Estimado (a) ' . $usuario->name . ', ' . $usuario->puesto . ':</strong><br>
+                                    Ha sido registrada la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria . ', por parte del ' .
+                                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+    
+                        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $usuario->unidad_administrativa_id,$usuario->id);
+                    }          
+                }
+
+                AuditoriaAccion::where('analista_asignado_id',auth()->user()->id)->where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_analista'=>'Si']);
+                $cedula->update(['fase_autorizacion' => null]);
             }
-
-            AuditoriaAccion::where('analista_asignado_id',auth()->user()->id)->where('segauditoria_id',$auditoria->id)->update(['aprobar_cedini_analista'=>'Si']);
-            $cedula->update(['fase_autorizacion' => null]);
+                      
             
             Movimientos::create([
                 'tipo_movimiento' => 'Registro de la Cédula General de Seguimiento',

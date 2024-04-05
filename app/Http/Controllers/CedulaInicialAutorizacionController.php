@@ -122,8 +122,8 @@ class CedulaInicialAutorizacionController extends Controller
     
             foreach ($auditoria->totalsolacl as $solicitud) {
                 $TSP=$TSP+$solicitud->monto_aclarar;
-                $TSPS=$TSPS+$solicitud->solicitudesaclaracion->monto_solventado;
-                $TSPNS=$TSPNS+($solicitud->monto_aclarar-$solicitud->solicitudesaclaracion->monto_solventado);
+                $TSPS=$TSPS+((!empty($solicitud->solicitudesaclaracion)&&!empty($solicitud->solicitudesaclaracion->monto_solventado))?$solicitud->solicitudesaclaracion->monto_solventado:0);
+                $TSPNS=$TSPNS+($solicitud->monto_aclarar-((!empty($solicitud->solicitudesaclaracion)&&!empty($solicitud->solicitudesaclaracion->monto_solventado))?$solicitud->solicitudesaclaracion->monto_solventado:0));
             }
     
             $TPP=0;
@@ -132,8 +132,8 @@ class CedulaInicialAutorizacionController extends Controller
     
             foreach ($auditoria->totalpliegos as $pliego) {
                 $TPP=$TPP+$pliego->monto_aclarar;
-                $TPPS=$TPPS+$pliego->pliegosobservacion->monto_solventado;
-                $TPPNS=$TPPNS+($pliego->monto_aclarar-$pliego->pliegosobservacion->monto_solventado);
+                $TPPS=$TPPS+((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0);
+                $TPPNS=$TPPNS+($pliego->monto_aclarar-((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0));
             }
     
             $TAP=$TSP+$TPP;
@@ -145,8 +145,9 @@ class CedulaInicialAutorizacionController extends Controller
             $pdfgenrado = file_put_contents($nombre, $pdf);
             
 
-            $request['cedula']=$nombre;
-            mover_archivos($request, ['cedula']);
+            $request['cedulaaut']=$nombre;
+            mover_archivos($request, ['cedulaaut']);
+            $cedula->update(['cedula' => $request->cedulaaut]);
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria;

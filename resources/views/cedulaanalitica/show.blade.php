@@ -60,7 +60,7 @@
                         </tr>
                         <tr>
                             <td><span style="font-size: 0.6rem"><strong>&nbsp;ACTO DE FISCALIZACIÓN:&nbsp;{{ $auditoria->acto_fiscalizacion }}</strong></span></td>
-                            <td><span style="font-size: 0.6rem"><strong>&nbsp;NÚMERO DE EXPEDIENTE: &nbsp;{{ $auditoria->radicacion->numero_expediente}}</strong></span></td>
+                            <td><span style="font-size: 0.6rem"><strong>&nbsp;NÚMERO DE EXPEDIENTE: &nbsp;{{ esVacioStr(['auditoria','radicacion','numero_expediente'],$auditoria) }}</strong></span></td>
                         </tr>
                     </table>
                 </td>             
@@ -89,8 +89,8 @@
                         </tr>                   
                         <tr>
                             <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( $accion->monto_aclarar, 2) }}</strong></span></td>
-                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( $accion->solicitudesaclaracion->monto_solventado, 2) }}</strong></span></td>
-                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( $accion->monto_aclarar-$accion->solicitudesaclaracion->monto_solventado, 2) }}</strong></span></td>
+                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( ((!empty($accion->solicitudesaclaracion)&&!empty($accion->solicitudesaclaracion->monto_solventado))?$accion->solicitudesaclaracion->monto_solventado:0), 2) }}</strong></span></td>
+                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( $accion->monto_aclarar-((!empty($accion->solicitudesaclaracion)&&!empty($accion->solicitudesaclaracion->monto_solventado))?$accion->solicitudesaclaracion->monto_solventado:0), 2) }}</strong></span></td>
                         </tr>
                         @elseif($accion->tipo=='Pliego de observación')
                         <tr>
@@ -100,8 +100,8 @@
                         </tr>                   
                         <tr>
                             <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( $accion->monto_aclarar, 2) }}</strong></span></td>
-                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( $accion->pliegosobservacion->monto_solventado, 2) }}</strong></span></td>
-                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( $accion->monto_aclarar-$accion->pliegosobservacion->monto_solventado, 2) }}</strong></span></td>
+                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( ((!empty($accion->pliegosobservacion)&&!empty($accion->pliegosobservacion->monto_solventado))?$accion->pliegosobservacion->monto_solventado:0), 2) }}</strong></span></td>
+                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ '$'.number_format( $accion->monto_aclarar-((!empty($accion->pliegosobservacion)&&!empty($accion->pliegosobservacion->monto_solventado))?$accion->pliegosobservacion->monto_solventado:0), 2) }}</strong></span></td>
                         </tr>
                         @elseif($accion->tipo=='Recomendación')
                         <tr>
@@ -198,13 +198,13 @@
                                 <span style="font-size: 0.6rem">
                                     <strong>
                                         @if ($accion->tipo=='Solicitud de aclaración')
-                                            {{ $accion->solicitudesaclaracion->listado_documentos }}
+                                            {{ ((!empty($accion->solicitudesaclaracion)&&!empty($accion->solicitudesaclaracion->listado_documentos))?$accion->solicitudesaclaracion->listado_documentos:"") }}
                                         @elseif ($accion->tipo=='Pliego de observación')
-                                            {{ $accion->pliegosobservacion->listado_documentos }}
+                                            {{ ((!empty($accion->pliegosobservacion)&&!empty($accion->pliegosobservacion->listado_documentos))?$accion->pliegosobservacion->listado_documentos:"") }}
                                         @elseif ($accion->tipo=='Recomendación')
-                                            {{ $accion->recomendaciones->listado_documentos }}
+                                            {{ ((!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->listado_documentos))?$accion->recomendaciones->listado_documentos:"") }}
                                         @elseif ($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')
-                                            {{ $accion->pras->listado_documentos }}  
+                                            {{ ((!empty($accion->pras)&&!empty($accion->pras->listado_documentos))?$accion->pras->listado_documentos:"") }}
                                         @endif
                                     </strong>
                                 </span> 
@@ -224,13 +224,13 @@
                                 <span style="font-size: 0.6rem">
                                     <strong>
                                         @if ($accion->tipo=='Solicitud de aclaración')
-                                            {{ $accion->solicitudesaclaracion->conclusion }}
+                                            {{ ((!empty($accion->solicitudesaclaracion)&&!empty($accion->solicitudesaclaracion->conclusion))?$accion->solicitudesaclaracion->conclusion:"") }}
                                         @elseif ($accion->tipo=='Pliego de observación')
-                                            {{ $accion->pliegosobservacion->conclusion }}
+                                            {{ ((!empty($accion->pliegosobservacion)&&!empty($accion->pliegosobservacion->conclusion))?$accion->pliegosobservacion->conclusion:"") }}
                                         @elseif ($accion->tipo=='Recomendación')
-                                            {{ $accion->recomendaciones->conclusion }}
+                                            {{ ((!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->conclusion))?$accion->recomendaciones->conclusion:"") }}
                                         @elseif ($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')
-                                            {{ $accion->pras->listado_documentos }}  
+                                             {{ ((!empty($accion->pras)&&!empty($accion->pras->conclusion))?$accion->pras->conclusion:"") }}
                                         @endif
                                     </strong>
                                 </span> 
@@ -248,32 +248,53 @@
         @endif
     @endif
     @endforeach   
+    @if (count($auditoria->cedulaanalitica)>0 && $auditoria->cedulaanalitica[0]->fase_autorizacion=='Autorizado')
     <table width="100%">
         <tr>
             <td colspan="1"></td>
             <td colspan="6">
-                <table style="border: 0px solid; border-collapse:collapse;" width="100%">
+                <table style="border-collapse:collapse;" width="100%">
                     <tr>
-                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ: <br><br><br> ANALISTA</strong></span></td>
-                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ<br><br><br>LÍDER DE PROYECTO</strong></span></td>
-                        <td colspan="2" style="text-align: center; color: black; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ<br><br><br>JEFE DE DEPARTAMENTO</strong></span></td>
+                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:</strong></span></td>
                     </tr>
                     <tr>
-                        <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ<br><br><br>DIRECTOR</strong></span></td>
-                        <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ<br><br><br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
+                        @foreach ($nombresanalistasL as $analista)
+                        <td colspan="{{(count($nombresanalistasL)==3?'2': (count($nombresanalistasL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>{{ $analista }} <br> ANALISTA</strong></span></td>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ:</strong></span></td>
+                    </tr>
+                    <tr>
+                        @foreach ($nombreslideresL as $lider)
+                        <td colspan="{{(count($nombreslideresL)==3?'2': (count($nombreslideresL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $lider }} <br> LÍDER DE PROYECTO</strong></span></td>                            
+                        @endforeach                        
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
+                    </tr>
+                    <tr>
+                        @foreach ($nombresJefesL as $jefe)
+                        <td colspan="{{(count($nombresJefesL)==3?'2': (count($nombresJefesL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
+                        @endforeach 
+                    </tr>
+                    <tr>
+                        <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ: <br><br><br><br><br>  {{ $director->name }} <br>DIRECTOR</strong></span></td>
+                        <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ:<br><br><br><br><br>  {{ auth()->user()->titular->name }} <br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
                     </tr>
                     <tr>
                         <td style="width: 20%;"></td>
-                        <td style="width: 20%;"></td>
-                        <td style="width: 20%;"></td>
-                        <td style="width: 20%;"></td>
-                        <td style="width: 20%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 15%;"></td>
                         <td style="width: 20%;"></td>
                     </tr>
                 </table>
             </td>  
             <td colspan="1"></td>          
-        </tr>
+        </tr> 
     </table> 
+    @endif  
 </body>
 </html>

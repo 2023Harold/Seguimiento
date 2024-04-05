@@ -53,7 +53,7 @@ class SeguimientoAuditoriaController extends Controller
         $entidad3 = null;
         $cargosasociadosIntra = null;
 
-        return view('seguimientoauditoria.form', compact('ejercicios','auditoria','accion','consecutivo','entidades', 'entidad1', 'entidad2', 'entidad3','tipos','tiporevision','periodorevision','lideresProyecto'));
+        return view('seguimientoauditoria.form', compact('ejercicios','auditoria','accion','entidades','consecutivo', 'entidad1', 'entidad2', 'entidad3','tipos','tiporevision','periodorevision','lideresProyecto'));
     }
 
     /**
@@ -270,16 +270,20 @@ class SeguimientoAuditoriaController extends Controller
 
     public function normalizarDatos(Request $request)
     {
-       $entidad=EntidadFiscalizableIntra::where('PkCveEntFis',$request->entidad_fiscalizable_id)->first();
-       $tipoauditoria=CatalogoTipoAuditoria::find($request->tipo_auditoria_id);
-       $entidadCompleta='';
-
-        if ($entidad->NivEntFis == 3){
-            $entidadCompleta=$entidad->entidadFiscalizableN1->NomEntFis.' - '.$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis;
-        }elseif ($entidad->NivEntFis == 2){
-            $entidadCompleta=$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis;
-        }elseif ($entidad->NivEntFis == 1){
-            $entidadCompleta=$entidad->NomEntFis;
+        if(!empty($request->entidad_fiscalizable_id)){
+            $entidad=EntidadFiscalizableIntra::where('PkCveEntFis',$request->entidad_fiscalizable_id)->first();
+        }
+       
+        $tipoauditoria=CatalogoTipoAuditoria::find($request->tipo_auditoria_id);
+        $entidadCompleta='';
+        if(!empty($request->entidad_fiscalizable_id)){
+            if ($entidad->NivEntFis == 3){
+                $entidadCompleta=$entidad->entidadFiscalizableN1->NomEntFis.' - '.$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis;
+            }elseif ($entidad->NivEntFis == 2){
+                $entidadCompleta=$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis;
+            }elseif ($entidad->NivEntFis == 1){
+                $entidadCompleta=$entidad->NomEntFis;
+            }
         }
 
         if(!empty($request->entidad_descripcion)){
@@ -287,8 +291,8 @@ class SeguimientoAuditoriaController extends Controller
         }
 
        $request['entidad_fiscalizable'] = $entidadCompleta;
-       $request['tipo_entidad']=$entidad->Ambito;
-       $request['siglas_entidad']=$entidad->SigEntFis;
+       $request['tipo_entidad']=(!empty($entidad->Ambito)?$entidad->Ambito:'');
+       $request['siglas_entidad']=(!empty($entidad->SigEntFis)?$entidad->SigEntFis:'');
        $request['ejercicio']=0;
        $request['acto_fiscalizacion']=$tipoauditoria->descripcion;
 

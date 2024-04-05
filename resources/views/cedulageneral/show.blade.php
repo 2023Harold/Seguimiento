@@ -73,7 +73,7 @@
                 <span style="font-size: 0.6rem"><strong>&nbsp;NÚMERO DE EXPEDIENTE</strong></span>
             </td>
             <td style="border: .5 solid; width:20%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ $auditoria->radicacion->numero_expediente}}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ esVacioStr(['auditoria','radicacion','numero_expediente'],$auditoria)}}</strong></span>
             </td>            
         </tr>  
         <tr style="border-collapse:separate;border-spacing:0 500px; vertical-align: middle;">
@@ -87,19 +87,19 @@
                 <span style="font-size: .6rem;"><strong>Fecha de Comparecencia</strong></span>
             </td>
             <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha($auditoria->comparecencia->fecha_comparecencia) }}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(esVacioStr(['auditoria','comparecencia','fecha_comparecencia'],$auditoria)) }}</strong></span>
             </td>
             <td style="text-align: center; width: 10%; color: white; background-color: #960048; vertical-align: middle;"> 
                 <span style="font-size: .6rem;"><strong>Fecha de Inicio</strong></span>
             </td>
             <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion) }}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(esVacioStr(['auditoria','comparecencia','fecha_inicio_aclaracion'],$auditoria)) }}</strong></span>
             </td>
             <td style="text-align: center; width: 10%; color: white; background-color: #960048; vertical-align: middle;"> 
                 <span style="font-size: .6rem;"><strong>Fecha de Vencimiento</strong></span>
             </td>
             <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha($auditoria->comparecencia->fecha_termino_aclaracion) }}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(esVacioStr(['auditoria','comparecencia','fecha_termino_aclaracion'],$auditoria)) }}</strong></span>
             </td>
         </tr> 
         <tr></tr>
@@ -301,9 +301,9 @@
                             <td style="text-align: justify;; width: 35%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $solacl->accion }}</strong></span></td>
                             <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $solacl->numero }}</strong></span></td>
                             <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->monto_aclarar, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->solicitudesaclaracion->monto_solventado, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->monto_aclarar-$solacl->solicitudesaclaracion->monto_solventado, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $solacl->solicitudesaclaracion->calificacion_sugerida }}</td>
+                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( ((!empty($solacl->solicitudesaclaracion)&&!empty($solacl->solicitudesaclaracion->monto_solventado))?$solacl->solicitudesaclaracion->monto_solventado:0), 2) }}</strong></span></td>
+                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->monto_aclarar-(!empty($solacl->solicitudesaclaracion)&&empty($solacl->solicitudesaclaracion->monto_solventado)?$solacl->solicitudesaclaracion->monto_solventado:0), 2) }}</strong></span></td>
+                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ ((!empty($solacl->solicitudesaclaracion)&&!empty($solacl->solicitudesaclaracion->calificacion_sugerida))?$solacl->solicitudesaclaracion->calificacion_sugerida:"") }}</td>
                         </tr>                        
                     @endforeach
                 </table>
@@ -330,9 +330,9 @@
                             <td style="text-align: justify; width: 45%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $pliegos->accion }}</strong></span></td>
                             <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $pliegos->numero }}</strong></span></td>
                             <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->monto_aclarar, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->pliegosobservacion->monto_solventado, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->monto_aclarar-$pliegos->pliegosobservacion->monto_solventado, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $pliegos->pliegosobservacion->calificacion_sugerida }}</td>
+                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format(((!empty($pliegos->pliegosobservacion)&&!empty($pliegos->pliegosobservacion->monto_solventado))?$pliegos->pliegosobservacion->monto_solventado:0), 2) }}</strong></span></td>
+                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format($pliegos->monto_aclarar-(!empty ($pliegos->pliegosobservacion)&&!empty($pliegos->pliegosobservacion->monto_solventado)?$pliegos->pliegosobservacion->monto_solventado:0), 2) }}</strong></span></td>
+                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ ((!empty($pliegos->pliegosobservacion)&&!empty($pliegos->pliegosobservacion->calificacion_sugerida))?$pliegos->pliegosobservacion->calificacion_sugerida:0) }}</td>
                         </tr>                        
                     @endforeach
                 </table>

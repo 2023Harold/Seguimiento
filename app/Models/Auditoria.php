@@ -240,7 +240,14 @@ class Auditoria extends Model
             {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General PRAS');
             }
-
+            public function cedulaanalitica()
+            {                       
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula Analítica');
+            }
+            public function cedulaanaliticadesemp()
+            {                       
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula Analítica Desempeño');
+            }
             public function movimientosCedulaGeneral()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General de Seguimiento')->orderBy('id', 'ASC');
@@ -248,5 +255,22 @@ class Auditoria extends Model
             public function tipologiadesc()
             {
                 return $this->belongsTo(CatalogoTipologiaAuditoria::class, 'tipologia_id', 'id');
+            }
+
+            public function movimientosCedulaPRAS()
+            {
+                return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General PRAS')->orderBy('id', 'ASC');
+            }
+            public function movimientosCedulaRecomendacion()
+            {
+                return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General Recomendación')->orderBy('id', 'ASC');
+            }
+            public function movimientosCedulaAnalitica()
+            {
+                return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula Analítica')->orderBy('id', 'ASC');
+            }
+            public function movimientosCedulaAnaliticaDesemp()
+            {
+                return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula Analítica Desempeño')->orderBy('id', 'ASC');
             }
 }

@@ -60,6 +60,18 @@ class AuditoriaAccion extends Model
         'aprobar_cedini_analista',
         'aprobar_cedini_lider',
         'aprobar_cedini_jefe',
+        'aprobar_cedpras_analista',
+        'aprobar_cedpras_lider',
+        'aprobar_cedpras_jefe',
+        'aprobar_cedrec_analista',
+        'aprobar_cedrec_lider',
+        'aprobar_cedrec_jefe',
+        'aprobar_cedana_analista',
+        'aprobar_cedana_lider',
+        'aprobar_cedana_jefe',
+        'aprobar_cedanades_analista',
+        'aprobar_cedanades_lider',
+        'aprobar_cedanades_jefe',
         'eliminado'
     ];
 

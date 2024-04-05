@@ -633,9 +633,9 @@ Breadcrumbs::for('cedulaanalitica.edit', function (BreadcrumbTrail $trail,$audit
     $trail->parent('cedulainicial.index',$auditoria);
     $trail->push('Cédula Analitica', route('cedulaanalitica.edit',$auditoria));
 });
-Breadcrumbs::for('cedulaanaliticarecomendacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+Breadcrumbs::for('cedulaanaliticadesemp.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('cedulainicial.index',$auditoria);
-    $trail->push('Cédula Analitica Desempeño', route('cedulaanaliticarecomendacion.edit',$auditoria));
+    $trail->push('Cédula Analitica Desempeño', route('cedulaanaliticadesemp.edit',$auditoria));
 });
 
 

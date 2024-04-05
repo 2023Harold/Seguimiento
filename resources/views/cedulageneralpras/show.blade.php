@@ -73,7 +73,7 @@
                 <span style="font-size: 0.6rem"><strong>&nbsp;NÚMERO DE EXPEDIENTE</strong></span>
             </td>
             <td style="border: .5 solid; width:20%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ $auditoria->radicacion->numero_expediente}}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ esVacioStr(['auditoria','radicacion','numero_expediente'],$auditoria)}}</strong></span>
             </td>            
         </tr>  
         <tr style="border-collapse:separate;border-spacing:0 500px; vertical-align: middle;">
@@ -163,33 +163,46 @@
                     @endforeach
                 </table>
             </td>                       
-        </tr> 
+        </tr>         
+        @if (count($auditoria->cedulageneralpras)>0 && $auditoria->cedulageneralpras[0]->fase_autorizacion=='Autorizado')
         <tr></tr>
         <tr>
             <td colspan="1"></td>
             <td colspan="6">
-                <table style="border-collapse:collapse;" width="100%">
+                <table style="border-collapse:collapse;" width="100%">                    
                     <tr>
-                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ: <br><br><br> ANALISTA</strong></span></td>
-                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ<br><br><br>LÍDER DE PROYECTO</strong></span></td>
-                        <td colspan="2" style="text-align: center; color: black; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ<br><br><br>JEFE DE DEPARTAMENTO</strong></span></td>
+                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:</strong></span></td>
                     </tr>
                     <tr>
-                        <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ<br><br><br>DIRECTOR</strong></span></td>
-                        <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ<br><br><br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
+                        @foreach ($nombreslideresL as $lider)
+                        <td colspan="{{(count($nombreslideresL)==3?'2': (count($nombreslideresL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $lider }} <br> LÍDER DE PROYECTO</strong></span></td>                            
+                        @endforeach                        
                     </tr>
                     <tr>
-                        <td style="width: 20%; border-style: none; border-color: white;"></td>
-                        <td style="width: 15%; border-style: none; border-color: white;"></td>
-                        <td style="width: 15%; border-style: none; border-color: white;"></td>
-                        <td style="width: 15%; border-style: none; border-color: white;"></td>
-                        <td style="width: 15%; border-style: none; border-color: white;"></td>
-                        <td style="width: 20%; border-style: none; border-color: white;"></td>
+                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
+                    </tr>
+                    <tr>
+                        @foreach ($nombresJefesL as $jefe)
+                        <td colspan="{{(count($nombresJefesL)==3?'2': (count($nombresJefesL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
+                        @endforeach 
+                    </tr>
+                    <tr>
+                        <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ: <br><br><br><br><br>  {{ $director->name }} <br>DIRECTOR</strong></span></td>
+                        <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ:<br><br><br><br><br>  {{ auth()->user()->titular->name }} <br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 15%;"></td>
+                        <td style="width: 20%;"></td>
                     </tr>
                 </table>
             </td>  
             <td colspan="1"></td>          
         </tr> 
+        @endif   
     </table>
 </body>
 </html>

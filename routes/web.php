@@ -13,10 +13,36 @@ use App\Http\Controllers\AuditoriaConsultaAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\CedulaAnaliticaAnalistaController;
+use App\Http\Controllers\CedulaAnaliticaAutorizacionController;
 use App\Http\Controllers\CedulaAnaliticaController;
+use App\Http\Controllers\CedulaAnaliticaDesempenoAnalistaController;
+use App\Http\Controllers\CedulaAnaliticaDesempenoAutorizacionController;
 use App\Http\Controllers\CedulaAnaliticaDesempenoController;
+use App\Http\Controllers\CedulaAnaliticaDesempenoRevision01Controller;
+use App\Http\Controllers\CedulaAnaliticaDesempenoRevisionController;
+use App\Http\Controllers\CedulaAnaliticaDesempenoValidacionController;
+use App\Http\Controllers\CedulaAnaliticaRecomendacionAnalistaController;
+use App\Http\Controllers\CedulaAnaliticaRecomendacionAutorizacionController;
+use App\Http\Controllers\CedulaAnaliticaRecomendacionRevision01Controller;
+use App\Http\Controllers\CedulaAnaliticaRecomendacionRevisionController;
+use App\Http\Controllers\CedulaAnaliticaRecomendacionValidacionController;
+use App\Http\Controllers\CedulaAnaliticaRevision01Controller;
+use App\Http\Controllers\CedulaAnaliticaRevisionController;
+use App\Http\Controllers\CedulaAnaliticaValidacionController;
+use App\Http\Controllers\CedulaGeneralPrasAnalistaController;
+use App\Http\Controllers\CedulaGeneralPRASAutorizacionController;
 use App\Http\Controllers\CedulaGeneralPRASController;
+use App\Http\Controllers\CedulaGeneralPRASLiderController;
+use App\Http\Controllers\CedulaGeneralPRASRevision01Controller;
+use App\Http\Controllers\CedulaGeneralPRASRevisionController;
+use App\Http\Controllers\CedulaGeneralPRASValidacionController;
+use App\Http\Controllers\CedulaGeneralRecomendacionesAnalistaController;
+use App\Http\Controllers\CedulaGeneralRecomendacionesAutorizacionController;
 use App\Http\Controllers\CedulaGeneralRecomendacionesController;
+use App\Http\Controllers\CedulaGeneralRecomendacionesRevision01Controller;
+use App\Http\Controllers\CedulaGeneralRecomendacionesRevisionController;
+use App\Http\Controllers\CedulaGeneralRecomendacionesValidacionController;
 use App\Http\Controllers\CedulaInicialAprobarAnalistaController;
 use App\Http\Controllers\CedulaInicialAutorizacionController;
 use App\Http\Controllers\CedulaInicialController;
@@ -135,11 +161,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Auth::routes();
-
 Route::get('/', function () {
     return view('welcome');
 });
-
 Route::post('/salir', [LogoutController::class, 'logout'])->name('auth.logout');
 Route::get('/cotejamiento/{archivo}/{model}', [CotejamientoController::class, 'cotejamiento'])->name('cotejamiento');
 Route::post('getCargosAsociados', [SeguimientoAuditoriaController::class, 'getCargosAsociados'])->name('getCargosAsociados');
@@ -229,7 +253,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('comparecencia', ComparecenciaController::class,['parameters' => ['comparecencia' => 'comparecencia']]);
     Route::post('getAgendaComparecencias', [AjaxController::class, 'getAgendaComparecencias'])->name('getAgendaComparecencias');
     Route::get('auditoriacomparecencia/{auditoria}', [ComparecenciaController::class,'auditoria'])->name('comparecencia.auditoria');
-    Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['parameters' => ['comparecenciaacuse' => 'comparecencia']]);
     Route::resource('comparecenciaacta', ComparecenciaActaController::class,['parameters' => ['comparecenciaacta' => 'comparecencia']]);
 
     /*pras*/
@@ -327,12 +350,33 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('cedulainicialprimeraautorizacion',CedulaInicialAutorizacionController::class,['parameters' => ['cedulainicialprimeraautorizacion' => 'cedula']]);
 
     Route::resource('cedulageneralrecomendacion',CedulaGeneralRecomendacionesController::class,['parameters' => ['cedulageneralrecomendacion' => 'auditoria']]);
+    Route::resource('cedgralrecomendacionanalista',CedulaGeneralRecomendacionesAnalistaController::class,['parameters' => ['cedgralrecomendacionanalista' => 'cedula']]);
+    Route::resource('cedgralrecomendacionrevision01',CedulaGeneralRecomendacionesRevision01Controller::class,['parameters' => ['cedgralrecomendacionrevision01' => 'cedula']]);
+    Route::resource('cedgralrecomendacionrevision',CedulaGeneralRecomendacionesRevisionController::class,['parameters' => ['cedgralrecomendacionrevision' => 'cedula']]);
+    Route::resource('cedgralrecomendacionvalidacion',CedulaGeneralRecomendacionesValidacionController::class,['parameters' => ['cedgralrecomendacionvalidacion' => 'cedula']]);
+    Route::resource('cedgralrecomendacionautorizacion',CedulaGeneralRecomendacionesAutorizacionController::class,['parameters' => ['cedgralrecomendacionautorizacion' => 'cedula']]);
+   
     Route::resource('cedulageneralpras',CedulaGeneralPRASController::class,['parameters' => ['cedulageneralpras' => 'auditoria']]);
+    Route::resource('cedulageneralprasanalista',CedulaGeneralPrasAnalistaController::class,['parameters' => ['cedulageneralprasanalista' => 'cedula']]);
+    Route::resource('cedulageneralpraslider',CedulaGeneralPRASLiderController::class,['parameters' => ['cedulageneralpraslider' => 'cedula']]);
+    Route::resource('cedulageneralprasrevision01',CedulaGeneralPRASRevision01Controller::class,['parameters' => ['cedulageneralprasrevision01' => 'cedula']]);
+    Route::resource('cedulageneralprasrevision',CedulaGeneralPRASRevisionController::class,['parameters' => ['cedulageneralprasrevision' => 'cedula']]);
+    Route::resource('cedulageneralprasvalidacion',CedulaGeneralPRASValidacionController::class,['parameters' => ['cedulageneralprasvalidacion' => 'cedula']]);
+    Route::resource('cedulageneralprasautorizacion',CedulaGeneralPRASAutorizacionController::class,['parameters' => ['cedulageneralprasautorizacion' => 'cedula']]);
+    
     Route::resource('cedulaanalitica',CedulaAnaliticaController::class,['parameters' => ['cedulaanalitica' => 'auditoria']]);
-    Route::resource('cedulaanaliticarecomendacion',CedulaAnaliticaDesempenoController::class,['parameters' => ['cedulaanaliticarecomendacion' => 'auditoria']]);
+    Route::resource('cedulaanaliticaanalista',CedulaAnaliticaAnalistaController::class,['parameters' => ['cedulaanaliticaanalista' => 'cedula']]);
+    Route::resource('cedulaanaliticarevision01',CedulaAnaliticaRevision01Controller::class,['parameters' => ['cedulaanaliticarevision01' => 'cedula']]);
+    Route::resource('cedulaanaliticarevision',CedulaAnaliticaRevisionController::class,['parameters' => ['cedulaanaliticarevision' => 'cedula']]);
+    Route::resource('cedulaanaliticavalidacion',CedulaAnaliticaValidacionController::class,['parameters' => ['cedulaanaliticavalidacion' => 'cedula']]);
+    Route::resource('cedulaanaliticaautorizacion',CedulaAnaliticaAutorizacionController::class,['parameters' => ['cedulaanaliticaautorizacion' => 'cedula']]);
 
-
-
+    Route::resource('cedulaanaliticadesemp',CedulaAnaliticaDesempenoController::class,['parameters' => ['cedulaanaliticadesemp' => 'auditoria']]);
+    Route::resource('cedanadesempanalista',CedulaAnaliticaDesempenoAnalistaController::class,['parameters' => ['cedanadesempanalista' => 'cedula']]);
+    Route::resource('cedanadesemprevision01',CedulaAnaliticaDesempenoRevision01Controller::class,['parameters' => ['cedanadesemprevision01' => 'cedula']]);
+    Route::resource('cedanadesemprevision',CedulaAnaliticaDesempenoRevisionController::class,['parameters' => ['cedanadesemprevision' => 'cedula']]);
+    Route::resource('cedanadesempvalidacion',CedulaAnaliticaDesempenoValidacionController::class,['parameters' => ['cedanadesempvalidacion' => 'cedula']]);
+    Route::resource('cedanadesempautorizacion',CedulaAnaliticaDesempenoAutorizacionController::class,['parameters' => ['cedanadesempautorizacion' => 'cedula']]);
 });
 //usuarios
 

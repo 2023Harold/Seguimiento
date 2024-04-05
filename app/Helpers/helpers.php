@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Auditoria;
 use App\Models\Constancia;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,6 +13,9 @@ use Carbon\Carbon;
 
 function fecha($fecha = null, string $formato = 'd/m/Y')
 {
+    if(empty($fecha)){
+        return "";
+    }
     return optional($fecha)->format($formato);
 }
 
@@ -331,6 +335,64 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             }
         }
         return date('Y-m-d', $start);
+    }
+
+    function esVacioStr($valores=[],$auditoria){        
+        $nuevovalor=null;
+        $band="";
+    
+        for ($i=0;   $i < count($valores); $i++) { 
+            if($i==0){
+                if (empty(${$valores[$i]})){
+                    return "";
+                }else{
+                    $band=$valores[0];
+                }              
+            }elseif($i==count($valores)-1){
+                $band=$band.'->'.$valores[$i];
+                if (empty(${$band})){
+                    return "";
+                }else{
+                    return ${$band};
+                }   
+            }else{
+                $band=$band.'->'.$valores[$i];
+                if (empty(${$band})){
+                    return "";
+                }else{
+                    $band=$valores[0];
+                }   
+            }            
+        }        
+    }
+
+    function esVacioInt($valores=[],$auditoria){        
+        $nuevovalor=null;
+        $band="";
+    
+        for ($i=0;   $i < count($valores); $i++) { 
+            if($i==0){
+                if (empty(${$valores[$i]})){
+                    return 0;
+                }else{
+                    $band=$valores[0];
+                }              
+            }elseif($i==count($valores)-1){
+                $band=$band.'->'.$valores[$i];
+                if (empty(${$band})){
+                    return 0;
+                }else{
+                    return ${$band};
+                }   
+            }else{
+                $band=$band.'->'.$valores[$i];
+                if (empty(${$band})){
+                    return 0;
+                }else{
+                    $band=$valores[0];
+                }   
+            }            
+        }        
     }
 
 
