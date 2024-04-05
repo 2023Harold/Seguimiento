@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('segcattipologia_auditorias', function (Blueprint $table) {
-            $table->id();
-            $table->string('descripcion', 100)->nullable();
-            $table->timestamps();
+        Schema::table('segauditoria_acciones', function (Blueprint $table) {
+            $table->string('aprobar_cedanades_analista',2)->nullable();
+            $table->string('aprobar_cedanades_lider',2)->nullable();
+            $table->string('aprobar_cedanades_jefe',2)->nullable();
         });
     }
 
@@ -27,6 +27,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('segcattipologia_auditorias');
+        Schema::table('segauditoria_acciones', function (Blueprint $table) {
+            //
+        });
     }
 };

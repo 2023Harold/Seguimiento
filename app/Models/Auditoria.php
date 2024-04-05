@@ -251,11 +251,7 @@ class Auditoria extends Model
             public function movimientosCedulaGeneral()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General de Seguimiento')->orderBy('id', 'ASC');
-            }
-            public function tipologiadesc()
-            {
-                return $this->belongsTo(CatalogoTipologiaAuditoria::class, 'tipologia_id', 'id');
-            }
+            }           
 
             public function movimientosCedulaPRAS()
             {

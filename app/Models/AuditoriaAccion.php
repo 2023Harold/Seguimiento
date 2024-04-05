@@ -72,7 +72,8 @@ class AuditoriaAccion extends Model
         'aprobar_cedanades_analista',
         'aprobar_cedanades_lider',
         'aprobar_cedanades_jefe',
-        'eliminado'
+        'eliminado',
+        'tipologia_id'
     ];
 
 
@@ -143,6 +144,11 @@ class AuditoriaAccion extends Model
     public function movimientos()
     {
         return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Revisión Acción Registro Auditoría')->orderBy('id', 'ASC');
+    }
+
+    public function tipologiadesc()
+    {
+        return $this->belongsTo(CatalogoTipologia::class, 'tipologia_id', 'id');
     }
 
 }

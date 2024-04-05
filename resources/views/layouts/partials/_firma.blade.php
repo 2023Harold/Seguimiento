@@ -6,8 +6,8 @@
         var status = $("#form").valid();
         if(status){
             if (confirm("Desea continuar con el firmado de la constancia de movimiento?"))
-                firmar();
-                //$("#form").submit();
+                //firmar();
+                $("#form").submit();
         }else{
             return ;
         }

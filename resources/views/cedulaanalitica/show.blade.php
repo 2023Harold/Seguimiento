@@ -21,7 +21,7 @@
 @endphp
 <body>         
     @foreach ($auditoria->acciones as $accion)
-        @if ($accion->tipo!='Promoción de responsabilidad administrativa sancionatoria')
+        {{-- @if ($accion->tipo!='Promoción de responsabilidad administrativa sancionatoria') --}}
         <table width="100%" >  
             <tr style="border-collapse:collapse;border-spacing:0px;">
                 <td colspan="2" style="width:250px; color: #424242;">                
@@ -73,7 +73,7 @@
                             <td style="text-align: center; width: 50%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Número de acción:</strong></span></td>
                         </tr>
                         <tr>
-                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ $accion->tipo }}</strong></span></td>
+                            <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ $accion->tipo=='Promoción de responsabilidad administrativa sancionatoria'?'PRAS':$accion->tipo }}</strong></span></td>
                             <td style="text-align: center; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;"><span style="font-size: 0.6rem"><strong>&nbsp;{{ $accion->numero }}</strong></span></td>
                         </tr>
                     </table>
@@ -116,7 +116,7 @@
                         </tr>
                         @elseif($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')
                             <tr>
-                                <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Estatus:</strong></span></td>
+                                <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Estatus:</strong></span></td>
                                 <td></td>
                                 <td></td>
                             </tr>                   
@@ -133,7 +133,7 @@
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                         <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ANTECEDENTES DE LA ACCIÓN PROMOVIDA:</strong></span></td>
+                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>OBSERVACIÓN PROMOVIDA:</strong></span></td>
                         </tr>
                         <tr>
                             <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
@@ -142,21 +142,8 @@
                         </tr>
                     </table>
                 </td>
-            </tr>       
-            <tr>
-                <td colspan="8">
-                    <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                        <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DESCRIPCIÓN DE LA ACCIÓN PROMOVIDA::</strong></span></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
-                                <span style="font-size: 0.6rem"><strong>{{ $accion->accion }}</strong></span> 
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+            </tr> 
+            @if ($accion->tipo!='Recomendación')
             <tr>
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
@@ -170,8 +157,9 @@
                         </tr>
                     </table>
                 </td>
-            </tr>
-            @if ($accion->tipo=='Recomendación')
+            </tr> 
+            @endif
+            {{-- @if ($accion->tipo=='Recomendación')
             <tr>
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
@@ -186,12 +174,12 @@
                     </table>
                 </td>
             </tr>
-            @endif
+            @endif --}}
             <tr>
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                         <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DOCUMENTACIÓN ANALIZADA:</strong></span></td>
+                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DESCRIPCIÓN DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
                         </tr>
                         <tr>
                             <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
@@ -217,7 +205,7 @@
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                         <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>CONCLUSIÓN:</strong></span></td>
+                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ANALISIS DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
                         </tr>
                         <tr>
                             <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
@@ -243,10 +231,10 @@
         @php
             $i=$i+1;
         @endphp
-        @if(count($auditoria->acciones)-count($auditoria->totalpras) != $i)       
+        @if(count($auditoria->acciones) != $i)       
             <div style="page-break-after:always;"></div>
         @endif
-    @endif
+    {{-- @endif --}}
     @endforeach   
     @if (count($auditoria->cedulaanalitica)>0 && $auditoria->cedulaanalitica[0]->fase_autorizacion=='Autorizado')
     <table width="100%">

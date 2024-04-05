@@ -39,21 +39,7 @@
                                         {!! BootForm::textarea('motivo_rechazo','Motivo del rechazo:*','',["rows" => "2", "style" => "rezise:none"])!!}
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! archivoFirma('certificate_file', 'Certificado digital: *', null,['data-allowedFileExtensions' => 'cer', 'accept'=>'.cer', 'class'=>'key']) !!}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! archivoFirma('privkey_file', 'Llave pública: *', null,['data-allowedFileExtensions' => 'key', 'accept'=>'.key', 'class'=>'key']) !!}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                    {!! BootForm::password("password", "Contraseña:") !!}
-                                    </div>
-                                </div>
+                                
                             </div>
                             {!! camposFirma() !!}
                             <div class="row mt-3">
@@ -72,7 +58,6 @@
     </div>
 @endsection
 @section('script')
-{!! JsValidator::formRequest('App\Http\Requests\AutorizarFlujoAutorizacionRequest') !!}
 <script type="text/javascript" src="{{ asset('assets/js/signData.js')}}"></script>
     @include('layouts.partials._firma')
 @endsection

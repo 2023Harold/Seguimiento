@@ -129,6 +129,8 @@ class PermisosSeeder extends Seeder
                         'cedanadesemprevision',
                         'cedanadesempvalidacion',
                         'cedanadesempautorizacion',
+                        'tipologiaaccion',
+                        'tipologiaauditorias',
                     ];
         $permisosGenerales = [];
         $i = 0;

@@ -10,7 +10,7 @@
                 </h1>
             </div>
             <div class="card-body">
-            {!! BootForm::open(['model' => $auditoria ,'update'=>'tipologiaauditorias.update','store'=>'tipologiaauditorias.store','id'=>'form'] )!!}
+            {!! BootForm::open(['model' => $accion ,'update'=>'tipologiaaccion.update','id'=>'form'] )!!}
 
                 <div class="row">
                     <div class="col-md-4">

@@ -18,7 +18,7 @@
             <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                 <label>Acto de fiscalización: </label>
                 <span class="text-primary">
-                    {{ $accion->acto_fiscalizacion}}
+                    {{ $accion->acto_fiscalizacion}} - {{ (empty($accion->tipologia_id)?'':$accion->tipologiadesc->tipologia) }}
                 </span>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-12">

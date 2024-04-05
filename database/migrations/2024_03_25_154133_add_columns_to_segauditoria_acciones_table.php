@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('segauditorias', function (Blueprint $table) {
-            $table->integer('tipologia_id')->nullable();
-            $table->string('tipologia')->nullable();
+        Schema::table('segauditoria_acciones', function (Blueprint $table) {
+            $table->integer('tipologia_id')->nullable();            
         });
     }
 
@@ -26,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('segauditorias', function (Blueprint $table) {
-            //
+        Schema::table('segauditoria_acciones', function (Blueprint $table) {
+            $table->dropColumn('tipologia_id');
         });
     }
 };

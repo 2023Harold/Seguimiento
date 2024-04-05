@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             CatTipoAuditoriaSeeder::class,  
             CatTiposAccionesSeeder::class,    
             CatUnidadesAdministrativasSeeder::class,    
-            CatMunicipiosSeeder::class,    
+            CatMunicipiosSeeder::class,  
+            CatTipologiasSeeder::class,  
             UsersSeeder::class,     
         ]);
         

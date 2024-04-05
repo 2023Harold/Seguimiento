@@ -28,6 +28,12 @@
         <div class="row">
             <div class="col-md-4">
                 {!! BootForm::select('acto_fiscalizacion_id', 'Acto de fiscalización: *', $actosfiscalizacion->toArray(), old('acto_fiscalizacion_id',$accion->acto_fiscalizacion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+            </div>      
+            @php
+                $divtipologiamostrar=(empty(old('acto_fiscalizacion_id', $accion->acto_fiscalizacion_id))?'none':'block');
+            @endphp 
+            <div class="col-md-4" id="divtipologia" style="display: {{ $divtipologiamostrar }}">
+                {!! BootForm::select('tipologia_id', 'Tipología: *', $tipologias->toArray(), old('tipologia_id',$accion->tipologia_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div> 
         <div class="row">
@@ -130,7 +136,8 @@
             }); 
 
             $("#acto_fiscalizacion_id").select2().on('change', function(e) {
-                var actofiscalizacion = $(this).children("option:selected").text();              
+                var actofiscalizacion = $(this).children("option:selected").text();    
+                var actofiscalizacionId = $(this).children("option:selected").val();          
                 if(actofiscalizacion=='Desempeño' || actofiscalizacion=='Legalidad'){
                     // alert('entra');  
                     $("label[for=evidencia_recomendacion] span").text('*');
@@ -141,8 +148,42 @@
                     $("label[for=evidencia_recomendacion] span").text(' ');
                     $("label[for=tipo_recomendacion] span").text(' ');
                     $("label[for=tramo_control_recomendacion] span").text(' ');
-                }        
-            });        
+                } 
+                
+                $.ajax({
+                url: "{{ route('getTipologia') }}"
+                , dataType: "JSON"
+                , type: "POST"
+                , method: 'POST'
+                , data: {
+                    "actoid": actofiscalizacionId
+                    , "acto": actofiscalizacion
+                , }
+                , beforeSend: function(objeto) {}
+                , success: function(respuesta) {
+                    console.log(respuesta);
+                    var tipologias = respuesta[1];                   
+                    if (tipologias.length > 0) {
+                        $('#tipologia_id').empty();
+                        $('#tipologia_id').append('<option value="" disable="">Seleccionar una opción</option>');
+                        for (var i = 0; i < tipologias.length; i++) {
+                            $('#tipologia_id').append('<option value="' + tipologias[i].id + '">' + tipologias[i].text + '</option>');
+                        }
+                        $('#tipologia_id').select2();
+                        
+                        $('#divtipologia').show(); 
+                    } else {
+                        $('#divtipologia').hide();                       
+                    }                    
+                }
+                , error: function() {
+                    console.log('Error al cargar las entidades fiscalizables');
+                }
+            }); 
+
+            });  
+            
+            
         });
     </script>   
     {!! JsValidator::formRequest('App\Http\Requests\AuditoriaAccionRequest') !!}

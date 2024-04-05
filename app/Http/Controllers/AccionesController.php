@@ -7,6 +7,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\CatalogoTipoAccion;
 use App\Models\CatalogoTipoAuditoria;
+use App\Models\CatalogoTipologia;
 use App\Rules\RecomendacionRegistroRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -43,7 +44,7 @@ class AccionesController extends Controller
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('consecutivo')->paginate(30);
-        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);
+        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
         $monto_aclarar=$this->setQuery($request)->orderBy('monto_aclarar');
         $movimiento=null;
 
@@ -60,10 +61,11 @@ class AccionesController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $numeroconsecutivo=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->get()->count()+1;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
+        $tipologias= CatalogoTipologia::all()->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
         $accion = new AuditoriaAccion();
         $actosfiscalizacion=CatalogoTipoAuditoria::whereIn('id',[1,2,3,4])->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
 
-        return view('seguimientoauditoriaaccion.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion'));
+        return view('seguimientoauditoriaaccion.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion','tipologias'));
     }
 
     /**
@@ -108,10 +110,11 @@ class AccionesController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $numeroconsecutivo=$accion->consecutivo;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id');
+        $tipologias= CatalogoTipologia::where('tipo_auditoria_id',$accion->acto_fiscalizacion_id)->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
         $actosfiscalizacion=CatalogoTipoAuditoria::whereIn('id',[1,2,3,4])->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
 
 
-        return view('seguimientoauditoriaaccion.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion'));
+        return view('seguimientoauditoriaaccion.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion','tipologias'));
     }
 
     /**

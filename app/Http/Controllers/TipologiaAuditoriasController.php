@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
-
+use App\Models\AuditoriaAccion;
+use App\Models\CatalogoTipoAccion;
 use App\Models\CatalogoTipologiaAuditoria;
 use Illuminate\Http\Request;
 
@@ -36,11 +37,7 @@ class TipologiaAuditoriasController extends Controller
      */
     public function create()
     {
-        $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-        $tipologias = CatalogoTipologiaAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
-        // dd($tipologias);
-
-        return view('tipologiaauditorias.form', compact('auditorias', 'request','tipologias'));
+     //
     }
 
     /**
@@ -72,12 +69,10 @@ class TipologiaAuditoriasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Auditoria $auditoria)
-    {
-
-
-        $tipologias = CatalogoTipologiaAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
-        // dd($tipologias);
-        return view('tipologiaauditorias.form', compact('auditoria', 'request','tipologias'));
+    {     
+        setSession('auditoria_acion_tipologia',$auditoria->id);   
+       
+       return redirect()->route('tipologiaaccion.index');
     }
 
     /**
@@ -89,16 +84,7 @@ class TipologiaAuditoriasController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-
-        // dd('entro al update de tipologia');
-        $auditoria->update($request->all());
-
-
-        setMessage('La tipología se ha agregado correctamente.');
-
-        return view ('layouts.close');
-
-
+       //
     }
 
     /**
@@ -155,158 +141,5 @@ class TipologiaAuditoriasController extends Controller
         }
 
         return $query;
-    }
-
-    public function accionesConsulta(Auditoria $auditoria)
-    {
-        $movimiento='consultar';
-        $acciones = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->orderBy('consecutivo')->paginate(30);
-        $request = new Request();
-        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);
-
-        return view('seguimientoauditoriaaccion.index', compact('acciones', 'request', 'auditoria','movimiento','tiposaccion'));
-    }
-
-    public function getCargosAsociados(Request $request)
-    {
-        $datos = [];
-        $entidades = [];
-        $cargosasociados = [];
-
-        $entidadselecionada = EntidadFiscalizableIntra::where('PkCveEntFis', $request->entidadid)->first();
-        $entidadesIntra = EntidadFiscalizableIntra::where('FkCveEntFis', $request->entidadid)->where('StsEntFis', 1);
-
-        if ($request->entidadid == 611) {
-            $entidadesIntra = $entidadesIntra->whereNotNull('CveEntFis');
-        }
-        $entidadesIntra = $entidadesIntra->get();
-
-        if (!empty($entidadesIntra) && count($entidadesIntra) > 0) {
-            foreach ($entidadesIntra as $entidadIntra) {
-                $entidades[] = ['id' => $entidadIntra->PkCveEntFis, 'text' => $entidadIntra->NomEntFis];
-            }
-        }
-
-        $datos[1] = $entidades;
-
-        return response()->json($datos);
-    }
-
-    public function normalizarDatos(Request $request)
-    {
-       $entidad=EntidadFiscalizableIntra::where('PkCveEntFis',$request->entidad_fiscalizable_id)->first();
-       $tipoauditoria=CatalogoTipoAuditoria::find($request->tipo_auditoria_id);
-       $entidadCompleta='';
-
-        if ($entidad->NivEntFis == 3){
-            $entidadCompleta=$entidad->entidadFiscalizableN1->NomEntFis.' - '.$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis;
-        }elseif ($entidad->NivEntFis == 2){
-            $entidadCompleta=$entidad->entidadFiscalizableN2->NomEntFis.' - '.$entidad->NomEntFis;
-        }elseif ($entidad->NivEntFis == 1){
-            $entidadCompleta=$entidad->NomEntFis;
-        }
-
-        if(!empty($request->entidad_descripcion)){
-            $entidadCompleta=$entidadCompleta.' - '.$request->entidad_descripcion;
-        }
-
-       $request['entidad_fiscalizable'] = $entidadCompleta;
-       $request['tipo_entidad']=$entidad->Ambito;
-       $request['siglas_entidad']=$entidad->SigEntFis;
-       $request['ejercicio']=0;
-       $request['acto_fiscalizacion']=$tipoauditoria->descripcion;
-
-       return  $request;
-    }
-
-    public function auditoriaAcciones(Auditoria $auditoria)
-    {
-        setSession('auditoria_id',$auditoria->id);
-
-        return  redirect()->route('seguimientoauditoriaacciones.index');
-    }
-
-    public function concluir(Auditoria $auditoria)
-    {
-        if(empty($auditoria->fase_autorizacion))
-        {
-            foreach ($auditoria->acciones as $accionrevision)
-            {
-                $accionrevision->update(['fase_revision'=>'En revisión 01']);
-            }
-        }else{
-            if (count($auditoria->accionesrechazadaslider)>0)
-            {
-                foreach ($auditoria->accionesrechazadaslider as $accionrechazada)
-                {
-                    $accionrechazada->update(['fase_revision'=>'En revisión 01']);
-                    $accionrechazada->update(['revision_lider'=>null]);
-                    $accionrechazada->update(['revision_jefe'=>null]);
-                }
-
-                $accionesnuevas=AuditoriaAccion::where('segauditoria_id',getSession('auditoria_id'))->whereNull('fase_revision')->get();
-
-                if (count($accionesnuevas)>0)
-                {
-                    foreach ($accionesnuevas as $accionnueva)
-                    {
-                        $accionnueva->update(['fase_revision'=>'En revisión 01']);
-                        $accionnueva->update(['revision_lider'=>null]);
-                        $accionnueva->update(['revision_jefe'=>null]);
-                    }
-                }
-            }
-            if (count($auditoria->accionesrechazadasjefe)>0)
-            {
-                foreach ($auditoria->accionesrechazadasjefe as $accionrechazada)
-                {
-                    $accionrechazada->update(['fase_revision'=>'En revisión 01']);
-                    $accionrechazada->update(['revision_lider'=>null]);
-                    $accionrechazada->update(['revision_jefe'=>null]);
-                }
-
-                $accionesnuevas=AuditoriaAccion::where('segauditoria_id',getSession('auditoria_id'))->whereNull('fase_revision')->get();
-
-                if (count($accionesnuevas)>0)
-                {
-                    foreach ($accionesnuevas as $accionnueva)
-                    {
-                        $accionnueva->update(['fase_revision'=>'En revisión 01']);
-                        $accionnueva->update(['revision_lider'=>null]);
-                        $accionnueva->update(['revision_jefe'=>null]);
-                    }
-                }
-            }
-        }
-
-        Movimientos::create([
-            'tipo_movimiento' => 'Registro de la auditoría',
-            'accion' => 'Registro de la auditoría',
-            'accion_id' => $auditoria->id,
-            'estatus' => 'Aprobado',
-            'usuario_creacion_id' => auth()->id(),
-            'usuario_asignado_id' => auth()->id(),
-        ]);
-
-        if (strlen($auditoria->nivel_autorizacion) == 3 || strlen($auditoria->nivel_autorizacion) == 4) {
-            $nivel_autorizacion = $auditoria->nivel_autorizacion;
-        } else {
-            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 5);
-        }
-
-
-        $auditoria->update(['registro_concluido' => 'Si', 'fase_autorizacion' => 'En revisión 01']);
-
-        $titulo = 'Registro de auditoría';
-        $mensaje = '<strong>Estimado (a) ' . $auditoria->lider->name . ', ' . $auditoria->lider->puesto . ':</strong><br>
-                    Ha sido registrada la auditoría No. ' . $auditoria->numero_auditoria . ', por parte del Analista ' .
-                    auth()->user()->name . ', por lo que se requiere realice la revisión oportuna de la auditoría.';
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->lider->unidad_administrativa_id,$auditoria->lider->id);
-
-        setMessage('El registro auditoría se ha concluido y enviado a revisión.');
-
-
-
-        return  redirect()->route('tipologiaauditorias.index');
     }
 }

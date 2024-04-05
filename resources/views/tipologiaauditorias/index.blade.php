@@ -38,11 +38,9 @@
                                 <th>Entidad fiscalizable</th>
                                 <th>Acto de fiscalización</th>
                                 <th>Informe de auditoría</th>
-                                <th>Acciones promovidas</th>
-                                <th>Monto por aclarar</th>
-                                <th>Tipología</th>
+                                <th>Acciones</th>
+                                <th>Monto por aclarar</th>                               
                             </tr>
-
                         </thead>
                         <tbody>
                             @forelse ($auditorias as $auditoria)
@@ -68,40 +66,12 @@
                                             </a>
                                         @endif
                                     </td>
-                                    <td class="text-center">
-                                        @if(!empty($auditoria->fase_autorizacion) && auth()->user()->siglas_rol!='ANA')
-                                            <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
-                                        @endif
-                                        @if(!empty($auditoria->fase_autorizacion) && $auditoria->fase_autorizacion!='Rechazado' && auth()->user()->siglas_rol=='ANA')
-                                            <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
-                                        @endif
+                                    <td class="text-center">                                       
+                                        <a href="{{ route('tipologiaauditorias.edit', $auditoria) }}" class="btn btn-primary">Ingresar</a>                                       
                                     </td>
                                     <td style="text-align: right!important;">
                                         {{ '$'.number_format( $auditoria->total(), 2) }}
-                                    </td>
-                                    <td>
-                                        {{-- <td class="text-center">
-                                            <a href="{{ route('tipologiaauditorias.edit', $auditoria) }}" class="btn btn-primary">Tipología</a>
-                                        </td>
-                                        <a href="{{ route('tipologiaauditorias.edit',$auditoria) }}" class="btn btn-primary popuprevisar float-end">
-                                            <li class="fa fa-gavel"></li>
-                                            Tipología boton
-                                        </a>
-                                        --}}
-                                        @if(($auditoria->tipologia_id))
-                                        <p>{{ $auditoria->tipologiadesc->descripcion }}
-                                        @elseif(!empty($auditoria->tipologia==0))
-                                        <a href="{{ route('tipologiaauditorias.edit',$auditoria)}} " class="btn btn-primary popuprevisar float-end">
-                                            <li class="fa fa-gavel"></li>
-                                            Tipología boton
-                                        </a>
-                                        @endif
-
-                                    {{-- <a href="{{ route('tipologiaauditorias.edit',$auditoria) }}" class="btn btn-primary popuprevisar float-end">
-                                        <li class="fa fa-gavel"></li>
-                                        Tipología boton
-                                    </a> --}}
-                                   </td>
+                                    </td>                                   
                                 </tr>
                             @empty
                                 <tr>

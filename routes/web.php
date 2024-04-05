@@ -138,6 +138,7 @@ use App\Http\Controllers\SolicitudesAclaracionDocumentosController;
 use App\Http\Controllers\SolicitudesAclaracionRevision01Controller;
 use App\Http\Controllers\SolicitudesAclaracionRevisionController;
 use App\Http\Controllers\SolicitudesAclaracionValidacionController;
+use App\Http\Controllers\TipologiaAccionController;
 use App\Http\Controllers\TipologiaAuditoriasController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\UsersController;
@@ -166,7 +167,8 @@ Route::get('/', function () {
 });
 Route::post('/salir', [LogoutController::class, 'logout'])->name('auth.logout');
 Route::get('/cotejamiento/{archivo}/{model}', [CotejamientoController::class, 'cotejamiento'])->name('cotejamiento');
-Route::post('getCargosAsociados', [SeguimientoAuditoriaController::class, 'getCargosAsociados'])->name('getCargosAsociados');
+Route::post('getTipologia', [SeguimientoAuditoriaController::class, 'getTipologia'])->name('getTipologia');
+Route::post('getCargosAsocia', [SeguimientoAuditoriaController::class, 'getCargosAsociados'])->name('getCargosAsociados');
 Route::post('archivo', [ArchivoController::class, 'upload']);
 
 Route::resource('user', UsersController::class);
@@ -208,6 +210,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
     //Tipología de auditoria
     Route::resource('tipologiaauditorias', TipologiaAuditoriasController::class, ['parameters' => ['tipologiaauditorias' => 'auditoria']]);
+    Route::resource('tipologiaaccion', TipologiaAccionController::class, ['parameters' => ['tipologiaaccion' => 'accion']]);
 
 
     //Asignaciones

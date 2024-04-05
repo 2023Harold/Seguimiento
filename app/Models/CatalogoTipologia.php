@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CatalogoTipologiaAuditoria extends Model
+class CatalogoTipologia extends Model
 {
     use HasFactory;
-    protected $table = 'segcattipologia_auditorias';
+    protected $table = 'segcattipologia';
 
     protected $fillable = [
         'id',
-        'descripcion',
+        'tipo_auditoria_id',
         'tipologia',
+        'descripcion',
     ];
 
     public $timestamps = false;

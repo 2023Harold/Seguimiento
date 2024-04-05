@@ -45,7 +45,7 @@
                                             {{ $accion->tipo }}
                                         </td>
                                         <td>
-                                            {{ $accion->acto_fiscalizacion }}
+                                            {{ $accion->acto_fiscalizacion }} - {{(empty($accion->tipologia_id)?'':$accion->tipologiadesc->tipologia) }}
                                         </td>
                                         <td class="text-center">
                                             {{ $accion->numero }}

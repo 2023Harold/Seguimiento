@@ -34,6 +34,7 @@ class AuditoriaAccionRequest extends FormRequest
             'normativa_infringida' => 'required|string|max:3000',      
             'fecha_termino_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
             'plazo_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
+            'tipologia_id' => 'sometimes|nullable|required_with:acto_fiscalizacion_id|integer|max:999999999',
         ];        
     }
 
@@ -53,6 +54,7 @@ class AuditoriaAccionRequest extends FormRequest
             'tramo_control_recomendacion' => 'tramo de control',
             'fecha_termino_recomendacion' => 'fecha de término',
             'plazo_recomendacion' => 'plazo convenido',
+            'tipologia_id' => 'tipología',
         ];
     }
 
@@ -63,6 +65,7 @@ class AuditoriaAccionRequest extends FormRequest
             'unique' => 'El :attribute ya se encuentra registrado.',
             'required_if' => 'El campo :attribute es obligatorio.',
             'required_without' => 'El campo :attribute es obligatorio.',
+            'required_with' => 'El campo :attribute es obligatorio.',
         ];
     }
 }

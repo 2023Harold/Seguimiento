@@ -6,6 +6,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\CatalogoTipoAccion;
 use App\Models\CatalogoTipoAuditoria;
+use App\Models\CatalogoTipologia;
 use App\Models\Movimientos;
 use App\Models\SUTIC\EntidadFiscalizableIntra;
 use App\Models\User;
@@ -388,5 +389,26 @@ class SeguimientoAuditoriaController extends Controller
 
 
         return  redirect()->route('seguimientoauditoria.index');
+    }
+
+    public function getTipologia(Request $request)
+    {
+        $datos = [];
+        $tipologias = [];
+       
+       
+        $tipologiassearch = CatalogoTipologia::where('tipo_auditoria_id', $request->actoid)->get();
+
+        
+
+        if (!empty($tipologiassearch) && count($tipologiassearch) > 0) {
+            foreach ($tipologiassearch as $tipologiasearch) {
+                $tipologias[] = ['id' => $tipologiasearch->id, 'text' => $tipologiasearch->tipologia];
+            }
+        }
+
+        $datos[1] = $tipologias;
+
+        return response()->json($datos);
     }
 }

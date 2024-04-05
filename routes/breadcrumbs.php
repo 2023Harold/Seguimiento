@@ -76,6 +76,14 @@ Breadcrumbs::for('tipologiaauditorias.create', function (BreadcrumbTrail $trail)
     $trail->push('Auditoría', route('tipologiaauditorias.create'));
 });
 
+Breadcrumbs::for('tipologiaaccion.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('tipologiaauditorias');
+    $trail->push('Acciones', route('tipologiaaccion.index'));
+});
+
+
+
+
 
 Breadcrumbs::for('seguimientoauditorias.create', function (BreadcrumbTrail $trail) {
     $trail->parent('seguimientoauditorias');
