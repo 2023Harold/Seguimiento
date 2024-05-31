@@ -414,6 +414,28 @@
                 </div>
             </div>
             @endcan
+            <div class="mb-3 col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="card-title">
+                            <span class="text-gray-800 fs-2x"><img alt="Logo"
+                                    src="{{asset('assets/img/seguimiento1.png')}}" class="h-40px logo" /></span>&nbsp;
+                            PAC
+                        </h1>
+                    </div>
+                    <div class="overflow-auto card-body h-200px">
+                        <div class="d-flex flex-column">
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('pac.index') }}">
+                                    <span class="bi bi-archive fs-1"></span>
+                                </a>
+                            </li>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {{--
             <div class="mb-3 col-md-3">
                 <div class="card">
