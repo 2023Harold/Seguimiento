@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('pliegosobservacionacciones.index',$auditoria) }}
+{{ Breadcrumbs::render('informeprimeraetapa.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -25,11 +25,17 @@
                         $request->numero_auditoria)) !!}
                     </div>
                     <div class="col-md-6 mt-8">
-                        <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search"
+                        <button type="submit" class="btn btn-primary"><i class ="align-middle fas fa-search"
                                 aria-hidden="true"></i> Buscar</button>
                     </div>
                 </div>
-                {!! BootForm::close() !!}
+                <div class="row">
+                    <div class="col-md-12">
+                    <a class="btn btn-primary float-end" href="{{ route('informeprimeraetapa.create') }}">
+                        Generar Informe
+                    </a>
+                    </div>                    
+                </div>                                
                 <div class="table-responsive">
                     <table class="table">
                         <thead>

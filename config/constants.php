@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'MENSAJE_CONSTANCIA' => '"2023. Año del Septuagésimo Aniversario del Reconocimiento del Derecho al Voto de las Mujeres en México."',
+    'MENSAJE_CONSTANCIA' => '"2024 Año del Bicentenario de la Erección del Estado Libre y Soberano de México."',
 ];

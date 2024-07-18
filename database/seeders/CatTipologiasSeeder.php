@@ -65,6 +65,29 @@ class CatTipologiasSeeder extends Seeder
             ['tipo_auditoria_id'=>3,'tipologia'=>'Información y comunicación','descripcion' => null],   
             ['tipo_auditoria_id'=>3,'tipologia'=>'Supervisión','descripcion' => null],            
 
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Actividades de Control','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Actividades de Control e Información y Comunicación','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Actividades de Control e Información y Control','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Actividades de Control y Administración de riesgos','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Actividades de Control y Supervisión','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Actividades de Control, Administración de Riesgos e Información y Comunicación','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Actividades de Control, Ambiente de Control e Información y Comunicación','descripcion' => null],  
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Actividades de Control, Supervisión e Información y Comunicación','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Administración de Riesgos','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Administración de Riesgos e Información y Comunicación','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Administración de Riesgos, Actividades de Control','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Administración de Riesgos, Actividades de Control e Información y Comunicación','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Ambiente de Control','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Ambiente de Control e Información y Comunicación','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Ambiente de Control Interno e Información y Comunicación','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Ambiente de Control y Actividades de Control','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Ambiente de Control y Supervisión','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Ambiente de Control, Actividades de Control e Información y Comunicación','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Ambiente de Control y Supervisión','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Información y comunicación','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Supervisión','descripcion' => null],   
+            ['tipo_auditoria_id'=>5,'tipologia'=>'Supervisión e Información y Comunicación','descripcion' => null],   
+
         ]);
     }
 }

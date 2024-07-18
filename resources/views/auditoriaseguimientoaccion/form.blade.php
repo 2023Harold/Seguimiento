@@ -64,11 +64,11 @@
                     {!! archivo('evidencia_recomendacion', 'Evidencia documental que acredite la atención de la recomendación: *',  old('evidencia_recomendacion', $accion->evidencia_recomendacion)) !!}
                 </div>
             </div> 
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-md-6">
                     {!! BootForm::text('tipo_recomendacion', 'Tipo de recomendación: *', old('tipo_recomendacion', $accion->tipo_recomendacion)) !!}
                 </div>
-            </div> 
+            </div>  --}}
             <div class="row">
                 <div class="col-md-6">
                     {!! BootForm::text('tramo_control_recomendacion', 'Tramo de control: *', old('tramo_control_recomendacion', $accion->tramo_control_recomendacion)) !!}
@@ -108,9 +108,66 @@
                 }else{
                     $('#div_monto').show();
                     $('#div_recomendacion').hide();
-                }        
-            });        
+                }  
+                if(tipoaccionseleccionado=='Promoción de responsabilidad administrativa sancionatoria')
+                {
+                    $('#divtipologia').hide();    
+                }       
+            });  
+            
+            $("#acto_fiscalizacion_id").select2().on('change', function(e) {
+                var actofiscalizacion = $(this).children("option:selected").text();    
+                var actofiscalizacionId = $(this).children("option:selected").val();          
+                var tipoaccionseleccionado = $("#segtipo_accion_id").children("option:selected").val();
+                // alert(actofiscalizacionId);
+                if(actofiscalizacion=='Desempeño' || actofiscalizacion=='Legalidad'){
+                    // alert('entra');  
+                    $("label[for=evidencia_recomendacion] span").text('*');
+                    $("label[for=tipo_recomendacion] span").text('*');
+                    $("label[for=tramo_control_recomendacion] span").text('*');              
+                }else{
+                    // alert('no entra');
+                    $("label[for=evidencia_recomendacion] span").text(' ');
+                    $("label[for=tipo_recomendacion] span").text(' ');
+                    $("label[for=tramo_control_recomendacion] span").text(' ');
+                } 
+                
+                $.ajax({
+                url: "{{ route('getTipologia') }}"
+                , dataType: "JSON"
+                , type: "POST"
+                , method: 'POST'
+                , data: {
+                    "actoid": actofiscalizacionId
+                    , "acto": actofiscalizacion
+                    , "tipo_accion":tipoaccionseleccionado
+                , }
+                , beforeSend: function(objeto) {}
+                , success: function(respuesta) {
+                    console.log(respuesta);
+                    var tipologias = respuesta[1];                   
+                    if (tipologias.length > 0 > 0 && tipoaccionseleccionado!=4) {
+                        $('#tipologia_id').empty();
+                        $('#tipologia_id').append('<option value="" disable="">Seleccionar una opción</option>');
+                        for (var i = 0; i < tipologias.length; i++) {
+                            $('#tipologia_id').append('<option value="' + tipologias[i].id + '">' + tipologias[i].text + '</option>');
+                        }
+                        $('#tipologia_id').select2();
+                        
+                        $('#divtipologia').show(); 
+                    } else {
+                        $('#divtipologia').hide();                       
+                    } 
+                     else {
+                        $('#divtipologia').hide();                       
+                    }                   
+                }
+                , error: function() {
+                    console.log('Error al cargar las entidades fiscalizables');
+                }
+            }); 
+            });              
         });
-    </script>   
+    </script>
     {!! JsValidator::formRequest('App\Http\Requests\AuditoriaAccionRequest') !!}
 @endsection

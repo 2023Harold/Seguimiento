@@ -58,9 +58,11 @@ use App\Http\Controllers\ConstanciaController;
 use App\Http\Controllers\CotejamientoController;
 use App\Http\Controllers\FirmaController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InformeDocumentoController;
 use App\Http\Controllers\InformePrimeraEtapaController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PacController;
+use App\Http\Controllers\PacAuditoriaController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\PliegosObservacionAccionesController;
 use App\Http\Controllers\PliegosObservacionAcusesController;
@@ -109,6 +111,7 @@ use App\Http\Controllers\RecomendacionesController;
 use App\Http\Controllers\RecomendacionesRevision01Controller;
 use App\Http\Controllers\RecomendacionesRevisionController;
 use App\Http\Controllers\RecomendacionesValidacionController;
+use App\Http\Controllers\ReportesSeguimientoController;
 use App\Http\Controllers\RevisionesPliegosAtencionController;
 use App\Http\Controllers\RevisionesPliegosController;
 use App\Http\Controllers\RevisionesRecomendacionesAtencionController;
@@ -155,7 +158,8 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
+| Here is where you can register web routes for your application
+ These
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
@@ -173,10 +177,19 @@ Route::post('getCargosAsocia', [SeguimientoAuditoriaController::class, 'getCargo
 Route::post('archivo', [ArchivoController::class, 'upload']);
 
 Route::resource('pac', PacController::class);
+Route::resource('pacauditoria', PacAuditoriaController::class);
+
+
 /**Analista */
 Route::get('/pac/mot/{id}', [PacController::class, 'mot'])->name('pac.mot');
 Route::get('/pac/fc/{id}', [PacController::class, 'fc'])->name('pac.fc');
 Route::get('/pac/fccd/{id}', [PacController::class, 'fccd'])->name('pac.fccd');
+
+Route::get('/pacauditoria/mot/{id}', [PacAuditoriaController::class, 'mot'])->name('pacauditoria.mot');
+Route::get('/pacauditoria/fc/{id}', [PacAuditoriaController::class, 'fc'])->name('pacauditoria.fc');
+Route::get('/pacauditoria/fccd/{id}', [PacAuditoriaController::class, 'fccd'])->name('pacauditoria.fccd');
+
+
 
 /**Lider*/
 Route::get('/pac/ar/{id}', [PacController::class, 'ar'])->name('pac.ar');
@@ -197,6 +210,16 @@ Route::get('/pac/av/{id}', [PacController::class, 'av'])->name('pac.av');
 Route::get('/pac/oi/{id}', [PacController::class, 'oi'])->name('pac.oi');
 Route::get('/pac/ofriii/{id}', [PacController::class, 'ofriii'])->name('pac.ofriii');
 Route::get('/pac/ai/{id}', [PacController::class, 'ai'])->name('pac.ai');
+
+Route::get('/pacauditoria/ofiaar/{id}', [PacAuditoriaController::class, 'ofiaar'])->name('pacauditoria.ofiaar');
+Route::get('/pacauditoria/ofaroics/{id}', [PacAuditoriaController::class, 'ofaroics'])->name('pacauditoria.ofaroics');
+Route::get('/pacauditoria/ac/{id}', [PacAuditoriaController::class, 'ac'])->name('pacauditoria.ac');
+
+
+
+
+
+
 
 /**Jefe */
 Route::get('/pac/ofis/{id}', [PacController::class, 'ofis'])->name('pac.ofis');
@@ -282,6 +305,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::get('/auditoriaseguimiento/acciones/consulta/{auditoria}', [AuditoriaSeguimientoController::class, 'accionesConsulta'])->name('auditoriaseguimiento.accionesconsulta');
     Route::resource('auditoriaseguimientoacciones', AuditoriaSeguimientoAccionesController::class,['parameters' => ['auditoriaseguimientoacciones' => 'accion']]);
     Route::resource('auditoriaconsultaacciones', AuditoriaConsultaAccionesController::class,['parameters' => ['auditoriaconsultaacciones' => 'accion']]);
+    Route::resource('reportesseg', ReportesSeguimientoController::class);
 
 
     /*Radicación*/
@@ -383,6 +407,21 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     // Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);
     //Informe Primera Etapa
     Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
+   
+    // Route::resource('seguimientoauditoriaaccionrevision01', SeguimientoAuditoriaAccionRevision01Controller::class, ['parameters' => ['seguimientoauditoriaaccionrevision01' => 'accion']]);
+    // Route::resource('seguimientoauditoriaaccionrevision', SeguimientoAuditoriaAccionRevisionController::class, ['parameters' => ['seguimientoauditoriaaccionrevision' => 'accion']]);
+    // Route::get('/seguimientoauditoria/acciones/{auditoria}', [SeguimientoAuditoriaController::class, 'auditoriaAcciones'])->name('seguimientoauditoria.acciones');
+    // Route::get('/seguimientoauditoria/acciones/accion/{accion}', [AccionesController::class, 'accion'])->name('seguimientoauditoriaacciones.accion');
+    // Route::get('/seguimientoauditoria/{auditoria}', [SeguimientoAuditoriaController::class, 'concluir'])->name('seguimientoauditoria.concluir');
+    // Route::get('/seguimientoauditoria/acciones/consulta/{auditoria}', [SeguimientoAuditoriaController::class, 'accionesConsulta'])->name('seguimientoauditoria.accionesconsulta');
+    // Route::resource('seguimientoauditoriarevision01', SeguimientoAuditoriaRevision01Controller::class, ['parameters' => ['seguimientoauditoriarevision01' => 'auditoria']]);
+    // Route::resource('seguimientoauditoriarevision', SeguimientoAuditoriaRevisionController::class, ['parameters' => ['seguimientoauditoriarevision' => 'auditoria']]);
+    // Route::resource('seguimientoauditoriavalidacion', SeguimientoAuditoriaValidacionController::class, ['parameters' => ['seguimientoauditoriavalidacion' => 'auditoria']]);
+    // Route::resource('seguimientoauditoriaautorizacion', SeguimientoAuditoriaAutorizacionController::class, ['parameters' => ['seguimientoauditoriaautorizacion' => 'auditoria']]);
+
+
+
+
     //Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
     Route::resource('cedulainicialprimera',CedulaInicialPrimeraEtapaController::class,['parameters' => ['cedulainicialprimera' => 'auditoria']]);
     Route::resource('cedulainicialprimeraanalista',CedulaInicialAprobarAnalistaController::class,['parameters' => ['cedulainicialprimeraanalista' => 'cedula']]);

@@ -639,18 +639,42 @@ Breadcrumbs::for('cedulageneralpras.edit', function (BreadcrumbTrail $trail,$aud
 });
 Breadcrumbs::for('cedulaanalitica.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('cedulainicial.index',$auditoria);
-    $trail->push('Cédula Analitica', route('cedulaanalitica.edit',$auditoria));
+    $trail->push('Cédula Analítica', route('cedulaanalitica.edit',$auditoria));
 });
 Breadcrumbs::for('cedulaanaliticadesemp.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('cedulainicial.index',$auditoria);
-    $trail->push('Cédula Analitica Desempeño', route('cedulaanaliticadesemp.edit',$auditoria));
+    $trail->push('Cédula Analítica Desempeño', route('cedulaanaliticadesemp.edit',$auditoria));
 });
 
+//PAC
 Breadcrumbs::for('pac.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('PAC', route('pac.index'));
 });
 
+Breadcrumbs::for('reportesseg.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Reportes', route('reportesseg.index'));
+});
+
+
+
+// Informe Primer Etapa
+
+Breadcrumbs::for('informeprimeraetapa.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('auditoriaseguimiento.index',$auditoria);
+    $trail->push('Informe', route('informeprimeraetapa.index'));
+});
+
+Breadcrumbs::for('informeprimeraetapa.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Informe Primera Etapa', route('informeprimeraetapa.create'));
+});
+
+// Breadcrumbs::for('informeprimeraetapa.edit', function (BreadcrumbTrail $trail,) {
+//     $trail->parent('auditoriaseguimiento');
+//     $trail->push('Editar', route('informeprimeraetapa.edit',$informe));
+// });
 
 
 

@@ -37,13 +37,13 @@
                 {!! BootForm::close() !!}
                 @if ($auditoria->registro_concluido=='No')
                 @can('seguimientoauditoriaacciones.create')
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-12">
                         <a class="btn btn-primary float-end" href="{{ route('seguimientoauditoriaacciones.create') }}">
                             Agregar acción
                         </a>
                     </div>
-                </div>
+                </div> --}}
                 @endcan
                 @endif
                 <div class="table-responsive">

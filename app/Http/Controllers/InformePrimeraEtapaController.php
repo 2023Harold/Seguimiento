@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InformePrimeraEtapaRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\Constancia;
+use App\Models\InformePrimeraEtapa;
 use Illuminate\Http\Request;
 
 class InformePrimeraEtapaController extends Controller
@@ -21,6 +24,7 @@ class InformePrimeraEtapaController extends Controller
      */
     public function index(Request $request)
     {
+        
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
 
@@ -34,7 +38,12 @@ class InformePrimeraEtapaController extends Controller
      */
     public function create()
     {
-        //
+        $auditoria = Auditoria::find(getSession('auditoria_id'));               
+        // $consecutivo=InformePrimeraEtapa::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->get()->count()+1;
+        $informe = new InformePrimeraEtapa();
+       
+        return view('informeprimeraetapa.form', compact('auditoria','informe'));
+
     }
 
     /**
@@ -45,7 +54,55 @@ class InformePrimeraEtapaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request['auditoria_id']= getSession('auditoria_id');
+        $informe  = InformePrimeraEtapa::create($request->all());
+
+      
+        $params = [
+        
+            'direccion'=>'unidad_admnistrativa',
+            'departamento'=>'AAA',
+            'mes'=>'Junio',
+            'dia'=>'19',
+            'anio'=>'2024',
+            'orden_auditoria'=>'XXXXXX',
+            'numero_auditoria'=>'OSFEM/X/XXX/202X',
+            'numero_expediente'=>'OSFEM/X/XXX/202X',
+            'oficio_numero'=>' OSFEM/US/XXX/202X',
+            'informe_auditoria'=>'XXXX/xxx/xxxxx',
+            'orden_numero'=>'XXXX/xxx/xxxxx',
+            'cargo'=>'XXXXXXX ',
+            'domicilio'=>'DRFGNIDGIDGIRDGIRDFFDGLDK',
+            'auditoria'=>'ÑLPOLOIKK',
+            'practicada_a'=>'DFGHTYEJ ',
+            'periodo_comprendido'=>' SDRGSDRG',
+            'oficio_numero2'=>'XX/XXX/XXXX/XXXX',
+            'constante_a'=>' DFARESF',
+            'fojas_utiles'=>' GSDRHG',
+            'nombre_subsecretario'=>'NOMBRE_SUBSCRETARIO ',
+            'lisv'=>' XXX/XXXX/XXX/XXXX',
+            
+
+        ];
+
+        $constanciareporte = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Jefe/ofis', $params, 'docx'); 
+        
+        // $constancia = new Constancia();
+        // $constancia->constancia_pdf=$constanciareporte;
+
+        //dd($constancia);
+    
+            return response()->download($constanciareporte);
+            
+            
+           // return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'informeprimeraetapa.index']);
+        // dd($request->all());
+        // $this->actualizaProgresivo();
+        // setMessage('El informe ha sido guardado');
+        //return redirect() -> route('informeprimeraetapa.index');
+    
+
+
     }
 
     /**
@@ -65,7 +122,7 @@ class InformePrimeraEtapaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Auditoria $auditoria)
     {
         //
     }
@@ -78,8 +135,10 @@ class InformePrimeraEtapaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    { 
+       
+        
+
     }
 
     /**

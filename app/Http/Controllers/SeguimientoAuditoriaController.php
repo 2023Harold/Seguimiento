@@ -394,13 +394,14 @@ class SeguimientoAuditoriaController extends Controller
     public function getTipologia(Request $request)
     {
         $datos = [];
-        $tipologias = [];
-       
+        $tipologias = [];       
        
         $tipologiassearch = CatalogoTipologia::where('tipo_auditoria_id', $request->actoid)->get();
 
-        
-
+        if($request->tipo_accion==2 && $request->actoid==4)
+        {
+            $tipologiassearch = CatalogoTipologia::where('tipo_auditoria_id', 5)->get();
+        }
         if (!empty($tipologiassearch) && count($tipologiassearch) > 0) {
             foreach ($tipologiassearch as $tipologiasearch) {
                 $tipologias[] = ['id' => $tipologiasearch->id, 'text' => $tipologiasearch->tipologia];
