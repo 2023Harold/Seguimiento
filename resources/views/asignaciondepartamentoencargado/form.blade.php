@@ -18,7 +18,7 @@
         {!! BootForm::hidden('usuario_id',null,['id'=>'usuario_id']) !!}
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::checkboxes('interests[]',false, ['Asignación de la auditoria completa']);!!}
+                {!! BootForm::checkboxes(false,false, ['Asignación de la auditoria completa']);!!}
             </div>
         </div>
         <div class="row">
