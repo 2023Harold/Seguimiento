@@ -27,32 +27,32 @@
                 </div> --}}
                 <div class="row">
                     <div class="col-md-8">
-                        {!! BootForm::text('numero_ordenauditoria', 'Numero de la orden de la auditoría: *', old('numero_ordenauditoria', $informe->numero_ordenauditoria)) !!}
+                        {!! BootForm::text('numero_ordenauditoria', 'Número de la orden de la auditoría: *', old('numero_ordenauditoria', $informe->numero_ordenauditoria)) !!}
                     </div>
                 </div>       
                 <div class="row">
                     <div class="col-md-5">
-                        {!! BootForm::date('fecha_notificacion_oficio', 'Fecha de notificación del oficio con el cual se le entrego a la entidad fiscalizada el informe de Auditoria: *', old('fecha_notificacion_oficio', fecha($auditoria->fecha_notificacion_oficio, 'Y-m-d'))); !!}
+                        {!! BootForm::date('fecha_notificacion_oficio', 'Fecha de notificación del oficio con el cual se le entregó a la entidad fiscalizada el informe de auditoría: *', old('fecha_notificacion_oficio', fecha($auditoria->fecha_notificacion_oficio, 'Y-m-d'))); !!}
                     </div>
                 </div>       
                 <div class="row">
                     <div class="col-md-8">
-                        {!! BootForm::text('numero_oficio_entro', 'Numero de Oficio por el cual se entrego el informe de Auditoria: *', old('numero_oficio_entro', $informe->numero_oficio_entro)) !!}
+                        {!! BootForm::text('numero_oficio_entro', 'Número de oficio por el cual se entregó el informe de auditoría: *', old('numero_oficio_entro', $informe->numero_oficio_entro)) !!}
                     </div>
                 </div>       
                 <div class="row">
                     <div class="col-md-8">
-                        {!! BootForm::text('acta_reunion_resultados', 'Acta de reunión de resultados y cierre de Auditoria: *', old('acta_reunion_resultados', $informe->acta_reunion_resultados)) !!}
+                        {!! BootForm::text('acta_reunion_resultados', 'Acta de reunión de resultados y cierre de auditoría: *', old('acta_reunion_resultados', $informe->acta_reunion_resultados)) !!}
                     </div>            
                 </div>       
                 <div class="row">
                     <div class="col-md-8">
-                        {!! BootForm::date('fecha_notificación', 'Fecha de notificación del oficio por el cual se remitieron las constancias que comprenden el Informe de Seguimiento: *', old('fecha_notificación', $informe->fecha_notificación)) !!}
+                        {!! BootForm::date('fecha_notificación', 'Fecha de notificación del oficio por el cual se remitieron las constancias que comprenden el informe de seguimiento: *', old('fecha_notificación', $informe->fecha_notificación)) !!}
                     </div>            
                 </div>       
                 <div class="row">
                     <div class="col-md-4">
-                        {!! BootForm::text('informe_seguimiento', 'Informe de Seguimiento: *', old('informe_seguimiento', $informe->informe_seguimiento)) !!}
+                        {!! BootForm::text('informe_seguimiento', 'Informe de seguimiento: *', old('informe_seguimiento', $informe->informe_seguimiento)) !!}
                     </div>            
                     <div class="col-md-4">
                         {!! BootForm::text('fojas_utiles', 'Fojas útiles: *', old('fojas_utiles', $informe->fojas_utiles)) !!}
@@ -60,7 +60,7 @@
                 </div>       
                 <div class="row">
                     <div class="col-md-8">
-                        {!! BootForm::text('clave_accion_pliego', 'Número de Acta Administrativa de Comparecencia : *', old('clave_accion_pliego', $informe->clave_accion_pliego)) !!}
+                        {!! BootForm::text('clave_accion_pliego', 'Número de acta administrativa de comparecencia : *', old('clave_accion_pliego', $informe->clave_accion_pliego)) !!}
                     </div>            
                 </div>
                 <div class="row">

@@ -55,7 +55,7 @@ class InformePrimeraEtapaController extends Controller
     public function store(Request $request)
     {
         $request['auditoria_id']= getSession('auditoria_id');
-        $informe  = InformePrimeraEtapa::create($request->all());
+        //$informe  = InformePrimeraEtapa::create($request->all());
 
       
         $params = [
@@ -65,10 +65,10 @@ class InformePrimeraEtapaController extends Controller
             'mes'=>'Junio',
             'dia'=>'19',
             'anio'=>'2024',
-            'orden_auditoria'=>'XXXXXX',
+            'orden_auditoria'=>$request->numero_ordenauditoria,
             'numero_auditoria'=>'OSFEM/X/XXX/202X',
             'numero_expediente'=>'OSFEM/X/XXX/202X',
-            'oficio_numero'=>' OSFEM/US/XXX/202X',
+            'oficio_numero'=>$request->numero_oficio_entro,
             'informe_auditoria'=>'XXXX/xxx/xxxxx',
             'orden_numero'=>'XXXX/xxx/xxxxx',
             'cargo'=>'XXXXXXX ',
@@ -78,7 +78,7 @@ class InformePrimeraEtapaController extends Controller
             'periodo_comprendido'=>' SDRGSDRG',
             'oficio_numero2'=>'XX/XXX/XXXX/XXXX',
             'constante_a'=>' DFARESF',
-            'fojas_utiles'=>' GSDRHG',
+            'fojas_utiles'=>$request->fojas_utiles,
             'nombre_subsecretario'=>'NOMBRE_SUBSCRETARIO ',
             'lisv'=>' XXX/XXXX/XXX/XXXX',
             

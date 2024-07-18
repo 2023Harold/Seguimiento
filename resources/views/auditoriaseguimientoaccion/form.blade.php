@@ -11,7 +11,7 @@
         </h1>
     </div>
     <div class="card-body">
-        @include('flash::message')
+        @include('flash::message')       
         {!! BootForm::open(['model' => $accion,'store' => 'seguimientoauditoriaacciones.store','update' => 'seguimientoauditoriaacciones.update','id' => 'form']) !!}
           
         <div class="row">

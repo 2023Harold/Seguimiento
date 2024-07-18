@@ -31,9 +31,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                    <a class="btn btn-primary float-end" href="{{ route('informeprimeraetapa.create') }}">
-                        Generar Informe
-                    </a>
+                        @can('informeprimeraetapa.create')
+                            <a class="btn btn-primary float-end" href="{{ route('informeprimeraetapa.create') }}">
+                                Generar Informe
+                            </a> 
+                        @endcan
                     </div>                    
                 </div>                                
                 <div class="table-responsive">

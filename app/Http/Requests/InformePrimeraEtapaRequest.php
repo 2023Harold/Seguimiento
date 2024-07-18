@@ -38,14 +38,14 @@ class InformePrimeraEtapaRequest extends FormRequest
         public function attributes()
     {
         return [
-            'numero_ordenauditoria' => 'numero de la orden de la auditoria',
-            'fecha_notificacion_oficio' => 'fecha de notificación del oficio con el cual se le entrego a la entidad fiscalizable el informe de auditoría',
-            'numero_oficio_entro' => 'numero de oficio por el cual se entrego el informe de auditoria',
-            'acta_reunion_resultados' => 'Acta de reunión de resultados y cierre de auditoria',
+            'numero_ordenauditoria' => 'número de la orden de la auditoría',
+            'fecha_notificacion_oficio' => 'fecha de notificación del oficio con el cual se le entregó a la entidad fiscalizable el informe de auditoría',
+            'numero_oficio_entro' => 'número de oficio por el cual se entregó el informe de auditoría',
+            'acta_reunion_resultados' => 'acta de reunión de resultados y cierre de auditoría',
             'fecha_notificación' => 'fecha de notificación del oficio por el cual se remitieron las constancias que comprenden el informe de seguimiento',
             'informe_seguimiento'=>'informe de seguimiento ',
             'fojas_utiles'=>'fojas útiles',
-            'clave_accion_pliego'=>'numero de acta administrativa de comparecencia',
+            'clave_accion_pliego'=>'número de acta administrativa de comparecencia',
         ];
     }
     public function messages()

@@ -16,7 +16,7 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                @if (empty($auditoria->radicacion))
+                @if (empty($auditoria->radicacion) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
                     @can('radicacion.auditoria')
                         <div class="row">
                             <div class="col-md-12">

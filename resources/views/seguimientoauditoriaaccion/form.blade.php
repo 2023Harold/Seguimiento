@@ -32,7 +32,7 @@
             @php
                 $divtipologiamostrar=(empty(old('acto_fiscalizacion_id', $accion->acto_fiscalizacion_id))?'none':'block');
             @endphp 
-            <div class="col-md-4" id="divtipologia" style="display: {{ $divtipologiamostrar }}">
+            <div class="col-md-4" id="divtipologia" >
                 {!! BootForm::select('tipologia_id', 'Tipología: *', $tipologias->toArray(), old('tipologia_id',$accion->tipologia_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div> 
@@ -65,12 +65,12 @@
             $mostrarDivMonto = ((!empty(old('segtipo_accion_id', $accion->segtipo_accion_id))&&old('segtipo_accion_id', $accion->segtipo_accion_id)!='2')?'block':'none');
             $mostrarDivRecomendaciones = ((!empty(old('segtipo_accion_id', $accion->segtipo_accion_id))&&old('segtipo_accion_id', $accion->segtipo_accion_id)=='2')?'block':'none');
         @endphp
-        <div class="row" id="div_monto" style="display:{!! $mostrarDivMonto !!}">
+        <div class="row" id="div_monto" >
             <div class="col-md-3">
                 {!! BootForm::text('monto_aclarar', 'Monto por aclarar: *', old('monto_aclarar', $accion->monto_aclarar),['class' => 'numeric']) !!}
             </div>
         </div> 
-        <div id="div_recomendacion" style="display:{!! $mostrarDivRecomendaciones !!}">
+        <div id="div_recomendacion" >
             <div class="row" >
                 <div class="col-md-12">
                     {!! BootForm::textarea('evidencia_resumen', 'Evidencia documental que acredite la atención de la recomendación: ', old('evidencia_resumen', $accion->evidencia_resumen)) !!}

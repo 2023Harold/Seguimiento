@@ -15,41 +15,41 @@
             </div> 
             <div class="card-body">           
             <div class="table-responsive" >
-                <table class="table border solid" border="1" >
+                <table class="table" border="1" style="table-layout: fixed; width: 20000px;">
                     <thead>
                         <tr>
-                            <th rowspan=3> Tipo Auditoria </th>                          
-                            <th rowspan=3> Núm. Progresivo </th>                    
-                            <th rowspan=3> Núm. Entidad/ Siglas </th>
-                            <th rowspan=3> Tipo de Entidad </th>
-                            <th rowspan=3> Entidad fiscalizada </th>
-                            <th rowspan=3> Tipo Auditoría </th> 
-                            <th rowspan=3> Periodo Auditado </th> 
-                            <th rowspan=3> Año Auditado </th>
-                            <th rowspan=3> Admon. </th>
-                            <th rowspan=3> Núm. de Auditoría </th>
-                            <th rowspan=3> Fecha de recepción del expediente </th>
-                            <th rowspan=3> Núm. de expediente (interno US) </th>
-                            <th rowspan=3> Fecha del acuerdo de radicación </th>
-                            <th rowspan=3> Fecha de comparecencia </th>
-                            <th rowspan=2 colspan=2> Oficio donde se notifican los acuerdos </th>                            
-                            <th colspan=9> ETAPA DE ACLARACIÓN </th> 
-                            <th colspan=5> ETAPA DE ATENCIÓN DE RECOMENDACIONES </th>
-                            <th rowspan=2 colspan=5 > Acciones Promovidas 1.° Etapa  </th>
-                            <th rowspan=2 colspan=2> Acciones Promovidas </th>
-                            <th rowspan=2 colspan=2> Acciones Promovidas Solventadas</th>
-                            <th rowspan=2 colspan=2> Acciones Promovidas No Solventadas</th>
-                            <th rowspan=3 > Area en que se encuentra </th>
-                            <th rowspan=3 > Parte del Proceso de Seguimiento en que se encuentra la Auditoría >Etapa aclaración< </th>
-                            <th rowspan=3 > Parte del Proceso de Seguimiento en que se encuentra la Auditoría >Atención de las Recom.< </th>
-                            <th rowspan=3 > Fecha de acuse de la conclusión de la Etapa de Aclaración </th>
-                            <th rowspan=3 > Fecha de acuse de la conclusión al proceso de atención de las recom.</th>
-                            <th rowspan=3 > Fecha de acuse de oficio de notif. del informe de seguimiento de la etapa de aclaración </th>
-                            <th rowspan=3 > Fecha de acuse de oficio de notif. del informe de seguimiento al proceso de atención de las recom. </th>
-                            <th rowspan=3> Fecha de envío a la UI. </th>
-                            <th rowspan=3> Fecha de envío a la OIC </th>
-                            <th rowspan=2 colspan=4> Asignación</th>
-                            <th rowspan=2 colspan=5> Contestaciones</th>                            
+                            <th rowspan=3 style="width:20px" class="text-center"> Tipo Auditoria </th>                          
+                            <th rowspan=3 style="width:20px" class="text-center"> Núm. Progresivo </th>                    
+                            <th rowspan=3 style="width:20px" class="text-center"> Núm. Entidad/ Siglas </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Tipo de Entidad </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Entidad fiscalizada </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Tipo Auditoría </th> 
+                            <th rowspan=3 style="width:20px" class="text-center"> Periodo Auditado </th> 
+                            <th rowspan=3 style="width:20px" class="text-center"> Año Auditado </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Admon. </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Núm. de Auditoría </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Fecha de recepción del expediente </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Núm. de expediente (interno US) </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Fecha del acuerdo de radicación </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Fecha de comparecencia</th>
+                            <th rowspan=2 colspan=2 style="width:50px" class="text-center"> Oficio donde se notifican los acuerdos </th>                            
+                            <th colspan=9 style="width:100px" class="text-center"> Etapa de Aclaración </th> 
+                            <th colspan=5 style="width:100px" class="text-center"> Etapa de atención de Recomendaciones</th>
+                            <th rowspan=2 colspan=5 style="width:100px" class="text-center"> Acciones Promovidas 1.° Etapa  </th>
+                            <th rowspan=2 colspan=2 style="width:50px" class="text-center"> Acciones Promovidas </th>
+                            <th rowspan=2 colspan=2 style="width:50px" class="text-center"> Acciones Promovidas Solventadas</th>
+                            <th rowspan=2 colspan=2 style="width:50px" class="text-center"> Acciones Promovidas No Solventadas</th>
+                            <th rowspan=3 style="width:100px" class="text-center"> Area en que se encuentra </th>
+                            <th rowspan=3 style="width:100px" class="text-center"> Parte del Proceso de Seguimiento en que se encuentra la Auditoría >Etapa aclaración< </th>
+                            <th rowspan=3 style="width:100px" class="text-center"> Parte del Proceso de Seguimiento en que se encuentra la Auditoría >Atención de las Recom.< </th>
+                            <th rowspan=3 style="width:100px" class="text-center"> Fecha de acuse de la conclusión de la Etapa de Aclaración </th>
+                            <th rowspan=3 style="width:100px" class="text-center"> Fecha de acuse de la conclusión al proceso de atención de las recom.</th>
+                            <th rowspan=3 style="width:100px" class="text-center"> Fecha de acuse de oficio de notif. del informe de seguimiento de la etapa de aclaración </th>
+                            <th rowspan=3 style="width:100px" class="text-center"> Fecha de acuse de oficio de notif. del informe de seguimiento al proceso de atención de las recom. </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Fecha de envío a la UI. </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Fecha de envío a la OIC </th>
+                            <th rowspan=2 colspan=4 style="width:70px" class="text-center"> Asignación</th>
+                            <th rowspan=2 colspan=5 style="width:80px" class="text-center"> Contestaciones</th>                            
                         </tr>  
                         <tr>                              
                             <th colspan=3> Fechas </th>

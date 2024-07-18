@@ -34,7 +34,7 @@ class AuditoriaAccionRequest extends FormRequest
             'normativa_infringida' => 'required|string|max:3000',      
             'fecha_termino_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
             'plazo_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
-            'tipologia_id' => 'sometimes|nullable|required_with:acto_fiscalizacion_id|integer|max:999999999',
+            'tipologia_id' => 'sometimes|nullable|required_if:segtipo_accion_id,1,2,3|integer|max:999999999',
         ];        
     }
 

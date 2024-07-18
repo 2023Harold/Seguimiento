@@ -22,6 +22,7 @@
 <link href="{{asset('assets/icons/fontawesome/css/fontawesome.css')}}" rel="stylesheet">
 <link href="{{asset('assets/icons/fontawesome/css/brands.css')}}" rel="stylesheet">
 <link href="{{asset('assets/icons/fontawesome/css/solid.css')}}" rel="stylesheet">
+<script src="{{ asset('/vendors/ckeditor/ckeditor.js') }}"></script>
 <!--/FontAwesome-->
 
 

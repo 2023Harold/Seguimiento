@@ -17,6 +17,11 @@
         {{-- {!! BootForm::hidden('accion',$accion) !!} --}}
         {!! BootForm::hidden('usuario_id',null,['id'=>'usuario_id']) !!}
         <div class="row">
+            <div class="col-md-6">
+                {!! BootForm::checkboxes('interests[]',false, ['Asignación de la auditoria completa']);!!}
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-3">
                 {!! BootForm::select('departamento_encargado_id', 'Departamento: *', $unidades->toArray() , old('departamento_encargado_id',$auditoria->departamento_encargado_id), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>

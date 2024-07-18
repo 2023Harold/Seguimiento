@@ -267,7 +267,7 @@ Breadcrumbs::for('asignacionlideranalista.reasignaranalista', function (Breadcru
 
 /*Asignación del departamento encargado */
 Breadcrumbs::for('asignaciondepartamentoencargado.edit', function (BreadcrumbTrail $trail,$auditoria) {
-    $trail->parent('asignacionlideranalista.index');
+    $trail->parent('asignaciondepartamento.index');
     $trail->push('Asignación del Departamento Encargado de la Auditoría', route('asignaciondepartamentoencargado.edit',$auditoria));
 });
 
