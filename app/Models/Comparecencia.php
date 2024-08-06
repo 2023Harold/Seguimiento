@@ -73,7 +73,9 @@ class Comparecencia extends Model
         'tipo_identificacion1',
         'tipo_identificacion2',
         'oficio_designacion',
-        'fecha_oficio_designacion'
+        'fecha_oficio_designacion',
+        'fecha_inicio_proceso',
+        'fecha_termino_proceso',
     ];
 
 
@@ -92,6 +94,8 @@ class Comparecencia extends Model
         'fecha_acta'=>'date',
         'fecha_respuesta'=>'date',
         'fecha_cedula'=>'date',
+        'fecha_inicio_proceso'=>'date',
+        'fecha_termino_proceso'=>'date',
         'created_at'=>'datetime',
         'updated_at'=>'datetime'
     ];

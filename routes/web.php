@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\ReporteSeguimiento;
 use App\Http\Controllers\AccesoController;
 use App\Http\Controllers\AccionesController;
 use App\Http\Controllers\AjaxController;
@@ -214,6 +215,8 @@ Route::get('/pac/ai/{id}', [PacController::class, 'ai'])->name('pac.ai');
 Route::get('/pacauditoria/ofiaar/{id}', [PacAuditoriaController::class, 'ofiaar'])->name('pacauditoria.ofiaar');
 Route::get('/pacauditoria/ofaroics/{id}', [PacAuditoriaController::class, 'ofaroics'])->name('pacauditoria.ofaroics');
 Route::get('/pacauditoria/ac/{id}', [PacAuditoriaController::class, 'ac'])->name('pacauditoria.ac');
+
+Route::get('/reportesseg/excel', [ReportesSeguimientoController::class, 'export'])->name('reporteseguimiento.exportar');
 
 
 

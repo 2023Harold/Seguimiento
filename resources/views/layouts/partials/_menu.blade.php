@@ -266,7 +266,7 @@
                             </div>
                         </div> 
                         <div class="menu-item mb-1">                     
-                            <a href="{{ route('pacauditoria.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'radicacion') || str_contains(Route::current()->getName(), 'comparecenciaacuse')|| str_contains(Route::current()->getName(), 'comparecenciaagenda')) ? 'active' : '' }}">
+                            <a href="{{ route('pacauditoria.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'pacauditoria') || str_contains(Route::current()->getName(), 'comparecenciaacuse')|| str_contains(Route::current()->getName(), 'comparecenciaagenda')) ? 'active' : '' }}">
                                 <span class="menu-bullet">
                                     <span class="bi bi-archive"></span>
                                 </span>

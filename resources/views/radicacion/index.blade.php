@@ -91,10 +91,8 @@
                                             @endif
                                             @if ($auditoria->radicacion->fase_autorizacion=='Autorizado')
                                             <span class="badge badge-light-success">{{ $auditoria->radicacion->fase_autorizacion }} </span> <br>
-                                                @btnFile($auditoria->radicacion->constancia)
-                                                @btnXml($auditoria->radicacion, 'constancia')
-                                            @endif
-                                        
+                                                @btnFile($auditoria->radicacion->constancia)                                                
+                                            @endif                                            
                                     </td>
                                     <td class="text-center">
                                         @if (!empty($auditoria->radicacion->fase_autorizacion)&&$auditoria->radicacion->fase_autorizacion=='Autorizado')

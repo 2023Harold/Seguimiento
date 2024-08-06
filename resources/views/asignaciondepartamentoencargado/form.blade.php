@@ -18,7 +18,7 @@
         {!! BootForm::hidden('usuario_id',null,['id'=>'usuario_id']) !!}
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::checkboxes(false,false, ['Asignación de la auditoria completa']);!!}
+                {!! BootForm::checkbox('auditoria_completa', 'Asignación de la auditoria completa', 'X', false, ['class' => 'i-checks']) !!}
             </div>
         </div>
         <div class="row">

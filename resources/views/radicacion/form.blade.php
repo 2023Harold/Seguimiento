@@ -21,6 +21,7 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 {!! BootForm::open(['model' => $radicacion,'store' => 'radicacion.store','update' => 'radicacion.update','id' =>'form',]) !!}
+                {!! BootForm::hidden('acto_fiscalizacion_auditoria',$auditoria->acto_fiscalizacion)!!}
                 <div class="row">
                     <div class="col-md-3">
                         {!! BootForm::text('numero_expediente', 'Número de expediente: *', old('numero_expediente',$radicacion->numero_expediente)) !!}
@@ -69,6 +70,7 @@
                         {!! BootForm::time('hora_comparecencia_inicio','Hora de inicio de la comparecencia: *',old('hora_comparecencia_inicio', $comparecencia->hora_comparecencia_inicio)) !!}
                     </div>
                 </div>
+                @if ($auditoria->acto_fiscalizacion!='Desempeño')
                 <div class="row">
                     <div class="col-md-6">
                         {!! BootForm::radios('aplicacion_periodo', '¿El periodo de la etapa de aclaración es de 30 días hábiles? *', ['Si' => 'Si', 'No' => 'No'], old('aplicacion_periodo',$comparecencia->aplicacion_periodo),true,['class'=>'i-checks']); !!}
@@ -76,13 +78,25 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_inicio_aclaracion','Inicio de la etapa de aclaración: *',old('fecha_inicio_aclaracion', fecha($comparecencia->fecha_inicio_aclaracion, 'Y-m-d')),['readonly'])
+                        {!! BootForm::date('fecha_inicio_aclaracion','Inicio de la etapa de aclaración: *',old('fecha_inicio_aclaracion', fecha($comparecencia->fecha_inicio_aclaracion, 'Y-m-d')))
                         !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_termino_aclaracion','Término de la etapa de aclaración: *',old('fecha_termino_aclaracion', fecha($comparecencia->fecha_termino_aclaracion, 'Y-m-d')),['readonly'],) !!}
+                        {!! BootForm::date('fecha_termino_aclaracion','Término de la etapa de aclaración: *',old('fecha_termino_aclaracion', fecha($comparecencia->fecha_termino_aclaracion, 'Y-m-d'))) !!}
                     </div>
                 </div>
+                @endif
+                @if ($auditoria->acto_fiscalizacion=='Legalidad' || $auditoria->acto_fiscalizacion=='Desempeño')
+                <div class="row">
+                    <div class="col-md-3">
+                        {!! BootForm::date('fecha_inicio_proceso','Inicio del proceso de atención: *',old('fecha_inicio_proceso', fecha($comparecencia->fecha_inicio_proceso, 'Y-m-d')))
+                        !!}
+                    </div>
+                    <div class="col-md-3">
+                        {!! BootForm::date('fecha_termino_proceso','Término del proceso de atención: *',old('fecha_termino_proceso', fecha($comparecencia->fecha_termino_proceso, 'Y-m-d'))) !!}
+                    </div>
+                </div>
+                @endif
                 <div class="row">
                     <div class="col-md-6">
                         @canany(['radicacion.store','radicacion.update'])
@@ -108,7 +122,7 @@
               //     dateFormat: "d-m-Y",
               //     disable: [rmydays],
               // });
-              $("#fecha_comparecencia").prop('readonly', false);
+              //$("#fecha_comparecencia").prop('readonly', false);
               $("#fecha_comparecencia").on("change", function() {
                   let pd = $(this).val();
                   console.log(pd);
@@ -151,11 +165,11 @@
               }
 
                 $('input[name="aplicacion_periodo"]').on('ifChanged', function(event) {
-                    if (event.target.value == 'Si') {
-                        document.getElementById("fecha_termino_aclaracion").readOnly = true;
-                    }else{
-                        document.getElementById("fecha_termino_aclaracion").readOnly = false;
-                    }
+                    // if (event.target.value == 'Si') {
+                    //     document.getElementById("fecha_termino_aclaracion").readOnly = true;
+                    // }else{
+                    //     document.getElementById("fecha_termino_aclaracion").readOnly = false;
+                    // }
                 });
           });
 </script>

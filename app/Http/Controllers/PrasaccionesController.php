@@ -110,7 +110,7 @@ class PrasaccionesController extends Controller
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('auditoria_id'))->where('segtipo_accion_id',4);
+         $query = $query->where('segauditoria_id',getSession('auditoria_id'))->whereNull('eliminado')->where('segtipo_accion_id',4);
 
          if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){           
             $query = $query->where('lider_asignado_id',auth()->user()->id);

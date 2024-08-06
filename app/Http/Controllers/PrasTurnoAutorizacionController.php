@@ -62,29 +62,31 @@ class PrasTurnoAutorizacionController extends Controller
      */
     public function edit(Segpras $pras)
     {
-        $params = [
-            'nombre_movimiento' => 'Registro del turno del PRAS.',
-            'director' => auth()->user()->name,
-            'autoriza' => auth()->user()->name,
-            'cargo' => auth()->user()->puesto,
-        ];
-
-        $datosConstancia = [
-            'nombreConstancia' => 'Fiscalizacion/Seguimiento/prasauditoriaconstancia',
-            'parametros' => $params,
-            'where' => base64_encode(Str::random(5).$pras->id.Str::random(5)),
-        ];
-
-        $params['where'] = $pras->id;
-
-         $preconstancia = reporte($pras->id, 'Fiscalizacion/Seguimiento/prasauditoriaconstancia', $params, 'pdf');
-         $archivorutaxml = reporte($pras->id, 'Fiscalizacion/Seguimiento/prasauditoriaconstancia', $params, 'xml');
-         $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutaxml)));
+       
          $auditoria = Auditoria::find(getSession('auditoria_id'));
          $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
 
-         return view('prasturnosautorizacion.form', compact('pras', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
+         $datosConstancia = [           
+            'nombrereporte' => 'prasauditoriaconstancia',
+            'auditoriaseleccionada'=>base64_encode(Str::random(5).$pras->auditoria_id.Str::random(5)),
+            'accionseleccionada'=>base64_encode(Str::random(5).$pras->accion_id.Str::random(5)),            
+            'modelo_principal'=>['tbl'=>$pras->getTable(),'vinculo'=>base64_encode(Str::random(5).$pras->id.Str::random(5))],
+            'relacion1'=>null,
+            'relacion2'=>null,
+            'relacion3'=>null,
+            'firmante'=>auth()->user()->name,
+            'firmante_puesto'=>auth()->user()->puesto,          
+        ];
 
+        $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
+                                 base64_encode(Str::random(5).$pras->auditoria_id.Str::random(5)),
+                                 base64_encode(Str::random(5).$pras->accion_id.Str::random(5)),
+                                 ['tbl'=>$pras->getTable(),'vinculo'=>base64_encode(Str::random(5).$pras->id.Str::random(5))],
+                                 null,null,null,'','','','','',auth()->user()->name, auth()->user()->puesto);
+        
+        $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
+
+        return view('prasturnosautorizacion.form', compact('pras', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
     }
 
     /**
@@ -112,7 +114,7 @@ class PrasTurnoAutorizacionController extends Controller
 
         $pras->update([
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
-            'constancia' => $constancia->constancia_pdf,
+            'constancia_turno' => $constancia->constancia_pdf,
         ]);
 
 

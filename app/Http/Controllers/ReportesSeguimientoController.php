@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReporteSeguimiento;
 use App\Models\Auditoria;
 use Illuminate\Http\Request;
+use Excel;
 
 class ReportesSeguimientoController extends Controller
 {
@@ -56,7 +58,11 @@ class ReportesSeguimientoController extends Controller
      */
     public function show($id)
     {
-        //
+        $auditorias = $this->model->orderBy('id')->paginate(30);
+
+        return view('reportesseg.show', [
+            'auditorias' => $auditorias
+        ]);
     }
 
     /**
@@ -94,48 +100,16 @@ class ReportesSeguimientoController extends Controller
     }
     public function setQuery(Request $request)
     {
-         $query = $this->model;
+        $query = $this->model;
 
-
-        if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
-            $query = $query->where('usuario_creacion_id',auth()->id());
-        }
-
-        if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
-            $userLider=auth()->user();
-            $query = $query->whereRaw('LOWER(lider_proyecto_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('fase_autorizacion');
-        }
-
-        if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-            $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
-            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
-        }
-
-        if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())||
-           in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||
-           in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
-           in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){
-            $unidadAdministrativa=rtrim(auth()->user()->unidad_administrativa_id, 0);
-            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"]);
-        }
-
-
-        if ($request->filled('numero_auditoria')) {
-             $numeroAuditoria=strtolower($request->numero_auditoria);
-             $query = $query->whereRaw('LOWER(numero_auditoria) LIKE (?) ',["%{$numeroAuditoria}%"]);
-         }
-
-        if ($request->filled('entidad_fiscalizable')) {
-            $entidadFiscalizable=strtolower($request->entidad_fiscalizable);
-            $query = $query->whereRaw('LOWER(entidad_fiscalizable) LIKE (?) ',["%{$entidadFiscalizable}%"]);
-        }
-
-        if ($request->filled('acto_fiscalizacion')) {
-            $actoFiscalizacion=strtolower($request->acto_fiscalizacion);
-            $query = $query->whereRaw('LOWER(acto_fiscalizacion) LIKE (?) ',["%{$actoFiscalizacion}%"]);
-        }
+       
 
         return $query;
+    }
+
+    public function export() 
+    {
+        return Excel::download(new ReporteSeguimiento, 'invoices.xlsx');
     }
 
 }

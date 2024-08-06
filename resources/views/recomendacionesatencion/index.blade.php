@@ -186,9 +186,8 @@
                                     @endif
                                     @if ($recomendacion->fase_autorizacion=='Autorizado')
                                     <span class="badge badge-light-success">{{ $recomendacion->fase_autorizacion }} </span> <br>
-                                        @btnFile($recomendacion->constancia)
-                                        @btnXml($recomendacion, 'constancia')
-                                    @endif
+                                        @btnFile($recomendacion->constancia_autorizacion)                                       
+                                    @endif                                                                     
                                 </td>
                             </tr>
                             {!! movimientosDesglose($recomendacion->id, 9, $recomendacion->movimientos) !!}

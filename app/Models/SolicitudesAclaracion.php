@@ -73,5 +73,10 @@ class SolicitudesAclaracion extends Model
         return $this->belongsTo(CatalogoTipoAccion::class, 'promocion','id');
     }
 
+    public function constestaciones()
+    {
+        return $this->hasMany(SolicitudesAclaracionContestacion::class, 'solicitudaclaracion_id','id');
+    }
+
 
 }

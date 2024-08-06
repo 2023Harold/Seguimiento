@@ -62,29 +62,31 @@ class SolicitudesAclaracionAutorizacionController extends Controller
      */
     public function edit(SolicitudesAclaracion $solicitud)
     {
-        $params = [
-            'nombre_movimiento' => 'Autorización de atención de la solicitud de aclaración.',
-            'director' => auth()->user()->name,
-            'autoriza' => auth()->user()->name,
-            'cargo' => auth()->user()->puesto,
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
+
+        $datosConstancia = [           
+            'nombrereporte' => 'atencionsolicitudesaclaracionconstancia',
+            'auditoriaseleccionada'=>base64_encode(Str::random(5).$solicitud->auditoria_id.Str::random(5)),
+            'accionseleccionada'=>base64_encode(Str::random(5).$solicitud->accion_id.Str::random(5)),            
+            'modelo_principal'=>['tbl'=>$solicitud->getTable(),'vinculo'=>base64_encode(Str::random(5).$solicitud->id.Str::random(5))] ,
+            'relacion1'=>['tbl_rel'=>$solicitud->constestaciones[0]->getTable(),'col_rel'=>'solicitudaclaracion_id'],
+            'relacion2'=>null,
+            'relacion3'=>null, 
+            'firmante'=>auth()->user()->name,
+            'firmante_puesto'=>auth()->user()->puesto,         
         ];
 
-        $datosConstancia = [
-            'nombreConstancia' => 'Fiscalizacion/Seguimiento/atencionsolicitudesaclaracionconstancia',
-            'parametros' => $params,
-            'where' => base64_encode(Str::random(5).$solicitud->id.Str::random(5)),
-        ];
+        $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
+        base64_encode(Str::random(5).$solicitud->auditoria_id.Str::random(5)),
+        base64_encode(Str::random(5).$solicitud->accion_id.Str::random(5)),
+        ['tbl'=>$solicitud->getTable(),'vinculo'=>base64_encode(Str::random(5).$solicitud->id.Str::random(5))],
+        ['tbl_rel'=>$solicitud->constestaciones[0]->getTable(),'col_rel'=>'solicitudaclaracion_id'],
+        null,null,'','','','','','','');
 
-        $params['where'] = $solicitud->id;
+        $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
 
-         $preconstancia = reporte($solicitud->id, 'Fiscalizacion/Seguimiento/atencionsolicitudesaclaracionconstancia', $params, 'pdf');
-         $archivorutaxml = reporte($solicitud->id, 'Fiscalizacion/Seguimiento/atencionsolicitudesaclaracionconstancia', $params, 'xml');
-         $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutaxml)));
-
-         $auditoria = Auditoria::find(getSession('auditoria_id'));
-         $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-
-         return view('solicitudesaclaracionautorizacion.form', compact('solicitud', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
+        return view('solicitudesaclaracionautorizacion.form', compact('solicitud', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
     }
 
     /**

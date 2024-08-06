@@ -8,6 +8,8 @@ use App\Models\Radicacion;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
 
 class RadicacionAutorizacionController extends Controller
 {
@@ -61,27 +63,31 @@ class RadicacionAutorizacionController extends Controller
      */
     public function edit(Radicacion $radicacion)
     {
-         $params = [
-            'nombre_movimiento' => 'Registro del acuerdo de radicación.',
-            'director' => $radicacion->auditoria->directorasignado->name,
-            'autoriza' => auth()->user()->name,
-            'cargo' => auth()->user()->puesto,
-        ];
+        $auditoria=$radicacion->auditoria;
 
         $datosConstancia = [
-            'nombreConstancia' => 'Fiscalizacion/Seguimiento/radicacionconstancia',
-            'parametros' => $params,
-            'where' => base64_encode(Str::random(5).$radicacion->id.Str::random(5)),
+            'nombrereporte' => 'radicacionconstancia',
+            'auditoriaseleccionada'=>base64_encode(Str::random(5).$radicacion->auditoria_id.Str::random(5)),
+            'accionseleccionada'=>'',            
+            'modelo_principal'=>['tbl'=>$radicacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$radicacion->id.Str::random(5))],
+            'relacion1'=>null,
+            'relacion2'=>null,
+            'relacion3'=>null,  
+            'firmante'=>auth()->user()->name,
+            'firmante_puesto'=>auth()->user()->puesto,  
         ];
 
-        $params['where'] = $radicacion->id;
+        $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
+                                 base64_encode(Str::random(5).$radicacion->auditoria_id.Str::random(5)),
+                                 '',
+                                 ['tbl'=>$radicacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$radicacion->id.Str::random(5))],
+                                 null,null,null,'','','','','','','');
 
-         $preconstancia = reporte($radicacion->id, 'Fiscalizacion/Seguimiento/radicacionconstancia', $params, 'pdf');
-         $archivorutaxml = reporte($radicacion->id, 'Fiscalizacion/Seguimiento/radicacionconstancia', $params, 'xml');
-         $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutaxml)));
-         $auditoria=$radicacion->auditoria;
+        $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
 
-         return view('radicacionautorizacion.form', compact('radicacion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
+
+        
+         return view('radicacionautorizacion.form', compact('radicacion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
     }
 
     /**

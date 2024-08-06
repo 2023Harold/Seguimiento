@@ -6,8 +6,8 @@
         var status = $("#form").valid();
         if(status){
             if (confirm("Desea continuar con el firmado de la constancia de movimiento?"))
-                //firmar();
-                $("#form").submit();
+               firmar();
+			//$("#form").submit();
         }else{
             return ;
         }
@@ -39,7 +39,6 @@
             },
             error: function() {
                 alert('Error al generar la petición');
-                $('#btn-firma').after('<button type="submit" class="btn btn-primary mx-2">Proceder sin constancia</button>');
                 $('#body_loader').hide();
                 $('#campos').show();
                 $('#btn-firma').html('Firmar y guardar');
@@ -51,7 +50,7 @@
     //Se finaliza la firma del xml, se genera el pdf con la firma del xml y se inicia el proceso
     //de firma del pdf.
     function finalizarfirma() {
-        var datosConstancia = @json($datosConstancia);
+        var datosConstancia = {!! json_encode($datosConstancia) !!};
         console.log(datosConstancia);
         console.log(signaturepck7);
         var token = '{{ csrf_token() }}'
@@ -71,7 +70,7 @@
                 "data": signaturepck7,
                 "hash": resultado.hash,
                 "datosConstancia": datosConstancia,
-                _token: token,
+                "_token": token,
             },
             success: function(respuesta) {
                 $("#acuse_xml").val(respuesta.datosXML.acuse_xml);
@@ -83,11 +82,10 @@
                 hashPDF = respuesta.hashPDF;
                 signData();
                 console.log('Fin e Inicio')
-                console.log(respuesta)
+                console.log(respuesta.datosXML)
             },
             error: function() {
                 alert('Error al generar la petición');
-                $('#btn-firma').after('<button type="submit" class="btn btn-primary mx-2">Proceder sin constancia</button>');
                 $('#campos').show();
                 $('#body_loader').hide();
                 $('#btn-firma').html('Firmar y guardar');

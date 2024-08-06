@@ -22,6 +22,7 @@ class PrasTurnoController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
         $prass = Segpras::where('accion_id',getSession('prasauditoriaaccion_id'))->get();
+        dd($prass);
 
         return view('prasturnos.index',compact('prass','auditoria','accion'));
     }

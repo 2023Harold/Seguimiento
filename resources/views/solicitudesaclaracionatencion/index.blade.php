@@ -210,9 +210,12 @@
                                     @endif
                                     @if ($solicitud->fase_autorizacion=='Autorizado')
                                     <span class="badge badge-light-success">{{ $solicitud->fase_autorizacion }} </span> <br>
-                                        @btnFile($solicitud->constancia)
-                                        @btnXml($solicitud, 'constancia')
+                                        @btnFile($solicitud->constancia_autorizacion)
                                     @endif
+                                    <a href="{{ route('solicitudesaclaracionautorizacion.edit',$solicitud) }}" class="btn btn-primary">
+                                        <li class="fa fa-gavel"></li>
+                                        Autorizar
+                                    </a>
                                 </td>
                             </tr>
                             {!! movimientosDesglose($solicitud->id, 9, $solicitud->movimientos) !!}

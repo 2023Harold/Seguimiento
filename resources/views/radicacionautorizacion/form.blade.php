@@ -39,7 +39,23 @@
                                         {!! BootForm::textarea('motivo_rechazo','Motivo del rechazo:*','',["rows" => "2", "style" => "rezise:none"])!!}
                                     </div>
                                 </div>
-                                
+                                <div id="campos">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {!! archivoFirma('certificate_file', 'Certificado digital: *', null,['data-allowedFileExtensions' => 'cer', 'accept'=>'.cer', 'class'=>'key']) !!}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {!! archivoFirma('privkey_file', 'Llave pública: *', null,['data-allowedFileExtensions' => 'key', 'accept'=>'.key', 'class'=>'key']) !!}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {!! BootForm::password("password", "Contraseña:", ['autocomplete'=>'off', 'class'=>'enviar-firma']); !!}
+                                        </div>
+                                    </div>
+                                </div>                                
                             </div>
                             {!! camposFirma() !!}
                             <div class="row mt-3">

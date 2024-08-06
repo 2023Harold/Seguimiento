@@ -94,7 +94,7 @@ class Auditoria extends Model
 
             public function total()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->sum('monto_aclarar');
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->sum('monto_aclarar');
             }
 
             public function entidadFiscalizable()
@@ -128,27 +128,27 @@ class Auditoria extends Model
 
             public function totalrecomendacion()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2);
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 2);
             }
 
             public function totalpras()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 4);
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 4);
             }
 
             public function totalsolacl()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 1);
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 1);
             }
 
             public function totalpliegos()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3);
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 3);
             }
 
             public function totalsolventadorecomendacion()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 2)
                             ->whereHas('recomendaciones', function (Builder $query) {
                                 $query->where('calificacion_sugerida','Atendida');
                             });
@@ -156,7 +156,7 @@ class Auditoria extends Model
 
             public function totalsolventadopras()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 4)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 4)
                             ->whereHas('pras', function (Builder $query) {
                                 $query->whereNotNull('constancia_turno');
                             });
@@ -165,7 +165,7 @@ class Auditoria extends Model
 
             public function totalsolventadosolacl()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 1)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 1)
                             ->whereHas('solicitudesaclaracion', function (Builder $query) {
                                 $query->where('calificacion_sugerida', 'Solventada');
                             });
@@ -173,7 +173,7 @@ class Auditoria extends Model
 
             public function totalsolventadopliegos()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 3)
                             ->whereHas('pliegosobservacion', function (Builder $query) {
                                 $query->where('calificacion_sugerida', 'Solventado');
                             });
@@ -181,7 +181,7 @@ class Auditoria extends Model
 
             public function totalNOsolventadorecomendacion()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 2)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 2)
                             ->whereHas('recomendaciones', function (Builder $query) {
                                 $query->whereNotIn('calificacion_sugerida',['Atendida']);
                             });
@@ -189,7 +189,7 @@ class Auditoria extends Model
 
             public function totalNOsolventadopras()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 4)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 4)
                             ->whereHas('pras', function (Builder $query) {
                                 $query->whereNull('constancia_turno');
                             });
@@ -198,7 +198,7 @@ class Auditoria extends Model
 
             public function totalNOsolventadosolacl()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 1)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 1)
                             ->whereHas('solicitudesaclaracion', function (Builder $query) {
                                 $query->whereNotIn('calificacion_sugerida', ['Solventada']);
                             });
@@ -206,7 +206,7 @@ class Auditoria extends Model
 
             public function totalNOsolventadopliegos()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('segtipo_accion_id', 3)
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 3)
                             ->whereHas('pliegosobservacion', function (Builder $query) {
                                 $query->whereNotIn('calificacion_sugerida', ['Solventado']);
                             });
@@ -214,19 +214,19 @@ class Auditoria extends Model
 
             public function accionesrevisadaslider()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_lider');
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNotNull('revision_lider');
             }
             public function accionesrechazadaslider()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_lider')->where('revision_lider','Rechazado');
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNotNull('revision_lider')->where('revision_lider','Rechazado');
             }
             public function accionesrevisadasjefe()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_jefe');
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNotNull('revision_jefe');
             }
             public function accionesrechazadasjefe()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNotNull('revision_jefe')->where('revision_jefe','Rechazado');
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNotNull('revision_jefe')->where('revision_jefe','Rechazado');
             }
             public function cedulageneralseguimiento()
             {
@@ -268,5 +268,9 @@ class Auditoria extends Model
             public function movimientosCedulaAnaliticaDesemp()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula Analítica Desempeño')->orderBy('id', 'ASC');
+            }
+            public function tipo_auditoria()
+            {
+                return $this->hasOne(CatalogoTipoAuditoria::class, 'id', 'tipo_auditoria_id');
             }
 }

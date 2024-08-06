@@ -62,28 +62,31 @@ class RecomendacionesAutorizacionController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-        $params = [
-            'nombre_movimiento' => 'Registro de atención de la recomendación.',
-            'director' => auth()->user()->name,
-            'autoriza' => auth()->user()->name,
-            'cargo' => auth()->user()->puesto,
-        ];
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
 
-        $datosConstancia = [
-            'nombreConstancia' => 'Fiscalizacion/Seguimiento/atencionrecomendacionconstancia',
-            'parametros' => $params,
-            'where' => base64_encode(Str::random(5).$recomendacion->id.Str::random(5)),
-        ];
+        $datosConstancia = [           
+            'nombrereporte' => 'atencionrecomendacionconstancia',
+            'auditoriaseleccionada'=>base64_encode(Str::random(5).$recomendacion->auditoria_id.Str::random(5)),
+            'accionseleccionada'=>base64_encode(Str::random(5).$recomendacion->accion_id.Str::random(5)),            
+            'modelo_principal'=>['tbl'=>$recomendacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$recomendacion->id.Str::random(5))],
+            'relacion1'=>['tbl_rel'=>$recomendacion->constestaciones[0]->getTable(),'col_rel'=>'recomendacion_id'],
+            'relacion2'=>null,
+            'relacion3'=>null, 
+            'firmante'=>auth()->user()->name,
+            'firmante_puesto'=>auth()->user()->puesto,          
+        ];       
 
-        $params['where'] = $recomendacion->id;
+        $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
+                                 base64_encode(Str::random(5).$recomendacion->auditoria_id.Str::random(5)),
+                                 base64_encode(Str::random(5).$recomendacion->accion_id.Str::random(5)),
+                                 ['tbl'=>$recomendacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$recomendacion->id.Str::random(5))],
+                                 ['tbl_rel'=>$recomendacion->constestaciones[0]->getTable(),'col_rel'=>'recomendacion_id'],
+                                 null,null,'','','','','','','');
 
-         $preconstancia = reporte($recomendacion->id, 'Fiscalizacion/Seguimiento/atencionrecomendacionconstancia', $params, 'pdf');
-         $archivorutaxml = reporte($recomendacion->id, 'Fiscalizacion/Seguimiento/atencionrecomendacionconstancia', $params, 'xml');
-         $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutaxml)));
-         $auditoria = Auditoria::find(getSession('auditoria_id'));
-         $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
 
-         return view('recomendacionesatencionautorizacion.form', compact('recomendacion', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia', 'archivorutaxml'));
+         return view('recomendacionesatencionautorizacion.form', compact('recomendacion', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
     }
 
     /**

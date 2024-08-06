@@ -94,9 +94,8 @@
                                     @endif
                                     @if ($pras->fase_autorizacion=='Autorizado')
                                     <span class="badge badge-light-success">{{ $pras->fase_autorizacion }} </span> <br>
-                                        @btnFile($pras->constancia)
-                                        @btnXml($pras, 'constancia')
-                                    @endif
+                                        @btnFile($pras->constancia_turno)                                       
+                                    @endif                     
                                 </td>
                                 <td class="text-center">
                                     @if ($pras->fase_autorizacion=='Autorizado')

@@ -211,9 +211,8 @@
                                     @endif
                                     @if ($pliegos->fase_autorizacion=='Autorizado')
                                     <span class="badge badge-light-success">{{ $pliegos->fase_autorizacion }} </span> <br>
-                                        @btnFile($pliegos->constancia)
-                                        @btnXml($pliegos, 'constancia')
-                                    @endif
+                                        @btnFile($pliegos->constancia_autorizacion)
+                                    @endif                                  
                                 </td>
                             </tr>
                             {!! movimientosDesglose($pliegos->id, 9, $pliegos->movimientos) !!}

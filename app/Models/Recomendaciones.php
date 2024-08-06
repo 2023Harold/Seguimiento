@@ -80,4 +80,9 @@ class Recomendaciones extends Model
         return $this->hasMany(RecomendacionesDocumento::class, 'accion_id','id');
     }
 
+    public function constestaciones()
+    {
+        return $this->hasMany(RecomendacionesContestacion::class, 'recomendacion_id','id');
+    }
+
 }

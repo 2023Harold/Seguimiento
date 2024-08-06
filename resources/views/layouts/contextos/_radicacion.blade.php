@@ -52,6 +52,7 @@
             </span>
         </div>
     @endif
+    @if ($auditoria->acto_fiscalizacion!='Desempeño')
     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
         <label>Inicio de la etapa de aclaración: </label>
         <span class="text-sistema">
@@ -64,6 +65,21 @@
             {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion) }}
         </span>
     </div>
+    @endif
+    @if ($auditoria->acto_fiscalizacion=='Legalidad' || $auditoria->acto_fiscalizacion=='Desempeño')
+    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Inicio del proceso de atención: </label>
+        <span class="text-sistema">
+            {{ fecha($auditoria->comparecencia->fecha_inicio_proceso)  }}
+        </span>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+        <label>Término del proceso de atención: </label>
+        <span class="text-sistema">
+            {{ fecha($auditoria->comparecencia->fecha_termino_proceso) }}
+        </span>
+    </div>
+    @endif
 </div>
 <div class="row">
     <div class="col-md-12"><hr></div>

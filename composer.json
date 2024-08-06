@@ -10,6 +10,7 @@
         "barryvdh/laravel-dompdf": "^2.0",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "doctrine/dbal": "^3.6",
+        "dompdf/dompdf": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "jaspersoft/rest-client": "v2.0.0",
         "kartik-v/bootstrap-fileinput": "dev-master",
@@ -24,6 +25,7 @@
         "orangehill/iseed": "^3.0",
         "proengsoft/laravel-jsvalidation": "^4.7",
         "propaganistas/laravel-fakeid": "^4.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^5.5",
         "watson/bootstrap-form": "^2.3",
         "yajra/laravel-oci8": "^9.0"

@@ -34,9 +34,11 @@ class RadicacionRequest extends FormRequest
             'cargo_titular' => 'required|string|max:120',
             'fecha_comparecencia' => 'required|date|max:10|after:fecha_oficio_acuerdo',
             'hora_comparecencia_inicio' => 'required|string|max:15',
-            'aplicacion_periodo'=>  'required|string|max:2',
-            'fecha_inicio_aclaracion' => 'required',
-            'fecha_termino_aclaracion' => 'required',
+            'aplicacion_periodo'=>  'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Cumplimiento Financiero,Inversión Física|string|max:2',
+            'fecha_inicio_aclaracion' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Cumplimiento Financiero,Inversión Física|date|max:10',
+            'fecha_termino_aclaracion' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Cumplimiento Financiero,Inversión Física|date|max:10',
+            'fecha_inicio_proceso' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Desempeño|date|max:10',
+            'fecha_termino_proceso' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Desempeño|date|max:10',
         ];
     }
 
@@ -56,6 +58,8 @@ class RadicacionRequest extends FormRequest
             'aplicacion_periodo'=>'¿El periodo de la etapa de aclaración es de 30 días hábiles?',
             'fecha_inicio_aclaracion' => 'inicio de la etapa de aclaración',
             'fecha_termino_aclaracion' => 'término de la etapa de aclaración',
+            'fecha_inicio_proceso' => 'inicio del proceso de atención',
+            'fecha_termino_proceso' => 'término del proceso de atención',
         ];
     }
 
