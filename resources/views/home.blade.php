@@ -343,6 +343,12 @@
                                 </a>
                             </li>
                             @endcan
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('reportesregistrosauditorias.index') }}">
+                                    Reportes de Registros de Auditorias
+                                </a>
+                                </li>
                         </div>
                     </div>
                 </div>

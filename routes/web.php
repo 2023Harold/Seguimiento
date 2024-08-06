@@ -112,6 +112,7 @@ use App\Http\Controllers\RecomendacionesController;
 use App\Http\Controllers\RecomendacionesRevision01Controller;
 use App\Http\Controllers\RecomendacionesRevisionController;
 use App\Http\Controllers\RecomendacionesValidacionController;
+use App\Http\Controllers\ReportesRegistrosAuditoriasController;
 use App\Http\Controllers\ReportesSeguimientoController;
 use App\Http\Controllers\RevisionesPliegosAtencionController;
 use App\Http\Controllers\RevisionesPliegosController;
@@ -309,6 +310,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('auditoriaseguimientoacciones', AuditoriaSeguimientoAccionesController::class,['parameters' => ['auditoriaseguimientoacciones' => 'accion']]);
     Route::resource('auditoriaconsultaacciones', AuditoriaConsultaAccionesController::class,['parameters' => ['auditoriaconsultaacciones' => 'accion']]);
     Route::resource('reportesseg', ReportesSeguimientoController::class);
+    Route::resource('reportesregistrosauditorias', ReportesRegistrosAuditoriasController::class);
+
 
 
     /*Radicación*/

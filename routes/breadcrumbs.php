@@ -81,6 +81,11 @@ Breadcrumbs::for('tipologiaaccion.index', function (BreadcrumbTrail $trail) {
     $trail->push('Acciones', route('tipologiaaccion.index'));
 });
 
+//Reportes de Registro de Auditorias
+Breadcrumbs::for('reportesregistrosauditorias.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Reportes de Registro de Auditorias', route('reportesregistrosauditorias.index'));
+});
 
 
 
