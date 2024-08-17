@@ -40,8 +40,9 @@
                                 <th>Informe de auditoría</th>
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>                                                                 
-                                <th>Asignación de departamentos</th>
                                 <th>Asignación del encargado de la auditoría</th>
+                                <th>Asignación de departamentos</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -67,7 +68,7 @@
                                                 <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->informe_auditoria)) ?>
                                             </a>                                    
                                         @endif
-                                    </td>
+                                    </td>                                    
                                     <td class="text-center">
                                         @can('asignaciondepartamento.accionesconsulta')
                                             @if($auditoria->registro_concluido=='Si')
@@ -77,22 +78,7 @@
                                     </td>
                                     <td style="text-align: right!important;">
                                         {{ '$'.number_format( $auditoria->total(), 2) }}                                         
-                                    </td>                                    
-                                    <td class="text-center">
-                                            @can('asignaciondepartamento.edit')                                          
-                                                @if ($auditoria->asignacion_departamentos=='Si'|| in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray()))
-                                                    <a href="{{ route('asignaciondepartamento.edit',$auditoria) }}" class="btn btn-primary">
-                                                        <i class="fa fa-magnifying-glass"></i> Consultar
-                                                    </a>
-                                                @else
-                                                    @if (empty($auditoria->asignacion_departamentos))
-                                                        <a href="{{ route('asignaciondepartamento.edit',$auditoria) }}" class="btn btn-primary">
-                                                            <i class="fa fa-handshake"></i> Asignar
-                                                        </a>
-                                                    @endif 
-                                                @endif                                               
-                                            @endcan                                                                                                          
-                                    </td>                                  
+                                    </td>
                                     <td class="text-center">
                                         @if (!empty($auditoria->departamento_encargado_id))
                                             <span class="badge-light-secondary text-gray-600">
@@ -107,7 +93,22 @@
                                                 </a>
                                             @endcan 
                                         @endif                                                                                                                                           
-                                    </td>                                  
+                                    </td>                                                                      
+                                    <td class="text-center">
+                                            @can('asignaciondepartamento.edit')                                          
+                                                @if ($auditoria->asignacion_departamentos=='Si'|| in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray()))
+                                                    <a href="{{ route('asignaciondepartamento.edit',$auditoria) }}" class="btn btn-primary">
+                                                        <i class="fa fa-magnifying-glass"></i> Consultar
+                                                    </a>
+                                                @else
+                                                    @if (empty($auditoria->asignacion_departamentos)&&($auditoria->departamento_encargado_id))
+                                                        <a href="{{ route('asignaciondepartamento.edit',$auditoria) }}" class="btn btn-primary">
+                                                            <i class="fa fa-handshake"></i> Asignar
+                                                        </a>
+                                                    @endif 
+                                                @endif                                               
+                                            @endcan                                                                                                          
+                                    </td>                                                                     
                                 </tr>                                                           
                             @empty
                                 <tr>

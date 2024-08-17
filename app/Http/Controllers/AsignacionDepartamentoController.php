@@ -72,7 +72,7 @@ class AsignacionDepartamentoController extends Controller
         $unidades = auth()->user()->unidadAdministrativa->departamentos->prepend('Seleccionar una opción', '');         
         $acciondep ='Asignación';   
         $departamentoasignado = null;           
-        $acciones =  AuditoriaAccion::where('segauditoria_id',$auditoria->id)->orderBy('id')->get();
+        $acciones =  AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->orderBy('id')->get();
                
         return view('asignaciondepartamento.form', compact('auditoria','unidades','acciondep','departamentoasignado','acciones'));        
     }
