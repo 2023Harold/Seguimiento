@@ -29,7 +29,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::text('fecha_expediente_turnado', 'Fecha de recepción del expediente turnado: *', old('fecha_expediente_turnado',$radicacion->fecha_expediente_turnado)) !!}
+                        {!! BootForm::date('fecha_expediente_turnado', 'Fecha de recepción del expediente turnado: *', old('fecha_expediente_turnado',$radicacion->fecha_expediente_turnado)) !!}
                     </div>
                 </div>
                 <div class="row">
@@ -48,14 +48,14 @@
                 <div class="row">
                     <div class="col-md-6">
                         {!! BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
-                    </div>
+                    </div>                    
                     <div class="col-lg-3 col-md-3">
-                        {!! BootForm::text('numero_expediente', 'Fecha del oficio notificación del informe: *', old('numero_expediente',$radicacion->numero_expediente)) !!}
+                        {!! BootForm::date('fecha_oficio_informe','Fecha del oficio notificación del informe: *', old('numero_expediente',$radicacion->fecha_oficio_informe,'Y-m-d')) !!}
                     </div>                      
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::text('numero_expediente', 'Fecha de notificación: *', old('numero_expediente',$radicacion->numero_expediente)) !!}
+                        {!! BootForm::date('fecha_notificacion', 'Fecha de notificación: *', old('numero_expediente',$radicacion->fecha_notificacion,'Y-m-d')) !!}
                     </div>
                 </div>                                                                                  
                 
@@ -105,8 +105,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
-                        {!! BootForm::text('numero_expediente', 'Plazo máximo: *', old('numero_expediente',$radicacion->numero_expediente)) !!}
+                    <div class="col-md-2">
+                        {!! BootForm::text('plazo_maximo', 'Plazo máximo: *', old('numero_expediente',$radicacion->plazo_maximo)) !!}
                     </div>
                 </div>                                                                                                  
                 {{-- @endif

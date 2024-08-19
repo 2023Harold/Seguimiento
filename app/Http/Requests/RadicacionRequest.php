@@ -28,6 +28,7 @@ class RadicacionRequest extends FormRequest
             'numero_acuerdo' => 'required|string|max:30',
             'oficio_acuerdo' => 'required|string|max:100',
             'fecha_oficio_acuerdo' => 'required|date|max:10',
+            
             // 'oficio_designacion' => 'required|string|max:100',
             // 'fecha_oficio_designacion' => 'required|date|max:10|after_or_equal:fecha_oficio_acuerdo',
             'nombre_titular' => 'required|string|max:120',
@@ -39,13 +40,18 @@ class RadicacionRequest extends FormRequest
             'fecha_termino_aclaracion' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Cumplimiento Financiero,Inversión Física|date|max:10',
             'fecha_inicio_proceso' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Desempeño|date|max:10',
             'fecha_termino_proceso' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Desempeño|date|max:10',
+            'num_memo_recepcion_expediente'=>'required|string|max:200',
+            'fecha_expediente_turnado'=>'required|date|max:10',
+            'fecha_oficio_informe'=>'required|date|max:10',
+            'fecha_notificacion'=>'required|date|max:10',
+            'plazo_maximo'=>'required|integer|max:31',            
         ];
     }
 
     public function attributes()
     {
         return [
-            'numero_expediente'=>'número de expediente',
+            'numero_expediente'=>'número de expediente US',
             'numero_acuerdo' => 'número de oficio de notificación del informe de auditoría',
             'oficio_acuerdo' => 'acuerdo de radicación',
             'fecha_oficio_acuerdo' => 'fecha del acuerdo',
@@ -56,10 +62,15 @@ class RadicacionRequest extends FormRequest
             'fecha_comparecencia' => 'fecha de la comparecencia',
             'hora_comparecencia_inicio' => 'hora de inicio de la comparecencia',
             'aplicacion_periodo'=>'¿El periodo de la etapa de aclaración es de 30 días hábiles?',
-            'fecha_inicio_aclaracion' => 'inicio de la etapa de aclaración',
-            'fecha_termino_aclaracion' => 'término de la etapa de aclaración',
+            'fecha_inicio_aclaracion'=>'inicio de la etapa de aclaración',
+            'fecha_termino_aclaracion'=>'término de la etapa de aclaración',
             'fecha_inicio_proceso' => 'inicio del proceso de atención',
             'fecha_termino_proceso' => 'término del proceso de atención',
+            'num_memo_recepcion_expediente'=>'número del memorándum de recepción del expediente',
+            'fecha_expediente_turnado'=>'fecha de recepción del expediente turnado',
+            'fecha_oficio_informe'=>'fecha oficio informe',
+            'fecha_notificacion'=>'fecha notificacion',
+            'plazo_maximo'=>'plazo máximo',           
         ];
     }
 
