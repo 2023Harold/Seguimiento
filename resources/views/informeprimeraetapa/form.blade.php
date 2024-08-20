@@ -30,11 +30,11 @@
                         {!! BootForm::text('numero_ordenauditoria', 'Número de la orden de la auditoría: *', old('numero_ordenauditoria', $informe->numero_ordenauditoria)) !!}
                     </div>
                 </div>       
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-5">
                         {!! BootForm::date('fecha_notificacion_oficio', 'Fecha de notificación del oficio con el cual se le entregó a la entidad fiscalizada el informe de auditoría: *', old('fecha_notificacion_oficio', fecha($auditoria->fecha_notificacion_oficio, 'Y-m-d'))); !!}
                     </div>
-                </div>       
+                </div>        --}}
                 <div class="row">
                     <div class="col-md-8">
                         {!! BootForm::text('numero_oficio_entro', 'Número de oficio por el cual se entregó el informe de auditoría: *', old('numero_oficio_entro', $informe->numero_oficio_entro)) !!}
@@ -54,15 +54,15 @@
                     <div class="col-md-4">
                         {!! BootForm::text('informe_seguimiento', 'Informe de seguimiento: *', old('informe_seguimiento', $informe->informe_seguimiento)) !!}
                     </div>            
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">                                 
                         {!! BootForm::text('fojas_utiles', 'Fojas útiles: *', old('fojas_utiles', $informe->fojas_utiles)) !!}
-                    </div>            
+                    </div>             --}}
                 </div>       
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-8">
                         {!! BootForm::text('clave_accion_pliego', 'Número de acta administrativa de comparecencia : *', old('clave_accion_pliego', $informe->clave_accion_pliego)) !!}
                     </div>            
-                </div>
+                </div> --}}
                 <div class="row">
                     <div class="col-md-6"> 
                         {{-- @canany(['informeprimeraetapa.store','informeprimeraetapa.update'])      --}}
