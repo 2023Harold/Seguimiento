@@ -29,7 +29,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_expediente_turnado', 'Fecha de recepción del expediente turnado: *', old('fecha_expediente_turnado',$radicacion->fecha_expediente_turnado)) !!}
+                        {!! BootForm::date('fecha_expediente_turnado', 'Fecha de recepción del expediente turnado: *', old('fecha_expediente_turnado',fecha($radicacion->fecha_expediente_turnado, 'Y-m-d'))) !!}
                     </div>
                 </div>
                 <div class="row">
@@ -42,20 +42,20 @@
                         {!! archivo('oficio_acuerdo', 'Acuerdo de radicación: *', old('oficio_acuerdo',$radicacion->oficio_acuerdo)) !!}
                     </div>
                     <div class="col-lg-3 col-md-2">
-                        {!! BootForm::date('fecha_oficio_acuerdo','Fecha del acuerdo de radicación: *',old('fecha_oficio_acuerdo',fecha($radicacion->fecha_oficio_acuerdo, 'Y-m-d')),) !!}
+                        {!! BootForm::date('fecha_oficio_acuerdo','Fecha del acuerdo de radicación: *',old('fecha_oficio_acuerdo',fecha($radicacion->fecha_oficio_acuerdo, 'Y-m-d'))) !!}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         {!! BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
                     </div>                    
                     <div class="col-lg-3 col-md-3">
-                        {!! BootForm::date('fecha_oficio_informe','Fecha del oficio notificación del informe: *', old('numero_expediente',$radicacion->fecha_oficio_informe,'Y-m-d')) !!}
+                        {!! BootForm::date('fecha_oficio_informe','Fecha del oficio notificación del informe: *', old('fecha_oficio_informe',$radicacion->fecha_oficio_informe,'Y-m-d')) !!}
                     </div>                      
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
-                        {!! BootForm::date('fecha_notificacion', 'Fecha de notificación: *', old('numero_expediente',$radicacion->fecha_notificacion,'Y-m-d')) !!}
+                    <div class="col-md-2">
+                        {!! BootForm::date('fecha_notificacion', 'Fecha de notificación: *', old('fecha_notificacion',$radicacion->fecha_notificacion,'Y-m-d')) !!}
                     </div>
                 </div>                                                                                  
                 
@@ -195,6 +195,7 @@
                     //     document.getElementById("fecha_termino_aclaracion").readOnly = false;
                     // }
                 });
+                
           });
 </script>
 @endsection

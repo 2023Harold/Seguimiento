@@ -50,8 +50,15 @@ class RadicacionController extends Controller
         $request['auditoria_id']=getSession('radicacion_auditoria_id');
         $request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
         $request['fecha_termino_aclaracion'] = addBusinessDays($request->fecha_inicio_aclaracion, 30);
+
+        $request['num_memo_recepcion_expediente'] = addBusinessDays($request->num_memo_recepcion_expediente, 1);
+
         $radicacion = Radicacion::create($request->all());
         $comparecencia = Comparecencia::create($request->all());
+
+        
+        
+        
 
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_comparecencia'], null, $ruta);
@@ -80,7 +87,7 @@ class RadicacionController extends Controller
 
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
         */
-        setMessage('Los datos de la radicacion se han registrado exitosamente, continua agendado la comparecencia.');
+        setMessage('Los datos de la radicación se han registrado exitosamente, continua agendado la comparecencia.');
 
         return redirect()->route('comparecenciaagenda.edit',$comparecencia);
     }
@@ -126,6 +133,8 @@ class RadicacionController extends Controller
         $auditoria=$radicacion->auditoria;
         $comparecencia=$auditoria->comparecencia;
         $comparecencia->update($request->all());
+
+        //$fecha_expediente_turnado->
 
         /*Movimientos::create([
             'tipo_movimiento' => 'Registro de la radicación',

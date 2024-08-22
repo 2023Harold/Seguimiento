@@ -44,7 +44,7 @@ class RadicacionRequest extends FormRequest
             'fecha_expediente_turnado'=>'required|date|max:10',
             'fecha_oficio_informe'=>'required|date|max:10',
             'fecha_notificacion'=>'required|date|max:10',
-            'plazo_maximo'=>'required|integer|max:31',            
+            'plazo_maximo'=>'required|integer|max:120',            
         ];
     }
 
