@@ -33,7 +33,7 @@
                     <div class="col-md-12">
                         @can('informeprimeraetapa.create')
                             <a class="btn btn-primary float-end" href="{{ route('informeprimeraetapa.create') }}">
-                                Generar Informe
+                                Crear Informe
                             </a> 
                         @endcan
                     </div>                    

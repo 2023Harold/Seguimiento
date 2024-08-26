@@ -60,7 +60,10 @@
                                         <small>{{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}</small>
                                         @endif
                                     </td>
-                                    <td class="text-center">                                        
+                                    <td class="text-center"> 
+                                        <a href="{{ route('radicacion.edit',$auditoria->radicacion) }}" class="btn btn-primary">
+                                            <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
+                                        </a>                                       
                                             @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
                                                     @can('radicacion.edit')

@@ -78,7 +78,7 @@ class InformePrimeraEtapaController extends Controller
             'periodo_comprendido'=>' SDRGSDRG',
             'oficio_numero2'=>'XX/XXX/XXXX/XXXX',
             'constante_a'=>' DFARESF',
-            'fojas_utiles'=>$request->fojas_utiles,
+            //'fojas_utiles'=>$request->fojas_utiles,
             'nombre_subsecretario'=>'NOMBRE_SUBSCRETARIO ',
             'lisv'=>' XXX/XXXX/XXX/XXXX',
             
@@ -99,7 +99,7 @@ class InformePrimeraEtapaController extends Controller
         // dd($request->all());
         // $this->actualizaProgresivo();
         // setMessage('El informe ha sido guardado');
-        //return redirect() -> route('informeprimeraetapa.index');
+        return redirect() -> route('informeprimeraetapa.index');
     
 
 

@@ -22,6 +22,7 @@
                 @include('layouts.contextos._auditoria')
                 {!! BootForm::open(['model' => $radicacion,'store' => 'radicacion.store','update' => 'radicacion.update','id' =>'form',]) !!}
                 {!! BootForm::hidden('acto_fiscalizacion_auditoria',$auditoria->acto_fiscalizacion)!!}
+                {!! BootForm::hidden('calculo_fecha','',['id'=> 'calculo_fecha'])!!}
                 <div class="row">
                     <div class="col-md-3">
                         {!! BootForm::text('num_memo_recepcion_expediente', 'Número del memorándum de recepción del expediente: *', old('num_memo_recepcion_expediente',$radicacion->num_memo_recepcion_expediente)) !!}
@@ -149,7 +150,7 @@
               //$("#fecha_comparecencia").prop('readonly', false);
               $("#fecha_comparecencia").on("change", function() {
                   let pd = $(this).val();
-                  console.log(pd);
+                  console.log(pd,1);
                   let dateu = pd.substr(0, 4)+'-'+pd.substr(5, 2)+'-'+pd.substr(8, 2);
                   let date = new Date(dateu);
                   //let date = new Date(pd);
@@ -164,14 +165,14 @@
                   var yyyy = date.getFullYear();
                   today = yyyy + '-' + mm + '-' + dd;
                   $("#fecha_inicio_aclaracion").val(today);
-                  fechaTermino();
+                  fechaTermino(30,'aclaracion',today);
               });
 
-              function fechaTermino() {
-                  let pickedDate = $("#fecha_inicio_aclaracion").val();
+              function fechaTermino(sumadias,etapa,inicio) {
+                  let pickedDate = inicio;
                   let date = new Date(pickedDate);
                 //   date.setDate(date.getDate() + 2);
-                  for (let index = 1; index <= 30; index++) {
+                  for (let index = 1; index <= sumadias; index++) {
 
                       if (date.getDay() == 5 ) {
                         date.setDate(date.getDate() + 3);
@@ -185,8 +186,38 @@
                   var mm = String(date.getMonth() + 1).padStart(2, '0');
                   var yyyy = date.getFullYear();
                   today = yyyy + '-' + mm + '-' + dd;
-                  $("#fecha_termino_aclaracion").val(today);
+                
+                  if(etapa==='aclaracion') {
+                    console.log(today,2);
+                     $("#fecha_termino_aclaracion").val(today);
+                     fechaanalisis(today);
+                  }
+                  if(etapa==='analisis') {
+                    console.log(today,4);
+                     $("#calculo_fecha").val(today);
+                  }                  
               }
+
+              function fechaanalisis(fechatermino) {
+                
+                  let pd = fechatermino;
+                  console.log(3);
+                  let dateu = pd.substr(0, 4)+'-'+pd.substr(5, 2)+'-'+pd.substr(8, 2);
+                  let date = new Date(dateu);
+                  //let date = new Date(pd);
+                  date.setDate(date.getDate() + 1);
+                  for (let index = 1; index <= 1; index++) {
+                      date.setDate(date.getDate() + 1);
+                      if (date.getDay() == 6 || date.getDay() == 0)
+                          index--;
+                  }
+                  var dd = String(date.getDate()).padStart(2, '0');
+                  var mm = String(date.getMonth() + 1).padStart(2, '0');
+                  var yyyy = date.getFullYear();
+                  today = yyyy + '-' + mm + '-' + dd;
+                  fechaTermino(120,'analisis',today);
+              }
+
 
                 $('input[name="aplicacion_periodo"]').on('ifChanged', function(event) {
                     // if (event.target.value == 'Si') {

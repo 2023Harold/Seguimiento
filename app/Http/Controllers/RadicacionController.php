@@ -50,8 +50,7 @@ class RadicacionController extends Controller
         $request['auditoria_id']=getSession('radicacion_auditoria_id');
         $request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
         $request['fecha_termino_aclaracion'] = addBusinessDays($request->fecha_inicio_aclaracion, 30);
-
-        $request['num_memo_recepcion_expediente'] = addBusinessDays($request->num_memo_recepcion_expediente, 1);
+        
 
         $radicacion = Radicacion::create($request->all());
         $comparecencia = Comparecencia::create($request->all());

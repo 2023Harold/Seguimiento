@@ -25,15 +25,15 @@
                 <table class="table" border="1" style="table-layout: fixed; width: 20000px;">
                     <thead>
                         <tr>
-                            <th rowspan=3 style="width:20px" class="text-center  bg-danger"> Tipo Auditoria </th>                          
+                            <th rowspan=3 style="width:20px" class="text-center  bg-danger"> Tipo de Entidad </th>                          
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. Progresivo </th>                    
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. Entidad/ Siglas </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Tipo de Entidad </th>
-                            <th rowspan=3 style="width:20px" class="text-center"> Entidad fiscalizada </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Auditoría PAA </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Tipo Auditoría </th> 
-                            <th rowspan=3 style="width:20px" class="text-center"> Periodo Auditado </th> 
+                            <th rowspan=3 style="width:20px" class="text-center"> Periodo Auditado del</th> 
                             <th rowspan=3 style="width:20px" class="text-center"> Año Auditado </th>
-                            <th rowspan=3 style="width:20px" class="text-center bg-danger"> Admon. </th>
+                            {{-- <th rowspan=3 style="width:20px" class="text-center bg-danger"> Admon. </th> --}}
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. de Auditoría </th>
                             <th rowspan=3 style="width:20px" class="text-center  bg-warning"> Fecha de recepción del expediente </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. de expediente (interno US) </th>
@@ -138,14 +138,14 @@
                                 <td class="text-center bg-light-dark">                                       
                                     {{ $auditoria->ejercicio-1 }}                                       
                                 </td>
-                                <td style="text-align: center;" class="bg-danger">
+                                {{-- <td style="text-align: center;" class="bg-danger">
                                    2022-2024
-                                </td>   
+                                </td>    --}}
                                 <td class="text-center bg-light-dark">                                       
                                     {{ $auditoria->tipo_auditoria->sigla.' - '.$auditoria->numero_auditoria }}                                     
                                 </td>
-                                <td class="text-center bg-warning">                                       
-                                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}                                     
+                                <td class="text-center bg-warning">                                                                           
+                                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}                                      
                                 </td>                                 
                                 <td class="text-center bg-light-dark">                                       
                                     {{ $auditoria->radicacion->numero_expediente}}                                     

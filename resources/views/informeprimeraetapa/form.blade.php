@@ -26,7 +26,7 @@
                     {!! BootForm::number('consecutivo', "No. Consecutivo:", old('consecutivo', $request->consecutivo)) !!}
                 </div> --}}
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-4">
                         {!! BootForm::text('numero_ordenauditoria', 'Número de la orden de la auditoría: *', old('numero_ordenauditoria', $informe->numero_ordenauditoria)) !!}
                     </div>
                 </div>       
@@ -36,17 +36,17 @@
                     </div>
                 </div>        --}}
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-4">
                         {!! BootForm::text('numero_oficio_entro', 'Número de oficio por el cual se entregó el informe de auditoría: *', old('numero_oficio_entro', $informe->numero_oficio_entro)) !!}
                     </div>
                 </div>       
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-4">
                         {!! BootForm::text('acta_reunion_resultados', 'Acta de reunión de resultados y cierre de auditoría: *', old('acta_reunion_resultados', $informe->acta_reunion_resultados)) !!}
                     </div>            
                 </div>       
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-3">
                         {!! BootForm::date('fecha_notificación', 'Fecha de notificación del oficio por el cual se remitieron las constancias que comprenden el informe de seguimiento: *', old('fecha_notificación', $informe->fecha_notificación)) !!}
                     </div>            
                 </div>       
@@ -65,9 +65,9 @@
                 </div> --}}
                 <div class="row">
                     <div class="col-md-6"> 
-                        {{-- @canany(['informeprimeraetapa.store','informeprimeraetapa.update'])      --}}
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                        {{-- @endcanany --}}
+                        @canany(['informeprimeraetapa.store','informeprimeraetapa.update'])
+                            <button type="submit" class="btn btn-primary">Generar Informe</button>
+                        @endcanany
                         <a href="{{ route('informeprimeraetapa.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>
