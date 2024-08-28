@@ -15,6 +15,7 @@ class Recomendaciones extends Model
     protected $table = 'Segrecomendaciones';
 
     protected $fillable = [
+        'id',
         'consecutivo',
         'fecha_vencimiento',
         'nombre_responsable',
@@ -84,5 +85,12 @@ class Recomendaciones extends Model
     {
         return $this->hasMany(RecomendacionesContestacion::class, 'recomendacion_id','id');
     }
+
+    public function contestaciones()
+    {
+        return $this->hasMany(RecomendacionesContestacion::class, 'recomendacion_id','id');
+    }
+
+    
 
 }

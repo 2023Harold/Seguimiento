@@ -210,8 +210,7 @@
                                         @endcan
                                     @endif
                                     @if ($pliegos->fase_autorizacion=='Autorizado')
-                                    <span class="badge badge-light-success">{{ $pliegos->fase_autorizacion }} </span> <br>
-                                        @btnFile($pliegos->constancia_autorizacion)
+                                    <span class="badge badge-light-success">{{ $pliegos->fase_autorizacion }} </span>                                         
                                     @endif                                  
                                 </td>
                             </tr>

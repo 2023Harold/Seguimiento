@@ -26,12 +26,12 @@
                     {{ $pras->numero_oficio }}  
                 </span>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+            {{-- <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                 <label>Fecha proxima de seguimiento: </label>
                 <span class="text-primary">
                     {{ fecha($pras->fecha_proxima_seguimiento) }}
                 </span>
-            </div>                      
+            </div>                       --}}
         </div>
         <hr/>
     </div>

@@ -10,7 +10,7 @@
                 <div class="card-header">
                     <h1 class="card-title">
                         <a href="{{ route('radicacion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                        Autorizar
+                        Autorizar                        
                     </h1>
                 </div>
                 <div class="card-body">

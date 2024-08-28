@@ -181,6 +181,7 @@ class FirmaController extends Controller
         $request->datosConstancia['relacion1'],
         $request->datosConstancia['relacion2'],
         $request->datosConstancia['relacion3'],
+        $request->datosConstancia['relacion4'],
         $data,
         $hashFirma,
         $fechaexpedicion,

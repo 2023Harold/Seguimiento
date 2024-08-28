@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
+use App\Models\Auditoria;
 use App\Models\Movimientos;
 use App\Models\Radicacion;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
+use Luecano\NumeroALetras\NumeroALetras;
+use PhpOffice\PhpWord\TemplateProcessor;
+
 
 class RadicacionAutorizacionController extends Controller
 {
@@ -65,6 +70,39 @@ class RadicacionAutorizacionController extends Controller
     {
         $auditoria=$radicacion->auditoria;
 
+        $horas=explode(':',$auditoria->comparecencia->hora_comparecencia_inicio); 
+        $formatter = new NumeroALetras();
+        $hora = $formatter->toString($horas[0]);
+        $minutos = $formatter->toString($horas[1]);
+      
+        $horaMax = ucwords($hora);             
+        $horaMin = ucwords(strtolower($horaMax));
+       
+        $minutosMax = ucwords($minutos);            
+        $minutosMin = ucwords(strtolower($minutosMax));
+
+        $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);        
+        $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);       
+        $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
+
+        $formatterPM = new NumeroALetras();
+        $plazomax=$formatter->toString($radicacion->plazo_maximo);
+
+        $plazomaxMax = ucwords($plazomax);            
+        $plazomaxMin = ucwords(strtolower($plazomaxMax));
+
+        $fechaactual=fechaaletra(now());
+        
+        $relacion4=[
+            'horastxt'=> $horaMin,
+            'mintxt'=> $minutosMin,
+            'fechacomparecenciatxt'=>$fechacomparecencia,
+            'fechainicioaclaraciontxt'=>$fechainicioaclaracion,
+            'fechaterminoaclaraciontxt'=>$fechaterminoaclaracion,
+            'plazomaximo'=>$plazomaxMin,
+            'fechaactual'=>$fechaactual,
+        ];
+
         $datosConstancia = [
             'nombrereporte' => 'radicacionconstancia',
             'auditoriaseleccionada'=>base64_encode(Str::random(5).$radicacion->auditoria_id.Str::random(5)),
@@ -72,7 +110,8 @@ class RadicacionAutorizacionController extends Controller
             'modelo_principal'=>['tbl'=>$radicacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$radicacion->id.Str::random(5))],
             'relacion1'=>null,
             'relacion2'=>null,
-            'relacion3'=>null,  
+            'relacion3'=>null,
+            'relacion4'=>$relacion4,  
             'firmante'=>auth()->user()->name,
             'firmante_puesto'=>auth()->user()->puesto,  
         ];
@@ -81,10 +120,9 @@ class RadicacionAutorizacionController extends Controller
                                  base64_encode(Str::random(5).$radicacion->auditoria_id.Str::random(5)),
                                  '',
                                  ['tbl'=>$radicacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$radicacion->id.Str::random(5))],
-                                 null,null,null,'','','','','','','');
+                                 null,null,null,$relacion4,'','','','','','','');
 
         $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
-
 
         
          return view('radicacionautorizacion.form', compact('radicacion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
@@ -180,4 +218,5 @@ class RadicacionAutorizacionController extends Controller
 
         return $mensaje;
     }
+
 }

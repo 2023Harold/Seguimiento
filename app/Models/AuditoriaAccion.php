@@ -149,6 +149,5 @@ class AuditoriaAccion extends Model
     public function tipologiadesc()
     {
         return $this->belongsTo(CatalogoTipologia::class, 'tipologia_id', 'id');
-    }
-
+    }   
 }

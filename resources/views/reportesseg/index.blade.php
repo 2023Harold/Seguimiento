@@ -25,7 +25,7 @@
                 <table class="table" border="1" style="table-layout: fixed; width: 20000px;">
                     <thead>
                         <tr>
-                            <th rowspan=3 style="width:20px" class="text-center  bg-danger"> Tipo de Entidad </th>                          
+                            <th rowspan=3 style="width:20px" class="text-center"> Tipo de Entidad </th>                          
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. Progresivo </th>                    
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. Entidad/ Siglas </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Tipo de Entidad </th>
@@ -35,15 +35,15 @@
                             <th rowspan=3 style="width:20px" class="text-center"> Año Auditado </th>
                             {{-- <th rowspan=3 style="width:20px" class="text-center bg-danger"> Admon. </th> --}}
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. de Auditoría </th>
-                            <th rowspan=3 style="width:20px" class="text-center  bg-warning"> Fecha de recepción del expediente </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Fecha de recepción del expediente </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. de expediente (interno US) </th>
-                            <th rowspan=3 style="width:20px" class="text-center bg-warning"> Fecha del acuerdo de radicación </th>
+                            <th rowspan=3 style="width:20px" class="text-center"> Fecha del acuerdo de radicación </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Fecha de comparecencia</th>
-                            <th rowspan=2 colspan=2 style="width:50px" class="text-center bg-warning"> Oficio donde se notifican los acuerdos </th>                                                         
+                            <th rowspan=2 colspan=2 style="width:50px" class="text-center"> Oficio donde se notifican los acuerdos </th>                                                         
                             <th colspan=9 style="width:100px" class="text-center"> Etapa de Aclaración </th> 
                             <th colspan=5 style="width:100px" class="text-center"> Etapa de atención de Recomendaciones</th>
                             <th rowspan=2 colspan=5 style="width:100px" class="text-center"> Acciones Promovidas 1.° Etapa  </th>
-                            <th rowspan=2 colspan=2 style="width:50px" class="text-center bg-warning"> Acciones promovidas </th>  
+                            <th rowspan=2 colspan=2 style="width:50px" class="text-center"> Acciones promovidas </th>  
                             <th rowspan=2 colspan=2 style="width:50px" class="text-center"> Acciones promovidas solventadas </th>   
                             <th rowspan=2 colspan=2 style="width:50px" class="text-center"> Acciones promovidas no solventadas </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Área en que sencuentra </th>                             
@@ -63,14 +63,14 @@
                             <th colspan=2> Pliegos de Observaciones Promovidos </th>
                             <th colspan=2> Pliegos de observaciones solventados</th>
                             <th colspan=2> Pliegos de Observaciones No Solventados </th>
-                            <th colspan=2 class="bg-danger"> Proceso de Atención </th>    
+                            <th colspan=2> Proceso de Atención </th>    
                             <th> Recomendaciones Promovidas </th>    
                             <th> Recomendaciones Atendidas </th>    
                             <th> Recomendaciones No Atendidas </th>                                                        
                         </tr> 
                         <tr> 
-                            <th class="bg-warning"> Fecha </th>
-                            <th class="bg-warning"> Número</th>
+                            <th> Fecha </th>
+                            <th> Número</th>
                             <th> Notificación</th>
                             <th> Vencimiento</th>
                             <th> 120 días de la etapa de Seguimiento</th>
@@ -80,8 +80,8 @@
                             <th> Importe </th>
                             <th> Núm. Obs. </th>
                             <th> Importe </th>
-                            <th class="bg-danger"> Plazo Convenido </th>
-                            <th class="bg-danger"> Fecha termino </th>
+                            <th> Plazo Convenido </th>
+                            <th> Fecha termino </th>
                             <th> Núm. Obs. </th>
                             <th> Núm. Obs. </th>
                             <th> Núm. Obs. </th>
@@ -90,14 +90,14 @@
                             <th> R </th>
                             <th> PRAS </th>
                             <th> Total</th>
-                            <th class="bg-warning"> Núm. Obs. </th>
-                            <th class="bg-warning"> Importe </th>
                             <th> Núm. Obs. </th>
                             <th> Importe </th>
                             <th> Núm. Obs. </th>
                             <th> Importe </th>
-                            <th class="bg-warning"> Analista </th>
-                            <th class="bg-warning"> Líder de proyecto </th>                            
+                            <th> Núm. Obs. </th>
+                            <th> Importe </th>
+                            <th> Analista </th>
+                            <th> Líder de proyecto </th>                            
                             <th> Jefe de departamento </th>
                             <th> Direccion </th>
                             <th class="bg-danger"> Recibidas </th>
@@ -109,7 +109,9 @@
                     <tbody>
                         @forelse ($auditorias as $auditoria)
                             <tr>
-                                <td class="text-center bg-danger">MUNICIPAL</td>
+                                <td class="text-center">
+                                    {{ $auditoria->tipoEntidadAmbito=='PODER EJECUTIVO'?'ESTATAL':$auditoria->tipoEntidadAmbito}}
+                                </td>
                                 <td class="text-center bg-light-dark">{{ str_pad($loop->iteration, 3, '0', STR_PAD_LEFT) }}</td>                                                             
                                 <td class="text-center">                                    
                                     @if (!empty($auditoria->siglas_entidad))
@@ -145,30 +147,32 @@
                                 <td class="text-center bg-light-dark">                                       
                                     {{ $auditoria->tipo_auditoria->sigla.' - '.$auditoria->numero_auditoria }}                                     
                                 </td>
-                                <td class="text-center bg-warning">                                                                           
-                                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}                                      
+                                <td class="text-center">                                                                           
+                                    {{ fecha($auditoria->radicacion->fecha_expediente_turnado)}}                                      
                                 </td>                                 
                                 <td class="text-center bg-light-dark">                                       
                                     {{ $auditoria->radicacion->numero_expediente}}                                     
                                 </td> 
-                                <td class="text-center bg-warning">                                       
+                                <td class="text-center">                                       
                                     {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}                                     
                                 </td>  
                                 <td class="text-center bg-light-dark">                                       
                                     {{ fecha($auditoria->comparecencia->fecha_comparecencia)}}                                     
                                 </td> 
-                                <td class="text-center bg-warning">                                       
-                                    {{ fecha($auditoria->comparecencia->fecha_acta)}}                                     
+                                <td class="text-center">                                       
+                                    {{ fecha($auditoria->radicacion->fecha_notificacion)}}                                     
                                 </td>                             
-                                <td class="text-center bg-warning">                                       
-                                    {{ $auditoria->comparecencia->numero_acta}}                                     
+                                <td class="text-center">                                       
+                                    {{ $auditoria->radicacion->num_memo_recepcion_expediente}}                                     
                                 </td>  
-                                <td></td>
+                                <td class="text-center">
+                                    {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion)}}
+                                </td>
                                 <td class="text-center bg-light-dark">
-                                    {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion)}}    
+                                    {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion)}}    
                                 </td>
                                 <td class="text-center">
-                                    {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion)}}
+                                    {{ fecha($auditoria->radicacion->calculo_fecha)}}
                                 </td>
                                 <td class="bg-light-dark text-center">
                                     {{  $auditoria->totalpliegos->count()}} 
@@ -188,11 +192,11 @@
                                 <td style="text-align: right!important;">
                                     {{ '$'.number_format( $auditoria->totalNOsolventadopliegos->sum('monto_aclarar'), 2) }}
                                 </td>
-                                <td class="bg-danger text-center">
-                                    120 días hábiles
+                                <td class="text-center">
+                                    {{ $auditoria->radicacion->plazo_maximo}} días hábiles
                                 </td>
-                                <td class="bg-danger text-center">
-                                    15-may-24
+                                <td class="text-center">
+                                    {{ fecha($auditoria->radicacion->calculo_fecha)}}
                                 </td>
                                 <td class="text-center bg-light-dark">
                                     {{  $auditoria->totalrecomendacion->count()}}
@@ -219,10 +223,10 @@
                                     {{ $auditoria->acciones->count() }} 
                                 </td>
                                 {{-- Nota:  Se contemplan los PRAS   --}}
-                                <td class="text-center bg-warning">                                       
+                                <td class="text-center">                                       
                                     {{ $auditoria->acciones->count() }}                                     
                                 </td> 
-                                <td class="bg-warning" style="text-align: right!important;">  
+                                <td style="text-align: right!important;">  
                                     {{ '$'.number_format(  $auditoria->total(), 2) }}  
                                 </td>
                                 <td class="text-center bg-light-dark">                                       
@@ -257,7 +261,7 @@
                                 </td>
                                 <td class="bg-light-dark">
                                 </td>
-                                <td class="bg-warning">
+                                <td>
                                     @php
                                         $analistas='';
                                         
@@ -270,7 +274,7 @@
                                     @endphp                                   
                                      {{$analistas}}
                                 </td>
-                                <td class="bg-warning">
+                                <td class="bg-light-dark">
                                     @php
                                     $lideres='';                                    
                                     foreach ($auditoria->acciones as $accion) {
@@ -289,11 +293,207 @@
                                     {{ $auditoria->direccion_asignada}} <br>
                                     {{ $auditoria->directorasignado->name}} <br>
                                 </td>
-                                <td class="bg-danger"></td>
-                                <td class="bg-danger"></td>
-                                <td class="bg-danger"></td>
-                                <td class="bg-danger"></td>
+                                <td class="text-center">                                    
+                                    @php
+                                        $contestacionestotal=0;
+                                        $rec=0;
+                                        $sa=0;
+                                        $po=0;
+                                        foreach ($auditoria->acciones as $accion) {
+                                            if (!empty($accion->recomendaciones)) {                                                
+                                                // dd($accion->recomendaciones);
+                                                // foreach ($accion->recomendaciones as $recomendacion) {
+                                                    $contestaciones=$accion->recomendaciones->contestaciones;
                                                    
+                                                    if (count($contestaciones)>0) {                                                               
+                                                        $rec=count($contestaciones);                                               
+                                                    }
+                                                // } 
+                                            }
+
+                                            if (!empty($accion->solicitudesaclaracion)) {                                                
+                                                // dd($accion->recomendaciones);
+                                                // foreach ($accion->recomendaciones as $recomendacion) {
+                                                    $contestaciones=$accion->solicitudesaclaracion->contestaciones;
+                                                   
+                                                    if (count($contestaciones)>0) {                                                        
+                                                        $sa=count($contestaciones);                                                        
+                                                    }
+                                                // } 
+                                            }
+
+                                            if (!empty($accion->pliegosobservacion)) {                                                
+                                                // dd($accion->recomendaciones);
+                                                // foreach ($accion->recomendaciones as $recomendacion) {
+                                                    $contestaciones=$accion->pliegosobservacion->contestaciones;
+                                                   
+                                                    if (count($contestaciones)>0) {                                                        
+                                                        $po=count($contestaciones);                                                       
+                                                    }
+                                                // } 
+                                            }
+                                        }
+                                        $contestacionestotal=$rec+$sa+$po;
+                                    @endphp
+                                    {{$contestacionestotal}}
+                                </td>
+                                <td class="bg-light-dark text-center">
+                                   @php
+                                   $contestacionesAtendidas=0;
+                                     foreach ($auditoria->acciones as $accion) {
+
+                                        if (!empty($accion->recomendaciones)) {                                                
+                                                
+                                                    $atencionr=empty($accion->recomendaciones->calificacion_sugerida)?'NoHay':$accion->recomendaciones->calificacion_sugerida;
+                                                    $autorizacionr=empty($accion->recomendaciones->fase_autorizacion)?'NoHay':$accion->recomendaciones->fase_autorizacion;
+                                                   
+                                                   
+                                                    if ($autorizacionr=='Autorizado') {  
+                                                        $contestaciones=$accion->recomendaciones->contestaciones;                                                             
+                                                        $contestacionesAtendidas=$contestacionesAtendidas + count($contestaciones);                                               
+                                                    }
+                                                
+                                            }
+
+                                            if (!empty($accion->solicitudesaclaracion)) {                                                
+                                                // dd($accion->recomendaciones);
+                                                // foreach ($accion->recomendaciones as $recomendacion) {
+                                                    $atencionsa=empty($accion->solicitudesaclaracion->calificacion_sugerida)?'NoHay':$accion->solicitudesaclaracion->calificacion_sugerida;
+                                                    $autorizacionsa=empty($accion->solicitudesaclaracion->fase_autorizacion)?'NoHay':$accion->solicitudesaclaracion->fase_autorizacion;
+                                                   
+                                                    if ($autorizacionsa=='Autorizado') {  
+                                                        $contestaciones=$accion->solicitudesaclaracion->contestaciones;                                                      
+                                                        $contestacionesAtendidas=$contestacionesAtendidas + count($contestaciones);                                                        
+                                                    }
+                                                // } 
+                                            }
+
+                                            if (!empty($accion->pliegosobservacion)) {                                                
+                                                // dd($accion->recomendaciones);
+                                                // foreach ($accion->recomendaciones as $recomendacion) {
+                                                // $contestaciones=$accion->pliegosobservacion->constestaciones;
+
+                                                    $atencionpo=empty($accion->pliegosobservacion->calificacion_sugerida)?'NoHay':$accion->pliegosobservacion->calificacion_sugerida;
+                                                    $autorizacionpo=empty($accion->pliegosobservacion->fase_autorizacion)?'NoHay':$accion->pliegosobservacion->fase_autorizacion;
+                                                   
+                                                    if ($autorizacionpo=='Autorizado') {  
+                                                        $contestaciones=$accion->pliegosobservacion->contestaciones; 
+                                                        $contestacionesAtendidas=$contestacionesAtendidas + count($contestaciones);                                                      
+                                                    }
+                                                // } 
+                                            }
+
+                                     }
+                                     @endphp
+                                     {{$contestacionesAtendidas}}
+                                </td>
+                                <td class="text-center">
+                                    @php
+                                   $contestacionesNoAtendidas=0;
+                                     foreach ($auditoria->acciones as $accion) {
+
+                                        if (!empty($accion->recomendaciones)) {                                                
+                                                
+                                                    $atencionr=empty($accion->recomendaciones->calificacion_sugerida)?'NoHay':$accion->recomendaciones->calificacion_sugerida;
+                                                    $autorizacionr=empty($accion->recomendaciones->fase_autorizacion)?'NoHay':$accion->recomendaciones->fase_autorizacion;
+                                                   
+                                                   
+                                                    if ($autorizacionr!='Autorizado') {     
+                                                        $contestaciones=$accion->recomendaciones->contestaciones;                                                           
+                                                        $contestacionesNoAtendidas=$contestacionesNoAtendidas + count($contestaciones);                                               
+                                                    }
+                                                
+                                            }
+
+                                            if (!empty($accion->solicitudesaclaracion)) {                                                
+                                                // dd($accion->recomendaciones);
+                                                // foreach ($accion->recomendaciones as $recomendacion) {
+                                                    $atencionsa=empty($accion->solicitudesaclaracion->calificacion_sugerida)?'NoHay':$accion->solicitudesaclaracion->calificacion_sugerida;
+                                                    $autorizacionsa=empty($accion->solicitudesaclaracion->fase_autorizacion)?'NoHay':$accion->solicitudesaclaracion->fase_autorizacion;
+                                                   
+                                                    if ($autorizacionsa!='Autorizado') {     
+                                                        $contestaciones=$accion->solicitudesaclaracion->contestaciones;                                                       
+                                                        $contestacionesNoAtendidas=$contestacionesNoAtendidas + count($contestaciones);                                                        
+                                                    }
+                                                // } 
+                                            }
+
+                                            if (!empty($accion->pliegosobservacion)) {                                                
+                                                // dd($accion->recomendaciones);
+                                                // foreach ($accion->recomendaciones as $recomendacion) {
+                                                // $contestaciones=$accion->pliegosobservacion->constestaciones;
+
+                                                    $atencionpo=empty($accion->pliegosobservacion->calificacion_sugerida)?'NoHay':$accion->pliegosobservacion->calificacion_sugerida;
+                                                    $autorizacionpo=empty($accion->pliegosobservacion->fase_autorizacion)?'NoHay':$accion->pliegosobservacion->fase_autorizacion;
+                                                   
+                                                    if ($autorizacionpo!='Autorizado') {   
+                                                        $contestaciones=$accion->pliegosobservacion->contestaciones;                                                       
+                                                        $contestacionesNoAtendidas=$contestacionesNoAtendidas + count($contestaciones);                                                      
+                                                    }
+                                                // } 
+                                            }
+
+                                     }
+                                     @endphp
+                                     {{$contestacionesNoAtendidas}}
+                                </td>
+                                <td class="bg-light-dark text-center">
+                                    @php
+                                     foreach ($auditoria->acciones as $accion) {
+
+                                        if (!empty($accion->recomendaciones)) {                                                
+                                            if (count($accion->recomendaciones->constestaciones)>0) {     
+                                                $contestaciones=$accion->recomendaciones->contestaciones;                                                           
+                                                $fechar=null;
+                                                foreach ($contestaciones as $contestacion) {
+                                                    if($fechar<$contestacion->fecha_oficio_contestacion){
+                                                        $fechar = $contestacion->fecha_oficio_contestacion;
+                                                    }                                                            
+                                                }
+                                            }                                                
+                                        }
+
+                                        if (!empty($accion->solicitudesaclaracion)) {
+                                            if (count($accion->solicitudesaclaracion->contestaciones)>0) {     
+                                                $contestaciones=$accion->solicitudesaclaracion->contestaciones;  
+                                                $fechasa=null;                                                     
+                                                foreach ($contestaciones as $contestacion) {
+                                                    if($fechasa < $contestacion->fecha_oficio_contestacion){
+                                                        $fechasa = $contestacion->fecha_oficio_contestacion;
+                                                    }                                                            
+                                                }                                                   
+                                            }                                        
+                                        }
+
+                                            if (!empty($accion->pliegosobservacion)) {                                                
+                                                if (count($accion->pliegosobservacion->contestaciones)>0) {   
+                                                    $contestaciones=$accion->pliegosobservacion->contestaciones;  
+                                                    $fechapo=null;                                                     
+                                                    foreach ($contestaciones as $contestacion) {
+                                                        if($fechapo < $contestacion->fecha_oficio_contestacion){
+                                                            $fechapo = $contestacion->fecha_oficio_contestacion;
+                                                        }                                                            
+                                                    } 
+                                                }
+                                            }
+                                        }
+                                         $fecha=null;
+                                        if ($fechapo > $fechasa) {
+                                            if($fechapo > $fechar){
+                                                $fecha=$fechapo;
+                                            }else{
+                                                $fecha=$fechasa;
+                                            }
+                                        }else{
+                                            if($fechasa > $fechar){
+                                                $fecha=$fechasa;
+                                            }else{
+                                                $fecha=$fechar; 
+                                            }
+                                        }
+                                     @endphp
+                                    {{fecha($fecha)}}
+                                </td>                                                   
                             </tr>
                         @empty
                             <tr>

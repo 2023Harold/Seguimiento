@@ -27,7 +27,6 @@
                         </div>
                     @endcan                 
                 @endif  
-                  
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -60,10 +59,7 @@
                                         <small>{{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}</small>
                                         @endif
                                     </td>
-                                    <td class="text-center"> 
-                                        <a href="{{ route('radicacion.edit',$auditoria->radicacion) }}" class="btn btn-primary">
-                                            <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
-                                        </a>                                       
+                                    <td class="text-center">                                                                            
                                             @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
                                                     @can('radicacion.edit')
@@ -97,7 +93,7 @@
                                                 @btnFile($auditoria->radicacion->constancia)                                                
                                             @endif                                            
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center">                                       
                                         @if (!empty($auditoria->radicacion->fase_autorizacion)&&$auditoria->radicacion->fase_autorizacion=='Autorizado')
                                             @if (empty($auditoria->comparecencia->oficio_recepcion))                                            
                                                 @can('comparecenciaacuse.edit')

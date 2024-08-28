@@ -218,6 +218,8 @@ Route::get('/pacauditoria/ofaroics/{id}', [PacAuditoriaController::class, 'ofaro
 Route::get('/pacauditoria/ac/{id}', [PacAuditoriaController::class, 'ac'])->name('pacauditoria.ac');
 
 Route::get('/reportesseg/excel', [ReportesSeguimientoController::class, 'export'])->name('reporteseguimiento.exportar');
+Route::get('/radicacionnotificacion/iaar', [RadicacionController::class, 'export'])->name('radicacioniaar.exportar');
+Route::get('/radicacionnotificacion/aroic', [RadicacionController::class, 'exportOIC'])->name('radicacioniaar.exportaroic');
 
 
 

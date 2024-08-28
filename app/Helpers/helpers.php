@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use Jaspersoft\Client\Client;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Luecano\NumeroALetras\NumeroALetras;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat\NumberFormatter;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 function fecha($fecha = null, string $formato = 'd/m/Y')
@@ -401,14 +403,21 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
     {
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                     $fecha = Carbon::parse(now());
+
+                    $formatterD = new NumeroALetras();
+                    $anioD = $formatterD->toString($fecha->format('Y'));
+
+                    $anioMax = ucwords($anioD);             
+                    $anioMin = ucwords(strtolower($anioMax));
+
                     $mes = $meses[($fecha->format('n')) - 1];
-                    $fechaactual = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+                    $fechaactual = $fecha->format('d') . ' dias del mes de ' . $mes . ' del año ' . $anioMin;
 
 
         return $fechaactual;
     }
 
-    function reportepdf($nombrereporte,$temporal=1,$qr='',$auditoria,$accion='',$modeloprincipal=[],$relacion1=[],$relacion2=[],$relacion3=[],$firma='', $hash='', $fechahora='', $estatus='',$motivo_rechazo='', $firmante='',$firmante_puesto='')
+    function reportepdf($nombrereporte,$temporal=1,$qr='',$auditoria,$accion='',$modeloprincipal=[],$relacion1=[],$relacion2=[],$relacion3=[],$relacion4=null,$firma='', $hash='', $fechahora='', $estatus='',$motivo_rechazo='', $firmante='',$firmante_puesto='')
     {
         $archivob64='';
         if(!empty($auditoria))
@@ -440,6 +449,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
                  'relacion1'=>$relacionconstancia1,
                  'relacion2'=>$relacionconstancia2,
                  'relacion3'=>$relacionconstancia3,
+                 'relacion4'=>$relacion4,
                  'firma'=>$firma,
                  'hash'=>$hash,
                  'fechahora'=>$fechahora,
@@ -456,6 +466,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             $b64archivoxml = chunk_split(base64_encode(file_get_contents(base_path() . '/public/storage/temporales/'.$nombrereporte.'.xml')));
             $archivob64= $b64archivoxml;
             $pdf->save(storage_path('app/public/temporales/') . $nombrereporte .'.pdf');
+            $pdf->save(storage_path('app/public/temporales/') . $nombrereporte .'.docx');
         }else{
             $pdf->save(storage_path('app/public/temporales/') . $nombrereporte .'.pdf');
             $pdf64 = chunk_split(base64_encode(file_get_contents(storage_path('app/public/temporales/') . $nombrereporte.'.pdf')));
@@ -463,6 +474,33 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         }          
 
         return $archivob64;
+    }
+
+    function fechaaletra($fecha){
+       
+        $diacomparecencia=explode('/',fecha($fecha));
+
+        $dia=$diacomparecencia[0];
+        $anio=$diacomparecencia[2];
+
+        $formatterD = new NumeroALetras();
+        $formatterD->apocope = true;
+        $diaD = $formatterD->toString($dia);    
+        $anioD = $formatterD->toString($anio);
+      
+        $diaMax = ucwords($diaD);            
+        $diaMin = mb_convert_encoding(mb_convert_case(ucwords(strtolower($diaMax)), MB_CASE_TITLE), "UTF-8") ;       
+
+        $anioMax = ucwords($anioD);            
+        $anioMin = ucwords(strtolower($anioMax));
+
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                    $fecha = Carbon::parse($fecha);
+                    $mes = $meses[($fecha->format('n')) - 1];
+                    $fechaactual = $diaMin. 'de ' . $mes . ' del ' .  $anioMin;
+
+
+        return $fechaactual;
     }
 
     

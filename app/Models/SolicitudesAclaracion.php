@@ -78,5 +78,10 @@ class SolicitudesAclaracion extends Model
         return $this->hasMany(SolicitudesAclaracionContestacion::class, 'solicitudaclaracion_id','id');
     }
 
+    public function contestaciones()
+    {
+        return $this->hasMany(SolicitudesAclaracionContestacion::class, 'solicitudaclaracion_id','id');
+    }
+
 
 }

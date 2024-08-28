@@ -65,28 +65,29 @@ class SolicitudesAclaracionAutorizacionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
 
-        $datosConstancia = [           
-            'nombrereporte' => 'atencionsolicitudesaclaracionconstancia',
-            'auditoriaseleccionada'=>base64_encode(Str::random(5).$solicitud->auditoria_id.Str::random(5)),
-            'accionseleccionada'=>base64_encode(Str::random(5).$solicitud->accion_id.Str::random(5)),            
-            'modelo_principal'=>['tbl'=>$solicitud->getTable(),'vinculo'=>base64_encode(Str::random(5).$solicitud->id.Str::random(5))] ,
-            'relacion1'=>['tbl_rel'=>$solicitud->constestaciones[0]->getTable(),'col_rel'=>'solicitudaclaracion_id'],
-            'relacion2'=>null,
-            'relacion3'=>null, 
-            'firmante'=>auth()->user()->name,
-            'firmante_puesto'=>auth()->user()->puesto,         
-        ];
+        // $datosConstancia = [           
+        //     'nombrereporte' => 'atencionsolicitudesaclaracionconstancia',
+        //     'auditoriaseleccionada'=>base64_encode(Str::random(5).$solicitud->auditoria_id.Str::random(5)),
+        //     'accionseleccionada'=>base64_encode(Str::random(5).$solicitud->accion_id.Str::random(5)),            
+        //     'modelo_principal'=>['tbl'=>$solicitud->getTable(),'vinculo'=>base64_encode(Str::random(5).$solicitud->id.Str::random(5))] ,
+        //     'relacion1'=>['tbl_rel'=>$solicitud->constestaciones[0]->getTable(),'col_rel'=>'solicitudaclaracion_id'],
+        //     'relacion2'=>null,
+        //     'relacion3'=>null, 
+        //     'firmante'=>auth()->user()->name,
+        //     'firmante_puesto'=>auth()->user()->puesto,         
+        // ];
 
-        $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
-        base64_encode(Str::random(5).$solicitud->auditoria_id.Str::random(5)),
-        base64_encode(Str::random(5).$solicitud->accion_id.Str::random(5)),
-        ['tbl'=>$solicitud->getTable(),'vinculo'=>base64_encode(Str::random(5).$solicitud->id.Str::random(5))],
-        ['tbl_rel'=>$solicitud->constestaciones[0]->getTable(),'col_rel'=>'solicitudaclaracion_id'],
-        null,null,'','','','','','','');
+        // $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
+        // base64_encode(Str::random(5).$solicitud->auditoria_id.Str::random(5)),
+        // base64_encode(Str::random(5).$solicitud->accion_id.Str::random(5)),
+        // ['tbl'=>$solicitud->getTable(),'vinculo'=>base64_encode(Str::random(5).$solicitud->id.Str::random(5))],
+        // ['tbl_rel'=>$solicitud->constestaciones[0]->getTable(),'col_rel'=>'solicitudaclaracion_id'],
+        // null,null,'','','','','','','');
 
-        $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
+        // $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
 
-        return view('solicitudesaclaracionautorizacion.form', compact('solicitud', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
+        //return view('solicitudesaclaracionautorizacion.form', compact('solicitud', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
+        return view('solicitudesaclaracionautorizacion.form', compact('solicitud', 'accion', 'auditoria'));
     }
 
     /**
@@ -100,7 +101,7 @@ class SolicitudesAclaracionAutorizacionController extends Controller
     {
         $this->normalizarDatos($request);
         //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
-        $constancia = guardarConstanciasFirmadas($solicitud, 'constancia_atencion_solicitud', $request, 'constancia');
+        //$constancia = guardarConstanciasFirmadas($solicitud, 'constancia_atencion_solicitud', $request, 'constancia');
 
         Movimientos::create([
             'tipo_movimiento' => 'Autorización de la atención de la solicitud de aclaración',
@@ -114,9 +115,8 @@ class SolicitudesAclaracionAutorizacionController extends Controller
 
         $solicitud->update([
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
-            'constancia_autorizacion' => $constancia->constancia_pdf,
+            //'constancia_autorizacion' => $constancia->constancia_pdf,
         ]);
-
 
         $director=User::where('unidad_administrativa_id',substr($solicitud->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
         $jefe=$solicitud->accion->depaasignado;
@@ -146,7 +146,8 @@ class SolicitudesAclaracionAutorizacionController extends Controller
             setMessage('Se ha rechazado el registro de la calificación y conclusión de la atención de la solicitud de aclaración.');
         }
 
-        return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'solicitudesaclaracionatencion.index']);
+        //return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'solicitudesaclaracionatencion.index']);
+        return redirect()->route('solicitudesaclaracionatencion.index');
     }
 
     /**

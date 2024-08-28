@@ -74,4 +74,8 @@ class PliegosObservacion extends Model
     {
         return $this->hasMany(PliegosContestacion::class, 'pliegosobservacion_id','id');
     }
+    public function contestaciones()
+    {
+        return $this->hasMany(PliegosContestacion::class, 'pliegosobservacion_id','id');
+    }
 }

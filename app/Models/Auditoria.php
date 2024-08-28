@@ -162,7 +162,6 @@ class Auditoria extends Model
                             });
             }
 
-
             public function totalsolventadosolacl()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 1)
@@ -195,7 +194,6 @@ class Auditoria extends Model
                             });
             }
 
-
             public function totalNOsolventadosolacl()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 1)
@@ -216,59 +214,72 @@ class Auditoria extends Model
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNotNull('revision_lider');
             }
+
             public function accionesrechazadaslider()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNotNull('revision_lider')->where('revision_lider','Rechazado');
             }
+
             public function accionesrevisadasjefe()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNotNull('revision_jefe');
             }
+
             public function accionesrechazadasjefe()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNotNull('revision_jefe')->where('revision_jefe','Rechazado');
             }
+
             public function cedulageneralseguimiento()
             {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Seguimiento');
             }
+
             public function cedulageneralrecomendaciones()
             {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Recomendaciones');
             }
+
             public function cedulageneralpras()
             {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General PRAS');
             }
+
             public function cedulaanalitica()
             {                       
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula Analítica');
             }
+
             public function cedulaanaliticadesemp()
             {                       
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula Analítica Desempeño');
             }
+
             public function movimientosCedulaGeneral()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General de Seguimiento')->orderBy('id', 'ASC');
-            }           
+            }  
 
             public function movimientosCedulaPRAS()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General PRAS')->orderBy('id', 'ASC');
             }
+
             public function movimientosCedulaRecomendacion()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General Recomendación')->orderBy('id', 'ASC');
             }
+
             public function movimientosCedulaAnalitica()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula Analítica')->orderBy('id', 'ASC');
             }
+
             public function movimientosCedulaAnaliticaDesemp()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula Analítica Desempeño')->orderBy('id', 'ASC');
             }
+
             public function tipo_auditoria()
             {
                 return $this->hasOne(CatalogoTipoAuditoria::class, 'id', 'tipo_auditoria_id');
@@ -284,4 +295,27 @@ class Auditoria extends Model
                 $p_anio= substr($this->periodo_revision,-4);                                                        
                 return $p_anio;
             }            
+           
+            public function getTipoEntidadAmbitoAttribute(){
+
+                $entidadF=EntidadFiscalizableIntra::where('PkCveEntFis',$this->entidad_fiscalizable_id)->first();
+                if($entidadF->NivEntFis==3){
+                    $entidad2=EntidadFiscalizableIntra::where('PkCveEntFis',$entidadF->FkCveEntFis)->first();
+                    $entidad=EntidadFiscalizableIntra::where('PkCveEntFis',$entidad2->FkCveEntFis)->first();
+
+                    return $entidad->NomEntFis;                    
+                }
+
+                if($entidadF->NivEntFis==2){
+                    $entidad2=EntidadFiscalizableIntra::where('PkCveEntFis',$entidadF->FkCveEntFis)->first();
+
+                    return $entidad2->NomEntFis;
+                }
+
+                if($entidadF->NivEntFis==1){
+                    
+                    return $entidadF->NomEntFis;
+                }
+            }
+           
 }

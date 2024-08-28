@@ -7,6 +7,7 @@ use App\Models\Comparecencia;
 use App\Models\Movimientos;
 use App\Models\Radicacion;
 use Illuminate\Http\Request;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class RadicacionController extends Controller
 {
@@ -215,5 +216,89 @@ class RadicacionController extends Controller
         }
 
         return $query;
+    }
+
+    public function export(){
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+
+        $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
+
+         $txtentidad=null;
+
+         if (count($entidades)>1) {
+            if ($entidades[1]=='MUNICIPIOS') {
+                $bar = ucwords($entidades[2]);       
+                $bar = ucwords(strtolower($bar));
+
+                $txtentidad='Municipio de '.$bar;
+            }
+         }
+
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $mes = $meses[(now()->format('n')) - 1];
+
+        $template=new TemplateProcessor('bases-word/IA_AR.docx');
+        $template->setValue('anio',date("Y"));
+        $template->setValue('mes',$mes);
+        $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+        $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+        $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+        $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+        $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+        $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+        $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+        $template->setValue('entidad',$txtentidad);
+        $template->setValue('periodo',$auditoria->periodo_revision);
+        $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
+
+        $nombreword='AIAR';
+
+        $template->saveAs($nombreword.'.docx');
+
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+    }
+  
+  
+    public function exportOIC(){
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+
+        $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
+
+         $txtentidad=null;
+
+         if (count($entidades)>1) {
+            if ($entidades[1]=='MUNICIPIOS') {
+                $bar = ucwords($entidades[2]);       
+                $bar = ucwords(strtolower($bar));
+
+                $txtentidad='Municipio de '.$bar;
+            }
+         }
+
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $mes = $meses[(now()->format('n')) - 1];
+
+        $template=new TemplateProcessor('bases-word/AR_OIC.docx');
+        $template->setValue('anio',date("Y"));
+        $template->setValue('mes',$mes);
+        $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+        $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+        $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+        $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+        $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+        $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+        $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+        $template->setValue('entidad',$txtentidad);
+        $template->setValue('periodo',$auditoria->periodo_revision);
+        $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
+        $template->setValue('totalpras',$auditoria);
+
+
+
+        $nombreword='AROIC';
+
+        $template->saveAs($nombreword.'.docx');
+
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
     }
 }

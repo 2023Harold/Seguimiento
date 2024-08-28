@@ -13,6 +13,11 @@
     <div class="card-body">
         @include('flash::message')
         @include('layouts.contextos._auditoria')
+        {{-- <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul> --}}
         {!! BootForm::open(['model' => $accion,'store' => 'seguimientoauditoriaacciones.store','update' => 'seguimientoauditoriaacciones.update','id' => 'form']) !!}
           
         <div class="row">
@@ -32,7 +37,7 @@
             @php
                 $divtipologiamostrar=(empty(old('acto_fiscalizacion_id', $accion->acto_fiscalizacion_id))?'none':'block');
             @endphp 
-            <div class="col-md-4" id="divtipologia" >
+            <div class="col-md-4" id="divtipologia" style="display: {{$divtipologiamostrar}}">
                 {!! BootForm::select('tipologia_id', 'Tipología: *', $tipologias->toArray(), old('tipologia_id',$accion->tipologia_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div> 
@@ -63,14 +68,14 @@
         </div>   
         @php           
             $mostrarDivMonto = ((!empty(old('segtipo_accion_id', $accion->segtipo_accion_id))&&old('segtipo_accion_id', $accion->segtipo_accion_id)!='2')?'block':'none');
-            $mostrarDivRecomendaciones = ((!empty(old('segtipo_accion_id', $accion->segtipo_accion_id))&&old('segtipo_accion_id', $accion->segtipo_accion_id)=='2')?'block':'none');
+            $mostrarDivRecomendaciones = ((!empty(old('segtipo_accion_id', $accion->segtipo_accion_id))&&old('segtipo_accion_id', $accion->segtipo_accion_id)=='2')?'block':'none');           
         @endphp
-        <div class="row" id="div_monto" >
+        <div class="row" id="div_monto" style="display: {{$mostrarDivMonto}}">
             <div class="col-md-3">
                 {!! BootForm::text('monto_aclarar', 'Monto por aclarar: *', old('monto_aclarar', $accion->monto_aclarar),['class' => 'numeric']) !!}
             </div>
         </div> 
-        <div id="div_recomendacion" >
+        <div id="div_recomendacion" style="display: {{$mostrarDivRecomendaciones}}">
             <div class="row" >
                 <div class="col-md-12">
                     {!! BootForm::textarea('evidencia_resumen', 'Evidencia documental que acredite la atención de la recomendación: ', old('evidencia_resumen', $accion->evidencia_resumen)) !!}
@@ -78,7 +83,7 @@
             </div>
             <div class="row" >
                 <div class="col-md-6">
-                    {!! archivo('evidencia_recomendacion', 'Soporte de la evidencia documental que acredite la atención de la recomendación: ',  old('evidencia_recomendacion', $accion->evidencia_recomendacion)) !!}
+                    {!! archivo('evidencia_recomendacion', 'Soporte de la evidencia documental que acredite la atención de la recomendación: *',  old('evidencia_recomendacion', $accion->evidencia_recomendacion)) !!}
                 </div>
             </div>              
             {{-- <div class="row">
@@ -88,7 +93,7 @@
             </div>  --}}
             <div class="row">
                 <div class="col-md-6">
-                    {!! BootForm::text('tramo_control_recomendacion', 'Tramo de control: ', old('tramo_control_recomendacion', $accion->tramo_control_recomendacion)) !!}
+                    {!! BootForm::text('tramo_control_recomendacion', 'Tramo de control: * ', old('tramo_control_recomendacion', $accion->tramo_control_recomendacion)) !!}
                 </div>
             </div>
             <div class="row">

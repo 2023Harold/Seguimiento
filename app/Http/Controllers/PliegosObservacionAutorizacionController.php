@@ -66,29 +66,30 @@ class PliegosObservacionAutorizacionController extends Controller
         $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $auditoria = $accion->auditoria;
 
-        $datosConstancia = [           
-            'nombrereporte' => 'atencionpliegoobservacionconstancia',
-            'auditoriaseleccionada'=>base64_encode(Str::random(5).$pliegosobservacion->auditoria_id.Str::random(5)),
-            'accionseleccionada'=>base64_encode(Str::random(5).$pliegosobservacion->accion_id.Str::random(5)),            
-            'modelo_principal'=>['tbl'=>$pliegosobservacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$pliegosobservacion->id.Str::random(5))],
-            'relacion1'=>['tbl_rel'=>$pliegosobservacion->constestaciones[0]->getTable(),'col_rel'=>'pliegosobservacion_id'],
-            'relacion2'=>null,
-            'relacion3'=>null,
-            'firmante'=>auth()->user()->name,
-            'firmante_puesto'=>auth()->user()->puesto,          
-        ];       
+        // $datosConstancia = [           
+        //     'nombrereporte' => 'atencionpliegoobservacionconstancia',
+        //     'auditoriaseleccionada'=>base64_encode(Str::random(5).$pliegosobservacion->auditoria_id.Str::random(5)),
+        //     'accionseleccionada'=>base64_encode(Str::random(5).$pliegosobservacion->accion_id.Str::random(5)),            
+        //     'modelo_principal'=>['tbl'=>$pliegosobservacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$pliegosobservacion->id.Str::random(5))],
+        //     'relacion1'=>['tbl_rel'=>$pliegosobservacion->constestaciones[0]->getTable(),'col_rel'=>'pliegosobservacion_id'],
+        //     'relacion2'=>null,
+        //     'relacion3'=>null,
+        //     'firmante'=>auth()->user()->name,
+        //     'firmante_puesto'=>auth()->user()->puesto,          
+        // ];       
 
-        $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
-                                 base64_encode(Str::random(5).$pliegosobservacion->auditoria_id.Str::random(5)),
-                                 base64_encode(Str::random(5).$pliegosobservacion->accion_id.Str::random(5)),
-                                 ['tbl'=>$pliegosobservacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$pliegosobservacion->id.Str::random(5))],
-                                 ['tbl_rel'=>$pliegosobservacion->constestaciones[0]->getTable(),'col_rel'=>'pliegosobservacion_id'],
-                                 null,null,'','','','','',auth()->user()->name, auth()->user()->puesto);
+        // $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
+        //                          base64_encode(Str::random(5).$pliegosobservacion->auditoria_id.Str::random(5)),
+        //                          base64_encode(Str::random(5).$pliegosobservacion->accion_id.Str::random(5)),
+        //                          ['tbl'=>$pliegosobservacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$pliegosobservacion->id.Str::random(5))],
+        //                          ['tbl_rel'=>$pliegosobservacion->constestaciones[0]->getTable(),'col_rel'=>'pliegosobservacion_id'],
+        //                          null,null,'','','','','',auth()->user()->name, auth()->user()->puesto);
 
-        $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
+        // $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
 
 
-         return view('pliegosobservacionautorizacion.form', compact('pliegosobservacion', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia' ));
+         //return view('pliegosobservacionautorizacion.form', compact('pliegosobservacion', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia' ));
+         return view('pliegosobservacionautorizacion.form', compact('pliegosobservacion', 'accion', 'auditoria'));
     }
 
     /**
@@ -102,7 +103,7 @@ class PliegosObservacionAutorizacionController extends Controller
     {
         $this->normalizarDatos($request);
         //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
-        $constancia = guardarConstanciasFirmadas($pliegosobservacion, 'constancia_atencion_pliego', $request, 'constancia');
+        //$constancia = guardarConstanciasFirmadas($pliegosobservacion, 'constancia_atencion_pliego', $request, 'constancia');
 
         Movimientos::create([
             'tipo_movimiento' => 'Autorización de la atención del pliego de observación',
@@ -116,7 +117,7 @@ class PliegosObservacionAutorizacionController extends Controller
 
         $pliegosobservacion->update([
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
-            'constancia_autorizacion' => $constancia->constancia_pdf,
+            //'constancia_autorizacion' => $constancia->constancia_pdf,
         ]);
 
 
@@ -149,7 +150,8 @@ class PliegosObservacionAutorizacionController extends Controller
             setMessage('Se ha rechazado el registro de la calificación y conclusión del pliego de observación.');
         }
 
-        return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'pliegosobservacionatencion.index']);
+        //return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'pliegosobservacionatencion.index']);
+        return redirect()->route('pliegosobservacionatencion.index');
     }
 
     /**

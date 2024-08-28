@@ -66,27 +66,28 @@ class PrasTurnoAutorizacionController extends Controller
          $auditoria = Auditoria::find(getSession('auditoria_id'));
          $accion = AuditoriaAccion::find(getSession('prasauditoriaaccion_id'));
 
-         $datosConstancia = [           
-            'nombrereporte' => 'prasauditoriaconstancia',
-            'auditoriaseleccionada'=>base64_encode(Str::random(5).$pras->auditoria_id.Str::random(5)),
-            'accionseleccionada'=>base64_encode(Str::random(5).$pras->accion_id.Str::random(5)),            
-            'modelo_principal'=>['tbl'=>$pras->getTable(),'vinculo'=>base64_encode(Str::random(5).$pras->id.Str::random(5))],
-            'relacion1'=>null,
-            'relacion2'=>null,
-            'relacion3'=>null,
-            'firmante'=>auth()->user()->name,
-            'firmante_puesto'=>auth()->user()->puesto,          
-        ];
+        //  $datosConstancia = [           
+        //     'nombrereporte' => 'prasauditoriaconstancia',
+        //     'auditoriaseleccionada'=>base64_encode(Str::random(5).$pras->auditoria_id.Str::random(5)),
+        //     'accionseleccionada'=>base64_encode(Str::random(5).$pras->accion_id.Str::random(5)),            
+        //     'modelo_principal'=>['tbl'=>$pras->getTable(),'vinculo'=>base64_encode(Str::random(5).$pras->id.Str::random(5))],
+        //     'relacion1'=>null,
+        //     'relacion2'=>null,
+        //     'relacion3'=>null,
+        //     'firmante'=>auth()->user()->name,
+        //     'firmante_puesto'=>auth()->user()->puesto,          
+        // ];
 
-        $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
-                                 base64_encode(Str::random(5).$pras->auditoria_id.Str::random(5)),
-                                 base64_encode(Str::random(5).$pras->accion_id.Str::random(5)),
-                                 ['tbl'=>$pras->getTable(),'vinculo'=>base64_encode(Str::random(5).$pras->id.Str::random(5))],
-                                 null,null,null,'','','','','',auth()->user()->name, auth()->user()->puesto);
+        // $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
+        //                          base64_encode(Str::random(5).$pras->auditoria_id.Str::random(5)),
+        //                          base64_encode(Str::random(5).$pras->accion_id.Str::random(5)),
+        //                          ['tbl'=>$pras->getTable(),'vinculo'=>base64_encode(Str::random(5).$pras->id.Str::random(5))],
+        //                          null,null,null,'','','','','',auth()->user()->name, auth()->user()->puesto);
         
-        $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
+        // $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
 
-        return view('prasturnosautorizacion.form', compact('pras', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
+        //return view('prasturnosautorizacion.form', compact('pras', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
+        return view('prasturnosautorizacion.form', compact('pras', 'accion', 'auditoria'));
     }
 
     /**
@@ -100,7 +101,7 @@ class PrasTurnoAutorizacionController extends Controller
     {
         $this->normalizarDatos($request);
         //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
-        $constancia = guardarConstanciasFirmadas($pras, 'constancia_turno_pras', $request, 'constancia');
+        //$constancia = guardarConstanciasFirmadas($pras, 'constancia_turno_pras', $request, 'constancia');
 
         Movimientos::create([
             'tipo_movimiento' => 'Autorización del turno del PRAS',
@@ -114,7 +115,7 @@ class PrasTurnoAutorizacionController extends Controller
 
         $pras->update([
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
-            'constancia_turno' => $constancia->constancia_pdf,
+            //'constancia_turno' => $constancia->constancia_pdf,
         ]);
 
 
@@ -138,7 +139,8 @@ class PrasTurnoAutorizacionController extends Controller
             setMessage('Se ha rechazado el registro del turno del PRAS con exito.');
         }
 
-        return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'prasturno.index']);
+        //return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'prasturno.index']);
+        return redirect()->route('prasturno.index');
     }
 
     /**

@@ -76,7 +76,7 @@ class AccionesController extends Controller
      */
     public function store(Request $request)
     {
-        $this->setValidator($request)->validate();
+        $this->setValidator($request)->validate();       
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $this->normalizarDatos($request);
         mover_archivos($request, ['cedula'], null);
@@ -214,7 +214,7 @@ class AccionesController extends Controller
         $this->validationRules['evidencia_recomendacion'] = [new RecomendacionRegistroRule($request->segtipo_accion_id,$request->acto_fiscalizacion_id)];
         $this->validationRules['tipo_recomendacion'] = [new RecomendacionRegistroRule($request->segtipo_accion_id,$request->acto_fiscalizacion_id)];
         $this->validationRules['tramo_control_recomendacion'] = [new RecomendacionRegistroRule($request->segtipo_accion_id,$request->acto_fiscalizacion_id)];
-
+        
         return Validator::make($request->all(), $this->validationRules, $this->errorMessages)->setAttributeNames($this->attributeNames);
     }
 

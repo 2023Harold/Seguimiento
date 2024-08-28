@@ -127,14 +127,15 @@
                                             @endif
                                         @endif
                                     @endif
+
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center">                                   
                                     @if (empty($recomendacion->fase_autorizacion))
                                         @can('recomendacionesanalisisenvio.edit')
                                             <a href="{{ route('recomendacionesanalisisenvio.edit',$recomendacion) }}" class="btn btn-primary">
                                                 <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
                                             </a>
-                                        @endcan
+                                        @endcan                                        
                                     @endif
                                     @if ($recomendacion->fase_autorizacion == 'Rechazado')
                                         <span class="badge badge-light-danger">{{ $recomendacion->fase_autorizacion }}</span>
@@ -185,8 +186,9 @@
                                         @endcan
                                     @endif
                                     @if ($recomendacion->fase_autorizacion=='Autorizado')
-                                    <span class="badge badge-light-success">{{ $recomendacion->fase_autorizacion }} </span> <br>
-                                        @btnFile($recomendacion->constancia_autorizacion)                                       
+                                    <span class="badge badge-light-success">{{ $recomendacion->fase_autorizacion }} </span> 
+                                        {{-- <br>
+                                        @btnFile($recomendacion->constancia_autorizacion)                                        --}}
                                     @endif                                                                     
                                 </td>
                             </tr>

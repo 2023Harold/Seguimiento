@@ -65,28 +65,29 @@ class RecomendacionesAutorizacionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
 
-        $datosConstancia = [           
-            'nombrereporte' => 'atencionrecomendacionconstancia',
-            'auditoriaseleccionada'=>base64_encode(Str::random(5).$recomendacion->auditoria_id.Str::random(5)),
-            'accionseleccionada'=>base64_encode(Str::random(5).$recomendacion->accion_id.Str::random(5)),            
-            'modelo_principal'=>['tbl'=>$recomendacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$recomendacion->id.Str::random(5))],
-            'relacion1'=>['tbl_rel'=>$recomendacion->constestaciones[0]->getTable(),'col_rel'=>'recomendacion_id'],
-            'relacion2'=>null,
-            'relacion3'=>null, 
-            'firmante'=>auth()->user()->name,
-            'firmante_puesto'=>auth()->user()->puesto,          
-        ];       
+        // $datosConstancia = [           
+        //     'nombrereporte' => 'atencionrecomendacionconstancia',
+        //     'auditoriaseleccionada'=>base64_encode(Str::random(5).$recomendacion->auditoria_id.Str::random(5)),
+        //     'accionseleccionada'=>base64_encode(Str::random(5).$recomendacion->accion_id.Str::random(5)),            
+        //     'modelo_principal'=>['tbl'=>$recomendacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$recomendacion->id.Str::random(5))],
+        //     'relacion1'=>['tbl_rel'=>$recomendacion->constestaciones[0]->getTable(),'col_rel'=>'recomendacion_id'],
+        //     'relacion2'=>null,
+        //     'relacion3'=>null, 
+        //     'firmante'=>auth()->user()->name,
+        //     'firmante_puesto'=>auth()->user()->puesto,          
+        // ];       
 
-        $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
-                                 base64_encode(Str::random(5).$recomendacion->auditoria_id.Str::random(5)),
-                                 base64_encode(Str::random(5).$recomendacion->accion_id.Str::random(5)),
-                                 ['tbl'=>$recomendacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$recomendacion->id.Str::random(5))],
-                                 ['tbl_rel'=>$recomendacion->constestaciones[0]->getTable(),'col_rel'=>'recomendacion_id'],
-                                 null,null,'','','','','','','');
+        // $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
+        //                          base64_encode(Str::random(5).$recomendacion->auditoria_id.Str::random(5)),
+        //                          base64_encode(Str::random(5).$recomendacion->accion_id.Str::random(5)),
+        //                          ['tbl'=>$recomendacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$recomendacion->id.Str::random(5))],
+        //                          ['tbl_rel'=>$recomendacion->constestaciones[0]->getTable(),'col_rel'=>'recomendacion_id'],
+        //                          null,null,'','','','','','','');
 
-        $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
+        // $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
 
-         return view('recomendacionesatencionautorizacion.form', compact('recomendacion', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
+        //return view('recomendacionesatencionautorizacion.form', compact('recomendacion', 'accion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
+         return view('recomendacionesatencionautorizacion.form', compact('recomendacion', 'accion', 'auditoria'));
     }
 
     /**
@@ -100,7 +101,7 @@ class RecomendacionesAutorizacionController extends Controller
     {
         $this->normalizarDatos($request);
         //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
-        $constancia = guardarConstanciasFirmadas($recomendacion, 'constancia_atencion_recomendacion', $request, 'constancia');
+        //$constancia = guardarConstanciasFirmadas($recomendacion, 'constancia_atencion_recomendacion', $request, 'constancia');
 
         Movimientos::create([
             'tipo_movimiento' => 'Autorización de la calificación y conclusión de la atención de la recomendación',
@@ -114,7 +115,7 @@ class RecomendacionesAutorizacionController extends Controller
 
         $recomendacion->update([
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
-            'constancia_autorizacion' => $constancia->constancia_pdf,
+            //'constancia_autorizacion' => $constancia->constancia_pdf,
         ]);
 
 
@@ -138,7 +139,8 @@ class RecomendacionesAutorizacionController extends Controller
             setMessage('Se ha rechazado el registro de la atencion con exito.');
         }
 
-        return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'recomendacionesatencion.index']);
+        //return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'recomendacionesatencion.index']);
+        return redirect()->route('recomendacionesatencion.index');
     }
 
     /**
