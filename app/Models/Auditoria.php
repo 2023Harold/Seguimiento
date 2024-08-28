@@ -273,4 +273,15 @@ class Auditoria extends Model
             {
                 return $this->hasOne(CatalogoTipoAuditoria::class, 'id', 'tipo_auditoria_id');
             }
+            public function getPeriodoMesAttribute()
+            {       
+                          //ACF - 001/dian/001= 26/08/2024  
+                $p_mes= substr($this->periodo_revision,0,-4);                                       
+                return $p_mes;
+            } 
+            public function getPeriodoAnioAttribute()
+            { 
+                $p_anio= substr($this->periodo_revision,-4);                                                        
+                return $p_anio;
+            }            
 }

@@ -24,9 +24,9 @@ class ReportesSeguimientoController extends Controller
 
     public function index(Request $request)
     {       
-        $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
+        $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);                
         return view('reportesseg.index', compact('request','auditorias'));
-
+        
     }
 
     /**

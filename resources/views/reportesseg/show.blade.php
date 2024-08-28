@@ -2,11 +2,11 @@
 <table>
     <thead>
         <tr>
-            <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="150px" > Tipo Auditoria </th>                          
+            <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="150px" > Tipo de Entidad </th>                          
             <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="150px"> Núm. Progresivo </th>                    
             <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="150px"> Núm. Entidad/ Siglas </th>
             <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="150px"> Tipo de Entidad </th>
-            <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="400px"> Entidad fiscalizada </th>
+            <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="400px"> Auditoría PAA </th>
             <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="200px"> Tipo Auditoría </th> 
             <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="300px"> Periodo Auditado </th> 
             <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="150px"> Año Auditado </th>
@@ -24,8 +24,8 @@
             <th rowspan=2 colspan=2 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="300px"> Acciones promovidas solventadas </th>   
             <th rowspan=2 colspan=2 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="300px"> Acciones promovidas no solventadas </th>
             <th rowspan=3 style="color: white; background-color: #A13B71; border:solid;" align="center" valign="center" width="200px"> Área en que sencuentra </th>                             
-            <th rowspan=3 style="color: white; background-color: red; border:solid;" align="center" valign="center" width="600px"> Parte del Proceso de Seguimiento en que se encuentra la Auditoría >Etapa aclaración< </th>
-            <th rowspan=3 style="color: white; background-color: red; border:solid;" align="center" valign="center" width="600px"> Parte del Proceso de Seguimiento en que se encuentra la Auditoría >Atención de las Recom.< </th>
+            <th rowspan=3 style="color: white; background-color: red; border:solid;" align="center" valign="center" width="600px"> Parte del Proceso de Seguimiento en que se encuentra la Auditoría Etapa aclaración </th>
+            <th rowspan=3 style="color: white; background-color: red; border:solid;" align="center" valign="center" width="600px"> Parte del Proceso de Seguimiento en que se encuentra la Auditoría Atención de las Recom. </th>
             <th rowspan=3 style="color: white; background-color: red; border:solid;" align="center" valign="center" width="600px"> Fecha de acuse de la conclusión de la Etapa de Aclaración </th>
             <th rowspan=3 style="color: white; background-color: red; border:solid;" align="center" valign="center" width="600px"> Fecha de acuse de la conclusión al proceso de atención de las recom.</th>
             <th rowspan=3 style="color: white; background-color: red; border:solid;" align="center" valign="center" width="600px"> Fecha de acuse de oficio de notif. del informe de seguimiento de la etapa de aclaración </th>

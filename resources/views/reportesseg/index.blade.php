@@ -31,7 +31,7 @@
                             <th rowspan=3 style="width:20px" class="text-center"> Tipo de Entidad </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Auditoría PAA </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Tipo Auditoría </th> 
-                            <th rowspan=3 style="width:20px" class="text-center"> Periodo Auditado del</th> 
+                            <th rowspan=3 style="width:20px" class="text-center"> Periodo Auditado</th> 
                             <th rowspan=3 style="width:20px" class="text-center"> Año Auditado </th>
                             {{-- <th rowspan=3 style="width:20px" class="text-center bg-danger"> Admon. </th> --}}
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. de Auditoría </th>
@@ -132,11 +132,12 @@
                                 <td class="bg-light-dark">
                                     {{ $auditoria->acto_fiscalizacion }}                                    
                                 </td> 
-                                <td>
-                                    {{ $auditoria->periodo_revision }}                                    
+                                <td>       
+                                    {{ $auditoria->periodomes }}                              
+                                   
                                 </td>                                              
                                 <td class="text-center bg-light-dark">                                       
-                                    {{ $auditoria->ejercicio-1 }}                                       
+                                    {{ $auditoria->periodoAnio }}                            
                                 </td>
                                 {{-- <td style="text-align: center;" class="bg-danger">
                                    2022-2024
