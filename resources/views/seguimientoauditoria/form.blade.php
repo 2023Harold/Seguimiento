@@ -22,7 +22,12 @@
             <div class="col-md-3">
                 {!! BootForm::text('numero_auditoria', 'Número de auditoría: *', old('numero_auditoria', $auditoria->numero_auditoria)) !!}
             </div>
-        </div>       
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                {!! BootForm::text('numero_orden', 'Número de orden de auditoría: *', old('numero_orden', $auditoria->numero_orden)) !!}
+            </div>
+        </div>                      
             {!! BootForm::label('lb_ebtidad','Entidad Fiscalizable: *') !!}
         <div class="row">           
             <div class="col-md-3 mb-4">
@@ -57,8 +62,11 @@
             </div>
         </div>       
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 {!! archivo('informe_auditoria', 'Informe de auditoria: ', optional($auditoria)->informe_auditoria) !!}
+            </div>
+            <div class="col-md-2">
+                {!! BootForm::text('fojas_utiles', 'Número de fojas útiles: *', optional($auditoria)->fojas_utiles) !!}
             </div>
         </div>        
         <div class="row">

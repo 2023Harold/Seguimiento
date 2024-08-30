@@ -44,9 +44,11 @@
                         <thead>
                             <tr>
                                 <th>No. de auditoría</th>
+                                <th>No. de orden de auditoría</th>
                                 <th>Entidad fiscalizable</th>
                                 <th>Acto de fiscalización</th>
                                 <th>Informe de auditoría</th>
+                                <th>Número de fojas</th>
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th> 
                                 <th>Fase</th>                                
@@ -58,6 +60,9 @@
                                 <tr>
                                     <td>
                                         {{ $auditoria->numero_auditoria }}
+                                    </td>
+                                    <td>
+                                        {{ $auditoria->numero_orden }}
                                     </td>
                                     <td  width='40%'>
                                         @php
@@ -76,6 +81,9 @@
                                                 <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->informe_auditoria)) ?>
                                             </a>                                    
                                         @endif
+                                    </td>
+                                    <td>
+                                        {{ $auditoria->fojas_utiles}}
                                     </td>
                                     <td class="text-center">
                                         @if(!empty($auditoria->fase_autorizacion) && auth()->user()->siglas_rol!='ANA')

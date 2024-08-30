@@ -51,7 +51,7 @@
                         {!! BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
                     </div>                    
                     <div class="col-lg-3 col-md-3">
-                        {!! BootForm::date('fecha_oficio_informe','Fecha del oficio notificación del informe: *', old('fecha_oficio_informe',$radicacion->fecha_oficio_informe,'Y-m-d')) !!}
+                        {!! BootForm::date('fecha_oficio_informe','Fecha del oficio: *', old('fecha_oficio_informe',$radicacion->fecha_oficio_informe,'Y-m-d')) !!}
                     </div>                      
                 </div>
                 <div class="row">

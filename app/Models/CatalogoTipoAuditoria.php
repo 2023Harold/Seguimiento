@@ -18,6 +18,7 @@ class CatalogoTipoAuditoria extends Model
         'cumplimiento_financiero',
         'inversion_fisica',
         'desempenio_legalidad',
+        'nombre_ae',
     ];
 
     public function tipo_auditorias()

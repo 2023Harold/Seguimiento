@@ -18,26 +18,31 @@ class CatTipoAuditoriaSeeder extends Seeder
             'Descripcion' => 'Cumplimiento Financiero',
             'Sigla' => 'ACF',
             'cumplimiento_financiero' => 'X',
+            'nombre_ae'=>'Jaime Enrique Perdigón Nieto',
         ]);
         CatalogoTipoAuditoria::create([
             'Descripcion' => 'Inversión Física',
             'Sigla' => 'AIF',
             'inversion_fisica' => 'X',
+            'nombre_ae'=>'Jaime Enrique Perdigón Nieto',
         ]);
         CatalogoTipoAuditoria::create([
             'Descripcion' => 'Desempeño',
             'Sigla' => 'AD',
             'desempenio_legalidad' => 'X',
+            'nombre_ae'=>'Javier López Pérez',
         ]);
         CatalogoTipoAuditoria::create([
             'Descripcion' => 'Legalidad',
             'Sigla' => 'AL',
             'desempenio_legalidad' => 'X',
+            'nombre_ae'=>'Javier López Pérez',
         ]);
         CatalogoTipoAuditoria::create([
             'Descripcion' => 'Legalidad y Desempeño',
             'Sigla' => 'ALD',
             'desempenio_legalidad' => 'X',
+            'nombre_ae'=>'Javier López Pérez',
         ]);
         CatalogoTipoAuditoria::create([
             'Descripcion' => 'Inversión Física y Legalidad',
@@ -74,6 +79,7 @@ class CatTipoAuditoriaSeeder extends Seeder
             'Sigla' => 'ACFIF',
             'cumplimiento_financiero' => 'X',
             'inversion_fisica' => 'X',
+            'nombre_ae'=>'Jaime Enrique Perdigón Nieto',
         ]);
         CatalogoTipoAuditoria::create([
             'Descripcion' => 'Cumplimiento Financiero, Desempeño y Legalidad',

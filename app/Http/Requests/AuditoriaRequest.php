@@ -25,11 +25,13 @@ class AuditoriaRequest extends FormRequest
     {
         return [
             'numero_auditoria' => 'required|string|max:100',
+            'numero_orden'=>'required|string|max:150',
             'entidad_n1' => 'sometimes|nullable|required_without:entidad_descripcion|integer|max:999999999999',
             'entidad_n2' => 'sometimes|nullable|required_without_all:entidad_fiscalizable_id,entidad_descripcion|integer|max:999999999999',
             'entidad_n3' => 'sometimes|nullable|required_without_all:entidad_fiscalizable_id,entidad_descripcion|integer|max:999999999999',
             'entidad_descripcion'=>'sometimes|nullable|required_without:entidad_fiscalizable_id|string|max:2000',
             'periodo_revision' => 'required|string|max:100',
+            'fojas_utiles'=>'required|integer|max:80000',
             'tipo_auditoria_id' => 'required|integer|max:9999999999',
             'lider_proyecto_id' => 'required|integer|max:9999999999',
         ];
@@ -44,6 +46,8 @@ class AuditoriaRequest extends FormRequest
             'entidad_n3' => 'entidad fiscalizable',
             'periodo_revision' => 'periodo de la revisión',
             'tipo_auditoria_id' => 'acto de fiscalización',
+            'numero_orden'=>'número de orden de auditoría',
+            'fojas_utiles'=>'número de fojas útiles',
 
         ];
     }

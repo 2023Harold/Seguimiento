@@ -24,6 +24,7 @@ class Auditoria extends Model
              */
             protected $fillable = [
                 'numero_auditoria',
+                'numero_orden',
                 'entidad_fiscalizable_id',
                 'entidad_fiscalizable',
                 'tipo_entidad',
@@ -33,6 +34,7 @@ class Auditoria extends Model
                 'tipo_auditoria_id',
                 'acto_fiscalizacion',
                 'informe_auditoria',
+                'fojas_utiles',
                 'registro_concluido',
                 'constancia',
                 'fase_autorizacion',
