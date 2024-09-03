@@ -198,7 +198,7 @@ class CedulaInicialAutorizacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, Auditoria $auditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el el registro de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.'.';
+                    .'Ha sido rechazado el registro de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.'.';
 
         return $mensaje;
     }
@@ -206,7 +206,7 @@ class CedulaInicialAutorizacionController extends Controller
     private function mensajeAprobado(String $nombre, String $puesto, Auditoria $auditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .' Ha sido rechazado el el registro de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.
+                    .' Ha sido aprobado el registro de la Cédula General de Seguimiento de la Auditoría No. '.$auditoria->numero_auditoria.
                     ', por parte del Titular.';
 
         return $mensaje;

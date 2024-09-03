@@ -64,22 +64,21 @@
                             <a href="{{ route('cedulaanalitica.edit',$auditoria) }}" rel="noopener noreferrer">
                                 <div class="card">                           
                                     <div class="card-body overflow-auto h-50px btn btn-secondary">
-                                        <div class="d-flex flex-column">Cédula Analitica
+                                        <div class="d-flex flex-column">Cédula Analítica
                                         </div>
                                     </div>
                                 </div>
                             </a>
                         </div> 
                         @endcan
-                    @endif
-                      
+                    @endif                      
                     @if (count($auditoria->totalrecomendacion)>0 &&(str_contains($auditoria->acto_fiscalizacion, 'Desempeño')||str_contains($auditoria->acto_fiscalizacion, 'Legalidad')))
                     @can('cedulaanaliticadesemp.edit')
                     <div class="col-md-4 mt-2">
                         <a href="{{ route('cedulaanaliticadesemp.edit',$auditoria) }}" rel="noopener noreferrer">
                             <div class="card">                           
                                 <div class="card-body overflow-auto h-50px btn btn-secondary">
-                                    <div class="d-flex flex-column">Cédula Analitica Desempeño
+                                    <div class="d-flex flex-column">Cédula Analítica Desempeño
                                     </div>
                                 </div>
                             </div>
@@ -87,6 +86,20 @@
                     </div>  
                     @endcan 
                     @endif 
+                    @if($auditoria->acto_fiscalizacion!='Desempeño')
+                        @can('cedulaanalitica.edit')              
+                        <div class="col-md-4 mt-2">
+                            <a href="{{ route('cedulaanaliticadesemp.edit',$auditoria) }}" rel="noopener noreferrer">
+                                <div class="card">                           
+                                    <div class="card-body overflow-auto h-50px btn btn-secondary">
+                                        <div class="d-flex flex-column">Cédula Analítica Desempeño
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>  
+                        @endcan
+                    @endif
                 </div>                
             </div>
         </div>
