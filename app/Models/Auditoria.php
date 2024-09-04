@@ -359,5 +359,10 @@ class Auditoria extends Model
                     return $entidadF->NomEntFis;
                 }
             }
+
+            public function informeprimeraetapa()
+            {
+                return $this->belongsTo(InformePrimeraEtapa::class, 'id', 'auditoria_id');
+            }
            
 }

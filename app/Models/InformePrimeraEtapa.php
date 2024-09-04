@@ -11,14 +11,9 @@ class InformePrimeraEtapa extends Model
     // protected $fillable = ['numero_ordenauditoria','fecha_notificacion_oficio','numero_oficio_entro'];
     protected $table = 'seginforme_primeraetapa';
     protected $fillable = [
-        'numero_ordenauditoria',
-        'fecha_notificacion_oficio',
-        'numero_oficio_entro',
-        'acta_reunion_resultados',
-        'fecha_notificación',
-        'informe_seguimiento',
-        'fojas_utiles',
-        'clave_accion_pliego',
+        'numero_informe',
+        'fecha_informe',
+        'informe',
         'auditoria_id'
     ];
     /**

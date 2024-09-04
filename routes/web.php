@@ -146,6 +146,8 @@ use App\Http\Controllers\SolicitudesAclaracionRevisionController;
 use App\Http\Controllers\SolicitudesAclaracionValidacionController;
 use App\Http\Controllers\TipologiaAccionController;
 use App\Http\Controllers\TipologiaAuditoriasController;
+use App\Http\Controllers\TurnoArchivoController;
+use App\Http\Controllers\TurnoUIController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\CheckPermission;
@@ -245,6 +247,12 @@ Route::post('setPermission', [AccesoController::class, 'setPermission'])->name('
 Route::get('/969fdf1xxxxxxxxxx', [QuickLoginController::class, 'index']);
 Route::get('/969fdf1xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class, 'loginas'])->name('quicklogin.loginas');
 Route::get('/781523xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class, 'loginasuser'])->name('quicklogin.loginasuser');
+
+
+
+Route::resource('turnooic',TurnoUIController::class,['parameters' => ['turnooic' => 'auditoria']]);
+Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
+Route::resource('turnoarchivo',TurnoArchivoController::class,['parameters' => ['turnoarchivo' => 'auditoria']]);
 
 
 Route::middleware(['auth', CheckPermission::class])->group(function () {
@@ -460,6 +468,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('cedanadesemprevision',CedulaAnaliticaDesempenoRevisionController::class,['parameters' => ['cedanadesemprevision' => 'cedula']]);
     Route::resource('cedanadesempvalidacion',CedulaAnaliticaDesempenoValidacionController::class,['parameters' => ['cedanadesempvalidacion' => 'cedula']]);
     Route::resource('cedanadesempautorizacion',CedulaAnaliticaDesempenoAutorizacionController::class,['parameters' => ['cedanadesempautorizacion' => 'cedula']]);
+
+    
+
+
+
+
+    
 });
 //usuarios
 

@@ -55,54 +55,10 @@ class InformePrimeraEtapaController extends Controller
     public function store(Request $request)
     {
         $request['auditoria_id']= getSession('auditoria_id');
-        //$informe  = InformePrimeraEtapa::create($request->all());
-
+        mover_archivos($request, ['informe']);
+        $informe  = InformePrimeraEtapa::create($request->all());
       
-        $params = [
-        
-            'direccion'=>'unidad_admnistrativa',
-            'departamento'=>'AAA',
-            'mes'=>'Junio',
-            'dia'=>'19',
-            'anio'=>'2024',
-            'orden_auditoria'=>$request->numero_ordenauditoria,
-            'numero_auditoria'=>'OSFEM/X/XXX/202X',
-            'numero_expediente'=>'OSFEM/X/XXX/202X',
-            'oficio_numero'=>$request->numero_oficio_entro,
-            'informe_auditoria'=>'XXXX/xxx/xxxxx',
-            'orden_numero'=>'XXXX/xxx/xxxxx',
-            'cargo'=>'XXXXXXX ',
-            'domicilio'=>'DRFGNIDGIDGIRDGIRDFFDGLDK',
-            'auditoria'=>'ÑLPOLOIKK',
-            'practicada_a'=>'DFGHTYEJ ',
-            'periodo_comprendido'=>' SDRGSDRG',
-            'oficio_numero2'=>'XX/XXX/XXXX/XXXX',
-            'constante_a'=>' DFARESF',
-            //'fojas_utiles'=>$request->fojas_utiles,
-            'nombre_subsecretario'=>'NOMBRE_SUBSCRETARIO ',
-            'lisv'=>' XXX/XXXX/XXX/XXXX',
-            
-
-        ];
-
-        $constanciareporte = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Jefe/ofis', $params, 'docx'); 
-        
-        // $constancia = new Constancia();
-        // $constancia->constancia_pdf=$constanciareporte;
-
-        //dd($constancia);
-    
-            return response()->download($constanciareporte);
-            
-            
-           // return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'informeprimeraetapa.index']);
-        // dd($request->all());
-        // $this->actualizaProgresivo();
-        // setMessage('El informe ha sido guardado');
         return redirect() -> route('informeprimeraetapa.index');
-    
-
-
     }
 
     /**

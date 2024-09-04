@@ -273,6 +273,42 @@
                                 </div>                            
                             </div>
                         </div> 
+                        <div class="menu-item menu-accordion" data-kt-menu-trigger="click">                     
+                            <a href="#" class="menu-link py-3">
+                                <span class="menu-icon">
+                                    <i class="fa fa-folder-open fs-3"></i>
+                                </span>
+                                <span class="menu-title">Turno</span>
+                            </a>
+                            <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3">                              
+                                <div class="menu-item mb-1">
+                                    <a href="{{route('turnoui.index')}}" class="menu-link py-3">
+                                        <span class="menu-bullet">
+                                            <span class="fa fa-file-text"></span>
+                                        </span>
+                                        <span class="menu-title">Turno a la UI</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item mb-1">
+                                    <a href="{{route('turnooic.index')}}" class="menu-link py-3">
+                                        <span class="menu-bullet">
+                                            <span class="fa fa-file-text"></span>
+                                        </span>
+                                        <span class="menu-title">Turno OIC</span>
+                                    </a>
+                                </div>                              
+                                
+                                <div class="menu-item mb-1">
+                                    <a href="{{route('turnoarchivo.index')}}" class="menu-link py-3">
+                                        <span class="menu-bullet">
+                                            <span class="fa fa-file-text"></span>
+                                        </span>
+                                        <span class="menu-title">Acuse envio archivo</span>
+                                    </a>
+                                </div>
+                                          
+                            </div>
+                        </div> 
                         <div class="menu-item mb-1">                     
                             <a href="{{ route('pacauditoria.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'pacauditoria') || str_contains(Route::current()->getName(), 'comparecenciaacuse')|| str_contains(Route::current()->getName(), 'comparecenciaagenda')) ? 'active' : '' }}">
                                 <span class="menu-bullet">
