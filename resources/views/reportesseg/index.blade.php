@@ -439,6 +439,10 @@
                                 </td>
                                 <td class="bg-light-dark text-center">
                                     @php
+                                    $fechapo=date('01/01/0001');
+                                    $fechasa=date('01/01/0001');
+                                    $fechar=date('01/01/0001');
+                                    
                                      foreach ($auditoria->acciones as $accion) {
 
                                         if (!empty($accion->recomendaciones)) {                                                

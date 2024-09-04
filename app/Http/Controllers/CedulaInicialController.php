@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use App\Models\SUTIC\EntidadFiscalizableIntra;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,9 +23,118 @@ class CedulaInicialController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));        
+        $auditoria = Auditoria::find(getSession('auditoria_id'));   
+        
+        $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedini_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedini_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());    
+
+        $raccionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedrec_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        $raccionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedrec_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        $raccionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedrec_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        $raccionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedrec_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        $raccionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedrec_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        $raccionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedrec_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        $ranalistasF=array_unique($raccionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        $ranalistasL=array_unique($raccionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        $rlideresF=array_unique($raccionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        $rlideresL=array_unique($raccionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        $rjefesF=array_unique($raccionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        $rjefesL=array_unique($raccionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());   
+
+        $prasaccionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedpras_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        $prasaccionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedpras_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        $prasaccionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedpras_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        $prasaccionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedpras_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        $prasaccionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedpras_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        $prasaccionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedpras_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        $prasanalistasF=array_unique($prasaccionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        $prasanalistasL=array_unique($prasaccionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        $praslideresF=array_unique($prasaccionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        $praslideresL=array_unique($prasaccionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        $prasjefesF=array_unique($prasaccionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        $prasjefesL=array_unique($prasaccionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());   
+
+        $caaccionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        $caaccionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedana_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        $caaccionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        $caaccionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedana_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        $caaccionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        $caaccionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedana_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        $caanalistasF=array_unique($caaccionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        $caanalistasL=array_unique($caaccionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        $calideresF=array_unique($caaccionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        $calideresL=array_unique($caaccionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        $cajefesF=array_unique($caaccionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        $cajefesL=array_unique($caaccionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());    
+        
+        $cadesaccionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedanades_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        $cadesaccionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedanades_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        $cadesaccionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedanades_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        $cadesaccionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedanades_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        $cadesaccionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedanades_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        $cadesaccionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedanades_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        $cadesanalistasF=array_unique($cadesaccionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        $cadesanalistasL=array_unique($cadesaccionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        $cadeslideresF=array_unique($cadesaccionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        $cadeslideresL=array_unique($cadesaccionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        $cadesjefesF=array_unique($cadesaccionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        $cadesjefesL=array_unique($cadesaccionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());
+
+        $resultado=[
+            'cg_seguimiento'=>[
+                'analistasF'=>$analistasF,
+                'analistasL'=>$analistasL,
+                'lideresF'=>$lideresF,
+                'lideresL'=>$lideresL,
+                'jefesF'=>$jefesF,
+                'jefesL'=>$jefesL,
+            ],
+            'cg_recomendaciones'=>[
+                'analistasF'=>$ranalistasF,
+                'analistasL'=>$ranalistasL,
+                'lideresF'=>$rlideresF,
+                'lideresL'=>$rlideresL,
+                'jefesF'=>$rjefesF,
+                'jefesL'=>$rjefesL,
+            ],
+            'cg_pras'=>[
+                'analistasF'=>$prasanalistasF,
+                'analistasL'=>$prasanalistasL,
+                'lideresF'=>$praslideresF,
+                'lideresL'=>$praslideresL,
+                'jefesF'=>$prasjefesF,
+                'jefesL'=>$prasjefesL,
+            ],
+            'ca_seguimiento'=>[
+                'analistasF'=>$caanalistasF,
+                'analistasL'=>$caanalistasL,
+                'lideresF'=>$calideresF,
+                'lideresL'=>$calideresL,
+                'jefesF'=>$cajefesF,
+                'jefesL'=>$cajefesL,
+            ],
+            'ca_desempeno'=>[
+                'analistasF'=>$cadesanalistasF,
+                'analistasL'=>$cadesanalistasL,
+                'lideresF'=>$cadeslideresF,
+                'lideresL'=>$cadeslideresL,
+                'jefesF'=>$cadesjefesF,
+                'jefesL'=>$cadesjefesL,
+            ],
+        ];
+
                
-        return view('cedulainicial.index', compact('auditoria', 'request'));
+        return view('cedulainicial.index', compact('auditoria', 'request','resultado'));
     }
 
     /**
@@ -66,7 +176,7 @@ class CedulaInicialController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Auditoria $auditoria)
-    {
+    {        
         $entidadregistrada = EntidadFiscalizableIntra::where('PkCveEntFis',$auditoria->id)->first();
         $entidad = $entidadregistrada->NomEntFis;
         $tipo_entidad = $entidadregistrada->Ambito;

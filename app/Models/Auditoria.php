@@ -79,6 +79,46 @@ class Auditoria extends Model
                 return $this->belongsTo(AuditoriaAccion::class, 'id','segauditoria_id');
             }
 
+            public function accionesrecomendaciones()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',2)->orderBy('consecutivo');
+            }
+
+            public function accionesrecomendacionesautorizadas()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',2)
+                ->whereHas('recomendaciones', function (Builder $query) {
+                    $query->where('fase_autorizacion','Autorizado');
+                })->orderBy('consecutivo');
+            }
+
+            public function accionespras()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',4)->orderBy('consecutivo');
+            }
+            public function accionesprasautorizadas()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',4)
+                ->whereHas('pras', function (Builder $query) {
+                    $query->where('fase_autorizacion','Autorizado');
+                })->orderBy('consecutivo');
+            }
+            public function accionespoautorizadas()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',3)
+                ->whereHas('pliegosobservacion', function (Builder $query) {
+                    $query->where('fase_autorizacion','Autorizado');
+                })->orderBy('consecutivo');
+            }
+            public function accionessolaclautorizadas()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',1)
+                ->whereHas('solicitudesaclaracion', function (Builder $query) {
+                    $query->where('fase_autorizacion','Autorizado');
+                })->orderBy('consecutivo');
+            }
+           
+
             public function accionesDepartamento()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->where('departamento_asignado_id',substr(auth()->user()->unidad_administrativa_id, 0, 5).'0')->orderBy('consecutivo');
@@ -239,7 +279,7 @@ class Auditoria extends Model
 
             public function cedulageneralrecomendaciones()
             {
-                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Recomendaciones');
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Recomendación');
             }
 
             public function cedulageneralpras()

@@ -221,10 +221,7 @@ Route::get('/reportesseg/excel', [ReportesSeguimientoController::class, 'export'
 Route::get('/radicacionnotificacion/iaar', [RadicacionController::class, 'export'])->name('radicacioniaar.exportar');
 Route::get('/radicacionnotificacion/aroic', [RadicacionController::class, 'exportOIC'])->name('radicacioniaar.exportaroic');
 
-
-
-
-
+Route::get('/comparecencia/ac', [ComparecenciaController::class, 'export'])->name('comparecencia.exportar');
 
 
 /**Jefe */
@@ -426,10 +423,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     // Route::resource('seguimientoauditoriarevision', SeguimientoAuditoriaRevisionController::class, ['parameters' => ['seguimientoauditoriarevision' => 'auditoria']]);
     // Route::resource('seguimientoauditoriavalidacion', SeguimientoAuditoriaValidacionController::class, ['parameters' => ['seguimientoauditoriavalidacion' => 'auditoria']]);
     // Route::resource('seguimientoauditoriaautorizacion', SeguimientoAuditoriaAutorizacionController::class, ['parameters' => ['seguimientoauditoriaautorizacion' => 'auditoria']]);
-
-
-
-
     //Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
     Route::resource('cedulainicialprimera',CedulaInicialPrimeraEtapaController::class,['parameters' => ['cedulainicialprimera' => 'auditoria']]);
     Route::resource('cedulainicialprimeraanalista',CedulaInicialAprobarAnalistaController::class,['parameters' => ['cedulainicialprimeraanalista' => 'cedula']]);

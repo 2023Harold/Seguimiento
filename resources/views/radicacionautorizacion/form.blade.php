@@ -18,7 +18,7 @@
                         @include('flash::message')
                         @include('layouts.contextos._radicacion')                    
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="display: none;" id="div_acuerdopdf">
                                 <div id="body_loader" class="body_loader" style="display:none;">
                                     <span class="loader"></span>
                                     <span> Firmando la constancia, por favor espere.</span>
@@ -26,20 +26,27 @@
                                 <embed src="{{asset($preconstancia)}}" type="application/pdf" width="100%" height="600px"/>
                             </div>
                         </div>
-                        {!! BootForm::open(['model' => $radicacion,'update'=>'radicacionautorizacion.update','id'=>'form'] )!!}
+                        {!! BootForm::open(['model' => $radicacion,'update'=>'radicacionautorizacion.update','id'=>'form'] )!!}                       
                         {!! BootForm::hidden('archivo_firmar',$b64archivoxml,['id'=>'archivo_firmar'])!!}
-                            <div id="campos">
+                            <div id="campos"><br>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {!! BootForm::radios("estatus", ' ', ['Aprobado' => 'Autorizar', 'Rechazado' => 'Rechazar'], null,false,['class'=>'i-checks rechazado']); !!}
+                                        {!! BootForm::checkbox('radicacion_sistema', 'Acuerdo de radicacion por sistema', 'X', false, ['class' => 'i-checks rxs']) !!}
                                     </div>
                                 </div>
-                                <div class="row" id="justificacion" style="display: none;">
-                                    <div class="col-md-12">
-                                        {!! BootForm::textarea('motivo_rechazo','Motivo del rechazo:*','',["rows" => "2", "style" => "rezise:none"])!!}
+                                <div class="div-estatus" style="display:block;">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {!! BootForm::radios("estatus", ' ', ['Aprobado' => 'Autorizar', 'Rechazado' => 'Rechazar'], null,false,['class'=>'i-checks rechazado']); !!}
+                                        </div>
                                     </div>
-                                </div>
-                                <div id="campos">
+                                    <div class="row" id="justificacion" style="display: none;">
+                                        <div class="col-md-12">
+                                            {!! BootForm::textarea('motivo_rechazo','Motivo del rechazo:*','',["rows" => "2", "style" => "rezise:none"])!!}
+                                        </div>
+                                    </div>
+                                </div>                                
+                                <div id="camposfirma" style="display:none;" >
                                     <div class="row">
                                         <div class="col-md-6">
                                             {!! archivoFirma('certificate_file', 'Certificado digital: *', null,['data-allowedFileExtensions' => 'cer', 'accept'=>'.cer', 'class'=>'key']) !!}
@@ -55,15 +62,16 @@
                                             {!! BootForm::password("password", "Contraseña:", ['autocomplete'=>'off', 'class'=>'enviar-firma']); !!}
                                         </div>
                                     </div>
+                                    {!! camposFirma() !!}
                                 </div>                                
-                            </div>
-                            {!! camposFirma() !!}
+                            </div>                           
                             <div class="row mt-3">
                                 <div class="col-md-6 justify-content-end">
                                     @can('radicacionautorizacion.update')
-                                        <button type="button" id='btn-firma' class="btn btn-primary" onclick="ConfirmFirma();">Firmar y guardar</button>
+                                        <button type="button" id='btn-firma' class="btn btn-primary" onclick="ConfirmFirma();" style="display: none;">Firmar y guardar</button>                                      
+                                        <button type="submit" id='btn-guardar' class="btn btn-primary">Guardar</button>
                                     @endcan
-                                <a href="{{ route('radicacion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
+                                     <a href="{{ route('radicacion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                                 </div>
                             </div>
                         {!! BootForm::close() !!}
@@ -76,4 +84,27 @@
 @section('script')
 <script type="text/javascript" src="{{ asset('assets/js/signData.js')}}"></script>
     @include('layouts.partials._firma')
+    <script>
+        $(document).ready(function() {
+            $('.rxs').on('ifChanged', function(event) {              
+                var estado = $(this).is(':checked')? 1 : 0;
+
+                if(estado==0){
+                    $('#div_acuerdopdf').hide();
+                    $('#camposfirma').hide();
+                    $('#btn-firma').hide();
+                    $('#btn-guardar').show();
+
+                }else{
+                    $('#div_acuerdopdf').show();
+                    $('#camposfirma').show();
+                    $('#btn-firma').show();
+                    $('#btn-guardar').hide();
+
+                }
+                //alert(estado);            
+            });
+        });
+    </script>    
+    {!! JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
 @endsection

@@ -139,23 +139,44 @@ class RadicacionAutorizacionController extends Controller
     {
        
         $this->normalizarDatos($request);
-        //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
-        $constancia = guardarConstanciasFirmadas($radicacion, 'constancia_radicacion', $request, 'constancia');
+        if(empty($request->radicacion_sistema)){
 
-        Movimientos::create([
-            'tipo_movimiento' => 'Autorización de la radicación',
-            'accion' => 'Radicación',
-            'accion_id' => $radicacion->id,
-            'estatus' => $request->estatus,
-            'usuario_creacion_id' => auth()->id(),
-            'usuario_asignado_id' => auth()->id(),
-            'motivo_rechazo' => $request->motivo_rechazo,
-        ]);       
-       
-        $radicacion->update([
-            'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
-            'constancia' => $constancia->constancia_pdf,
-        ]);
+            Movimientos::create([
+                'tipo_movimiento' => 'Autorización de la radicación',
+                'accion' => 'Radicación',
+                'accion_id' => $radicacion->id,
+                'estatus' => $request->estatus,
+                'usuario_creacion_id' => auth()->id(),
+                'usuario_asignado_id' => auth()->id(),
+                'motivo_rechazo' => $request->motivo_rechazo,
+            ]);       
+           
+            $radicacion->update([
+                'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
+            ]);
+
+
+
+        }else{
+            //dd($request);
+            //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
+            $constancia = guardarConstanciasFirmadas($radicacion, 'constancia_radicacion', $request, 'constancia');
+
+            Movimientos::create([
+                'tipo_movimiento' => 'Autorización de la radicación',
+                'accion' => 'Radicación',
+                'accion_id' => $radicacion->id,
+                'estatus' => $request->estatus,
+                'usuario_creacion_id' => auth()->id(),
+                'usuario_asignado_id' => auth()->id(),
+                'motivo_rechazo' => $request->motivo_rechazo,
+            ]);       
+        
+            $radicacion->update([
+                'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
+                'constancia' => $constancia->constancia_pdf,
+            ]);
+        }
 
         
         $director=User::where('unidad_administrativa_id',substr($radicacion->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();
@@ -177,9 +198,15 @@ class RadicacionAutorizacionController extends Controller
             
             setMessage('Se ha rechazado el registro de la radicación de la auditoría con exito.');
             
-        }
+        }    
 
-        return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'radicacion.index']);
+        if(empty($request->radicacion_sistema)){
+
+            return redirect()->route('radicacion.index');
+        } else{
+            
+            return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'radicacion.index']);
+        }
     }
 
     /**

@@ -62,26 +62,37 @@ class CedulaAnaliticaController extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-        $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_analista')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedana_analista')->where('segauditoria_id',$auditoria->id)->get();  
-        $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_lider')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedana_lider')->where('segauditoria_id',$auditoria->id)->get();  
-        $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_jefe')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedana_jefe')->where('segauditoria_id',$auditoria->id)->get();       
-        $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
-        $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
-        $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
-        $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
-        $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
-        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
+        // $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        // $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedana_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        // $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        // $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedana_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        // $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        // $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedana_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        // $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        // $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        // $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        // $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        // $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        // $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
         
-        if(count($auditoria->cedulaanalitica)==0){           
-            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulaanalitica.show',compact('auditoria'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
-            $nombre='storage/temporales/CedulaAnalitica'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
-            $pdfgenrado = file_put_contents($nombre, $pdf);            
-        }else{        
-            $nombre=$auditoria->cedulaanalitica[0]->cedula;            
-        }
+        // if(count($auditoria->cedulaanalitica)==0){           
+        //     $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulaanalitica.show',compact('auditoria'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+        //     $nombre='storage/temporales/CedulaAnalitica'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+        //     $pdfgenrado = file_put_contents($nombre, $pdf);            
+        // }else{        
+        //     $nombre=$auditoria->cedulaanalitica[0]->cedula;            
+        // }
+
+        $resultado=$this->generatepdf($auditoria);
+
+        $analistasF =$resultado['analistasF'];
+        $analistasL = $resultado['analistasL'];        
+        $lideresF = $resultado['lideresF'];
+        $lideresL = $resultado['lideresL'];        
+        $jefesF = $resultado['jefesF'];
+        $jefesL = $resultado['jefesL'];      
+        $nombre = $resultado['nombre'];  
+
         
         return view('cedulaanalitica.index',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
     }
@@ -95,12 +106,14 @@ class CedulaAnaliticaController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        if(count($auditoria->cedulaanalitica)==0){           
+        if(count($auditoria->cedulaanalitica)==0){  
+            $resultado=$this->generatepdf($auditoria);
+
             $request['auditoria_id']=$auditoria->id;
             $request['cedula_tipo']='Cedula Analítica';            
             $request['usuario_creacion_id']=auth()->id();
             
-            $request['cedula_analitica']=$request->cedula2;
+            $request['cedula_analitica']=$resultado['nombre'];
             mover_archivos($request, ['cedula_analitica']);
             $request['cedula']=$request->cedula_analitica;
             
@@ -211,7 +224,7 @@ class CedulaAnaliticaController extends Controller
     
         setMessage('Se ha iniciado el proceso de revisión para la Cédula Analítica.');
        
-        return redirect()->route('cedulaanalitica.edit',$auditoria);
+        return redirect()->route('cedulainicial.index');
     }
 
     /**
@@ -223,5 +236,40 @@ class CedulaAnaliticaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function generatepdf(Auditoria $auditoria){
+        $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedana_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedana_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedana_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedana_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
+        
+        if(count($auditoria->cedulaanalitica)==0){           
+            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulaanalitica.show',compact('auditoria'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+            $nombre='storage/temporales/CedulaAnalitica'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+            $pdfgenrado = file_put_contents($nombre, $pdf);            
+        }else{        
+            $nombre=$auditoria->cedulaanalitica[0]->cedula;            
+        }
+
+        $resultado=[
+            'nombre'=>$nombre,            
+            'analistasF'=>$analistasF,
+            'analistasL'=>$analistasL,
+            'lideresF'=>$lideresF,
+            'lideresL'=>$lideresL,
+            'jefesF'=>$jefesF,
+            'jefesL'=>$jefesL,
+        ];
+
+        return $resultado;
     }
 }

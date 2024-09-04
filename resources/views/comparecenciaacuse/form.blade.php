@@ -14,7 +14,9 @@
                 </h1>
                 <div class="float-end">
                     <a href="{{route('radicacioniaar.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;IA AR</a>
-                    <a href="{{route('radicacioniaar.exportaroic')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AR OIC</a>
+                    @if (count($auditoria->accionespras)>0)
+                        <a href="{{route('radicacioniaar.exportaroic')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AR OIC</a>
+                    @endif                   
                 </div>
             </div>
             <div class="card-body">

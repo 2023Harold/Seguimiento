@@ -62,57 +62,66 @@ class CedulaInicialPrimeraEtapaController extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-        $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_analista')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedini_analista')->where('segauditoria_id',$auditoria->id)->get();  
-        $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();  
-        $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_jefe')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedini_jefe')->where('segauditoria_id',$auditoria->id)->get();       
-        $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
-        $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
-        $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
-        $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
-        $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
-        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
+        $resultado=$this->pdfGenerator($auditoria);
+        // $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        // $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedini_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        // $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        // $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        // $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        // $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedini_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        // $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        // $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        // $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        // $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        // $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        // $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
         
         
-         if(count($auditoria->cedulageneralseguimiento)==0){
-            $TSP=0;
-            $TSPS=0;
-            $TSPNS=0;
+        //  if(count($auditoria->cedulageneralseguimiento)==0){
+        //     $TSP=0;
+        //     $TSPS=0;
+        //     $TSPNS=0;
     
-            foreach ($auditoria->totalsolacl as $solicitud) {
-                $TSP= $TSP  +  $solicitud->monto_aclarar;
-                $TSPS=  $TSPS  +  ((!empty($solicitud->solicitudesaclaracion)&&!empty($solicitud->solicitudesaclaracion->monto_solventado)) ? $solicitud->solicitudesaclaracion->monto_solventado:0);
-                $TSPNS= $TSPNS + ($solicitud->monto_aclarar - ((!empty($solicitud->solicitudesaclaracion)&& !empty($solicitud->solicitudesaclaracion->monto_solventado))? $solicitud->solicitudesaclaracion->monto_solventado:0));
-            }
+        //     foreach ($auditoria->totalsolacl as $solicitud) {
+        //         $TSP= $TSP  +  $solicitud->monto_aclarar;
+        //         $TSPS=  $TSPS  +  ((!empty($solicitud->solicitudesaclaracion)&&!empty($solicitud->solicitudesaclaracion->monto_solventado)) ? $solicitud->solicitudesaclaracion->monto_solventado:0);
+        //         $TSPNS= $TSPNS + ($solicitud->monto_aclarar - ((!empty($solicitud->solicitudesaclaracion)&& !empty($solicitud->solicitudesaclaracion->monto_solventado))? $solicitud->solicitudesaclaracion->monto_solventado:0));
+        //     }
     
-            //dd($totalSolicitudesPromovidas,$totalSolicitudesPromovidasSolventadas,$totalSolicitudesPromovidasNoSolventadas);
-            $TPP=0;
-            $TPPS=0;
-            $TPPNS=0;
+        //     //dd($totalSolicitudesPromovidas,$totalSolicitudesPromovidasSolventadas,$totalSolicitudesPromovidasNoSolventadas);
+        //     $TPP=0;
+        //     $TPPS=0;
+        //     $TPPNS=0;
     
-            foreach ($auditoria->totalpliegos as $pliego) {
-                $TPP=$TPP+$pliego->monto_aclarar;
-                $TPPS=$TPPS+((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0);
-                $TPPNS=$TPPNS+($pliego->monto_aclarar-((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0));
-            }
+        //     foreach ($auditoria->totalpliegos as $pliego) {
+        //         $TPP=$TPP+$pliego->monto_aclarar;
+        //         $TPPS=$TPPS+((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0);
+        //         $TPPNS=$TPPNS+($pliego->monto_aclarar-((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0));
+        //     }
     
-            $TAP=$TSP+$TPP;
-            $TAPS=$TSPS+$TPPS;
-            $TAPNS=$TSPNS+$TPPNS;
+        //     $TAP=$TSP+$TPP;
+        //     $TAPS=$TSPS+$TPPS;
+        //     $TAPNS=$TSPNS+$TPPNS;
            
 
            
-            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneral.show',compact('auditoria','TAP','TAPS','TAPNS','TSP','TSPS','TSPNS','TPP','TPPS','TPPNS'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
-            $nombre='storage/temporales/CedulaGeneral'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
-            $pdfgenrado = file_put_contents($nombre, $pdf);
+        //     $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneral.show',compact('auditoria','TAP','TAPS','TAPNS','TSP','TSPS','TSPNS','TPP','TPPS','TPPNS'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+        //     $nombre='storage/temporales/CedulaGeneral'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+        //     $pdfgenrado = file_put_contents($nombre, $pdf);
 
            
-        }else{            
-             $nombre=$auditoria->cedulageneralseguimiento[0]->cedula;           
-        }
+        // }else{            
+        //      $nombre=$auditoria->cedulageneralseguimiento[0]->cedula;           
+        // }
        
+        $nombre=$resultado['nombre'];
+        $analistasF=$resultado['analistasF'];
+        $analistasL=$resultado['analistasL'];
+        $lideresF=$resultado['lideresF'];
+        $lideresL=$resultado['lideresL'];
+        $jefesF=$resultado['jefesF'];
+        $jefesL=$resultado['jefesL'];
+        
         
         return view('cedulageneral.index',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
     }
@@ -126,12 +135,17 @@ class CedulaInicialPrimeraEtapaController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
+        
+
         if(count($auditoria->cedulageneralseguimiento)==0){
+            $resultado=$this->pdfGenerator($auditoria);
+            $nombre=$resultado['nombre'];
+
             $request['auditoria_id']=$auditoria->id;
             $request['cedula_tipo']='Cedula General Seguimiento';
             
             $request['usuario_creacion_id']=auth()->id();        
-            $request['cedula']=$request->cedula2;
+            $request['cedula']=$nombre;
 
             mover_archivos($request, ['cedula']);
             $cedula=Cedula::create($request->all());            
@@ -237,25 +251,14 @@ class CedulaInicialPrimeraEtapaController extends Controller
             ]);
         }
 
-
-        
-
-       
-        
-      
       //$lider=array_unique($auditoria->acciones->pluck('lider_asignado_id', 'id')->toArray());
       //$departamentos=array_unique($auditoria->acciones->pluck('departamento_asignado_id', 'id')->toArray());
 
       //dd($analistas,$lider,$departamentos);
-     
-       
-    
-        
-    
-    
+
         setMessage('Se ha iniciado el proceso de revisión para la cedula general de seguimiento.');
        
-        return redirect()->route('cedulainicialprimera.edit',$auditoria);
+        return redirect()->route('cedulainicial.index');
 
     }
 
@@ -268,5 +271,70 @@ class CedulaInicialPrimeraEtapaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function pdfGenerator(Auditoria $auditoria){
+        $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedini_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedini_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedini_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedini_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
+        
+        
+         if(count($auditoria->cedulageneralseguimiento)==0){
+            $TSP=0;
+            $TSPS=0;
+            $TSPNS=0;
+    
+            foreach ($auditoria->totalsolacl as $solicitud) {
+                $TSP= $TSP  +  $solicitud->monto_aclarar;
+                $TSPS=  $TSPS  +  ((!empty($solicitud->solicitudesaclaracion)&&!empty($solicitud->solicitudesaclaracion->monto_solventado)) ? $solicitud->solicitudesaclaracion->monto_solventado:0);
+                $TSPNS= $TSPNS + ($solicitud->monto_aclarar - ((!empty($solicitud->solicitudesaclaracion)&& !empty($solicitud->solicitudesaclaracion->monto_solventado))? $solicitud->solicitudesaclaracion->monto_solventado:0));
+            }
+    
+            //dd($totalSolicitudesPromovidas,$totalSolicitudesPromovidasSolventadas,$totalSolicitudesPromovidasNoSolventadas);
+            $TPP=0;
+            $TPPS=0;
+            $TPPNS=0;
+    
+            foreach ($auditoria->totalpliegos as $pliego) {
+                $TPP=$TPP+$pliego->monto_aclarar;
+                $TPPS=$TPPS+((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0);
+                $TPPNS=$TPPNS+($pliego->monto_aclarar-((!empty($pliego->pliegosobservacion)&&!empty($pliego->pliegosobservacion->monto_solventado))?$pliego->pliegosobservacion->monto_solventado:0));
+            }
+    
+            $TAP=$TSP+$TPP;
+            $TAPS=$TSPS+$TPPS;
+            $TAPNS=$TSPNS+$TPPNS;
+           
+
+           
+            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneral.show',compact('auditoria','TAP','TAPS','TAPNS','TSP','TSPS','TSPNS','TPP','TPPS','TPPNS'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+            $nombre='storage/temporales/CedulaGeneral'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+            $pdfgenrado = file_put_contents($nombre, $pdf);
+
+           
+        }else{            
+             $nombre=$auditoria->cedulageneralseguimiento[0]->cedula;           
+        }
+
+        $resultado=[
+            'nombre'=>$nombre,
+            'analistasF'=>$analistasF,
+            'analistasL'=>$analistasL,
+            'lideresF'=>$lideresF,
+            'lideresL'=>$lideresL,
+            'jefesF'=>$jefesF,
+            'jefesL'=>$jefesL,
+        ];
+
+        return $resultado;
     }
 }

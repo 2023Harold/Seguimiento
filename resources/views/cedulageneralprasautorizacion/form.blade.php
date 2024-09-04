@@ -9,7 +9,7 @@
                 </h1>
             </div>
             <div class="card-body">                            
-                {!! BootForm::open(['model' => $cedula,'update'=>'cedulaanaliticaautorizacion.update','id'=>'form'] )!!}
+                {!! BootForm::open(['model' => $cedula,'update'=>'cedulageneralprasautorizacion.update','id'=>'form'] )!!}
                 <div class="row" style="padding-left: 2rem;">
                     <div class="col-md-6">
                         {!! BootForm::radios("estatus", ' ',
@@ -23,12 +23,7 @@
                     <div class="col-md-12">
                         {!! BootForm::textarea('motivo_rechazo','Motivo del rechazo:*','',["rows" => "2", "style" => "rezise:none"])!!}
                     </div>
-                </div>
-                <div class="row" id="enviar" style="display: none; padding-left: 2rem;">
-                    <div class="col-md-6 mb-3">
-                        {!! BootForm::checkbox('reenviar', 'Se envía al superior para su revisión', '', true, ['class' => 'i-checks', 'disabled']) !!}
-                    </div>
-                </div>
+                </div>                
                 <div class="row mt-3" style="padding-left: 2rem;">
                     <div class="col-md-6 justify-content-end">
                         <button type="submit" class="btn btn-primary">Guardar</button>                       

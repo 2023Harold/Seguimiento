@@ -64,35 +64,15 @@ class CedulaGeneralPRASController extends Controller
      */
     public function edit(Auditoria $auditoria)
     { 
-        $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedpras_analista')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedpras_analista')->where('segauditoria_id',$auditoria->id)->get();  
-        $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedpras_lider')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedpras_lider')->where('segauditoria_id',$auditoria->id)->get();  
-        $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedpras_jefe')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedpras_jefe')->where('segauditoria_id',$auditoria->id)->get();       
-        $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
-        $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
-        $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
-        $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
-        $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
-        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
-        
+        $resultado = $this->generatepdf($auditoria);
 
-        $fechaminima=Segpras::where('auditoria_id',$auditoria->id)->min('fecha_acuse_oficio');
-        $fechainicio = Carbon::parse($fechaminima); 
-        $fechamaxima=Segpras::where('auditoria_id',$auditoria->id)->max('fecha_proxima_seguimiento');
-        $fechavencimiento = Carbon::parse($fechamaxima); 
-
-        if(count($auditoria->cedulageneralpras)==0){           
-            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneralpras.show',compact('auditoria','fechainicio','fechavencimiento'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
-            $nombre='storage/temporales/CedulaGeneralPRAS'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
-            $pdfgenrado = file_put_contents($nombre, $pdf);
-            
-        }else{
-            $nombre=$auditoria->cedulageneralpras[0]->cedula; 
-        }
-        
-       
+        $analistasF =$resultado['analistasF'];
+        $analistasL = $resultado['analistasL'];        
+        $lideresF = $resultado['lideresF'];
+        $lideresL = $resultado['lideresL'];        
+        $jefesF = $resultado['jefesF'];
+        $jefesL = $resultado['jefesL'];      
+        $nombre = $resultado['nombre'];  
         
         return view('cedulageneralpras.form',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
     }
@@ -106,12 +86,15 @@ class CedulaGeneralPRASController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        if(count($auditoria->cedulageneralpras)==0){           
+        if(count($auditoria->cedulageneralpras)==0){ 
+            
+            $resultado = $this->generatepdf($auditoria);
+
             $request['auditoria_id']=$auditoria->id;
             $request['cedula_tipo']='Cedula General PRAS';            
             $request['usuario_creacion_id']=auth()->id();   
 
-            $request['cedula_pras']=$request->cedula2;
+            $request['cedula_pras']=$resultado['nombre'];
             mover_archivos($request, ['cedula_pras']);
             $request['cedula']=$request->cedula_pras;
 
@@ -127,7 +110,7 @@ class CedulaGeneralPRASController extends Controller
                         $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
                     }
             
-                $cedula->update(['fase_autorizacion' =>  'En revisión', 'nivel_autorizacion' => $nivel_autorizacion]);
+                $cedula->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
         
                 $titulo = 'Revisión del la Cédula General PRAS de la Auditoría No. '.$auditoria->numero_auditoria;
                 $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
@@ -175,7 +158,7 @@ class CedulaGeneralPRASController extends Controller
                     $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
                 }
         
-                $cedula->update(['fase_autorizacion' =>  'En revisión', 'nivel_autorizacion' => $nivel_autorizacion]);
+                $cedula->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
         
                 $titulo = 'Revisión del la Cédula General PRAS de la Auditoría No. '.$auditoria->numero_auditoria;
                 $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
@@ -221,11 +204,10 @@ class CedulaGeneralPRASController extends Controller
 
             ]);
         }
-
     
         setMessage('Se ha iniciado el proceso de revisión para la Cédula General PRAS.');
        
-        return redirect()->route('cedulageneralpras.edit',$auditoria);
+        return redirect()->route('cedulainicial.index');
     }
 
     /**
@@ -237,5 +219,49 @@ class CedulaGeneralPRASController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function generatepdf(Auditoria $auditoria){
+
+        $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedpras_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedpras_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedpras_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedpras_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedpras_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedpras_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
+        
+
+        $fechaminima=Segpras::where('auditoria_id',$auditoria->id)->min('fecha_acuse_oficio');
+        $fechainicio = Carbon::parse($fechaminima); 
+        $fechamaxima=Segpras::where('auditoria_id',$auditoria->id)->max('fecha_proxima_seguimiento');
+        $fechavencimiento = Carbon::parse($fechamaxima); 
+
+        if(count($auditoria->cedulageneralpras)==0){           
+            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneralpras.show',compact('auditoria','fechainicio','fechavencimiento'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+            $nombre='storage/temporales/CedulaGeneralPRAS'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+            $pdfgenrado = file_put_contents($nombre, $pdf);
+            
+        }else{
+            $nombre=$auditoria->cedulageneralpras[0]->cedula; 
+        }
+
+        $resultado=[
+            'nombre'=>$nombre,            
+            'analistasF'=>$analistasF,
+            'analistasL'=>$analistasL,
+            'lideresF'=>$lideresF,
+            'lideresL'=>$lideresL,
+            'jefesF'=>$jefesF,
+            'jefesL'=>$jefesL,
+        ];
+
+        return $resultado;
     }
 }

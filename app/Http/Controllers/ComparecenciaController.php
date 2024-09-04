@@ -7,6 +7,7 @@ use App\Models\Comparecencia;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class ComparecenciaController extends Controller
 {
@@ -174,5 +175,62 @@ class ComparecenciaController extends Controller
         setSession('comparecencia_auditoria_id',$auditoria->id);
 
         return redirect()->route('comparecencia.create');
+    }
+
+    public function export(){
+        
+        $auditoria=Auditoria::find(getSession('auditoria_id'));     
+        $directoruser = $auditoria->directorasignado;
+        $direccionseguimiento = $directoruser->unidadAdministrativa->descripcion;
+
+        $jefeuser = $auditoria->jefedepartamentoencargado;
+        $jefeseguimiento = $jefeuser->unidadAdministrativa->descripcion;
+
+        $ordenauditoria='NUMMORDN';
+        $numeroauditoria=$auditoria->numero_auditoria;
+
+        $numeroexpediente=$auditoria->radicacion->numero_expediente;
+
+        $tipoauditoria=$auditoria->tipo_auditoria->descripcion;
+
+        $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
+        $txtentidad=null;
+        if (count($entidades)>1) {
+            if ($entidades[1]=='MUNICIPIOS') {
+                $bar = ucwords($entidades[2]);       
+                $bar = ucwords(strtolower($bar));
+
+                $txtentidad='Municipio de '.$bar;
+            }
+         }
+
+        $periodo=$auditoria->periodo_revision;
+
+        $director=$directoruser->name;
+        $directorcargo=$directoruser->puesto;
+
+        $jefe=$jefeuser->name;
+        $jefecargo=$jefeuser->puesto;
+
+
+        $template=new TemplateProcessor('bases-word/AC.docx');
+        $template->setValue('direccionseguimiento',$direccionseguimiento);
+        $template->setValue('departamentoseguimiento',$jefeseguimiento);
+        $template->setValue('ordenauditoria',$ordenauditoria);
+        $template->setValue('numeroauditoria',$numeroauditoria);
+        $template->setValue('numeroexpediente',$numeroexpediente);
+        $template->setValue('tipoauditoria',$tipoauditoria);
+        $template->setValue('entidad',$txtentidad);
+        $template->setValue('periodo',$periodo);
+        $template->setValue('director',$director);
+        $template->setValue('directorcargo',$directorcargo);
+        $template->setValue('jefe',$jefe);
+        $template->setValue('jefecargo',$jefecargo);
+ 
+        $nombreword='AC';
+
+        $template->saveAs($nombreword.'.docx');
+
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
     }
 }

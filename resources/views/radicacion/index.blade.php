@@ -59,7 +59,7 @@
                                         <small>{{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}</small>
                                         @endif
                                     </td>
-                                    <td class="text-center">                                                                            
+                                    <td class="text-center">                                                                                    
                                             @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
                                                     @can('radicacion.edit')
@@ -89,11 +89,14 @@
                                                 @endcan
                                             @endif
                                             @if ($auditoria->radicacion->fase_autorizacion=='Autorizado')
-                                            <span class="badge badge-light-success">{{ $auditoria->radicacion->fase_autorizacion }} </span> <br>
-                                                @btnFile($auditoria->radicacion->constancia)                                                
+                                            <span class="badge badge-light-success">{{ $auditoria->radicacion->fase_autorizacion }} </span> 
+                                                @if(!empty($auditoria->radicacion->constancia))
+                                                    <br>
+                                                    @btnFile($auditoria->radicacion->constancia) 
+                                                @endif                                                 
                                             @endif                                            
                                     </td>
-                                    <td class="text-center">                                       
+                                    <td class="text-center">                                                                            
                                         @if (!empty($auditoria->radicacion->fase_autorizacion)&&$auditoria->radicacion->fase_autorizacion=='Autorizado')
                                             @if (empty($auditoria->comparecencia->oficio_recepcion))                                            
                                                 @can('comparecenciaacuse.edit')

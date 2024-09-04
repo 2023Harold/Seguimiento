@@ -408,9 +408,9 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
                     $anioD = $formatterD->toString($fecha->format('Y'));
 
                     $anioMax = ucwords($anioD);             
-                    $anioMin = ucwords(strtolower($anioMax));
+                    $anioMin = strtolower(ucwords(strtolower($anioMax)));
 
-                    $mes = $meses[($fecha->format('n')) - 1];
+                    $mes = strtolower($meses[($fecha->format('n')) - 1]);
                     $fechaactual = $fecha->format('d') . ' dias del mes de ' . $mes . ' del año ' . $anioMin;
 
 

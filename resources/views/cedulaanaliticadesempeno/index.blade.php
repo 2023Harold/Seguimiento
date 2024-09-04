@@ -1,21 +1,21 @@
-@extends('layouts.app')
-@section('breadcrums')
+@extends('layouts.appPopup')
+{{-- @section('breadcrums')
 {{ Breadcrumbs::render('cedulaanaliticadesemp.edit',$auditoria) }}
-@endsection
+@endsection --}}
 @section('content')
 <div class="row">
-    @include('layouts.partials._menu')
-    <div class="col-md-9 mt-2">
+    {{-- @include('layouts.partials._menu') --}}
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('cedulainicial.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+                    {{-- <a href="{{ route('cedulainicial.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> --}}
                     &nbsp;
                     Cédula Analitica Desempeño
                 </h1>
             </div>
             <div class="card-body">
-                @include('flash::message')
+                {{-- @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 @if(count($auditoria->cedulaanaliticadesemp)>0)  
                 @if ($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion == 'Rechazado')
@@ -110,15 +110,15 @@
                     </div>
                 </div>
                 {!! BootForm::close() !!}
-            @endif
-                <embed src="{{asset($nombre)}}" type="application/pdf" width="100%" height="600px"/>
+            @endif --}}
+                <embed src="{{asset($nombre)}}" type="application/pdf" width="100%" height="400px"/>
                 <div class="table-responsive">
                     <table class="table">                        
                         <tbody>     							
                             {!! movimientosDesglose($auditoria->id, 1, $auditoria->movimientosCedulaAnaliticaDesemp) !!}                            
                         </tbody>
                     </table>
-				</div>  
+				</div>
             </div>
         </div>
     </div>

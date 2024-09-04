@@ -63,30 +63,16 @@ class CedulaGeneralRecomendacionesController extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-        $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedrec_analista')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedrec_analista')->where('segauditoria_id',$auditoria->id)->get();  
-        $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedrec_lider')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedrec_lider')->where('segauditoria_id',$auditoria->id)->get();  
-        $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedrec_jefe')->where('segauditoria_id',$auditoria->id)->get();      
-        $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedrec_jefe')->where('segauditoria_id',$auditoria->id)->get();       
-        $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
-        $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
-        $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
-        $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
-        $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
-        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
+        $resultado = $this->generatepdf($auditoria);
+
+        $analistasF =$resultado['analistasF'];
+        $analistasL = $resultado['analistasL'];        
+        $lideresF = $resultado['lideresF'];
+        $lideresL = $resultado['lideresL'];        
+        $jefesF = $resultado['jefesF'];
+        $jefesL = $resultado['jefesL'];      
+        $nombre = $resultado['nombre'];      
         
-        if(count($auditoria->cedulageneralrecomendaciones)==0){           
-            $registroconfechamaxima=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->max('fecha_termino_recomendacion');    
-            $rfm = Carbon::parse($registroconfechamaxima); 
-                          
-            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneralrecomendaciones.show',compact('auditoria','rfm'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
-            $nombre='storage/temporales/CedulaGeneralRecomendaciones'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
-            $pdfgenrado = file_put_contents($nombre, $pdf);
-            
-        }else{            
-            $nombre=$auditoria->cedulageneralrecomendaciones[0]->cedula;            
-        }
 
         return view('cedulageneralrecomendaciones.form',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
     }
@@ -100,12 +86,14 @@ class CedulaGeneralRecomendacionesController extends Controller
      */
     public function update(Request $request,Auditoria $auditoria)
     {
-        if(count($auditoria->cedulageneralrecomendaciones)==0){           
+        
+        if(count($auditoria->cedulageneralrecomendaciones)==0){    
+            $resultado = $this->generatepdf($auditoria);       
             $request['auditoria_id']=$auditoria->id;
             $request['cedula_tipo']='Cedula General Recomendación';            
             $request['usuario_creacion_id']=auth()->id();
             
-            $request['cedula_recomendacion']=$request->cedula2;
+            $request['cedula_recomendacion']=$resultado['nombre'];
             mover_archivos($request, ['cedula_recomendacion']);
             $request['cedula']=$request->cedula_recomendacion;
             
@@ -214,9 +202,9 @@ class CedulaGeneralRecomendacionesController extends Controller
             ]);
         }    
     
-        setMessage('Se ha iniciado el proceso de revisión para la cedula general de seguimiento.');
+        setMessage('Se ha iniciado el proceso de revisión para la cedula general de recomendacion.');
        
-        return redirect()->route('cedulageneralrecomendacion.edit',$auditoria);
+        return redirect()->route('cedulainicial.index');
     }
 
     /**
@@ -228,5 +216,44 @@ class CedulaGeneralRecomendacionesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function generatepdf(Auditoria $auditoria){
+        $accionesanalistasFaltantes=AuditoriaAccion::whereNull('aprobar_cedrec_analista')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesanalistasListos=AuditoriaAccion::whereNotNull('aprobar_cedrec_analista')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesLideresFaltantes=AuditoriaAccion::whereNull('aprobar_cedrec_lider')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesLideresListos=AuditoriaAccion::whereNotNull('aprobar_cedrec_lider')->where('segauditoria_id',$auditoria->id)->get();  
+        $accionesJefesFaltantes=AuditoriaAccion::whereNull('aprobar_cedrec_jefe')->where('segauditoria_id',$auditoria->id)->get();      
+        $accionesJefesListos=AuditoriaAccion::whereNotNull('aprobar_cedrec_jefe')->where('segauditoria_id',$auditoria->id)->get();       
+        $analistasF=array_unique($accionesanalistasFaltantes->pluck('analista_asignado_id', 'id')->toArray());
+        $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());        
+        $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
+        $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
+        $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
+        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
+        
+        if(count($auditoria->cedulageneralrecomendaciones)==0){           
+            $registroconfechamaxima=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->max('fecha_termino_recomendacion');    
+            $rfm = Carbon::parse($registroconfechamaxima); 
+                          
+            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulageneralrecomendaciones.show',compact('auditoria','rfm'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+            $nombre='storage/temporales/CedulaGeneralRecomendaciones'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+            $pdfgenrado = file_put_contents($nombre, $pdf);
+            
+        }else{            
+            $nombre=$auditoria->cedulageneralrecomendaciones[0]->cedula;            
+        }
+
+        $resultado=[
+            'nombre'=>$nombre,            
+            'analistasF'=>$analistasF,
+            'analistasL'=>$analistasL,
+            'lideresF'=>$lideresF,
+            'lideresL'=>$lideresL,
+            'jefesF'=>$jefesF,
+            'jefesL'=>$jefesL,
+        ];
+
+        return $resultado;
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Auditoria;
 use App\Models\Comparecencia;
 use App\Models\Movimientos;
 use App\Models\Radicacion;
+use App\Models\User;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
 
@@ -219,7 +220,7 @@ class RadicacionController extends Controller
     }
 
     public function export(){
-        $auditoria=Auditoria::find(getSession('auditoria_id'));
+        $auditoria=Auditoria::find(getSession('auditoria_id'));       
 
         $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
 
@@ -233,9 +234,28 @@ class RadicacionController extends Controller
                 $txtentidad='Municipio de '.$bar;
             }
          }
+        $iniciales='';
+        $nombre=auth()->user()->name;
+        $esquemanombres=explode(' ',$nombre);
+         foreach($esquemanombres as $parte){
+            $iniciales=$iniciales.substr($parte, 0,1);
+         }
+
+         
 
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $mes = $meses[(now()->format('n')) - 1];
+
+        $nombre_ccp='';
+        $info_ccp='';
+        $infodom_ccp='';
+        $info='';
+        if ($auditoria->entidadFiscalizable->Ambito=='Estatal') {
+            $nombre_ccp='</w:t><w:br/><w:t>Luis David Fernández Araya';
+            $info_ccp='Subsecretario de Control y Evaluación de la Secretaría de la Contraloría del Gobierno del Estado de México. </w:t><w:br/><w:t>';
+            $infodom_ccp='Domicilio: Av. Primero de Mayo, número 1731, Esquina Robert Bosch, Colonia Zona Industrial, C.P. 50071, Toluca, México.</w:t><w:br/><w:t>';
+            $info=$info_ccp.' '.$infodom_ccp;
+        }
 
         $template=new TemplateProcessor('bases-word/IA_AR.docx');
         $template->setValue('anio',date("Y"));
@@ -249,8 +269,14 @@ class RadicacionController extends Controller
         $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
         $template->setValue('entidad',$txtentidad);
         $template->setValue('periodo',$auditoria->periodo_revision);
-        $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
-
+        $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);       
+        $template->setValue('nombre_ccp',$nombre_ccp);
+        $template->setValue('info_ccp',$info_ccp);
+        $template->setValue('infodom_ccp',$infodom_ccp);
+        $template->setValue('info',$info);
+        $template->setValue('iniciales',$iniciales);
+        $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+        
         $nombreword='AIAR';
 
         $template->saveAs($nombreword.'.docx');
@@ -272,11 +298,46 @@ class RadicacionController extends Controller
                 $bar = ucwords(strtolower($bar));
 
                 $txtentidad='Municipio de '.$bar;
+            }else{
+                //$bar = ucwords($entidades[2]);       
+                $bar = ucwords(strtolower($auditoria->entidad_fiscalizable));
+
+                $txtentidad=$bar;
             }
          }
 
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $mes = $meses[(now()->format('n')) - 1];
+        $prassp='';
+    
+        if (count($auditoria->accionespras)>0) {
+            if(count($auditoria->accionespras)==1){
+                $prassp='la Promoción de Responsabilidad Administrativa Sancionatoria (PRAS) identificada ';
+            }else{
+                $prassp='las Promociones de Responsabilidad Administrativa Sancionatoria (PRAS) identificadas ';
+            }
+
+           
+        }
+
+        $nombre_ccp='';
+        $info_ccp='';
+        $infodom_ccp='';
+        $info='';
+        if ($auditoria->entidadFiscalizable->Ambito=='Estatal') {
+            $nombre_ccp='</w:t><w:br/><w:t>Luis David Fernández Araya';
+            $info_ccp='Subsecretario de Control y Evaluación de la Secretaría de la Contraloría del Gobierno del Estado de México. </w:t><w:br/><w:t>';
+            $infodom_ccp='Domicilio: Av. Primero de Mayo, número 1731, Esquina Robert Bosch, Colonia Zona Industrial, C.P. 50071, Toluca, México.</w:t><w:br/><w:t>';
+            $info=$info_ccp.' '.$infodom_ccp;
+        }
+
+        $iniciales='';
+        $nombre=auth()->user()->name;
+        $esquemanombres=explode(' ',$nombre);
+         foreach($esquemanombres as $parte){
+            $iniciales=$iniciales.substr($parte, 0,1);
+         }
+
 
         $template=new TemplateProcessor('bases-word/AR_OIC.docx');
         $template->setValue('anio',date("Y"));
@@ -292,7 +353,15 @@ class RadicacionController extends Controller
         $template->setValue('periodo',$auditoria->periodo_revision);
         $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
         $template->setValue('totalpras',$auditoria);
-
+        $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+        $template->setValue('prassp',$prassp);
+        $template->setValue('claves',count($auditoria->accionespras));
+        $template->setValue('nombre_ccp',$nombre_ccp);
+        $template->setValue('info_ccp',$info_ccp);
+        $template->setValue('infodom_ccp',$infodom_ccp);
+        $template->setValue('info',$info);
+        $template->setValue('iniciales',$iniciales);
+        $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
 
 
         $nombreword='AROIC';
