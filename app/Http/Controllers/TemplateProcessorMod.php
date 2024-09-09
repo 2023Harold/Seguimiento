@@ -7,7 +7,21 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 class TemplateProcessorMod extends TemplateProcessor
 {
-    public function cloneBlock($blockname, $clones = 1, $replace = true, $indexVariables = false, $variableReplacements = null)
+    
+    public function ddeleteBlock($blockname)
+    {
+        $this->dreplaceBlock($blockname, '');
+    }
+
+    public function dreplaceBlock($blockname, $replacement) {
+        $this->tempDocumentMainPart = preg_replace(
+          '/(\${' . $blockname . '})(.*?)(\${\/' . $blockname . '})/is',
+          $replacement,
+          $this->tempDocumentMainPart
+        );
+    }
+
+    public function dcloneBlock($blockname, $clones = 1, $replace = true, $indexVariables = false, $variableReplacements = null)
     {
         $xmlBlock = null;
         $matches = array();
@@ -40,10 +54,5 @@ class TemplateProcessorMod extends TemplateProcessor
         }
 
         return $xmlBlock;
-    }
-
-    public function ddeleteBlock($blockname)
-    {
-        $this->replaceBlock($blockname, '');
     }
 }

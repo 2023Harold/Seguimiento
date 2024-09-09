@@ -225,6 +225,7 @@ Route::get('/radicacionnotificacion/iaar', [RadicacionController::class, 'export
 Route::get('/radicacionnotificacion/aroic', [RadicacionController::class, 'exportOIC'])->name('radicacioniaar.exportaroic');
 
 Route::get('/comparecencia/ac', [ComparecenciaController::class, 'export'])->name('comparecencia.exportar');
+Route::get('/informeprimeraetapa/exportar', [InformePrimeraEtapaController::class, 'export'])->name('informeprimeraetapa.exportar');
 
 
 /**Jefe */
