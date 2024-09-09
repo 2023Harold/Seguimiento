@@ -9,7 +9,7 @@
                 </h1>
             </div>
             <div class="card-body">                            
-                {!! BootForm::open(['model' => $cedula,'update'=>'cedulageneralprasanalista.update','id'=>'form'] )!!}
+                {!! BootForm::open(['model' => $cedula,'update'=>'cedulageneralpraslider.update','id'=>'form'] )!!}
                 <div class="row" style="padding-left: 2rem;">
                     <div class="col-md-6">
                         {!! BootForm::radios("estatus", ' ',

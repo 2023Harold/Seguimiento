@@ -681,6 +681,34 @@ Breadcrumbs::for('informeprimeraetapa.create', function (BreadcrumbTrail $trail)
 //     $trail->push('Editar', route('informeprimeraetapa.edit',$informe));
 // });
 
+Breadcrumbs::for('turnoui.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('auditoriaseguimiento.index',$auditoria);
+    $trail->push('Turno a la Unidad de Investigación', route('turnoui.index'));
+});
+
+Breadcrumbs::for('turnoui.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Turno a la Unidad de Investigación', route('auditoriaseguimiento.create'));
+});
+
+Breadcrumbs::for('turnooic.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('auditoriaseguimiento.index',$auditoria);
+    $trail->push('Turno al Organo Intrerno de Control', route('turnooic.index'));
+});
+
+Breadcrumbs::for('turnooic.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Turno al Organo Interno de Control', route('auditoriaseguimiento.create'));
+});
+Breadcrumbs::for('turnoarchivo.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('auditoriaseguimiento.index',$auditoria);
+    $trail->push('Envio de Archivo ', route('turnoarchivo.index'));
+});
+
+Breadcrumbs::for('turnoarchivo.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Turno al Organo Interno de Control', route('auditoriaseguimiento.create'));
+});
 
 
 

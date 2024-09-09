@@ -147,6 +147,7 @@ use App\Http\Controllers\SolicitudesAclaracionValidacionController;
 use App\Http\Controllers\TipologiaAccionController;
 use App\Http\Controllers\TipologiaAuditoriasController;
 use App\Http\Controllers\TurnoArchivoController;
+use App\Http\Controllers\TurnoOICController;
 use App\Http\Controllers\TurnoUIController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\UsersController;
@@ -250,7 +251,7 @@ Route::get('/781523xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class, 
 
 
 
-Route::resource('turnooic',TurnoUIController::class,['parameters' => ['turnooic' => 'auditoria']]);
+Route::resource('turnooic',TurnoOICController::class,['parameters' => ['turnooic' => 'auditoria']]);
 Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
 Route::resource('turnoarchivo',TurnoArchivoController::class,['parameters' => ['turnoarchivo' => 'auditoria']]);
 

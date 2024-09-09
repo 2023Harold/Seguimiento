@@ -110,7 +110,7 @@ class CedulaGeneralPRASController extends Controller
                         $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
                     }
             
-                $cedula->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
+                $cedula->update(['fase_autorizacion' =>  'En revisión', 'nivel_autorizacion' => $nivel_autorizacion]);
         
                 $titulo = 'Revisión del la Cédula General PRAS de la Auditoría No. '.$auditoria->numero_auditoria;
                 $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
