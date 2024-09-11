@@ -116,4 +116,13 @@ class TurnoOICController extends Controller
         }
         return $query;
     }
+
+    public function export(){
+        $auditoria=Auditoria::find(getSession('auditoria_id')); 
+        $template=new TemplateProcessorMod('bases-word/TurnoOIC.docx');       
+        $nombreword='OfR_OICs';
+        $template->saveAs($nombreword.'.docx');
+
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+    }
 }

@@ -16,6 +16,9 @@
                     <a href="{{ route('turnoui.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
                     &nbsp; Turno a la Unidad de Investigación
                 </h1>
+                <div class="float-end">
+                    <a href="{{route('turnoui.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;Of. UI</a>                         
+                </div>
             </div>        
             <div class="card-body">
                 @include('flash::message')

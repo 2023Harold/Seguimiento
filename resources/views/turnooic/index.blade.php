@@ -12,7 +12,7 @@
                     <a href="{{ route('auditoriaseguimiento.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;
-                    Turno al Orngano Interno De Control
+                    Turno al Organo Interno de Control
                 </h1>
             </div>
             <div class="card-body">

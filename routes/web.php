@@ -253,7 +253,9 @@ Route::get('/781523xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class, 
 
 
 //turnos
+Route::get('/turnooic/oroic', [TurnoOICController::class, 'export'])->name('turnooic.exportar');
 Route::resource('turnooic',TurnoOICController::class,['parameters' => ['turnooic' => 'auditoria']]);
+Route::get('/turnoui/oui', [TurnoUIController::class, 'export'])->name('turnoui.exportar');
 Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
 Route::resource('turnoarchivo',TurnoArchivoController::class,['parameters' => ['turnoarchivo' => 'auditoria']]);
 
