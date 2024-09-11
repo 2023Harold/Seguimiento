@@ -118,14 +118,14 @@
                                                                         str_contains(Route::current()->getName(), 'cedulaanalitica')||
                                                                         str_contains(Route::current()->getName(), 'cedulaanaliticarecomendacion')
                                                                         ) ? 'show' : ''  }} mx-5 me-0 pt-3">
-                                <div class="menu-item mb-1">
-                                    <a href="#" class="menu-link py-3">
+                                 <div class="menu-item mb-1">
+                                    <a href="{{route('acuerdoconclusion.index')}}" class="menu-link py-3">
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
                                         <span class="menu-title">Acuerdo de conclusión</span>
                                     </a>
-                                </div>
+                                </div>     
                                 @can('prasacciones.index')
                                 <div class="menu-item mb-1">
                                     <a href="{{ route('prasacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'prasacciones')||

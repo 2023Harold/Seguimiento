@@ -2,31 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcuerdoConclusion;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
-use App\Models\TurnoUI;
 use Illuminate\Http\Request;
+use PhpOffice\PhpWord\TemplateProcessor;
 
-class TurnoUIController extends Controller
+class AcuerdoConclusionController extends Controller
 {
-    
     protected $model;
     public function __construct(AuditoriaAccion $model)
-       {
-           $this -> model = $model;
-       } 
+
+    {
+        $this->model = $model;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    
     public function index(Request $request)
     {
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
         $acciones = $this -> setQuery($request)-> orderBy('id')->paginate(30);
 
-        return view ('turnoui.index', compact('request','acciones', 'auditoria'));
+        return view ('acuerdoconclusion.index', compact('request','acciones', 'auditoria'));
+
     }
 
     /**
@@ -37,9 +38,9 @@ class TurnoUIController extends Controller
     public function create()
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));               
-        $turnoui = new TurnoUI();
+        $acuerdoconclusion = new AcuerdoConclusion();
        
-        return view('turnoui.form', compact('auditoria','turnoui'));
+        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion'));
     }
 
     /**
@@ -50,11 +51,7 @@ class TurnoUIController extends Controller
      */
     public function store(Request $request)
     {
-        // $request['auditoria_id']= getSession('auditoria_id');
-        // mover_archivos($request, ['turnoui']);
-        // $informe  = TurnoUI::create($request->all());
-      
-        // return redirect() -> route('informeprimeraetapa.index');
+        //
     }
 
     /**
@@ -119,5 +116,34 @@ class TurnoUIController extends Controller
             $query = $query->where('monto_aclarar',$request->monto_aclarar);
         }
         return $query;
+    }
+    public function export(){
+        $auditoria=Auditoria::find(getSession('auditoria_id')); 
+
+        $template=new TemplateProcessor('bases-word/A_conclusion.docx');
+        $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+        $template->setValue('segtipo_auditoria',$auditoria->tipo_auditoria->descripcion);
+        $template->setValue('periodo_fiscalizado',$auditoria->periodo_revision);
+        $template->setValue('numero_orden',$auditoria->numero_orden);
+        $template->setValue('fecha_oficio_acuerdo',$auditoria->radicacion->fecha_oficio_acuerdo);
+        $template->setValue();
+        $templete->setValue();
+
+        $nombreword='A_conclusion';/** */
+
+        $template->saveAs($nombreword.'.docx');/** */
+
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */   
+    }
+
+
+
+    public function exportOFAC(){
+        $template=new TemplateProcessor('bases-word/OF_AC.docx'); 
+        $nombreword='OF_AC';/** */
+
+        $template->saveAs($nombreword.'.docx');/** */
+
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */   
     }
 }

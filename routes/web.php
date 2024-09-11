@@ -3,6 +3,7 @@
 use App\Exports\ReporteSeguimiento;
 use App\Http\Controllers\AccesoController;
 use App\Http\Controllers\AccionesController;
+use App\Http\Controllers\AcuerdoConclusionController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\AsignacionAccionController;
@@ -251,10 +252,17 @@ Route::get('/969fdf1xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class,
 Route::get('/781523xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class, 'loginasuser'])->name('quicklogin.loginasuser');
 
 
-
+//turnos
 Route::resource('turnooic',TurnoOICController::class,['parameters' => ['turnooic' => 'auditoria']]);
 Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
 Route::resource('turnoarchivo',TurnoArchivoController::class,['parameters' => ['turnoarchivo' => 'auditoria']]);
+
+//Acuerdo de conclusión
+Route::get('/acuerdoconclusion/ac', [AcuerdoConclusionController::class, 'export'])->name('acuerdoconclusionac.exportar');
+Route::get('/acuerdoconclusion/ofac', [AcuerdoConclusionController::class, 'exportOFAC'])->name('acuerdoconclusionofac.exportar');
+Route::resource('acuerdoconclusion',AcuerdoConclusionController::class,['parameters' => ['acuerdoconclusion' => 'auditoria']]);
+
+
 
 
 Route::middleware(['auth', CheckPermission::class])->group(function () {
@@ -416,6 +424,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::get('pliegosobservacioncontestacionoficios/{pliegosobservacion}', [PliegosObservacionAtencionContestacionController::class,'oficiospliegosobservacion'])->name('pliegosobservacioncontestacion.oficiospliegosobservacion');
     Route::resource('revisionespliegos',RevisionesPliegosController::class,['parameters' => ['revisionespliegos' => 'comentario']]);
     Route::resource('revisionespliegosatencion',RevisionesPliegosAtencionController::class,['parameters' => ['revisionespliegosatencion' => 'comentario']]);
+    
+
 
     /*pliegos Revisiones*/
     // Route::resource('pliegosobservacionesacuses',PliegosObservacionAcusesController::class,['parameters' => ['pliegosobservacionacuses' => 'pliegosobservacion']]);
