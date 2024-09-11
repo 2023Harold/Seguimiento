@@ -69,7 +69,8 @@
                                                                  str_contains(Route::current()->getName(), 'cedulageneralrecomendacion')||
                                                                  str_contains(Route::current()->getName(), 'cedulageneralpras')||
                                                                  str_contains(Route::current()->getName(), 'cedulaanalitica')||
-                                                                 str_contains(Route::current()->getName(), 'cedulaanaliticarecomendacion')
+                                                                 str_contains(Route::current()->getName(), 'cedulaanaliticarecomendacion')||
+                                                                 str_contains(Route::current()->getName(), 'acuerdoconclusion')
                                                                 ) ? 'show' : ''  }}" 
                                                                 data-kt-menu-trigger="click">
                             <a href="#" class="menu-link py-3" >
@@ -119,7 +120,8 @@
                                                                         str_contains(Route::current()->getName(), 'cedulaanaliticarecomendacion')
                                                                         ) ? 'show' : ''  }} mx-5 me-0 pt-3">
                                  <div class="menu-item mb-1">
-                                    <a href="{{route('acuerdoconclusion.index')}}" class="menu-link py-3">
+                                    <a href="{{route('acuerdoconclusion.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'acuerdoconclusion')
+                                                                                                         ) ? 'active' : '' }}">
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
@@ -272,8 +274,12 @@
                                     </a>
                                 </div>                            
                             </div>
-                        </div> 
-                        <div class="menu-item menu-accordion" data-kt-menu-trigger="click">                     
+                        </div>                     
+                        <div class="menu-item menu-accordion {{ (str_contains(Route::current()->getName(), 'turnoui')||
+                                                                 str_contains(Route::current()->getName(), 'turnooic')||
+                                                                 str_contains(Route::current()->getName(), 'turnoarchivo')                       
+                                                                ) ? 'show' : ''  }}" 
+                                                                data-kt-menu-trigger="click">                  
                             <a href="#" class="menu-link py-3">
                                 <span class="menu-icon">
                                     <i class="fa fa-folder-open fs-3"></i>
@@ -282,7 +288,8 @@
                             </a>
                             <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3">                              
                                 <div class="menu-item mb-1">
-                                    <a href="{{route('turnoui.index')}}" class="menu-link py-3">
+                                    <a href="{{route('turnoui.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoui')
+                                                                                                         ) ? 'active' : '' }}">
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
@@ -290,7 +297,8 @@
                                     </a>
                                 </div>
                                 <div class="menu-item mb-1">
-                                    <a href="{{route('turnooic.index')}}" class="menu-link py-3">
+                                    <a href="{{route('turnooic.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnooic')
+                                                                                                         ) ? 'active' : '' }}">
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
@@ -299,7 +307,8 @@
                                 </div>                              
                                 
                                 <div class="menu-item mb-1">
-                                    <a href="{{route('turnoarchivo.index')}}" class="menu-link py-3">
+                                    <a href="{{route('turnoarchivo.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoarchivo')
+                                                                                                         ) ? 'active' : '' }}">
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
