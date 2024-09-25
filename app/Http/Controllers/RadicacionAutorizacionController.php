@@ -149,11 +149,18 @@ class RadicacionAutorizacionController extends Controller
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
                 'motivo_rechazo' => $request->motivo_rechazo,
-            ]);       
+            ]);  
+            
+            $constancia = guardarConstanciasFirmadas($radicacion, 'radicacionconstancia', $request, 'constancia');
            
             $radicacion->update([
                 'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
+                // 'constancia' => $constancia->constancia_pdf,
             ]);
+
+            
+
+            // dd($constancia);
 
 
 

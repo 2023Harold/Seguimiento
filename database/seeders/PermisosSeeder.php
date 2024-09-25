@@ -131,6 +131,9 @@ class PermisosSeeder extends Seeder
                         'cedanadesempautorizacion',
                         'tipologiaaccion',
                         'tipologiaauditorias',
+                        'turnoui',
+                        'turnooic',
+                        'turnoarchivo'
                     ];
         $permisosGenerales = [];
         $i = 0;
@@ -185,5 +188,8 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'solicitudes.anexos']);
         Permission::create(['name' => 'pliegos.anexos']);
         Permission::create(['name' => 'pliegosobservacioncontestacion.oficiospliegosobservacion']);     
+        Permission::create(['name' => 'turnoui.export']);     
+        Permission::create(['name' => 'turnooic.export']);     
+        Permission::create(['name' => 'turnoarchivo.export']);     
     }
 }

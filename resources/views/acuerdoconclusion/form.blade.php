@@ -25,12 +25,24 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 {!! BootForm::open(['model' => $acuerdoconclusion,'store' => 'acuerdoconclusion.store','update' => 'acuerdoconclusion.update','id' => 'form']) !!}
-       
-                <div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('acuerdoconclusion', 'Acuerdo de conclusión: *', old('acuerdoconclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
+                <div class= "row">
+                    <div class="col-md-5">
+                        {!! BootForm::text('nombre_titular', 'Nombre del titular a quien se dirige : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        {!! BootForm::text('cargo_titular', 'Cargo del titular a quien se dirige : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
+                    </div>
+                </div>
+                <div class= "row">
+                    <div class="col-md-5">
+                        {!! BootForm::text('domicilio', 'Domicilio : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        {!! archivo('acuerdo_conclusion', 'Acuerdo de conclusión: *', old('acuerdoconclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
+                    </div>
+                    <div class="col-md-3">
                         {!! BootForm::text('numero_acuerdo_conclusion', 'Número del acuerdo de conclusión: *', old('numero_acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
                     </div>
                 </div>       
@@ -54,5 +66,5 @@
 </div> 
 @endsection
 @section('script')
-{{-- {!! JsValidator::formRequest('App\Http\Requests\InformePrimeraEtapaRequest') !!} --}}
+{!! JsValidator::formRequest('App\Http\Requests\AcuerdoConclusionRequest') !!}
 @endsection

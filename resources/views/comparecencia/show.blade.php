@@ -28,7 +28,7 @@
                                         <th>Fecha y hora de la comparecencia</th>
                                         <th>Hora aproximada de término </th>
                                         <th>Sala </th>
-                                        <th>Periodo de la etapa de aclaración</th>
+                                        {{-- <th>Periodo de la etapa de aclaración</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -47,9 +47,9 @@
                                         <td class="text-center">
                                             {{ date('g:i a', strtotime($auditoria->comparecencia->agenda->hora_fin)) }}</td>
                                         <td class="text-center">{{ $auditoria->comparecencia->agenda->sala }}</td>
-                                        <td class="text-center">
+                                        {{-- <td class="text-center">
                                             {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion) . ' - ' . fecha($auditoria->comparecencia->fecha_termino_aclaracion) }}
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 </tbody>
                             </table>

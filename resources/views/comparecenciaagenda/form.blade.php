@@ -35,7 +35,14 @@
                     <div class="col-md-3">
                         {!! BootForm::time('hora_fin','Hora aproximada de término: *',old('hora_comparecencia_inicio', optional($comparecencia->agenda)->hora_fin)) !!}
                     </div>
-                </div>       
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <span class="has-float-label">
+                            {!! BootForm::text('lugar_comparecencia','Lugar de la comparecencia: *',old('lugar_comparecencia',"OSFEM-José María Pino Suárez",$comparecencia->lugar_comparecencia),['readonly']) !!}
+                        </span>
+                    </div>       
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         {{-- @canany(['comparecenciaagenda.update']) --}}
@@ -56,6 +63,7 @@
                             <th>Fecha</th>
                             <th>Hora inicio</th>
                             <th>Hora aproximada de término</th>
+                            <th>lugar de la comparecencia</th>
                             </tr>
                         </thead>
                         <tbody id="tbodyCitas">  
@@ -66,6 +74,7 @@
                                     <td class="text-center">{{ fecha($cita->fecha) }}</td>
                                     <td class="text-center">{{ date("g:i a",strtotime($cita->hora_inicio)) }}</td>
                                     <td class="text-center">{{ date("g:i a",strtotime($cita->hora_fin))}}</td>
+                                    <td class="text-center">{{ $comparecencia->lugar_comparecencia }}</td>
                                 </tr>
                                 @empty             
                                     <tr>

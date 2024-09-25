@@ -15,6 +15,9 @@ class AcuerdoConclusion extends Model
         'fecha_acuerdo_conclusion',
         'acuerdo_conclusion',
         'auditoria_id',
+        'nombre_titular',
+        'cargo_titular',
+        'domicilio',
     ];
 protected $cast = [
     'created_at'=>'datetime',

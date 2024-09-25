@@ -33,14 +33,27 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th>Nombre del tutular a quien se dirige</th>
+                                <th>Cargo del titular a quien se dirige</th>
+                                <th>Domicilio</th>
                                 <th>Número</th>
                                 <th>Acuerdo de conclusión UI</th>
                                 <th>Fecha del acuerdo de conclusión</th>
                             </tr>
                         </thead>
                         <tbody>
+                            
                             @if (!empty($auditoria->acuerdoconclusion))
                             <tr>
+                                <td>
+                                    {{ $auditoria->acuerdoconclusion->nombre_titular }}
+                                </td>
+                                <td>
+                                    {{ $auditoria->acuerdoconclusion->cargo_titular }}
+                                </td>
+                                <td>
+                                    {{ $auditoria->acuerdoconclusion->domicilio }}
+                                </td>
                                 <td class="text-center">
                                     {{$auditoria->acuerdoconclusion->numero_acuerdo_conclusion }}
                                 </td>
@@ -61,11 +74,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
-                    {{
-                    $acciones->appends(['numero_auditoria'=>$request->numero_auditoria,'monto_aclarar'=>$request->monto_aclarar,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5')
-                    }}
-                </div>
+                
             </div>
         </div>
     </div>

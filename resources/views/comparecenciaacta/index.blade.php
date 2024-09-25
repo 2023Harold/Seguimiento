@@ -30,7 +30,7 @@
                                     <th>Fecha y hora de la comparecencia</th>
                                     <th>Hora aproximada de término</th>
                                     <th>Sala</th>
-                                    <th>Periodo de la etapa de aclaración</th>
+                                    {{-- <th>Periodo de la etapa de aclaración</th> --}}
                                     <th>Comprobante de recepción depto. de notificaciones</th>
                                     <th>Acuse de notificación de informe de auditoría</th>
                                 </tr>
@@ -52,12 +52,13 @@
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        {{ date('g:i a', strtotime($auditoria->comparecencia->agenda->hora_fin)) }}</td>
-                                    <td class="text-center">{{ $auditoria->comparecencia->agenda->sala }}</td>
-                                    <td class="text-center">
+                                        {{ (empty($auditoria->comparecencia->agenda->hora_fin)?'':date('g:i a', strtotime($auditoria->comparecencia->agenda->hora_fin))) }}</td>
+                                     <td class="text-center">{{ $auditoria->comparecencia->agenda->sala }}</td>
+                                    {{-- {{ (empty($auditoria->comparecencia->agenda->hora_fin)?'':date('g:i a', strtotime($auditoria->comparecencia->agenda->hora_fin))) }}</td>
+                                     <td class="text-center">
                                         {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion) . ' - '
                                         .fecha($auditoria->comparecencia->fecha_termino_aclaracion) }}
-                                    </td>
+                                    </td> --}}
                                     <td class="text-center">
                                         @if (!empty($auditoria->comparecencia->oficio_recepcion))
                                         <a href="{{ asset($auditoria->comparecencia->oficio_recepcion) }}"

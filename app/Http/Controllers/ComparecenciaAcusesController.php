@@ -35,7 +35,10 @@ class ComparecenciaAcusesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        mover_archivos($request, ['oficio_acuerdo'], null);
+        $request['usuario_creacion_id'] = auth()->user()->id;
+        $request['auditoria_id']=getSession('radicacion_auditoria_id');     
+        $comparecencia = Comparecencia::create($request->all());
     }
 
     /**
@@ -76,7 +79,7 @@ class ComparecenciaAcusesController extends Controller
         $request['usuario_modificacion_id'] = auth()->id();
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($comparecencia->auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_recepcion', 'oficio_acuse'], null, $ruta);
-        mover_archivos($request, ['oficio_recepcion', 'oficio_acuse']);
+        mover_archivos($request, ['oficio_recepcion','oficio_acuerdo','oficio_acuse']);
         $comparecencia->update($request->all());
         setMessage('Los acuses se han guardado correctamente');
 

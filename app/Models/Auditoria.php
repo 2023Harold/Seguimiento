@@ -364,5 +364,10 @@ class Auditoria extends Model
             {
                 return $this->belongsTo(InformePrimeraEtapa::class, 'id', 'auditoria_id');
             }
+
+            public function acuerdoconclusion()
+            {
+                return $this->belongsTo(AcuerdoConclusion::class, 'id', 'auditoria_id');
+            }
            
 }

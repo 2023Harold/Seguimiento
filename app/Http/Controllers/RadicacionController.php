@@ -219,7 +219,7 @@ class RadicacionController extends Controller
         return $query;
     }
 
-    public function export(){
+    public function export(){/** */
         $auditoria=Auditoria::find(getSession('auditoria_id'));       
 
         $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
@@ -257,7 +257,7 @@ class RadicacionController extends Controller
             $info=$info_ccp.' '.$infodom_ccp;
         }
 
-        $template=new TemplateProcessor('bases-word/IA_AR.docx');
+        $template=new TemplateProcessor('bases-word/IA_AR.docx'); //*
         $template->setValue('anio',date("Y"));
         $template->setValue('mes',$mes);
         $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
@@ -277,12 +277,12 @@ class RadicacionController extends Controller
         $template->setValue('iniciales',$iniciales);
         $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
         
-        $nombreword='AIAR';
+        $nombreword='AIAR';/** */
 
-        $template->saveAs($nombreword.'.docx');
+        $template->saveAs($nombreword.'.docx');/** */
 
-        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
-    }
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */
+    }/** */
   
   
     public function exportOIC(){

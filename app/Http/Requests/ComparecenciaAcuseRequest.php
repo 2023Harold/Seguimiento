@@ -28,6 +28,8 @@ class ComparecenciaAcuseRequest extends FormRequest
             'fecha_recepcion' => 'required|date_format:Y-m-d|max:10',
             'oficio_acuse' => 'required|string|max:100',
             'fecha_acuse' => 'required|date_format:Y-m-d|max:10',
+            'oficio_acuerdo' => 'required|string|max:100',
+            'fecha_oficio_acuerdo' => 'required|date_format:Y-m-d|max:10',            
         ];
     }
 
@@ -38,6 +40,8 @@ class ComparecenciaAcuseRequest extends FormRequest
             'fecha_recepcion' => 'fecha de recepción',
             'oficio_acuse' => 'acuse de notificación de informe de auditoría',
             'fecha_acuse' => 'fecha del acuse',
+            'oficio_acuerdo' => 'acuerdo de radicación',
+            'fecha_oficio_acuerdo' => 'fecha del acuerdo',
         ];
     }
 

@@ -33,7 +33,7 @@
                             <tr>                               
                                 <th>Número de expediente</th>
                                 <th>Número de oficio de notificación del informe de auditoria</th>
-                                <th>Acuerdo de radicación</th>                         
+                                {{-- <th>Acuerdo de radicación</th>                          --}}
                                 <th>Fase / Acción / Constancia</th>
                                 <th>Acuses</th>
                             </tr>
@@ -51,14 +51,14 @@
                                             {{ $auditoria->radicacion->numero_acuerdo }}
                                         @endif
                                     </td>
-                                    <td class="text-center">
+                                    {{-- <td class="text-center">
                                         @if (!empty($auditoria->radicacion))
                                         <a href="{{ asset($auditoria->radicacion->oficio_acuerdo) }}" target="_blank">
                                             <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->radicacion->oficio_acuerdo)) ?>
                                         </a> <br>
                                         <small>{{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}</small>
                                         @endif
-                                    </td>
+                                    </td> --}}
                                     <td class="text-center">                                                                                    
                                             @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>

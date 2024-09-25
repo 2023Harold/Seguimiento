@@ -27,9 +27,10 @@ class ComparecenciaAgenda extends Model
         'hora_fin',
         'sala',
         'usuario_creacion_id',
-        'usuario_actualizacion_id',
+        'usuario_actualizacion_id',        
+        'lugar_comparecencia',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
     protected $casts = [
         'fecha'=>'datetime',       

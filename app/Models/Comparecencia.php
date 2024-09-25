@@ -76,6 +76,8 @@ class Comparecencia extends Model
         'fecha_oficio_designacion',
         'fecha_inicio_proceso',
         'fecha_termino_proceso',
+        'oficio_acuerdo',
+        'fecha_oficio_acuerdo',
     ];
 
 
@@ -96,6 +98,7 @@ class Comparecencia extends Model
         'fecha_cedula'=>'date',
         'fecha_inicio_proceso'=>'date',
         'fecha_termino_proceso'=>'date',
+        'fecha_oficio_acuerdo'=>'date',
         'created_at'=>'datetime',
         'updated_at'=>'datetime'
     ];

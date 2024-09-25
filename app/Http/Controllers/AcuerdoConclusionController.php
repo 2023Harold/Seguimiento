@@ -11,7 +11,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 class AcuerdoConclusionController extends Controller
 {
     protected $model;
-    public function __construct(AuditoriaAccion $model)
+    public function __construct(AcuerdoConclusion $model)
 
     {
         $this->model = $model;
@@ -24,9 +24,9 @@ class AcuerdoConclusionController extends Controller
     public function index(Request $request)
     {
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
-        $acciones = $this -> setQuery($request)-> orderBy('id')->paginate(30);
+        //$acciones = $this -> setQuery($request)-> orderBy('id')->paginate(30);
 
-        return view ('acuerdoconclusion.index', compact('request','acciones', 'auditoria'));
+        return view ('acuerdoconclusion.index', compact('request', 'auditoria'));
 
     }
 
@@ -51,7 +51,13 @@ class AcuerdoConclusionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request['auditoria_id']= getSession('auditoria_id');
+        mover_archivos($request, ['acuerdo_conclusion']);
+        $acuerdoconclusion  = AcuerdoConclusion::create($request->all());
+
+        setMessage("Los datos se han guardado correctamente.");
+
+        return redirect() -> route('acuerdoconclusion.index');
     }
 
     /**
@@ -102,7 +108,7 @@ class AcuerdoConclusionController extends Controller
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('auditoria_id'));
+         $query = $query->where('auditoria_id',getSession('auditoria_id'));
 
          
         if ($request->filled('consecutivo')) {
@@ -126,8 +132,8 @@ class AcuerdoConclusionController extends Controller
         $template->setValue('periodo_fiscalizado',$auditoria->periodo_revision);
         $template->setValue('numero_orden',$auditoria->numero_orden);
         $template->setValue('fecha_oficio_acuerdo',$auditoria->radicacion->fecha_oficio_acuerdo);
-        $template->setValue();
-        $templete->setValue();
+        // $template->setValue();
+        // $templete->setValue();
 
         $nombreword='A_conclusion';/** */
 

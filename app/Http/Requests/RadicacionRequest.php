@@ -33,7 +33,8 @@ class RadicacionRequest extends FormRequest
             // 'fecha_oficio_designacion' => 'required|date|max:10|after_or_equal:fecha_oficio_acuerdo',
             'nombre_titular' => 'required|string|max:120',
             'cargo_titular' => 'required|string|max:120',
-            'fecha_comparecencia' => 'required|date|max:10|after:fecha_oficio_acuerdo',
+            'fecha_comparecencia' => 'required|date|max:10',
+            //'fecha_comparecencia' => 'required|date|max:10'|after:fecha_oficio_acuerdo'
             'hora_comparecencia_inicio' => 'required|string|max:15',
             'aplicacion_periodo'=>  'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Cumplimiento Financiero,Inversión Física|string|max:2',
             'fecha_inicio_aclaracion' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Cumplimiento Financiero,Inversión Física|date|max:10',
@@ -82,7 +83,7 @@ class RadicacionRequest extends FormRequest
             'required_if' => 'El campo :attribute es obligatorio.',
             'required_without' => 'El campo :attribute es obligatorio.',
             // 'fecha_oficio_designacion.after_or_equal'=> 'El campo :attribute debe ser posterior o igual a la fecha del acuerdo',
-            'fecha_comparecencia.after'=> 'El campo :attribute debe ser posterior a la fecha del acuerdo'
+            // 'fecha_comparecencia.after'=> 'El campo :attribute debe ser posterior a la fecha del acuerdo'
         ];
     }
 }
