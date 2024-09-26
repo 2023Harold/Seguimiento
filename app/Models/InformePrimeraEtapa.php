@@ -14,7 +14,14 @@ class InformePrimeraEtapa extends Model
         'numero_informe',
         'fecha_informe',
         'informe',
-        'auditoria_id'
+        'auditoria_id'.
+        'nombre_titular_informe',
+        'cargo_titular_informe',
+        'domicilio_informe',
+        'numero_fojas',
+        'fecha_envio',
+        'acuse_notificacion',
+        'fecha_notificacion',
     ];
     /**
      * The attributes that should be cast.
@@ -22,6 +29,9 @@ class InformePrimeraEtapa extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'fecha_informe'=>'date',
+        'fecha_envio'=>'date',
+        'fecha_notificacion'=>'date',
         'created_at'=>'datetime',
         'updated_at'=>'datetime',
         'fecha_termino_recomendacion'=>'datetime',

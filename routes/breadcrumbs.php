@@ -727,6 +727,17 @@ Breadcrumbs::for('turnoarchivo.create', function (BreadcrumbTrail $trail) {
     $trail->push('Envío de archivo', route('auditoriaseguimiento.create'));
 });
 
+//turno acuse archivo
+Breadcrumbs::for('turnotransferencia.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('auditoriaseguimiento.index',$auditoria);
+    $trail->push('Envío de archivo ', route('turnotransferencia.index'));
+});
+
+Breadcrumbs::for('turnotransferencia.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Envío de archivo', route('auditoriaseguimiento.create'));
+});
+
 
 
 

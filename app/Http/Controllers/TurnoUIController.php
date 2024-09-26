@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
-use App\Models\AuditoriaAccion;
 use App\Models\TurnoUI;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -12,7 +11,7 @@ class TurnoUIController extends Controller
 {
     
     protected $model;
-    public function __construct(AuditoriaAccion $model)
+    public function __construct(TurnoUI $model)
        {
            $this -> model = $model;
        } 
@@ -25,9 +24,9 @@ class TurnoUIController extends Controller
     public function index(Request $request)
     {
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
-        $acciones = $this -> setQuery($request)-> orderBy('id')->paginate(30);
-
-        return view ('turnoui.index', compact('request','acciones', 'auditoria'));
+        $turnoui=TurnoUI::where('auditoria_id',getSession('auditoria_id'))->first();
+       
+        return view ('turnoui.index', compact('request', 'auditoria','turnoui'));
     }
 
     /**
@@ -51,11 +50,14 @@ class TurnoUIController extends Controller
      */
     public function store(Request $request)
     {
-        // $request['auditoria_id']= getSession('auditoria_id');
-        // mover_archivos($request, ['turnoui']);
-        // $informe  = TurnoUI::create($request->all());
-      
-        // return redirect() -> route('informeprimeraetapa.index');
+       
+        mover_archivos($request, ['turno_ui']);
+        $request['auditoria_id']= getSession('auditoria_id');
+        $turnoui  = TurnoUI::create($request->all());
+
+        setMessage("Los datos se han guardado correctamente.");
+
+        return redirect() -> route('turnoui.index');
     }
 
     /**

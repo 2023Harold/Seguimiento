@@ -25,19 +25,49 @@
                 @include('layouts.contextos._auditoria')
                 {!! BootForm::open(['model' => $informe,'store' => 'informeprimeraetapa.store','update' => 'informeprimeraetapa.update','id' => 'form']) !!}
        
-                <div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('informe', 'Informe de auditoría: *', old('informe', $informe->informe)) !!}
-                    </div>
-                    <div class="col-md-4">
-                        {!! BootForm::text('numero_informe', 'Número del informe de la auditoría: *', old('numero_informe', $informe->numero_informe)) !!}
-                    </div>
-                </div>       
+                
                 <div class="row">
                     <div class="col-md-5">
                         {!! BootForm::date('fecha_informe', 'Fecha del informe de auditoría: *', old('fecha_informe', fecha($informe->fecha_informe, 'Y-m-d'))); !!}
                     </div>
                 </div> 
+                <div class="row">                    
+                    <div class="col-md-4">
+                        {!! BootForm::text('numero_informe', 'Número del informe de la auditoría: *', old('numero_informe', $informe->numero_informe)) !!}
+                    </div>
+                </div>       
+                <div class="row">                    
+                    <div class="col-md-4">
+                        {!! BootForm::text('nombre_titular_informe', 'Nombre del titular a quien se dirige: *', old('nombre_titular_informe', $informe->nombre_titular_informe)) !!}
+                    </div>
+                    <div class="col-md-4">
+                        {!! BootForm::text('cargo_titular_informe', 'Cargo del titualar a quien se dirige: *', old('nombre_titular_informe', $informe->nombre_titular_informe)) !!}
+                    </div>
+                    <div class="col-md-4">
+                        {!! BootForm::text('domicilio_informe', 'Domicilio: *', old('domicilio_informe', $informe->domicilio_informe)) !!}
+                    </div>
+                </div>       
+                <div class="row">                    
+                    <div class="col-md-4">
+                        {!! BootForm::text('numero_fojas', 'Número del informe de la auditoría: *', old('numero_informe', $informe->numero_fojas)) !!}
+                    </div>
+                </div>                       
+                <div class="row">
+                    <div class="col-md-6">
+                        {!! archivo('informe', 'Acuse envío a notificar: *', old('informe', $informe->informe)) !!}
+                    </div>
+                    <div class="col-md-5">
+                        {!! BootForm::date('fecha_envio', 'Fecha del envío a notificar *', old('fecha_envio', fecha($informe->fecha_envio, 'Y-m-d'))); !!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {!! archivo('acuse_notificacion', 'Acuse enviío a notificar *', old('acuse_notificacion', $informe->acuse_notificacion)) !!}
+                    </div>
+                    <div class="col-md-5">
+                        {!! BootForm::date('fecha_notificacion', 'Fecha del envío a notificar *', old('fecha_notificacion', fecha($informe->fecha_notificacion, 'Y-m-d'))); !!}
+                    </div>
+                </div>                                        
                 <div class="row">
                     <div class="col-md-6"> 
                         @canany(['informeprimeraetapa.store','informeprimeraetapa.update'])

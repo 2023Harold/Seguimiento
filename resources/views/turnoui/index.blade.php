@@ -20,7 +20,7 @@
                 @include('flash::message')                
                 <div class="row">
                     <div class="col-md-12">
-                        @if (empty($auditoria->turnoui))
+                        @if (empty($turnoui))
                             @can('turnoui.create')
                                 <a class="btn btn-primary float-end" href="{{ route('turnoui.create') }}">
                                     <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Turno UI
@@ -33,22 +33,26 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Número</th>
-                                <th>Turno UI</th>
-                                <th>Fecha del turno UI</th>
+                                <th>Fecha </th>
+                                <th>Número de oficio </th>
+                                <th>Acuse de notificación</th>
+                                <th>Fecha de notificacion</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (!empty($auditoria->turnoui))
+                            @if (!empty($turnoui))
                             <tr>
                                 <td class="text-center">
-                                    {{$auditoria->turnoui->numero_turno_ui }}
+                                    {{ fecha($turnoui->fecha_turno_oi) }}
                                 </td>
                                 <td class="text-center">
-                                    @btnFile($auditoria->turnoui->turno)
+                                    {{$turnoui->numero_turno_ui }}
                                 </td>
                                 <td class="text-center">
-                                    {{ fecha($auditoria->turnoui->fecha_turno_ui) }}
+                                    @btnFile($turnoui->turno_ui)
+                                </td>
+                                <td class="text-center">
+                                    {{ fecha($turnoui->fecha_notificacion_ui) }}
                                 </td>
                             </tr>
                             @else
@@ -60,12 +64,7 @@
                             @endif
                         </tbody>
                     </table>
-                </div>
-                <div class="pagination">
-                    {{
-                    $acciones->appends(['numero_auditoria'=>$request->numero_auditoria,'monto_aclarar'=>$request->monto_aclarar,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5')
-                    }}
-                </div>
+                </div>                
             </div>
         </div>
     </div>

@@ -33,22 +33,39 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Número</th>
-                                <th>Informe</th>
-                                <th>Fecha del informe</th>
+                                <th>Fecha</th>
+                                <th>Número de oficio</th>
+                                <th>Nombre del titular</th>
+                                <th>Acuse envío a notificar</th>
+                                <th>fecha del envío a notificar</th>
+                                <th>Acuse de notificación</th>
+                                <th>Fecha de notificación</th>
+
                             </tr>
                         </thead>
                         <tbody>
                             @if (!empty($auditoria->informeprimeraetapa))
                             <tr>
                                 <td class="text-center">
+                                    {{ fecha($auditoria->informeprimeraetapa->fecha_informe) }}
+                                </td>
+                                <td class="text-center">
                                     {{$auditoria->informeprimeraetapa->numero_informe }}
+                                </td>
+                                <td class="text-center">
+                                    {{$auditoria->informeprimeraetapa->nombre_titular_informe }}
                                 </td>
                                 <td class="text-center">
                                     @btnFile($auditoria->informeprimeraetapa->informe)
                                 </td>
                                 <td class="text-center">
-                                    {{ fecha($auditoria->informeprimeraetapa->fecha_informe) }}
+                                    {{ fecha($auditoria->informeprimeraetapa->fecha_envio) }}
+                                </td>
+                                <td class="text-center">
+                                    @btnFile($auditoria->informeprimeraetapa->acuse_notificacion)
+                                </td>
+                                <td class="text-center">
+                                    {{ fecha($auditoria->informeprimeraetapa->fecha_notificacion) }}
                                 </td>
                             </tr>
                             @else

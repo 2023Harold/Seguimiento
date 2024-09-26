@@ -148,6 +148,9 @@ use App\Http\Controllers\SolicitudesAclaracionValidacionController;
 use App\Http\Controllers\TipologiaAccionController;
 use App\Http\Controllers\TipologiaAuditoriasController;
 use App\Http\Controllers\TurnoArchivoController;
+use App\Http\Controllers\TurnoArchivoTransferencia;
+use App\Http\Controllers\TurnoArchivoTransferenciaControler;
+use App\Http\Controllers\TurnoArchivoTransferenciaController;
 use App\Http\Controllers\TurnoOICController;
 use App\Http\Controllers\TurnoUIController;
 use App\Http\Controllers\Usercontroller;
@@ -258,6 +261,7 @@ Route::resource('turnooic',TurnoOICController::class,['parameters' => ['turnooic
 Route::get('/turnoui/oui', [TurnoUIController::class, 'export'])->name('turnoui.exportar');
 Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
 Route::resource('turnoarchivo',TurnoArchivoController::class,['parameters' => ['turnoarchivo' => 'auditoria']]);
+Route::resource('turnotransferencia',TurnoArchivoTransferenciaController::class,['parameters' => ['turnotransferencia' => 'auditoria']]);
 
 //Acuerdo de conclusión
 Route::get('/acuerdoconclusion/ac', [AcuerdoConclusionController::class, 'export'])->name('acuerdoconclusionac.exportar');

@@ -11,7 +11,7 @@ class TurnoArchivoController extends Controller
 {
     protected $model;
 
-    public function __construct(AuditoriaAccion $model)
+    public function __construct(TurnoAcuseArchivo $model)
 
     {
         $this->model = $model;
@@ -24,9 +24,10 @@ class TurnoArchivoController extends Controller
     public function index(Request $request)
     {
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
-        $acciones = $this -> setQuery($request)-> orderBy('id')->paginate(30);
+        $turnoarchivo=TurnoAcuseArchivo::where('auditoria_id',getSession('auditoria_id'))->first();
+        
 
-        return view ('turnoarchivo.index', compact('request','acciones', 'auditoria'));
+        return view ('turnoarchivo.index', compact('request','auditoria','turnoarchivo'));
 
         
     }
@@ -52,7 +53,13 @@ class TurnoArchivoController extends Controller
      */
     public function store(Request $request)
     {
-      
+      mover_archivos($request, ['turno_archivo']);
+      $request['auditoria_id']= getSession('auditoria_id');
+      $turnoarchivo  = TurnoAcuseArchivo::create($request->all());
+
+      setMessage("Los datos se han guardado correctamente.");
+
+      return redirect() -> route('turnoarchivo.index');
 
 
 
@@ -102,24 +109,6 @@ class TurnoArchivoController extends Controller
     {
         //
     }
-    public function setQuery(Request $request)
-    {
-         $query = $this->model;
-
-         $query = $query->where('segauditoria_id',getSession('auditoria_id'));
-
-         
-        if ($request->filled('consecutivo')) {
-            $query = $query->where('consecutivo',$request->consecutivo);
-         }
-
-        if ($request->filled('tipo')) {
-            $query = $query->where('tipo',$request->tipo);
-        }
-        if ($request->filled('monto_aclarar')) {
-            $query = $query->where('monto_aclarar',$request->monto_aclarar);
-        }
-        return $query;
-    }
+   
 
 }

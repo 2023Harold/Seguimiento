@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Auditoria;
-use App\Models\TurnoOIC;
 
+use App\Models\Auditoria;
+use App\Models\TurnoArchivoTransferencia;
 use Illuminate\Http\Request;
 
-class TurnoOICController extends Controller
+class TurnoArchivoTransferenciaController extends Controller
 {
     protected $model;
-    public function __construct(TurnoOIC $model)
+    public function __construct(TurnoArchivoTransferencia $model)
        {
            $this -> model = $model;
        } 
@@ -22,11 +22,11 @@ class TurnoOICController extends Controller
     public function index(Request $request)
     {
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
-        $turnooic=TurnoOIC::where('auditoria_id',getSession('auditoria_id'))->first();   
-        
+        $turnotransferencia=TurnoArchivoTransferencia::where('auditoria_id',getSession('auditoria_id'))->first(); 
+        //dd($turnotransferencia);  
 
-        return view ('turnooic.index', compact('request','auditoria','turnooic'));
-        
+
+        return view ('turnotransferencia.index', compact('request','auditoria', 'turnotransferencia'));
     }
 
     /**
@@ -37,9 +37,9 @@ class TurnoOICController extends Controller
     public function create()
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));               
-        $turnooic = new TurnoOIC();
+        $turnotransferencia = new TurnoArchivoTransferencia();
        
-        return view('turnooic.form', compact('auditoria','turnooic'));
+        return view('turnotransferencia.form', compact('auditoria','turnotransferencia'));
     }
 
     /**
@@ -50,15 +50,15 @@ class TurnoOICController extends Controller
      */
     public function store(Request $request)
     {
+        
        //dd(getSession('auditoria_id'));
-     
-      mover_archivos($request, ['turno_oic']);
       $request['auditoria_id']= getSession('auditoria_id');
-      $turnooic  = TurnoOIC::create($request->all());
+      mover_archivos($request, ['turnotransferencia']);
+     $turnotransferencia  = TurnoArchivoTransferencia::create($request->all());
 
       setMessage("Los datos se han guardado correctamente.");
 
-        return redirect() -> route('turnooic.index');
+      return redirect() -> route('turnotransferencia.index');
     }
 
     /**
@@ -92,7 +92,14 @@ class TurnoOICController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         //dd(getSession('auditoria_id'));
+      $request['auditoria_id']= getSession('auditoria_id');
+      mover_archivos($request, ['turnotransferencia']);
+     $turnotransferencia  = TurnoArchivoTransferencia::create($request->all());
+      
+        setMessage('Los datos se han guardado correctamente');
+
+        return redirect()->route('turnotransferencia.edit', $turnotransferencia);
     }
 
     /**

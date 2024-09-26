@@ -26,18 +26,43 @@
                 {!! BootForm::open(['model' => $turnoui,'store' => 'turnoui.store','update' => 'turnoui.update','id' => 'form']) !!}
        
                 <div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('turnoui', 'Turno a la Unidad de Investigación: *', old('turnoui', $turnoui->turnoui)) !!}
+                    <div class="col-md-4">
+                        {!! BootForm::date('fecha_turno_oi', 'Fecha del turno a la Unidad de Investigación *', old('fecha_turno_oi', fecha($turnoui->fecha_turno_oi, 'Y-m-d'))); !!}
                     </div>
                     <div class="col-md-4">
-                        {!! BootForm::text('numero_turno_ui', 'Número del turno a la Unidad de Investigación: *', old('numero_turno_ui', $turnoui->turnoui)) !!}
-                    </div>
-                </div>       
-                <div class="row">
-                    <div class="col-md-5">
-                        {!! BootForm::date('fecha_turno_ui', 'Fecha del turno a la Unidad de Investigación *', old('fecha_turno_ui', fecha($turnoui->fecha_turno_ui, 'Y-m-d'))); !!}
+                        {!! BootForm::text('numero_turno_ui', 'Número de oficio *', old('numero_turno_ui', $turnoui->numero_turno_ui)) !!}
                     </div>
                 </div> 
+                <div class="row"> Expediente Técnico de la Auditoría:
+                    <div class="row">
+                        <div class="col-md-3">
+                            {!! BootForm::text('legajos_tecnico', 'Número de legajos  *', old('legajos_tecnico', ($turnoui->legajos_tecnico))); !!}
+                        </div>
+                        <div class="col-md-5">
+                            {!! BootForm::text('fojas_tecnico', 'Número de fojas  *', old('fojas_tecnico', ($turnoui->fojas_tecnico))); !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="row"> Expediente de Seguimiento:
+                    <div class="row">
+                        <div class="col-md-3">
+                            {!! BootForm::text('legajos_seg', 'Número de legajos  *', old('legajos_seg', ($turnoui->legajos_seg))); !!}
+                        </div>
+                        <div class="col-md-5">
+                            {!! BootForm::text('fojas_seg', 'Número de fojas  *', old('fojas_seg', ($turnoui->fojas_seg))); !!}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        {!! archivo('turno_ui', 'Turno a la Unidad de Investigación: *', old('turno_ui', $turnoui->turno_ui)) !!}
+                    </div>    
+                    <div class="col-md-4">
+                        {!! BootForm::date('fecha_notificacion_ui', 'Fecha de notificación  *', old('fecha_notificacion_ui', fecha($turnoui->fecha_notificacion_ui))); !!}
+                    </div>                
+                </div>       
+                
                 <div class="row">
                     <div class="col-md-6"> 
                         @canany(['turnoui.store','turnoui.update'])

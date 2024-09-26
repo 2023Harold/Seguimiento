@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('turnooic.index',$auditoria) }}
+{{ Breadcrumbs::render('turnotransferencia.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -9,63 +9,55 @@
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('turnooic.index') }}"><i
+                    <a href="{{ route('auditoriaseguimiento.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;
-                    Turno al Organo Interno de Control
-                </h1>
+                    Envío al Archivo de Transferencia
             </div>
             <div class="card-body">
                 @include('layouts.contextos._auditoria')
                 @include('flash::message')                
                 <div class="row">
                     <div class="col-md-12">
-                        @if (empty($turnooic))
-                            @can('turnooic.create')
-                                <a class="btn btn-primary float-end" href="{{ route('turnooic.create') }}">
-                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Turno al OIC
+                        @if (empty($turnotransferencia))
+                            {{-- @can('turnotransferencia.create') --}}
+                                <a class="btn btn-primary float-end" href="{{ route('turnotransferencia.create') }}">
+                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Archivo de Transferencia
                                 </a> 
-                            @endcan
+                            {{-- @endcan --}}
                         @endif
                     </div>                    
                 </div>                                
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr>                               
+                                <th>Número del oficio</th>
+                                <th>Inventario de documentos</th>
                                 <th>Fecha </th>
-                                <th>Número de oficio </th>
-                                <th>nombre de titular</th>
-                                <th>Acuse de envio a notificar</th>
-                                <th>Fecha de envío a notificar</th>
-                                <th>Acuse de notificación</th>
-                                <th>Fecha de notificación</th>
+                                <th>Tiempo de resguardo</th>
+                                <th>Clave topográfica</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (!empty($turnooic))
+                            @if (!empty($turnotransferencia))
                             <tr>
                                 <td class="text-center">
-                                    {{ fecha($turnooic->fecha_turno_oic) }}
+                                    {{$turnotransferencia->numero_transferencia }}
                                 </td>
                                 <td class="text-center">
-                                    {{$turnooic->numero_turno_oic }}
+                                    @btnFile($turnotransferencia->inventario_transferencia)
                                 </td>
                                 <td class="text-center">
-                                    {{$turnooic->nombre_titular_oic }}
+                                    {{ fecha($turnotransferencia->fecha_transferencia) }}
+                                </td>                                
+                                <td class="text-center">
+                                    {{$turnotransferencia->tiempo_resguardo }}
                                 </td>
                                 <td class="text-center">
-                                    @btnFile($turnooic->turno_oic)
+                                    {{$turnotransferencia->clave_topografica }}
                                 </td>
-                                <td class="text-center">
-                                    {{ fecha($turnooic->fecha_envio) }}
-                                </td>
-                                <td class="text-center">
-                                    @btnFile($turnooic->acuse_notificacion)
-                                </td>
-                                <td class="text-center">
-                                    {{ fecha($turnooic->fecha_notificacion) }}
-                                </td>
+                                
                             </tr>
                             @else
                             <tr>

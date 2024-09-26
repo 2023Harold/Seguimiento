@@ -24,20 +24,45 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 {!! BootForm::open(['model' => $turnooic,'store' => 'turnooic.store','update' => 'turnooic.update','id' => 'form']) !!}
-       
-                <div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('turnooic', 'Turno al Organo Interno de Conrtrol *', old('turnooic', $turnooic->turnooic)) !!}
-                    </div>
-                    <div class="col-md-4">
-                        {!! BootForm::text('numero_turno_oic', 'Número del turno al Organo Interno de Control: *', old('numero_turno_oic', $turnooic->turnooic)) !!}
-                    </div>
-                </div>       
+                
                 <div class="row">
                     <div class="col-md-5">
                         {!! BootForm::date('fecha_turno_oic', 'Fecha del turno al Organo Interno de Control *', old('fecha_turno_oic', fecha($turnooic->fecha_turno_oic, 'Y-m-d'))); !!}
                     </div>
                 </div> 
+                <div class="row">                    
+                    <div class="col-md-4">
+                        {!! BootForm::text('numero_turno_oic', 'Número de oficio: *', old('numero_turno_oic', $turnooic->turnooic)) !!}
+                    </div>
+                </div>       
+                <div class="row">                    
+                    <div class="col-md-4">
+                        {!! BootForm::text('nombre_titular_oic', 'Nombre del titular a quien se dirige: *', old('nombre_titualar', $turnooic->nombre_titular_oic)) !!}
+                    </div>
+                    <div class="col-md-4">
+                        {!! BootForm::text('cargo_titular_oic', 'Cargo del titualar a quien se dirige: *', old('nombre_titular_oic', $turnooic->nombre_titular_oic)) !!}
+                    </div>
+                    <div class="col-md-4">
+                        {!! BootForm::text('domicilio_oic', 'Domicilio: *', old('domicilio_oic', $turnooic->domicilio_oic)) !!}
+                    </div>
+                </div>                       
+                <div class="row">
+                    <div class="col-md-6">
+                        {!! archivo('turno_oic', 'Acuse enviío a notificar *', old('turno_oic', $turnooic->turno_oic)) !!}
+                    </div>
+                    <div class="col-md-5">
+                        {!! BootForm::date('fecha_envio', 'Fecha del envío a notificar *', old('fecha_envio', fecha($turnooic->fecha_envio, 'Y-m-d'))); !!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {!! archivo('acuse_notificacion', 'Acuse enviío a notificar *', old('acuse_notificacion', $turnooic->acuse_notificacion)) !!}
+                    </div>
+                    <div class="col-md-5">
+                        {!! BootForm::date('fecha_notificacion', 'Fecha del envío a notificar *', old('fecha_notificacion', fecha($turnooic->fecha_notificacion, 'Y-m-d'))); !!}
+                    </div>
+                </div>
+                    
                 <div class="row">
                     <div class="col-md-6"> 
                         @canany(['turnooic.store','turno_oic.update'])

@@ -11,11 +11,18 @@ class TurnoUI extends Model
     protected $table = 'segturno_ui';
     protected $fillable = [
         'numero_turno_ui',
-        'fecha_turno_ui',
+        'fecha_turno_oi',
         'turno_ui',
         'auditoria_id',
+        'legajos_tecnico',
+        'fojas_tecnico',
+        'legajos_seg',
+        'fojas_seg',
+        'fecha_notificacion_ui',
     ];
 protected $cast = [
+    'fecha_turno_oi'=>'date',
+    'fecha_notificacion_ui'=>'date',
     'created_at'=>'datetime',
     'updated_at'=> 'datetime',    
 
