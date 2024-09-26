@@ -155,31 +155,213 @@
                   let date = new Date(dateu);
                   //let date = new Date(pd);
                   date.setDate(date.getDate() + 1);
-                  for (let index = 1; index <= 1; index++) {
+                  for (let index = 1; index <= 1; index++) {                        
                       date.setDate(date.getDate() + 1);
                       if (date.getDay() == 6 || date.getDay() == 0)
                           index--;
                   }
-                  var dd = String(date.getDate()).padStart(2, '0');
-                  var mm = String(date.getMonth() + 1).padStart(2, '0');
-                  var yyyy = date.getFullYear();
-                  today = yyyy + '-' + mm + '-' + dd;
-                  $("#fecha_inicio_aclaracion").val(today);
-                  fechaTermino(30,'aclaracion',today);
+                                               
+                        //FEBRERO dias no laborables
+                        if(date.getMonth()==1 && date.getFullYear()==2024){
+                            if(date.getDate()==5){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+
+                        //MARZO dias no laborables
+                        if(date.getMonth()==2 && date.getFullYear()==2024){
+                            if(date.getDate()==2 || date.getDate()==18 || date.getDate()==28 ){
+                                date.setDate(date.getDate() + 1);
+                            }
+                            if(date.getDate()==29 ){
+                                date.setDate(date.getDate() + 1);
+                            }
+                            
+                        }
+
+                        //MAYO dias no laborables
+                        if(date.getMonth()==4 && date.getFullYear()==2024){
+                            if(date.getDate()==1 || date.getDate()==5){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+
+                        //JULIO dias no laborables
+                        if(date.getMonth()==6 && date.getFullYear()==2024){
+                            if(date.getDate()==22){
+                                date.setDate(date.getDate() + 14);
+                            }
+                        }                        
+
+                        //SEPTIEMBRE dias no laborables
+                        if(date.getMonth()==8 && date.getFullYear()==2024){
+                            if(date.getDate()==16){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+                        //OCTUBRE dias no laborables
+                        if(date.getMonth()==9 && date.getFullYear()==2024){
+                            if(date.getDate()==1){                        
+                                date.setDate(date.getDate() + 1);                                
+                            }
+                        }
+                        //NOVIEMBRE dias no laborables
+                        if(date.getMonth()==10 && date.getFullYear()==2024){
+                            if(date.getDate()==2 || date.getDate()==18){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+
+                        //DICIEMBRE dias no laborables
+                        if(date.getMonth()==11 && date.getFullYear()==2024){
+                            if(date.getDate()==20 ){
+                                date.setDate(date.getDate() + 18);
+                            }
+                        }
+
+                        
+                        var dd = String(date.getDate()).padStart(2, '0');
+                        var mm = String(date.getMonth() + 1).padStart(2, '0');
+                        var yyyy = date.getFullYear();
+                        today = yyyy + '-' + mm + '-' + dd;  
+                        
+                        date.setDate(date.getDate() + 1);
+                        var dd2 = String(date.getDate()).padStart(2, '0');
+                        var mm2 = String(date.getMonth() + 1).padStart(2, '0');
+                        var yyyy2 = date.getFullYear();
+                        todayDP = yyyy2 + '-' + mm2 + '-' + dd2;  
+
+                        $("#fecha_inicio_aclaracion").val(today);
+                        fechaTermino(30,'aclaracion',todayDP);
               });
 
               function fechaTermino(sumadias,etapa,inicio) {
                   let pickedDate = inicio;
                   let date = new Date(pickedDate);
-                //   date.setDate(date.getDate() + 2);
-                  for (let index = 1; index <= sumadias; index++) {
 
-                      if (date.getDay() == 5 ) {
+                  console.log('inicio In: '+inicio);
+                  console.log('inicio PD : '+pickedDate);
+                  console.log('inicio date: '+date);
+                 
+                //   date.setDate(date.getDate() + 2);
+                  for (let index = 1; index <= sumadias; index++) {                
+                    if (date.getDay() == 5 ) {
+
                         date.setDate(date.getDate() + 3);
-                      }else {
-                          date.setDate(date.getDate() + 1);
-                      }
-                  }
+
+                          //FEBRERO dias no laborables
+                          if(date.getMonth()==1 && date.getFullYear()==2024){
+                            if(date.getDate()==5){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+                        //MARZO dias no laborables
+                        if(date.getMonth()==2 && date.getFullYear()==2024){
+                            if(date.getDate()==2 || date.getDate()==18 || date.getDate()==28){
+                                date.setDate(date.getDate() + 1);
+                            }
+                            if(date.getDate()==29 ){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+                        //MAYO dias no laborables
+                        if(date.getMonth()==4 && date.getFullYear()==2024){
+                            if(date.getDate()==1 || date.getDate()==5){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+                         //JULIO dias no laborables
+                         if(date.getMonth()==6 && date.getFullYear()==2024){
+                            if(date.getDate()==22){
+                                date.setDate(date.getDate() + 14);
+                            }
+                        }  
+                        //SEPTIEMBRE dias no laborables
+                        if(date.getMonth()==8 && date.getFullYear()==2024){
+                            if(date.getDate()==16){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+                        //OCTUBRE dias no laborables
+                        if(date.getMonth()==9 && date.getFullYear()==2024){
+                            if(date.getDate()==1){                        
+                                date.setDate(date.getDate() + 1);                                
+                            }
+                        }
+                        //NOVIEMBRE dias no laborables
+                        if(date.getMonth()==10 && date.getFullYear()==2024){
+                            if(date.getDate()==2 || date.getDate()==18){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+
+                        //DICIEMBRE dias no laborables
+                        if(date.getMonth()==11 && date.getFullYear()==2024){
+                            if(date.getDate()==20 ){                                
+                                date.setDate(date.getDate() + 18);
+                            }
+                        }
+
+                    }else {
+                        date.setDate(date.getDate() + 1);
+
+
+                        //FEBRERO dias no laborables
+                        if(date.getMonth()==1 && date.getFullYear()==2024){
+                            if(date.getDate()==5){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+                        //MARZO dias no laborables
+                        if(date.getMonth()==2 && date.getFullYear()==2024){
+                            if(date.getDate()==2 || date.getDate()==18 || date.getDate()==28){
+                                date.setDate(date.getDate() + 1);
+                            }
+                            if(date.getDate()==29 ){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+                        //MAYO dias no laborables
+                        if(date.getMonth()==4 && date.getFullYear()==2024){
+                            if(date.getDate()==1 || date.getDate()==5){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+                         //JULIO dias no laborables
+                         if(date.getMonth()==6 && date.getFullYear()==2024){
+                            if(date.getDate()==22){
+                                date.setDate(date.getDate() + 14);
+                            }
+                        }  
+                        //SEPTIEMBRE dias no laborables
+                        if(date.getMonth()==8 && date.getFullYear()==2024){
+                            if(date.getDate()==16){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+                        //OCTUBRE dias no laborables
+                        if(date.getMonth()==9 && date.getFullYear()==2024){
+                            if(date.getDate()==1){                        
+                                date.setDate(date.getDate() + 1);                                
+                            }
+                        }
+                        //NOVIEMBRE dias no laborables
+                        if(date.getMonth()==10 && date.getFullYear()==2024){
+                            if(date.getDate()==2 || date.getDate()==18){
+                                date.setDate(date.getDate() + 1);
+                            }
+                        }
+
+                        //DICIEMBRE dias no laborables
+                        if(date.getMonth()==11 && date.getFullYear()==2024){
+                            if(date.getDate()==20 ){                                
+                                date.setDate(date.getDate() + 18);
+                            }
+                        }                       
+                    }
+
+                    console.log(index+"---------"+date.getDate()+"-----"+date.getMonth()+"------"+date.getFullYear());
+                }
 
 
                   var dd = String(date.getDate()).padStart(2, '0');
@@ -195,7 +377,9 @@
                   if(etapa==='analisis') {
                     console.log(today,4);
                      $("#calculo_fecha").val(today);
-                  }                  
+                  } 
+                  
+                  
               }
 
               function fechaanalisis(fechatermino) {

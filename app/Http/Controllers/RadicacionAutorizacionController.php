@@ -124,8 +124,10 @@ class RadicacionAutorizacionController extends Controller
 
         $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
 
+        $b64pdf=base64_encode(file_get_contents(asset($preconstancia)));
+       
         
-         return view('radicacionautorizacion.form', compact('radicacion', 'auditoria', 'preconstancia', 'b64archivoxml', 'datosConstancia'));
+         return view('radicacionautorizacion.form', compact('radicacion', 'auditoria', 'preconstancia', 'b64archivoxml','b64pdf', 'datosConstancia'));
     }
 
     /**
@@ -139,7 +141,7 @@ class RadicacionAutorizacionController extends Controller
     {
        
         $this->normalizarDatos($request);
-        if(empty($request->radicacion_sistema)){
+        // if(empty($request->radicacion_sistema)){
 
             Movimientos::create([
                 'tipo_movimiento' => 'Autorización de la radicación',
@@ -164,10 +166,14 @@ class RadicacionAutorizacionController extends Controller
 
 
 
-        }else{
+        // }else{
             //dd($request);
             //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
-            $constancia = guardarConstanciasFirmadas($radicacion, 'constancia_radicacion', $request, 'constancia');
+            
+            $request['id_proceso_pdf'] = $radicacion->id;
+            $request['hash_pdf'] = 'nmbmjb';
+
+            $constancia = guardarConstanciasFirmadas($radicacion, 'constanciaradicacion', $request, 'constancia');
 
             Movimientos::create([
                 'tipo_movimiento' => 'Autorización de la radicación',
@@ -183,7 +189,7 @@ class RadicacionAutorizacionController extends Controller
                 'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
                 'constancia' => $constancia->constancia_pdf,
             ]);
-        }
+        // }
 
         
         $director=User::where('unidad_administrativa_id',substr($radicacion->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();

@@ -288,11 +288,14 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
        
         $requestCons['constancia_pdf'] = $rutaDestino.'/'.$archivopdffirmado;
         Storage::disk('local')->put('public/archivos/'.$archivopdffirmado, base64_decode($request->acuse_pdf));
+
+
         
         $requestCons['accion'] = $model->getTable();
         $requestCons['accion_campo'] = $campo_constancia;
         $requestCons['accion_id'] = $model->id;
         $requestCons['usuario_creacion_id'] = auth()->user()->id;
+               
         $constancia = Constancia::create($requestCons);
 
         return $constancia;

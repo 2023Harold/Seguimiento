@@ -65,12 +65,12 @@ class RecomendacionesAnalisisEnvioController extends Controller
 
             return back()->withInput();
         }
-        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$recomendacion->id)->get();
+        /*$contestaciones = RecomendacionesContestacion::where('recomendacion_id',$recomendacion->id)->get();
         if($contestaciones->count()==0){
             setMessage('No se ha capturado información en el apartado de contestaciones.','error');
 
             return back()->withInput();
-        }
+        }*/
         $request['concluido']='Si';
         $recomendacion->update($request->all());
 

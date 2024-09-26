@@ -87,7 +87,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td class='text-center' colspan="7">No hay datos registrados en este apartado.</td>
+                                    <td class='text-center' colspan="7">No se encuentran contestaciones registradas para la entidad.</td>
                                 </tr>
                             @endif
                         </tbody>
