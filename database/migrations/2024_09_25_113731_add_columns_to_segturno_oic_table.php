@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::table('segturno_oic', function (Blueprint $table) {
-            $table->string('nombre_titular_oic', 100);
-            $table->string('cargo_titular_oic',100);
-            $table->string('domicilio_oic',150);
-            $table->date('fecha_envio',100);
-            $table->string('acuse_notificacion',100);
-            $table->string('fecha_notificacion',100);
+            $table->string('nombre_titular_oic', 100)->nullable();
+            $table->string('cargo_titular_oic',100)->nullable();
+            $table->string('domicilio_oic',150)->nullable();
+            $table->date('fecha_envio',100)->nullable();
+            $table->string('acuse_notificacion',100)->nullable();
+            $table->string('fecha_notificacion',100)->nullable();
         });
     }
 

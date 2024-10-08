@@ -69,9 +69,12 @@
                                 <tr>
                                     <td class='text-center' colspan="7">No hay datos registrados en este apartado.</td>
                                 </tr>
-                            @endif
-                        </tbody>
+                            @endif                           
+                        </tbody>                       
                     </table>
+                    <a class="btn btn-primary" href="{{ route('solicitudesaclaracionatencion.index') }}">
+                        Continuar
+                    </a>
                 </div>
                 <div class="pagination">
                     {{ $anexos->appends(['consecutivo'=>$request->consecutivo,'nombre_archivo'=>$request->nombre_archivo])->links('vendor.pagination.bootstrap-5') }}

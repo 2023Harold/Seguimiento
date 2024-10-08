@@ -29,5 +29,10 @@ class TurnoArchivoTransferencia extends Model
     {
         return User::where('unidad_administrativa_id',$this->departamento_asignado_id)->first();
     }
+    public function auditoria()
+    {
+        return $this->belongsTo(Auditoria::class, 'auditoria_id', 'id');
+    }
+
 
 }

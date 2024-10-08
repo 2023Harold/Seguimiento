@@ -98,229 +98,144 @@
                                 </div>                    
                             </div>
                         @endcan                 
-                    @endif                    
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Acta de comparecencia</th>
-                                    <th>Oficio de designación</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (!empty($auditoria->comparecencia->oficio_acta))
-                                <tr>
-                                    <td class="text-center">
-                                        @if (!empty($auditoria->comparecencia->oficio_acta))
-                                        <a href="{{ asset($auditoria->comparecencia->oficio_acta) }}" target="_blank">
-                                            <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_acta)) ?>
-                                        </a><br>
-                                        <small>{{ 'No. '.$auditoria->comparecencia->numero_acta }}</small><br>
-                                        <small>{{ fecha($auditoria->comparecencia->fecha_cedula) }}</small>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        @if (!empty($auditoria->comparecencia->oficio_designacion))
-                                        <a href="{{ asset($auditoria->comparecencia->oficio_designacion) }}"
-                                            target="_blank">
-                                            <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_designacion)) ?>
-                                        </a><br>
-                                        <small>{{ fecha($auditoria->comparecencia->fecha_oficio_designacion) }}</small>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @else
-                                <tr>
-                                    <td class="text-center" colspan="2">
-                                        No hay registros en éste apartado.
-                                    </td>
-                                </tr>
-
-                                @endif
-                            </tbody>
-                        </table>
+                    @endif  
+                              
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Acta de comparecencia</th>
+                                        <th>Oficio de designación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (!empty($auditoria->comparecencia->oficio_acta))
+                                    <tr>
+                                        <td class="text-center">
+                                            @if (!empty($auditoria->comparecencia->oficio_acta))
+                                            <a href="{{ asset($auditoria->comparecencia->oficio_acta) }}" target="_blank">
+                                                <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_acta)) ?>
+                                            </a><br>
+                                            <small>{{ 'No. '.$auditoria->comparecencia->numero_acta }}</small><br>
+                                            <small>{{ fecha($auditoria->comparecencia->fecha_cedula) }}</small>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if (!empty($auditoria->comparecencia->oficio_designacion))
+                                            <a href="{{ asset($auditoria->comparecencia->oficio_designacion) }}"
+                                                target="_blank">
+                                                <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_designacion)) ?>
+                                            </a><br>
+                                            <small>{{ fecha($auditoria->comparecencia->fecha_oficio_designacion) }}</small>
+                                            @endif                                        
+                                        </td>
+                                    </tr>
+                                    @else
+                                    <tr>
+                                        <td class="text-center" colspan="2">
+                                            No hay registros en éste apartado.
+                                        </td>
+                                    </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>                                                              
+                        @if (!empty($auditoria->comparecencia->comparecio) && $auditoria->comparecencia->comparecio=="X")
                         
-                        {{-- <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Nombre del representante</th>
-                                    <th>Cargo del representante</th>
-                                    <th>Número de identificación del representante</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (!empty($auditoria->comparecencia))
-                                <tr>
-                                    <td>
+                            <h4 class="text-primary">Titular o representante  </h4><br>
+                            <div class="row">
+                            
+                                <div class="col-md-6">
+                                    <label>Nombre:</label>
+                                    <span class="text-primary">
                                         {{ $auditoria->comparecencia->nombre_representante }}
-                                    </td>
-                                    <td>
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Cargo:</label>
+                                    <span class="text-primary">
                                         {{ $auditoria->comparecencia->cargo_representante1 }}
-                                    </td>
-                                    <td>
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Tipo de identificación:</label>
+                                    <span class="text-primary">
+                                        {{ $auditoria->comparecencia->tipo_identificacion }}
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Número de identificación:</label>
+                                    <span class="text-primary">
                                         {{ $auditoria->comparecencia->numero_identificacion_representante }}
-                                    </td>
-                                </tr>
-                                @else
-                                <tr>
-                                    <td class="text-center" colspan="3">
-                                        No hay registros en éste apartado.
-                                    </td>
-                                </tr>                                    
-                                @endif
-                            </tbody>
-                        </table>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Nombre del testigo 1</th>
-                                    <th>Cargo del testigo 1</th>
-                                    <th>Número de identificación del testigo 1</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (!empty($auditoria->comparecencia))
-                                <tr>
-                                    <td>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">                    
+                                <div class="col-md-12"><hr></div>
+                            </div>
+                            @if (!empty($auditoria->comparecencia->nombre_testigo1))
+                            <h4 class="text-primary">Primer testigo  </h4><br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Nombre:</label>
+                                    <span class="text-primary">
                                         {{ $auditoria->comparecencia->nombre_testigo1 }}
-                                    </td>
-                                    <td>
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Cargo:</label>
+                                    <span class="text-primary">
                                         {{ $auditoria->comparecencia->cargo_testigo1 }}
-                                    </td>
-                                    <td>
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Tipo de identificación:</label>
+                                    <span class="text-primary">
+                                        {{ $auditoria->comparecencia->tipo_identificacion1 }}
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Número de identificación:</label>
+                                    <span class="text-primary">
                                         {{ $auditoria->comparecencia->numero_identificacion_testigo1 }}
-                                    </td>
-                                </tr>
-                                @else
-                                <tr>
-                                    <td class="text-center" colspan="3">
-                                        No hay registros en éste apartado.
-                                    </td>
-                                </tr>                                    
-                                @endif
-                            </tbody>
-                        </table>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Nombre del testigo 2</th>
-                                    <th>Cargo del testigo 2</th>
-                                    <th>Número de identificación del testigo 2</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (!empty($auditoria->comparecencia))
-                                <tr>
-                                    <td>
+                                    </span>
+                                </div>
+                            </div>                           
+                            <div class="row">                    
+                                <div class="col-md-12"><hr></div>
+                            </div>
+                            @endif
+                            @if (!empty($auditoria->comparecencia->nombre_testigo2))
+                            <h4 class="text-primary">Segundo testigo  </h4><br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Nombre:</label>
+                                    <span class="text-primary">
                                         {{ $auditoria->comparecencia->nombre_testigo2 }}
-                                    </td>
-                                    <td>
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Cargo:</label>
+                                    <span class="text-primary">
                                         {{ $auditoria->comparecencia->cargo_testigo2 }}
-                                    </td>
-                                    <td>
-                                        {{ $auditoria->comparecencia->numero_identificacion_testigo2
-                                        }}
-                                    </td>
-                                </tr>
-                                @else
-                                <tr>
-                                    <td class="text-center" colspan="3">
-                                        No hay registros en éste apartado.
-                                    </td>
-                                </tr>                                    
-                                @endif
-                            </tbody>
-                        </table> --}}
-                    </div>
-                    @if (!empty($auditoria->comparecencia->oficio_acta))
-                    <h4 class="text-primary">Titular o representante  </h4><br>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Nombre:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->nombre_representante }}
-                            </span>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Cargo:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->cargo_representante1 }}
-                            </span>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Tipo de identificación:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->tipo_identificacion }}
-                            </span>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Número de identificación:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->numero_identificacion_representante }}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row">                    
-                        <div class="col-md-12"><hr></div>
-                    </div>
-                    <h4 class="text-primary">Primer testigo  </h4><br>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Nombre:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->nombre_testigo1 }}
-                            </span>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Cargo:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->cargo_testigo1 }}
-                            </span>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Tipo de identificación:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->tipo_identificacion1 }}
-                            </span>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Número de identificación:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->numero_identificacion_testigo1 }}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row">                    
-                        <div class="col-md-12"><hr></div>
-                    </div>
-                    <h4 class="text-primary">Segundo testigo  </h4><br>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Nombre:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->nombre_testigo2 }}
-                            </span>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Cargo:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->cargo_testigo2 }}
-                            </span>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Tipo de identificación:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->tipo_identificacion2 }}
-                            </span>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Número de identificación:</label>
-                            <span class="text-primary">
-                                {{ $auditoria->comparecencia->numero_identificacion_testigo2 }}
-                            </span>
-                        </div>
-                    </div>
-                    @endif
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Tipo de identificación:</label>
+                                    <span class="text-primary">
+                                        {{ $auditoria->comparecencia->tipo_identificacion2 }}
+                                    </span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Número de identificación:</label>
+                                    <span class="text-primary">
+                                        {{ $auditoria->comparecencia->numero_identificacion_testigo2 }}
+                                    </span>
+                                </div>
+                            </div> 
+                            @endif                       
+                        @endif                    
             </div>
         </div>
     </div>

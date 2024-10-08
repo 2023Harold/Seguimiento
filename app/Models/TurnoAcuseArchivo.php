@@ -19,6 +19,7 @@ class TurnoAcuseArchivo extends Model
         'legajos_seg_archivo',
         'fojas_seg_archivo',
         'fecha_notificacion_archivo',
+        
 
     ];
     protected $cast=[

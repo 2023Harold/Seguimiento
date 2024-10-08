@@ -25,7 +25,7 @@ class ComparecenciaAgendaRequest extends FormRequest
     public function rules()
     {
         return [
-            'sala'  => 'required|string|in:s1,s2,s3',
+            'sala'  => 'sometimes|nullable|string|in:s1,s2,s3',
             'fecha' => 'required|date|max:10',
             'hora_inicio' => 'required|string|max:10',
             'hora_fin' => 'required|string|max:10',

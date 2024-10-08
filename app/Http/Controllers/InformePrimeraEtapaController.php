@@ -236,9 +236,10 @@ class InformePrimeraEtapaController extends Controller
 
         }
 
-
-
-        $template=new TemplateProcessorMod('bases-word/IS.docx');
+if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
+{
+        $auditoria->acto_fiscalizacion=='Cumplimiento Financiero';
+        $template=new TemplateProcessorMod('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/JEFE/2. IS.docx');
 
         $template->setValue('direccionseguimiento',$direccionseguimiento);
         $template->setValue('departamentoseguimiento',$jefeseguimiento);
@@ -249,7 +250,7 @@ class InformePrimeraEtapaController extends Controller
         $template->setValue('rectext1',$rectext1);
         $template->setValue('rectext2',$rectext2);
         $template->setValue('potext1',$potext1);
-        if(!str_contains($auditoria->tipo_auditoria->descripcion, 'Legalidad')){
+        if(!str_contains($auditoria->tipo_auditoria->descripcion, 'Cumplimiento Financiero')){
             $template->ddeleteBlock('bloquelegporec');
         }else{
             if(count($auditoria->totalpliegos) < 1 || count($auditoria->totalrecomendacion) < 1 ){           
@@ -263,13 +264,102 @@ class InformePrimeraEtapaController extends Controller
         $template->dcloneBlock('bloquerec', 0, true, false, $replacementsrec);
 
 
-
-
-
         $nombreword='IS';
 
         $template->saveAs($nombreword.'.docx');
-
-        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+ }
+    if( $auditoria->acto_fiscalizacion=='Legalidad')
+    {
+        $template=new TemplateProcessorMod('bases-word/PAC/LEGALIDAD/JEFE/2. IS.docx');
+    
+            $template->setValue('direccionseguimiento',$direccionseguimiento);
+            $template->setValue('departamentoseguimiento',$jefeseguimiento);
+            $template->setValue('entidad',$txtentidad);
+            $template->setValue('tipoauditoria',$tipoauditoria);
+            $template->setValue('periodo',$periodo);
+            $template->setValue('ordenauditoria',$ordenauditoria);
+            $template->setValue('rectext1',$rectext1);
+            $template->setValue('rectext2',$rectext2);
+            $template->setValue('potext1',$potext1);
+            if(!str_contains($auditoria->tipo_auditoria->descripcion, 'Legalidad')){
+                $template->ddeleteBlock('bloquelegporec');
+            }else{
+                if(count($auditoria->totalpliegos) < 1 || count($auditoria->totalrecomendacion) < 1 ){           
+                    $template->ddeleteBlock('bloquelegporec');
+                }else{
+                    $template->dcloneBlock('bloquelegporec', 1, true, true);
+                }
+            }
+            $template->ddeleteBlock('bloquelegporecsi');       
+            $template->dcloneBlock('bloquepo', 0, true, false, $replacements);
+            $template->dcloneBlock('bloquerec', 0, true, false, $replacementsrec);
+    
+    
+            $nombreword='IS';
+    
+            $template->saveAs($nombreword.'.docx');
     }
+        if($auditoria->acto_fiscalizacion=='Inversión Física')
+        { 
+            $template=new TemplateProcessorMod('bases-word/PAC/INVERSION_FISICA/JEFE/2. IS.docx');
+
+            $template->setValue('direccionseguimiento',$direccionseguimiento);
+            $template->setValue('departamentoseguimiento',$jefeseguimiento);
+            $template->setValue('entidad',$txtentidad);
+            $template->setValue('tipoauditoria',$tipoauditoria);
+            $template->setValue('periodo',$periodo);
+            $template->setValue('ordenauditoria',$ordenauditoria);
+            $template->setValue('rectext1',$rectext1);
+            $template->setValue('rectext2',$rectext2);
+            $template->setValue('potext1',$potext1);
+            if(!str_contains($auditoria->tipo_auditoria->descripcion, 'Inversión Física')){
+                $template->ddeleteBlock('bloquelegporec');
+            }else{
+                if(count($auditoria->totalpliegos) < 1 || count($auditoria->totalrecomendacion) < 1 ){           
+                    $template->ddeleteBlock('bloquelegporec');
+                }else{
+                    $template->dcloneBlock('bloquelegporec', 1, true, true);
+                }
+            }
+            $template->ddeleteBlock('bloquelegporecsi');       
+            $template->dcloneBlock('bloquepo', 0, true, false, $replacements);
+            $template->dcloneBlock('bloquerec', 0, true, false, $replacementsrec);
+
+            $nombreword='IS';
+
+            $template->saveAs($nombreword.'.docx');
+        }
+        if( $auditoria->acto_fiscalizacion=='Desempeño')
+        {
+            $template=new TemplateProcessorMod('bases-word/PAC/DESEMPEÑO/JEFE/2. IS.docx');
+            $template->setValue('direccionseguimiento',$direccionseguimiento);
+            $template->setValue('departamentoseguimiento',$jefeseguimiento);
+            $template->setValue('entidad',$txtentidad);
+            $template->setValue('tipoauditoria',$tipoauditoria);
+            $template->setValue('periodo',$periodo);
+            $template->setValue('ordenauditoria',$ordenauditoria);
+            $template->setValue('rectext1',$rectext1);
+            $template->setValue('rectext2',$rectext2);
+            $template->setValue('potext1',$potext1);
+            if(!str_contains($auditoria->tipo_auditoria->descripcion, 'Desempeño')){
+                $template->ddeleteBlock('bloquelegporec');
+            }else{
+                if(count($auditoria->totalpliegos) < 1 || count($auditoria->totalrecomendacion) < 1 ){           
+                    $template->ddeleteBlock('bloquelegporec');
+                }else{
+                    $template->dcloneBlock('bloquelegporec', 1, true, true);
+                }
+            }
+            $template->ddeleteBlock('bloquelegporecsi');       
+            $template->dcloneBlock('bloquepo', 0, true, false, $replacements);
+            $template->dcloneBlock('bloquerec', 0, true, false, $replacementsrec);
+
+            $nombreword='IS';
+
+            $template->saveAs($nombreword.'.docx');
+        }
+    
+            return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+        }    
+
 }

@@ -277,8 +277,7 @@
                         </div>                     
                         <div class="menu-item menu-accordion {{ (str_contains(Route::current()->getName(), 'turnoui')||
                                                                  str_contains(Route::current()->getName(), 'turnooic')||
-                                                                 str_contains(Route::current()->getName(), 'turnoarchivo')||
-                                                                 str_contains(Route::current()->getName(), 'turnotransferencia')                       
+                                                                 str_contains(Route::current()->getName(), 'turnoarchivo')
                                                                 ) ? 'show' : ''  }}" 
                                                                 data-kt-menu-trigger="click">                  
                             <a href="#" class="menu-link py-3">
@@ -314,17 +313,7 @@
                                         </span>
                                         <span class="menu-title">Acuse envio archivo</span>
                                     </a>
-                                </div>
-                                <div class="menu-item mb-1">
-                                    <a href="{{route('turnotransferencia.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnotransferencia')
-                                                                                                         ) ? 'active' : '' }}">
-                                        <span class="menu-bullet">
-                                            <span class="fa fa-file-text"></span>
-                                        </span>
-                                        <span class="menu-title">Envio al archivo de trasferencia</span>
-                                    </a>
-                                </div>
-                                          
+                                </div>                                                                      
                             </div>
                         </div> 
                         <div class="menu-item mb-1">                     

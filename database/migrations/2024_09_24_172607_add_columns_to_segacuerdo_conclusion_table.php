@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('segacuerdo_conclusion', function (Blueprint $table) {
-            $table->string('nombre_titular', 100);
-            $table->string('cargo_titular',100);
-            $table->string('domicilio',150);
+            $table->string('nombre_titular', 100)->nullable();
+            $table->string('cargo_titular',100)->nullable();
+            $table->string('domicilio',150)->nullable();
         });
     }
 

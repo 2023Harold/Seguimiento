@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('segagenda_comparecencias', function (Blueprint $table) {
-            $table->string('lugar_comparecencia',150);
+            $table->string('lugar_comparecencia',150)->nullable();
             
         });
     }

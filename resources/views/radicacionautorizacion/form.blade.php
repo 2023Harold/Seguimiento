@@ -19,15 +19,16 @@
                         @include('layouts.contextos._radicacion')                    
                         <div class="row">
                             <div class="col-md-12">
-                                {{-- <div id="body_loader" class="body_loader" style="display:none;">
+                                <div id="body_loader" class="body_loader" style="display:none;">
                                     <span class="loader"></span>
                                     <span> Firmando la constancia, por favor espere.</span>
-                                </div> --}}
+                                </div>
                                 <embed src="{{asset($preconstancia)}}" type="application/pdf" width="100%" height="600px"/>
                             </div>
                         </div>
                         {!! BootForm::open(['model' => $radicacion,'update'=>'radicacionautorizacion.update','id'=>'form'] )!!}                       
-                        {{-- {!! BootForm::hidden('archivo_firmar',$b64archivoxml,['id'=>'archivo_firmar'])!!} --}}
+                        {!! BootForm::hidden('archivo_firmar',$b64archivoxml,['id'=>'archivo_firmar'])!!}
+                        
                             <div id="campos"><br>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -46,7 +47,7 @@
                                         </div>
                                     </div>
                                 </div>                                
-                                {{-- <div id="camposfirma" style="display:none;" >
+                                <div id="camposfirma" style="display:none;" >
                                     <div class="row">
                                         <div class="col-md-6">
                                             {!! archivoFirma('certificate_file', 'Certificado digital: *', null,['data-allowedFileExtensions' => 'cer', 'accept'=>'.cer', 'class'=>'key']) !!}
@@ -63,14 +64,14 @@
                                         </div>
                                     </div>
                                     {!! camposFirma() !!}
-                                </div>                                 --}}
+                                </div>                                
                             </div>                           
                             <div class="row mt-3">
                                 <div class="col-md-6 justify-content-end">
                                     @can('radicacionautorizacion.update')
-                                        <button type="button" id='btn-guardar' class="btn btn-primary" onclick="ConfirmFirma();" style="display: none;">Guardar</button>                                      
-                                        <button type="submit" id='btn-guardar' class="btn btn-primary">Guardar</button>
-                                    @endcan
+                                        <button type="button" id='btn-guardar' class="btn btn-primary" onclick="ConfirmFirma();" >Guardar</button>                                                                              
+                                        {{-- <button type="submit" id='btn-guardarsinfirma' class="btn btn-primary">Guardar</button> --}}
+                                    @endcan                                    
                                      <a href="{{ route('radicacion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                                 </div>
                             </div>
@@ -82,7 +83,7 @@
     </div>
 @endsection
 @section('script')
-{{-- <script type="text/javascript" src="{{ asset('assets/js/signData.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/signData.js')}}"></script>
     @include('layouts.partials._firma')
     <script>
         $(document).ready(function() {
@@ -93,18 +94,21 @@
                     $('#div_acuerdopdf').hide();
                     $('#camposfirma').hide();
                     $('#btn-firma').hide();
-                    $('#btn-guardar').show();
+                    $('#btn-guardar').hide();
+                    $('#btn-guardarsinfirma').show();
+                    
 
                 }else{
                     $('#div_acuerdopdf').show();
                     $('#camposfirma').show();
                     $('#btn-firma').show();
-                    $('#btn-guardar').hide();
+                    $('#btn-guardar').show();
+                    $('#btn-guardarsinfirma').hide();
 
                 }
                 //alert(estado);            
             });
         });
-    </script>     --}}
+    </script>    
     {!! JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
 @endsection

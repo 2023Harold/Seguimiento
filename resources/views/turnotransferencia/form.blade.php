@@ -13,8 +13,8 @@
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('turnotransferencia.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
-                    &nbsp; Turno acuse envío al archivo
+                    <a href="{{ route('turnoarchivo.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
+                    &nbsp; Turno acuse envío al archivo de Trasferencia
                 </h1>
             </div>        
             <div class="card-body">
@@ -29,7 +29,7 @@
                 <div class="row"> 
                     <div class="row">
                         <div class="col-md-5">
-                            {!! archivo('inventario_transferencia', 'Inventario de documentos *', old('turnoarchivo', $turnotransferencia->inventario_transferencia)) !!}
+                            {!! archivo('inventario_transferencia', 'Inventario de documentos *', old('inventario_transferencia', $turnotransferencia->inventario_transferencia)) !!}
                         </div>
                         <div class="col-md-3">
                             {!! BootForm::date('fecha_transferencia', 'Fecha de transferencia', old('fecha_transferencia', fecha($turnotransferencia->fecha_transferencia, 'Y-m-d'))); !!}
@@ -45,11 +45,11 @@
                     </div>
                 </div>                     
                 <div class="row">
-                    <div class="col-md-6"> 
-                        @canany(['turnotransferencia.store','turnoarchivo.update'])
+                    <div class="col-md-6">                        
+                        @canany(['turnoarchivo.store','turnoarchivo.update'])
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         @endcanany
-                        <a href="{{ route('turnotransferencia.index') }}" class="btn btn-secondary me-2">Cancelar</a>
+                        <a href="{{ route('turnoarchivo.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>
                 {!! BootForm::close() !!}    
@@ -59,5 +59,5 @@
 </div> 
 @endsection
 @section('script')
-{{-- {!! JsValidator::formRequest('App\Http\Requests\InformePrimeraEtapaRequest') !!} --}}
+{{-- {!! JsValidator::formRequest('App\Http\Requests\AcuseArchivoTransferenciaRequest') !!} --}}
 @endsection

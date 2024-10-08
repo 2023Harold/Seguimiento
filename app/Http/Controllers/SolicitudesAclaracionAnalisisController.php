@@ -114,7 +114,7 @@ class SolicitudesAclaracionAnalisisController extends Controller
         $solicitud->update($request->all());
         setMessage("Se ha actualizado el análisis.");
 
-        return redirect()->route('solicitudesaclaracionatencion.index');
+        return redirect()->route('solicitudesaclaracionanexos.index');
     }
 
     /**

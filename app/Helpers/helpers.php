@@ -238,6 +238,7 @@ function camposFirma()
     BootForm::hidden('id_proceso_xml', '', ['id' => 'id_proceso_xml']).
     BootForm::hidden('hash_xml', '', ['id' => 'hash_xml']).
     BootForm::hidden('acuse_pdf', '', ['id' => 'acuse_pdf']).
+    BootForm::hidden('constancia_pdf', '', ['id' => 'constancia_pdf']).
     BootForm::hidden('id_proceso_pdf', '', ['id' => 'id_proceso_pdf']).
     BootForm::hidden('hash_pdf', '', ['id' => 'hash_pdf']).'</div>';
 }
@@ -257,6 +258,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         $requestCons['acuse_xml'] = $request->acuse_xml;
         $requestCons['id_proceso_xml'] = $request->id_proceso_xml;
         $requestCons['hash_xml'] = $request->hash_xml;
+        $requestCons['acuse_pdf'] = $request->acuse_pdf;
         $requestCons['id_proceso_pdf'] = $request->id_proceso_pdf;
         $requestCons['hash_pdf'] = $request->hash_pdf;
 
@@ -288,6 +290,8 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
        
         $requestCons['constancia_pdf'] = $rutaDestino.'/'.$archivopdffirmado;
         Storage::disk('local')->put('public/archivos/'.$archivopdffirmado, base64_decode($request->acuse_pdf));
+
+        
 
 
         

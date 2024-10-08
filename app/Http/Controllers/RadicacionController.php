@@ -256,31 +256,109 @@ class RadicacionController extends Controller
             $infodom_ccp='Domicilio: Av. Primero de Mayo, número 1731, Esquina Robert Bosch, Colonia Zona Industrial, C.P. 50071, Toluca, México.</w:t><w:br/><w:t>';
             $info=$info_ccp.' '.$infodom_ccp;
         }
-
-        $template=new TemplateProcessor('bases-word/IA_AR.docx'); //*
-        $template->setValue('anio',date("Y"));
-        $template->setValue('mes',$mes);
-        $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-        $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-        $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-        $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-        $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-        $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-        $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
-        $template->setValue('entidad',$txtentidad);
-        $template->setValue('periodo',$auditoria->periodo_revision);
-        $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);       
-        $template->setValue('nombre_ccp',$nombre_ccp);
-        $template->setValue('info_ccp',$info_ccp);
-        $template->setValue('infodom_ccp',$infodom_ccp);
-        $template->setValue('info',$info);
-        $template->setValue('iniciales',$iniciales);
-        $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
-        
-        $nombreword='AIAR';/** */
+        if($auditoria->acto_fiscalizacion=='Inversión Física')
+        {
+            $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/2. Of. IA AR.docx'); //*
+            $template->setValue('anio',date("Y"));
+            $template->setValue('mes',$mes);
+            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('entidad',$txtentidad);
+            $template->setValue('periodo',$auditoria->periodo_revision);
+            $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);       
+            $template->setValue('nombre_ccp',$nombre_ccp);
+            $template->setValue('info_ccp',$info_ccp);
+            $template->setValue('infodom_ccp',$infodom_ccp);
+            $template->setValue('info',$info);
+            $template->setValue('iniciales',$iniciales);
+            $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+            
+            $nombreword='AIAR';/** */
 
         $template->saveAs($nombreword.'.docx');/** */
+        }
+         if($auditoria->acto_fiscalizacion=='Legalidad'){
+            $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/2. Of. IA AR.docx'); //*
+            $template->setValue('anio',date("Y"));
+            $template->setValue('mes',$mes);
+            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('entidad',$txtentidad);
+            $template->setValue('periodo',$auditoria->periodo_revision);
+            $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);       
+            $template->setValue('nombre_ccp',$nombre_ccp);
+            $template->setValue('info_ccp',$info_ccp);
+            $template->setValue('infodom_ccp',$infodom_ccp);
+            $template->setValue('info',$info);
+            $template->setValue('iniciales',$iniciales);
+            $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+            
+            $nombreword='AIAR';/** */
 
+        $template->saveAs($nombreword.'.docx');/** */
+            }
+            if($auditoria->acto_fiscalizacion=='Desempeño')
+            {
+                $template=new TemplateProcessor('bases-word/PAC/DESEMPEÑO/LIDER/2. Of. IA AR.docx'); //*
+                $template->setValue('anio',date("Y"));
+                $template->setValue('mes',$mes);
+                $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+                $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+                $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+                $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+                $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+                $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+                $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+                $template->setValue('entidad',$txtentidad);
+                $template->setValue('periodo',$auditoria->periodo_revision);
+                $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);       
+                $template->setValue('nombre_ccp',$nombre_ccp);
+                $template->setValue('info_ccp',$info_ccp);
+                $template->setValue('infodom_ccp',$infodom_ccp);
+                $template->setValue('info',$info);
+                $template->setValue('iniciales',$iniciales);
+                $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+                
+                $nombreword='AIAR';/** */
+    
+            $template->saveAs($nombreword.'.docx');/** */
+            }    
+            if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
+        {
+            $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/2. Of. IA AR.docx'); //*
+            $template->setValue('anio',date("Y"));
+            $template->setValue('mes',$mes);
+            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('entidad',$txtentidad);
+            $template->setValue('periodo',$auditoria->periodo_revision);
+            $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);       
+            $template->setValue('nombre_ccp',$nombre_ccp);
+            $template->setValue('info_ccp',$info_ccp);
+            $template->setValue('infodom_ccp',$infodom_ccp);
+            $template->setValue('info',$info);
+            $template->setValue('iniciales',$iniciales);
+            $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+            
+            $nombreword='AIAR';/** */
+
+        $template->saveAs($nombreword.'.docx');/** */
+        }
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */
     }/** */
   
@@ -338,8 +416,9 @@ class RadicacionController extends Controller
             $iniciales=$iniciales.substr($parte, 0,1);
          }
 
-
-        $template=new TemplateProcessor('bases-word/AR_OIC.docx');
+         if($auditoria->acto_fiscalizacion=='Inversión Física')
+    {
+        $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/3. Of. AR_OIC´s.docx');
         $template->setValue('anio',date("Y"));
         $template->setValue('mes',$mes);
         $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
@@ -367,6 +446,68 @@ class RadicacionController extends Controller
         $nombreword='AROIC';
 
         $template->saveAs($nombreword.'.docx');
+    }
+    if($auditoria->acto_fiscalizacion=='Legalidad')
+    {    $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/3. Of. AR_OIC´s.docx');
+        $template->setValue('anio',date("Y"));
+        $template->setValue('mes',$mes);
+        $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+        $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+        $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+        $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+        $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+        $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+        $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+        $template->setValue('entidad',$txtentidad);
+        $template->setValue('periodo',$auditoria->periodo_revision);
+        $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
+        $template->setValue('totalpras',$auditoria);
+        $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+        $template->setValue('prassp',$prassp);
+        $template->setValue('claves',count($auditoria->accionespras));
+        $template->setValue('nombre_ccp',$nombre_ccp);
+        $template->setValue('info_ccp',$info_ccp);
+        $template->setValue('infodom_ccp',$infodom_ccp);
+        $template->setValue('info',$info);
+        $template->setValue('iniciales',$iniciales);
+        $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+
+
+        $nombreword='AROIC';    
+        $template->saveAs($nombreword.'.docx');
+    }
+    if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
+    {    $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/3. Of. AR_OIC´s.docx');
+        $template->setValue('anio',date("Y"));
+        $template->setValue('mes',$mes);
+        $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+        $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+        $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+        $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+        $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+        $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+        $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+        $template->setValue('entidad',$txtentidad);
+        $template->setValue('periodo',$auditoria->periodo_revision);
+        $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
+        $template->setValue('totalpras',$auditoria);
+        $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+        $template->setValue('prassp',$prassp);
+        $template->setValue('claves',count($auditoria->accionespras));
+        $template->setValue('nombre_ccp',$nombre_ccp);
+        $template->setValue('info_ccp',$info_ccp);
+        $template->setValue('infodom_ccp',$infodom_ccp);
+        $template->setValue('info',$info);
+        $template->setValue('iniciales',$iniciales);
+        $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
+
+
+        $nombreword='AROIC';    
+        $template->saveAs($nombreword.'.docx');
+    }
+    // else{
+        
+    // }
 
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
     }

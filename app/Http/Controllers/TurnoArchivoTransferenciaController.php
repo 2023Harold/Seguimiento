@@ -21,12 +21,12 @@ class TurnoArchivoTransferenciaController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria :: find(getSession('auditoria_id'));
-        $turnotransferencia=TurnoArchivoTransferencia::where('auditoria_id',getSession('auditoria_id'))->first(); 
-        //dd($turnotransferencia);  
+        // $auditoria = Auditoria :: find(getSession('auditoria_id'));
+        // $turnotransferencia=TurnoArchivoTransferencia::where('auditoria_id',getSession('auditoria_id'))->first(); 
+        // //dd($turnotransferencia);  
 
 
-        return view ('turnotransferencia.index', compact('request','auditoria', 'turnotransferencia'));
+        // return view ('turnotransferencia.index', compact('request','auditoria', 'turnotransferencia'));
     }
 
     /**
@@ -51,14 +51,14 @@ class TurnoArchivoTransferenciaController extends Controller
     public function store(Request $request)
     {
         
-       //dd(getSession('auditoria_id'));
+    //   dd(getSession('auditoria_id'));
       $request['auditoria_id']= getSession('auditoria_id');
       mover_archivos($request, ['turnotransferencia']);
      $turnotransferencia  = TurnoArchivoTransferencia::create($request->all());
+    // dd($turnotransferencia);
+      setMessage("Los datos del archivo de transferencia se han guardado correctamente.");
 
-      setMessage("Los datos se han guardado correctamente.");
-
-      return redirect() -> route('turnotransferencia.index');
+      return redirect() -> route('turnoarchivo.index',$turnotransferencia);
     }
 
     /**
@@ -92,14 +92,14 @@ class TurnoArchivoTransferenciaController extends Controller
      */
     public function update(Request $request, $id)
     {
-         //dd(getSession('auditoria_id'));
+        // dd(getSession('auditoria_id'));
       $request['auditoria_id']= getSession('auditoria_id');
       mover_archivos($request, ['turnotransferencia']);
-     $turnotransferencia  = TurnoArchivoTransferencia::create($request->all());
-      
-        setMessage('Los datos se han guardado correctamente');
+      $turnotransferencia  = TurnoArchivoTransferencia::create($request->all());
+    // dd($turnotransferencia);  
+        setMessage('Los datos de archivo trasferencia se han guardado correctamente');
 
-        return redirect()->route('turnotransferencia.edit', $turnotransferencia);
+        return redirect()->route('turnoarchivo.index', $turnotransferencia);
     }
 
     /**

@@ -27,12 +27,12 @@ class ComparecenciaActaRequest extends FormRequest
             'oficio_acta' => 'required|string|max:100',
             'numero_acta' => 'required|string|max:50',
             'fecha_acta' => 'required|date_format:Y-m-d|max:10',
-            'hora_comparecencia_termino' => 'required|string|max:15',
-            'tipo_identificacion'=>'required|string|max:100',            
+            'hora_comparecencia_termino' => 'sometimes|nullable|required_if:comparecio,X|string|max:15',      
             //'hora_comparecencia_termino' => 'hora de término de la comparecencia',
-            'nombre_representante'=> 'required|string|max:100',
-            'cargo_representante1'=> 'required|string|max:300',
-            'numero_identificacion_representante'=> 'required|string|max:100',
+            'nombre_representante'=> 'sometimes|nullable|string|required_if:comparecio,X|max:100',
+            'cargo_representante1'=> 'sometimes|nullable|required_if:comparecio,X|string|max:300',
+            'tipo_identificacion'=>'sometimes|string|required_if:comparecio,X|max:100',
+            'numero_identificacion_representante'=> 'sometimes|nullable|required_if:comparecio,X|string|max:100',
 
         ];
     }

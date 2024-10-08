@@ -40,7 +40,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-5">
-                        {!! archivo('acuerdo_conclusion', 'Acuerdo de conclusión: *', old('acuerdoconclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
+                        {!! archivo('acuerdo_conclusion', 'Acuerdo de conclusión: *', old('acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
                     </div>
                     <div class="col-md-3">
                         {!! BootForm::text('numero_acuerdo_conclusion', 'Número del acuerdo de conclusión: *', old('numero_acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}

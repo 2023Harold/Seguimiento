@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         @if (empty($turnoarchivo))
-                            @can('turnoui.create')
+                            @can('turnoarchivo.create')
                                 <a class="btn btn-primary float-end" href="{{ route('turnoarchivo.create') }}">
                                     <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Acuse envío archivo
                                 </a> 
@@ -37,6 +37,7 @@
                                 <th>Número del oficio</th>
                                 <th>Acuse de notificacion</th>
                                 <th>Fecha de notificacion</th>
+                                <th>Envío al archivo de transferencia</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,7 +55,58 @@
                                 <td class="text-center">
                                     {{ fecha($turnoarchivo->fecha_notificacion_archivo) }}
                                 </td>
-                                
+                                <td class="text-center">
+                                    @if (empty($turnoarchivo))
+                                    <a href="{{ route('turnotransferencia.create',$turnoarchivo) }}" class="btn btn-primary">Enviar a Transferencia</a>
+                                    @else                                     
+                                   Enviado.                                                                           
+                                    @endif
+                                </td>                                
+                            </tr>
+                            @else
+                            <tr>
+                                <td class="text-center" colspan="5">
+                                    No se encuentran registros en este apartado.
+                                </td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div> 
+                <h1 class="card-title">
+                    <span class="text-primary"> 
+                Envío archivo de transferencia
+                    </span>
+            </h1>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Número de oficio de transferencia</th>
+                                <th>Inventario de documentos</th>
+                                <th>Fecha de de trasferencia</th>
+                                <th>Tiempo de resguardo</th>
+                                <th>Clave topográfica</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!empty($auditoria->archivotransferencia))
+                            <tr>
+                                <td class="text-center">
+                                    {{ ($auditoria->archivotransferencia->numero_transferencia) }}
+                                </td>
+                                <td class="text-center">
+                                    @btnFile($auditoria->archivotransferencia->inventario_transferencia)
+                                </td>
+                                <td class="text-center">
+                                    {{  fecha($auditoria->archivotransferencia->fecha_transferencia)}}
+                                </td>
+                                <td class="text-center">
+                                    {{ ($auditoria->archivotransferencia->tiempo_resguardo) }}
+                                </td>
+                                <td class="text-center">
+                                    {{$auditoria->archivotransferencia->clave_topografica }}
+                                </td>                                
                             </tr>
                             @else
                             <tr>

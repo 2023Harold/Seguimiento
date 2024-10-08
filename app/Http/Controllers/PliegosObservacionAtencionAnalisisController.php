@@ -110,7 +110,7 @@ class PliegosObservacionAtencionAnalisisController extends Controller
         $pliegosobservacion->update($request->all());
         setMessage("Se ha actualizado el análisis.");
 
-        return redirect()->route('pliegosobservacionatencion.index');
+        return redirect()->route('pliegosobservacionanexos.index');
     }
 
     /**

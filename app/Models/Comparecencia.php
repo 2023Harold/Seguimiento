@@ -78,6 +78,7 @@ class Comparecencia extends Model
         'fecha_termino_proceso',
         'oficio_acuerdo',
         'fecha_oficio_acuerdo',
+        'comparecio',
     ];
 
 

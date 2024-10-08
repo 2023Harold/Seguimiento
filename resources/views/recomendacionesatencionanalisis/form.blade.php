@@ -79,7 +79,7 @@
                                     {!! BootForm::textarea('analisis', 'Análisis *',old('analisis', $recomendacion->analisis),['rows'=>'10']) !!}
                                 </div>
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-md-12">
                                     <span>
                                         <a class="btn btn-primary float-end" href="{{ route('recomendacionesanexos.index') }}">
@@ -87,7 +87,7 @@
                                         </a>
                                     </span>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row">
                                 <div class="col-md-12">
                                     {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusión', $recomendacion->analisis),['rows'=>'10']) !!}
@@ -100,7 +100,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    @btnSubmit('Guardar',route('recomendacionesanalisis.store'))
+                                    @btnSubmit('Guardar y continuar',route('recomendacionesanexos.index'))
                                     @btnCancelar('Cancelar', route('recomendacionesatencion.index'))
                                 </div>
                             </div>

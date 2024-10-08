@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::table('seginforme_primeraetapa', function (Blueprint $table) {
-            $table->string('nombre_titular_informe', 100);
-            $table->string('cargo_titular_informe',100);
-            $table->string('domicilio_informe',150);
+            $table->string('nombre_titular_informe', 100)->nullable();
+            $table->string('cargo_titular_informe',100)->nullable();
+            $table->string('domicilio_informe',150)->nullable();
             $table->string('numero_fojas',100)->nullable();
-            $table->date('fecha_envio',100);
-            $table->string('acuse_notificacion',100);
-            $table->string('fecha_notificacion',100);
+            $table->date('fecha_envio',100)->nullable();
+            $table->string('acuse_notificacion',100)->nullable();
+            $table->string('fecha_notificacion',100)->nullable();
         });
     }
 

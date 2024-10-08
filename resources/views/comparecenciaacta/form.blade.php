@@ -25,19 +25,19 @@
 
                     {!! BootForm::open(['model' => $comparecencia,'update' => 'comparecenciaacta.update','id' => 'form',]) !!}                 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             {!! archivo('oficio_acta', 'Acta de comparecencia: *', old('oficio_acta', $comparecencia->oficio_acta))
                             !!}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             {!! BootForm::text('numero_acta', 'Número de acta: *', old('numero_acta', $comparecencia->numero_acta));
                             !!}
                         </div>
-                        <div class="col-md-4">
-                            {!! BootForm::date('fecha_acta', 'Fecha del acta: *', old('fecha_comparecencia',
-                            fecha($comparecencia->fecha_comparecencia, 'Y-m-d'))); !!}
+                        <div class="col-md-3">
+                            {!! BootForm::date('fecha_acta', 'Fecha del acta: *', old('fecha_acta',
+                            fecha($comparecencia->fecha_acta, 'Y-m-d'))); !!}
                         </div>
                     </div>                       
                     
@@ -59,7 +59,7 @@
                                             {!! archivo('oficio_designacion', 'Oficio de designación: ', old('oficio_designacion',
                                             $comparecencia->oficio_designacion)) !!}
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             {!! BootForm::date('fecha_oficio_designacion', 'Fecha del oficio de designacion: ', old('fecha_oficio_designacion',
                                             fecha($comparecencia->fecha_oficio_designacion, 'Y-m-d'))); !!}
                                         </div>

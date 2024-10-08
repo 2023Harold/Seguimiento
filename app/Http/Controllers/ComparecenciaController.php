@@ -180,6 +180,8 @@ class ComparecenciaController extends Controller
     public function export(){
         
         $auditoria=Auditoria::find(getSession('auditoria_id'));     
+        $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
+
         $directoruser = $auditoria->directorasignado;
         $direccionseguimiento = $directoruser->unidadAdministrativa->descripcion;
 
@@ -211,26 +213,89 @@ class ComparecenciaController extends Controller
 
         $jefe=$jefeuser->name;
         $jefecargo=$jefeuser->puesto;
+        //dd($auditoria->acto_fiscalizacion);
+        if($auditoria->acto_fiscalizacion=='Inversión Física')
+            {
+                
+                $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/4. AC.docx');
+                $template->setValue('direccionseguimiento',$direccionseguimiento);
+                $template->setValue('departamentoseguimiento',$jefeseguimiento);
+                $template->setValue('ordenauditoria',$ordenauditoria);
+                $template->setValue('numeroauditoria',$numeroauditoria);
+                $template->setValue('numeroexpediente',$numeroexpediente);
+                $template->setValue('tipoauditoria',$tipoauditoria);
+                $template->setValue('entidad',$txtentidad);
+                $template->setValue('periodo',$periodo);
+                $template->setValue('director',$director);
+                $template->setValue('directorcargo',$directorcargo);
+                $template->setValue('jefe',$jefe);
+                $template->setValue('jefecargo',$jefecargo);
+        
+                $nombreword='AC';
 
+                $template->saveAs($nombreword.'.docx');
+            }
+            if($auditoria->acto_fiscalizacion=='Legalidad')
+            {
+                
+                $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/4. AC.docx');
+                $template->setValue('direccionseguimiento',$direccionseguimiento);
+                $template->setValue('departamentoseguimiento',$jefeseguimiento);
+                $template->setValue('ordenauditoria',$ordenauditoria);
+                $template->setValue('numeroauditoria',$numeroauditoria);
+                $template->setValue('numeroexpediente',$numeroexpediente);
+                $template->setValue('tipoauditoria',$tipoauditoria);
+                $template->setValue('entidad',$txtentidad);
+                $template->setValue('periodo',$periodo);
+                $template->setValue('director',$director);
+                $template->setValue('directorcargo',$directorcargo);
+                $template->setValue('jefe',$jefe);
+                $template->setValue('jefecargo',$jefecargo);
+        
+                $nombreword='AC';
 
-        $template=new TemplateProcessor('bases-word/AC.docx');
-        $template->setValue('direccionseguimiento',$direccionseguimiento);
-        $template->setValue('departamentoseguimiento',$jefeseguimiento);
-        $template->setValue('ordenauditoria',$ordenauditoria);
-        $template->setValue('numeroauditoria',$numeroauditoria);
-        $template->setValue('numeroexpediente',$numeroexpediente);
-        $template->setValue('tipoauditoria',$tipoauditoria);
-        $template->setValue('entidad',$txtentidad);
-        $template->setValue('periodo',$periodo);
-        $template->setValue('director',$director);
-        $template->setValue('directorcargo',$directorcargo);
-        $template->setValue('jefe',$jefe);
-        $template->setValue('jefecargo',$jefecargo);
- 
-        $nombreword='AC';
+                $template->saveAs($nombreword.'.docx');
+            }
+            if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
+            {                
+                $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/4. AC.docx');
+                $template->setValue('direccionseguimiento',$direccionseguimiento);
+                $template->setValue('departamentoseguimiento',$jefeseguimiento);
+                $template->setValue('ordenauditoria',$ordenauditoria);
+                $template->setValue('numeroauditoria',$numeroauditoria);
+                $template->setValue('numeroexpediente',$numeroexpediente);
+                $template->setValue('tipoauditoria',$tipoauditoria);
+                $template->setValue('entidad',$txtentidad);
+                $template->setValue('periodo',$periodo);
+                $template->setValue('director',$director);
+                $template->setValue('directorcargo',$directorcargo);
+                $template->setValue('jefe',$jefe);
+                $template->setValue('jefecargo',$jefecargo);
+        
+                $nombreword='AC';
 
-        $template->saveAs($nombreword.'.docx');
+                $template->saveAs($nombreword.'.docx');
+            }
+            if($auditoria->acto_fiscalizacion=='Desempeño')
+            {                
+                $template=new TemplateProcessor('bases-word/PAC/DESEMPEÑO/LIDER/3. AC.docx');
+                $template->setValue('direccionseguimiento',$direccionseguimiento);
+                $template->setValue('departamentoseguimiento',$jefeseguimiento);
+                $template->setValue('ordenauditoria',$ordenauditoria);
+                $template->setValue('numeroauditoria',$numeroauditoria);
+                $template->setValue('numeroexpediente',$numeroexpediente);
+                $template->setValue('tipoauditoria',$tipoauditoria);
+                $template->setValue('entidad',$txtentidad);
+                $template->setValue('periodo',$periodo);
+                $template->setValue('director',$director);
+                $template->setValue('directorcargo',$directorcargo);
+                $template->setValue('jefe',$jefe);
+                $template->setValue('jefecargo',$jefecargo);
+        
+                $nombreword='AC';
 
-        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+                $template->saveAs($nombreword.'.docx');
+            }
+                return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
     }
 }

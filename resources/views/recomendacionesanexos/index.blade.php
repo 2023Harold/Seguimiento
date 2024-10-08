@@ -71,6 +71,9 @@
                             @endif
                         </tbody>
                     </table>
+                    <a class="btn btn-primary" href="{{ route('recomendacionesatencion.index') }}">
+                        Continuar
+                    </a>
                 </div>
                 <div class="pagination">
                     {{ $anexos->appends(['consecutivo'=>$request->consecutivo,'nombre_archivo'=>$request->nombre_archivo])->links('vendor.pagination.bootstrap-5') }}

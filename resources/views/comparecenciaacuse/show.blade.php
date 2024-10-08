@@ -44,12 +44,21 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>Acuerdo de radicación</th>
                                     <th>Comprobante de recepción depto. de notificaciones</th>
                                     <th>Acuse de notificación de informe de auditoría</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td class="text-center">
+                                        @if (!empty($auditoria->comparecencia->oficio_acuerdo))
+                                        <a href="{{ asset($auditoria->comparecencia->oficio_acuerdo) }}" target="_blank">
+                                            <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_acuerdo)); ?>
+                                        </a><br>
+                                        <small>{{ fecha($auditoria->comparecencia->fecha_oficio_acuerdo) }}</small>
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         @if (!empty($auditoria->comparecencia->oficio_recepcion))
                                         <a href="{{ asset($auditoria->comparecencia->oficio_recepcion) }}"
@@ -66,7 +75,7 @@
                                         </a><br>
                                         <small>{{ fecha($auditoria->comparecencia->fecha_acuse) }}</small>
                                         @endif
-                                    </td>
+                                    </td>                                   
                                 </tr>
                             </tbody>
                         </table>

@@ -80,7 +80,7 @@ class RecomendacionesAnalisisController extends Controller
         $recomendacion->update($request->all());
         setMessage("Se ha actualizado el análisis.");
 
-        return redirect()->route('recomendacionesatencion.index');
+        return redirect()->route('recomendacionesanexos.index');
     }
 
     /**

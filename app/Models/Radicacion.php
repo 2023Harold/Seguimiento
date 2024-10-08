@@ -41,6 +41,7 @@ class Radicacion extends Model
         'usuario_modificacion_id',
         'usuario_firmante_id',
         'num_memo_recepcion_expediente',
+        'radicacion_sistema',
         'created_at'=>'datetime',
         'updated_at'=>'datetime',        
     ];

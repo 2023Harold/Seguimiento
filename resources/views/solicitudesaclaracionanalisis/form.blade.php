@@ -29,7 +29,7 @@
                                     {!! BootForm::textarea('analisis', 'Análisis *',old('analisis', $solicitud->analisis),['rows'=>'10']) !!}
                                 </div>
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-md-12">
                                     <span>
                                         <a class="btn btn-primary float-end" href="{{ route('solicitudesaclaracionanexos.index') }}">
@@ -37,7 +37,7 @@
                                         </a>
                                     </span>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row">
                                 <div class="col-md-12">
                                     {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusion', $solicitud->conclusion),['rows'=>'10']) !!}
@@ -79,7 +79,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    @btnSubmit('Guardar',route('solicitudesaclaracionanalisis.update'))
+                                    @btnSubmit('Guardar y continuar',route('solicitudesaclaracionanexos.index'))
+                                    {{-- @btnSubmit('Guardar',route('solicitudesaclaracionanalisis.update')) --}}
                                     @btnCancelar('Cancelar', route('solicitudesaclaracionatencion.index'))
                                 </div>
                             </div>

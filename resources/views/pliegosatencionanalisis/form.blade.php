@@ -27,16 +27,7 @@
                             <div class="col-md-12">
                                 {!! BootForm::textarea('analisis', 'Análisis *',old('analisis', $pliegosobservacion->analisis),['rows'=>'10']) !!}
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <span>
-                                    <a class="btn btn-primary float-end" href="{{ route('pliegosobservacionanexos.index') }}">
-                                        Agregar anexos
-                                    </a>
-                                </span>
-                            </div>
-                        </div>
+                        </div>                        
                         <div class="row">
                             <div class="col-md-12">
                                 {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusion', $pliegosobservacion->analisis),['rows'=>'10']) !!}
@@ -75,7 +66,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                @btnSubmit('Guardar',route('pliegosobservacionanalisis.store'))
+                                @btnSubmit('Guardar y continuar',route('pliegosobservacionanexos.index'))
                                 @btnCancelar('Cancelar', route('pliegosobservacionatencion.index'))
                             </div>
                         </div>

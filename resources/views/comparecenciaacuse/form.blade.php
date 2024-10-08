@@ -23,16 +23,17 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 @include('layouts.contextos._radicacion')
+                
+                {!! BootForm::open(['model' => $comparecencia,'update' => 'comparecenciaacuse.update','id' => 'form',]) !!}
                 <div class="row">
                     <div class="col-md-6">
                         {!! archivo('oficio_acuerdo', 'Acuerdo de radicación: *', old('oficio_acuerdo', $comparecencia->oficio_acuerdo)) !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_acuerdo', 'Fecha del acuerdo de radicación: *', old('fecha_acuerdo', fecha($comparecencia->fecha_acuerdo, 'Y-m-d'))); !!}
+                        {!! BootForm::date('fecha_oficio_acuerdo', 'Fecha del acuerdo de radicación: *', old('fecha_oficio_acuerdo', fecha($comparecencia->fecha_oficio_acuerdo, 'Y-m-d'))); !!}
                     </div>
-                </div>
-                {!! BootForm::open(['model' => $comparecencia,'update' => 'comparecenciaacuse.update','id' => 'form',]) !!}
-                    <div class="row">
+                </div>    
+                <div class="row">
                         <div class="col-md-6">
                             {!! archivo('oficio_recepcion', 'Comprobante de recepción depto. de notificaciones: *', old('oficio_recepcion', $comparecencia->oficio_recepcion)) !!}
                         </div>

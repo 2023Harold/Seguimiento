@@ -726,17 +726,16 @@ Breadcrumbs::for('turnoarchivo.create', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimiento.index');
     $trail->push('Envío de archivo', route('auditoriaseguimiento.create'));
 });
-
-//turno acuse archivo
-Breadcrumbs::for('turnotransferencia.index', function (BreadcrumbTrail $trail,$auditoria) {
-    $trail->parent('auditoriaseguimiento.index',$auditoria);
-    $trail->push('Envío de archivo ', route('turnotransferencia.index'));
+Breadcrumbs::for('turnoarchivo.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoarchivo.index',$auditoria);
+    $trail->push('Envío al archivo de transferecia ', route('turnotransferencia.create'));
 });
 
 Breadcrumbs::for('turnotransferencia.create', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimiento.index');
-    $trail->push('Envío de archivo', route('auditoriaseguimiento.create'));
+    $trail->push('Envío de archivo', route('turnoarchivo.index'));
 });
+
 
 
 

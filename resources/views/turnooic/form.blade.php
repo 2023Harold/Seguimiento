@@ -40,7 +40,7 @@
                         {!! BootForm::text('nombre_titular_oic', 'Nombre del titular a quien se dirige: *', old('nombre_titualar', $turnooic->nombre_titular_oic)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!! BootForm::text('cargo_titular_oic', 'Cargo del titualar a quien se dirige: *', old('nombre_titular_oic', $turnooic->nombre_titular_oic)) !!}
+                        {!! BootForm::text('cargo_titular_oic', 'Cargo del titular a quien se dirige: *', old('nombre_titular_oic', $turnooic->nombre_titular_oic)) !!}
                     </div>
                     <div class="col-md-4">
                         {!! BootForm::text('domicilio_oic', 'Domicilio: *', old('domicilio_oic', $turnooic->domicilio_oic)) !!}

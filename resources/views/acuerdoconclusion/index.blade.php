@@ -37,8 +37,7 @@
                                 <th>Cargo del titular a quien se dirige</th>
                                 <th>Domicilio</th>
                                 <th>Número</th>
-                                <th>Acuerdo de conclusión UI</th>
-                                <th>Fecha del acuerdo de conclusión</th>
+                                <th>Acuerdo de conclusión UI</th>                                
                             </tr>
                         </thead>
                         <tbody>
@@ -58,11 +57,14 @@
                                     {{$auditoria->acuerdoconclusion->numero_acuerdo_conclusion }}
                                 </td>
                                 <td class="text-center">
-                                    @btnFile($auditoria->acuerdoconclusion->acuerdo)
+                                    <a>
+                                    @btnFile($auditoria->acuerdoconclusion->acuerdo_conclusion)
+                                    </a><br>
+                                    <small>{{ fecha($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion) }}</small>
                                 </td>
-                                <td class="text-center">
+                                {{-- <td class="text-center">
                                     {{ fecha($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion) }}
-                                </td>
+                                </td> --}}
                             </tr>
                             @else
                             <tr>

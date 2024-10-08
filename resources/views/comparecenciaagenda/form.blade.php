@@ -20,7 +20,7 @@
                 {!! BootForm::open(['model' => $comparecencia,'update' => 'comparecenciaagenda.update','id' =>'form',]) !!}
                 <div class="row">
                     <div class="col-md-6">
-                        {!! BootForm::radios('sala', 'Sala de la reunión *', ['s1'=>1,'s2'=>2,'s3'=>3], old('sala','s'.optional($comparecencia->agenda)->sala),true,['class'=>'i-checks']) !!}
+                        {!! BootForm::radios('sala', 'Sala de la reunión ', ['s1'=>1,'s2'=>2,'s3'=>3], old('sala','s'.optional($comparecencia->agenda)->sala),true,['class'=>'i-checks']) !!}
                     </div>
                 </div> 
                 <div class="row">
