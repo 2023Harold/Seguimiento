@@ -74,7 +74,7 @@
                                     <td class="text-center">{{ fecha($cita->fecha) }}</td>
                                     <td class="text-center">{{ date("g:i a",strtotime($cita->hora_inicio)) }}</td>
                                     <td class="text-center">{{ date("g:i a",strtotime($cita->hora_fin))}}</td>
-                                    <td class="text-center">{{ $comparecencia->lugar_comparecencia }}</td>
+                                    <td class="text-center">{{ $cita->lugar_comparecencia }}</td>
                                 </tr>
                                 @empty             
                                     <tr>

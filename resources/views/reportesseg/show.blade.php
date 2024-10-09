@@ -124,30 +124,47 @@
                 <td class="text-center bg-light-dark">                                       
                     {{ $auditoria->tipo_auditoria->sigla.' - '.$auditoria->numero_auditoria }}                                     
                 </td>
-                <td class="text-center bg-warning">                                       
-                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}                                     
+                <td class="text-center bg-warning">   
+                    @if (!empty($auditoria->fecha_oficio_acuerdo))                                                                                                                                                                   
+                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}
+                    @endif                                       
                 </td>                                 
-                <td class="text-center bg-light-dark">                                       
-                    {{ $auditoria->radicacion->numero_expediente}}                                     
+                <td class="text-center bg-light-dark"> 
+                    @if (!empty($auditoria->numero_expediente))                                                                                                                                                                                
+                        {{ $auditoria->radicacion->numero_expediente}}                                     
+                         @endif                                      
+                    {{-- {{ $auditoria->radicacion->numero_expediente}} --}}
                 </td> 
-                <td class="text-center bg-warning">                                       
-                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}                                     
+                <td class="text-center bg-warning">                         
+                    @if(!empty($auditoria->fecha_oficio_acuerdo))                                  
+                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}                                                         
+                    @endif
                 </td>  
-                <td class="text-center bg-light-dark">                                       
-                    {{ fecha($auditoria->comparecencia->fecha_comparecencia)}}                                     
+                <td class="text-center bg-light-dark"> 
+                    @if(!empty($auditoria->fecha_comparecencia))                                      
+                    {{ fecha($auditoria->comparecencia->fecha_comparecencia)}}
+                    @endif                                     
                 </td> 
                 <td class="text-center bg-warning">                                       
+                    @if(!empty($auditoria->fecha_comparecencia))
                     {{ fecha($auditoria->comparecencia->fecha_acta)}}                                     
+                    @endif
                 </td>                             
                 <td class="text-center bg-warning">                                       
+                    @if(!empty($auditoria->numero_acta))
                     {{ $auditoria->comparecencia->numero_acta}}                                     
+                    @endif
                 </td>  
                 <td></td>
                 <td class="text-center bg-light-dark">
+                    @if(!empty($auditoria->fecha_inicio_aclaracion))
                     {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion)}}    
+                    @endif
                 </td>
                 <td class="text-center">
+                    @if(!empty($auditoria->fecha_termino_aclaracion))
                     {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion)}}
+                    @endif
                 </td>
                 <td class="bg-light-dark text-center">
                     {{  $auditoria->totalpliegos->count()}} 

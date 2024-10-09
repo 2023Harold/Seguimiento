@@ -46,7 +46,8 @@ class RadicacionAutorizacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $radicacion = Radicacion create($request->all());
+      
     }
 
     /**
@@ -139,9 +140,11 @@ class RadicacionAutorizacionController extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, Radicacion $radicacion)
     {
-       
+    //    dd($request);
+       $radicacion->update($request->all());
         $this->normalizarDatos($request);
         // if(empty($request->radicacion_sistema)){
+        
 
             Movimientos::create([
                 'tipo_movimiento' => 'Autorización de la radicación',
