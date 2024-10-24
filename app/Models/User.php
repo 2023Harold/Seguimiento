@@ -36,7 +36,13 @@ class User extends Authenticatable
         'estatus',
         'fecha_ultimo_acceso',
         'usuario_creacion_id',
-        'usuario_actualizacion_id'
+        'usuario_actualizacion_id',
+        'cp_2023',
+        'cp_2022',
+        'cp_2021',
+        'cp_ua2023',
+        'cp_ua2022',
+        'cp_ua2021'
     ];
 
     /**
@@ -65,6 +71,18 @@ class User extends Authenticatable
     {
         return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'id', 'unidad_administrativa_id');
     }
+    public function unidadAdministrativa2021()
+    {
+        return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'id','cp_ua2021');
+    }
+    public function unidadAdministrativa2022()
+    {
+        return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'id', 'cp_ua2022');
+    }
+    public function unidadAdministrativa2023()
+    {
+        return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'id', 'cp_ua2023');
+    }
 
     public function notificaciones()
     {
@@ -82,20 +100,57 @@ class User extends Authenticatable
     
     public function getJefeAttribute()
     {
-        return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 5).'0')->first();
+        if(getSession('cp')==2021){
+            return $this->where('cp_ua2021', substr(getSession('cp_ua'), 0, 5).'0')->first();
+        }
+        if(getSession('cp')==2022){
+            return $this->where('cp_ua2022', substr(getSession('cp_ua'), 0, 5).'0')->first();
+        }
+        if(getSession('cp')==2023){
+            return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 5).'0')->first();
+        }
+       
     }
 
     public function getDirectorAttribute()
     {
-        return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 4).'00')->first();
+        if(getSession('cp')==2021){
+            return $this->where('cp_ua2021', substr(getSession('cp_ua'), 0, 4).'0')->first();
+        }
+        if(getSession('cp')==2022){
+            return $this->where('cp_ua2022', substr(getSession('cp_ua'), 0, 4).'0')->first();
+        }
+        if(getSession('cp')==2023){
+            return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 4).'0')->first();
+        }                
     }
 
     public function getTitularAttribute()
     {
-        return $this->where('unidad_administrativa_id', substr((empty(auth()->user()->unidad_administrativa_id) ? '119' : auth()->user()->unidad_administrativa_id), 0, 3).'000')->first();
+        if(getSession('cp')==2021){
+            return $this->where('cp_ua2021', substr(getSession('cp_ua'), 0, 3).'000')->first();
+        }
+        if(getSession('cp')==2022){
+            return $this->where('cp_ua2022', substr(getSession('cp_ua'), 0, 3).'000')->first();
+        }
+        if(getSession('cp')==2023){
+            return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 3).'000')->first();
+        }
+
+        // return $this->where('unidad_administrativa_id', substr((empty(auth()->user()->unidad_administrativa_id) ? '119' : auth()->user()->unidad_administrativa_id), 0, 3).'000')->first();
     }
     public function getLiderAttribute()
     {
-        return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','LP')->first();
-    }
+        if(getSession('cp')==2021){
+            return $this->where('cp_ua2021', substr(getSession('cp_ua'), 0, 5).'0')->first();
+        }
+        if(getSession('cp')==2022){
+            return $this->where('cp_ua2022', substr(getSession('cp_ua'), 0, 5).'0')->first();
+        }
+        if(getSession('cp')==2023){
+            return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 5).'0')->first();
+        }
+
+        // return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','LP')->first();
+    }   
 }

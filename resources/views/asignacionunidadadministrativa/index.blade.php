@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('user.index') }}
+{{ Breadcrumbs::render('asignacionunidadadministrativa.index') }}
 @endsection
 @section('content')
 <div class="row">
@@ -10,10 +10,9 @@
                 <div class="card-header">
                     <h1 class="card-title">
                         <a href="{{ route('administracion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;&nbsp;&nbsp;
-                        Usuarios
+                        Asignación Unidad Administrativa
                     </h1>
                 </div>
-
                 <div class="card-body">
                     {!! BootForm::open(['id'=>'form', 'method' => 'GET']); !!}
                     <div class="row align-items-center">
@@ -42,8 +41,9 @@
                                         <th scope="col">Puesto</th>
                                         <th scope="col">Correo electrónico</th>
                                         <th scope="col">Rol</th>
-                                        <th scope="col">Unidad administrativa / Entidad fiscalizable</th>
-                                        <th scope="col">Fecha de último acceso</th>
+                                        <th scope="col">Unidad Administrativa 2021</th>
+                                        <th scope="col">Unidad Administrativa 2022</th>
+                                        <th scope="col">Unidad Administrativa 2023</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,16 +64,38 @@
                                         </td>
                                         <td>{{ $user->puesto }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ implode($user->getRoleNames()->toArray()) }}</td>
-                                        <td>
-                                            @if (implode($user->getRoleNames()->toArray()) == 'Entidad Fiscalizable')
-                                            {{ $user->entidadFiscalizable->descripcion }}
-                                            @else
-                                            {{ $user->unidadAdministrativa->descripcion }}
-                                            @endif
-                                        </td>
-                                        <td class="text-center">{{ fecha($user->fecha_ultimo_acceso,'d/m/Y H:i') }}</td>
-                                    </tr>
+                                        <td>{{ implode($user->getRoleNames()->toArray()) }}</td>                                                                             
+                                        
+                                    <td>
+                                        @if (empty($user->cp_ua2021))
+                                        <a href="{{ route('asignacionunidadadministrativa.edit',$user) }}"  class="btn btn-primary float-end">
+                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Asignar
+                                        </a>
+                                        @else
+                                       {{ $user->unidadAdministrativa2021->descripcion }}
+                                       @endif
+                                    </td>             
+                                    <td>
+                                        @if (empty($user->cp_ua2022))
+                                        <a href="{{ route('asignacionunidadadministrativa2022.edit',$user) }}"  class="btn btn-primary float-end">
+                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Asignar
+                                        </a>
+                                        @else
+                                        {{ $user->unidadAdministrativa2022->descripcion }}
+                                       @endif
+
+                                    </td>             
+                                    <td>
+                                        @if (empty($user->cp_ua2023))
+                                        <a href="{{ route('asignacionunidadadministrativa2023.edit',$user) }}"  class="btn btn-primary float-end">
+                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Asignar
+                                        </a>
+                                        @else
+                                        {{ $user->unidadAdministrativa2023->descripcion }}
+                                       @endif
+                                    </td>             
+                                                                                                        
+                                </tr>
                                     @endforeach
                                     @else
                                     <tr>
@@ -95,3 +117,4 @@
         </div>
 </div>
 @endsection
+

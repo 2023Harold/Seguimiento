@@ -6,8 +6,8 @@
 <div class="row justify-content-center">
     <div class="mt-4 mb-5 col-12">
         <div class="flex-row row flex-center">
-            @canany(['user.index'])
-            <div class="col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12 mb-3 mb-3">
+            {{-- @canany(['user.index']) --}}
+            {{-- <div class="col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12 mb-3 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title">
@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            @endcanany
+            @endcanany --}}
             {{-- @canany(['catrequerimiento.index', 'user.index', 'rol.index', 'permiso.index', 'acceso.index',
             'ejercicio.index'])
             <div class="mb-3 col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12">
