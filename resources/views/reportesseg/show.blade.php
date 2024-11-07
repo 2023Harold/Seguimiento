@@ -277,13 +277,17 @@
                     @endphp                                   
                     {{$lideres}}
                 </td>
-                <td class="text-center">
-                    {{$auditoria->departamento_encargado}}<br>
-                    {{ $auditoria->jefedepartamentoencargado->name}} 
+                <td class="text-center">.
+					@if(!empty($auditoria->departamento_encargado))
+						{{$auditoria->departamento_encargado}}<br>
+						{{ $auditoria->jefedepartamentoencargado->name}} 
+					@endif  
                 </td>
                 <td class="text-center bg-light-dark">
-                    {{ $auditoria->direccion_asignada}} <br>
-                    {{ $auditoria->directorasignado->name}} <br>
+					@if(!empty($auditoria->direccion_asignada))
+						{{ $auditoria->direccion_asignada}} <br>
+						{{ $auditoria->directorasignado->name}} <br>
+					@endif  
                 </td>
                 <td class="bg-danger"></td>
                 <td class="bg-danger"></td>

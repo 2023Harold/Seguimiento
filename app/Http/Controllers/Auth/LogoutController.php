@@ -16,8 +16,8 @@ class LogoutController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        //return redirect('/');
        
-        //return redirect('https://plataforma.osfem.gob.mx/Desarrollo/OSDirectorio/public/login');
+        return redirect('https://plataforma.osfem.gob.mx/login');
     }
 }

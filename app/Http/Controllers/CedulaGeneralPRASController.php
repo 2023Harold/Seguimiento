@@ -73,7 +73,8 @@ class CedulaGeneralPRASController extends Controller
         $jefesF = $resultado['jefesF'];
         $jefesL = $resultado['jefesL'];      
         $nombre = $resultado['nombre'];  
-        
+		
+		return redirect(asset($nombre));        
         return view('cedulageneralpras.form',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
     }
 

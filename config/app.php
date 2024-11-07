@@ -177,7 +177,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -194,8 +193,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // ...
-        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
 ];

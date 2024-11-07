@@ -90,7 +90,7 @@ class AuditoriaAccion extends Model
 
     public function getDepaasignadoAttribute()
     {
-        return User::where('unidad_administrativa_id',$this->departamento_asignado_id)->first();
+        return User::where('unidad_administrativa_id',$this->departamento_asignado_id)->where('siglas_rol','JD')->first();
     }
 
     public function auditoria()
@@ -105,12 +105,12 @@ class AuditoriaAccion extends Model
 
     public function lider()
     {
-        return $this->belongsTo(User::class, 'lider_asignado_id', 'id');
+        return $this->belongsTo(User::class, 'lider_asignado_id', 'id')->where('siglas_rol','LP');
     }
 
     public function analista()
     {
-        return $this->belongsTo(User::class, 'analista_asignado_id', 'id');
+        return $this->belongsTo(User::class, 'analista_asignado_id', 'id')->where('siglas_rol','ANA');
     }
     public function pras()
     {

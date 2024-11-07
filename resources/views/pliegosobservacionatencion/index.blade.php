@@ -105,7 +105,7 @@
                                         @endcan
                                     @endif
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center">								
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
                                         @if (empty($pliegos->fase_revision) || ($pliegos->fase_revision!='Pendiente'&& $pliegos->fase_revision!='Revisión Jefe'))
                                             @can('pliegosobservacionanalisis.edit')

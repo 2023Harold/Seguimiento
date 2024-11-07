@@ -35,18 +35,20 @@
                             @endphp                                              
                             <div class="row">  
                                 <!-- ********************************************************************************************************** CG Seguimiento ******************************************************************************************************************************************* -->
-                                
+                                @if (count($auditoria->accionessolaclpo)>0)
                                 <div class="col-md-4">
                                     <div class="card card-custom gutter-b bg-light-primary">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center justify-content-between p-4 flex-lg-wrap flex-xl-nowrap">
                                                 <div class="d-flex flex-column mr-5 text-center">
-                                                    <a href="{{ route('cedulainicialprimera.edit',$auditoria) }}" class="h6 text-gray-600 text-hover-primary mb-5 popuprevisar align-items-sm-center">
+                                                    <a href="{{ route('cedulainicialprimera.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 align-items-sm-center">
                                                         Seguimiento &nbsp;&nbsp;&nbsp;&nbsp;
                                                         <span class="fa fa-eye"></span>
                                                     </a>                                 
                                                 </div>
                                                 <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0 text-center">
+												
+													
                                                     @if ($totaut==$totalacciones)
                                                         @if(count($auditoria->cedulageneralseguimiento)>0)
 
@@ -172,13 +174,14 @@
                                                             </div>
                                                             {!! BootForm::close() !!}                                                                                                      
                                                         @endif
-                                                    @endif                                                
+                                                    @endif 
+												
                                                 </div>
                                             </div>                                            
                                         </div>
                                     </div>
                                 </div>
-                                
+                                @endif
 
                                 <!-- *************************************************************************************CG Recomendación ************************************************************************************************** -->
                                 @if (count($auditoria->totalrecomendacion)>0)    
@@ -190,7 +193,7 @@
                                         <div class="card-body">
                                             <div class="d-flex align-items-center justify-content-between p-4 flex-lg-wrap flex-xl-nowrap">
                                                 <div class="d-flex flex-column mr-3 text-center">
-                                                    <a href="{{ route('cedulageneralrecomendacion.edit',$auditoria) }}" class="h6 text-gray-600 text-hover-primary mb-5 popuprevisar">
+                                                    <a href="{{ route('cedulageneralrecomendacion.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                         Recomendaciones  &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                     </a>                                                    
                                                 </div>
@@ -338,7 +341,7 @@
                                         <div class="card-body">
                                             <div class="d-flex align-items-center justify-content-between p-4 flex-lg-wrap flex-xl-nowrap">
                                                 <div class="d-flex flex-column mr-3 text-center">
-                                                    <a href="{{ route('cedulageneralpras.edit',$auditoria) }}" class="h6 text-gray-600 text-hover-primary mb-5 popuprevisar">
+                                                    <a href="{{ route('cedulageneralpras.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                         PRAS &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span> 
                                                     </a>                                                    
                                                 </div>
@@ -479,14 +482,15 @@
                         <div class="ribbon ribbon-top">
                             <div class="ribbon-label bg-primary">Cédulas Analiticas</div>      
                         </div>                  
-                        <div class="card-body ">                                              
-                            <div class="row">                                
+                        <div class="card-body "> 							
+                            <div class="row">  
+								@if (count($auditoria->accionessolaclpo)>0)							
                                 <div class="col-md-4">
                                     <div class="card card-custom gutter-b bg-light-primary">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center justify-content-between p-4 flex-lg-wrap flex-xl-nowrap">
                                                 <div class="d-flex flex-column mr-3 text-center">
-                                                    <a href="{{ route('cedulaanalitica.edit',$auditoria) }}" class="h6 text-gray-600 text-hover-primary mb-5 popuprevisar">
+                                                    <a href="{{ route('cedulaanalitica.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                        Seguimiento &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                     </a>
                                                 </div>                                               
@@ -617,6 +621,7 @@
                                         </div>
                                     </div>
                                 </div>
+								@endif
                                 @if (count($auditoria->totalrecomendacion)>0 && (str_contains($auditoria->acto_fiscalizacion, 'Desempeño')||str_contains($auditoria->acto_fiscalizacion, 'Legalidad')))
                                 @php
                                      $ca_desempenio=$resultado['ca_desempeno'];
@@ -626,7 +631,7 @@
                                         <div class="card-body">
                                             <div class="d-flex align-items-center justify-content-between p-4 flex-lg-wrap flex-xl-nowrap">
                                                 <div class="d-flex flex-column mr-3 text-center">
-                                                    <a href="{{ route('cedulaanaliticadesemp.edit',$auditoria) }}" class="h6 text-gray-600 text-hover-primary mb-5 popuprevisar">
+                                                    <a href="{{ route('cedulaanaliticadesemp.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                         Desempeño &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                     </a>                                                   
                                                 </div>

@@ -9,11 +9,10 @@
             <div class="card ">
                 <div class="card-header">
                     <h1 class="card-title">
-                        <a href="{{ route('administracion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;&nbsp;&nbsp;
+                        <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;&nbsp;&nbsp;
                         Usuarios
                     </h1>
                 </div>
-
                 <div class="card-body">
                     {!! BootForm::open(['id'=>'form', 'method' => 'GET']); !!}
                     <div class="row align-items-center">
@@ -33,6 +32,11 @@
                         </div>
                     </div>
                     {!! BootForm::close() !!}
+					<div class="row">
+						<div class="col-md-12">                        
+                            @button('Agregar usuario', route('user.create'), 'mt-8 float-end')                        
+						</div>
+					</div>
                     <div class="row">
                         <div class="col-md-12">
                             <table class="table table-hover table-rounded table-row-gray-300 gy-7">

@@ -9,7 +9,7 @@ use App\Mail\SetPassword;
 use App\Mail\SendMailRegistro;
 use App\Models\User;
 use App\Models\Rol;
-use App\Models\Unidad_Administrativa;
+use App\Models\CatalogoUnidadesAdministrativas;
 use App\Models\Entidad_Fiscalizable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -31,8 +31,7 @@ class UsersController extends Controller
     {
         $this->validationRules = [
             'name' => 'bail|required|max:75|string|regex:/^[A-Z,a-zñáéíóúü\s]+$/i',
-            'puesto' => 'required|string|max:150|regex:/^[A-Z,a-zñáéíóúü"\s]+$/i',
-            'email' => 'required|unique:users,email|email|max:60',
+            'puesto' => 'required|string|max:150|regex:/^[A-Z,a-zñáéíóúü"\s]+$/i',            
             'rol' => 'required|max:40|string',
         ];
 
@@ -59,38 +58,41 @@ class UsersController extends Controller
 
     public function create()
     {
-        // $user = new User();
-        // $rol = new Rol();
-        // $unidad = new Unidad_Administrativa();
-        // $roles =  $rol->getRoles()->prepend('Seleccione el rol','');
-        // $accion = 'Agregar';
-        // $unidadesadministrativas = $unidad->getUnidadesAdministrativas()->prepend('Seleccione la unidad administrativa','');
-        // $entidades_fiscalizables = Entidad_fiscalizable::orderBy('ambito_id')
-        //     ->get()->pluck('descripcion','id')->prepend('Seleccione la entidad fiscalizable','');
+		 $user = new User();		 
+         $rol = new Rol();		 
+         $unidad = new CatalogoUnidadesAdministrativas();		 
+         $roles =  $rol->getRoles()->prepend('Seleccione el rol','');		
+         $accion = 'Agregar';
+         $unidadesadministrativas = $unidad->getUnidadesAdministrativas()->prepend('Seleccione la unidad administrativa','');
+		 
+         /*$entidades_fiscalizables = Entidad_fiscalizable::orderBy('ambito_id')
+             ->get()->pluck('descripcion','id')->prepend('Seleccione la entidad fiscalizable','');*/
+			 
 
-        // $validator = JsValidator::make($this->validationRules, $this->errorMessages, $this->attributeNames, '#form');
-
-        // return view('users.form',compact('user','roles','unidadesadministrativas','entidades_fiscalizables','validator','accion'));
+         $validator = JsValidator::make($this->validationRules, $this->errorMessages, $this->attributeNames, '#form');		 
+		
+		
+         return view('users.form',compact('user','roles','unidadesadministrativas','validator','accion'));
     }
 
     public function store(Request $request)
     {
-        // $this->setValidator($request)->validate();
+         //$this->setValidator($request)->validate();
 
-        // $request = $this->fixData($request);
+         $request = $this->fixData($request);
         // //$request['password'] = Hash::make(Str::random(12));
-        // $request['password'] = Hash::make('password');
-        // $request['estatus']  = 'Activo';
-        // $request['usuario_creacion_id'] = auth()->id();
-        // $user = User::create($request->all());
-        // $user->syncRoles($request->rol);
+         $request['password'] = Hash::make('password');
+         $request['estatus']  = 'Activo';
+         $request['usuario_creacion_id'] = auth()->id();
+         $user = User::create($request->all());
+         $user->syncRoles($request->rol);
         // $token = Str::random(60);
         // $user['token'] = $token;
         // $user['is_verified'] = 0;
         // $user->save();
         // Mail::to($request->email)->send(new SetPassword($user->name, $token));
-        // setMessage('El usuario ha sido agregado y se han enviado las instrucciones por correo');
-        // return redirect('/user');
+         setMessage('El usuario ha sido agregado y se han enviado las instrucciones por correo');
+         return redirect('/user');
     }
 
     public function setpassword(User $user)
@@ -219,12 +221,12 @@ class UsersController extends Controller
             $request[ 'password' ] = Hash::make($request->password);
         }
         */
-        // if ($request->rol == 'Entidad Fiscalizable'){
-        //     $request['unidad_administrativa_id'] = null;
-        // } else{
-        //     $request['entidad_fiscalizable_id'] = null;
-        // }
-        // return $request;
+         if ($request->rol == 'Entidad Fiscalizable'){
+             $request['unidad_administrativa_id'] = null;
+         } else{
+             $request['entidad_fiscalizable_id'] = null;
+         }
+         return $request;
     }
 
     public function forgotPasswordValidate($token)

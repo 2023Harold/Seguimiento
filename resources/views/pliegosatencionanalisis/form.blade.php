@@ -30,7 +30,7 @@
                         </div>                        
                         <div class="row">
                             <div class="col-md-12">
-                                {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusion', $pliegosobservacion->analisis),['rows'=>'10']) !!}
+                                {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusion', $pliegosobservacion->conclusion),['rows'=>'10']) !!}
                             </div>
                         </div>
                         <div class="row">
@@ -49,7 +49,7 @@
                         @php
                             $mostrarDivPromocion = ((!empty(old('calificacion_sugerida', $pliegosobservacion->calificacion_sugerida))&&old('calificacion_sugerida', $pliegosobservacion->calificacion_sugerida)!='Solventado')?'block':'none');
                         @endphp
-                        <div id="div_promocion" style="display:{!! $mostrarDivPromocion !!}">
+                        <div id="div_promocion">
                             <div class="row">
                                 <div class="col-md-4">
                                 {!! BootForm::select('promocion', 'Promoción: ', $promocion->toArray(), old('promocion',$pliegosobservacion->promocion),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
@@ -85,7 +85,7 @@
         $('input[name=calificacion_sugerida]').on('ifChanged', function(event){
             if(event.target.value=='Solventado'){
                 $('#id_monto_solventa').hide();
-                $('#div_promocion').hide();
+                $('#div_promocion').show();
             } else if(event.target.value=='No Solventado') {
                 $('#id_monto_solventa').hide();
                 $('#div_promocion').show();

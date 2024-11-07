@@ -24,9 +24,9 @@ class PliegosObservacionAnalisisRequest extends FormRequest
     public function rules()
     {
         return [
-            'analisis' => 'required|string|max:8000',
+            'analisis' => 'required|string',
             'calificacion_sugerida' => 'required|string|max:30|in:Solventado,No Solventado,Solventado Parcialmente',
-            'conclusion' => 'required|string|max:8000',
+            'conclusion' => 'required|string',
             'monto_solventado' => 'sometimes|nullable|required_if:calificacion_sugerida,Solventado Parcialmente',
             // 'promocion' => 'sometimes|nullable|string|max:8000|required_if:calificacion_sugerida,Solventado Parcialmente,No Solventado',
             'monto_promocion' => 'sometimes|nullable|required_if:promocion,1,4',

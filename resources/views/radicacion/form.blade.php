@@ -38,27 +38,21 @@
                         {!! BootForm::text('numero_expediente', 'Número de expediente US: *', old('numero_expediente',$radicacion->numero_expediente)) !!}
                     </div>
                 </div>
-                {{-- <div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('oficio_acuerdo', 'Acuerdo de radicación: *', old('oficio_acuerdo',$radicacion->oficio_acuerdo)) !!}
+				<div class="row">
+                    <div class="col-md-2">
+                        {!! BootForm::date('fecha_notificacion', 'Fecha de radicación: *', old('fecha_notificacion',fecha($radicacion->fecha_notificacion,'Y-m-d'))) !!}
                     </div>
-                    <div class="col-lg-3 col-md-2">
-                        {!! BootForm::date('fecha_oficio_acuerdo','Fecha del acuerdo de radicación: *',old('fecha_oficio_acuerdo',fecha($radicacion->fecha_oficio_acuerdo, 'Y-m-d'))) !!}
-                    </div>
-                </div> --}}
+                </div>
+                
                 <div class="row">
                     <div class="col-md-4">
                         {!! BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
                     </div>                    
                     <div class="col-lg-3 col-md-3">
-                        {!! BootForm::date('fecha_oficio_informe','Fecha del oficio: *', old('fecha_oficio_informe',$radicacion->fecha_oficio_informe,'Y-m-d')) !!}
+                        {!! BootForm::date('fecha_oficio_informe','Fecha del oficio: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
                     </div>                      
                 </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        {!! BootForm::date('fecha_notificacion', 'Fecha de notificación: *', old('fecha_notificacion',$radicacion->fecha_notificacion,'Y-m-d')) !!}
-                    </div>
-                </div>                                                                                  
+                                                                                                  
                 
                 {{-- <div class="row">
                     <div class="col-md-6">
@@ -96,6 +90,7 @@
                         {!! BootForm::radios('aplicacion_periodo', '¿El periodo de la etapa de aclaración es de 30 días hábiles? *', ['Si' => 'Si', 'No' => 'No'], old('aplicacion_periodo',$comparecencia->aplicacion_periodo),true,['class'=>'i-checks']); !!}
                     </div>
                 </div> --}}
+				@if ($auditoria->acto_fiscalizacion!='Desempeño')
                 <div class="row">
                     <div class="col-md-3">
                         {!! BootForm::date('fecha_inicio_aclaracion','Inicio de la etapa de aclaración: *',old('fecha_inicio_aclaracion', fecha($comparecencia->fecha_inicio_aclaracion, 'Y-m-d')))
@@ -105,6 +100,7 @@
                         {!! BootForm::date('fecha_termino_aclaracion','Término de la etapa de aclaración: *',old('fecha_termino_aclaracion', fecha($comparecencia->fecha_termino_aclaracion, 'Y-m-d'))) !!}
                     </div>
                 </div>
+				@endif
                 <div class="row">
                     <div class="col-md-2">
                         {!! BootForm::text('plazo_maximo', 'Plazo máximo: *', old('numero_expediente',$radicacion->plazo_maximo)) !!}

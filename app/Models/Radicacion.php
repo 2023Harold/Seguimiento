@@ -55,6 +55,7 @@ class Radicacion extends Model
     protected $casts = [
         'fecha_oficio_acuerdo'=>'datetime',
         'fecha_oficio_designacion'=>'datetime',
+		'fecha_notificacion'=>'datetime',
         'created_at'=>'datetime',
         'updated_at'=>'datetime'
     ];

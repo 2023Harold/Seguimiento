@@ -39,8 +39,23 @@ class AcuerdoConclusionController extends Controller
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));               
         $acuerdoconclusion = new AcuerdoConclusion();
+		$fechaacuerdo=now();
+		
+		if($auditoria->acto_fiscalizacion=='Desempeño'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Legalidad'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Inversión Física'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+				
        
-        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion'));
+        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo'));
     }
 
     /**

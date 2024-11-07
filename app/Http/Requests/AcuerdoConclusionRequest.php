@@ -27,7 +27,8 @@ class AcuerdoConclusionRequest extends FormRequest
             'nombre_titular'=>'required|string|max:100',
             'cargo_titular'=>'required|string|max:100',
             'domicilio'=>'required|string|max:150',
-            'numero_acuerdo_conclusion' => 'required|string|max:100',
+			'numero_oficio'=>'required|string|max:100',
+            'fecha_oficio'=>'required|date_format:Y-m-d|max:10',
             'fecha_acuerdo_conclusion' => 'required|date_format:Y-m-d|max:10',
             'acuerdo_conclusion' => 'required|string|max:100',
         ];
@@ -38,7 +39,8 @@ class AcuerdoConclusionRequest extends FormRequest
            'nombre_titular'=>'el nombre del titular a quien se dirige',
            'cargo_titular'=>'el cargo del titular a quien se dirige',
            'domicilio'=>'el domicilio',
-           'numero_acuerdo_conclusion' => 'número del informe de auditoría',
+		   'numero_oficio'=>'número del oficio',
+           'fecha_oficio'=>'fecha del oficio',
            'fecha_acuerdo_conclusion' => 'fecha del acuerdo de conclusion',
            'informe' => 'acuerdo de conclusión',
         ];

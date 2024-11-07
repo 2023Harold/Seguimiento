@@ -46,8 +46,7 @@ class RadicacionAutorizacionController extends Controller
      */
     public function store(Request $request)
     {
-        // $radicacion = Radicacion create($request->all());
-      
+        //
     }
 
     /**
@@ -69,10 +68,19 @@ class RadicacionAutorizacionController extends Controller
      */
     public function edit(Radicacion $radicacion)
     {
+		$horaMin='';
+        $minutosMin='';
+        $fechacomparecencia='';
+        $fechainicioaclaracion='';
+        $fechaterminoaclaracion='';
+		
+		
         $auditoria=$radicacion->auditoria;
-
-        $horas=explode(':',$auditoria->comparecencia->hora_comparecencia_inicio); 
+		$horas=explode(':',$auditoria->comparecencia->hora_comparecencia_inicio); 
         $formatter = new NumeroALetras();
+		if(empty($auditoria->comparecencia->fecha_comparecencia)){
+
+        
         $hora = $formatter->toString($horas[0]);
         $minutos = $formatter->toString($horas[1]);
       
@@ -85,6 +93,7 @@ class RadicacionAutorizacionController extends Controller
         $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);        
         $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);       
         $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
+		}
 
         $formatterPM = new NumeroALetras();
         $plazomax=$formatter->toString($radicacion->plazo_maximo);
@@ -93,6 +102,7 @@ class RadicacionAutorizacionController extends Controller
         $plazomaxMin = ucwords(strtolower($plazomaxMax));
 
         $fechaactual=fechaaletra(now());
+		
         
         $relacion4=[
             'horastxt'=> $horaMin,
@@ -140,11 +150,9 @@ class RadicacionAutorizacionController extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, Radicacion $radicacion)
     {
-    //    dd($request);
-       $radicacion->update($request->all());
+       
         $this->normalizarDatos($request);
         // if(empty($request->radicacion_sistema)){
-        
 
             Movimientos::create([
                 'tipo_movimiento' => 'Autorización de la radicación',

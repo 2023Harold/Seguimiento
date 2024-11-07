@@ -37,15 +37,15 @@ class RadicacionRequest extends FormRequest
             //'fecha_comparecencia' => 'required|date|max:10'|after:fecha_oficio_acuerdo'
             'hora_comparecencia_inicio' => 'required|string|max:15',
             'aplicacion_periodo'=>  'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Cumplimiento Financiero,Inversión Física|string|max:2',
-            'fecha_inicio_aclaracion' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Cumplimiento Financiero,Inversión Física|date|max:10',
-            'fecha_termino_aclaracion' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Cumplimiento Financiero,Inversión Física|date|max:10',
-            'fecha_inicio_proceso' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Desempeño|date|max:10',
-            'fecha_termino_proceso' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Legalidad,Desempeño|date|max:10',
+            'fecha_inicio_aclaracion' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Cumplimiento Financiero,Inversión Física|date|max:10',
+            'fecha_termino_aclaracion' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Cumplimiento Financiero,Inversión Física|date|max:10',
+            'fecha_inicio_proceso' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Desempeño|date|max:10',
+            'fecha_termino_proceso' => 'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Desempeño|date|max:10',
             'num_memo_recepcion_expediente'=>'required|string|max:200',
             'fecha_expediente_turnado'=>'required|date|max:10',
             'fecha_oficio_informe'=>'required|date|max:10',
             'fecha_notificacion'=>'required|date|max:10',
-            'plazo_maximo'=>'required|integer|max:120',            
+            'plazo_maximo'=>'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Desempeño|integer|max:120',            
         ];
     }
 
@@ -70,7 +70,7 @@ class RadicacionRequest extends FormRequest
             'num_memo_recepcion_expediente'=>'número del memorándum de recepción del expediente',
             'fecha_expediente_turnado'=>'fecha de recepción del expediente turnado',
             'fecha_oficio_informe'=>'fecha oficio informe',
-            'fecha_notificacion'=>'fecha notificacion',
+            'fecha_notificacion'=>'fecha radicación',
             'plazo_maximo'=>'plazo máximo',           
         ];
     }

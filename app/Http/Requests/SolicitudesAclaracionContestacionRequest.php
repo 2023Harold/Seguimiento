@@ -25,7 +25,7 @@ class SolicitudesAclaracionContestacionRequest extends FormRequest
     {
         return [                
             'oficio_contestacion'=>'required|string|max:100',
-            'fecha_oficio_contestacion'=>'required|date|max:10',
+            'fecha_oficio_contestacion'=>'sometimes|nullable|date|max:10',
             'numero_oficio'=>'required|string|max:250',
             'nombre_remitente'=>'required|string|max:500',
             'cargo_remitente'=>'required|string|max:500',

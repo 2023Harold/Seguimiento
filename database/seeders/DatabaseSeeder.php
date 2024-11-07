@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
             CatMunicipiosSeeder::class,  
             CatTipologiasSeeder::class,  
             UsersSeeder::class,     
-            LeyendaSeeder::class,
         ]);
         
     }

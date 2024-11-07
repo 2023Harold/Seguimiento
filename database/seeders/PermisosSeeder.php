@@ -21,7 +21,6 @@ class PermisosSeeder extends Seeder
                         'permiso',
                         'rol',
                         'acceso',
-                        'administracion',
                         'seguimientoauditoria',
                         'seguimientoauditoriaacciones',
                         'seguimientoauditoriaaccionrevision01',
@@ -134,8 +133,7 @@ class PermisosSeeder extends Seeder
                         'tipologiaauditorias',
                         'turnoui',
                         'turnooic',
-                        'turnoarchivo',
-                                                
+                        'turnoarchivo'
                     ];
         $permisosGenerales = [];
         $i = 0;
@@ -156,8 +154,6 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'setPermission']);
         Permission::create(['name' => 'quicklogin.loginas']);
         Permission::create(['name' => 'quicklogin.loginasuser']);
-        Permission::create(['name' => 'cphome']);
-        Permission::create(['name' => 'administracion']);
         Permission::create(['name' => 'home']);
         Permission::create(['name' => 'notificaciones.index']);
         Permission::create(['name' => 'marcarleido']);

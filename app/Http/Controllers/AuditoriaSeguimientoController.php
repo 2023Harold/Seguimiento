@@ -122,8 +122,12 @@ class AuditoriaSeguimientoController extends Controller
                 $q = $q->whereRaw('LOWER(lider_asignado_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('fase_autorizacion');
             }
         });
+		if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
+             $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
+             $query = $query->whereRaw('LOWER(direccion_asignada_id) LIKE (?) ',["%{$unidadAdministrativa}%"]);
+         }
 
-        if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())||
+        if(
             in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||
             in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
             in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){

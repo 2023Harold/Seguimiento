@@ -18,10 +18,14 @@ class AcuerdoConclusion extends Model
         'nombre_titular',
         'cargo_titular',
         'domicilio',
+		'numero_oficio',
+		'fecha_oficio',
     ];
 protected $cast = [
     'created_at'=>'datetime',
-    'updated_at'=> 'datetime',    
+    'updated_at'=> 'datetime', 
+	'fecha_oficio'=> 'date',
+	'fecha_acuerdo_conclusion'=> 'date',
 ];
 public function getDepaasignadoAttribute()
     {

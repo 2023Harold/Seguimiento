@@ -9,6 +9,8 @@ use App\Models\Radicacion;
 use App\Models\User;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Luecano\NumeroALetras\NumeroALetras;
+use Illuminate\Support\Str;
 
 class RadicacionController extends Controller
 {
@@ -510,5 +512,80 @@ class RadicacionController extends Controller
     // }
 
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+    }
+	
+	
+	public function radicacionpdf(Radicacion $radicacionpdf)
+    {
+		$radicacion=$radicacionpdf;
+		$horaMin='';
+        $minutosMin='';
+        $fechacomparecencia='';
+        $fechainicioaclaracion='';
+        $fechaterminoaclaracion='';
+		
+		
+        $auditoria=$radicacion->auditoria;
+		$horas=explode(':',$auditoria->comparecencia->hora_comparecencia_inicio); 
+        $formatter = new NumeroALetras();
+		if(empty($auditoria->comparecencia->fecha_comparecencia)){
+
+        
+        $hora = $formatter->toString($horas[0]);
+        $minutos = $formatter->toString($horas[1]);
+      
+        $horaMax = ucwords($hora);             
+        $horaMin = ucwords(strtolower($horaMax));
+       
+        $minutosMax = ucwords($minutos);            
+        $minutosMin = ucwords(strtolower($minutosMax));
+
+        $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);        
+        $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);       
+        $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
+		}
+
+        $formatterPM = new NumeroALetras();
+        $plazomax=$formatter->toString($radicacion->plazo_maximo);
+
+        $plazomaxMax = ucwords($plazomax);            
+        $plazomaxMin = ucwords(strtolower($plazomaxMax));
+
+        $fechaactual=fechaaletra(now());
+		
+        
+        $relacion4=[
+            'horastxt'=> $horaMin,
+            'mintxt'=> $minutosMin,
+            'fechacomparecenciatxt'=>$fechacomparecencia,
+            'fechainicioaclaraciontxt'=>$fechainicioaclaracion,
+            'fechaterminoaclaraciontxt'=>$fechaterminoaclaracion,
+            'plazomaximo'=>$plazomaxMin,
+            'fechaactual'=>$fechaactual,
+        ];
+
+        $datosConstancia = [
+            'nombrereporte' => 'radicacionconstancia',
+            'auditoriaseleccionada'=>base64_encode(Str::random(5).$radicacion->auditoria_id.Str::random(5)),
+            'accionseleccionada'=>'',            
+            'modelo_principal'=>['tbl'=>$radicacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$radicacion->id.Str::random(5))],
+            'relacion1'=>null,
+            'relacion2'=>null,
+            'relacion3'=>null,
+            'relacion4'=>$relacion4,  
+            'firmante'=>auth()->user()->name,
+            'firmante_puesto'=>auth()->user()->puesto,  
+        ];
+
+        $pdf=reportepdfprevio($datosConstancia['nombrereporte'],1,'Temporal',
+                                 base64_encode(Str::random(5).$radicacion->auditoria_id.Str::random(5)),
+                                 '',
+                                 ['tbl'=>$radicacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$radicacion->id.Str::random(5))],
+                                 null,null,null,$relacion4,'','','','','','','');
+
+        
+       
+		
+		return $pdf->stream('prueba.pdf');
     }
 }

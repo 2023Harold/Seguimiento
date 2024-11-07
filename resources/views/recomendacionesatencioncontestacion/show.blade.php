@@ -49,7 +49,9 @@
                         </div>
                         <hr/>
                     </div>                    
-                </div>                
+                </div>   
+
+				@include('layouts.contextos._accionrecomendacion')				
                 <div class="table-responsive">
                     <table class="table">
                         <thead>

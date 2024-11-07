@@ -24,7 +24,7 @@ class RecomendacionesDocumentoRequest extends FormRequest
     public function rules()
     {
         return [
-            'listado_documentos'=>'required|string|max:8000'
+            'listado_documentos'=>'required|string'
         ];
     }
 

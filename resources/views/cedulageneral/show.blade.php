@@ -17,7 +17,8 @@
     </style>
 </head>
 <body>
-    <table width="100%" >
+<div style="page-break-inside: avoid;">
+    <table width="100%">
         <tr style="border-collapse:separate;border-spacing:0px;">
             <td colspan="2" rowspan="3" style="width:20%; border: 1px solid;  color: grey;">
                 {{-- <div style="width: max-content;">--}}
@@ -73,7 +74,7 @@
                 <span style="font-size: 0.6rem"><strong>&nbsp;NÚMERO DE EXPEDIENTE</strong></span>
             </td>
             <td style="border: .5 solid; width:20%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ esVacioStr(['auditoria','radicacion','numero_expediente'],$auditoria)}}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ optional($auditoria->radicacion)->numero_expediente}}</strong></span>
             </td>            
         </tr>  
         <tr style="border-collapse:separate;border-spacing:0 500px; vertical-align: middle;">
@@ -87,19 +88,19 @@
                 <span style="font-size: .6rem;"><strong>Fecha de Comparecencia</strong></span>
             </td>
             <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(esVacioStr(['auditoria','comparecencia','fecha_comparecencia'],$auditoria)) }}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(optional($auditoria->comparecencia)->fecha_comparecencia) }}</strong></span>
             </td>
             <td style="text-align: center; width: 10%; color: white; background-color: #960048; vertical-align: middle;"> 
                 <span style="font-size: .6rem;"><strong>Fecha de Inicio</strong></span>
             </td>
             <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(esVacioStr(['auditoria','comparecencia','fecha_inicio_aclaracion'],$auditoria)) }}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(optional($auditoria->comparecencia)->fecha_inicio_aclaracion)  }}</strong></span>
             </td>
             <td style="text-align: center; width: 10%; color: white; background-color: #960048; vertical-align: middle;"> 
                 <span style="font-size: .6rem;"><strong>Fecha de Vencimiento</strong></span>
             </td>
             <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(esVacioStr(['auditoria','comparecencia','fecha_termino_aclaracion'],$auditoria)) }}</strong></span>
+                <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(optional($auditoria->comparecencia)->fecha_termino_aclaracion)}}</strong></span>
             </td>
         </tr> 
         <tr></tr>
@@ -386,5 +387,6 @@
         </tr> 
         @endif        
     </table>
+	</div>
 </body>
 </html>

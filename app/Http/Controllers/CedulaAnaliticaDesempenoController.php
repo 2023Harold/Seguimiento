@@ -72,8 +72,9 @@ class CedulaAnaliticaDesempenoController extends Controller
         $jefesF = $resultado['jefesF'];
         $jefesL = $resultado['jefesL'];      
         $nombre = $resultado['nombre'];
-                
-        return view('cedulaanaliticadesempeno.index',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
+		
+		return redirect(asset($nombre));                 
+        //return view('cedulaanaliticadesempeno.index',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
     }
 
     /**

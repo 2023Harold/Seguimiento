@@ -13,6 +13,7 @@
     </div>
     <div class="card-body">
         @include('flash::message')
+		@include('layouts.contextos._accionpliego')
         <div class="pt-4">
             <table class="table">
                  <thead>

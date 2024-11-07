@@ -121,9 +121,7 @@
                                     @endif
                                 </td>
                                 <td class="text-center bg-light-dark">
-                                    @if (!empty($auditoria->tipo_entidad))
                                     {{ $auditoria->tipo_entidad }}
-                                    @endif
                                 </td>
                                 <td  width='40%'>
                                     @php
@@ -134,182 +132,113 @@
                                     @endforeach
                                 </td>
                                 <td class="bg-light-dark">
-                                    @if (!empty($auditoria->acto_fiscalizacion))
-                                    {{ $auditoria->acto_fiscalizacion }} 
-                                    @endif                                   
+                                    {{ $auditoria->acto_fiscalizacion }}                                    
                                 </td> 
-                                <td>    
-                                    @if (!empty($auditoria->periodomes))    
+                                <td>       
                                     {{ $auditoria->periodomes }}                              
-                                   @endif
+                                   
                                 </td>                                              
                                 <td class="text-center bg-light-dark">                                       
-                                    @if (!empty($auditoria->periodomes))    
-                                    {{ $auditoria->periodomes }}           
-                                    @endif                 
+                                    {{ $auditoria->periodoAnio }}                            
                                 </td>
                                 {{-- <td style="text-align: center;" class="bg-danger">
                                    2022-2024
                                 </td>    --}}
                                 <td class="text-center bg-light-dark">                                       
-                                    @if (!empty($auditoria->numero_auditoria))    
-                                    {{ $auditoria->tipo_auditoria->sigla.' - '.$auditoria->numero_auditoria }}
-                                    @endif                                     
+                                    {{ $auditoria->tipo_auditoria->sigla.' - '.$auditoria->numero_auditoria }}                                     
                                 </td>
-                                <td class="text-center">        
-                                    @if (!empty($auditoria->fecha_expediente_turnado))                                                                                                           
+                                <td class="text-center">                                                                           
                                     {{ fecha($auditoria->radicacion->fecha_expediente_turnado)}}                                      
-                                    @endif
                                 </td>                                 
-                                <td class="text-center bg-light-dark">   
-                                    @if (!empty($auditoria->numero_expediente))                                                                                                                                                                                
+                                <td class="text-center bg-light-dark">                                       
                                     {{ $auditoria->radicacion->numero_expediente}}                                     
-                                    @endif
                                 </td> 
                                 <td class="text-center">                                       
-                                    @if (!empty($auditoria->fecha_oficio_acuerdo))                                                                                                                                                                   
-                                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}
-                                    @endif
+                                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}                                     
                                 </td>  
                                 <td class="text-center bg-light-dark">                                       
-                                    @if (!empty($auditoria->fecha_comparecencia))
                                     {{ fecha($auditoria->comparecencia->fecha_comparecencia)}}                                     
-                                    @endif
                                 </td> 
                                 <td class="text-center">                                       
-                                    @if (!empty($auditoria->fecha_notificacion))
                                     {{ fecha($auditoria->radicacion->fecha_notificacion)}}                                     
-                                    @endif
                                 </td>                             
                                 <td class="text-center">                                       
-                                    @if (!empty($auditoria->num_memo_recepcion_expediente))
                                     {{ $auditoria->radicacion->num_memo_recepcion_expediente}}                                     
-                                    @endif
                                 </td>  
                                 <td class="text-center">
-                                    @if (!empty($auditoria->fecha_inicio_aclaracion))
                                     {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion)}}
-                                    @endif
                                 </td>
                                 <td class="text-center bg-light-dark">
-                                    @if (!empty($auditoria->fecha_termino_aclaracion))
                                     {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion)}}    
-                                    @endif
                                 </td>
                                 <td class="text-center">
-                                    -@if (!empty($auditoria->calculo_fecha))
                                     {{ fecha($auditoria->radicacion->calculo_fecha)}}
-                                    @endif
                                 </td>
                                 <td class="bg-light-dark text-center">
-                                    @if (!empty($auditoria->totalpliegos->count()))
                                     {{  $auditoria->totalpliegos->count()}} 
-                                    @endif
                                 </td>
                                 <td style="text-align: right!important;">                                    
-                                    @if (!empty($auditoria->totalpliegos->sum('monto_aclarar')))
                                     {{ '$'.number_format( $auditoria->totalpliegos->sum('monto_aclarar'), 2) }}  
-                                    @endif
                                 </td>
                                 <td class="text-center bg-light-dark">
-                                    @if (!empty($auditoria->totalsolventadopliegos->count()))
                                     {{  $auditoria->totalsolventadopliegos->count()}}
-                                    @endif
                                 </td>
                                 <td style="text-align: right!important;">
-                                    @if (!empty($auditoria->totalsolventadopliegos->sum('monto_aclarar')))
                                     {{ '$'.number_format( $auditoria->totalsolventadopliegos->sum('monto_aclarar'), 2) }}
-                                    @endif
                                 </td>
                                 <td class="text-center bg-light-dark">
-                                    @if (!empty($auditoria->totalNOsolventadopliegos->count()))
                                     {{  $auditoria->totalNOsolventadopliegos->count()}}
-                                    @endif
                                 </td>
                                 <td style="text-align: right!important;">
-                                    @if (!empty($auditoria->totalNOsolventadopliegos->sum('monto_aclarar')))
                                     {{ '$'.number_format( $auditoria->totalNOsolventadopliegos->sum('monto_aclarar'), 2) }}
-                                    @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (!empty($auditoria->plazo_maximo))
                                     {{ $auditoria->radicacion->plazo_maximo}} días hábiles
-                                    @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (!empty($auditoria->fecha_inicio_aclaracion))
-                                    {{ fecha($auditoria->radicacion->fecha_inicio_aclaracion)}}                            
-                                    @endif
+                                    {{ fecha($auditoria->radicacion->calculo_fecha)}}
                                 </td>
                                 <td class="text-center bg-light-dark">
-                                    @if (!empty($auditoria->totalrecomendacion->count()))
                                     {{  $auditoria->totalrecomendacion->count()}}
-                                    @endif
                                 </td>
                                 <td class="text-center">                                    
-                                    @if (!empty($auditoria->totalsolventadorecomendacion->count()))
                                     {{  $auditoria->totalsolventadorecomendacion->count()}}
-                                    @endif
                                 </td>
                                 <td class="text-center bg-light-dark">
-                                    @if (!empty($auditoria->totalNOsolventadorecomendacion->count()))
                                     {{  $auditoria->totalNOsolventadorecomendacion->count()}}
-                                    @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (!empty($auditoria->totalpliegos->count()))
                                     {{  $auditoria->totalpliegos->count()}} 
-                                    @endif
                                 </td>
                                 <td class="text-center bg-light-dark">
-                                    @if (!empty($auditoria->totalsolacl->count()))
                                     {{  $auditoria->totalsolacl->count()}} 
-                                    @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (!empty($auditoria->totalrecomendacion->count()))
-                                    {{  $auditoria->totalrecomendacion->count()}}
-                                    @endif
+                                    {{  $auditoria->totalrecomendacion->count()}} 
                                 </td>
                                 <td class="text-center bg-light-dark">
-                                    @if (!empty($auditoria->totalpras->count()))
                                     {{  $auditoria->totalpras->count()}} 
-                                    @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (!empty($auditoria->acciones->count()))
                                     {{ $auditoria->acciones->count() }} 
-                                    @endif
                                 </td>
                                 {{-- Nota:  Se contemplan los PRAS   --}}
-                                <td class="text-center">  
-                                    @if (!empty($auditoria->acciones->count()))
-                                    {{ $auditoria->acciones->count() }}      
-                                    @endif                               
+                                <td class="text-center">                                       
+                                    {{ $auditoria->acciones->count() }}                                     
                                 </td> 
                                 <td style="text-align: right!important;">  
-                                    @if (!empty($auditoria->total()))
                                     {{ '$'.number_format(  $auditoria->total(), 2) }}  
-                                    @endif
                                 </td>
                                 <td class="text-center bg-light-dark">                                       
-                                    @if (!empty($auditoria->totalsolventadorecomendacion->count() + $auditoria->totalsolventadopras->count() +  $auditoria->totalsolventadosolacl->count() + $auditoria->totalsolventadopliegos->count()))
                                     {{ $auditoria->totalsolventadorecomendacion->count() + $auditoria->totalsolventadopras->count() +  $auditoria->totalsolventadosolacl->count() + $auditoria->totalsolventadopliegos->count()}}                                     
-                                    @endif
                                 </td>                           
                                 <td style="text-align: right!important;"> 
-                                    @if (!empty($auditoria->totalsolventadorecomendacion->sum('monto_aclarar') + $auditoria->totalsolventadopras->sum('monto_aclarar') +  $auditoria->totalsolventadosolacl->sum('monto_aclarar') + $auditoria->totalsolventadopliegos->sum('monto_aclarar')))
                                     {{ '$'.number_format( ($auditoria->totalsolventadorecomendacion->sum('monto_aclarar') + $auditoria->totalsolventadopras->sum('monto_aclarar') +  $auditoria->totalsolventadosolacl->sum('monto_aclarar') + $auditoria->totalsolventadopliegos->sum('monto_aclarar')), 2) }} </td>                           
-                                    @endif
                                 <td class="text-center bg-light-dark">                                       
-                                    @if (!empty($auditoria->totalNOsolventadorecomendacion->count() + $auditoria->totalNOsolventadopras->count() +  $auditoria->totalNOsolventadosolacl->count() + $auditoria->totalNOsolventadopliegos->count()))                                       
-                                    {{ $auditoria->totalNOsolventadorecomendacion->count() + $auditoria->totalNOsolventadopras->count() +  $auditoria->totalNOsolventadosolacl->count() + $auditoria->totalNOsolventadopliegos->count()}}       
-                                    @endif                              
+                                    {{ $auditoria->totalNOsolventadorecomendacion->count() + $auditoria->totalNOsolventadopras->count() +  $auditoria->totalNOsolventadosolacl->count() + $auditoria->totalNOsolventadopliegos->count()}}                                     
                                 </td>                           
                                 <td style="text-align: right!important;"> 
-                                    @if (!empty($auditoria->totalNOsolventadorecomendacion->sum('monto_aclarar') + $auditoria->totalNOsolventadopras->sum('monto_aclarar') +  $auditoria->totalNOsolventadosolacl->sum('monto_aclarar') + $auditoria->totalNOsolventadopliegos->sum('monto_aclarar')))
                                     {{ '$'.number_format(($auditoria->totalNOsolventadorecomendacion->sum('monto_aclarar') + $auditoria->totalNOsolventadopras->sum('monto_aclarar') +  $auditoria->totalNOsolventadosolacl->sum('monto_aclarar') + $auditoria->totalNOsolventadopliegos->sum('monto_aclarar')), 2) }} 
-                                    @endif
                                 </td>   
                                 <td class="text-center bg-light-dark">                                       
                                    US

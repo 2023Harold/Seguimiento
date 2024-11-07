@@ -32,7 +32,7 @@
                             <div id="campos"><br>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {!! BootForm::checkbox('radicacion_sistema', 'Acuerdo de radicacion por sistema', 'X', false, ['class' => 'i-checks rxs']) !!}
+                                        {!! BootForm::checkbox('radicacion_sistema', 'Acuerdo de radicación por sistema', 'X', false, ['class' => 'i-checks rxs']) !!}
                                     </div>
                                 </div>
                                 <div class="div-estatus" style="display:block;">
@@ -69,8 +69,8 @@
                             <div class="row mt-3">
                                 <div class="col-md-6 justify-content-end">
                                     @can('radicacionautorizacion.update')
-                                        <button type="button" id='btn-guardar' class="btn btn-primary" onclick="ConfirmFirma();" >Guardar</button>                                                                              
-                                        {{-- <button type="submit" id='btn-guardarsinfirma' class="btn btn-primary">Guardar</button> --}}
+                                        <button type="button" id='btn-guardar' class="btn btn-primary" onclick="ConfirmFirma();" style="display:none;">Firmar y Guardar</button>                                                                              
+                                         <button type="submit" id='btn-guardarsinfirma' class="btn btn-primary">Guardar</button>
                                     @endcan                                    
                                      <a href="{{ route('radicacion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                                 </div>

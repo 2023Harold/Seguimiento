@@ -24,9 +24,9 @@ class RecomendacionesAnalisisRequest extends FormRequest
     public function rules()
     {
         return [
-            'analisis' => 'required|string|max:8000',
+            'analisis' => 'required|string',
             'calificacion_sugerida' => 'required|string|max:30|in:Atendida,No Atendida,Parcialmente Atendida',
-            'conclusion' => 'required|string|max:8000'
+            'conclusion' => 'required|string'
             ];
     }
 

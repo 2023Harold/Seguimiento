@@ -3,38 +3,9 @@
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
-Breadcrumbs::for('cphome', function (BreadcrumbTrail $trail) {
-    $trail->push('Cuenta Pública', route('cphome'));
-});
-
 Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
-    $trail->parent('cphome');
-    $trail->push('Inicio Cuenta Pública', route('home'));
+    $trail->push('Inicio', route('home'));
 });
-
-Breadcrumbs::for('administracion.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('cphome');
-    $trail->push('Administración', route('administracion.index'));
-});
-
-Breadcrumbs::for('asignacionunidadadministrativa.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('administracion.index');
-    $trail->push('Asignación Unidad Administrativa', route('asignacionunidadadministrativa.index'));
-});
-
-Breadcrumbs::for('asignacionunidadadministrativa.edit', function (BreadcrumbTrail $trail,$user) {
-    $trail->parent('administracion.index');
-    $trail->push('Asignación Unidad Administrativa 2021', route('asignacionunidadadministrativa.edit',$user));
-});
-Breadcrumbs::for('asignacionunidadadministrativa2022.edit', function (BreadcrumbTrail $trail,$user) {
-    $trail->parent('administracion.index');
-    $trail->push('Asignación Unidad Administrativa 2022', route('asignacionunidadadministrativa2022.edit',$user));
-});
-Breadcrumbs::for('asignacionunidadadministrativa2023.edit', function (BreadcrumbTrail $trail,$user) {
-    $trail->parent('administracion.index');
-    $trail->push('Asignación Unidad Administrativa 2023', route('asignacionunidadadministrativa2023.edit',$user));
-});
-
 
 Breadcrumbs::for('notificaciones', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
@@ -42,12 +13,12 @@ Breadcrumbs::for('notificaciones', function (BreadcrumbTrail $trail) {
 });
 
 Breadcrumbs::for('user.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('administracion.index');
+    $trail->parent('home');
     $trail->push('Usuarios', route('user.index'));
 });
 
 Breadcrumbs::for('rol.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('administracion.index');
+    $trail->parent('home');
     $trail->push('Catálogo de Roles', route('rol.index'));
 });
 
@@ -62,7 +33,7 @@ Breadcrumbs::for('rol.edit', function (BreadcrumbTrail $trail,$rol) {
 });
 
 Breadcrumbs::for('permiso.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('administracion.index');
+    $trail->parent('home');
     $trail->push('Catálogo de Permisos', route('permiso.index'));
 });
 
@@ -79,7 +50,7 @@ Breadcrumbs::for('permiso.edit', function (BreadcrumbTrail $trail,$rol) {
 //home
 
 Breadcrumbs::for('acceso.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('administracion.index');
+    $trail->parent('home');
     $trail->push('Accesos', route('acceso.index'));
 });
 
@@ -391,6 +362,11 @@ Breadcrumbs::for('comparecenciaacta.index', function (BreadcrumbTrail $trail,$co
 Breadcrumbs::for('comparecenciaacta.edit', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
     $trail->parent('comparecenciaacta.index',$comparecencia,$auditoria);
     $trail->push('Acta', route('comparecenciaacta.edit',$comparecencia));
+});
+
+Breadcrumbs::for('comparecenciavalidacion.edit', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
+    $trail->parent('comparecenciaacta.index',$comparecencia,$auditoria);
+    $trail->push('Validar', route('comparecenciavalidacion.edit',$comparecencia));
 });
 
 Breadcrumbs::for('comparecenciaacta2.show', function (BreadcrumbTrail $trail,$auditoria) {

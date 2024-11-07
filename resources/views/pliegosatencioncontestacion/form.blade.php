@@ -31,7 +31,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_oficio_contestacion', 'Fecha del oficio de contestación: *', old('fecha_oficio_contestacion', fecha($contestacion->fecha_oficio_contestacion, 'Y-m-d'))); !!}
+                        {!! BootForm::date('fecha_oficio_contestacion', 'Fecha del oficio de contestación: ', old('fecha_oficio_contestacion', fecha($contestacion->fecha_oficio_contestacion, 'Y-m-d'))); !!}
                     </div>
                     <div class="col-md-3">
                         {!! BootForm::text('numero_oficio', 'Número del oficio: *', old('numero_oficio', $contestacion->numero_oficio)); !!}

@@ -121,9 +121,9 @@ class CedulaInicialPrimeraEtapaController extends Controller
         $lideresL=$resultado['lideresL'];
         $jefesF=$resultado['jefesF'];
         $jefesL=$resultado['jefesL'];
-        
-        
-        return view('cedulageneral.index',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
+		
+		return redirect(asset($nombre));        
+        //return view('cedulageneral.index',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
     }
 
     /**

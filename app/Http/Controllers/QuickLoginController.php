@@ -58,19 +58,14 @@ class QuickLoginController extends Controller
         return $query;
     }
 
-    public function loginas(User $usuario)
+    public function loginas(Request $request)
     {
-        if (App::environment('local')) {
-            Auth::login($usuario);
+		$tamaño = strlen($request['usuario']);
+        $id_sinp5 = substr($request['usuario'], 5, $tamaño);
+        $id_sinu5 = str_replace(substr($id_sinp5, -5, -1), '', $id_sinp5);
+        $id = intval(base64_decode($id_sinu5));
+        $usuario = User::where('usuario_plataforma_id', $id)->first();
 
-            return redirect()->route('home');
-        }
-
-        return abort(403);
-    }
-
-    public function loginasuser(User $usuario)
-    {		
         if (App::environment('local')) {
             Auth::login($usuario);
 
@@ -79,4 +74,16 @@ class QuickLoginController extends Controller
 
         return abort(403);      
     }
+	
+	public function loginasuser(User $usuario)
+    {			
+        if (App::environment('local')) {
+            Auth::login($usuario);
+
+            return redirect()->route('home');
+        }
+
+        return abort(403);      
+    }
+	
 }

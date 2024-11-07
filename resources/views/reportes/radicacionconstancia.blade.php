@@ -5,7 +5,7 @@ Registro del acuerdo de radicación
 @section('content')
 <div>
         <p style="font-family: Arial; color: #000000; font-size: 14px; text-align: justify;">
-            V I S T O el memorándum número <span style="color: blue;">{{$modelo->num_memo_recepcion_expediente}}</span>, presentado por <span style="color: blue;">{{$auditoria->tipo_auditoria->nombre_ae}}</span>, <span style="color: blue;">"Auditor Especial de " {{(str_contains($auditoria->tipo_auditoria->nombre_ae, 'Jaime')?'Cumplimiento Financiero e Inversión Física':'Legalidad y Desempeño' )}} </span> del Órgano Superior de Fiscalización del Estado de México, 
+            V I S T O el memorándum número <span style="color: blue;">{{$modelo->num_memo_recepcion_expediente}}</span>, presentado por <span style="color: blue;">{{$auditoria->tipo_auditoria->nombre_ae}}</span>, <span style="color: blue;">"Auditor Especial de  {{(str_contains($auditoria->tipo_auditoria->nombre_ae, 'Jaime')?'Cumplimiento Financiero e Inversión Física':'Legalidad y Desempeño' )}}" </span> del Órgano Superior de Fiscalización del Estado de México, 
             por medio del cual remite a la Unidad de Seguimiento el Expediente Técnico derivado de la Auditoría <span style="color: blue;">{{$auditoria->tipo_auditoria->descripcion}}</span> practicada a <span style="color: blue;">{{ $auditoria->entidad_fiscalizable}}</span>, 
             por el período comprendido <span style="color: blue;">{{$auditoria->periodo_revision}}</span>, así como, el Informe de Auditoría correspondiente, 
             en el que se presentan los datos que identifican los resultados finales obtenidos con las observaciones determinadas a la citada entidad fiscalizada; 

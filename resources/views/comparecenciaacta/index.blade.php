@@ -17,6 +17,9 @@
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp; Comparecencia
                 </h1>
+				 <div class="float-end">
+                    <a href="{{route('comparecencia.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AC</a>                                  
+                </div>
             </div>
             <div class="card-body">
                 @include('flash::message')
@@ -53,7 +56,7 @@
                                     </td>
                                     <td class="text-center">
                                         {{ (empty($auditoria->comparecencia->agenda->hora_fin)?'':date('g:i a', strtotime($auditoria->comparecencia->agenda->hora_fin))) }}</td>
-                                     <td class="text-center">{{ $auditoria->comparecencia->agenda->sala }}</td>
+                                     <td class="text-center">{{ empty($auditoria->comparecencia->agenda->sala)?'':$auditoria->comparecencia->agenda->sala }}</td>
                                     {{-- {{ (empty($auditoria->comparecencia->agenda->hora_fin)?'':date('g:i a', strtotime($auditoria->comparecencia->agenda->hora_fin))) }}</td>
                                      <td class="text-center">
                                         {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion) . ' - '
@@ -83,11 +86,10 @@
                                         No hay registros en éste apartado.
                                     </td>
                                 </tr>
-                                @endif
-                                
+                                @endif                                
                             </tbody>
                         </table>
-                    </div>
+                    </div>					
                     @if (empty($auditoria->comparecencia->oficio_acta)&&!empty($auditoria->comparecencia->oficio_acuse))
                         @can('comparecenciaacta.edit')
                             <div class="row">
@@ -106,6 +108,8 @@
                                     <tr>
                                         <th>Acta de comparecencia</th>
                                         <th>Oficio de designación</th>
+										<th>Fase / Acción</th>
+                                        <th>Enviar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -129,7 +133,42 @@
                                             <small>{{ fecha($auditoria->comparecencia->fecha_oficio_designacion) }}</small>
                                             @endif                                        
                                         </td>
+										<td class="text-center">                                                                                                                                
+											@if (empty($auditoria->comparecencia->fase_autorizacion)||$auditoria->comparecencia->fase_autorizacion=='Rechazado')
+												<span class="badge badge-light-danger">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
+												@can('comparecenciaacta.edit')                                                        
+														<a href="{{ route('comparecenciaacta.edit',$auditoria->comparecencia) }}" class="text-primary">
+														<span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+														</a>
+													@endcan
+											@endif
+											@if ($auditoria->comparecencia->fase_autorizacion == 'En validación')
+												@can('comparecenciavalidacion.edit')
+													<a href="{{ route('comparecenciavalidacion.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
+														<li class="fa fa-gavel"></li>
+														Validar
+													</a>
+												@else
+													<span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
+												@endcan
+											@endif           
+											@if ($auditoria->comparecencia->fase_autorizacion=='Autorizado')
+												<span class="badge badge-light-success">{{ $auditoria->radicacion->fase_autorizacion }} </span>                                                                                                                                               
+											@endif                                                                                                 
+										</td>
+										<td class="text-center">    
+											@if (empty($auditoria->comparecencia->fase_autorizacion)||$auditoria->comparecencia->fase_autorizacion=='Rechazado')                                       
+												@can('comparecenciaacta.edit')                                                        
+													<a href="{{ route('comparecenciaenvio.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
+													 Enviar
+													</a>
+												@endcan
+											@endif
+										</td>            
                                     </tr>
+									@if (!empty($auditoria->comparecencia))
+										{!! movimientosDesglose($auditoria->comparecencia->id, 10, $auditoria->comparecencia->movimientos) !!}
+									@endif   
                                     @else
                                     <tr>
                                         <td class="text-center" colspan="2">

@@ -17,6 +17,7 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
+				@include('layouts.contextos._radicacion')
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">                         
                         <label>Número de oficio de notificación de informe de auditoría: </label>
@@ -27,15 +28,17 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Acuerdo de radicación: </label>
                         <span class="text-primary">
-                            <a href="{{ asset($auditoria->radicacion->oficio_acuerdo) }}" target="_blank">
-                                <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->radicacion->oficio_acuerdo)); ?>
-                            </a>
+                            @can('radicacion.radicacionpdf')
+								<a href="{{route('radicacion.radicacionpdf',$auditoria->radicacion)}}" target="_blank">
+									<?php echo htmlspecialchars_decode(iconoArchivo('.pdf')) ?>
+								</a>
+							@endcan
                         </span>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                         <label>Fecha del acuerdo de radicación: </label>
                         <span class="text-primary">
-                            {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}
+                            {{  fecha($auditoria->comparecencia->fecha_oficio_acuerdo)  }}
                         </span>
                     </div>                    
                 </div>                

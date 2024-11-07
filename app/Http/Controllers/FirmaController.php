@@ -2,37 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Auditoria;
-use App\Models\AuditoriaAccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Str;
-
 
 class FirmaController extends Controller
 {
      /*
     URL Decodificar Certificado
     Pruebas:   https://feb.seguridata.com/ws-rest-seguritools/
-    Producción:https://www.plataformaosfem.mx/signtools/
+    Producción:https://firma.osfem.gob.mx/signtools/
     */
-    public $urlDecodeCert = 'https://firmatest.osfem.gob.mx/ws-rest-seguritools/';
+    public $urlDecodeCert = 'https://firma.osfem.gob.mx/signtools/';
 
     /*
     URL SignnRest Proceso de firma
     Pruebas:   https://feb.seguridata.com/sign_rest/
-    Producción:https://www.plataformaosfem.mx/sign_rest/
+    Producción:https://firma.osfem.gob.mx/sign_rest/
     */
-    public $urlSingRest = 'https://firmatest.osfem.gob.mx/sign_rest_osfem/';
+    public $urlSingRest = 'https://firma.osfem.gob.mx/sign_rest/';
 
     /*
      URL SignnRest Estampa de Tiempo
     Pruebas:   https://feb.seguridata.com/snotary-rest-ws/
     Producción:
     */
-    public $urlSnotary = 'https://firmatest.osfem.gob.mx/snotary-rest-ws/';
+    public $urlSnotary = 'https://firma.osfem.gob.mx/snotary-rest-ws/';
 
     public function firmar(Request $request)
     {
@@ -60,8 +55,8 @@ class FirmaController extends Controller
                         ->withOptions(['verify' => false])
                         ->asForm()
                         ->post($this->urlSingRest.'user', [
-                            'user' => 'osfem',
-                            'password' => '12121212qw.', ]);
+                            'user' => 'sectech',
+                            'password' => '53ct3ch.21', ]);
         //'password' => '53ct3ch.21', ]);
 
         $token = $response->json()['token'];
@@ -116,9 +111,6 @@ class FirmaController extends Controller
         $nombre = $request->nombrecertificado;
         $data = $request->data;
         $auditoria_id = $request->data;
-      
-        
-        
 
         /* Actualización de la firma en el xml con el método multilateral/update */
         $multiSignedMessageUpdtRequest = [
@@ -155,7 +147,7 @@ class FirmaController extends Controller
         $responseEstampaTiempo = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Access-Control-Allow-Origin' => '*',
-            'Authorization' => 'Basic b3NmZW06MTIxMjEyMTJRdy4=',
+            'Authorization' => 'Basic c2VjdGVjaDo1M2N0M2NoLjIx',
         ])->withOptions(['verify' => false])
           ->post($this->urlSnotary.'getTimeStamp?appendData=true&doHash=false&valueIsBase64=false', $estampaTiempoRequest);
 
@@ -169,37 +161,31 @@ class FirmaController extends Controller
         $hashFirma = $responseEstampaTiempo->json()['data']['hash'];
         $xmlFirma = $responseEstampaTiempo->json()['data']['rsaSignature'];
         $fechaexpedicion = $responseEstampaTiempo->json()['data']['expeditionDate'];
-       
 
-        /* Se crea la versión imprimible(pdf) del xml */ 
-        $qr = route('cotejamiento', [base64_encode($hash), 'Constancia']);      
-
-        $pdf64=reportepdf($request->datosConstancia['nombrereporte'],0,$qr,
-        $request->datosConstancia['auditoriaseleccionada'],
-        $request->datosConstancia['accionseleccionada'],
-        $request->datosConstancia['modelo_principal'],
-        $request->datosConstancia['relacion1'],
-        $request->datosConstancia['relacion2'],
-        $request->datosConstancia['relacion3'],
-        $request->datosConstancia['relacion4'],
-        $data,
-        $hashFirma,
-        $fechaexpedicion,
-        (str_contains($request->estatus, 'echazad') ? 'Rechazado' : 'Autorizado'),
-        $request->motivo_rechazo,
-        $request->datosConstancia['firmante'],
-        $request->datosConstancia['firmante_puesto'],
-    );
-
+        /* Se crea la versión imprimible(pdf) del xml */
+        $registro_id = substr(base64_decode($request->datosConstancia['where']), 5, -5);
+        $qr = route('cotejamiento', [base64_encode($hash), 'Auditoria_Fuera']);
+        $parametros = $request->datosConstancia['parametros'];
+        $parametros = Arr::add($parametros, 'estado', (str_contains($request->estatus, 'echazad') ? 'Rechazado' : 'Autorizado'));
+        $parametros = Arr::add($parametros, 'motivo_rechazo', $request->motivo_rechazo);
+        $parametros = Arr::add($parametros, 'firma', $xmlFirma);
+        $parametros = Arr::add($parametros, 'fechahora', $fechaexpedicion);
+        $parametros = Arr::add($parametros, 'hash', $hashFirma);
+        $parametros = Arr::add($parametros, 'qr', $qr);
+        $parametros = Arr::add($parametros, 'where', $registro_id);
+        $nombreConstancia = $request->datosConstancia['nombreConstancia'];
+        $archivorutapdf = reporte($registro_id, $nombreConstancia, $parametros, 'pdf');
+        $resultado = Arr::add($resultado, 'storage', $archivorutapdf);
+        
+        $pdf64 = chunk_split(base64_encode(file_get_contents(base_path().'/public/'.$archivorutapdf)));
         $resultado = Arr::add($resultado, 'pdfBase64', $pdf64);
 
-
-        $multiSignedMessageInitRequestPDF = [
-            'data' => $request->datosConstancia['nombrereporte'].'.pdf',
+         $multiSignedMessageInitRequestPDF = [
+            'data' => $nombreConstancia.'.pdf',
             'document2Sign' => [
                 'base64' => true,
                 'data' => $pdf64,
-                'name' => $request->datosConstancia['nombrereporte'].'.pdf',
+                'name' => $nombreConstancia.'.pdf',
             ],
             'pdfPassword' => '',
             'hashAlg' => 'SHA256',
@@ -244,6 +230,16 @@ class FirmaController extends Controller
         $hashPDF = $responseMultiLateralGetHashPDF->json()['hash'];
         $resultado = Arr::add($resultado, 'multilateralIdPDF', $mulLatIdPDF);
         $resultado = Arr::add($resultado, 'hashPDF', $hashPDF);
+
+       
+       
+
+      
+       
+        
+       
+     
+        
 
         return response()->json($resultado);
     }

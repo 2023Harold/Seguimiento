@@ -63,7 +63,7 @@ class CedulaGeneralRecomendacionesController extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-        $resultado = $this->generatepdf($auditoria);
+		$resultado = $this->generatepdf($auditoria);
 
         $analistasF =$resultado['analistasF'];
         $analistasL = $resultado['analistasL'];        
@@ -73,8 +73,8 @@ class CedulaGeneralRecomendacionesController extends Controller
         $jefesL = $resultado['jefesL'];      
         $nombre = $resultado['nombre'];      
         
-
-        return view('cedulageneralrecomendaciones.form',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
+		return redirect(asset($nombre));
+        //return view('cedulageneralrecomendaciones.form',compact('nombre','auditoria','analistasF','analistasL','lideresF','lideresL','jefesF','jefesL'));
     }
 
     /**

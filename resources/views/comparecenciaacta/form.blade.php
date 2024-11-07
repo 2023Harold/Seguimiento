@@ -12,10 +12,7 @@
                     <a href="{{ route('comparecencia.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp; Acta
-                </h1>
-                <div class="float-end">
-                    <a href="{{route('comparecencia.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AC</a>                                  
-                </div>
+                </h1>               
             </div>
             <div class="card-body">
                 <div class="card-body">
@@ -130,7 +127,7 @@
                         <button type="submit" id='btn-guardar' class="btn btn-primary">Guardar</button>
                         {{-- @btnSubmit("Guardar") --}}
                         @endcan
-                        @btnCancelar('Cancelar', route('comparecencia.index'))
+                        @btnCancelar('Cancelar', route('comparecenciaacta.index'))
                     </div>
                 </div>
                 {!! BootForm::close() !!}

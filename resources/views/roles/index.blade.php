@@ -7,7 +7,7 @@
 <div class="card ">
     <div class="card-header">
         <h1 class="card-title">
-            <a href="{{ route('administracion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;&nbsp;&nbsp;
+            <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;&nbsp;&nbsp;
             Catálogo de roles
         </h1>        
     </div>

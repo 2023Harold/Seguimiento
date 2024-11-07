@@ -55,7 +55,6 @@ class Auditoria extends Model
                 'tipologia',
                 'created_at',
                 'updated_at',
-                'cuenta_publica',
             ];
 
 
@@ -104,6 +103,12 @@ class Auditoria extends Model
                     $query->where('fase_autorizacion','Autorizado');
                 })->orderBy('consecutivo');
             }
+			
+			 public function accionespo()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',3)->orderBy('consecutivo');
+            }
+			
             public function accionespoautorizadas()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',3)
@@ -111,6 +116,17 @@ class Auditoria extends Model
                     $query->where('fase_autorizacion','Autorizado');
                 })->orderBy('consecutivo');
             }
+			
+			public function accionessolacl()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',1)->orderBy('consecutivo');
+            }
+			
+			public function accionessolaclpo()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereIn('segtipo_accion_id',[1,3])->orderBy('consecutivo');
+            }
+			
             public function accionessolaclautorizadas()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',1)
@@ -156,7 +172,7 @@ class Auditoria extends Model
             }
             public function lider()
             {
-                return $this->belongsTo(User::class, 'lider_proyecto_id', 'id');
+                return $this->belongsTo(User::class, 'lider_proyecto_id', 'id')->where('siglas_rol','LP');
             }
 
             public function getDirectorasignadoAttribute()
@@ -166,7 +182,7 @@ class Auditoria extends Model
 
             public function getJefedepartamentoencargadoAttribute()
             {
-                return User::where('unidad_administrativa_id',$this->departamento_encargado_id)->first();
+                return User::where('unidad_administrativa_id',$this->departamento_encargado_id)->where('siglas_rol','JD')->first();
             }
 
             public function totalrecomendacion()

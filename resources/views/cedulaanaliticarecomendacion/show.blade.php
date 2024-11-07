@@ -60,7 +60,7 @@
                     </tr>
                     <tr>
                         <td><span style="font-size: 0.6rem"><strong>&nbsp;ACTO DE FISCALIZACIÓN:&nbsp;{{ $auditoria->acto_fiscalizacion }}</strong></span></td>
-                        <td><span style="font-size: 0.6rem"><strong>&nbsp;NÚMERO DE EXPEDIENTE: &nbsp;{{ optional($auditoria->radicacion)->numero_expediente}}</strong></span></td>
+                        <td><span style="font-size: 0.6rem"><strong>&nbsp;NÚMERO DE EXPEDIENTE: &nbsp;{{ $auditoria->radicacion->numero_expediente}}</strong></span></td>
                     </tr>
                 </table>
             </td>             
@@ -98,17 +98,11 @@
             <td colspan="8">
                 <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                     <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>OBSERVACIÓN PROMOVIDA:</strong></span></td>
+                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>RECOMENDACIÓN PROMOVIDA:</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                            <span>
-								<strong>
-									@php
-										 echo nl2br(htmlentities($accion->accion));									
-									@endphp
-								</strong>
-							</span> 
+                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
+                            <span style="font-size: 0.6rem"><strong>{{ $accion->accion }}</strong></span> 
                         </td>
                     </tr>
                 </table>
@@ -118,17 +112,11 @@
             <td colspan="8">
                 <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                     <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ORDENAMIENTOS LEGALES Y DISPOSICIONES JURÍDICAS APLICABLES:</strong></span></td>
+                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DEBER SER:</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                            <span>
-								<strong>									
-									@php
-										 echo nl2br(htmlentities($accion->normativa_infringida));									
-									@endphp
-								</strong>
-							</span> 
+                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
+                            <span style="font-size: 0.6rem"><strong>{{ $accion->normativa_infringida }}</strong></span> 
                         </td>
                     </tr>
                 </table>
@@ -138,15 +126,13 @@
             <td colspan="8">
                 <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                     <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL PARA LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
+                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL QUE ACREDITE LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                            <span>
+                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
+                            <span style="font-size: 0.6rem">
                                 <strong>
-									@php
-										 echo nl2br(htmlentities($accion->evidencia_resumen));									
-									@endphp                                    
+                                    {{ $accion->evidencia_resumen }}  
                                 </strong>
                             </span> 
                         </td>
@@ -158,19 +144,15 @@
             <td colspan="8">
                 <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                     <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DESCRIPCIÓN DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
+                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DOCUMENTACIÓN ANALIZADA:</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; margin:45px; font-size: 0.6rem;">
-							<strong>
-								<span>								   
-										@php
-										if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->listado_documentos)){
-										 echo nl2br(htmlentities($accion->recomendaciones->listado_documentos));
-										}									
-										@endphp
-								</span>
-							<strong>
+                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
+                            <span style="font-size: 0.6rem">
+                                <strong>                                   
+                                        {{ $accion->recomendaciones->listado_documentos }}                                    
+                                </strong>
+                            </span> 
                         </td>
                     </tr>
                 </table>
@@ -180,17 +162,13 @@
             <td colspan="8">
                 <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                     <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ANALISIS DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
+                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ANALISIS:</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                            <span>
+                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;">
+                            <span style="font-size: 0.6rem">
                                 <strong>
-									@php
-										if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->conclusion)){
-										 echo nl2br(htmlentities($accion->recomendaciones->conclusion));	
-										}
-									@endphp                                                           
+                                     {{ $accion->recomendaciones->conclusion }}                                  
                                 </strong>
                             </span> 
                         </td>
@@ -206,54 +184,33 @@
         <div style="page-break-after:always;"></div>
     @endif
     @endif
-    @endforeach  
-    @if (count($auditoria->cedulaanaliticadesemp)>0 && $auditoria->cedulaanaliticadesemp[0]->fase_autorizacion=='Autorizado')
+    @endforeach   
     <table width="100%">
-    <tr>
-        <td colspan="1"></td>
-        <td colspan="6">
-            <table style="border-collapse:collapse;" width="100%">
-                <tr>
-                    <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:</strong></span></td>
-                </tr>
-                <tr>
-                    @foreach ($nombresanalistasL as $analista)
-                    <td colspan="{{(count($nombresanalistasL)==3?'2': (count($nombresanalistasL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>{{ $analista }} <br> ANALISTA</strong></span></td>
-                    @endforeach
-                </tr>
-                <tr>
-                    <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ:</strong></span></td>
-                </tr>
-                <tr>
-                    @foreach ($nombreslideresL as $lider)
-                    <td colspan="{{(count($nombreslideresL)==3?'2': (count($nombreslideresL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $lider }} <br> LÍDER DE PROYECTO</strong></span></td>                            
-                    @endforeach                        
-                </tr>
-                <tr>
-                    <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
-                </tr>
-                <tr>
-                    @foreach ($nombresJefesL as $jefe)
-                    <td colspan="{{(count($nombresJefesL)==3?'2': (count($nombresJefesL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
-                    @endforeach 
-                </tr>
-                <tr>
-                    <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ: <br><br><br><br><br>  {{ $director->name }} <br>DIRECTOR</strong></span></td>
-                    <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ:<br><br><br><br><br>  {{ auth()->user()->titular->name }} <br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
-                </tr>
-                <tr>
-                    <td style="width: 20%;"></td>
-                    <td style="width: 15%;"></td>
-                    <td style="width: 15%;"></td>
-                    <td style="width: 15%;"></td>
-                    <td style="width: 15%;"></td>
-                    <td style="width: 20%;"></td>
-                </tr>
-            </table>
-        </td>  
-        <td colspan="1"></td>          
-    </tr> 
+        <tr>
+            <td colspan="1"></td>
+            <td colspan="6">
+                <table style="border: 0px solid; border-collapse:collapse;" width="100%">
+                    <tr>
+                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ: <br><br><br> ANALISTA</strong></span></td>
+                        <td colspan="2" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ<br><br><br>LÍDER DE PROYECTO</strong></span></td>
+                        <td colspan="2" style="text-align: center; color: black; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ<br><br><br>JEFE DE DEPARTAMENTO</strong></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ<br><br><br>DIRECTOR</strong></span></td>
+                        <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ<br><br><br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 20%;"></td>
+                    </tr>
+                </table>
+            </td>  
+            <td colspan="1"></td>          
+        </tr>
     </table> 
-    @endif   
 </body>
 </html>

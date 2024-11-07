@@ -47,6 +47,7 @@
                         <hr/>
                     </div>
                 </div>
+				@include('layouts.contextos._accionrecomendacion')
                                 
                     
                         <div class="row">

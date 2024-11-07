@@ -23,23 +23,9 @@
         <span class="text-primary">
             {{ $auditoria->radicacion->numero_acuerdo }}
         </span>
-    </div>           
-    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-        <label>Acuerdo de radicación: </label>
-        <span class="text-primary">
-            <a href="{{ asset($auditoria->radicacion->oficio_acuerdo) }}" target="_blank">
-                <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->radicacion->oficio_acuerdo)) ?>
-            </a>           
-        </span>
-    </div>            
-    <div class="col-lg-12 col-md-12 col-sm-12 col-12">                         
-        <label>Fecha del acuerdo de radicación: </label>
-        <span class="text-primary">
-            {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo) }}
-        </span>
-    </div> 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-        <label>Fecha notificación: </label>
+    </div>     
+	<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <label>Fecha radicación: </label>
         <span class="text-primary">
             {{ fecha($auditoria->radicacion->fecha_notificacion)}}
         </span>

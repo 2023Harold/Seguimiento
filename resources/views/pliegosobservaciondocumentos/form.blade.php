@@ -35,5 +35,5 @@
 </div>
 @endsection
 @section('script')
-{!! JsValidator::formRequest('App\Http\Requests\RecomendacionesDocumentoRequest') !!}
+{!! JsValidator::formRequest('App\Http\Requests\PliegosObservacionDocumento') !!}
 @endsection

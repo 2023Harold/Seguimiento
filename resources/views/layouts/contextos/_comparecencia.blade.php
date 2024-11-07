@@ -44,6 +44,18 @@
                 {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion) }}
             </span>
         </div>
+		<div class="col-lg-5 col-md-6 col-sm-12 col-12">
+            <label>Inicio del proceso de atención: </label>
+            <span class="text-sistema">
+                {{ fecha($auditoria->comparecencia->fecha_inicio_proceso)  }}
+            </span>
+        </div>
+        <div class="col-lg-7 col-md-6 col-sm-12 col-12">
+            <label>Término del proceso de atención: </label>
+            <span class="text-sistema">
+                {{ fecha($auditoria->comparecencia->fecha_termino_proceso) }}
+            </span>
+        </div>
     </div>
     @if (!empty($auditoria->comparecencia->oficio_recepcion))
     <h3 class="card-title text-primary">Acuses</h3> 

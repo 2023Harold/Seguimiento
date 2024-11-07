@@ -22,6 +22,8 @@ class InformePrimeraEtapa extends Model
         'fecha_envio',
         'acuse_notificacion',
         'fecha_notificacion',
+		'acuse_envio',
+        'fecha_acuse_envio',
     ];
     /**
      * The attributes that should be cast.
@@ -35,6 +37,7 @@ class InformePrimeraEtapa extends Model
         'created_at'=>'datetime',
         'updated_at'=>'datetime',
         'fecha_termino_recomendacion'=>'datetime',
+		'fecha_acuse_envio'=>'datetime',
     ];
 
     public function getDepaasignadoAttribute()

@@ -29,14 +29,14 @@
                             <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search" aria-hidden="true"></i>Buscar</button>                           
                         </div>
                     </div>
-                {!! BootForm::close() !!}     
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="pagination float-end">
-                        {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
-                        </div>              
-                    </div>              
-                </div>                  
+                {!! BootForm::close() !!} 
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pagination float-end">
+							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
+						</div>
+					</div>
+				</div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -121,13 +121,9 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="pagination float-end">
+                <div class="pagination float-end">
                     {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
-                    </div>
-                </div>            
+                </div>
             </div>
         </div>
     </div>

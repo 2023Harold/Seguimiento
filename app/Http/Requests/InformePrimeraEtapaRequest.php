@@ -24,17 +24,33 @@ class InformePrimeraEtapaRequest extends FormRequest
     public function rules()
     {
         return [
-            'numero_informe' => 'required|string|max:100',
             'fecha_informe' => 'required|date_format:Y-m-d|max:10',
-            'informe' => 'required|string|max:100',
+			'numero_informe'=> 'required|string|max:100',			
+			'nombre_titular_informe'=> 'required|string|max:500',
+			'cargo_titular_informe'=> 'required|string|max:500',
+			'domicilio_informe'=> 'required|string|max:500',
+			'numero_fojas'=> 'required|integer|max:999999999',
+			'informe'=> 'required|string|max:100',
+			'acuse_envio'=> 'required|string|max:100',
+			'fecha_acuse_envio'=> 'required|date|max:10',
+			'acuse_notificacion'=> 'required|string|max:100',
+			'fecha_notificacion'=> 'required|date|max:10',
         ];
     }    
         public function attributes()
     {
         return [
-           'numero_informe' => 'número del informe de auditoría',
-           'fecha_informe' => 'fecha del informe de auditoría',
-           'informe' => 'informe de auditoría',
+			'fecha_informe' => 'fecha del oficio de notificación del informe de seguimiento',
+			'numero_informe'=> 'Número de oficio de notificación',
+			'nombre_titular_informe'=> 'nombre del titular a quien se dirige',
+			'cargo_titular_informe'=> 'cargo del titular a quien se dirige',
+			'domicilio_informe'=> 'domicilio',
+			'numero_fojas'=> 'número de fojas',
+			'informe'=> 'informe de seguimiento',
+			'acuse_envio'=> 'acuse envío a notificar',
+			'fecha_acuse_envio'=> 'fecha del envío a notificar',
+			'acuse_notificacion'=> 'acuse de notificación',
+			'fecha_notificacion'=> 'fecha de notificación',
         ];
     }
     public function messages()

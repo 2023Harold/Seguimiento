@@ -69,6 +69,7 @@
                         <hr/>
                     </div>
                 </div>
+				@include('layouts.contextos._accionrecomendacion')
                 <div>
                     <h3 class="card-title text-primary">Análisis</h3>
                     <div class="card-body mt-2">
@@ -90,7 +91,7 @@
                             </div> --}}
                             <div class="row">
                                 <div class="col-md-12">
-                                    {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusión', $recomendacion->analisis),['rows'=>'10']) !!}
+                                    {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusión', $recomendacion->conclusion),['rows'=>'10']) !!}
                                 </div>
                             </div>
                             <div class="row">

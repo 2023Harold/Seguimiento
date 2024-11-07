@@ -38,6 +38,7 @@
                                 <th>No. de acción</th>
                                 <th>Tipo de acción</th>
                                 <th>Monto por aclarar</th>
+								<th>Fase</th>
                                 <th>Datos de atención</th>
                             </tr>
                         </thead>
@@ -56,6 +57,21 @@
                                 <td style="text-align: right!important;">
                                     {{'$'.number_format( $accion->monto_aclarar, 2)}}
                                 </td>
+								<td class="text-center">
+									@if (empty($accion->solicitudesaclaracion->fase_autorizacion))
+                                        <span class="badge badge-light-warning">Pendiente</span>                                 
+                                    @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'En revisión 01')                                        
+                                        <span class="badge badge-light-warning">En revisión</span>
+                                    @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'En revisión')
+                                        <span class="badge badge-light-warning">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>
+                                    @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'En validación')
+                                        <span class="badge badge-light-warning">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>
+                                    @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'En autorización')
+										<span class="badge badge-light-warning">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>
+                                    @elseif ($accion->solicitudesaclaracion->fase_autorizacion=='Autorizado')
+										<span class="badge badge-light-success">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>                                         
+                                    @endif 
+								</td>
                                 <td class="text-center">
                                     @if (!empty($accion->auditoria->comparecencia)&&!empty($accion->auditoria->comparecencia->oficio_acta))
                                         @can('solicitudesaclaracionacciones.edit')

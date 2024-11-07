@@ -3,7 +3,6 @@
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Constancia;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -23,7 +22,16 @@ function fecha($fecha = null, string $formato = 'd/m/Y')
     $fecha = new Carbon($fecha);
     return optional($fecha)->format($formato);
 }
+function fechadias($fecha = null, $dias )
+{
+    if(empty($fecha)){
+        return "";
+    }
 
+    $fecha = new Carbon($fecha); 
+	$nuevafecha=$fecha->addDay($dias); 
+    return optional($nuevafecha); 
+}
 function hora($fecha = null, string $formato = 'h:i')
 {
     return optional($fecha)->format($formato);
@@ -483,6 +491,55 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
 
         return $archivob64;
     }
+	
+	function reportepdfprevio($nombrereporte,$temporal=1,$qr='',$auditoria,$accion='',$modeloprincipal=[],$relacion1=[],$relacion2=[],$relacion3=[],$relacion4=null,$firma='', $hash='', $fechahora='', $estatus='',$motivo_rechazo='', $firmante='',$firmante_puesto='')
+    {
+        $archivob64='';
+        if(!empty($auditoria))
+        $auditoria=Auditoria::find(substr(base64_decode($auditoria), 5, -5));
+        if(!empty($accion))
+        $accion=AuditoriaAccion::find(substr(base64_decode($accion), 5, -5));
+        
+        $relacionconstancia1 ='';
+        $relacionconstancia2 ='';
+        $relacionconstancia3 ='';
+       
+        $modelo = DB::table($modeloprincipal['tbl'])->where('id',substr(base64_decode($modeloprincipal['vinculo']), 5, -5))->first();
+        if(!empty($relacion1))
+        $relacionconstancia1 = DB::table( $relacion1['tbl_rel'])->where($relacion1['col_rel'],$modelo->id)->get();
+        if(!empty($relacion2))
+        $relacionconstancia2 = DB::table( $relacion2['tbl_rel'])->where($relacion2['col_rel'],$modelo->id)->get();
+        if(!empty($relacion3))
+        $relacionconstancia3 = DB::table( $relacion3['tbl_rel'])->where($relacion3['col_rel'],$modelo->id)->get();
+       
+        $codigoQR = QrCode::format('png')->size(100)->generate($qr);       
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $data = [
+                 'temporal'=>$temporal,
+                 'qr'=>$codigoQR,
+                 'auditoria'=>$auditoria,                 
+                 'accion'=>$accion, 
+                 'modelo'=>$modelo,
+                 'relacion1'=>$relacionconstancia1,
+                 'relacion2'=>$relacionconstancia2,
+                 'relacion3'=>$relacionconstancia3,
+                 'relacion4'=>$relacion4,
+                 'firma'=>$firma,
+                 'hash'=>$hash,
+                 'fechahora'=>$fechahora,
+                 'estatus'=>$estatus,
+                 'motivo_rechazo'=>$motivo_rechazo,
+                 'firmante'=>$firmante,
+                 'firmante_puesto'=>$firmante_puesto,
+                ];
+        $pdf->loadView('reportes.'.$nombrereporte, $data);
+
+
+       
+        return $pdf;
+    }
+	
 
     function fechaaletra($fecha){
        
@@ -509,24 +566,6 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
 
 
         return $fechaactual;
-    }
-    function usuariocp($ua){
-        $users=new User();
-        if(getSession('cp')==2021)
-        {
-            $users=$users->where('cp_ua2021','LIKE','%'.$ua .'%' );
-        }
-        if(getSession('cp')==2022)
-        {
-            $users=$users->where('cp_ua2022','LIKE','%'.$ua .'%' );
-        }
-        if(getSession('cp')==2023)
-        {
-            $users=$users
-            ->where('cp_ua2023','LIKE','%'.$ua .'%' );
-        }
-        return $users;
-
     }
 
     

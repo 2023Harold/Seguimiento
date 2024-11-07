@@ -1,31 +1,21 @@
 @extends('layouts.app')
 @section('breadcrums')
-    @if ($accion=='Agregar')
-        {{ Breadcrumbs::render('usercreate') }}
-    @else
-        {{ Breadcrumbs::render('useredit') }}
-    @endif
+    
 @endsection
 @section('content')
-<div class="container-fluid">
-    @section('content')
-    @include('flash::message')
+@include('flash::message')
+<div class="row">
+<div class="col-md-12">
     <div class="card">
-        <div class="card-header">
-            <div class="row ">
-                <div class="col-md-8">
-                    <h3 class="color-sistema py-2">
-                        @can('user.index')
-                            <a class="color-sistema" href="{{ route('user.index') }}"><i class="fa fa-arrow-circle-o-left"></i></a>
-                        @endcan
-                        Usuario
-                    </h3>
-                </div>
-            </div>
+        <div class="card-header">  
+            <h1 class="card-title py-2">                        
+                <a class="text-primary" href="{{ route('user.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>                        
+                    &nbsp;&nbsp;&nbsp; Usuario
+            </h1>             
         </div>
         <div class="card-body">
             @include('flash::message')
-            {{ BootForm::open(['model' => $user, 'store' => 'user.store', 'update' => 'user.update','id'=>'form']) }}
+            {!! BootForm::open(['model' => $user, 'store' => 'user.store', 'update' => 'user.update','id'=>'form']) !!}
                 <div class="row">
                     <div class="col-md-3 pt-2">
                         {!! BootForm::text('name','Nombre del usuario: *',old("name",$user->name),['maxlength'=>'75']); !!}
@@ -46,7 +36,7 @@
                 @endphp
                 <div class="row">
                     <div class="col-md-2">
-                        {!! BootForm::select('rol','Rol: *' ,$roles,old("rol",$values[0])); !!}
+                        {!! BootForm::select('rol','Rol: *' ,$roles->toArray(),old("rol",$values[0])); !!}
                     </div>
                 </div>
                 @php
@@ -68,18 +58,11 @@
                     <div class="row">
                         <div class="col-md-4">
                             {!! BootForm::select('unidad_administrativa_id', 'Unidad Administrativa: *',
-                            $unidadesadministrativas,old("unidad_administrativa_id",$user->unidad_administrativa_id));!!}
+                            $unidadesadministrativas->toArray(),old("unidad_administrativa_id",$user->unidad_administrativa_id));!!}
                         </div>
                     </div>
                 </div>
-                <div id="div_mostrar_entidad" style="display:{{$mostrar_entidad}}">
-                    <div class="row">
-                        <div class="col-sm-6">
-                        {!! BootForm::select("entidad_fiscalizable_id", "Entidad fiscalizable: *",$entidades_fiscalizables,
-                        old("entidad_fiscalizable_id",$user->entidad_fiscalizable_id),['placeholder'=>'Seleccione la entidad fiscalizable' ,'class'=>'selection', 'width'=>'col-md-12']); !!}
-                        </div>
-                    </div>
-                </div>
+               
 
                 @if ($user->exists)
                 <div class="row">
@@ -92,9 +75,9 @@
                 <div class="row">
                     <div class="col-sm-12">
                         @canany('user.store','user.update')
-                            <button type="submit" class="btn btn-sistema">Guardar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                         @endcanany
-                        <a href="{{route('user.index')}}" class="text-danger text-right col-md-2">Cancelar</a>
+                        <a href="{{route('user.index')}}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>
             {!! BootForm::close() !!}

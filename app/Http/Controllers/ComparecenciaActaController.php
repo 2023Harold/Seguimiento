@@ -67,9 +67,9 @@ class ComparecenciaActaController extends Controller
     public function edit(Comparecencia $comparecencia)
     {
         $auditoria=$comparecencia->auditoria;
-        $tipo_identificacion= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional'];
-        $tipo_identificacion1= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional'];
-        $tipo_identificacion2= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional'];
+        $tipo_identificacion = [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional','Licencia de conducir'=>'Licencia de conducir'];
+        $tipo_identificacion1= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional','Licencia de conducir'=>'Licencia de conducir'];
+        $tipo_identificacion2= [null=>'','INE'=>'INE','Pasaporte'=>'Pasaporte','Cedula profesional'=>'Cédula profesional','Cartilla militar'=>'Cartilla militar','Gafete institucional'=>'Gafete institucional','Licencia de conducir'=>'Licencia de conducir'];
 
 
         return view('comparecenciaacta.form', compact('comparecencia', 'auditoria','tipo_identificacion','tipo_identificacion1','tipo_identificacion2'));

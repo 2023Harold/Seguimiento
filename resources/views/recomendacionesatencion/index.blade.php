@@ -28,7 +28,7 @@
                         <thead>
                             <tr>
                                 <th>Fecha compromiso de atención</th>
-                                <th>Nombre del responsable de la entidad fiscalizable</th>
+                                <th>Nombre del responsable de la entidad fiscalizada</th>
                                 <th>Cargo del responsable</th>
                                 <th>Oficios de contestación</th>
                                 <th>Listado de Doc.</th>
@@ -43,11 +43,11 @@
                                 <td class="text-center">
                                     {{ fecha($accion->fecha_termino_recomendacion) }}
                                 </td>
-                                <td>
-                                    {{$recomendacion->nombre_responsable }}
+								<td>
+                                    {{ $recomendacion->auditoria->comparecencia->nombre_titular }}
                                 </td>
                                 <td>
-                                    {{$recomendacion->cargo_responsable }}
+                                    {{ $recomendacion->auditoria->comparecencia->cargo_titular }}
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($recomendacion->fase_autorizacion) || $recomendacion->fase_autorizacion=='Rechazado'))

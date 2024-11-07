@@ -30,9 +30,13 @@
                         </div>
                     </div>
                 {!! BootForm::close() !!}
-                <div class="pagination">
-                    {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
-                </div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pagination float-end">
+							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
+						</div>
+					</div>
+				</div>	
                 @can('seguimientoauditoria.create')
                     <div class="row">
                         <div class="col-md-12">
@@ -163,7 +167,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
+                <div class="pagination float-end">
                     {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>

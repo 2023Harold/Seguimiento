@@ -25,7 +25,9 @@
                                 $nombres_xml = explode("/", $constancia->archivo_xml);
                             @endphp
                             <a href="data:application/pdf;base64,{{base64_encode(file_get_contents(asset($constancia->constancia_pdf)))}}"
-                                download="{{end($nombres_constancia)}}" class="btn btn-primary" >Descargar PDF</a>                                                    
+                                download="{{end($nombres_constancia)}}" class="btn btn-primary" >Descargar PDF</a>
+                            <a href="data:application/xml;base64,{{base64_encode(file_get_contents(asset($constancia->archivo_xml)))}}"
+                                download="{{end($nombres_xml)}}" class="btn btn-primary" >Descargar XML</a>                            
                             <a href="{{ route($rutaCerrar) }}" class="btn btn-secondary me-2">Cancelar</a>
                         </div>
                     </div>

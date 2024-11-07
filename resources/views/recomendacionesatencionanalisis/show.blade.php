@@ -48,6 +48,7 @@
                         <hr/>
                     </div>
                 </div>
+				@include('layouts.contextos._accionrecomendacion')
                 <div>
                     <h3 class="card-title text-primary">Análisis</h3>
                     <div class="card-body mt-2">
