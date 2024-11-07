@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <a href="{{ route('radicacion.auditoria',$auditoria) }}"  class="btn btn-primary float-end">
-                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar radicacion
+                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar radicación
                                 </a>
                             </div>                    
                         </div>
