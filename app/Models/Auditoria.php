@@ -55,6 +55,7 @@ class Auditoria extends Model
                 'tipologia',
                 'created_at',
                 'updated_at',
+                'cuenta_publica',
             ];
 
 

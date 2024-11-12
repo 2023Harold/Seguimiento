@@ -48,7 +48,7 @@ class SeguimientoAuditoriaController extends Controller
         $tiporevision = [null=>'','Cumplimiento Financiero'=>'Cumplimiento Financiero','Inversión Física'=>'Inversión Física','Financiera'=>'Financiera','Obra'=>'Obra','Desempeño'=>'Desempeño'];
         $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022'];
         //$lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->director->unidad_administrativa_id)->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
-        $lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->jefe->unidad_administrativa_id)->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
+        $lideresProyecto=usuariocp(getSession('cp_ua'))->where('siglas_rol','LP')->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
         $entidad1 = null;
         $entidad2 = null;
         $entidad3 = null;
@@ -75,6 +75,7 @@ class SeguimientoAuditoriaController extends Controller
         $this->normalizarDatos($request);
         mover_archivos($request, ['informe_auditoria'], null);
         $request['usuario_creacion_id'] = auth()->user()->id;
+        $request['cuenta_publica'] = getSession('cp');
         $request['unidad_administrativa_registro']=auth()->user()->unidad_administrativa_id;
         $auditoria = Auditoria::create($request->all());
 
@@ -191,6 +192,7 @@ class SeguimientoAuditoriaController extends Controller
     public function setQuery(Request $request)
     {
          $query = $this->model;
+         $query = $query->where('cuenta_publica',getSession('cp'));
 
 
         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
@@ -208,8 +210,8 @@ class SeguimientoAuditoriaController extends Controller
         }
 		
 		if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-            $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
-            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(direccion_asignada_id) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
+            $unidadAdministrativa=substr(getSession('cp_ua'), 0, 4);
+            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
         }
 
         if(in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||

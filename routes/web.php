@@ -4,6 +4,7 @@ use App\Exports\ReporteSeguimiento;
 use App\Http\Controllers\AccesoController;
 use App\Http\Controllers\AccionesController;
 use App\Http\Controllers\AcuerdoConclusionController;
+use App\Http\Controllers\AdministracionController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\AsignacionAccionController;
@@ -11,6 +12,9 @@ use App\Http\Controllers\AsignacionLiderAnalistaController;
 use App\Http\Controllers\AsignacionDepartamentoController;
 use App\Http\Controllers\AsignacionDepartamentoEncargadoController;
 use App\Http\Controllers\AsignacionDireccionController;
+use App\Http\Controllers\AsignacionUnidadAdministrativa2022Controller;
+use App\Http\Controllers\AsignacionUnidadAdministrativa2023Controller;
+use App\Http\Controllers\AsignacionUnidadAdministrativaController;
 use App\Http\Controllers\AuditoriaConsultaAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoAccionesController;
 use App\Http\Controllers\AuditoriaSeguimientoController;
@@ -60,6 +64,7 @@ use App\Http\Controllers\ComparecenciaEnvioController;
 use App\Http\Controllers\ComparecenciaValidacionController;
 use App\Http\Controllers\ConstanciaController;
 use App\Http\Controllers\CotejamientoController;
+use App\Http\Controllers\CuentaPublicaHomeController;
 use App\Http\Controllers\FirmaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InformeDocumentoController;
@@ -98,6 +103,7 @@ use App\Http\Controllers\PrasTurnoValidacionController;
 use App\Http\Controllers\QuickLoginController;
 use App\Http\Controllers\RadicacionAutorizacionController;
 use App\Http\Controllers\RadicacionController;
+use App\Http\Controllers\RadicacionEnvioController;
 use App\Http\Controllers\RadicacionValidacionController;
 use App\Http\Controllers\RecomendacionesAccionesController;
 use App\Http\Controllers\RecomendacionesAcusesController;
@@ -275,7 +281,19 @@ Route::resource('acuerdoconclusion',AcuerdoConclusionController::class,['paramet
 
 Route::middleware(['auth', CheckPermission::class])->group(function () {
 
+    Route::get('/cphome', [CuentaPublicaHomeController::class, 'index'])->name('cphome');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/home/{cp}', [HomeController::class, 'cuenta'])->name('cuenta');
+    Route::get('/administracion', [AdministracionController::class, 'index'])->name('administracion.index');
+    Route::resource('asignacionunidadadministrativa', AsignacionUnidadAdministrativaController::class, ['parameters' => ['asignacionunidadadministrativa' => 'user']]);
+    Route::resource('asignacionunidadadministrativa2022', AsignacionUnidadAdministrativa2022Controller::class, ['parameters' => ['asignacionunidadadministrativa2022' => 'user']]);
+    Route::resource('asignacionunidadadministrativa2023', AsignacionUnidadAdministrativa2023Controller::class, ['parameters' => ['asignacionunidadadministrativa2023' => 'user']]);       
+
+    Route::resource('asignaciondireccion', AsignacionDireccionController::class, ['parameters' => ['asignaciondireccion' => 'auditoria']]);
+    Route::get('/asignaciondireccion/acciones/consulta/{auditoria}', [AsignacionDireccionController::class, 'accionesConsulta'])->name('asignaciondireccion.accionesconsulta');
+    Route::get('/asignacionaccion/{accion}/{movimiento?}', [AsignacionAccionController::class, 'accionesConsulta'])->name('asignacion.accion');//revisar si esta bien
+    Route::post('getUnidadAdministrativa', [AsignacionUnidadAdministrativaController::class, 'getUnidadAdministrativa'])->name('getUnidadAdministrativa');
+    Route::get('/asignaciondireccion/reasignacion/{auditoria}', [AsignacionDireccionController::class, 'reasignar'])->name('asignaciondireccion.reasignar');    
 
     Route::get('notificaciones',[NotificacionController::class, 'index'])->name('notificaciones.index');
     Route::get('marcarleido', [NotificacionController::class, 'marcarleido'])->name('marcarleido');
@@ -340,9 +358,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
 
     /*Radicación*/
+    
     Route::resource('radicacion', RadicacionController::class);
     Route::get('auditoriaradicacion/{auditoria}', [RadicacionController::class,'auditoria'])->name('radicacion.auditoria');
 	Route::get('radicacionpdf/{radicacionpdf}', [RadicacionController::class,'radicacionpdf'])->name('radicacion.radicacionpdf');
+    Route::resource('radicacionenvio',RadicacionEnvioController::class,['parameters' => ['radicacionenvio' => 'radicacion']]);
+    Route::get('radicacionconcluir/{radicacion}', [RadicacionController::class,'concluir'])->name('radicacion.concluir');
     Route::resource('radicacionvalidacion', RadicacionValidacionController::class,['parameters' => ['radicacionvalidacion' => 'radicacion']]);
     Route::resource('radicacionautorizacion', RadicacionAutorizacionController::class,['parameters' => ['radicacionautorizacion' => 'radicacion']]);
     Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['parameters' => ['comparecenciaacuse' => 'comparecencia']]);

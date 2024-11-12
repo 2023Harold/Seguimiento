@@ -8,12 +8,11 @@
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                @can('administracion.index')
-                <a class="btn btn-primary float-end" hidden  href="{{ route('administracion.index') }}">
-                 Administración
-                 </a>
-                 @endcan 
-                </h1>
+                    
+                    <a class="btn btn-primary float-end" href="{{ route('administracion.index') }}">
+                     Administración
+                     </a>
+                    </h1>
             </div>
          </div>      
 </div>

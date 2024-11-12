@@ -79,7 +79,7 @@ class AsignacionUnidadAdministrativa2022Controller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request,User $user)
-    {
+    {        
         $request ['cp_2022']='X';
         $user->update($request->all());
         return redirect()->route('asignacionunidadadministrativa.index',$user);  

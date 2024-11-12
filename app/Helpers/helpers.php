@@ -3,6 +3,7 @@
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Constancia;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -567,7 +568,23 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
 
         return $fechaactual;
     }
+    function usuariocp($ua){
+        $users=new User();
+        if(getSession('cp')==2021)
+        {
+            $users=$users->where('cp_ua2021','LIKE','%'.$ua .'%' );
+        }
+        if(getSession('cp')==2022)
+        {
+            $users=$users->where('cp_ua2022','LIKE','%'.$ua .'%' );
+        }
+        if(getSession('cp')==2023)
+        {
+            $users=$users
+            ->where('cp_ua2023','LIKE','%'.$ua .'%' );
+        }
+        return $users;
+    }    
 
-    
 
 

@@ -8,7 +8,7 @@
     <div class="card-header">
         <div class="row ">
             <h1 class="card-title">
-                <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;&nbsp;&nbsp;
+                <a href="{{ route('administracion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;&nbsp;&nbsp;
                 Accesos
             </h1>  
         </div>

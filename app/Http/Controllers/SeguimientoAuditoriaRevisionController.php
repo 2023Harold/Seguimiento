@@ -115,7 +115,7 @@ class SeguimientoAuditoriaRevisionController extends Controller
         setMessage($request->estatus == 'Aprobado' ?
             'La aprobación ha sido registrada y se ha enviado a validación del superior.' :
             'El rechazo ha sido registrado.'
-        );
+        );    
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Validación del registro de la auditoria No. '.$auditoria->numero_auditoria;

@@ -6,8 +6,8 @@
 <div class="row justify-content-center">
     <div class="mt-4 mb-5 col-12">
         <div class="flex-row row flex-center">
-            @canany(['user.index'])
-            <div class="col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12 mb-3 mb-3">
+            {{-- @canany(['user.index']) --}}
+            {{-- <div class="col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12 mb-3 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title">
@@ -21,7 +21,7 @@
                                 <span class="bullet me-5 bg-primary"></span> <a
                                     href="{{ route('user.index') }}">Usuarios</a>
                             </li>
-                            @endcan                            
+                            @endcan
                             @can('rol.index')
                                 <li class="d-flex align-items-center py-2">
                                     <span class="bullet me-5 bg-primary"></span>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            @endcanany
+            @endcanany --}}
             {{-- @canany(['catrequerimiento.index', 'user.index', 'rol.index', 'permiso.index', 'acceso.index',
             'ejercicio.index'])
             <div class="mb-3 col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12">
@@ -315,7 +315,7 @@
             @endcan --}}
 
 
-            @canany(['seguimientoauditoria.index'])
+            @canany(['seguimientoauditoria.index','tipologiaauditorias.index'])
             <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">
@@ -335,14 +335,12 @@
                                 </a>
                             </li>
                             @endcan
-							 @can('tipologiaauditorias.index')
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('tipologiaauditorias.index') }}">
-                                    Tipología Auditorias
+                                <a href="{{ route('reportesregistrosauditorias.index') }}">
+                                    Reportes de Registros de Auditorias
                                 </a>
-                            </li>
-                            @endcan                              
+                                </li>
                         </div>
                     </div>
                 </div>
@@ -399,8 +397,6 @@
                             Seguimiento
                         </h1>
                     </div>
-
-
                     <div class="overflow-auto card-body h-200px">
                         <div class="d-flex flex-column">
                             <li class="py-2 d-flex align-items-center">
@@ -409,20 +405,41 @@
                                     Auditorias
                                 </a>
                             </li>
-							 <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('reportesseg.index') }}">
-                                    Reportes
-                                </a>
-                                </li>
                         </div>
+                        <li class="py-2 d-flex align-items-center">
+                            <span class="bullet me-5 bg-primary"></span>
+                            <a href="{{ route('reportesseg.index') }}">
+                                Reportes
+                            </a>
+                            </li>
                     </div>
                 </div>
             </div>
             @endcan
-           
-
-            {{--
+            {{-- <div class="mb-3 col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="card-title">
+                            <span class="text-gray-800 fs-2x"><img alt="Logo"
+                                    src="{{asset('assets/img/seguimiento1.png')}}" class="h-40px logo" /></span>&nbsp;
+                            PAC
+                        </h1>
+                    </div>
+                    <div class="overflow-auto card-body h-200px">
+                        <div class="d-flex flex-column">
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('pac.index') }}">
+                                    <span class="bi bi-archive fs-1"></span>
+                                </a>
+                                {{-- @can('reportesseguimiento.index') --}}
+                               
+                            {{-- @endcan                             
+                        </div>
+                    </div>
+                </div>
+            </div>         --}}
+            {{--   
             <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">
@@ -449,7 +466,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>            
             <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">

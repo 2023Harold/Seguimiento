@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             CatUnidadesAdministrativasSeeder::class,    
             CatMunicipiosSeeder::class,  
             CatTipologiasSeeder::class,  
-            UsersSeeder::class,     
+            UsersSeeder::class, 
+            LeyendaSeeder::class,    
         ]);
         
     }
