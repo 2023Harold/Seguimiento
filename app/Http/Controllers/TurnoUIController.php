@@ -123,8 +123,6 @@ class TurnoUIController extends Controller
         }
         return $query;
     }
-
-
     public function export(){
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
         $template=new TemplateProcessorMod('bases-word/TurnoUI.docx');       

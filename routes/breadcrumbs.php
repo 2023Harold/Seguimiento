@@ -9,7 +9,7 @@ Breadcrumbs::for('cphome', function (BreadcrumbTrail $trail) {
 
 Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->parent('cphome');
-    $trail->push('Inicio Cuenta Pública', route('home'));
+    $trail->push('Inicio', route('home'));
 });
 
 Breadcrumbs::for('administracion.index', function (BreadcrumbTrail $trail) {
@@ -323,7 +323,7 @@ Breadcrumbs::for('radicacion.index', function (BreadcrumbTrail $trail,$auditoria
     $trail->push('Radicación', route('radicacion.index'));
 });
 
-Breadcrumbs::for(' comparecenciaacuse.show', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
+Breadcrumbs::for('comparecenciaacuse.show', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
     $trail->parent('radicacion.index',$auditoria);
     $trail->push('Acuses', route('comparecenciaacuse.show',$comparecencia));
 });
@@ -763,6 +763,7 @@ Breadcrumbs::for('turnoarchivo.edit', function (BreadcrumbTrail $trail,$auditori
     $trail->parent('turnoarchivo.index',$auditoria);
     $trail->push('Envío al archivo de transferecia ', route('turnotransferencia.create'));
 });
+
 
 Breadcrumbs::for('turnotransferencia.create', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimiento.index');

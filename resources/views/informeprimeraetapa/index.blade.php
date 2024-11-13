@@ -36,8 +36,7 @@
                                 <th>Fecha</th>
                                 <th>Número de oficio</th>
                                 <th>Nombre del titular</th>
-                                <th>Acuse envío a notificar</th>
-                                <th>fecha del envío a notificar</th>
+                                <th>Acuse envío a notificar</th>                                
                                 <th>Acuse de notificación</th>
                                 <th>Fecha de notificación</th>
 
@@ -57,10 +56,7 @@
                                 </td>
                                 <td class="text-center">
                                     @btnFile($auditoria->informeprimeraetapa->informe)
-                                </td>
-                                <td class="text-center">
-                                    {{ fecha($auditoria->informeprimeraetapa->fecha_envio) }}
-                                </td>
+                                </td>                                
                                 <td class="text-center">
                                     @btnFile($auditoria->informeprimeraetapa->acuse_notificacion)
                                 </td>

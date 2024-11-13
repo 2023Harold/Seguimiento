@@ -59,7 +59,7 @@
                                     @if (empty($turnoarchivo))
                                     <a href="{{ route('turnotransferencia.create',$turnoarchivo) }}" class="btn btn-primary">Enviar a Transferencia</a>
                                     @else                                     
-                                   Enviado.                                                                           
+                                   <span class="badge badge-success">Enviado<s/pan>
                                     @endif
                                 </td>                                
                             </tr>

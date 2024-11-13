@@ -1,32 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Auditoria;
-use App\Models\TurnoOIC;
 
 use Illuminate\Http\Request;
 
-class TurnoOICController extends Controller
+class TurnoArchivoValidacionController extends Controller
 {
-    protected $model;
-    public function __construct(TurnoOIC $model)
-       {
-           $this -> model = $model;
-       } 
-    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $auditoria = Auditoria :: find(getSession('auditoria_id'));
-        $turnooic=TurnoOIC::where('auditoria_id',getSession('auditoria_id'))->first();   
-        
-
-        return view ('turnooic.index', compact('request','auditoria','turnooic'));
-        
+        //
     }
 
     /**
@@ -36,10 +23,7 @@ class TurnoOICController extends Controller
      */
     public function create()
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));               
-        $turnooic = new TurnoOIC();
-       
-        return view('turnooic.form', compact('auditoria','turnooic'));
+        //
     }
 
     /**
@@ -50,15 +34,7 @@ class TurnoOICController extends Controller
      */
     public function store(Request $request)
     {
-       //dd(getSession('auditoria_id'));
-     
-      mover_archivos($request, ['turno_oic']);
-      $request['auditoria_id']= getSession('auditoria_id');
-      $turnooic  = TurnoOIC::create($request->all());
-
-      setMessage("Los datos se han guardado correctamente.");
-
-        return redirect() -> route('turnooic.index');
+        //
     }
 
     /**
@@ -104,13 +80,5 @@ class TurnoOICController extends Controller
     public function destroy($id)
     {
         //
-    }
-    public function export(){
-        $auditoria=Auditoria::find(getSession('auditoria_id')); 
-        $template=new TemplateProcessorMod('bases-word/TurnoOIC.docx');       
-        $nombreword='Of. R_OICs';
-        $template->saveAs($nombreword.'.docx');
-
-        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
     }
 }

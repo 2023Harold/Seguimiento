@@ -35,8 +35,7 @@
                             <tr>
                                 <th>Nombre del tutular a quien se dirige</th>
                                 <th>Cargo del titular a quien se dirige</th>
-                                <th>Domicilio</th>
-                                <th>Número</th>
+                                <th>Domicilio</th>                                
                                 <th>Acuerdo de conclusión UI</th>                                
                             </tr>
                         </thead>
@@ -53,9 +52,7 @@
                                 <td>
                                     {{ $auditoria->acuerdoconclusion->domicilio }}
                                 </td>
-                                <td class="text-center">
-                                    {{$auditoria->acuerdoconclusion->numero_acuerdo_conclusion }}
-                                </td>
+                               
                                 <td class="text-center">
                                     <a>
                                     @btnFile($auditoria->acuerdoconclusion->acuerdo_conclusion)
