@@ -18,7 +18,7 @@
         {!! BootForm::hidden('usuario_id',null,['id'=>'usuario_id']) !!}
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::checkbox('auditoria_completa', 'Asignación de la auditoria completa', 'X', false, ['class' => 'i-checks']) !!}
+                {!! BootForm::checkbox('auditoria_completa', 'Asignación de la auditoria completa', 'X', (getSession('cp')==2023?true:false), ['class' => 'i-checks', (getSession('cp')==2023?'disabled':'')]) !!}
             </div>
         </div>
         <div class="row">

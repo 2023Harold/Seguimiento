@@ -199,6 +199,7 @@ class AsignacionLiderAnalistaController extends Controller
     public function setQuery(Request $request)
     {
          $query = $this->model;
+         $query = $query->where('cuenta_publica',getSession('cp'));
 
         if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
@@ -214,10 +215,13 @@ class AsignacionLiderAnalistaController extends Controller
                         ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);
 
         }elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-
-            $query = $query->whereHas('acciones', function($q){
-                $q->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
-            });
+            if(getSession('cp')==2023){
+                $query = $query->where('departamento_encargado_id',getSession('cp_ua'));
+            }else{
+                $query = $query->whereHas('acciones', function($q){
+                    $q->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
+                });
+            }            
         }
 
         if ($request->filled('numero_auditoria')) {

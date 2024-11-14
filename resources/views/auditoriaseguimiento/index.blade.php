@@ -75,11 +75,13 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if(!empty($auditoria->fase_autorizacion) && auth()->user()->siglas_rol!='ANA')
-                                            <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
-                                        @endif
-                                        @if(!empty($auditoria->fase_autorizacion) && $auditoria->fase_autorizacion!='Rechazado' && auth()->user()->siglas_rol=='ANA')
-                                            <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
+                                        @if(count($auditoria->acciones)>0)
+                                            @if(!empty($auditoria->fase_autorizacion) && auth()->user()->siglas_rol!='ANA')
+                                                <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
+                                            @endif
+                                            @if(!empty($auditoria->fase_autorizacion) && $auditoria->fase_autorizacion!='Rechazado' && auth()->user()->siglas_rol=='ANA')
+                                                <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
+                                            @endif
                                         @endif
                                     </td>
                                     <td style="text-align: right!important;">

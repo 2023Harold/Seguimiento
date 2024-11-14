@@ -75,7 +75,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                            @if($auditoria->registro_concluido=='Si')
+                                            @if($auditoria->registro_concluido=='Si'&& count($auditoria->acciones) > 0)
                                                 @can('asignacionlideranalista.accionesconsulta')
                                                     <a href="{{ route('asignacionlideranalista.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-magnifying-glass-chart"></i>Consultar</a>
                                                 @endcan

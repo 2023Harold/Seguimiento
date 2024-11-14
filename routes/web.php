@@ -131,6 +131,11 @@ use App\Http\Controllers\RevisionesRecomendacionesController;
 use App\Http\Controllers\RevisionesSolicitudesAtencionController;
 use App\Http\Controllers\RevisionesSolicitudesController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\SeguimientoAuditoria2023AutorizacionController;
+use App\Http\Controllers\SeguimientoAuditoria2023Controller;
+use App\Http\Controllers\SeguimientoAuditoria2023Revision01Controller;
+use App\Http\Controllers\SeguimientoAuditoria2023RevisionController;
+use App\Http\Controllers\SeguimientoAuditoria2023ValidacionController;
 use App\Http\Controllers\SeguimientoAuditoriaAccionRevision01Controller;
 use App\Http\Controllers\SeguimientoAuditoriaAccionRevisionController;
 use App\Http\Controllers\SeguimientoAuditoriaAutorizacionController;
@@ -188,6 +193,7 @@ Auth::routes();
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/cphome', [CuentaPublicaHomeController::class, 'index'])->name('cphome');
 Route::post('/salir', [LogoutController::class, 'logout'])->name('auth.logout');
 Route::get('/cotejamiento/{archivo}/{model}', [CotejamientoController::class, 'cotejamiento'])->name('cotejamiento');
 Route::post('getTipologia', [SeguimientoAuditoriaController::class, 'getTipologia'])->name('getTipologia');
@@ -283,7 +289,7 @@ Route::resource('acuerdoconclusion',AcuerdoConclusionController::class,['paramet
 
 Route::middleware(['auth', CheckPermission::class])->group(function () {
 
-    Route::get('/cphome', [CuentaPublicaHomeController::class, 'index'])->name('cphome');
+   
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/home/{cp}', [HomeController::class, 'cuenta'])->name('cuenta');
     Route::get('/administracion', [AdministracionController::class, 'index'])->name('administracion.index');
@@ -320,9 +326,18 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('seguimientoauditoriavalidacion', SeguimientoAuditoriaValidacionController::class, ['parameters' => ['seguimientoauditoriavalidacion' => 'auditoria']]);
     Route::resource('seguimientoauditoriaautorizacion', SeguimientoAuditoriaAutorizacionController::class, ['parameters' => ['seguimientoauditoriaautorizacion' => 'auditoria']]);
 
+    //Registro de auditorias 2023
+    Route::resource('seguimientoauditoriacp', SeguimientoAuditoria2023Controller::class, ['parameters' => ['seguimientoauditoriacp' => 'auditoria']]);
+    Route::resource('seguimientoauditoriacprevision01', SeguimientoAuditoria2023Revision01Controller::class, ['parameters' => ['seguimientoauditoriacprevision01' => 'auditoria']]);
+    Route::resource('seguimientoauditoriacprevision', SeguimientoAuditoria2023RevisionController::class, ['parameters' => ['seguimientoauditoriacprevision' => 'auditoria']]);
+    Route::resource('seguimientoauditoriacpvalidacion', SeguimientoAuditoria2023ValidacionController::class, ['parameters' => ['seguimientoauditoriacpvalidacion' => 'auditoria']]);
+    Route::resource('seguimientoauditoriacpautorizacion', SeguimientoAuditoria2023AutorizacionController::class, ['parameters' => ['seguimientoauditoriacpautorizacion' => 'auditoria']]);
+
+
     //Tipología de auditoria
     Route::resource('tipologiaauditorias', TipologiaAuditoriasController::class, ['parameters' => ['tipologiaauditorias' => 'auditoria']]);
     Route::resource('tipologiaaccion', TipologiaAccionController::class, ['parameters' => ['tipologiaaccion' => 'accion']]);
+    
 
 
     //Asignaciones

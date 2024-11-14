@@ -4,7 +4,7 @@ use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
 Breadcrumbs::for('cphome', function (BreadcrumbTrail $trail) {
-    $trail->push('Cuenta Pública', route('cphome'));
+    $trail->push('Cuenta Pública '.getSession('cp'), route('cphome'));
 });
 
 Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {

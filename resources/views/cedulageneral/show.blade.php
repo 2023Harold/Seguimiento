@@ -8,17 +8,43 @@
     <title>{{config('app.name', 'OSFEM')}}</title>
     <style>
         @page {
-            margin-left: 0;
-            margin-right: 0;
-            margin-top: 0;
-            margin-bottom: 0;
+            margin: 1px 1px;
         }
+		
+		header {
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			height: 0px;
+			background-color: #000;
+		}
+
+		footer {
+			position: fixed;
+			bottom: -60px;
+			left: 0px;
+			right: 0px;
+			height: 50px;
+
+			/** Extra personal styles **/
+			background-color: #03a9f4;
+			color: white;
+			text-align: center;
+			line-height: 35px;
+		}
 
     </style>
 </head>
 <body>
-<div style="page-break-inside: avoid;">
-    <table width="100%">
+<header>
+</header>
+
+<footer>
+</footer>
+
+<main>
+	<table width="100%">
         <tr style="border-collapse:separate;border-spacing:0px;">
             <td colspan="2" rowspan="3" style="width:20%; border: 1px solid;  color: grey;">
                 {{-- <div style="width: max-content;">--}}
@@ -49,7 +75,7 @@
                 <span style="font-size: 0.7rem"><strong>&nbsp;{{ $auditoria->entidad_fiscalizable }}</strong></span>
             </td>
         </tr>
-        <tr style="border-collapse:separate;border-spacing:0 500px;">
+		<tr style="border-collapse:separate;border-spacing:0 500px;">
             <td style="width:15%; background-color: #960048; color: white; vertical-align:middle;">
                 <span style="font-size: 0.6rem"><strong>&nbsp;PERIODO DE REVISIÓN</strong></span>
             </td>
@@ -63,7 +89,7 @@
                 <span style="font-size: 0.6rem"><strong>&nbsp;{{ $auditoria->numero_auditoria }}</strong></span>
             </td>            
         </tr>
-        <tr style="border-collapse:separate;border-spacing:0 500px;">
+		<tr style="border-collapse:separate;border-spacing:0 500px;">
             <td style="width:20%; background-color: #960048; color: white; vertical-align:middle;">
                 <span style="font-size: 0.6rem"><strong>&nbsp;ACTO DE FISCALIZACIÓN</strong></span>
             </td>
@@ -76,317 +102,299 @@
             <td style="border: .5 solid; width:20%; color: #424242; vertical-align:middle;">
                 <span style="font-size: 0.6rem"><strong>&nbsp;{{ optional($auditoria->radicacion)->numero_expediente}}</strong></span>
             </td>            
-        </tr>  
-        <tr style="border-collapse:separate;border-spacing:0 500px; vertical-align: middle;">
-            <td colspan="2" rowspan="2"></td>
-            <td colspan="6" style="text-align: center; width: 80%; color: white; background-color: #960048; vertical-align: middle;"> 
+        </tr> 
+	</table>
+	<table width="100%">
+		<tr style="width:100%; border-collapse:separate;border-spacing:0 500px; vertical-align: middle;">
+            <td rowspan="2" style="width:15%; background-color:#fff;"></td>
+            <td colspan="6" style="width: 80%; background-color: #960048; text-align: center; color: white; vertical-align: middle;"> 
                 <span style="font-size: .6rem;"><strong>1.ª Etapa de Aclaración</strong></span>
             </td>
-        </tr>   
-        <tr style="border-collapse:separate;border-spacing:0 500px;">            
-            <td style="text-align: center; width: 10%; color: white; background-color: #960048; vertical-align: middle;"> 
+        </tr> 
+		<tr style="border-collapse:separate;border-spacing:0 500px;">            
+            <td style="text-align: center; width: 14%; color: white; background-color: #960048; vertical-align: middle;"> 
                 <span style="font-size: .6rem;"><strong>Fecha de Comparecencia</strong></span>
             </td>
-            <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
+            <td style="border: .5 solid; width:13%; color: #424242; vertical-align:middle;">
                 <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(optional($auditoria->comparecencia)->fecha_comparecencia) }}</strong></span>
             </td>
-            <td style="text-align: center; width: 10%; color: white; background-color: #960048; vertical-align: middle;"> 
+            <td style="text-align: center; width: 13%; color: white; background-color: #960048; vertical-align: middle;"> 
                 <span style="font-size: .6rem;"><strong>Fecha de Inicio</strong></span>
             </td>
-            <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
+            <td style="border: .5 solid; width:13%; color: #424242; vertical-align:middle;">
                 <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(optional($auditoria->comparecencia)->fecha_inicio_aclaracion)  }}</strong></span>
             </td>
-            <td style="text-align: center; width: 10%; color: white; background-color: #960048; vertical-align: middle;"> 
+            <td style="text-align: center; width: 13%; color: white; background-color: #960048; vertical-align: middle;"> 
                 <span style="font-size: .6rem;"><strong>Fecha de Vencimiento</strong></span>
             </td>
-            <td style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
+            <td style="border: .5 solid; width:14%; color: #424242; vertical-align:middle;">
                 <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(optional($auditoria->comparecencia)->fecha_termino_aclaracion)}}</strong></span>
             </td>
         </tr> 
-        <tr></tr>
-        <tr>
-            <td colspan="2">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acciones Promovidas</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolacl)+count($auditoria->totalpliegos) }}</strong></span></td>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TAP, 2) }}</strong></span></td>
-                    </tr>
-                </table>
-            </td>
-            <td colspan="2">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acciones Promovidas Solventadas</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolventadosolacl)+count($auditoria->totalsolventadopliegos) }}</strong></span></td>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TAPS, 2) }}</strong></span></td>
-                    </tr>
-                </table>
-            </td>
-            <td colspan="2">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acciones Promovidas No Solventadas</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalNOsolventadorecomendacion)+count($auditoria->totalNOsolventadopras)+count($auditoria->totalNOsolventadosolacl)+count($auditoria->totalNOsolventadopliegos) }}</strong></span></td>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TAPNS, 2) }}</strong></span></td>
-                    </tr>
-                </table>
-            </td>
-            <td colspan="2" rowspan="12" style="vertical-align: top;">
-                <table style="border-collapse:collapse; border: 1px solid; border-color: #424242; padding-top: 0%;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; height:1.5%; color: white; background-color: #960048;"> <span style="font-size: .6rem;"><strong>Acciones Promovidas</strong></span></td>
-                    </tr>                    
-                    <tr>
-                        <td style="text-align: center; width: 10%; height:3%; color: black; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Recomendaciones</strong></span></td>
-                        <td style="text-align: center; width: 10%; height:3%; color: black; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->totalrecomendacion) }}</strong></span></td>
-                    </tr>                    
-                    <tr>
-                        <td style="text-align: center; width: 10%; height:3%; color: black; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>PRAS</strong></span></td>
-                        <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->totalpras) }}</strong></span></td>
-                    </tr>                    
-                    <tr>
-                        <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración</strong></span></td>
-                        <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolacl) }}</strong></span></td>
-                    </tr>                    
-                    <tr>
-                        <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observación</strong></span></td>
-                        <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->totalpliegos) }}</strong></span></td>
-                    </tr>                    
-                    <tr>
-                        <td style="text-align: center; width: 10%; height:7%; color: black; border: 1px solid; border-color: #424242; background-color: #D8D8D8;"> <span style="font-size: .6rem;"><strong>TOTAL</strong></span></td>
-                        <td style="text-align: center; width: 10%; height:7%; color: black; border: 1px solid; border-color: #424242; background-color: #D8D8D8;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->acciones) }}</strong></span></td>
-                    </tr>                    
-                </table>               
-            </td>
-        </tr>       
-        <tr></tr>
-        <tr>
-            <td colspan="2">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración Promovidas</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolacl) }}</strong></span></td>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TSP, 2) }}</strong></span></td>
-                    </tr>
-                </table>
-            </td>
-            <td colspan="2">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración Solventadas</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolventadosolacl) }}</strong></span></td>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TSPS, 2) }}</strong></span></td>
-                    </tr>
-                </table>
-            </td>
-            <td colspan="2">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración No Solventadas</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalNOsolventadosolacl) }}</strong></span></td>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TSPNS, 2) }}</strong></span></td>
-                    </tr>
-                </table>
-            </td>            
-        </tr>       
-        <tr></tr>
-        <tr>
-            <td colspan="2">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observaciones Promovidos</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalpliegos) }}</strong></span></td>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TPP, 2) }}</strong></span></td>
-                    </tr>
-                </table>
-            </td>
-            <td colspan="2">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observaciones Solventados</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolventadopliegos) }}</strong></span></td>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TPPS, 2) }}</strong></span></td>
-                    </tr>
-                </table>
-            </td>
-            <td colspan="2">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observaciones No Solventados</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
-                        <td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalNOsolventadopliegos) }}</strong></span></td>
-                        <td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TPPNS, 2) }}</strong></span></td>
-                    </tr>
-                </table>
-            </td>            
-        </tr>       
-        <tr style="border-collapse:separate;border-spacing:0 500px;">
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-        </tr>     
-        <tr style="border-collapse:collapse;border-spacing:0 500px;">
-            <td colspan="8"> 
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="8" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración</strong></span></td> 
-                    </tr>
-                    <tr>
-                        <td colspan="3" style="text-align: center; width: 40%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acción Promovida</strong></span></td>
-                        <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Número</strong></span></td>
-                        <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Promovido</strong></span></td> 
-                        <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Solventado</strong></span></td>
-                        <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe No Solventado</strong></span></td>
-                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Estatus</strong></span></td>
-                    </tr>
-                    @foreach ($auditoria->totalsolacl as $solacl)
-                        <tr>
-                            <td style="text-align: center; width: 5%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong> {{ $loop->iteration }}</strong></span></td>
-                            <td style="text-align: justify;; width: 35%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $solacl->accion }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $solacl->numero }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->monto_aclarar, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( ((!empty($solacl->solicitudesaclaracion)&&!empty($solacl->solicitudesaclaracion->monto_solventado))?$solacl->solicitudesaclaracion->monto_solventado:0), 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->monto_aclarar-(!empty($solacl->solicitudesaclaracion)&&empty($solacl->solicitudesaclaracion->monto_solventado)?$solacl->solicitudesaclaracion->monto_solventado:0), 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ ((!empty($solacl->solicitudesaclaracion)&&!empty($solacl->solicitudesaclaracion->calificacion_sugerida))?$solacl->solicitudesaclaracion->calificacion_sugerida:"") }}</td>
-                        </tr>                        
-                    @endforeach
-                </table>
-            </td>                       
-        </tr>
-        <tr></tr>        
-        <tr style="border-collapse:collapse;border-spacing:0 500px;">
-            <td colspan="8"> 
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="8" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observación</strong></span></td> 
-                    </tr>
-                    <tr>
-                        <td colspan="3" style="text-align: center; width: 50%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acción Promovida</strong></span></td>
-                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Número</strong></span></td>
-                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Promovido</strong></span></td> 
-                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Solventado</strong></span></td>
-                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe No Solventado</strong></span></td>
-                        <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Estatus</strong></span></td>
-                    </tr>
-                    @foreach ($auditoria->totalpliegos as $pliegos)
-                        <tr>
-                            <td style="text-align: center; width: 5%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong> {{ $loop->iteration }}</strong></span></td>
-                            <td style="text-align: justify; width: 45%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $pliegos->accion }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $pliegos->numero }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->monto_aclarar, 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format(((!empty($pliegos->pliegosobservacion)&&!empty($pliegos->pliegosobservacion->monto_solventado))?$pliegos->pliegosobservacion->monto_solventado:0), 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format($pliegos->monto_aclarar-(!empty ($pliegos->pliegosobservacion)&&!empty($pliegos->pliegosobservacion->monto_solventado)?$pliegos->pliegosobservacion->monto_solventado:0), 2) }}</strong></span></td>
-                            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ ((!empty($pliegos->pliegosobservacion)&&!empty($pliegos->pliegosobservacion->calificacion_sugerida))?$pliegos->pliegosobservacion->calificacion_sugerida:0) }}</td>
-                        </tr>                        
-                    @endforeach
-                </table>
-            </td>                       
-        </tr> 
-        @if (count($auditoria->cedulageneralseguimiento)>0 && $auditoria->cedulageneralseguimiento[0]->fase_autorizacion=='Autorizado')
-        <tr></tr>
-        <tr>
-            <td colspan="1"></td>
-            <td colspan="6">
-                <table style="border-collapse:collapse;" width="100%">
-                    <tr>
-                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:</strong></span></td>
-                    </tr>
-                    <tr>
-                        @foreach ($nombresanalistasL as $analista)
-                        <td colspan="{{(count($nombresanalistasL)==3?'2': (count($nombresanalistasL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>{{ $analista }} <br> ANALISTA</strong></span></td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ:</strong></span></td>
-                    </tr>
-                    <tr>
-                        @foreach ($nombreslideresL as $lider)
-                        <td colspan="{{(count($nombreslideresL)==3?'2': (count($nombreslideresL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $lider }} <br> LÍDER DE PROYECTO</strong></span></td>                            
-                        @endforeach                        
-                    </tr>
-                    <tr>
-                        <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
-                    </tr>
-                    <tr>
-                        @foreach ($nombresJefesL as $jefe)
-                        <td colspan="{{(count($nombresJefesL)==3?'2': (count($nombresJefesL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
-                        @endforeach 
-                    </tr>
-                    <tr>
-                        <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ: <br><br><br><br><br>  {{ $director->name }} <br>DIRECTOR</strong></span></td>
-                        <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ:<br><br><br><br><br>  {{ auth()->user()->titular->name }} <br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 20%;"></td>
-                        <td style="width: 15%;"></td>
-                        <td style="width: 15%;"></td>
-                        <td style="width: 15%;"></td>
-                        <td style="width: 15%;"></td>
-                        <td style="width: 20%;"></td>
-                    </tr>
-                </table>
-            </td>  
-            <td colspan="1"></td>          
-        </tr> 
-        @endif        
-    </table>
+	</table>
+	
+	<div style="width:70%;  float: left;">
+		<table width="100%">
+			<tr>
+				<td colspan="2">
+					<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+						<tr>
+							<td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acciones Promovidas</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolacl)+count($auditoria->totalpliegos) }}</strong></span></td>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TAP, 2) }}</strong></span></td>
+						</tr>
+					</table>
+				</td>
+				<td colspan="2">
+					<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+						<tr>
+							<td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acciones Promovidas Solventadas</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolventadosolacl)+count($auditoria->totalsolventadopliegos) }}</strong></span></td>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TAPS, 2) }}</strong></span></td>
+						</tr>
+					</table>
+				</td>
+				<td colspan="2">
+					<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+						<tr>
+							<td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acciones Promovidas No Solventadas</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalNOsolventadorecomendacion)+count($auditoria->totalNOsolventadopras)+count($auditoria->totalNOsolventadosolacl)+count($auditoria->totalNOsolventadopliegos) }}</strong></span></td>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TAPNS, 2) }}</strong></span></td>
+						</tr>
+					</table>
+				</td>
+				</tr>
+				<tr></tr>
+			<tr>
+				<td colspan="2">
+					<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+						<tr>
+							<td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración Promovidas</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolacl) }}</strong></span></td>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TSP, 2) }}</strong></span></td>
+						</tr>
+					</table>
+				</td>
+				<td colspan="2">
+					<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+						<tr>
+							<td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración Solventadas</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolventadosolacl) }}</strong></span></td>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TSPS, 2) }}</strong></span></td>
+						</tr>
+					</table>
+				</td>
+				<td colspan="2">
+					<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+						<tr>
+							<td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración No Solventadas</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalNOsolventadosolacl) }}</strong></span></td>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TSPNS, 2) }}</strong></span></td>
+						</tr>
+					</table>
+				</td>            
+			</tr>       
+			<tr></tr>
+			<tr>
+				<td colspan="2">
+					<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+						<tr>
+							<td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observaciones Promovidos</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalpliegos) }}</strong></span></td>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TPP, 2) }}</strong></span></td>
+						</tr>
+					</table>
+				</td>
+				<td colspan="2">
+					<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+						<tr>
+							<td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observaciones Solventados</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolventadopliegos) }}</strong></span></td>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TPPS, 2) }}</strong></span></td>
+						</tr>
+					</table>
+				</td>
+				<td colspan="2">
+					<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+						<tr>
+							<td colspan="2" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observaciones No Solventados</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Núm.</strong></span></td>
+							<td style="text-align: center; width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>Importe</strong></span></td>
+						</tr>
+						<tr>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ count($auditoria->totalNOsolventadopliegos) }}</strong></span></td>
+							<td style="text-align: center; width: 20%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $TPPNS, 2) }}</strong></span></td>
+						</tr>
+					</table>
+				</td>            
+			</tr> 
+			</table>
+			</div>
+	<div style="width:30%; float: right;">
+        <table style="border-collapse:collapse; border: 1px solid; border-color: #424242; padding-top: 0%;" width="100%">
+            <tr>
+                <td colspan="2" style="text-align: center; width: 20%; height:1.5%; color: white; background-color: #960048;"> <span style="font-size: .6rem;"><strong>Acciones Promovidas</strong></span></td>
+            </tr>                    
+            <tr>
+                <td style="text-align: center; width: 10%; height:3%; color: black; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Recomendaciones</strong></span></td>
+                <td style="text-align: center; width: 10%; height:3%; color: black; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->totalrecomendacion) }}</strong></span></td>
+            </tr>                    
+            <tr>
+                <td style="text-align: center; width: 10%; height:3%; color: black; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>PRAS</strong></span></td>
+                <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->totalpras) }}</strong></span></td>
+            </tr>                    
+            <tr>
+                <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración</strong></span></td>
+                <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->totalsolacl) }}</strong></span></td>
+            </tr>                    
+            <tr>
+            <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observación</strong></span></td>
+                <td style="text-align: center; width: 10%; height:3%; color: black;border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->totalpliegos) }}</strong></span></td>
+            </tr>                    
+            <tr>
+                <td style="text-align: center; width: 10%; height:7%; color: black; border: 1px solid; border-color: #424242; background-color: #D8D8D8;"> <span style="font-size: .6rem;"><strong>TOTAL</strong></span></td>
+                <td style="text-align: center; width: 10%; height:7%; color: black; border: 1px solid; border-color: #424242; background-color: #D8D8D8;"> <span style="font-size: .6rem;"><strong>{{ count($auditoria->acciones) }}</strong></span></td>
+            </tr>                    
+        </table>     
 	</div>
+    <table  width="100%" style="clear: both; border: 1px solid; border-collapse:collapse; border-color: #424242;">
+        <tr>
+            <td colspan="8" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Solicitudes de Aclaración</strong></span></td> 
+        </tr>
+		<tr>
+            <td colspan="3" style="text-align: center; width: 40%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acción Promovida</strong></span></td>
+            <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Número</strong></span></td>
+            <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Promovido</strong></span></td> 
+            <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Solventado</strong></span></td>
+            <td style="text-align: center; width: 15%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe No Solventado</strong></span></td>
+            <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Estatus</strong></span></td>
+        </tr>
+        @foreach ($auditoria->totalsolacl as $solacl)
+        <tr>
+			<td style="text-align: center; width: 5%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong> {{ $loop->iteration }}</strong></span></td>
+            <td style="text-align: justify;; width: 35%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $solacl->accion }}</strong></span></td>
+            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $solacl->numero }}</strong></span></td>
+            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->monto_aclarar, 2) }}</strong></span></td>
+            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( ((!empty($solacl->solicitudesaclaracion)&&!empty($solacl->solicitudesaclaracion->monto_solventado))?$solacl->solicitudesaclaracion->monto_solventado:0), 2) }}</strong></span></td>
+            <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $solacl->monto_aclarar-(!empty($solacl->solicitudesaclaracion)&&empty($solacl->solicitudesaclaracion->monto_solventado)?$solacl->solicitudesaclaracion->monto_solventado:0), 2) }}</strong></span></td>
+            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ ((!empty($solacl->solicitudesaclaracion)&&!empty($solacl->solicitudesaclaracion->calificacion_sugerida))?$solacl->solicitudesaclaracion->calificacion_sugerida:"") }}</td>
+        </tr>                        
+        @endforeach		
+    </table>	
+	<table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
+        <tr>
+            <td colspan="8" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observación</strong></span></td> 
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: center; width: 50%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acción Promovida</strong></span></td>
+            <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Número</strong></span></td>
+            <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Promovido</strong></span></td> 
+            <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe Solventado</strong></span></td>
+            <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Importe No Solventado</strong></span></td>
+            <td style="text-align: center; width: 10%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Estatus</strong></span></td>
+        </tr>
+        @foreach ($auditoria->totalpliegos as $pliegos)
+        <tr>
+            <td style="text-align: center; width: 5%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong> {{ $loop->iteration }}</strong></span></td>
+            <td style="text-align: justify; width: 45%; border: 1px solid; border-color: #424242;" colspan="2"><span style="font-size: .6rem;"><strong>{{ $pliegos->accion }}</strong></span></td>
+            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $pliegos->numero }}</strong></span></td>
+            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format( $pliegos->monto_aclarar, 2) }}</strong></span></td>
+            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format(((!empty($pliegos->pliegosobservacion)&&!empty($pliegos->pliegosobservacion->monto_solventado))?$pliegos->pliegosobservacion->monto_solventado:0), 2) }}</strong></span></td>
+            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ '$'.number_format($pliegos->monto_aclarar-(!empty ($pliegos->pliegosobservacion)&&!empty($pliegos->pliegosobservacion->monto_solventado)?$pliegos->pliegosobservacion->monto_solventado:0), 2) }}</strong></span></td>
+            <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ ((!empty($pliegos->pliegosobservacion)&&!empty($pliegos->pliegosobservacion->calificacion_sugerida))?$pliegos->pliegosobservacion->calificacion_sugerida:0) }}</td>
+        </tr>                        
+        @endforeach
+    </table>
+	@if (count($auditoria->cedulageneralseguimiento)>0 && $auditoria->cedulageneralseguimiento[0]->fase_autorizacion=='Autorizado')
+	<table style="border-collapse:collapse;" width="100%">
+        <tr>
+            <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:</strong></span></td>
+        </tr>
+        <tr>
+            @foreach ($nombresanalistasL as $analista)
+			<td colspan="{{(count($nombresanalistasL)==3?'2': (count($nombresanalistasL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>{{ $analista }} <br> ANALISTA</strong></span></td>
+            @endforeach
+        </tr>
+        <tr>
+            <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>SUPERVISÓ:</strong></span></td>
+        </tr>
+        <tr>
+			@foreach ($nombreslideresL as $lider)
+            <td colspan="{{(count($nombreslideresL)==3?'2': (count($nombreslideresL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $lider }} <br> LÍDER DE PROYECTO</strong></span></td>                            
+            @endforeach                        
+        </tr>
+        <tr>
+            <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
+        </tr>
+        <tr>
+            @foreach ($nombresJefesL as $jefe)
+            <td colspan="{{(count($nombresJefesL)==3?'2': (count($nombresJefesL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
+            @endforeach 
+        </tr>
+        <tr>
+            <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ: <br><br><br><br><br>  {{ $director->name }} <br>DIRECTOR</strong></span></td>
+            <td colspan="3" style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>AUTORIZÓ:<br><br><br><br><br>  {{ auth()->user()->titular->name }} <br>TITULAR DE LA UNIDAD DE SEGUIMIENTO</strong></span></td>
+        </tr>
+        <tr>
+            <td style="width: 20%;"></td>
+            <td style="width: 15%;"></td>
+            <td style="width: 15%;"></td>
+            <td style="width: 15%;"></td>
+            <td style="width: 15%;"></td>
+            <td style="width: 20%;"></td>
+        </tr>
+		@endif
+    </table>
+</main>
 </body>
 </html>

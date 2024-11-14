@@ -140,7 +140,7 @@
                                 <span>
 									<strong>
 										@php
-											 echo nl2br(htmlentities($accion->antecedentes_accion));									
+											 echo nl2br(htmlentities($accion->accion));									
 										@endphp  
 									</strong>
 								</span> 
@@ -236,18 +236,22 @@
 										@php
 											if ($accion->tipo=='Solicitud de aclaración'){
 												if(!empty($accion->solicitudesaclaracion)&&!empty($accion->solicitudesaclaracion->conclusion)){
+													echo nl2br(htmlentities($accion->solicitudesaclaracion->analisis."\n\n"));
 													echo nl2br(htmlentities($accion->solicitudesaclaracion->conclusion));
 												}
 											}elseif ($accion->tipo=='Pliego de observación'){
 												if(!empty($accion->pliegosobservacion)&&!empty($accion->pliegosobservacion->conclusion)){
+													echo nl2br(htmlentities($accion->pliegosobservacion->analisis."\n\n"));
 													echo nl2br(htmlentities($accion->pliegosobservacion->conclusion)); 
 												}
 											}elseif ($accion->tipo=='Recomendación'){
 												if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->conclusion)){
+													echo nl2br(htmlentities($accion->recomendaciones->analisis."\n\n"));
 													echo nl2br(htmlentities($accion->recomendaciones->conclusion)); 
 												}										
 											}elseif ($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria'){
 												if(!empty($accion->pras)&&!empty($accion->pras->conclusion)){
+													echo nl2br(htmlentities($accion->pras->analisis."\n\n"));
 													echo nl2br(htmlentities($accion->pras->conclusion)); 
 												}
 											}

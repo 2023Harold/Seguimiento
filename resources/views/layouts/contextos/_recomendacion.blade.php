@@ -8,16 +8,16 @@
                     {{ fecha($accion->fecha_termino_recomendacion) }}
                 </span>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                <label>Nombre del responsable por parte de la entidad: </label>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <label>Nombre del responsable de la entidad fiscalizada: </label>
                 <span class="text-primary">
-                    {{$recomendacion->nombre_responsable }}
+                    {{$recomendacion->auditoria->comparecencia->nombre_titular }}
                 </span>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                <label>Cargo del responsable por parte de la entidad: </label>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <label>Cargo del responsable: </label>
                 <span class="text-primary">
-                    {{$recomendacion->cargo_responsable }}
+                    {{$recomendacion->auditoria->comparecencia->cargo_titular }}
                 </span>
             </div>
         </div>

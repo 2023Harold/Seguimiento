@@ -29,14 +29,14 @@
                             <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search" aria-hidden="true"></i>Buscar</button>                           
                         </div>
                     </div>
-                {!! BootForm::close() !!} 
-				<div class="row">
-					<div class="col-md-12">
-						<div class="pagination float-end">
-							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
-						</div>
-					</div>
-				</div>
+                {!! BootForm::close() !!}     
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pagination float-end">
+                        {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
+                        </div>              
+                    </div>              
+                </div>                  
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -75,8 +75,8 @@
                                         @endif
                                     </td>
                                     <td class="text-center">     
-                                        @can('asignaciondireccion.accionesconsulta')                                   
-                                            @if($auditoria->registro_concluido=='Si')
+                                        @can('asignaciondireccion.accionesconsulta')  
+                                            @if($auditoria->registro_concluido=='Si' && count($auditoria->acciones) > 0)
                                                 <a href="{{ route('asignaciondireccion.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-magnifying-glass-chart"></i>Consultar</a>
                                             @endif    
                                         @endcan                                    
@@ -121,11 +121,15 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination float-end">
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pagination float-end">
                     {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection

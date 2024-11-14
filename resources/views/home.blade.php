@@ -327,14 +327,25 @@
                     </div>
                     <div class="overflow-auto card-body h-200px">
                         <div class="d-flex flex-column">
-                            @can('seguimientoauditoria.index')
-                            <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('seguimientoauditoria.index') }}">
-                                    Registro
-                                </a>
-                            </li>
-                            @endcan
+                            @if(getSession('cp')==2023)
+                                @can('seguimientoauditoriacp.index')
+                                <li class="py-2 d-flex align-items-center">
+                                    <span class="bullet me-5 bg-primary"></span>
+                                    <a href="{{ route('seguimientoauditoriacp.index') }}">
+                                        Registro
+                                    </a>
+                                </li>
+                                @endcan
+                            @else
+                                @can('seguimientoauditoria.index')
+                                <li class="py-2 d-flex align-items-center">
+                                    <span class="bullet me-5 bg-primary"></span>
+                                    <a href="{{ route('seguimientoauditoria.index') }}">
+                                        Registro
+                                    </a>
+                                </li>
+                                @endcan
+                            @endif
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('reportesregistrosauditorias.index') }}">

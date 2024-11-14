@@ -99,39 +99,50 @@ class AuditoriaSeguimientoController extends Controller
 
          if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
             //$query = $query->where('departamento_encargado_id',auth()->user()->unidad_administrativa_id);
-            $query = $query->where(function ($queryJDE) {
-                $queryJDE->where('departamento_encargado_id', auth()->user()->unidad_administrativa_id)
-                ->orWhere(function ($queryJDA) {
-                    $queryJDA->whereHas('acciones', function($q){
-                            $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
-                            $q = $q->whereNotNull('fase_autorizacion')->whereRaw('LOWER(departamento_asignado_id) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
-
+            if(getSession('cp')!=2023){
+                $query = $query->where(function ($queryJDE) {
+                    $queryJDE->where('departamento_encargado_id', auth()->user()->unidad_administrativa_id)
+                    ->orWhere(function ($queryJDA) {
+                        $queryJDA->whereHas('acciones', function($q){
+                                $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
+                                $q = $q->whereNotNull('fase_autorizacion')->whereRaw('LOWER(departamento_asignado_id) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
+    
+                        });
                     });
+    
+                });    
+            }else{
+                $query = $query->where(function ($queryJDE) {
+                    $queryJDE->where('departamento_encargado_id', auth()->user()->cp_ua2023);
                 });
-
-            });
-
+            }
          }
 
-         $query = $query->whereHas('acciones', function($q){
-            if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
-                $q = $q->where('analista_asignado_id',auth()->user()->id);
-            }
-            if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
-                $userLider=auth()->user();
-                $q = $q->whereRaw('LOWER(lider_asignado_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('fase_autorizacion');
-            }
-        });
+         if(getSession('cp')!=2023){
+            $query = $query->whereHas('acciones', function($q){
+                if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
+                    $q = $q->where('analista_asignado_id',auth()->user()->id);
+                }
+                if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
+                    $userLider=auth()->user();
+                    $q = $q->whereRaw('LOWER(lider_asignado_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('fase_autorizacion');
+                }
+            });
+        }
 		if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
              $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
              $query = $query->whereRaw('LOWER(direccion_asignada_id) LIKE (?) ',["%{$unidadAdministrativa}%"]);
          }
 
-        if(
-            in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||
+        if( in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||
             in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
             in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){
             $query = $query->whereNotNull('fase_autorizacion')->where('fase_autorizacion','Autorizado');
+        }
+
+        if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
+            $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
+            $query = $query->whereRaw('LOWER(direccion_asignada_id) LIKE (?) ',["%{$unidadAdministrativa}%"]);
         }
 
         if ($request->filled('numero_auditoria')) {

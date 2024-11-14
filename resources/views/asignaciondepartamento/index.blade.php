@@ -29,14 +29,14 @@
                             <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search" aria-hidden="true"></i>Buscar</button>                           
                         </div>
                     </div>
-                {!! BootForm::close() !!} 
-				<div class="row">
+                {!! BootForm::close() !!}        
+                <div class="row">
 					<div class="col-md-12">
 						<div class="pagination float-end">
 							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
 						</div>
 					</div>
-				</div>				
+				</div>       
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -48,7 +48,9 @@
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>                                                                 
                                 <th>Asignación del encargado de la auditoría</th>
+                                @if(getSession('cp')!=2023)                               
                                 <th>Asignación de departamentos</th>
+                                @endif
                                 
                             </tr>
                         </thead>
@@ -78,7 +80,7 @@
                                     </td>                                    
                                     <td class="text-center">
                                         @can('asignaciondepartamento.accionesconsulta')
-                                            @if($auditoria->registro_concluido=='Si')
+                                            @if($auditoria->registro_concluido=='Si'&& count($auditoria->acciones) > 0)
                                                 <a href="{{ route('asignaciondepartamento.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-magnifying-glass-chart"></i>Consultar</a>
                                             @endif    
                                         @endcan                                    
@@ -100,7 +102,8 @@
                                                 </a>
                                             @endcan 
                                         @endif                                                                                                                                           
-                                    </td>                                                                      
+                                    </td>  
+                                    @if(getSession('cp')!=2023)                                                                    
                                     <td class="text-center">
                                             @can('asignaciondepartamento.edit')                                          
                                                 @if ($auditoria->asignacion_departamentos=='Si'|| in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray()))
@@ -115,7 +118,8 @@
                                                     @endif 
                                                 @endif                                               
                                             @endcan                                                                                                          
-                                    </td>                                                                     
+                                    </td> 
+                                    @endif                                                                    
                                 </tr>                                                           
                             @empty
                                 <tr>
@@ -127,10 +131,14 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination float-end">
-                    {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
-                </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">        
+                    <div class="pagination float-end">
+                        {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
+                    </div>           
+                </div>             
+            </div>               
         </div>
     </div>
 </div>

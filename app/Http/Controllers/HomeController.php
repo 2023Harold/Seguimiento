@@ -47,9 +47,7 @@ class HomeController extends Controller
             setSession('cp_ua',$usuario->cp_ua2023);
         }
 
-
-
-
-        return view('home');
+        
+        return redirect('/home');
     }
 }

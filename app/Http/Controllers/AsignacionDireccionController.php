@@ -123,6 +123,7 @@ class AsignacionDireccionController extends Controller
     {
          $query = $this->model;
          $query = $query->whereNotNull('fase_autorizacion')->where('fase_autorizacion','Autorizado');
+         $query = $query->where('cuenta_publica',getSession('cp'));
 
         if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){
