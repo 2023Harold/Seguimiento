@@ -387,6 +387,14 @@ class Auditoria extends Model
             {
                 return $this->belongsTo(AcuerdoConclusion::class, 'id', 'auditoria_id');
             }
+            public function turnoui()
+            {
+                return $this->belongsTo(TurnoUI::class, 'id', 'auditoria_id');
+            }
+            public function turnooic()
+            {
+                return $this->belongsTo(TurnoOIC::class, 'id', 'auditoria_id');
+            }
             public function turnoarchivo()
             {
                 return $this->belongsTo(TurnoAcuseArchivo::class, 'id', 'auditoria_id');

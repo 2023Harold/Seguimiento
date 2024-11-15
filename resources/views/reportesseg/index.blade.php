@@ -32,8 +32,7 @@
                             <th rowspan=3 style="width:20px" class="text-center"> Auditoría PAA </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Tipo Auditoría </th> 
                             <th rowspan=3 style="width:20px" class="text-center"> Periodo Auditado</th> 
-                            <th rowspan=3 style="width:20px" class="text-center"> Año Auditado </th>
-                            {{-- <th rowspan=3 style="width:20px" class="text-center bg-danger"> Admon. </th> --}}
+                            <th rowspan=3 style="width:20px" class="text-center"> Año Auditado </th>                            
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. de Auditoría </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Fecha de recepción del expediente </th>
                             <th rowspan=3 style="width:20px" class="text-center"> Núm. de expediente (interno US) </th>
@@ -135,44 +134,64 @@
                                     {{ $auditoria->acto_fiscalizacion }}                                    
                                 </td> 
                                 <td>       
-                                    {{ $auditoria->periodomes }}                              
-                                   
+                                    {{ $auditoria->periodomes }}                                                                 
                                 </td>                                              
                                 <td class="text-center bg-light-dark">                                       
                                     {{ $auditoria->periodoAnio }}                            
-                                </td>
-                                {{-- <td style="text-align: center;" class="bg-danger">
-                                   2022-2024
-                                </td>    --}}
+                                </td>      
+                                 {{-- Núm. de Auditoría	 --}}
                                 <td class="text-center bg-light-dark">                                       
                                     {{ $auditoria->tipo_auditoria->sigla.' - '.$auditoria->numero_auditoria }}                                     
-                                </td>
-                                <td class="text-center">                                                                           
-                                    {{ fecha($auditoria->radicacion->fecha_expediente_turnado)}}                                      
-                                </td>                                 
-                                <td class="text-center bg-light-dark">                                       
-                                    {{ $auditoria->radicacion->numero_expediente}}                                     
                                 </td> 
-                                <td class="text-center">                                       
-                                    {{ fecha($auditoria->radicacion->fecha_oficio_acuerdo)}}                                     
+                                {{-- fecha del acuerdo de radicación --}}                              
+                                <td class="text-center"> 
+                                    @if (!empty($auditoria->radicacion->fecha_expediente_turnado))                                                                                                                                                                   
+                                    {{ fecha($auditoria->radicacion->fecha_expediente_turnado)}}
+                                    @endif                                                                                                                                                  
                                 </td>  
+                                {{-- Núm. de expediente (interno US)	--}}
                                 <td class="text-center bg-light-dark">                                       
-                                    {{ fecha($auditoria->comparecencia->fecha_comparecencia)}}                                     
+                                 @if (!empty( $auditoria->radicacion->numero_expediente))                                                                                                                                                                                
+                                 {{  $auditoria->radicacion->numero_expediente}}                                     
+                                @endif                                       
                                 </td> 
-                                <td class="text-center">                                       
-                                    {{ fecha($auditoria->radicacion->fecha_notificacion)}}                                     
+                                {{--Fecha del acuerdo de radicación	  --}}
+                                <td class="text-center"> 
+                                    @if(!empty($auditoria->radicacion->fecha_notificacion))                                  
+                                    {{fecha($auditoria->radicacion->fecha_notificacion)}}                                                         
+                                    @endif                                                                                                           
+                                </td>  
+                                {{--  Fecha de comparecencia	--}}
+                                <td class="text-center bg-light-dark">                                       
+                                @if(!empty($auditoria->comparecencia->fecha_comparecencia))                                      
+                                {{ fecha($auditoria->comparecencia->fecha_comparecencia)}}
+                                @endif                                      
+                                </td> 
+                                <td class="text-center">     
+                                @if(!empty($auditoria->radicacion->fecha_notificacion))
+                                {{ fecha($auditoria->radicacion->fecha_notificacion)}}                                     
+                                @endif                                                                                                          
                                 </td>                             
-                                <td class="text-center">                                       
-                                    {{ $auditoria->radicacion->num_memo_recepcion_expediente}}                                     
+                                <td class="text-center">   
+                                @if(!empty($auditoria->radicacion->num_memo_recepcion_expediente))
+                                {{ $auditoria->radicacion->num_memo_recepcion_expediente}}                                    
+                                @endif                                                                            
                                 </td>  
                                 <td class="text-center">
-                                    {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion)}}
+                                @if(!empty($auditoria->comparecencia->fecha_inicio_aclaracion))
+                                {{ fecha($auditoria->comparecencia->fecha_inicio_aclaracion)}}    
+                                @endif                                      
                                 </td>
                                 <td class="text-center bg-light-dark">
-                                    {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion)}}    
+                                @if(!empty($auditoria->comparecencia->fecha_termino_aclaracion))   
+                                {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion)}}    
+                                @endif 
                                 </td>
+                                {{-- 120 días de la etapa de Seguimiento	 --}}
                                 <td class="text-center">
-                                    {{ fecha($auditoria->radicacion->calculo_fecha)}}
+                                @if(!empty($auditoria->radicacion->calculo_fecha))   
+                                {{ fecha($auditoria->radicacion->calculo_fecha)}}    
+                                @endif                     
                                 </td>
                                 <td class="bg-light-dark text-center">
                                     {{  $auditoria->totalpliegos->count()}} 
@@ -192,11 +211,17 @@
                                 <td style="text-align: right!important;">
                                     {{ '$'.number_format( $auditoria->totalNOsolventadopliegos->sum('monto_aclarar'), 2) }}
                                 </td>
+                                {{-- Plazo Convenido	 --}}
                                 <td class="text-center">
-                                    {{ $auditoria->radicacion->plazo_maximo}} días hábiles
+                                 @if (!empty( $auditoria->radicacion->plazo_maximo))                                                                                                                                                                                
+                                 {{ $auditoria->radicacion->plazo_maximo}} días hábiles                                     
+                                @endif                                 
                                 </td>
+                                {{-- fecha termino --}}
                                 <td class="text-center">
-                                    {{ fecha($auditoria->radicacion->calculo_fecha)}}
+                                @if (!empty( $auditoria->radicacion->calculo_fecha))    
+                                {{ fecha($auditoria->radicacion->calculo_fecha)}}
+                                @endif
                                 </td>
                                 <td class="text-center bg-light-dark">
                                     {{  $auditoria->totalrecomendacion->count()}}
@@ -249,17 +274,41 @@
                                 <td class="text-center bg-danger">
                                     NO APLICA
                                 </td>
+
+                                {{-- Fecha de acuse de la conclusión de la Etapa de Aclaración	 --}}
                                 <td class="text-center bg-danger">
-                                    01-feb-24
+                                    @if (!empty($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion))                                                                                                                                                                                
+                                    {{ fecha($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion)}}                                     
+                                     @endif                                   
                                 </td>
-                                <td class="text-center bg-danger"></td>
+                                {{--  Fecha de acuse de la conclusión al proceso de atención de las recom.	--}}                              
                                 <td class="text-center bg-danger">
-                                    26-abr-24
+                                    @if (!empty($auditoria->comparecencia->fecha_termino_proceso))                                                                                                                                                                                
+                                    {{ fecha($auditoria->comparecencia->fecha_termino_proceso)}}                                     
+                                     @endif                                              
                                 </td>
-                                <td class="text-center bg-danger"></td>
-                                <td class="text-center">                                    
+
+                                {{--Fecha de acuse de oficio de notif. del informe de seguimiento de la etapa de aclaración	 --}}
+                                <td class="text-center bg-danger">
+                                    @if (!empty($auditoria->informeprimeraetapa->fecha_notificacion))                                                                                                                                                                                
+                                    {{fecha($auditoria->informeprimeraetapa->fecha_notificacion)}}                                     
+                                     @endif      
                                 </td>
-                                <td class="bg-light-dark">
+                                {{-- Fecha de acuse de oficio de notif. del informe de seguimiento al proceso de atención de las recom.	 --}}
+                                <td class="text-center bg-danger">
+                                                          
+                                </td>
+                                {{-- Fecha de envío a la UI.--}}                            
+                                <td class="text-center bg-danger">        
+                                    @if (!empty($auditoria->turnoui->fecha_notificacion_ui))                                                                                                                                                                                
+                                    {{fecha($auditoria->turnoui->fecha_notificacion_ui)}}        
+                                    @endif          
+                                </td>
+                                {{-- Fecha de envío a la OIC --}}
+                                <td class="text-center bg-danger">      
+                                    @if (!empty($auditoria->turnooic->fecha_envio))                                                                                                                                                                                
+                                    {{ fecha($auditoria->turnooic->fecha_envio) }} 
+                                    @endif                                                           
                                 </td>
                                 <td>
                                     @php

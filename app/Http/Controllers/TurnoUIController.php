@@ -104,6 +104,12 @@ class TurnoUIController extends Controller
     {
         //
     }
+    public function auditoria(Auditoria $auditoria)
+    {
+        setSession('turnoui_auditoria_id',$auditoria->id);
+
+        return redirect()->route('turnoui.create');
+    }
     public function setQuery(Request $request)
     {
          $query = $this->model;

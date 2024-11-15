@@ -105,6 +105,12 @@ class TurnoOICController extends Controller
     {
         //
     }
+    public function auditoria(Auditoria $auditoria)
+    {
+        setSession('turnooic_auditoria_id',$auditoria->id);
+
+        return redirect()->route('turnooic.create');
+    }
     public function export(){
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
         $template=new TemplateProcessorMod('bases-word/TurnoOIC.docx');       
