@@ -247,6 +247,7 @@ Route::get('/pacauditoria/ac/{id}', [PacAuditoriaController::class, 'ac'])->name
 
 Route::get('/reportesseg/excel', [ReportesSeguimientoController::class, 'export'])->name('reporteseguimiento.exportar');
 Route::get('/radicacionnotificacion/iaar', [RadicacionController::class, 'export'])->name('radicacioniaar.exportar');
+Route::get('/radicacion/ar', [RadicacionController::class, 'exportar_ar'])->name('radicacionar.exportar_ar');
 Route::get('/radicacionnotificacion/aroic', [RadicacionController::class, 'exportOIC'])->name('radicacioniaar.exportaroic');
 
 Route::get('/comparecencia/ac', [ComparecenciaController::class, 'export'])->name('comparecencia.exportar');
@@ -288,7 +289,8 @@ Route::resource('turnouiautorizacion', TurnoUIAutorizacionController::class, ['p
 
 Route::get('/turnooic/oroic', [TurnoOICController::class, 'export'])->name('turnooic.exportar');
 Route::resource('turnooic',TurnoOICController::class,['parameters' => ['turnooic' => 'auditoria']]);
-	
+Route::get('/turnoui/oui', [TurnoUIController::class, 'export'])->name('turnoui.exportar');
+Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
 Route::resource('turnoarchivo',TurnoArchivoController::class,['parameters' => ['turnoarchivo' => 'auditoria']]);
 Route::resource('turnoarchivoenvio',TurnoArchivoEnvioController::class,['parameters' => ['turnoarchivoenvio' => 'auditoria']]);
 Route::resource('turnotransferencia',TurnoArchivoTransferenciaController::class,['parameters' => ['turnotransferencia' => 'auditoria']]);
@@ -383,6 +385,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::get('/auditoriaseguimiento/seleccionar/{auditoria}', [AuditoriaSeguimientoController::class, 'seleccionarauditoria'])->name('seleccionarauditoria.auditoria');
     Route::get('/auditoriaseguimiento/acciones/consulta/{auditoria}', [AuditoriaSeguimientoController::class, 'accionesConsulta'])->name('auditoriaseguimiento.accionesconsulta');
     Route::resource('auditoriaseguimientoacciones', AuditoriaSeguimientoAccionesController::class,['parameters' => ['auditoriaseguimientoacciones' => 'auditoria']]);    
+    Route::get('/auditoriaseguimiento/acciones/consulta/{auditoria}', [AuditoriaSeguimientoController::class, 'accionesConsulta'])->name('auditoriaseguimiento.accionesconsulta');
+    Route::resource('auditoriaseguimientoacciones', AuditoriaSeguimientoAccionesController::class,['parameters' => ['auditoriaseguimientoacciones' => 'accion']]);
     Route::resource('auditoriaconsultaacciones', AuditoriaConsultaAccionesController::class,['parameters' => ['auditoriaconsultaacciones' => 'accion']]);
     Route::resource('reportesseg', ReportesSeguimientoController::class);
     Route::resource('reportesregistrosauditorias', ReportesRegistrosAuditoriasController::class);

@@ -83,6 +83,9 @@
                                 <th>Editar</th>
                                 <th>Eliminar</th>
                                 @endif
+								@if ($auditoria->numero_auditoria=='AD-098'&&auth()->user()->siglas_rol=='ANA')
+								<th>Editar</th>
+								@endif
                             </tr>
                         </thead>
                         <tbody>
@@ -166,6 +169,13 @@
                                     @endcan
                                 </td>
                                 @endif
+								@if ($auditoria->numero_auditoria=='AD-098'&&auth()->user()->siglas_rol=='ANA')
+								<td class="text-center">
+									<a href="{{ route('seguimientoauditoriaacciones.edit',$accion) }}">
+                                        <i class="align-middle fas fa-edit text-primary" aria-hidden="true"></i>
+                                    </a>
+								</td>
+								@endif
                             </tr>
                             {!! movimientosDesglose($accion->id, 8, $accion->movimientos) !!}
                             @empty
@@ -180,11 +190,7 @@
                 </div>
                 @if ($auditoria->registro_concluido=='No')
                 @can('seguimientoauditoria.concluir')
-                <div class="row">
-                    <div class="col-md-6">
-                        <a href="{{ route('seguimientoauditoria.concluir',$auditoria) }}" class="btn btn-primary" onclick="return  confirm('Al concluir con el registro de la auditoría, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?');">Concluir</a>
-                    </div>
-                </div>
+                
                 @endcan
                 @endif
                 <div class="pagination">

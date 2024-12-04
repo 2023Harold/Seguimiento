@@ -101,8 +101,8 @@ class ReportesSeguimientoController extends Controller
     public function setQuery(Request $request)
     {
         $query = $this->model;
-
-       
+		$query = $query->where('cuenta_publica',getSession('cp'));
+   
 
         return $query;
     }

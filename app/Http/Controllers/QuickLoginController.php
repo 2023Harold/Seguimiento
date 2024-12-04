@@ -69,7 +69,7 @@ class QuickLoginController extends Controller
         if (App::environment('local')) {
             Auth::login($usuario);
 
-            return redirect()->route('home');
+            return redirect()->route('cphome');
         }
 
         return abort(403);      
@@ -80,7 +80,7 @@ class QuickLoginController extends Controller
         if (App::environment('local')) {
             Auth::login($usuario);
 
-            return redirect()->route('home');
+            return redirect()->route('cphome');
         }
 
         return abort(403);      

@@ -116,33 +116,27 @@
                 <td>
                     {{ $auditoria->periodo_revision }}                                    
                 </td>     
-                    {{-- año auditado --}}
                 <td class="text-center bg-light-dark">                                       
                     {{ $auditoria->periodoAnio}}                                       
                 </td> 
-                {{-- Núm. de Auditoría	 --}}
                 <td class="text-center bg-light-dark">                                       
                     {{ $auditoria->tipo_auditoria->sigla.' - '.$auditoria->numero_auditoria }}                                     
                 </td>
-                {{-- fecha del acuerdo de radicación --}}
                 <td class="text-center bg-warning">   
                     @if (!empty($auditoria->radicacion->fecha_expediente_turnado))                                                                                                                                                                   
                     {{ fecha($auditoria->radicacion->fecha_expediente_turnado)}}
                     @endif                                       
-                </td> 
-                {{-- Núm. de expediente (interno US)	--}}                                
+                </td>                                
                 <td class="text-center bg-light-dark"> 
                     @if (!empty( $auditoria->radicacion->numero_expediente))                                                                                                                                                                                
                     {{  $auditoria->radicacion->numero_expediente}}                                     
                     @endif                                                         
                 </td> 
-                 {{--Fecha del acuerdo de radicacióN --}}
                 <td class="text-center bg-warning">                         
                     @if(!empty($auditoria->radicacion->fecha_notificacion))                                  
                     {{ fecha($auditoria->radicacion->fecha_notificacion)}}                                                         
                     @endif
                 </td>  
-                {{--  Fecha de comparecencia	--}}
                 <td class="text-center bg-light-dark"> 
                     @if(!empty($auditoria->comparecencia->fecha_comparecencia))                                      
                     {{ fecha($auditoria->comparecencia->fecha_comparecencia)}}
@@ -168,9 +162,8 @@
                 {{ fecha($auditoria->comparecencia->fecha_termino_aclaracion)}}
                 @endif                
                 </td>
-                 {{-- 120 días de la etapa de Seguimiento	 --}}
                  <td class="text-center">
-                @if(!empty(fecha($auditoria->radicacion->calculo_fecha)))
+                @if(!empty($auditoria->radicacion)&&!empty(fecha($auditoria->radicacion->calculo_fecha)))
                 {{ fecha($auditoria->radicacion->calculo_fecha)}}
                 @endif               
                 </td>

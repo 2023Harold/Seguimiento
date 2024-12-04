@@ -7,12 +7,13 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h1 class="card-title">
-                    
+			@can('administracion.index')
+					<h1 class="card-title">                    
                     <a class="btn btn-primary float-end" href="{{ route('administracion.index') }}">
                      Administración
                      </a>
                     </h1>
+			@endcan
             </div>
          </div>      
 </div>

@@ -14,6 +14,9 @@
                     &nbsp;
                     Informe
                 </h1>
+				<div class="float-end">
+                    <a href="{{route('informeprimeraetapa.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;IS</a>                                  
+                </div>
             </div>
             <div class="card-body">
                 @include('layouts.contextos._auditoria')
@@ -36,6 +39,7 @@
                                 <th>Fecha</th>
                                 <th>Número de oficio</th>
                                 <th>Nombre del titular</th>
+								<th>Informe</th>
                                 <th>Acuse envío a notificar</th>                                
                                 <th>Acuse de notificación</th>
                                 <th>Fecha de notificación</th>
@@ -54,8 +58,11 @@
                                 <td class="text-center">
                                     {{$auditoria->informeprimeraetapa->nombre_titular_informe }}
                                 </td>
-                                <td class="text-center">
+								<td class="text-center">
                                     @btnFile($auditoria->informeprimeraetapa->informe)
+                                </td>
+                                <td class="text-center">
+                                    @btnFile($auditoria->informeprimeraetapa->acuse_envio)
                                 </td>                                
                                 <td class="text-center">
                                     @btnFile($auditoria->informeprimeraetapa->acuse_notificacion)
@@ -73,12 +80,7 @@
                             @endif
                         </tbody>
                     </table>
-                </div>
-                <div class="pagination">
-                    {{
-                    $acciones->appends(['numero_auditoria'=>$request->numero_auditoria,'monto_aclarar'=>$request->monto_aclarar,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5')
-                    }}
-                </div>
+                </div>                
             </div>
         </div>
     </div>

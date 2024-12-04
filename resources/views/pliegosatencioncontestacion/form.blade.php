@@ -39,7 +39,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        {!! BootForm::text('nombre_remitente', 'Remitente: *', old('nombre_remitente', fecha($contestacion->nombre_remitente, 'Y-m-d'))); !!}
+                        {!! BootForm::text('nombre_remitente', 'Remitente: *', old('nombre_remitente', $contestacion->nombre_remitente)); !!}
                     </div>
                     <div class="col-md-6">
                         {!! BootForm::text('cargo_remitente', 'Cargo del remitente: *', old('cargo_remitente', $contestacion->cargo_remitente)); !!}

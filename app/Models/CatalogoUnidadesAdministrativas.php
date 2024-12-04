@@ -34,5 +34,10 @@ class CatalogoUnidadesAdministrativas extends Model
     {
         return CatalogoUnidadesAdministrativas::where('direccion_id', $this->id)->get()->pluck('descripcion', 'id');
     } 
+	
+	public function getUnidadesAdministrativas()
+    {
+        return CatalogoUnidadesAdministrativas::whereNotNull('id')->get()->pluck('descripcion', 'id');
+    } 
 
 }

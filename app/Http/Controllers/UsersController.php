@@ -10,7 +10,7 @@ use App\Mail\SendMailRegistro;
 use App\Models\User;
 use App\Models\Rol;
 use App\Models\CatalogoUnidadesAdministrativas;
-use App\Models\Entidad_Fiscalizable;
+use App\Models\SUTIC\EntidadFiscalizableIntra;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -123,15 +123,15 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
-        // $unidad= new Unidad_Administrativa();
-        // $rol = new Rol();
-        // $roles = $rol->getRoles();
-        // $unidadesadministrativas = $unidad->getUnidadesAdministrativas();
-        // $accion = 'Editar';
-        // $entidades_fiscalizables = Entidad_fiscalizable::orderBy('ambito_id')->get()->pluck('descripcion','id');
-        // $this->validationRules['email'] =['required','string','email','max:60','unique:users,email,'.$user->id];
-        // $validator = JsValidator::make($this->validationRules, $this->errorMessages, $this->attributeNames, '#form');
-        // return view('users.form',compact('user', 'roles', 'unidadesadministrativas', 'entidades_fiscalizables', 'validator', 'accion'));
+         $unidad= new CatalogoUnidadesAdministrativas();
+         $rol = new Rol();
+         $roles = $rol->getRoles();
+         $unidadesadministrativas = $unidad->getUnidadesAdministrativas();
+         $accion = 'Editar';
+         $entidades_fiscalizables = EntidadFiscalizableIntra::orderBy('Ambito')->get()->pluck('NomEntFis','PkCveEntFis');
+         $this->validationRules['email'] =['required','string','email','max:60','unique:users,email,'.$user->id];
+         $validator = JsValidator::make($this->validationRules, $this->errorMessages, $this->attributeNames, '#form');
+         return view('users.form',compact('user', 'roles', 'unidadesadministrativas', 'entidades_fiscalizables', 'validator', 'accion'));
     }
 
     public function update(Request $request, User $user)
@@ -146,12 +146,12 @@ class UsersController extends Controller
 
         // $this->setValidator($request,$user->id)->validate();
         // $request = $this->fixData($request);
-        // $request['usuario_actualizacion_id'] = auth()->id();
-        // $user->update($request->all());
+        $request['usuario_actualizacion_id'] = auth()->id();
+        $user->update($request->all());
         // $user->syncRoles($request->rol);
         // setMessage('El usuario ha sido actualizado');
 
-        // return redirect('/user');
+         return redirect('/user');
     }
 
     public function updatepassword(Request $request, User $user)

@@ -118,7 +118,14 @@
                                             <span class="badge badge-light-success">{{ $auditoria->fase_autorizacion }}</span>
                                         @endif         
                                     </td>
-                                    <td class="text-center">   
+                                    <td class="text-center"> 
+										 @if ($auditoria->numero_auditoria=='AD-098')   
+                                            @can('seguimientoauditoria.edit')                                         
+                                                <a href="{{ route('seguimientoauditoria.edit',$auditoria) }}">
+                                                    <i class="align-middle fas fa-edit text-primary" aria-hidden="true"></i>
+                                                </a>  
+                                            @endcan                                                                              
+                                        @endif
                                         @if (empty($auditoria->fase_autorizacion)||$auditoria->fase_autorizacion=='Rechazado')   
                                             @can('seguimientoauditoria.edit')                                         
                                                 <a href="{{ route('seguimientoauditoria.edit',$auditoria) }}">

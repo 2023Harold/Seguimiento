@@ -25,7 +25,7 @@ class AcuerdoConclusionRequest extends FormRequest
     {
         return [
             'nombre_titular'=>'required|string|max:100',
-            'cargo_titular'=>'required|string|max:100',
+            'cargo_titular'=>'required|string|max:500',
             'domicilio'=>'required|string|max:150',
 			'numero_oficio'=>'required|string|max:100',
             'fecha_oficio'=>'required|date_format:Y-m-d|max:10',

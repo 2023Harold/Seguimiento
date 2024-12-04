@@ -47,14 +47,14 @@
 				<div class="row">
 					<div class="col-md-5">
 						
-						{!! BootForm::date('fecha_oficio', 'Fecha del oficio: *', old('fecha_oficio', $fechaacuerdo->format('Y-m-d'))); !!}
+						{!! BootForm::date('fecha_oficio', 'Fecha del oficio: *',old('fecha_acuerdo_conclusion', fecha($acuerdoconclusion->fecha_oficio, 'Y-m-d'))); !!}
 					</div>
 				</div>
 
 				
                 <div class="row">
                     <div class="col-md-5">
-                        {!! archivo('acuerdo_conclusion', 'Acuerdo de conclusión: *', old('acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
+                        {!! archivo('acuerdo_conclusion', 'Acuerdo de conclusión: *', old('acuerdo_conclusion', $acuerdoconclusion->acuerdo_conclusion)) !!}
                     </div>                    
                 </div>       
                 <div class="row">

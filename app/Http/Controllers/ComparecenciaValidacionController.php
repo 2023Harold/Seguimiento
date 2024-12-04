@@ -105,7 +105,7 @@ class ComparecenciaValidacionController extends Controller
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; ha aprobado la validación de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
         }else {
             
             $titulo = 'Rechazo de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria;

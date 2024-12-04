@@ -74,7 +74,6 @@ class Auditoria extends Model
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->orderBy('consecutivo');
             }
-
             public function accionessinenvio()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNull('fase_revision')->orderBy('consecutivo');
@@ -364,6 +363,10 @@ class Auditoria extends Model
             public function getTipoEntidadAmbitoAttribute(){
 
                 $entidadF=EntidadFiscalizableIntra::where('PkCveEntFis',$this->entidad_fiscalizable_id)->first();
+				if(empty($entidadF->NivEntFis)){
+                    
+                    return null;                    
+                }
                 if($entidadF->NivEntFis==3){
                     $entidad2=EntidadFiscalizableIntra::where('PkCveEntFis',$entidadF->FkCveEntFis)->first();
                     $entidad=EntidadFiscalizableIntra::where('PkCveEntFis',$entidad2->FkCveEntFis)->first();

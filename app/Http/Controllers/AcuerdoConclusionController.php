@@ -92,9 +92,26 @@ class AcuerdoConclusionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(AcuerdoConclusion $auditoria)
     {
-        //
+		$acuerdoconclusion=$auditoria;
+        $auditoria = Auditoria::find(getSession('auditoria_id'));               
+        
+		if($auditoria->acto_fiscalizacion=='Desempeño'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Legalidad'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Inversión Física'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+				
+       
+        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo'));
     }
 
     /**
@@ -104,9 +121,15 @@ class AcuerdoConclusionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, AcuerdoConclusion $auditoria)
     {
-        //
+        $acuerdoconclusion=$auditoria;
+        mover_archivos($request, ['acuerdo_conclusion'],$acuerdoconclusion);
+        $acuerdoconclusion->update($request->all());
+
+        setMessage("Los datos se han actualizado correctamente.");
+
+        return redirect() -> route('acuerdoconclusion.index');
     }
 
     /**

@@ -185,8 +185,23 @@ class PacController extends Controller
             'lisv'=>'XXXXXX',         
 
         ];    
-
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ar', $params, 'docx');       
+		
+		$auditoria=Auditoria::find(getSession('auditoria_id'));
+		$preconstancia="";
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+			$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+			$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+			$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}
+              
 
         return response()->download($preconstancia);
         

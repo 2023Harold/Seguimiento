@@ -77,7 +77,7 @@
                                 <span class="menu-icon">
                                     <i class="fa fa-folder-open fs-3"></i>
                                 </span>
-                                <span class="menu-title">Primera etapa de aclaración</span>
+                                <span class="menu-title">Primer análisis</span>
                                 <span class="menu-arrow"></span>
                             </a>                            
                             <div class="menu-sub menu-sub-accordion {{ (str_contains(Route::current()->getName(), 'prasacciones')||
@@ -230,7 +230,7 @@
                                 <span class="menu-icon">
                                     <i class="fa fa-folder-open fs-3"></i>
                                 </span>
-                                <span class="menu-title">Segunda etapa de aclaración</span>
+                                <span class="menu-title">Segundo análisis</span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3">

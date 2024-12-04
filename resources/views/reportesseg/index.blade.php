@@ -268,44 +268,44 @@
                                 <td class="text-center bg-light-dark">                                       
                                    US
                                 </td>  
-                                <td class="text-center bg-danger">
+                                <td class="text-center">
                                     EN ANÁLISIS
                                 </td>
-                                <td class="text-center bg-danger">
+                                <td class="text-center bg-light-dark">
                                     NO APLICA
                                 </td>
 
                                 {{-- Fecha de acuse de la conclusión de la Etapa de Aclaración	 --}}
-                                <td class="text-center bg-danger">
+                                <td class="text-center">
                                     @if (!empty($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion))                                                                                                                                                                                
                                     {{ fecha($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion)}}                                     
                                      @endif                                   
                                 </td>
                                 {{--  Fecha de acuse de la conclusión al proceso de atención de las recom.	--}}                              
-                                <td class="text-center bg-danger">
+                                <td class="text-center bg-light-dark">
                                     @if (!empty($auditoria->comparecencia->fecha_termino_proceso))                                                                                                                                                                                
                                     {{ fecha($auditoria->comparecencia->fecha_termino_proceso)}}                                     
                                      @endif                                              
                                 </td>
 
                                 {{--Fecha de acuse de oficio de notif. del informe de seguimiento de la etapa de aclaración	 --}}
-                                <td class="text-center bg-danger">
+                                <td class="text-center">
                                     @if (!empty($auditoria->informeprimeraetapa->fecha_notificacion))                                                                                                                                                                                
                                     {{fecha($auditoria->informeprimeraetapa->fecha_notificacion)}}                                     
                                      @endif      
                                 </td>
                                 {{-- Fecha de acuse de oficio de notif. del informe de seguimiento al proceso de atención de las recom.	 --}}
-                                <td class="text-center bg-danger">
+                                <td class="text-center bg-light-dark">
                                                           
                                 </td>
                                 {{-- Fecha de envío a la UI.--}}                            
-                                <td class="text-center bg-danger">        
+                                <td class="text-center">        
                                     @if (!empty($auditoria->turnoui->fecha_notificacion_ui))                                                                                                                                                                                
                                     {{fecha($auditoria->turnoui->fecha_notificacion_ui)}}        
                                     @endif          
                                 </td>
                                 {{-- Fecha de envío a la OIC --}}
-                                <td class="text-center bg-danger">      
+                                <td class="text-center bg-light-dark">      
                                     @if (!empty($auditoria->turnooic->fecha_envio))                                                                                                                                                                                
                                     {{ fecha($auditoria->turnooic->fecha_envio) }} 
                                     @endif                                                           

@@ -92,6 +92,9 @@
                                         </a>
                                         @else
                                         {{ $user->unidadAdministrativa2023->descripcion }}
+										<a href="{{ route('asignacionunidadadministrativa2023.edit',$user) }}"  class="btn btn-primary float-end">
+                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Asignar
+                                        </a>
                                        @endif
                                     </td>             
                                                                                                         

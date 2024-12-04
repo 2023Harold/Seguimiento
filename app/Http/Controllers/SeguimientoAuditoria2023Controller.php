@@ -36,7 +36,7 @@ class SeguimientoAuditoria2023Controller extends Controller
      */
     public function create()
     {
-        $ejercicios=[null=>'',2020=>2020,2021=>2021,2022=>2022];
+        $ejercicios=[null=>'',2020=>2020,2021=>2021,2022=>2022,2023=>2023];
         $auditoria = new Auditoria();
         $accion = 'Agregar';
         $auditorias=Auditoria::all()->count();
@@ -44,7 +44,7 @@ class SeguimientoAuditoria2023Controller extends Controller
         $entidades = EntidadFiscalizableIntra::where('NivEntFis', 1)->where('StsEntFis', 1)->whereNotIN('PkCveEntFis', [607, 608])->get()->pluck('NomEntFis', 'PkCveEntFis');
         $tipos = CatalogoTipoAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
         $tiporevision = [null=>'','Cumplimiento Financiero'=>'Cumplimiento Financiero','Inversión Física'=>'Inversión Física','Financiera'=>'Financiera','Obra'=>'Obra','Desempeño'=>'Desempeño'];
-        $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022'];
+        $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022','01 de Enero al 31 de Diciembre 2023'=>'01 de Enero al 31 de Diciembre 2023'];
         //$lideresProyecto=User::where('siglas_rol','LP')->where('unidad_administrativa_id',auth()->user()->director->unidad_administrativa_id)->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
         $lideresProyecto=usuariocp(getSession('cp_ua'))->where('siglas_rol','LP')->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
         $entidad1 = null;
@@ -63,7 +63,7 @@ class SeguimientoAuditoria2023Controller extends Controller
      */
     public function store(Request $request)
     {
-        $auditoria=Auditoria::where('numero_auditoria',$request->numero_auditoria)->first();
+        $auditoria=Auditoria::where('numero_auditoria',$request->numero_auditoria)->where('cuenta_publica',getSession('cp'))->first();
         if(!empty($auditoria)){
 
             setMessage('El número de auditoría ya se encuentra registrado favor de verificar.','error');
@@ -129,8 +129,9 @@ class SeguimientoAuditoria2023Controller extends Controller
         $entidades = EntidadFiscalizableIntra::where('NivEntFis', 1)->where('StsEntFis', 1)->whereNotIN('PkCveEntFis', [607, 608])->get()->pluck('NomEntFis', 'PkCveEntFis');
         $tipos = CatalogoTipoAuditoria::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
         $tiporevision = [null=>'','Cumplimiento Financiero'=>'Cumplimiento Financiero','Inversión Física'=>'Inversión Física','Financiera'=>'Financiera','Obra'=>'Obra','Desempeño'=>'Desempeño'];
-        $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022'];
-        $lideresProyecto=usuariocp(getSession('cp_ua'))->where('siglas_rol','LP')->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
+        //$periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022'];
+        $periodorevision= [null=>'','01 de Enero al 31 de Diciembre 2020'=>'01 de Enero al 31 de Diciembre 2020','01 de Enero al 31 de Diciembre 2021'=>'01 de Enero al 31 de Diciembre 2021','01 de Enero al 31 de Diciembre 2022'=>'01 de Enero al 31 de Diciembre 2022','01 de Enero al 31 de Diciembre 2023'=>'01 de Enero al 31 de Diciembre 2023'];
+		$lideresProyecto=usuariocp(getSession('cp_ua'))->where('siglas_rol','LP')->get()->pluck('name','id')->prepend('Seleccionar una opción', '');
         $entidad1 = null;
         $entidades2 = null;
         $entidad2 = null;
@@ -288,14 +289,14 @@ class SeguimientoAuditoria2023Controller extends Controller
 		
 		if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
             $unidadAdministrativa=substr(getSession('cp_ua'), 0, 4);
-            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
+            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"]);
         }
 
         if(in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())||
            in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){
             $unidadAdministrativa=rtrim(getSession('cp_ua'), 0);
-            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"]);
+            $query = $query->where('fase_autorizacion','En autorización')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"]);
         }
 
 

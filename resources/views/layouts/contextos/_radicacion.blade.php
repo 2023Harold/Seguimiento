@@ -29,17 +29,18 @@
         <span class="text-primary">
             {{ fecha($auditoria->radicacion->fecha_notificacion)}}
         </span>
-    </div>           
+    </div>  
+@if(!empty($auditoria->comparecencia))	
     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
         <label>Nombre del titular a quien se dirige la comparecencia:</label>
         <span class="text-sistema">
-            {{ $auditoria->comparecencia->nombre_titular }}                
+            {{ optional($auditoria->comparecencia)->nombre_titular }}                
         </span>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
         <label>Cargo del titular a quien se dirige la comparecencia: </label>
         <span class="text-sistema">
-            {{ $auditoria->comparecencia->cargo_titular }}                
+            {{ optional($auditoria->comparecencia)->cargo_titular }}                
         </span>
     </div>    
     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
@@ -91,6 +92,8 @@
         </span>
     </div>
     @endif
+	@endif
+	
 </div>
 <div class="row">
     <div class="col-md-12"><hr></div>

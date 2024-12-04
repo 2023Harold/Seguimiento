@@ -16,6 +16,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 function fecha($fecha = null, string $formato = 'd/m/Y')
 {
+	
     if(empty($fecha)){
         return "";
     }

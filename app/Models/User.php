@@ -101,22 +101,29 @@ class User extends Authenticatable
     {
         $clave = substr(getSession('cp_ua'), 0, 5).'0';
         if(getSession('cp')==2021){
-            return usuariocp( $clave)->where('siglas_rol','JD')->first();
+            return usuariocp($clave)->where('siglas_rol','JD')->first();
         }
         if(getSession('cp')==2022){
-            return $this->where('cp_ua2022', substr(getSession('cp_ua'), 0, 5).'0')->first();
+            return $this->where('cp_ua2022', substr(getSession('cp_ua'), 0, 5).'0')->where('siglas_rol','JD')->first();
         }
         if(getSession('cp')==2023){
-            return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 5).'0')->first();
-        }
-       
+            return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 5).'0')->where('siglas_rol','JD')->first();
+        }       
     }
 
     public function getDirectorAttribute()
     {
-        $clave = substr(getSession('cp_ua'), 0, 4).'0';
+        if(getSession('cp')==2021){
+            return $this->where('cp_ua2021', substr(getSession('cp_ua'), 0, 4).'00')->first();
+        }
+        if(getSession('cp')==2022){
+            return $this->where('cp_ua2022', substr(getSession('cp_ua'), 0, 4).'00')->first();
+        }
+        if(getSession('cp')==2023){
+            return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 4).'00')->first();
+        }
        
-        return usuariocp( $clave)->first();
+        //return usuariocp( $clave)->first();
        
        // return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 4).'00')->first();
     }
@@ -137,9 +144,16 @@ class User extends Authenticatable
     }
     public function getLiderAttribute()
     {
-        $clave = substr(getSession('cp_ua'), 0, 5).'0';
-      
-        return usuariocp( $clave)->where('siglas_rol','LP')->first();
+		$clave = substr(getSession('cp_ua'), 0, 5).'0';
+        if(getSession('cp')==2021){
+            return usuariocp($clave)->where('siglas_rol','LP')->first();
+        }
+        if(getSession('cp')==2022){
+            return $this->where('cp_ua2022', substr(getSession('cp_ua'), 0, 5).'0')->where('siglas_rol','LP')->first();
+        }
+        if(getSession('cp')==2023){
+            return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 5).'0')->where('siglas_rol','LP')->first();
+        } 
        
 
         //return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','LP')->first();

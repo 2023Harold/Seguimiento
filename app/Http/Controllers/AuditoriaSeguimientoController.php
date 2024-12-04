@@ -96,7 +96,8 @@ class AuditoriaSeguimientoController extends Controller
     public function setQuery(Request $request)
     {
          $query = $this->model;
-         $query = $query->where('cuenta_publica',getSession('cp'));
+		 $query = $query->where('cuenta_publica',getSession('cp'));
+
          if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
             //$query = $query->where('departamento_encargado_id',auth()->user()->unidad_administrativa_id);
             if(getSession('cp')!=2023){
@@ -169,13 +170,4 @@ class AuditoriaSeguimientoController extends Controller
 
         return  redirect()->route('auditoriaseguimientoacciones.index');
     }
-
-    public function seleccionarauditoria(Auditoria $auditoria)
-    {
-        setSession('auditoriaselect_id',$auditoria->id);
-
-        return redirect()->route('agregaracciones.index');
-    }
-
-
 }

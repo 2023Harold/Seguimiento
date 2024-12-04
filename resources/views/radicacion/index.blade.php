@@ -12,6 +12,9 @@
                     <a href="{{ route('auditoriaseguimiento.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
                     Radicación
                 </h1>
+				<div class="float-end">
+                   <a href="{{route('radicacionar.exportar_ar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AR</a>                                  
+                </div>
             </div>
             <div class="card-body">
                 @include('flash::message')
@@ -21,7 +24,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <a href="{{ route('radicacion.auditoria',$auditoria) }}"  class="btn btn-primary float-end">
-                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar radicacion
+                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar radicación
                                 </a>
                             </div>                    
                         </div>					

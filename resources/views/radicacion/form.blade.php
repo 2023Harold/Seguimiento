@@ -66,38 +66,38 @@
                 </div> --}}
                 <div class="row">
                     <div class="col-md-4">
-                        {!! BootForm::text('nombre_titular','Nombre del titular a quien se dirige la comparecencia: *',old('nombre_titular', $comparecencia->nombre_titular),) !!}
+                        {!! BootForm::text('nombre_titular','Nombre del titular a quien se dirige la comparecencia: *',old('nombre_titular', optional($comparecencia)->nombre_titular),) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        {!! BootForm::text('cargo_titular','Cargo del titular a quien se dirige la comparecencia: *',old('cargo_titular', $comparecencia->cargo_titular),) !!}
+                        {!! BootForm::text('cargo_titular','Cargo del titular a quien se dirige la comparecencia: *',old('cargo_titular', optional($comparecencia)->cargo_titular),) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
                         <span class="has-float-label">
-                            {!! BootForm::date('fecha_comparecencia','Fecha de la comparecencia: *',old('fecha_comparecencia', fecha($comparecencia->fecha_comparecencia, 'Y-m-d'))) !!}
+                            {!! BootForm::date('fecha_comparecencia','Fecha de la comparecencia: *',old('fecha_comparecencia', fecha(optional($comparecencia)->fecha_comparecencia, 'Y-m-d'))) !!}
                         </span>
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::time('hora_comparecencia_inicio','Hora de inicio de la comparecencia: *',old('hora_comparecencia_inicio', $comparecencia->hora_comparecencia_inicio)) !!}
+                        {!! BootForm::time('hora_comparecencia_inicio','Hora de inicio de la comparecencia: *',old('hora_comparecencia_inicio', optional($comparecencia)->hora_comparecencia_inicio)) !!}
                     </div>
                 </div>
                 {{-- @if ($auditoria->acto_fiscalizacion!='Desempeño') --}}
                 {{-- <div class="row">
                     <div class="col-md-6">
-                        {!! BootForm::radios('aplicacion_periodo', '¿El periodo de la etapa de aclaración es de 30 días hábiles? *', ['Si' => 'Si', 'No' => 'No'], old('aplicacion_periodo',$comparecencia->aplicacion_periodo),true,['class'=>'i-checks']); !!}
+                        {!! BootForm::radios('aplicacion_periodo', '¿El periodo de la etapa de aclaración es de 30 días hábiles? *', ['Si' => 'Si', 'No' => 'No'], old('aplicacion_periodo',optional($comparecencia)->aplicacion_periodo),true,['class'=>'i-checks']); !!}
                     </div>
                 </div> --}}
 				@if ($auditoria->acto_fiscalizacion!='Desempeño')
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_inicio_aclaracion','Inicio de la etapa de aclaración: *',old('fecha_inicio_aclaracion', fecha($comparecencia->fecha_inicio_aclaracion, 'Y-m-d')))
+                        {!! BootForm::date('fecha_inicio_aclaracion','Inicio de la etapa de aclaración: *',old('fecha_inicio_aclaracion', fecha(optional($comparecencia)->fecha_inicio_aclaracion, 'Y-m-d')))
                         !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_termino_aclaracion','Término de la etapa de aclaración: *',old('fecha_termino_aclaracion', fecha($comparecencia->fecha_termino_aclaracion, 'Y-m-d'))) !!}
+                        {!! BootForm::date('fecha_termino_aclaracion','Término de la etapa de aclaración: *',old('fecha_termino_aclaracion', fecha(optional($comparecencia)->fecha_termino_aclaracion, 'Y-m-d'))) !!}
                     </div>
                 </div>
 				@endif
@@ -110,11 +110,11 @@
                 @if ($auditoria->acto_fiscalizacion=='Legalidad' || $auditoria->acto_fiscalizacion=='Desempeño') --}}
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_inicio_proceso','Inicio del proceso de atención: *',old('fecha_inicio_proceso', fecha($comparecencia->fecha_inicio_proceso, 'Y-m-d')))
+                        {!! BootForm::date('fecha_inicio_proceso','Inicio del proceso de atención: *',old('fecha_inicio_proceso', fecha(optional($comparecencia)->fecha_inicio_proceso, 'Y-m-d')))
                         !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_termino_proceso','Término del proceso de atención: *',old('fecha_termino_proceso', fecha($comparecencia->fecha_termino_proceso, 'Y-m-d'))) !!}
+                        {!! BootForm::date('fecha_termino_proceso','Término del proceso de atención: *',old('fecha_termino_proceso', fecha(optional($comparecencia)->fecha_termino_proceso, 'Y-m-d'))) !!}
                     </div>
                 </div>
                 {{-- @endif --}}
