@@ -5,6 +5,7 @@ use App\Http\Controllers\AccesoController;
 use App\Http\Controllers\AccionesController;
 use App\Http\Controllers\AcuerdoConclusionController;
 use App\Http\Controllers\AdministracionController;
+use App\Http\Controllers\AgregarAccionesController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\AsignacionAccionController;
@@ -166,13 +167,18 @@ use App\Http\Controllers\TurnoArchivoTransferencia;
 use App\Http\Controllers\TurnoArchivoTransferenciaControler;
 use App\Http\Controllers\TurnoArchivoTransferenciaController;
 use App\Http\Controllers\TurnoOICController;
+use App\Http\Controllers\TurnoUIAutorizacionController;
 use App\Http\Controllers\TurnoUIController;
+use App\Http\Controllers\TurnoUIEnvioController;
+use App\Http\Controllers\TurnoUIRevisionController;
+use App\Http\Controllers\TurnoUIValidacionController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\CheckPermission;
 use App\Http\Requests\PliegosObservacionContestacionRequest;
 use App\Models\PliegosObservacion;
 use App\Models\Recomendaciones;
+use App\Models\TurnoUI;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -271,10 +277,18 @@ Route::get('/781523xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class, 
 
 
 //turnos
-Route::get('/turnooic/oroic', [TurnoOICController::class, 'export'])->name('turnooic.exportar');
-Route::resource('turnooic',TurnoOICController::class,['parameters' => ['turnooic' => 'auditoria']]);
+
+
 Route::get('/turnoui/oui', [TurnoUIController::class, 'export'])->name('turnoui.exportar');
 Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
+Route::resource('turnouienvio',TurnoUIEnvioController::class,['parameters' => ['turnouienvio' => 'auditoria']]);
+Route::resource('turnouirevision', TurnoUIRevisionController::class, ['parameters' => ['turnouirevision' => 'auditoria']]);
+Route::resource('turnouivalidacion', TurnoUIValidacionController::class, ['parameters' => ['turnouivalidacion' => 'auditoria']]);
+Route::resource('turnouiautorizacion', TurnoUIAutorizacionController::class, ['parameters' => ['turnouiautorizacion' => 'auditoria']]);
+
+Route::get('/turnooic/oroic', [TurnoOICController::class, 'export'])->name('turnooic.exportar');
+Route::resource('turnooic',TurnoOICController::class,['parameters' => ['turnooic' => 'auditoria']]);
+	
 Route::resource('turnoarchivo',TurnoArchivoController::class,['parameters' => ['turnoarchivo' => 'auditoria']]);
 Route::resource('turnoarchivoenvio',TurnoArchivoEnvioController::class,['parameters' => ['turnoarchivoenvio' => 'auditoria']]);
 Route::resource('turnotransferencia',TurnoArchivoTransferenciaController::class,['parameters' => ['turnotransferencia' => 'auditoria']]);
@@ -366,12 +380,21 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
     /*Auditoria Seguimiento*/
     Route::resource('auditoriaseguimiento', AuditoriaSeguimientoController::class,['parameters' => ['auditoriaseguimiento' => 'auditoria']]);
+    Route::get('/auditoriaseguimiento/seleccionar/{auditoria}', [AuditoriaSeguimientoController::class, 'seleccionarauditoria'])->name('seleccionarauditoria.auditoria');
     Route::get('/auditoriaseguimiento/acciones/consulta/{auditoria}', [AuditoriaSeguimientoController::class, 'accionesConsulta'])->name('auditoriaseguimiento.accionesconsulta');
-    Route::resource('auditoriaseguimientoacciones', AuditoriaSeguimientoAccionesController::class,['parameters' => ['auditoriaseguimientoacciones' => 'accion']]);
+    Route::resource('auditoriaseguimientoacciones', AuditoriaSeguimientoAccionesController::class,['parameters' => ['auditoriaseguimientoacciones' => 'auditoria']]);    
     Route::resource('auditoriaconsultaacciones', AuditoriaConsultaAccionesController::class,['parameters' => ['auditoriaconsultaacciones' => 'accion']]);
     Route::resource('reportesseg', ReportesSeguimientoController::class);
     Route::resource('reportesregistrosauditorias', ReportesRegistrosAuditoriasController::class);
 
+    // Agregar Acciones cuenta publica 2023    
+    Route::resource('agregaracciones',AgregarAccionesController::class,['parameters' => ['agregaraccionesacciones' => 'accion']]);
+    // Route::resource('agregaraccionesaccionrevision', SeguimientoAuditoriaAccionRevisionController::class, ['parameters' => ['seguimientoauditoriaaccionrevision' => 'accion']]);
+    // Route::get('/agregaracciones/seleccionar/{auditoria}', [AgregarAccionesController::class, 'auditoriaAcciones'])->name('agregaracciones.acciones');
+    Route::get('/agregaracciones/acciones/{accion}', [AgregarAccionesController::class, 'accion'])->name('agregaracciones.accion');
+    Route::get('/agregaracciones/concluircp/{auditoria}', [AgregarAccionesController::class, 'concluir'])->name('agregaracciones.concluir');
+    Route::get('/AgregarAccionesController/acciones/consulta/{auditoria}', [AgregarAccionesController::class, 'accionesConsulta'])->name('AgregarAccionesController.accionesconsulta');
+    Route::resource('agregaraccionesrevision01', SeguimientoAuditoriaAccionRevision01Controller::class, ['parameters' => ['agregaraccionesrevision01' => 'accion']]);
 
 
     /*Radicación*/

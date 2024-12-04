@@ -48,6 +48,7 @@
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>
                                 <th>Seguimiento</th>
+                                <th>Agregar acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -89,6 +90,9 @@
                                     </td>
                                     <td class="text-center">
                                         <a href="{{ route('auditoriaseguimiento.edit', $auditoria) }}" class="btn btn-primary">Ingresar</a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('seleccionarauditoria.auditoria', $auditoria) }}" class="btn btn-primary">Agregar</a>
                                     </td>
                                 </tr>
                             @empty

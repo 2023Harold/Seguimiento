@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-@if (empty($tuenoui->numero_ordenauditoria))
+@if (empty($turnoui->numero_ordenauditoria))
     {{ Breadcrumbs::render('turnoui.create') }}
 @else
     {{ Breadcrumbs::render('turnoui.edit',$turnoui) }}

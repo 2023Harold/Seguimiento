@@ -309,11 +309,22 @@ Breadcrumbs::for('auditoriaseguimiento.index', function (BreadcrumbTrail $trail)
     $trail->push('Auditorias', route('auditoriaseguimiento.index'));
 });
 
+
 Breadcrumbs::for('auditoriaseguimiento.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('auditoriaseguimiento.index');
     $trail->push('Auditoría', route('auditoriaseguimiento.edit',$auditoria));
 });
 
+// Agregar acciones
+
+Breadcrumbs::for('agregaracciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Agregar Acciones', route('agregaracciones.index'));
+});
+Breadcrumbs::for('agregaracciones.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Accion', route('agregaracciones.index'));
+});
 
 
 
@@ -737,6 +748,21 @@ Breadcrumbs::for('turnoui.create', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimiento.index');
     $trail->push('Turno a la Unidad de Investigación', route('auditoriaseguimiento.create'));
 });
+
+Breadcrumbs::for('turnouirevision.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoui.index',$auditoria);
+    $trail->push('Revisar Turno a la Unidad de Investigación ', route('turnoui.index'));
+});
+
+Breadcrumbs::for('turnouivalidacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoui.index',$auditoria);
+    $trail->push('Validacion Turno a la Unidad de Investigación ', route('turnoui.index'));
+});
+Breadcrumbs::for('turnouiautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoui.index',$auditoria);
+    $trail->push('Autorizacion Turno a la Unidad de Investigación ', route('turnoui.index'));
+});
+
 
 // turno OIC
 Breadcrumbs::for('turnooic.index', function (BreadcrumbTrail $trail,$auditoria) {

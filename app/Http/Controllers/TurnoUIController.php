@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\Auditoria;
+use App\Models\Movimientos;
 use App\Models\TurnoUI;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -53,10 +55,12 @@ class TurnoUIController extends Controller
        
         mover_archivos($request, ['turno_ui']);
         $request['auditoria_id']= getSession('auditoria_id');
+        $request['usuario_creacion_id'] = auth()->user()->id;
         $turnoui  = TurnoUI::create($request->all());
 
         setMessage("Los datos se han guardado correctamente.");
 
+        $turnoui = TurnoUI::create($request->all());
         return redirect() -> route('turnoui.index');
     }
 
@@ -77,9 +81,12 @@ class TurnoUIController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(TurnoUI $auditoria)
     {
-        //
+        $turnoui=$auditoria;
+        $auditoria=$auditoria->auditoria;
+       
+        return view('turnoui.form', compact('turnoui','auditoria'));
     }
 
     /**
@@ -89,9 +96,17 @@ class TurnoUIController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,TurnoUI $auditoria)
     {
-        //
+        mover_archivos($request, ['turno_ui'],$auditoria);
+        $request['usuario_modificacion_id'] = auth()->user()->id;
+        //dd($request,$auditoria);
+        $auditoria->update($request->all());
+        $auditoria=$auditoria->auditoria;
+        setMessage("Los datos se han actualizado correctamente.");
+  
+        return redirect() -> route('turnoui.index');
+  
     }
 
     /**
@@ -110,31 +125,13 @@ class TurnoUIController extends Controller
 
         return redirect()->route('turnoui.create');
     }
-    public function setQuery(Request $request)
-    {
-         $query = $this->model;
-
-         $query = $query->where('segauditoria_id',getSession('auditoria_id'));
-
-         
-        if ($request->filled('consecutivo')) {
-            $query = $query->where('consecutivo',$request->consecutivo);
-         }
-
-        if ($request->filled('tipo')) {
-            $query = $query->where('tipo',$request->tipo);
-        }
-        if ($request->filled('monto_aclarar')) {
-            $query = $query->where('monto_aclarar',$request->monto_aclarar);
-        }
-        return $query;
-    }
     public function export(){
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
         $template=new TemplateProcessorMod('bases-word/TurnoUI.docx');       
-        $nombreword='OfUI';
+        $nombreword='TurnoUI';
         $template->saveAs($nombreword.'.docx');
 
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
-    }
+    }    
+   
 }
