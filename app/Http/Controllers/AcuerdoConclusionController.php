@@ -24,6 +24,7 @@ class AcuerdoConclusionController extends Controller
     public function index(Request $request)
     {
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
+        $acuerdoconclusion=AcuerdoConclusion::where('auditoria_id',getSession('auditoria_id'))->first();
         //$acciones = $this -> setQuery($request)-> orderBy('id')->paginate(30);
 
         return view ('acuerdoconclusion.index', compact('request', 'auditoria'));
@@ -65,9 +66,9 @@ class AcuerdoConclusionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $request['auditoria_id']= getSession('auditoria_id');
+    {      
         mover_archivos($request, ['acuerdo_conclusion']);
+        $request['auditoria_id']= getSession('auditoria_id');
         $acuerdoconclusion  = AcuerdoConclusion::create($request->all());
 
         setMessage("Los datos se han guardado correctamente.");
@@ -81,9 +82,11 @@ class AcuerdoConclusionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(AcuerdoConclusion $acuerdoconclusion)
     {
-        //
+        $auditoria=$acuerdoconclusion->auditoria;
+
+        return view('acuerdoconclusion.show', compact('acuerdoconclusion', 'auditoria'));
     }
 
     /**
@@ -142,25 +145,63 @@ class AcuerdoConclusionController extends Controller
     {
         //
     }
+    private function normalizarDatos(Request $request)
+    {
+        if ($request->estatus == 'Aprobado') {
+            $request['motivo_rechazo'] = null;
+        }
+
+        return $request;
+    }
+
+    // public function auditoria(Auditoria $auditoria)
+    // {
+    //     setSession('acuerdo_auditoria_id',$auditoria->id);
+
+    //     return redirect()->route('acuerdoconclusion.create');
+    // }
+
     public function setQuery(Request $request)
     {
-         $query = $this->model;
+        $query = new Auditoria;
+        $query = $query->whereNotNull('fase_autorizacion')
+           ->where('fase_autorizacion','Autorizado');
 
-         $query = $query->where('auditoria_id',getSession('auditoria_id'));
+       if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
+          in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
+          in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){
 
-         
-        if ($request->filled('consecutivo')) {
-            $query = $query->where('consecutivo',$request->consecutivo);
-         }
 
-        if ($request->filled('tipo')) {
-            $query = $query->where('tipo',$request->tipo);
+
+       }elseif(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
+
+           $query = $query->whereNotNull('fase_autorizacion')
+                       ->where('fase_autorizacion','Autorizado')
+                       ->whereNotNull('direccion_asignada_id')
+                       ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);
+       }elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
+           $query = $query->whereNotNull('departamento_encargado_id')
+                       ->where('departamento_encargado_id',auth()->user()->unidad_administrativa_id);
+       }
+
+       if ($request->filled('numero_auditoria')) {
+            $numeroAuditoria=strtolower($request->numero_auditoria);
+            $query = $query->whereRaw('LOWER(numero_auditoria) LIKE (?) ',["%{$numeroAuditoria}%"]);
         }
-        if ($request->filled('monto_aclarar')) {
-            $query = $query->where('monto_aclarar',$request->monto_aclarar);
-        }
-        return $query;
-    }
+
+       if ($request->filled('entidad_fiscalizable')) {
+           $entidadFiscalizable=strtolower($request->entidad_fiscalizable);
+           $query = $query->whereRaw('LOWER(entidad_fiscalizable) LIKE (?) ',["%{$entidadFiscalizable}%"]);
+       }
+
+       if ($request->filled('acto_fiscalizacion')) {
+           $actoFiscalizacion=strtolower($request->acto_fiscalizacion);
+           $query = $query->whereRaw('LOWER(acto_fiscalizacion) LIKE (?) ',["%{$actoFiscalizacion}%"]);
+       }
+
+       return $query;
+   }
+
     public function export(){
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
 

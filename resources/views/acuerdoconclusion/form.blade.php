@@ -28,15 +28,15 @@
                 {!! BootForm::open(['model' => $acuerdoconclusion,'store' => 'acuerdoconclusion.store','update' => 'acuerdoconclusion.update','id' => 'form']) !!}
                 <div class= "row">
                     <div class="col-md-5">
-                        {!! BootForm::text('nombre_titular', 'Nombre del titular a quien se dirige : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
+                        {!! BootForm::text('nombre_titular', 'Nombre del titular a quien se dirige : *', old('nombre_titular', $acuerdoconclusion->nombre_titular)) !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::text('cargo_titular', 'Cargo del titular a quien se dirige : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
+                        {!! BootForm::text('cargo_titular', 'Cargo del titular a quien se dirige : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->cargo_titular)) !!}
                     </div>
                 </div>
                 <div class= "row">
                     <div class="col-md-5">
-                        {!! BootForm::text('domicilio', 'Domicilio : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->acuerdoconclusion)) !!}
+                        {!! BootForm::text('domicilio', 'Domicilio : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->domicilio)) !!}
                     </div>
                 </div>
 				<div class="row">
@@ -47,14 +47,13 @@
 				<div class="row">
 					<div class="col-md-5">
 						
-						{!! BootForm::date('fecha_oficio', 'Fecha del oficio: *',old('fecha_acuerdo_conclusion', fecha($acuerdoconclusion->fecha_oficio, 'Y-m-d'))); !!}
+						{!! BootForm::date('fecha_oficio', 'Fecha del oficio: *', old('fecha_oficio', $fecha_oficio->format('Y-m-d'))); !!}
 					</div>
-				</div>
-
-				
+				</div>				
                 <div class="row">
                     <div class="col-md-5">
                         {!! archivo('acuerdo_conclusion', 'Acuerdo de conclusión: *', old('acuerdo_conclusion', $acuerdoconclusion->acuerdo_conclusion)) !!}
+                        
                     </div>                    
                 </div>       
                 <div class="row">

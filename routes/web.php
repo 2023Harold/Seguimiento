@@ -4,8 +4,14 @@ use App\Exports\ReporteSeguimiento;
 use App\Http\Controllers\AccesoController;
 use App\Http\Controllers\AccionesController;
 use App\Http\Controllers\AcuerdoConclusionController;
+use App\Http\Controllers\AcuerdoConclusionEnvioController;
+use App\Http\Controllers\AcuerdoConclusionValidacionController;
 use App\Http\Controllers\AdministracionController;
+use App\Http\Controllers\AgregarAccionesAutorizacionController;
 use App\Http\Controllers\AgregarAccionesController;
+use App\Http\Controllers\AgregarAccionesRevision01Controller;
+use App\Http\Controllers\AgregarAccionesRevisionController;
+use App\Http\Controllers\AgregarAccionesValidacionController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\AsignacionAccionController;
@@ -299,6 +305,9 @@ Route::resource('turnotransferencia',TurnoArchivoTransferenciaController::class,
 Route::get('/acuerdoconclusion/ac', [AcuerdoConclusionController::class, 'export'])->name('acuerdoconclusionac.exportar');
 Route::get('/acuerdoconclusion/ofac', [AcuerdoConclusionController::class, 'exportOFAC'])->name('acuerdoconclusionofac.exportar');
 Route::resource('acuerdoconclusion',AcuerdoConclusionController::class,['parameters' => ['acuerdoconclusion' => 'auditoria']]);
+Route::resource('acuerdoconclusionenvio',AcuerdoConclusionEnvioController::class,['parameters' => ['acuerdoconclusionenvio' => 'auditoria']]);
+Route::resource('acuerdoconclusionvalidacion', AcuerdoConclusionValidacionController::class, ['parameters' => ['acuerdoconclusionvalidacion' => 'auditoria']]);
+// Route::resource('turnouiautorizacion', TurnoUIAutorizacionController::class, ['parameters' => ['turnouiautorizacion' => 'auditoria']]);
 
 
 
@@ -392,13 +401,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('reportesregistrosauditorias', ReportesRegistrosAuditoriasController::class);
 
     // Agregar Acciones cuenta publica 2023    
-    Route::resource('agregaracciones',AgregarAccionesController::class,['parameters' => ['agregaraccionesacciones' => 'accion']]);
-    // Route::resource('agregaraccionesaccionrevision', SeguimientoAuditoriaAccionRevisionController::class, ['parameters' => ['seguimientoauditoriaaccionrevision' => 'accion']]);
-    // Route::get('/agregaracciones/seleccionar/{auditoria}', [AgregarAccionesController::class, 'auditoriaAcciones'])->name('agregaracciones.acciones');
+    Route::resource('agregaracciones',AgregarAccionesController::class,['parameters' => ['agregaracciones' => 'accion']]);
     Route::get('/agregaracciones/acciones/{accion}', [AgregarAccionesController::class, 'accion'])->name('agregaracciones.accion');
     Route::get('/agregaracciones/concluircp/{auditoria}', [AgregarAccionesController::class, 'concluir'])->name('agregaracciones.concluir');
-    Route::get('/AgregarAccionesController/acciones/consulta/{auditoria}', [AgregarAccionesController::class, 'accionesConsulta'])->name('AgregarAccionesController.accionesconsulta');
-    Route::resource('agregaraccionesrevision01', SeguimientoAuditoriaAccionRevision01Controller::class, ['parameters' => ['agregaraccionesrevision01' => 'accion']]);
+    Route::get('/AgregarAccionesController/acciones/consulta/{accion}', [AgregarAccionesController::class, 'accionesConsulta'])->name('AgregarAccionesController.accionesconsulta');
+    Route::resource('agregaraccionesrevision01', AgregarAccionesRevision01Controller::class, ['parameters' => ['agregaraccionesrevision01' => 'accion']]);
+    Route::resource('agregaraccionesrevision', AgregarAccionesRevisionController::class, ['parameters' => ['agregaraccionesrevision' => 'accion']]);
+    Route::resource('agregaraccionesvalidacion', AgregarAccionesValidacionController::class, ['parameters' => ['agregaraccionesvalidacion' => 'accion']]);
+    Route::resource('agregaraccionesautorizacion', AgregarAccionesAutorizacionController::class, ['parameters' => ['agregaraccionesautorizacion' => 'accion']]);
 
 
     /*Radicación*/

@@ -37,8 +37,10 @@
                                 <th>Nombre del titular a quien se dirige</th>
                                 <th>Cargo del titular a quien se dirige</th>
                                 <th>Domicilio</th>                                
-                                <th>Acuerdo de conclusión</th> 
-								<th></th>
+                                <th>Acuerdo de conclusión UI</th> 
+                                <th>Fase / Acción</th>
+                                <th>Enviar</th> 
+
                             </tr>
                         </thead>
                         <tbody>
@@ -91,8 +93,49 @@
                                 {{-- <td class="text-center">
                                     {{ fecha($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion) }}
                                 </td> --}}
+                                
+                            {{-- fase de validación --}}
+
+                                <td class="text-center">                                                                                                                                
+                                    @if (empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')
+                                        <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                        @can('acuerdoconclusion.edit')                                                        
+                                                <a href="{{ route('acuerdoconclusion.edit',$auditoria->acuerdoconclusion) }}" class="text-primary">
+                                                <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+                                                </a>
+                                            @endcan
+                                    @endif
+                                    @if ($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación')
+                                        @can('acuerdoconclusionvalidacion.edit')
+                                            <a href="{{ route('acuerdoconclusionvalidacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                <li class="fa fa-gavel"></li>
+                                                Validar
+                                            </a>
+                                        @else
+                                            <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                        @endcan
+                                    @endif           
+                                    @if ($auditoria->acuerdoconclusion->fase_autorizacion=='Autorizado')
+                                        <span class="badge badge-light-success">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>                                                                                                                                               
+                                    @endif                                                                                                 
+                                </td>
+                                <td class="text-center">    
+                                    @if (empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')                                       
+                                        @can('acuerdoconclusion.edit')                                                        
+                                            <a href="{{ route('acuerdoconclusionenvio.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                             Enviar
+                                            </a>
+                                        @endcan
+                                    @endif
+                                </td>            
                             </tr>
+                           {{-- {{ dd($auditoria->acuerdoconclusion->movimientos); }}} --}}
+                            @if (!empty($auditoria->acuerdoconclusion)&&!empty($auditoria->acuerdoconclusion->movimientos))
+                                {!! movimientosDesglose($auditoria->acuerdoconclusion->id, 10, $auditoria->acuerdoconclusion->movimientos) !!}
+                            @endif   
                             @else
+                            {{-- termino de fase de validación --}}
+                                            
                             <tr>
                                 <td class="text-center" colspan="5">
                                     No se encuentran registros en este apartado.

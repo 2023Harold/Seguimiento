@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('breadcrums')
 @if (!empty($movimiento)&&$movimiento=='consultar')
-{{ Breadcrumbs::render('seguimientoauditoriaacciones.consulta',$auditoria) }}
+{{ Breadcrumbs::render('agregaracciones.consulta',$auditoria) }}
 @elseif (!empty($movimiento)&&$movimiento=='direccionconsultar')
-{{ Breadcrumbs::render('asignaciondireccion.accionesconsulta',$auditoria) }}
+{{ Breadcrumbs::render('agregaraccionesdireccion.accionesconsulta',$auditoria) }}
 @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')
-{{ Breadcrumbs::render('asignaciondepartamento.accionesconsulta',$auditoria) }}
+{{ Breadcrumbs::render('agregaraccionesdepartamento.accionesconsulta',$auditoria) }}
 @elseif(!empty($movimiento)&&$movimiento=='lideranalistaconsultar')
 {{ Breadcrumbs::render('asignacionlideranalista.accionesconsulta',$auditoria) }}
 @else
@@ -64,7 +64,6 @@
                             Agregar acción
                         </a>
                     </div>
-
                 </div>
                 @endcan          
                 @endif      
@@ -88,24 +87,21 @@
                         </thead>
                         <tbody>
                             @forelse ($acciones as $accion)
-                            <tr>
+                            <tr>                                                                                                                         
                                 <td class="text-center">
-
                                     @if (($accion->revision_lider=='Rechazado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Rechazado'&& $accion->revision_jefe='Rechazado')||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Rechazado'))
                                         <a href="{{ route('agregaracciones.accion',$accion) }}">
                                             <i class="fa-regular fa-eye icon-hover"></i>
                                         </a>
-                                        1
                                     @elseif(!empty($movimiento))
                                         <a href="{{ route('agregaracciones.accion',['accion'=>$accion->id,'movimiento'=>$movimiento]) }}">
                                             <i class="fa-regular fa-eye icon-hover"></i>
                                         </a>
-                                        2
+                                        
                                     @else
                                         <a href="{{ route('agregaracciones.accion',['accion'=>$accion]) }}">
                                             <i class="fa-regular fa-eye icon-hover"></i>
-                                        </a>
-                                        3
+                                        </a>                                        
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -130,24 +126,51 @@
                                 <td style="text-align: right!important;">
                                     {{ '$'.number_format( $accion->monto_aclarar, 2) }}
                                 </td>
-                                <td class="text-center">
-                                    {{-- @if (($accion->revision_lider))
-                                    1 --}}
-                                        @if (($accion->revision_lider=='Aprobado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Aprobado'))
-                                            <span class="badge badge-light-success">Aprobada</span>
-                                        @elseif (($accion->revision_lider=='Rechazado'&& empty($accion->revision_jefe))||($accion->revision_lider=='Rechazado'&& $accion->revision_jefe='Rechazado')||($accion->revision_lider=='Aprobado'&& $accion->revision_jefe=='Rechazado'))
+                                <td class="text-center">                                   
+                                       
+                                        @if (($accion->fase_revision=='Rechazado'))
                                             <span class="badge badge-light-danger">Rechazada</span>
-                                        @elseif ($accion->revision_lider=='En revisión 01')
+                                        @elseif ($accion->fase_revision=='En revisión 01')
+                                            @can('agregaraccionesrevision01.edit')                                                                                            
+                                            <a href="{{ route('agregaraccionesrevision01.edit',$accion) }}"class="btn btn-primary">
+                                                Revisar
+                                            </a>   
+                                            @else                                         
                                             <span class="badge badge-light-warning">En revisión</span>
+                                            @endcan
+                                        @elseif ($accion->fase_revision=='En revisión')
+                                            @can('agregaraccionesrevision.edit')                                                                                            
+                                            <a href="{{ route('agregaraccionesrevision.edit',$accion) }}"class="btn btn-primary">
+                                                Revisar
+                                            </a>   
+                                            @else                                         
+                                            <span class="badge badge-light-warning">En revisión</span>
+                                            @endcan
+                                        @elseif ($accion->fase_revision=='En validación')
+                                            @can('agregaraccionesvalidacion.edit')                                                                                            
+                                            <a href="{{ route('agregaraccionesvalidacion.edit',$accion) }}"class="btn btn-primary">
+                                                Validar
+                                            </a>   
+                                            @else                                         
+                                            <span class="badge badge-light-warning">En validación</span>
+                                            @endcan   
+                                            @elseif ($accion->fase_revision=='En autorización')
+                                            @can('agregaraccionesautorizacion.edit')                                                                                            
+                                            <a href="{{ route('agregaraccionesautorizacion.edit',$accion) }}"class="btn btn-primary">
+                                                Autorizar
+                                            </a>   
+                                            @else                                         
+                                            <span class="badge badge-light-warning">En autorización</span>
+                                            @endcan                                           
+                                            {{-- <span class="badge badge-light-warning">En revisión</span> --}}
                                         @else
-                                            <span class="badge badge-light-warning">{{ $accion->revision_lider }}</span>
-                                        @endif
-                                    {{-- @endif --}}
-                                </td>
+                                            <span class="badge badge-light-warning">{{ $accion->fase_revision }}</span>
+                                        @endif                                        
+                              </td>
                                 @if (count ($auditoria->acciones)==count($auditoria->accionessinenvio))
                                 <td class="text-center">
                                     @can('agregaracciones.edit')
-                                        @if (empty($accion->revision_lider)||$accion->revision_lider=='Rechazado'||$accion->revision_jefe=='Rechazado')
+                                        @if (empty($accion->fase_revision)||$accion->revision_lider=='Rechazado'||$accion->fase_revision=='Rechazado')
                                             <a href="{{ route('agregaracciones.edit',$accion) }}">
                                                 <i class="align-middle fas fa-edit text-primary" aria-hidden="true"></i>
                                             </a>

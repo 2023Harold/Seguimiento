@@ -130,6 +130,14 @@ class AuditoriaSeguimientoController extends Controller
                 }
             });
         }
+        else{            
+            if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){              
+                $query = $query->where('analistacp_id',auth()->user()->id);
+            }
+            if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){              
+                $query = $query->where('lidercp_id',auth()->user()->id);
+            }
+        }
 		if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
              $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
              $query = $query->whereRaw('LOWER(direccion_asignada_id) LIKE (?) ',["%{$unidadAdministrativa}%"]);

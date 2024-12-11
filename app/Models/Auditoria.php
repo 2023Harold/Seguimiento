@@ -56,6 +56,9 @@ class Auditoria extends Model
                 'created_at',
                 'updated_at',
                 'cuenta_publica',
+                'fase_autorizacion_cp',
+                'analistacp_id',
+                'lidercp_id',
             ];
 
 
@@ -179,7 +182,14 @@ class Auditoria extends Model
             {
                 return $this->belongsTo(User::class, 'lider_proyecto_id', 'id')->where('siglas_rol','LP');
             }
-
+            public function lidercp()
+            {
+                return $this->belongsTo(User::class, 'lidercp_id', 'id')->where('siglas_rol','LP');
+            }
+            public function analistacp()
+            {
+                return $this->belongsTo(User::class, 'analistacp_id', 'id')->where('siglas_rol','ANA');
+            }
             public function getDirectorasignadoAttribute()
             {
                 return User::where('unidad_administrativa_id',$this->direccion_asignada_id)->first();

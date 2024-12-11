@@ -327,6 +327,25 @@ Breadcrumbs::for('agregaracciones.create', function (BreadcrumbTrail $trail) {
 });
 
 
+Breadcrumbs::for('agregaraccionesrevision01.edit', function (BreadcrumbTrail $trail,$accion) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Revisar', route('agregaraccionesrevision01.edit',$accion));
+});
+
+Breadcrumbs::for('agregaraccionesrevision.edit', function (BreadcrumbTrail $trail,$accion) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Revisar', route('agregaraccionesrevision.edit',$accion));
+});
+
+Breadcrumbs::for('agregaraccionesvalidacion.edit', function (BreadcrumbTrail $trail,$accion) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Validar', route('agregaraccionesvalidacion.edit',$accion));
+});
+
+Breadcrumbs::for('agregaraccionesautorizacion.edit', function (BreadcrumbTrail $trail,$accion) {
+    $trail->parent('auditoriaseguimiento.index');
+    $trail->push('Autorizar', route('agregaraccionesautorizacion.edit',$accion));
+});
 
 /*Radicacion*/
 Breadcrumbs::for('radicacion.index', function (BreadcrumbTrail $trail,$auditoria) {
@@ -385,6 +404,10 @@ Breadcrumbs::for('acuerdoconclusion.create', function (BreadcrumbTrail $trail) {
     $trail->push('Acuerdo de conclusión', route('auditoriaseguimiento.create'));
 });
 
+Breadcrumbs::for('acuerdoconclusionvalidacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('acuerdoconclusion.index',$auditoria);
+    $trail->push('Validacion Turno a la Unidad de Investigación ', route('acuerdoconclusion.index'));
+});
 //recomendaciones contestaciones
 
 Breadcrumbs::for('recomendacionescontestaciones.edit', function (BreadcrumbTrail $trail,$contestacion,$auditoria) {

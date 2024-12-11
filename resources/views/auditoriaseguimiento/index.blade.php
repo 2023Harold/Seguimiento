@@ -48,7 +48,9 @@
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>
                                 <th>Seguimiento</th>
+                                @if(getSession('cp')==2023)
                                 <th>Agregar acciones</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -91,9 +93,20 @@
                                     <td class="text-center">
                                         <a href="{{ route('auditoriaseguimiento.edit', $auditoria) }}" class="btn btn-primary">Ingresar</a>
                                     </td>
-                                    <td class="text-center">
+                                    {{-- <td class="text-center">
                                         <a href="{{ route('seleccionarauditoria.auditoria', $auditoria) }}" class="btn btn-primary">Agregar</a>
-                                    </td>
+                                    </td> --}}
+{{-- revision --}}
+                                    @if(getSession('cp')==2023)                                   
+                                      <td class="text-center">   
+                                            @can('seleccionarauditoria.auditoria')                                         
+                                                <a href="{{ route('seleccionarauditoria.auditoria',$auditoria) }}"class="btn btn-primary">
+                                                  Acciones
+                                                </a>  
+                                            @endcan                                                                                                                                               
+                                    </td>         
+                                    @endif
+{{-- fin del flujo --}}
                                 </tr>
                             @empty
                                 <tr>

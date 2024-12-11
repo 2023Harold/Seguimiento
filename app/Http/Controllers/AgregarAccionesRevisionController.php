@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
-use App\Models\CatalogoTipoAuditoria;
 use App\Models\Movimientos;
-use App\Models\SUTIC\EntidadFiscalizableIntra;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class AgregarAccionesRevision01Controller extends Controller
+class AgregarAccionesRevisionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -63,7 +61,7 @@ class AgregarAccionesRevision01Controller extends Controller
     public function edit(AuditoriaAccion $accion)
     {
         $auditoria = Auditoria::find(getSession('auditoriaselect_id'));
-        return view('agregaraccionesrevision01.form', compact('accion','auditoria'));
+        return view('agregaraccionesrevision.form', compact('accion','auditoria'));
     }
 
     /**
@@ -75,19 +73,19 @@ class AgregarAccionesRevision01Controller extends Controller
      */
     public function update(Request $request, AuditoriaAccion $accion)
     {
-
+        
         $auditoria = $accion->auditoria;
-        if ($request->estatus == 'Aprobado' && count($auditoria->accionesrechazadaslider)>0) {
+        if ($request->estatus == 'Aprobado' && count($auditoria->accionesrechazadasjefe)>0) {
             setMessage('Si hay acciones rechazadas no se puede aprobar la auditoría.','error');
 
             return back()->withInput();
         } 
 
         if ($request->estatus == 'Aprobado'){                               
-                $accion->update(['fase_revision'=>'En revisión']);
+                $accion->update(['fase_revision'=>$request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado']);
             
         }       
-       $lider=User::where('unidad_administrativa_id', substr($auditoria->usuarioCreacion->unidad_administrativa_id, 0, 5).'0')->first();
+       $jefe=User::where('unidad_administrativa_id', substr($auditoria->usuarioCreacion->unidad_administrativa_id, 0, 5).'0')->first();
       
         $this->normalizarDatos($request);
 
@@ -115,11 +113,11 @@ class AgregarAccionesRevision01Controller extends Controller
         if ($request->estatus == 'Aprobado') {
             $auditoria->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
             $titulo = 'Revisión del registro de la auditoria No. '.$auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$lider->name.', '.$lider->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
         } else {
 
             $auditoria->update(['registro_concluido'=>'No']);
@@ -131,6 +129,7 @@ class AgregarAccionesRevision01Controller extends Controller
         }
 
         return redirect()->route('agregaracciones.index');
+
     }
 
     /**
@@ -151,5 +150,4 @@ class AgregarAccionesRevision01Controller extends Controller
 
         return $request;
     }
-
 }

@@ -315,13 +315,13 @@ class SeguimientoAuditoriaController extends Controller
 
     public function concluir(Auditoria $auditoria)
     {
-        if(empty($auditoria->fase_autorizacion))
-        {
+            if(empty($auditoria->fase_autorizacion))
+            {  
             foreach ($auditoria->acciones as $accionrevision)
-            {
-                $accionrevision->update(['fase_revision'=>'En revisión 01']);
-            }
-        }else{
+                {
+                    $accionrevision->update(['fase_revision'=>'En revisión 01']);
+                }
+            }else{
             if (count($auditoria->accionesrechazadaslider)>0)
             {
                 foreach ($auditoria->accionesrechazadaslider as $accionrechazada)

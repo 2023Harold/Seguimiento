@@ -108,7 +108,7 @@ class AgregarAccionesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(AuditoriaAccion $accion)
-    {
+    {       
         $auditoria = Auditoria::find(getSession('auditoriaselect_id'));
         $numeroconsecutivo=$accion->consecutivo;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id');
@@ -227,7 +227,7 @@ class AgregarAccionesController extends Controller
     public function concluir(Auditoria $auditoria)
     {
         
-            
+        $auditoria->update(['fase_autorizacion_cp'=>'En revisión 01']);
             if (count($auditoria->acciones)>0)
             {
                 foreach ($auditoria->acciones as $accionrechazada)

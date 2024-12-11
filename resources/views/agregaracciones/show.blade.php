@@ -8,26 +8,15 @@
 {{ Breadcrumbs::render('agregaracciones.acciondepa',$accion->id,$movimiento,$auditoria) }}
 @elseif(!empty($movimiento)&&$movimiento=='lideranalistaconsultar')
 {{ Breadcrumbs::render('agregaracciones.accionlider',$accion->id,$movimiento,$auditoria) }}
-@else
-{{ Breadcrumbs::render('agregaracciones.acciones',$accion) }}
+{{-- @else
+{{ Breadcrumbs::render('agregaracciones.accion',$accion) }} --}}
 @endif
 @endsection
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h1 class="card-title">
-            {{-- <a href="{{ route('asignaciondireccion.accionesconsulta',$auditoria) }}">
-            <i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> --}}
-            @if (!empty($movimiento)&&$movimiento=='direccionconsultar')
-            <a href="{{ route('agregaraccionesdireccion.accionesconsulta',$auditoria) }}"><i
-                    class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-            @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')
-            <a href="{{ route('agregaraccionesdepartamento.accionesconsulta',$auditoria) }}"><i
-                    class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-            @else
-                <a href="{{ route('</h1>lideranalista.accionesconsulta',$auditoria) }}"><i
-                    class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-            @endif
+        <h1 class="card-title">           
+            <a href="{{ route('agregaracciones.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
             &nbsp; Acción
         </h1>
     </div>
