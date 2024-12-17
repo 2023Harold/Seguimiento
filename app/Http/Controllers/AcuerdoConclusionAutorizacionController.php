@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
+use App\Models\AcuerdoConclusion;
 use App\Models\Movimientos;
-use App\Models\TurnoAcuseArchivo;
 use Illuminate\Http\Request;
 
-class TurnoArchivoAutortizacionController extends Controller
+class AcuerdoConclusionAutorizacionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -57,12 +57,12 @@ class TurnoArchivoAutortizacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(TurnoAcuseArchivo $auditoria)
+    public function edit(AcuerdoConclusion $auditoria)
     {
-        $turnoarchivo=$auditoria;
+        $acuerdoconclusion=$auditoria;
         $auditoria=$auditoria->auditoria;
        
-        return view('turnoarchivoautorizacion.form', compact('turnoarchivo','auditoria'));
+         return view('acuerdoconclusionautorizacion.form', compact('acuerdoconclusion','auditoria'));
     }
 
     /**
@@ -72,15 +72,15 @@ class TurnoArchivoAutortizacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AprobarFlujoAutorizacionRequest $request, TurnoAcuseArchivo $auditoria)
+    public function update(AprobarFlujoAutorizacionRequest $request, AcuerdoConclusion $auditoria)
     {
         $this->normalizarDatos($request);
-        $turnoarchivo=$auditoria;
-
+        $acuerdoconclusion=$auditoria;
+ 
         Movimientos::create([
-            'tipo_movimiento' => 'Autorización del Turno acuse envío archivo',
-            'accion' => 'TurnoArchivo',
-            'accion_id' => $turnoarchivo->id,
+            'tipo_movimiento' => 'Autorización del Acuerdo de Conclusión',
+            'accion' => 'AcuerdoConclusion',
+            'accion_id' => $acuerdoconclusion->id,
             'estatus' => $request->estatus,
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
@@ -93,34 +93,30 @@ class TurnoArchivoAutortizacionController extends Controller
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
 
-        $turnoarchivo->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+        $acuerdoconclusion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
         setMessage($request->estatus == 'Aprobado' ?
-            'Se ha autorizado el Turno acuse envío archivo de la auditoría con éxito.' :
+            'Se ha autorizado el Acuerdo de Conclusión de la auditoría con exito.' :
             'El rechazo ha sido registrado.'
         );
 
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria;
+            $titulo = 'Autorización del Acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; ha aprobado la autorización del  Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria.
+                            '; ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$turnoarchivo->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
-
-
         }else {
             
-            $titulo = 'Rechazo del  Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$turnoarchivo->usuarioCreacion->name.', '.$turnoarchivo->usuarioCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el  Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria.
+            $titulo = 'Rechazo Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
+                            .'Ha sido rechazado el Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
             
-                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivo->usuarioCreacion->unidad_administrativa_id, $turnoarchivo->usuarioCreacion->id);
-                            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$turnoarchivo->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
+                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
                             
     }
-    return redirect()->route('turnoarchivo.index');
+    return redirect()->route('acuerdoconclusion.index');
     }
 
     /**
@@ -144,10 +140,11 @@ class TurnoArchivoAutortizacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro del Turno acuse envío archivo de la auditoría No. '.$numeroauditoria.'.';       
+                    .'Ha sido rechazado el registro de la radicación de auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }
+
     private function mensajeAprobado(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'

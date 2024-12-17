@@ -20,13 +20,23 @@
                 @include('flash::message')                
                 <div class="row">
                     <div class="col-md-12">
-                        @if (empty($auditoria->acuerdoconclusion))
-                            @can('acuerdoconclusion.create')
-                                <a class="btn btn-primary float-end" href="{{ route('acuerdoconclusion.create') }}">
+                        @if(getSession('cp')!=2023)                               
+                            @if (empty($auditoria->acuerdoconclusion))
+                                @can('acuerdoconclusion.create')
+                                    <a class="btn btn-primary float-end" href="{{ route('acuerdoconclusion.create') }}">
+                                        <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Acuerdo
+                                    </a> 
+                                @endcan
+                            @endif
+                            @else
+                            @if (empty($auditoria->acuerdoconclusion))
+                            @can('acuerdoconclusioncp.create')
+                                <a class="btn btn-primary float-end" href="{{ route('acuerdoconclusioncp.create') }}">
                                     <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Acuerdo
                                 </a> 
                             @endcan
                         @endif
+                        @endif    
                     </div>                    
                 </div>                                
                 <div class="table-responsive">
@@ -40,7 +50,6 @@
                                 <th>Acuerdo de conclusión UI</th> 
                                 <th>Fase / Acción</th>
                                 <th>Enviar</th> 
-
                             </tr>
                         </thead>
                         <tbody>
@@ -65,8 +74,7 @@
                                     @btnFile($auditoria->acuerdoconclusion->acuerdo_conclusion)
                                     </a><br>
                                     <small>{{ fecha($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion) }}</small>
-                                </td>
-								<td class="text-center">
+
 								@if($auditoria->numero_auditoria=='AD-097'||
 									$auditoria->numero_auditoria=='AD-108'||
 									$auditoria->numero_auditoria=='AD-120'||
@@ -95,7 +103,7 @@
                                 </td> --}}
                                 
                             {{-- fase de validación --}}
-
+                                
                                 <td class="text-center">                                                                                                                                
                                     @if (empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
@@ -105,6 +113,7 @@
                                                 </a>
                                             @endcan
                                     @endif
+                                    @if(getSession('cp')!=2023)                               
                                     @if ($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación')
                                         @can('acuerdoconclusionvalidacion.edit')
                                             <a href="{{ route('acuerdoconclusionvalidacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
@@ -114,14 +123,35 @@
                                         @else
                                             <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
                                         @endcan
-                                    @endif           
+                                    @elseif($auditoria->acuerdoconclusion->fase_autorizacion == 'En revisión')                                    
+                                        @can('acuerdoconclusionrevision.edit')
+                                            <a href="{{ route('acuerdoconclusionrevision.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                <li class="fa fa-gavel"></li>
+                                                Revisar
+                                            </a>
+                                        @else
+                                            <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                        @endcan
+                                    @endif       
+                                    @endif       
+                                    @if ($auditoria->acuerdoconclusion->fase_autorizacion == 'En autorización')
+                                    @can('acuerdoconclusionautorizacion.edit')
+                                        <a href="{{ route('acuerdoconclusionautorizacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                            <li class="fa fa-gavel"></li>
+                                            Autorizar
+                                        </a>
+                                        <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                    @else
+                                        <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                    @endcan
+                                @endif           
                                     @if ($auditoria->acuerdoconclusion->fase_autorizacion=='Autorizado')
                                         <span class="badge badge-light-success">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>                                                                                                                                               
                                     @endif                                                                                                 
                                 </td>
                                 <td class="text-center">    
                                     @if (empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')                                       
-                                        @can('acuerdoconclusion.edit')                                                        
+                                        @can('acuerdoconclusionenvio.edit')                                                        
                                             <a href="{{ route('acuerdoconclusionenvio.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
                                              Enviar
                                             </a>
@@ -134,8 +164,7 @@
                                 {!! movimientosDesglose($auditoria->acuerdoconclusion->id, 10, $auditoria->acuerdoconclusion->movimientos) !!}
                             @endif   
                             @else
-                            {{-- termino de fase de validación --}}
-                                            
+                            {{-- termino de fase de validación --}}                                            
                             <tr>
                                 <td class="text-center" colspan="5">
                                     No se encuentran registros en este apartado.
@@ -144,8 +173,7 @@
                             @endif
                         </tbody>
                     </table>
-                </div>
-                
+                </div>                
             </div>
         </div>
     </div>

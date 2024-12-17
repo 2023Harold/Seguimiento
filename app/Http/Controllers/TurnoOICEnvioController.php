@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movimientos;
-use App\Models\TurnoAcuseArchivo;
+use App\Models\TurnoOIC;
 use Illuminate\Http\Request;
 
-class TurnoArchivoEnvioController extends Controller
+class TurnoOICEnvioController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -56,29 +56,29 @@ class TurnoArchivoEnvioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(TurnoAcuseArchivo $auditoria)
-    { 
-       $turnoarchivo=$auditoria;
+    public function edit(TurnoOIC $auditoria)
+    {
+        $turnooic=$auditoria;
         Movimientos::create([
-            'tipo_movimiento' => 'Registro del turno archivo',
-                'accion' => 'TurnoArchivo',
-                'accion_id' => $turnoarchivo->id,
+            'tipo_movimiento' => 'Registro del turno al Órgano Interno de Control',
+                'accion' => 'TurnoOIC',
+                'accion_id' => $turnooic->id,
                 'estatus' => 'Aprobado',
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
             ]);
     
-            $turnoarchivo->update(['fase_autorizacion' =>  'En revisión']);
+            $turnooic->update(['fase_autorizacion' =>  'En revisión']);
     
-            $titulo = 'Revisión de los datos de turno archivo';
+            $titulo = 'Revisión de los datos del turno a la OIC';
             $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
-                        Ha sido registrada la turno archivo de la auditoría No. ' . $turnoarchivo->auditoria->numero_auditoria . ', por parte del ' .
-                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
+                        Ha sido registrada el turno a la OIC de la auditoría No. ' . $turnooic->auditoria->numero_auditoria . ', por parte del ' .
+                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
     
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
-            setMessage('Se ha enviado el turno archivo a Revisión');
+            setMessage('Se ha enviado el turno a la UI, a revisión');
     
-        return redirect()->route('turnoarchivo.index');
+        return redirect()->route('turnooic.index');
     }
 
     /**
@@ -90,7 +90,7 @@ class TurnoArchivoEnvioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**

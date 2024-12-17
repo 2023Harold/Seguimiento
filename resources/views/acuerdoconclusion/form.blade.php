@@ -23,9 +23,8 @@
             </div>        
             <div class="card-body">
                 @include('flash::message')
-                @include('layouts.contextos._auditoria')
-				@include('layouts.contextos._radicacion')
-                {!! BootForm::open(['model' => $acuerdoconclusion,'store' => 'acuerdoconclusion.store','update' => 'acuerdoconclusion.update','id' => 'form']) !!}
+                @include('layouts.contextos._auditoria')			
+                {!! BootForm::open(['model' => $acuerdoconclusion,'update' => 'acuerdoconclusion.update','update' => 'acuerdoconclusion.update','id' => 'form']) !!}
                 <div class= "row">
                     <div class="col-md-5">
                         {!! BootForm::text('nombre_titular', 'Nombre del titular a quien se dirige : *', old('nombre_titular', $acuerdoconclusion->nombre_titular)) !!}
@@ -45,9 +44,8 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-5">
-						
-						{!! BootForm::date('fecha_oficio', 'Fecha del oficio: *', old('fecha_oficio', $fecha_oficio->format('Y-m-d'))); !!}
+					<div class="col-md-5">						
+						  {!! BootForm::date('fecha_oficio', 'Fecha del Oficio *', old('fecha_oficio', fecha($acuerdoconclusion->fecha_oficio, 'Y-m-d'))); !!}
 					</div>
 				</div>				
                 <div class="row">

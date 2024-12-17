@@ -3,8 +3,11 @@
 use App\Exports\ReporteSeguimiento;
 use App\Http\Controllers\AccesoController;
 use App\Http\Controllers\AccionesController;
+use App\Http\Controllers\AcuerdoConclusionAutorizacionController;
 use App\Http\Controllers\AcuerdoConclusionController;
+use App\Http\Controllers\AcuerdoConclusionCPController;
 use App\Http\Controllers\AcuerdoConclusionEnvioController;
+use App\Http\Controllers\AcuerdoConclusionRevisionController;
 use App\Http\Controllers\AcuerdoConclusionValidacionController;
 use App\Http\Controllers\AdministracionController;
 use App\Http\Controllers\AgregarAccionesAutorizacionController;
@@ -167,12 +170,19 @@ use App\Http\Controllers\SolicitudesAclaracionRevisionController;
 use App\Http\Controllers\SolicitudesAclaracionValidacionController;
 use App\Http\Controllers\TipologiaAccionController;
 use App\Http\Controllers\TipologiaAuditoriasController;
+use App\Http\Controllers\TurnoArchivoAutortizacionController;
 use App\Http\Controllers\TurnoArchivoController;
 use App\Http\Controllers\TurnoArchivoEnvioController;
+use App\Http\Controllers\TurnoArchivoRevisionController;
 use App\Http\Controllers\TurnoArchivoTransferencia;
 use App\Http\Controllers\TurnoArchivoTransferenciaControler;
 use App\Http\Controllers\TurnoArchivoTransferenciaController;
+use App\Http\Controllers\TurnoArchivoValidacionController;
+use App\Http\Controllers\TurnoOICAutorizacionController;
 use App\Http\Controllers\TurnoOICController;
+use App\Http\Controllers\TurnoOICEnvioController;
+use App\Http\Controllers\TurnoOICRevisionController;
+use App\Http\Controllers\TurnoOICValidacionController;
 use App\Http\Controllers\TurnoUIAutorizacionController;
 use App\Http\Controllers\TurnoUIController;
 use App\Http\Controllers\TurnoUIEnvioController;
@@ -285,29 +295,46 @@ Route::get('/781523xxxxxxxxxx/loginas/{usuario}', [QuickLoginController::class, 
 
 //turnos
 
-
+//turno archivo  ui
 Route::get('/turnoui/oui', [TurnoUIController::class, 'export'])->name('turnoui.exportar');
 Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
 Route::resource('turnouienvio',TurnoUIEnvioController::class,['parameters' => ['turnouienvio' => 'auditoria']]);
 Route::resource('turnouirevision', TurnoUIRevisionController::class, ['parameters' => ['turnouirevision' => 'auditoria']]);
 Route::resource('turnouivalidacion', TurnoUIValidacionController::class, ['parameters' => ['turnouivalidacion' => 'auditoria']]);
 Route::resource('turnouiautorizacion', TurnoUIAutorizacionController::class, ['parameters' => ['turnouiautorizacion' => 'auditoria']]);
+// Route::get('/turnoui/oui', [TurnoUIController::class, 'export'])->name('turnoui.exportar');
+// Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
 
+
+//Turno OIC
 Route::get('/turnooic/oroic', [TurnoOICController::class, 'export'])->name('turnooic.exportar');
 Route::resource('turnooic',TurnoOICController::class,['parameters' => ['turnooic' => 'auditoria']]);
-Route::get('/turnoui/oui', [TurnoUIController::class, 'export'])->name('turnoui.exportar');
-Route::resource('turnoui',TurnoUIController::class,['parameters' => ['turnoui' => 'auditoria']]);
+Route::resource('turnooicenvio',TurnoOICEnvioController::class,['parameters' => ['turnooicenvio' => 'auditoria']]);
+Route::resource('turnooicrevision',TurnoOICRevisionController::class,['parameters' => ['turnooicrevision' => 'auditoria']]);
+Route::resource('turnooicvalidacion', TurnoOICValidacionController::class, ['parameters' => ['turnooicvalidacion' => 'auditoria']]);
+Route::resource('turnooicautorizacion', TurnoOICAutorizacionController::class, ['parameters' => ['turnooicautorizacion' => 'auditoria']]);
+
+//Turno Archivo
 Route::resource('turnoarchivo',TurnoArchivoController::class,['parameters' => ['turnoarchivo' => 'auditoria']]);
 Route::resource('turnoarchivoenvio',TurnoArchivoEnvioController::class,['parameters' => ['turnoarchivoenvio' => 'auditoria']]);
-Route::resource('turnotransferencia',TurnoArchivoTransferenciaController::class,['parameters' => ['turnotransferencia' => 'auditoria']]);
+Route::resource('turnoarchivorevision',TurnoArchivoRevisionController::class,['parameters' => ['turnoarchivorevision' => 'auditoria']]);
+Route::resource('turnoarchivovalidacion',TurnoArchivoValidacionController::class,['parameters' => ['turnoarchivovalidacion' => 'auditoria']]);
+Route::resource('turnoarchivoautorizacion',TurnoArchivoAutortizacionController::class,['parameters' => ['turnoarchivoautorizacion' => 'auditoria']]);
+
+//turnotransferencia
+Route::resource('turnoarchivotransferencia',TurnoArchivoTransferenciaController::class,['parameters' => ['turnotransferencia' => 'auditoria']]);
+
+
 
 //Acuerdo de conclusión
 Route::get('/acuerdoconclusion/ac', [AcuerdoConclusionController::class, 'export'])->name('acuerdoconclusionac.exportar');
 Route::get('/acuerdoconclusion/ofac', [AcuerdoConclusionController::class, 'exportOFAC'])->name('acuerdoconclusionofac.exportar');
 Route::resource('acuerdoconclusion',AcuerdoConclusionController::class,['parameters' => ['acuerdoconclusion' => 'auditoria']]);
+Route::resource('acuerdoconclusioncp',AcuerdoConclusionCPController::class,['parameters' => ['acuerdoconclusion' => 'auditoria']]);
+Route::resource('acuerdoconclusionrevision',AcuerdoConclusionRevisionController::class,['parameters' => ['acuerdoconclusion' => 'auditoria']]);
 Route::resource('acuerdoconclusionenvio',AcuerdoConclusionEnvioController::class,['parameters' => ['acuerdoconclusionenvio' => 'auditoria']]);
 Route::resource('acuerdoconclusionvalidacion', AcuerdoConclusionValidacionController::class, ['parameters' => ['acuerdoconclusionvalidacion' => 'auditoria']]);
-// Route::resource('turnouiautorizacion', TurnoUIAutorizacionController::class, ['parameters' => ['turnouiautorizacion' => 'auditoria']]);
+Route::resource('acuerdoconclusionautorizacion',AcuerdoConclusionAutorizacionController::class, ['parameters' => ['acuerdoconclusionautorizacion' => 'auditoria']]);
 
 
 

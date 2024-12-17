@@ -78,9 +78,12 @@ class TurnoOICController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(TurnoOIC $auditoria)
     {
-        //
+        $turnooic = $auditoria;
+        $auditoria = Auditoria::find(getSession('auditoria_id'));                       
+       
+        return view('turnooic.form', compact('auditoria','turnooic'));
     }
 
     /**
@@ -90,9 +93,13 @@ class TurnoOICController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, TurnoOIC $auditoria)
     {
-        //
+        $turnooic=$auditoria;
+        mover_archivos($request,['turnooic',$turnooic]);
+        $turnooic->update($request->all());
+        setMessage("Los datos se han actualizado correctamente.");
+        return redirect() -> route('turnooic.index',compact('auditoria','turnooic'));
     }
 
     /**
@@ -104,6 +111,14 @@ class TurnoOICController extends Controller
     public function destroy($id)
     {
         //
+    }
+    private function normalizarDatos(Request $request)
+    {
+        if ($request->estatus == 'Aprobado') {
+            $request['motivo_rechazo'] = null;
+        }
+
+        return $request;
     }
     public function auditoria(Auditoria $auditoria)
     {

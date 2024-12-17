@@ -406,8 +406,14 @@ Breadcrumbs::for('acuerdoconclusion.create', function (BreadcrumbTrail $trail) {
 
 Breadcrumbs::for('acuerdoconclusionvalidacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('acuerdoconclusion.index',$auditoria);
-    $trail->push('Validacion Turno a la Unidad de Investigación ', route('acuerdoconclusion.index'));
+    $trail->push('Validacion del Acuerdo de Conclusion ', route('acuerdoconclusion.index'));
 });
+
+Breadcrumbs::for('acuerdoconclusionautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('acuerdoconclusion.index',$auditoria);
+    $trail->push('Autorizacion del Acuerdo de Conclusión ', route('acuerdoconclusion.index'));
+});
+
 //recomendaciones contestaciones
 
 Breadcrumbs::for('recomendacionescontestaciones.edit', function (BreadcrumbTrail $trail,$contestacion,$auditoria) {
@@ -798,19 +804,45 @@ Breadcrumbs::for('turnooic.create', function (BreadcrumbTrail $trail) {
     $trail->push('Turno al Organo Interno de Control', route('auditoriaseguimiento.create'));
 });
 
+Breadcrumbs::for('turnooicrevision.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnooic.index',$auditoria);
+    $trail->push('Revisión del Turno al Órgano  de Control', route('turnooic.index'));
+});
+
+Breadcrumbs::for('turnooicvalidacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnooic.index',$auditoria);
+    $trail->push('Validacion del Turno al Órgano Interno de Control ', route('turnooic.index'));
+});
+
+Breadcrumbs::for('turnooicautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnooic.index',$auditoria);
+    $trail->push('Autorizacion del Turno al Órgano Interno de Control', route('turnooic.index'));
+});
+
 //turno acuse archivo
 Breadcrumbs::for('turnoarchivo.index', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('auditoriaseguimiento.index',$auditoria);
-    $trail->push('Envío de archivo ', route('turnoarchivo.index'));
+    $trail->push('Acuse envío archivo', route('turnoarchivo.index'));
 });
 
 Breadcrumbs::for('turnoarchivo.create', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimiento.index');
-    $trail->push('Envío de archivo', route('auditoriaseguimiento.create'));
+    $trail->push('Acuse envío de archivo', route('auditoriaseguimiento.create'));
 });
-Breadcrumbs::for('turnoarchivo.edit', function (BreadcrumbTrail $trail,$auditoria) {
+
+Breadcrumbs::for('turnoarchivorevision.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('turnoarchivo.index',$auditoria);
-    $trail->push('Envío al archivo de transferecia ', route('turnotransferencia.create'));
+    $trail->push('Revisión acuse envío archivo ', route('turnoarchivo.index'));
+});
+
+Breadcrumbs::for('turnoarchivovalidacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoarchivo.index',$auditoria);
+    $trail->push('Validación del Turno Archivo Envío ', route('turnoarchivo.index'));
+});
+
+Breadcrumbs::for('turnoarchivoautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoarchivo.index',$auditoria);
+    $trail->push('Autorización del Turno Archivo Envío ', route('turnoarchivo.index'));
 });
 
 

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\Movimientos;
 use App\Models\TurnoAcuseArchivo;
 use Illuminate\Http\Request;
 
-class TurnoArchivoValidacionController extends Controller
+class TurnoArchivoRevisionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -62,7 +61,7 @@ class TurnoArchivoValidacionController extends Controller
         $turnoarchivo=$auditoria;
         $auditoria=$auditoria->auditoria;
        
-        return view('turnoarchivovalidacion.form', compact('turnoarchivo','auditoria'));
+        return view('turnoarchivorevision.form', compact('turnoarchivo','auditoria'));
     }
 
     /**
@@ -72,12 +71,12 @@ class TurnoArchivoValidacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AprobarFlujoAutorizacionRequest $request, TurnoAcuseArchivo $auditoria)
+    public function update(Request $request, TurnoAcuseArchivo $auditoria)
     {
         $this->normalizarDatos($request);
         $turnoarchivo=$auditoria;
-        Movimientos::create([
-           'tipo_movimiento' => 'Validación del Turno Acuse Envío Archivo',
+       Movimientos::create([
+           'tipo_movimiento' => 'Revisión del Turno Acuse Envío Archivo',
            'accion' => 'TurnoArchivo',
            'accion_id' => $turnoarchivo->id,
            'estatus' => $request->estatus,
@@ -87,33 +86,33 @@ class TurnoArchivoValidacionController extends Controller
        ]);
 
        if ($request->estatus == 'Aprobado') {
-           $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
-       } else {
-           $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
-       }
+        $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
+    } else {
+        $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
+    }
 
-       $turnoarchivo->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
-       setMessage($request->estatus == 'Aprobado' ?
-           'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
-           'El rechazo ha sido registrado.'
-       );
+    $turnoarchivo->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+    setMessage($request->estatus == 'Aprobado' ?
+        'La Revisión ha sido registrada y se ha enviado a autorización del superior.' :
+        'El rechazo ha sido registrado.'
+    );
 
-       if ($request->estatus == 'Aprobado') {
-        $titulo = 'Autorización del Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria;
-        $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->director->puesto.':</strong><br>'
+    if ($request->estatus == 'Aprobado') {
+        $titulo = 'Revisión del Turno Acuse Envío de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria;
+        $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
                         .auth()->user()->name.', '.auth()->user()->puesto.
-                        '; ha aprobado la validación del acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria.
-                        ', por lo que se requiere realice la autorización oportuna de la misma.';
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->titular->id);
+                        '; ha aprobado la revisión del Turno Acuse Envío Archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria.
+                        ', por lo que se requiere realice la validación oportuna de la misma.';
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
     }else {
         
-        $titulo = 'Rechazo del Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria;
+        $titulo = 'Rechazo del Turno Acuse Envío de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado(a) '.$turnoarchivo->usuarioCreacion->name.', '.$turnoarchivo->usuarioCreacion->puesto.':</strong><br>'
-                        .'Ha sido rechazado la validación del Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria.
+                        .'Ha sido rechazado el Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria.
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
         
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivo->usuarioCreacion->unidad_administrativa_id, $turnoarchivo->usuarioCreacion->id);
-    }
+    }  
 
         return redirect()->route('turnoarchivo.index');
     }
@@ -126,8 +125,9 @@ class TurnoArchivoValidacionController extends Controller
      */
     public function destroy($id)
     {
-        //
+       //
     }
+
     private function normalizarDatos(Request $request)
     {
          if ($request->estatus == 'Aprobado') {

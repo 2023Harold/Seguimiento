@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Auditoria;
+
 use App\Models\Movimientos;
-use App\Models\TurnoUI;
+use App\Models\TurnoOIC;
 use Illuminate\Http\Request;
 
-class TurnoUIRevisionController extends Controller
+class TurnoOICRevisionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -56,12 +56,12 @@ class TurnoUIRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit( TurnoUI $auditoria)
+    public function edit(TurnoOIC $auditoria)
     {
-        $turnoui=$auditoria;
+        $turnooic=$auditoria;
         $auditoria=$auditoria->auditoria;
        
-        return view('turnouirevision.form', compact('turnoui','auditoria'));
+        return view('turnooicrevision.form', compact('turnooic','auditoria'));
     }
 
     /**
@@ -71,14 +71,14 @@ class TurnoUIRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TurnoUI $auditoria)
+    public function update(Request $request, TurnoOIC $auditoria)
     {
-       $this->normalizarDatos($request);
-       $turnoui=$auditoria;
+        $this->normalizarDatos($request);
+        $turnooic=$auditoria;
        Movimientos::create([
-           'tipo_movimiento' => 'Validación del Turno a la Unidad de Investigación',
-           'accion' => 'TurnoUI',
-           'accion_id' => $turnoui->id,
+           'tipo_movimiento' => 'Revisión del Turno al Órgano Interno de Control',
+           'accion' => 'TurnoOIC',
+           'accion_id' => $turnooic->id,
            'estatus' => $request->estatus,
            'usuario_creacion_id' => auth()->id(),
            'usuario_asignado_id' => auth()->id(),
@@ -91,30 +91,30 @@ class TurnoUIRevisionController extends Controller
         $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
     }
 
-    $turnoui->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+    $turnooic->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
     setMessage($request->estatus == 'Aprobado' ?
-        'La Validación ha sido registrada y se ha enviado a autorización del superior.' :
+        'La Revisión ha sido registrada y se ha enviado a autorización del superior.' :
         'El rechazo ha sido registrado.'
     );
 
     if ($request->estatus == 'Aprobado') {
-        $titulo = 'Autorización del Turno de la Unidad de Investigación de la auditoría No. '.$turnoui->auditoria->numero_auditoria;
-        $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
+        $titulo = 'Autorización del Turno al Órgano Interno de Control de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
+        $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
                         .auth()->user()->name.', '.auth()->user()->puesto.
-                        '; ha aprobado la revisión del Turno a la Unidad de Investigacion de la auditoría No. '.$turnoui->auditoria->numero_auditoria.
+                        '; ha aprobado la revisión del Turno al Órgano Interno de Control de la auditoría No. '.$turnooic->auditoria->numero_auditoria.
                         ', por lo que se requiere realice la autorización oportuna de la misma.';
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
     }else {
         
-        $titulo = 'Rechazo de la radicación de la auditoría No. '.$turnoui->auditoria->numero_auditoria;
-        $mensaje = '<strong>Estimado(a) '.$turnoui->usuarioCreacion->name.', '.$turnoui->usuarioCreacion->puesto.':</strong><br>'
-                        .'Ha sido rechazado el Turno a la Unidad de Investigación de auditoría No. '.$turnoui->auditoria->numero_auditoria.
+        $titulo = 'Rechazo de la radicación de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
+        $mensaje = '<strong>Estimado(a) '.$turnooic->usuarioCreacion->name.', '.$turnooic->usuarioCreacion->puesto.':</strong><br>'
+                        .'Ha sido rechazado el Turno al Órgano Interno de Control de la auditoría No. '.$turnooic->auditoria->numero_auditoria.
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
         
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoui->usuarioCreacion->unidad_administrativa_id, $turnoui->usuarioCreacion->id);
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnooic->usuarioCreacion->unidad_administrativa_id, $turnooic->usuarioCreacion->id);
     }  
 
-        return redirect()->route('turnoui.index');
+        return redirect()->route('turnooic.index');
     }
 
     /**
@@ -138,7 +138,7 @@ class TurnoUIRevisionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro del Turno a la Unidad de Investigación de auditoría No. '.$numeroauditoria.'.';       
+                    .'Ha sido rechazado el registro del Turno al Órgano Interno de Control de auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }

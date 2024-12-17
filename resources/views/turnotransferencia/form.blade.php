@@ -20,7 +20,7 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                {!! BootForm::open(['model' => $turnotransferencia,'store' => 'turnotransferencia.store','update' => 'turnotransferencia.update','id' => 'form']) !!}
+                {!! BootForm::open(['model' => $turnotransferencia,'store' => 'turnoarchivotransferencia.store','update' => 'turnoarchivotransferencia.update','id' => 'form']) !!}
                 <div class="row">                   
                     <div class="col-md-4">
                         {!! BootForm::text('numero_transferencia', 'Número de oficio: *', old('numero_transferencia', $turnotransferencia->numero_transferencia)) !!}
@@ -46,7 +46,7 @@
                 </div>                     
                 <div class="row">
                     <div class="col-md-6">                        
-                        @canany(['turnoarchivo.store','turnoarchivo.update'])
+                        @canany(['turnoarchivotransferencia.store','turnoarchivotrasferencia.update'])
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         @endcanany
                         <a href="{{ route('turnoarchivo.index') }}" class="btn btn-secondary me-2">Cancelar</a>
