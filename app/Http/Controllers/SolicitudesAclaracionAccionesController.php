@@ -119,7 +119,12 @@ class SolicitudesAclaracionAccionesController extends Controller
     {
         $query = $this->model;
 
-        $query = $query->where('segauditoria_id',getSession('auditoria_id'))->where('segtipo_accion_id',1);
+        $query = $query->where('segauditoria_id',getSession('auditoria_id'))->whereNull('eliminado')->where('segtipo_accion_id',1);
+
+        
+        if(getSession('cp')==2023){
+            $query = $query->where('fase_revision','Autorizado');
+        }
 
         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
             $query = $query->where('analista_asignado_id',auth()->user()->id);

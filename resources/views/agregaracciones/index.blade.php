@@ -78,11 +78,9 @@
                                 <th>Número de acción</th>
                                 <th>Cédula de acción</th>
                                 <th>Monto por aclarar</th>
-                                <th>Estatus</th>
-                                @if (count ($auditoria->acciones)==count($auditoria->accionessinenvio))
+                                <th>Estatus</th>                               
                                 <th>Editar</th>
                                 <th>Eliminar</th>
-                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -130,6 +128,7 @@
                                        
                                         @if (($accion->fase_revision=='Rechazado'))
                                             <span class="badge badge-light-danger">Rechazada</span>
+
                                         @elseif ($accion->fase_revision=='En revisión 01')
                                             @can('agregaraccionesrevision01.edit')                                                                                            
                                             <a href="{{ route('agregaraccionesrevision01.edit',$accion) }}"class="btn btn-primary">
@@ -163,33 +162,31 @@
                                             <span class="badge badge-light-warning">En autorización</span>
                                             @endcan                                           
                                             {{-- <span class="badge badge-light-warning">En revisión</span> --}}
-                                        @else
-                                            <span class="badge badge-light-warning">{{ $accion->fase_revision }}</span>
+                                        @elseif($accion->fase_revision=='Autorizado')
+                                            <span class="badge badge-light-success">{{ $accion->fase_revision }}</span>
                                         @endif                                        
-                              </td>
-                                @if (count ($auditoria->acciones)==count($auditoria->accionessinenvio))
+                                </td>                                
                                 <td class="text-center">
-                                    @can('agregaracciones.edit')
-                                        @if (empty($accion->fase_revision)||$accion->revision_lider=='Rechazado'||$accion->fase_revision=='Rechazado')
+                                    @if(empty($accion->fase_revision)||$accion->fase_revision=='Rechazado')
+                                        @can('agregaracciones.edit')                                       
                                             <a href="{{ route('agregaracciones.edit',$accion) }}">
                                                 <i class="align-middle fas fa-edit text-primary" aria-hidden="true"></i>
-                                            </a>
-                                        @endif
-                                    @endcan
-                                </td>
-                                @endif
-                                @if (count ($auditoria->acciones)==count($auditoria->accionessinenvio))
+                                            </a>                                       
+                                        @endcan
+                                    @endif
+                                </td>                            
                                 <td class="text-center">
+                                @if(empty($accion->fase_revision))
                                     @can('agregaracciones.edit')
                                        @destroy(route('agregaracciones.destroy',$accion))
                                     @endcan
-                                </td>
                                 @endif
+                                </td>
                             </tr>
-                            {!! movimientosDesglose($accion->id, 8, $accion->movimientos) !!}
+                            {!! movimientosDesglose($accion->id, 10, $accion->movimientos) !!}
                             @empty
                             <tr>
-                                <td class="text-center" colspan="9">
+                                <td class="text-center" colspan="10">
                                     <span class='text-center'>No hay registros en éste apartado</span>
                                 </td>
                             </tr>
@@ -197,14 +194,14 @@
                         </tbody>
                     </table>
                 </div>
-                @if (count ($auditoria->acciones)==count($auditoria->accionessinenvio))
-                @can('agregaracciones.concluir')
-                <div class="row">
-                    <div class="col-md-6">
-                        <a href="{{ route('agregaracciones.concluir',$auditoria) }}" class="btn btn-primary" onclick="return  confirm('Al concluir con el registro, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?');">Concluir</a>
+                @if ( (count($auditoria->acciones) > 0 && count($auditoria->acciones) == count($auditoria->accionessinenvio)) ||  count($auditoria->accionesrechazadas)>0)
+                    @can('agregaracciones.concluir')
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="{{ route('agregaracciones.concluir',$auditoria) }}" class="btn btn-primary" onclick="return  confirm('Al concluir con el registro, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?');">Concluir</a>
+                        </div>
                     </div>
-                </div>
-                @endcan
+                    @endcan
                 @endif
                 <div class="pagination">
                     {{

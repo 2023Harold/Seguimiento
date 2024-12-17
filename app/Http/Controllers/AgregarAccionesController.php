@@ -43,7 +43,7 @@ class AgregarAccionesController extends Controller
 
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('auditoriaselect_id'));
+        $auditoria = Auditoria::find(getSession('auditoriacp_id'));
         $acciones =  $this->setQuery($request)->orderBy('consecutivo')->paginate(30);
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
         $monto_aclarar=$this->setQuery($request)->orderBy('monto_aclarar');
@@ -60,7 +60,7 @@ class AgregarAccionesController extends Controller
     public function create()
     {
         
-        $auditoria = Auditoria::find(getSession('auditoriaselect_id'));        
+        $auditoria = Auditoria::find(getSession('auditoriacp_id'));        
         $numeroconsecutivo=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->get()->count()+1;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
         $tipologias= CatalogoTipologia::all()->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
@@ -79,9 +79,15 @@ class AgregarAccionesController extends Controller
     public function store(Request $request, Auditoria $auditoria)
     {
         $this->setValidator($request)->validate();       
-        $auditoria = Auditoria::find(getSession('auditoriaselect_id'));
+        $auditoria = Auditoria::find(getSession('auditoriacp_id'));
         $this->normalizarDatos($request);
         mover_archivos($request, ['cedula'], null);
+        $request['usuario_creacion_id'] = auth()->id();
+        $request['analista_asignado_id'] = auth()->id();
+        $request['analista_asignado'] = auth()->user()->name;
+        $request['lider_asignado_id'] = $auditoria->lider->id;
+        $request['lider_asignado'] = $auditoria->lider->name;
+
         $accion  = AuditoriaAccion::create($request->all());
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');
@@ -109,7 +115,7 @@ class AgregarAccionesController extends Controller
      */
     public function edit(AuditoriaAccion $accion)
     {       
-        $auditoria = Auditoria::find(getSession('auditoriaselect_id'));
+        $auditoria = Auditoria::find(getSession('auditoriacp_id'));
         $numeroconsecutivo=$accion->consecutivo;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id');
         $tipologias= CatalogoTipologia::where('tipo_auditoria_id',$accion->acto_fiscalizacion_id)->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
@@ -149,7 +155,7 @@ class AgregarAccionesController extends Controller
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('auditoriaselect_id'))->whereNull('eliminado');
+         $query = $query->where('segauditoria_id',getSession('auditoriacp_id'))->whereNull('eliminado');
 
         if ($request->filled('consecutivo')) {
             $query = $query->where('consecutivo',$request->consecutivo);
@@ -176,7 +182,7 @@ class AgregarAccionesController extends Controller
         $tiposaccion = CatalogoTipoAccion::find($request->segtipo_accion_id);
         $actosfiscalizacion = CatalogoTipoAuditoria::find($request->acto_fiscalizacion_id);
         $request['tipo'] = $tiposaccion->descripcion;
-        $request['segauditoria_id'] = getSession('auditoriaselect_id');
+        $request['segauditoria_id'] = getSession('auditoriacp_id');
         $request['usuario_actualizacion_id'] = auth()->id();
         $request['accion'] = str_replace("\r\n", "</br>",$request->accion);
         $request['acto_fiscalizacion'] = $actosfiscalizacion->descripcion;
@@ -193,7 +199,7 @@ class AgregarAccionesController extends Controller
         $numeroSiguiente = 1;
         $modelName = $this->model;
 
-        $er_records = $modelName::where('segauditoria_id', getSession('auditoriaselect_id'))->whereNull('eliminado');
+        $er_records = $modelName::where('segauditoria_id', getSession('auditoriacp_id'))->whereNull('eliminado');
 
         $er_records = $er_records->orderBy('consecutivo')->get();
 
@@ -230,14 +236,33 @@ class AgregarAccionesController extends Controller
         $auditoria->update(['fase_autorizacion_cp'=>'En revisión 01']);
             if (count($auditoria->acciones)>0)
             {
-                foreach ($auditoria->acciones as $accionrechazada)
+                foreach ($auditoria->accionesrechazadas as $accionrechazada)
                 {
                     $accionrechazada->update(['fase_revision'=>'En revisión 01']);
                     $accionrechazada->update(['revision_lider'=>'En revisión 01']);
                     $accionrechazada->update(['revision_jefe'=>null]);
+
+                    Movimientos::create([
+                        'tipo_movimiento' => 'Registro de la acción de la auditoría',
+                        'accion' => 'Revisión Acción Registro Auditoría',
+                        'accion_id' => $accionrechazada->id,
+                        'estatus' => 'Aprobado',
+                        'usuario_creacion_id' => auth()->id(),
+                        'usuario_asignado_id' => auth()->id(),
+                    ]);
+
+
+                    $titulo = 'Registro de la acción No.'.$accionrechazada->numero.' de la auditoría No.'.$auditoria->numero_auditoria;
+                    $mensaje = '<strong>Estimado (a) ' . $auditoria->lider->name . ', ' . $auditoria->lider->puesto . ':</strong><br>
+                                Ha sido registrada la acción  No. '.$accionrechazada->numero.'auditoría No. ' . $auditoria->numero_auditoria . ', por parte del Analista ' .
+                                auth()->user()->name . ', por lo que se requiere realice la revisión oportuna de la auditoría.';
+
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->lider->unidad_administrativa_id,$auditoria->lider->id);
+            
+                    
                 }
 
-                $accionesnuevas=AuditoriaAccion::where('segauditoria_id',getSession('auditoriaselect_id'))->whereNull('fase_revision')->get();
+                $accionesnuevas=AuditoriaAccion::where('segauditoria_id',getSession('auditoriacp_id'))->whereNull('eliminado')->whereNull('fase_revision')->get();
 
                 if (count($accionesnuevas)>0)
                 {
@@ -246,35 +271,27 @@ class AgregarAccionesController extends Controller
                         $accionnueva->update(['fase_revision'=>'En revisión 01']);
                         $accionnueva->update(['revision_lider'=>'En revisión 01']);
                         $accionnueva->update(['revision_jefe'=>null]);
+
+                        Movimientos::create([
+                            'tipo_movimiento' => 'Registro de la acción de la auditoría',
+                            'accion' => 'Revisión Acción Registro Auditoría',
+                            'accion_id' => $accionnueva->id,
+                            'estatus' => 'Aprobado',
+                            'usuario_creacion_id' => auth()->id(),
+                            'usuario_asignado_id' => auth()->id(),
+                        ]);
+
+                        $titulo = 'Registro de la acción No.'.$accionnueva->numero.' de la auditoría No.'.$auditoria->numero_auditoria;
+                        $mensaje = '<strong>Estimado (a) ' . $auditoria->lider->name . ', ' . $auditoria->lider->puesto . ':</strong><br>
+                                Ha sido registrada la acción  No. '.$accionnueva->numero.'auditoría No. ' . $auditoria->numero_auditoria . ', por parte del Analista ' .
+                                auth()->user()->name . ', por lo que se requiere realice la revisión oportuna de la auditoría.';
+
+                        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->lider->unidad_administrativa_id,$auditoria->lider->id);
                     }
                 }
+                setMessage('El registro auditoría se ha concluido y enviado a revisión.');
             }
        
-
-        Movimientos::create([
-            'tipo_movimiento' => 'Registro de la auditoría',
-            'accion' => 'Registro de la auditoría',
-            'accion_id' => $auditoria->id,
-            'estatus' => 'Aprobado',
-            'usuario_creacion_id' => auth()->id(),
-            'usuario_asignado_id' => auth()->id(),
-        ]);
-
-        if (strlen($auditoria->nivel_autorizacion) == 3 || strlen($auditoria->nivel_autorizacion) == 4) {
-            $nivel_autorizacion = $auditoria->nivel_autorizacion;
-        } else {
-            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 5);
-        }
-
-
-        $titulo = 'Registro de auditoría';
-        $mensaje = '<strong>Estimado (a) ' . $auditoria->lider->name . ', ' . $auditoria->lider->puesto . ':</strong><br>
-                    Ha sido registrada la auditoría No. ' . $auditoria->numero_auditoria . ', por parte del Analista ' .
-                    auth()->user()->name . ', por lo que se requiere realice la revisión oportuna de la auditoría.';
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->lider->unidad_administrativa_id,$auditoria->lider->id);
-
-        setMessage('El registro auditoría se ha concluido y enviado a revisión.');
-
 
         return  redirect()->route('agregaracciones.index');
     }

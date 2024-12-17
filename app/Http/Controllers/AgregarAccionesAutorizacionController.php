@@ -60,7 +60,7 @@ class AgregarAccionesAutorizacionController extends Controller
      */
     public function edit(AuditoriaAccion $accion)
     {
-        $auditoria = Auditoria::find(getSession('auditoriaselect_id'));
+        $auditoria = Auditoria::find(getSession('auditoriacp_id'));
         return view('agregaraccionesautorizacion.form', compact('accion','auditoria'));
     }
 

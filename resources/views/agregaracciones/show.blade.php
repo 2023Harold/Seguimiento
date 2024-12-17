@@ -8,8 +8,8 @@
 {{ Breadcrumbs::render('agregaracciones.acciondepa',$accion->id,$movimiento,$auditoria) }}
 @elseif(!empty($movimiento)&&$movimiento=='lideranalistaconsultar')
 {{ Breadcrumbs::render('agregaracciones.accionlider',$accion->id,$movimiento,$auditoria) }}
-{{-- @else
-{{ Breadcrumbs::render('agregaracciones.accion',$accion) }} --}}
+@else
+{{ Breadcrumbs::render('agregaracciones.accion',$accion) }} 
 @endif
 @endsection
 @section('content')

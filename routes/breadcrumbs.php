@@ -122,7 +122,6 @@ Breadcrumbs::for('seguimientoauditorias.create', function (BreadcrumbTrail $trai
     $trail->parent('seguimientoauditorias');
     $trail->push('Auditoría', route('seguimientoauditoria.create'));
 });
-
 Breadcrumbs::for('seguimientoauditorias.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('seguimientoauditorias');
     $trail->push('Auditoria', route('seguimientoauditoria.edit',$auditoria));
@@ -334,31 +333,35 @@ Breadcrumbs::for('auditoriaseguimiento.edit', function (BreadcrumbTrail $trail,$
 
 Breadcrumbs::for('agregaracciones.index', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimiento.index');
-    $trail->push('Agregar Acciones', route('agregaracciones.index'));
+    $trail->push('Acciones', route('agregaracciones.index'));
 });
 Breadcrumbs::for('agregaracciones.create', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimiento.index');
     $trail->push('Accion', route('agregaracciones.index'));
 });
 
+Breadcrumbs::for('agregaracciones.accion', function (BreadcrumbTrail $trail,$accion) {
+    $trail->parent('agregaracciones.index');
+    $trail->push('Accion', route('agregaracciones.accion',$accion));
+});
 
 Breadcrumbs::for('agregaraccionesrevision01.edit', function (BreadcrumbTrail $trail,$accion) {
-    $trail->parent('auditoriaseguimiento.index');
+    $trail->parent('agregaracciones.index');
     $trail->push('Revisar', route('agregaraccionesrevision01.edit',$accion));
 });
 
 Breadcrumbs::for('agregaraccionesrevision.edit', function (BreadcrumbTrail $trail,$accion) {
-    $trail->parent('auditoriaseguimiento.index');
+    $trail->parent('agregaracciones.index');
     $trail->push('Revisar', route('agregaraccionesrevision.edit',$accion));
 });
 
 Breadcrumbs::for('agregaraccionesvalidacion.edit', function (BreadcrumbTrail $trail,$accion) {
-    $trail->parent('auditoriaseguimiento.index');
+    $trail->parent('agregaracciones.index');
     $trail->push('Validar', route('agregaraccionesvalidacion.edit',$accion));
 });
 
 Breadcrumbs::for('agregaraccionesautorizacion.edit', function (BreadcrumbTrail $trail,$accion) {
-    $trail->parent('auditoriaseguimiento.index');
+    $trail->parent('agregaracciones.index');
     $trail->push('Autorizar', route('agregaraccionesautorizacion.edit',$accion));
 });
 
@@ -393,6 +396,11 @@ Breadcrumbs::for('comparecencia.show', function (BreadcrumbTrail $trail,$compare
     $trail->push('Datos de comparecencia', route('comparecencia.show',$comparecencia));
 });
 
+Breadcrumbs::for('radicacionrevision.edit', function (BreadcrumbTrail $trail,$radicacion,$auditoria) {
+    $trail->parent('radicacion.index',$auditoria);
+    $trail->push('Revisar', route('radicacionrevision.edit',$radicacion));
+});
+
 Breadcrumbs::for('radicacionvalidacion.edit', function (BreadcrumbTrail $trail,$radicacion,$auditoria) {
     $trail->parent('radicacion.index',$auditoria);
     $trail->push('Validar', route('radicacionvalidacion.edit',$radicacion));
@@ -406,6 +414,10 @@ Breadcrumbs::for('radicacionautorizacion.edit', function (BreadcrumbTrail $trail
 Breadcrumbs::for('comparecenciaacuse.edit', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
     $trail->parent('radicacion.index',$auditoria);
     $trail->push('Acuses', route('comparecenciaacuse.edit',$comparecencia));
+});
+Breadcrumbs::for('comparecenciaacusecp.edit', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
+    $trail->parent('radicacion.index',$auditoria);
+    $trail->push('Acuses', route('comparecenciaacusecp.edit',$comparecencia));
 });
 
 //acuerdo conclusion
@@ -866,6 +878,21 @@ Breadcrumbs::for('turnotransferencia.create', function (BreadcrumbTrail $trail) 
     $trail->push('Envío de archivo', route('turnoarchivo.index'));
 });
 
+
+Breadcrumbs::for('seguimientoauditoriascp.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Auditorias', route('seguimientoauditoriacp.index'));
+});
+
+Breadcrumbs::for('seguimientoauditoriascp.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('seguimientoauditoriascp.index');
+    $trail->push('Agregar', route('seguimientoauditoriacp.create'));
+});
+
+Breadcrumbs::for('seguimientoauditoriascp.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('seguimientoauditoriascp.index');
+    $trail->push('Editar', route('seguimientoauditoriacp.edit',$auditoria));
+});
 
 
 

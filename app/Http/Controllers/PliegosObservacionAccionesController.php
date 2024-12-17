@@ -6,6 +6,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class PliegosObservacionAccionesController extends Controller
 {
@@ -22,8 +23,22 @@ class PliegosObservacionAccionesController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        if(empty(getSession('numpaginapli'))){
+            setSession('numpaginapli',1);
+        }else{
+            setSession('numpaginapli',getSession('numpaginapo'));
+        }
+       
+        $auditoria = Auditoria::find(getSession('auditoria_id'));  
+
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
+       
+        //$acciones->setPage(getSession('numpaginapo'));
+        
+        //$request['page']=getSession('numpaginapo');  
+        //dd($request,getSession('numpaginapo'));    
+
+       
 
         return view('pliegosobservacionacciones.index', compact('request','acciones', 'auditoria'));
     }
@@ -67,7 +82,7 @@ class PliegosObservacionAccionesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(AuditoriaAccion $accion)
-    {
+    {        
         setSession('pliegosobservacionauditoriaaccion_id',$accion->id);
         $pliegosobservacion=$accion->pliegosobservacion;
         if (empty($accion->pliegosobservacion)) {
@@ -92,7 +107,6 @@ class PliegosObservacionAccionesController extends Controller
           }else{
             setSession('pliegosobservacionatencion_id',$pliegosobservacion->id);
         }
-        //   dd();
 
          return redirect()->route('pliegosobservacionatencion.index');
     }
@@ -124,7 +138,11 @@ class PliegosObservacionAccionesController extends Controller
     {
          $query = $this->model;
 
-         $query = $query->where('segauditoria_id',getSession('auditoria_id'))->where('segtipo_accion_id',3);
+         $query = $query->where('segauditoria_id',getSession('auditoria_id'))->whereNull('eliminado')->where('segtipo_accion_id',3);
+         
+         if(getSession('cp')==2023){
+            $query = $query->where('fase_revision','Autorizado');
+         }
 
          if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
             $query = $query->where('analista_asignado_id',auth()->user()->id);

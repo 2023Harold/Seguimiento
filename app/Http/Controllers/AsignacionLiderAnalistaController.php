@@ -68,8 +68,8 @@ class AsignacionLiderAnalistaController extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-        $lideres=User::where('siglas_rol','LP')->where('unidad_administrativa_id', auth()->user()->jefe->unidad_administrativa_id)->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
-        $analistas=User::where('siglas_rol','ANA')->where('unidad_administrativa_id', auth()->user()->unidad_administrativa_id)->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $lideres = usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','LP')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $analistas = usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','ANA')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $accion="asignar";
 
         return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));

@@ -296,7 +296,7 @@ class SeguimientoAuditoria2023Controller extends Controller
            in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())){
             $unidadAdministrativa=rtrim(getSession('cp_ua'), 0);
-            $query = $query->where('fase_autorizacion','En autorización')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"]);
+            $query = $query->whereIn('fase_autorizacion',['En autorización','Autorizado'])->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"]);
         }
 
 

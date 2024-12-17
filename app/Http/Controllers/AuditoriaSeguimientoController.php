@@ -180,4 +180,11 @@ class AuditoriaSeguimientoController extends Controller
 
         return  redirect()->route('auditoriaseguimientoacciones.index');
     }
+
+    public function seleccionarauditoria (Auditoria $auditoria)
+    {
+        setSession('auditoriacp_id',$auditoria->id);
+
+        return  redirect()->route('agregaracciones.index');
+    }
 }

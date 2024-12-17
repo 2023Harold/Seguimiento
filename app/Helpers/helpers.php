@@ -9,14 +9,23 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Jaspersoft\Client\Client;
 use Carbon\Carbon;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Luecano\NumeroALetras\NumeroALetras;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat\NumberFormatter;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
+function paginaactual($numeropagina=null,$accion=null){
+    if(empty($numeropagina)&&empty($accion)){
+        return "";
+    }
+    setSession('numpagina'.$accion,$numeropagina);
+        
+    return $numeropagina;
+}
+
 function fecha($fecha = null, string $formato = 'd/m/Y')
-{
-	
+{	
     if(empty($fecha)){
         return "";
     }
@@ -48,6 +57,11 @@ function setMessage($mensaje, $alerta = 'success')
 function setSession($attribute = '', $value = '')
 {
     session([config('app.name').'_'.$attribute => $value]);
+}
+//Eliminar las variables de sesion para el usuario
+function delSession($attribute = '', $value = '')
+{
+    unset($_SESSION[config('app.name').'_'.$attribute]);
 }
 
 //Retorna las variables de sesion para el usuario

@@ -2,32 +2,32 @@
 <div class="col-lg-6 col-md-6 col-sm-12 col-12">
     <label>Número de memorándum de recepción del expediente: </label>
     <span class="text-primary">
-        {{ $auditoria->radicacion->num_memo_recepcion_expediente }}
+        {{ optional($auditoria->radicacion)->num_memo_recepcion_expediente }}
     </span>
 </div>
 <div class="col-lg-6 col-md-6 col-sm-12 col-12">
     <label>Fecha de recepción del expediente turnado: </label>
     <span class="text-primary">
-        {{ fecha($auditoria->radicacion->fecha_expediente_turnado)}}
+        {{ fecha(optional($auditoria->radicacion)->fecha_expediente_turnado)}}
     </span>
 </div>
 <div class="col-lg-6 col-md-6 col-sm-12 col-12">
     <label>Número de expediente US: </label>
     <span class="text-primary">
-        {{ $auditoria->radicacion->numero_expediente}}
+        {{ optional($auditoria->radicacion)->numero_expediente}}
     </span>
 </div>       
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12 col-12">                         
         <label>Número de oficio de notificación del informe de auditoría: </label>
         <span class="text-primary">
-            {{ $auditoria->radicacion->numero_acuerdo }}
+            {{ optional($auditoria->radicacion)->numero_acuerdo }}
         </span>
     </div>     
 	<div class="col-lg-12 col-md-12 col-sm-12 col-12">
         <label>Fecha radicación: </label>
         <span class="text-primary">
-            {{ fecha($auditoria->radicacion->fecha_notificacion)}}
+            {{ fecha(optional($auditoria->radicacion)->fecha_notificacion)}}
         </span>
     </div>  
 @if(!empty($auditoria->comparecencia))	
@@ -46,7 +46,7 @@
     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
         <label>Fecha y hora de la comparecencia: </label>
         <span class="text-sistema">
-            {{ fecha($auditoria->comparecencia->fecha_comparecencia) . ' ' . date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_inicio)) . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"":"-".date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_termino))) }}
+            {{ fecha(optional($auditoria->comparecencia)->fecha_comparecencia) . ' ' . date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_inicio)) . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"":"-".date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_termino))) }}
         </span>
     </div>
     @if (!empty($auditoria->comparecencia->agenda->hora_fin))

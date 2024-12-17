@@ -68,6 +68,7 @@ use App\Http\Controllers\CedulaInicialRevisionController;
 use App\Http\Controllers\CedulaInicialValidacionController;
 use App\Http\Controllers\ComparecenciaActaController;
 use App\Http\Controllers\ComparecenciaAcusesController;
+use App\Http\Controllers\ComparecenciaAcusesCPController;
 use App\Http\Controllers\ComparecenciaAgendaController;
 use App\Http\Controllers\ComparecenciaController;
 use App\Http\Controllers\ComparecenciaEnvioController;
@@ -114,6 +115,7 @@ use App\Http\Controllers\QuickLoginController;
 use App\Http\Controllers\RadicacionAutorizacionController;
 use App\Http\Controllers\RadicacionController;
 use App\Http\Controllers\RadicacionEnvioController;
+use App\Http\Controllers\RadicacionRevisionController;
 use App\Http\Controllers\RadicacionValidacionController;
 use App\Http\Controllers\RecomendacionesAccionesController;
 use App\Http\Controllers\RecomendacionesAcusesController;
@@ -445,9 +447,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 	Route::get('radicacionpdf/{radicacionpdf}', [RadicacionController::class,'radicacionpdf'])->name('radicacion.radicacionpdf');
     Route::resource('radicacionenvio',RadicacionEnvioController::class,['parameters' => ['radicacionenvio' => 'radicacion']]);
     Route::get('radicacionconcluir/{radicacion}', [RadicacionController::class,'concluir'])->name('radicacion.concluir');
+    Route::resource('radicacionrevision', RadicacionRevisionController::class,['parameters' => ['radicacionrevision' => 'radicacion']]);
     Route::resource('radicacionvalidacion', RadicacionValidacionController::class,['parameters' => ['radicacionvalidacion' => 'radicacion']]);
     Route::resource('radicacionautorizacion', RadicacionAutorizacionController::class,['parameters' => ['radicacionautorizacion' => 'radicacion']]);
     Route::resource('comparecenciaacuse', ComparecenciaAcusesController::class,['parameters' => ['comparecenciaacuse' => 'comparecencia']]);
+    Route::resource('comparecenciaacusecp', ComparecenciaAcusesCPController::class,['parameters' => ['comparecenciaacusecp' => 'comparecencia']]);
     Route::resource('comparecenciaagenda', ComparecenciaAgendaController::class,['parameters' => ['comparecenciaagenda' => 'comparecencia']]);
 
     /*Comparecencia*/

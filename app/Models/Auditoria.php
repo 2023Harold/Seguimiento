@@ -81,6 +81,10 @@ class Auditoria extends Model
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereNull('fase_revision')->orderBy('consecutivo');
             }
+            public function accionesrechazadas()
+            {
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('fase_revision','Rechazado')->orderBy('consecutivo');
+            }
 
             public function accionesall()
             {

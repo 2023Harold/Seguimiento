@@ -30,6 +30,11 @@
                     </div>
                 </div>
                 {!! BootForm::close() !!}
+                <div class="pagination justify-content-end">
+                    {{
+                    $acciones->appends(['numero_auditoria'=>$request->numero_auditoria,'monto_aclarar'=>$request->monto_aclarar,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5')
+                    }}
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -46,7 +51,7 @@
                             @forelse ($acciones as $accion)
                             <tr>
                                 <td class="text-center">
-                                    {{$loop->iteration}}
+                                {{str_pad(($acciones ->currentpage()-1) * $acciones ->perpage() + $loop->index + 1, 3, "0", STR_PAD_LEFT)}}
                                 </td>
                                 <td>
                                     {{ $accion->numero }}
@@ -94,7 +99,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
+                <div class="pagination justify-content-end">
                     {{
                     $acciones->appends(['numero_auditoria'=>$request->numero_auditoria,'monto_aclarar'=>$request->monto_aclarar,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5')
                     }}

@@ -62,7 +62,8 @@ class AgregarAccionesRevision01Controller extends Controller
      */
     public function edit(AuditoriaAccion $accion)
     {
-        $auditoria = Auditoria::find(getSession('auditoriaselect_id'));
+        $auditoria = Auditoria::find(getSession('auditoriacp_id'));
+
         return view('agregaraccionesrevision01.form', compact('accion','auditoria'));
     }
 
@@ -83,18 +84,17 @@ class AgregarAccionesRevision01Controller extends Controller
             return back()->withInput();
         } 
 
-        if ($request->estatus == 'Aprobado'){                               
-                $accion->update(['fase_revision'=>'En revisión']);
-            
-        }       
-       $lider=User::where('unidad_administrativa_id', substr($auditoria->usuarioCreacion->unidad_administrativa_id, 0, 5).'0')->first();
-      
+        $accion->update(['revision_lider' => $request->estatus == 'Aprobado' ? 'En revisión' : 'Rechazado']);
+        $accion->update(['fase_revision' => $request->estatus == 'Aprobado' ? 'En revisión' : 'Rechazado']);
+
+        $jefe=usuariocp(substr($accion->usuarioCreacion->unidad, 0, 5).'0')->where('siglas_rol','JD')->first();
+             
         $this->normalizarDatos($request);
 
         Movimientos::create([
-            'tipo_movimiento' => 'Revisión del registro de la auditoría',
-            'accion' => 'Registro de las acciones',
-            'accion_id' => $auditoria->id,
+            'tipo_movimiento' => 'Revisión de la acción del registro de la auditoría',
+            'accion' => 'Revisión Acción Registro Auditoría',
+            'accion_id' => $accion->id,
             'estatus' => $request->estatus,
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
@@ -115,15 +115,14 @@ class AgregarAccionesRevision01Controller extends Controller
         if ($request->estatus == 'Aprobado') {
             $auditoria->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
             $titulo = 'Revisión del registro de la auditoria No. '.$auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$lider->name.', '.$lider->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado el registro de la auditoría No. '.$auditoria->numero_auditoria.
+                            '; se ha aprobado el registro de la acción No.'.$accion->numero.' de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
         } else {
 
-            $auditoria->update(['registro_concluido'=>'No']);
-            $titulo = 'Rechazo del registro de la auditoria No. '.$auditoria->numero_auditoria;
+            $titulo = 'Rechazo del registro de la acción No.'.$accion->numero.'  auditoria No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$auditoria->usuarioCreacion->name.', '.$auditoria->usuarioCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';

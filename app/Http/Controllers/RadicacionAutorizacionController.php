@@ -187,20 +187,20 @@ class RadicacionAutorizacionController extends Controller
 
             $constancia = guardarConstanciasFirmadas($radicacion, 'constanciaradicacion', $request, 'constancia');
 
-            Movimientos::create([
-                'tipo_movimiento' => 'Autorización de la radicación',
-                'accion' => 'Radicación',
-                'accion_id' => $radicacion->id,
-                'estatus' => $request->estatus,
-                'usuario_creacion_id' => auth()->id(),
-                'usuario_asignado_id' => auth()->id(),
-                'motivo_rechazo' => $request->motivo_rechazo,
-            ]);       
+            // Movimientos::create([
+            //     'tipo_movimiento' => 'Autorización de la radicación',
+            //     'accion' => 'Radicación',
+            //     'accion_id' => $radicacion->id,
+            //     'estatus' => $request->estatus,
+            //     'usuario_creacion_id' => auth()->id(),
+            //     'usuario_asignado_id' => auth()->id(),
+            //     'motivo_rechazo' => $request->motivo_rechazo,
+            // ]);       
         
-            $radicacion->update([
-                'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
-                'constancia' => $constancia->constancia_pdf,
-            ]);
+            // $radicacion->update([
+            //     'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
+            //     'constancia' => $constancia->constancia_pdf,
+            // ]);
         // }
 
         

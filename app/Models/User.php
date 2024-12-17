@@ -67,6 +67,19 @@ class User extends Authenticatable
         'updated_at'=>'datetime'
     ];
 
+    public function getUnidadAttribute()
+    {
+        if(getSession('cp')==2021){
+            return $this->cp_ua2021;
+        }
+        if(getSession('cp')==2022){
+            return $this->cp_ua2022;
+        }
+        if(getSession('cp')==2023){
+            return $this->cp_ua2023;
+        }
+    }
+
     public function unidadAdministrativa()
     {
         return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'id', 'unidad_administrativa_id');
@@ -82,6 +95,12 @@ class User extends Authenticatable
     public function unidadAdministrativa2023()
     {
         return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'id', 'cp_ua2023');
+    }
+    public function getNotificacionesCountAttribute()
+    {
+        $hoy = now();
+
+        return $this->hasMany(Notificacion::class, 'destinatario_id', 'id')->whereNull('fecha_muestra_fin')->where('fecha_muestra_inicio', '<=', $hoy)->where('estatus', 'Pendiente')->count();
     }
     public function notificaciones()
     {

@@ -112,6 +112,12 @@ class PrasaccionesController extends Controller
 
          $query = $query->where('segauditoria_id',getSession('auditoria_id'))->whereNull('eliminado')->where('segtipo_accion_id',4);
 
+         if(getSession('cp')==2023){
+            $query = $query->where('fase_revision','Atorizado');
+         }
+
+        
+
          if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){           
             $query = $query->where('lider_asignado_id',auth()->user()->id);
          } 

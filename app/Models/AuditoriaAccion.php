@@ -153,6 +153,14 @@ class AuditoriaAccion extends Model
 
     public function seleccionarauditoria()
     {
-        return $this->belongsTo(Auditoria::class, 'auditoriaselect_id','id');
+        return $this->belongsTo(Auditoria::class, 'auditoriacp_id','id');
     } 
+    public function usuarioCreacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_creacion_id', 'id');
+    }
+    public function usuarioActualizacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_actualizacion_id', 'id');
+    }
 }

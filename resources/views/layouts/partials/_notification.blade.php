@@ -2,10 +2,10 @@
 <div class="btn btn-icon w-30px h-30px w-md-40px h-md-40px position-relative" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" id="kt_drawer_chat_toggle">
     <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
     <i class="fa fa-bell fs-2x"></i>
-    @if (count(auth()->user()->notificaciones)>0)
+    @if (auth()->user()->NotificacionesCount>0)
     <!--end::Svg Icon-->
     <span class="badge badge-square badge-danger h-20px w-20px t-10 position-static translate-middle pulse pulse-danger top-0 start-100 animation-blink" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="badge_id">
-        <span id="numero_notificaciones">{{ count(auth()->user()->notificaciones) }}</span>
+        <span id="numero_notificaciones">{{ auth()->user()->NotificacionesCount }}</span>
         <span class="pulse-ring" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="pulse_id"></span>
     </span>
     <!--<span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
@@ -19,9 +19,9 @@
     <!--begin::Title-->
     <h1 class="text-primary fw-bold mb-3">Notificaciones</h1>
     <!--end::Title-->
-    @if (count(auth()->user()->notificaciones)>0)
+    @if (auth()->user()->NotificacionesCount>0)
         <!--begin::Status-->
-        <span class="badge bg-primary py-2 px-3" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="badge_etiqueta_id"><span id="numero_notificaciones_badge">{{ count(auth()->user()->notificaciones)}}</span> &nbsp;  <span id="span-ntf">{{count(auth()->user()->notificaciones)==1?'notificación':'notificaciones'}}</span></span>
+        <span class="badge bg-primary py-2 px-3" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="badge_etiqueta_id"><span id="numero_notificaciones_badge">{{ auth()->user()->NotificacionesCount}}</span> &nbsp;  <span id="span-ntf">{{auth()->user()->NotificacionesCount==1?'notificación':'notificaciones'}}</span></span>
         <!--end::Status-->
     @endif
     <span class="mt-2"><a href="{{route('notificaciones.index')}}">Ver todas las notificaciones</a></span>

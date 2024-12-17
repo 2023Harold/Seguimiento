@@ -60,7 +60,7 @@ class AgregarAccionesRevisionController extends Controller
      */
     public function edit(AuditoriaAccion $accion)
     {
-        $auditoria = Auditoria::find(getSession('auditoriaselect_id'));
+        $auditoria = Auditoria::find(getSession('auditoriacp_id'));
         return view('agregaraccionesrevision.form', compact('accion','auditoria'));
     }
 
@@ -81,24 +81,26 @@ class AgregarAccionesRevisionController extends Controller
             return back()->withInput();
         } 
 
-        if ($request->estatus == 'Aprobado'){                               
-                $accion->update(['fase_revision'=>$request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado']);
+                                    
+        $accion->update(['fase_revision'=>$request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado']);
             
-        }       
-       $jefe=User::where('unidad_administrativa_id', substr($auditoria->usuarioCreacion->unidad_administrativa_id, 0, 5).'0')->first();
+               
+       $director = usuariocp(substr($accion->usuarioCreacion->unidad, 0, 4).'00')->where('siglas_rol','DS')->first();
+       
       
         $this->normalizarDatos($request);
 
         Movimientos::create([
-            'tipo_movimiento' => 'Revisión del registro de la auditoría',
-            'accion' => 'Registro de las acciones',
-            'accion_id' => $auditoria->id,
+            'tipo_movimiento' => 'Revisión de la acción del registro de la auditoría',
+            'accion' => 'Revisión Acción Registro Auditoría',
+            'accion_id' => $accion->id,
             'estatus' => $request->estatus,
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);
 
+        
         if (strlen($auditoria->nivel_autorizacion) == 3 || strlen($auditoria->nivel_autorizacion) == 4) {
             $nivel_autorizacion = $auditoria->nivel_autorizacion;
         } else {
@@ -112,20 +114,19 @@ class AgregarAccionesRevisionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $auditoria->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
-            $titulo = 'Revisión del registro de la auditoria No. '.$auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
+            $titulo = 'Validación del registro de la acción No.'.$accion->numero.' de la auditoria No. '.$auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$director->name.', '.$director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado el registro de la auditoría No. '.$auditoria->numero_auditoria.
+                            '; se ha aprobado el registro de la acción No.'.$accion->numero.' de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
         } else {
 
-            $auditoria->update(['registro_concluido'=>'No']);
-            $titulo = 'Rechazo del registro de la auditoria No. '.$auditoria->numero_auditoria;
+            $titulo = 'Rechazo de la acción No.'.$accion->numero.' de la auditoria No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$auditoria->usuarioCreacion->name.', '.$auditoria->usuarioCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el registro de auditoría No. '.$auditoria->numero_auditoria.
+                            .'Ha sido rechazado el registro de la acción No.'.$accion->numero.'de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->usuarioCreacion->unidad_administrativa_id, $auditoria->usuarioCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->usuarioCreacion->unidad, $auditoria->usuarioCreacion->id);
         }
 
         return redirect()->route('agregaracciones.index');

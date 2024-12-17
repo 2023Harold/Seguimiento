@@ -49,7 +49,7 @@
                                 <th>Monto por aclarar</th>
                                 <th>Seguimiento</th>
                                 @if(getSession('cp')==2023)
-                                <th>Agregar acciones</th>
+                                <th>Acciones</th>
                                 @endif
                             </tr>
                         </thead>
@@ -101,7 +101,7 @@
                                       <td class="text-center">   
                                             @can('seleccionarauditoria.auditoria')                                         
                                                 <a href="{{ route('seleccionarauditoria.auditoria',$auditoria) }}"class="btn btn-primary">
-                                                  Acciones
+                                                  Ingresar
                                                 </a>  
                                             @endcan                                                                                                                                               
                                     </td>         
