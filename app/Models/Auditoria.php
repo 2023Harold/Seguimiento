@@ -59,6 +59,11 @@ class Auditoria extends Model
                 'fase_autorizacion_cp',
                 'analistacp_id',
                 'lidercp_id',
+                'lider_asignado',
+                'analista_asignado',
+                'staff_asignada',
+                'staff_juridico_id',
+                'reasignacion_staff',
             ];
 
 
