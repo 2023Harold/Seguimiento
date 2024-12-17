@@ -128,6 +128,23 @@ class User extends Authenticatable
        // return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 4).'00')->first();
     }
 
+    public function getStaffAttribute()
+    {
+        if(getSession('cp')==2021){
+            return $this->where('cp_ua2021', substr(getSession('cp_ua'), 0, 4).'00')->first();
+        }
+        if(getSession('cp')==2022){
+            return $this->where('cp_ua2022', substr(getSession('cp_ua'), 0, 4).'00')->first();
+        }
+        if(getSession('cp')==2023){
+            return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 4).'00')->first();
+        }
+       
+        //return usuariocp( $clave)->first();
+       
+       // return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 4).'00')->first();
+    }
+
     public function getTitularAttribute()
     {
         $clave = substr(getSession('cp_ua'), 0, 3).'000';

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('cargo_titular_informe',100)->nullable();
             $table->string('domicilio_informe',150)->nullable();
             $table->string('numero_fojas',100)->nullable();
-            $table->date('fecha_envio',100)->nullable();
+            $table->date('fecha_envio')->nullable();
             $table->string('acuse_notificacion',100)->nullable();
             $table->string('fecha_notificacion',100)->nullable();
         });

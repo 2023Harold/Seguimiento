@@ -260,6 +260,21 @@ Breadcrumbs::for('asignaciondepartamento.reasignar', function (BreadcrumbTrail $
     $trail->push('Reasignación', route('asignaciondepartamento.reasignar',$accion));
 });
 
+//Asignacion Staff Juridico
+Breadcrumbs::for('asignacionstaff.accionesconsulta', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('asignaciondepartamento.index');
+    $trail->push('Acciones', route('asignacionstaff.accionesconsulta',$auditoria));
+});
+
+Breadcrumbs::for('asignacionstaff.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('asignaciondepartamento.index');
+    $trail->push('Asignación', route('asignacionstaff.edit',$auditoria));
+});
+Breadcrumbs::for('asignacionstaff.reasignar', function (BreadcrumbTrail $trail, $auditoria, $accionstaff) {
+    $trail->parent('asignacionstaff.edit', $auditoria);
+    $trail->push($accionstaff, route('asignacionstaff.reasignar', $auditoria));
+});
+
 //Asignacion Lider y Analista
 Breadcrumbs::for('asignacionlideranalista.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');

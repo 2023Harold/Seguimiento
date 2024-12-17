@@ -23,7 +23,7 @@
             'permiso.update','id'=>'form']) !!}
             <div class="row">
                 <div class="col-md-6">
-                    {!! BootForm::text("name", "Nombre del permiso: *", old("name",$permiso->name), ['maxlength' => '50']); !!}
+                    {!! BootForm::text("name", "Nombre del permiso: *", old("name",$permiso->name), ['maxlength' => '50']) !!}
                 </div>
             </div>
             <div class="row">

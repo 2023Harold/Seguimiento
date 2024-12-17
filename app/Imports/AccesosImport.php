@@ -39,5 +39,11 @@ class AccesosImport implements ToModel, WithHeadingRow
         if($row['analista']=='X'){
             Role::where('name','Analista')->first()->givePermissionTo($row['permiso'].(!empty($row['metodo'])?'.'.$row['metodo']:''));
         }
+        if($row['staff_juridico']=='X'){
+            Role::where('name','Staff Juridico')->first()->givePermissionTo($row['permiso'].(!empty($row['metodo'])?'.'.$row['metodo']:''));
+        }
+        if($row['consulta_administrador']=='X'){
+            Role::where('name','Consulta Administrador')->first()->givePermissionTo($row['permiso'].(!empty($row['metodo'])?'.'.$row['metodo']:''));
+        }
     }
 }

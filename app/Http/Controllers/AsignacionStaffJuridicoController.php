@@ -9,7 +9,7 @@ use App\Models\CatalogoUnidadesAdministrativas;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class AsignacionDepartamentoController extends Controller
+class AsignacionStaffJuridicoController extends Controller
 {
     protected $model;
 
@@ -24,9 +24,7 @@ class AsignacionDepartamentoController extends Controller
      */
     public function index(Request $request)
     {
-        $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-               
-        return view('asignaciondepartamento.index', compact('auditorias', 'request'));
+        //
     }
 
     /**
@@ -68,13 +66,23 @@ class AsignacionDepartamentoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Auditoria $auditoria)
-    {        
+    {
         $unidades = auth()->user()->unidadAdministrativa->departamentos->prepend('Seleccionar una opción', '');         
-        $acciondep ='Asignación';   
+        $accionstaff ='Asignación';   
         $departamentoasignado = null;           
         $acciones =  AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->orderBy('id')->get();
-               
-        return view('asignaciondepartamento.form', compact('auditoria','unidades','acciondep','departamentoasignado','acciones'));        
+        $staffasignada = null;
+
+        // Obtener los usuarios STAFF de la dirección asignada
+        $staff = User::where('unidad_administrativa_id', $auditoria->direccion_asignada_id)
+            ->where('siglas_rol', 'STAFF')
+            ->pluck('name', 'id')
+            ->toArray();
+
+        //return view('asignacionstaffjuridico.form', compact('auditoria', 'unidades', 'accion', 'directorasignado','staffasignada', 'staff'));
+        return view('asignacionstaffjuridico.form', compact('auditoria','unidades','accionstaff','departamentoasignado','acciones', 'staff', 'staffasignada'));        
+
+
     }
 
     /**
@@ -86,44 +94,30 @@ class AsignacionDepartamentoController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        if($request->accion=='Reasignación'){
-            $accion=AuditoriaAccion::find($request->accion_id);
+        //dd($request);
+        if ($request->accionstaff == 'Asignación') {
 
-            $request['reasignacion_departamento']='Si';
-            $accion->update($request->all());
+            // Obtener el nombre del staff jurídico seleccionado
+            $staff = User::find($request->staff_juridico_id);
+            $request['staff_asignada'] = $staff ? $staff->name : null;
+            $auditoria->update($request->all());
 
-            $titulo = 'Reasignación de la acción';
-            $mensaje = '<strong>Estimado(a) ' . $request->nombre . ', ' . $request->cargo . '.</strong><br>Se le ha reasignado la acción No. '.$accion->numero.' de la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', por lo que se requiere realice la asignación oportuna del equipo de analistas y lider de proyecto, en el módulo de Asignación.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $request->departamento_asignado_id, $request->usuario_id);
+            setMessage('Se ha realizado la asignación del staff juridico correctamente.');
+        } elseif ($request->accionstaff == 'Reasignación') {
+            // Obtener el nombre del staff jurídico seleccionado
+            $staff = User::find($request->staff_juridico_id);
+            $request['staff_asignada'] = $staff ? $staff->name : null;
 
-            setMessage('Se ha realizado la reasignación del departamento correctamente.');
+            $request['reasignacion_staff'] = 'Si';
 
+            $auditoria->update($request->all());
 
-        }else{
-            foreach ($request->accion_id as $id) {
-
-                $departamento=CatalogoUnidadesAdministrativas::where('id',$request->get('departamento_asignado_id_'.$id))->first();
-                $accion=AuditoriaAccion::find($id);
-                $user=User::where('unidad_administrativa_id',$departamento->id)->first();
-    
-                $requestaccion= new Request();
-                $requestaccion['departamento_asignado_id']=$departamento->id;
-                $requestaccion['departamento_asignado']=$departamento->descripcion;
-                $accion->update($requestaccion->all());
-
-                $titulo = 'Asignación de la accion No. '.$accion->numero.'  de la auditoría '.$auditoria->numero_auditoria;
-                $mensaje = '<strong>Estimado(a) ' . $user->name . ', ' . $user->puesto . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', por lo que se requiere realice la asignación oportuna del equipo de analistas y lider de proyecto, en el módulo de Asignación.';
-                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $departamento->id, $user->id);       
-
-            }
-
-            setMessage('Se ha realizado la asignación del departamento correctamente.');
-            
-            $auditoria->update(['asignacion_departamentos'=>'Si']);
+            setMessage('Se ha realizado la reasignación del staff juridico correctamente.');
         }
 
-        return redirect()->route('asignaciondepartamento.index',$auditoria);  
+        return redirect()->route('asignaciondepartamento.index');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -139,9 +133,7 @@ class AsignacionDepartamentoController extends Controller
     public function setQuery(Request $request)
     {
          $query = $this->model;         
-         if(in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray())){
-            $query = $query->where('staff_juridico_id',auth()->user()->id);
-            }
+        
         if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
            in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){   
@@ -185,34 +177,47 @@ class AsignacionDepartamentoController extends Controller
         return view('seguimientoauditoriaaccion.index', compact('acciones', 'request', 'auditoria','movimiento','tiposaccion'));
     }
 
-    
-    public function getJefeDepartamento(Request $request)
+    public function getStaff(Request $request)
     {
-        $datos = [];
-        $usuario = [];
-        $cargosasociados = [];
+        $usuario = User::where('id', $request->user_id)->first(['id', 'name', 'puesto']); // Asegúrate de incluir 'puesto'
 
-        $users = User::where('unidad_administrativa_id', $request->unidadid)->get();     
+        if ($usuario) {
+            return response()->json([$usuario]); // Devuelve un array con el usuario
+        }
 
-        if (!empty($users) && count($users) > 0) {
-            foreach ($users as $user) {
-                $usuario[] = ['id' => $user->id, 'nombre' => $user->name,'puesto'=> $user->puesto,'unidad'=>$request->unidad];
-            }
-        }       
-
-        $datos[1] = $usuario;
-
-        return response()->json($datos);
+        return response()->json([], 404); // Respuesta vacía si no se encuentra
     }
 
-    public function reasignar(AuditoriaAccion $accion)
+
+    public function reasignar(Auditoria $auditoria)
     {              
-        $auditoria = Auditoria::find($accion->segauditoria_id);
-        $unidades = auth()->user()->unidadAdministrativa->departamentos->prepend('Seleccionar una opción', ''); 
-        $acciondep='Reasignación';     
+        //$auditoria = Auditoria::find($accionstaff->segauditoria_id);
         
-        $departamentoasignado=User::where('unidad_administrativa_id',$auditoria->departamento_asignado_id)->first();
+        if (!$auditoria) {
+            dd('No se encontró la auditoría');
+        }
+
+        //dd($auditoria);
+
+        $accionstaff='Reasignación';   
+        $departamentoasignado = null;           
+        $acciones =  AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->orderBy('id')->get();
+        $staffasignada = null;
+
+       // $auditoria = Auditoria::find($accionstaff->segauditoria_id);
+        $unidades = auth()->user()->unidadAdministrativa->departamentos->prepend('Seleccionar una opción', ''); 
+        $accionstaff='Reasignación';     
+        
+        // Obtener los usuarios STAFF de la dirección asignada
+        $staff = User::where('unidad_administrativa_id', $auditoria->direccion_asignada_id)
+            ->where('siglas_rol', 'STAFF')
+            ->pluck('name', 'id')
+            ->toArray();
+
                
-        return view('reasignaciondepartamento.form', compact('auditoria','unidades','acciondep','departamentoasignado','accion'));        
+        return view('asignacionstaffjuridico.form', compact('auditoria','unidades','accionstaff', 'staff', 'staffasignada'));  
+
     }
+
+
 }

@@ -97,7 +97,9 @@ class AuditoriaSeguimientoController extends Controller
     {
          $query = $this->model;
 		 $query = $query->where('cuenta_publica',getSession('cp'));
-
+         if(in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray())){
+            $query = $query->where('staff_juridico_id',auth()->user()->id);
+         }
          if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
             //$query = $query->where('departamento_encargado_id',auth()->user()->unidad_administrativa_id);
             if(getSession('cp')!=2023){

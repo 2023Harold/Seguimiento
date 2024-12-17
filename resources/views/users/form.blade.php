@@ -18,7 +18,7 @@
             {!! BootForm::open(['model' => $user, 'store' => 'user.store', 'update' => 'user.update','id'=>'form']) !!}
                 <div class="row">
                     <div class="col-md-3 pt-2">
-                        {!! BootForm::text('name','Nombre del usuario: *',old("name",$user->name),['maxlength'=>'75']); !!}
+                        {!! BootForm::text('name','Nombre del usuario: *',old("name",$user->name),['maxlength'=>'75']) !!}
                     </div>
                 </div>
                 <div class="row">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::text('email','Correo electrónico: *',old("email",$user->email),['maxlength'=>'60']); !!}
+                        {!! BootForm::text('email','Correo electrónico: *',old("email",$user->email),['maxlength'=>'60']) !!}
                     </div>
                 </div>
                 @php
@@ -36,7 +36,7 @@
                 @endphp
                 <div class="row">
                     <div class="col-md-2">
-                        {!! BootForm::select('rol','Rol: *' ,$roles->toArray(),old("rol",$values[0])); !!}
+                        {!! BootForm::select('rol','Rol: *' ,$roles->toArray(),old("rol",$values[0])) !!}
                     </div>
                 </div>
                 @php
@@ -92,18 +92,21 @@
         $(document).ready(function() {
             $.validator.setDefaults({ ignore: ":hidden:not(.chosen-select)" })
             $("#rol").change(function(){
-                Ocultar(['#div_mostrar_unidad']);
-                Ocultar(['#div_mostrar_entidad']);
+                $("#div_mostrar_unidad").hide();
+                $("#div_mostrar_entidad").hide();
                 var rolSeleccionado = $(this).children("option:selected").val();
                 if (rolSeleccionado=='Entidad Fiscalizable'){
-                    Ocultar(['#div_mostrar_unidad']);
-                    Mostrar(['#div_mostrar_entidad']);
+                    $("#div_mostrar_unidad").hide();
+                    $("#div_mostrar_entidad").show();
+                    
                 } else {
-                   Ocultar(['#div_mostrar_entidad']);
-                   Mostrar(['#div_mostrar_unidad']);
+                   
+                   $("#div_mostrar_unidad").show();
+                    $("#div_mostrar_entidad").hide();
                 }
             });
         });
+        
     </script>
     {!! $validator !!}
 @endsection

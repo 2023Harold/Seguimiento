@@ -29,12 +29,12 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            {!! BootForm::text('numero_acta', 'Número de acta: *', old('numero_acta', $comparecencia->numero_acta));
+                            {!! BootForm::text('numero_acta', 'Número de acta: *', old('numero_acta', $comparecencia->numero_acta))
                             !!}
                         </div>
                         <div class="col-md-3">
                             {!! BootForm::date('fecha_acta', 'Fecha del acta: *', old('fecha_acta',
-                            fecha($comparecencia->fecha_acta, 'Y-m-d'))); !!}
+                            fecha($comparecencia->fecha_acta, 'Y-m-d'))) !!}
                         </div>
                     </div>                       
                     
@@ -58,7 +58,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             {!! BootForm::date('fecha_oficio_designacion', 'Fecha del oficio de designacion: ', old('fecha_oficio_designacion',
-                                            fecha($comparecencia->fecha_oficio_designacion, 'Y-m-d'))); !!}
+                                            fecha($comparecencia->fecha_oficio_designacion, 'Y-m-d'))) !!}
                                         </div>
                                     </div> 
                                     <div class="row">                    

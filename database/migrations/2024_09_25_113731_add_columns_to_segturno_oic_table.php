@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nombre_titular_oic', 100)->nullable();
             $table->string('cargo_titular_oic',100)->nullable();
             $table->string('domicilio_oic',150)->nullable();
-            $table->date('fecha_envio',100)->nullable();
+            $table->date('fecha_envio' )->nullable();
             $table->string('acuse_notificacion',100)->nullable();
             $table->string('fecha_notificacion',100)->nullable();
         });

@@ -193,7 +193,10 @@ class SeguimientoAuditoriaController extends Controller
     {
          $query = $this->model;
          $query = $query->where('cuenta_publica',getSession('cp'));
-
+         
+         if(in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray())){
+            $query = $query->where('staff_juridico_id',auth()->user()->id);
+            }
 
         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
             $query = $query->where('usuario_creacion_id',auth()->id());

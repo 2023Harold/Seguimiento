@@ -24,5 +24,7 @@ class RolesSeeder extends Seeder
         Role::create(['name' => 'Jefe de Departamento de Seguimiento']);
         Role::create(['name' => 'Lider de Proyecto']);
         Role::create(['name' => 'Analista']);
+        Role::create(['name'=> 'Staff Juridico']);
+        Role::create(['name'=> 'Consultor Administrativo']);
     }
 }

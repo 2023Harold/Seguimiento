@@ -73,8 +73,17 @@ class AsignacionDireccionController extends Controller
         $unidades = (new CatalogoUnidadesAdministrativas())->direcciones->prepend('Seleccionar una opción', '');
         $accion ='Asignación';
         $directorasignado = null;
+        $staffasignada = null;
 
-        return view('asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
+        // Obtener los usuarios STAFF de la dirección asignada
+        $staff = User::where('unidad_administrativa_id', $auditoria->direccion_asignada_id)
+            ->where('siglas_rol', 'STAFF')
+            ->pluck('name', 'id')
+            ->toArray();
+
+        //return view('asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
+        return view('asignaciondireccion.form', compact('auditoria', 'unidades', 'accion', 'directorasignado','staffasignada', 'staff'));
+
     }
 
     /**
@@ -86,6 +95,31 @@ class AsignacionDireccionController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
+        if ($request->accion == 'Asignación') {
+
+            $auditoria->update($request->all());
+            $titulo = 'Asignación de auditoría';
+            $mensaje = '<strong>Estimado(a) ' . $request->nombre . ', ' . $request->cargo . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del Titular, por lo que se requiere realice la asignación oportuna de los departamentos, en el módulo de Asignación.';
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $request->direccion_asignada_id, $request->usuario_id);
+
+            setMessage('Se ha realizado la asignación de la dirección correctamente.');
+        } elseif ($request->accion == 'Reasignación') {
+
+            $request['reasignacion_direccion'] = 'Si';
+            $auditoria->update($request->all());
+            $titulo = 'Reasignación de auditoría';
+            $mensaje = '<strong>Estimado(a) ' . $request->nombre . ', ' . $request->cargo . '.</strong><br>Se le ha reasignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del Titular, por lo que se requiere realice la asignación oportuna de los departamentos, en el módulo de Asignación.';
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $request->direccion_asignada_id, $request->usuario_id);
+
+            setMessage('Se ha realizado la reasignación de la dirección correctamente.');
+        }
+
+        return redirect()->route('asignaciondireccion.index');
+    }
+
+    /*
+     public function update(Request $request, Auditoria $auditoria)
+    {
         if ($request->accion=='Asignación') {
             $auditoria->update($request->all());
 
@@ -96,6 +130,8 @@ class AsignacionDireccionController extends Controller
             setMessage('Se ha realizado la asignación de la dirección correctamente .');
         }elseif($request->accion=='Reasignación'){
             $request['reasignacion_direccion']='Si';
+            $request['reasignacion_staff']='Si';
+            
             $auditoria->update($request->all());
 
             $titulo = 'Reasignación de auditoría';
@@ -106,7 +142,7 @@ class AsignacionDireccionController extends Controller
         }
 
         return redirect()->route('asignaciondireccion.index');
-    }
+    }*/
 
     /**
      * Remove the specified resource from storage.
@@ -167,7 +203,7 @@ class AsignacionDireccionController extends Controller
         $usuario = [];
         $cargosasociados = [];
 
-        $users = User::where('unidad_administrativa_id', $request->unidadid)->get();
+        $users = User::where('unidad_administrativa_id', $request->unidadid)->where('siglas_rol', 'DS')->get();
 
         if (!empty($users) && count($users) > 0) {
             foreach ($users as $user) {
@@ -179,14 +215,19 @@ class AsignacionDireccionController extends Controller
 
         return response()->json($datos);
     }
-
     public function reasignar(Auditoria $auditoria)
     {
         $unidades = (new CatalogoUnidadesAdministrativas())->direcciones;
-        $accion='Reasignación';
+        $accion = 'Reasignación';
 
-        $directorasignado=User::where('unidad_administrativa_id',$auditoria->direccion_asignada_id)->first();
+        $directorasignado = User::where('unidad_administrativa_id', $auditoria->direccion_asignada_id)
+            ->where('siglas_rol', 'DS')
+            ->first();
 
-        return view('asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
+
+        // Retorna la vista con todas las variables necesarias
+        return view('asignaciondireccion.form', compact('auditoria', 'unidades', 'accion', 'directorasignado'));
     }
+
+
 }

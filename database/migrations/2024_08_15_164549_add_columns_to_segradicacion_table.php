@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('segradicacion', function (Blueprint $table) {
-            $table->text('num_memo_recepcion_expediente',200)->nullable();
+            $table->text('num_memo_recepcion_expediente')->nullable();
             $table->date('fecha_expediente_turnado')->nullable();
             $table->date('fecha_oficio_informe')->nullable();
             $table->date('fecha_notificacion')->nullable();

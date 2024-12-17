@@ -48,6 +48,7 @@
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>                                                                 
                                 <th>Dirección asignada</th>
+                                <th>Staff Juridico</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,7 +62,7 @@
                                             $entidadparciales = explode("-", $auditoria->entidad_fiscalizable);                                            
                                         @endphp
                                         @foreach ($entidadparciales as $entidadparcial)
-                                            {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8"); }}<br>
+                                            {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8") }}<br>
                                         @endforeach                                        
                                     </td>
                                     <td>
@@ -109,7 +110,11 @@
                                             @endif
                                               
                                         @endif                                                                          
-                                    </td>                                  
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $auditoria->staff_asignada}} <br>
+                                    </td>
+                                                            
                                 </tr>                                                           
                             @empty
                                 <tr>

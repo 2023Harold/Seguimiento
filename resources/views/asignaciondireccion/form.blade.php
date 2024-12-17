@@ -24,8 +24,21 @@
             <div class="col-md-3">
                 {!! BootForm::select('direccion_asignada_id', 'Direccion: *', $unidades->toArray() , old('direccion_asignada_id',$auditoria->direccion_asignada_id), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
-        </div> 
+            <div class="col-md-3">
+                {!! BootForm::select(
+                    'staff_juridico_id',
+                    'Staff Jurídico: *',
+                    $staff,
+                    old('staff_juridico_id', $auditoria->staff_juridico_id),
+                    ['data-control' => 'select2', 'class' => 'form-select', 'data-placeholder' => 'Seleccionar una opción']
+                ) !!}
+                
+            </div>
+        </div>
+
+         
         {!! BootForm::hidden('direccion_asignada',$auditoria->direccion_asignada,['id'=>'direccion_id']) !!}
+        {!! BootForm::hidden('staff_asignada',$auditoria->staff_asignada,['id'=>'direccion_id']) !!}
         <div class="row">
             <div class="col-md-3">
                 {!! BootForm::text('nombre', 'Nombre: *', old('nombre',optional($directorasignado)->name),['readonly']) !!}
@@ -33,7 +46,7 @@
             <div class="col-md-3">
                 {!! BootForm::text('cargo', 'Cargo: *', old('cargo',optional($directorasignado)->puesto),['readonly']) !!}
             </div>
-        </div>               
+        </div>                
         <div class="row">
             <div class="col-md-6">        
                 @can('asignaciondireccion.update')              
@@ -84,7 +97,6 @@
             });            
         });             
     });
-
 </script>
 {!! JsValidator::formRequest('App\Http\Requests\AsignacionDireccionRequest') !!}
 @endsection

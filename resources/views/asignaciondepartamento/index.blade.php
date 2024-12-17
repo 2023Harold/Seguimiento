@@ -9,7 +9,7 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                    Asignación de Auditorias a Departamentos
+                    Asignación Auditorias a Departamentos y Staff Juridico
                 </h1>
             </div>
             <div class="card-body">
@@ -51,6 +51,7 @@
                                 @if(getSession('cp')!=2023)                               
                                 <th>Asignación de departamentos</th>
                                 @endif
+                                <th>Staff juridico</th>
                                 
                             </tr>
                         </thead>
@@ -65,7 +66,7 @@
                                             $entidadparciales = explode("-", $auditoria->entidad_fiscalizable);                                            
                                         @endphp
                                         @foreach ($entidadparciales as $entidadparcial)
-                                            {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8"); }}<br>
+                                            {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8") }}<br>
                                         @endforeach                                        
                                     </td>
                                     <td>
@@ -106,7 +107,7 @@
                                     @if(getSession('cp')!=2023)                                                                    
                                     <td class="text-center">
                                             @can('asignaciondepartamento.edit')                                          
-                                                @if ($auditoria->asignacion_departamentos=='Si'|| in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray()))
+                                                @if ($auditoria->asignacion_departamentos=='Si'|| in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray()) || in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray()))
                                                     <a href="{{ route('asignaciondepartamento.edit',$auditoria) }}" class="btn btn-primary">
                                                         <i class="fa fa-magnifying-glass"></i> Consultar
                                                     </a>
@@ -118,11 +119,44 @@
                                                     @endif 
                                                 @endif                                               
                                             @endcan                                                                                                          
-                                    </td> 
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($auditoria->reasignacion_staff === 'Si')
+                                            <span class="badge-light-secondary text-gray-600">
+                                                {{ $auditoria->staff_asignada }} <br>
+                                                Reasignado
+                                            </span>
+                                        @else
+                                            @if($auditoria->staff_asignada)
+                                                <span class="badge-light-secondary text-gray-600">
+                                                    {{ $auditoria->staff_asignada }} <br>
+                                                    Asignado
+                                                </span>
+                                                @can('asignacionstaff.edit') 
+                                                    <!-- Si ya hay un staff asignado, redirige a reasignar -->
+                                                    <a href="{{ route('asignacionstaff.reasignar', $auditoria) }}" class="btn btn-primary">
+                                                        <i class="fa fa-user-edit"></i> Reasignar
+                                                    </a>
+                                                @endcan
+                                            @else
+                                                <span class="badge-light-secondary text-gray-600">
+                                                    {{ $auditoria->staff_asignada }} <br>
+                                                </span>
+                                                @can('asignacionstaff.edit') 
+                                                    <!-- Si no hay staff asignado, redirige a editar -->
+                                                    <a href="{{ route('asignacionstaff.edit', $auditoria) }}" class="btn btn-primary">
+                                                        <i class="fa fa-handshake"></i> Asignar
+                                                    </a>
+                                                @endcan
+                                            @endif
+                                        @endif
+                                    </td>
+                                    
                                     @endif                                                                    
                                 </tr>                                                           
                             @empty
                                 <tr>
+                                    
                                     <td class="text-center" colspan="8">
                                         <span class='text-center'>No hay registros en éste apartado</span>
                                     </td>
