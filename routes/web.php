@@ -20,6 +20,7 @@ use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\AsignacionAccionController;
 use App\Http\Controllers\AsignacionLiderAnalistaController;
 use App\Http\Controllers\AsignacionDepartamentoController;
+use App\Http\Controllers\AsignacionStaffJuridicoController;
 use App\Http\Controllers\AsignacionDepartamentoEncargadoController;
 use App\Http\Controllers\AsignacionDireccionController;
 use App\Http\Controllers\AsignacionUnidadAdministrativa2022Controller;
@@ -401,6 +402,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::get('/asignacionaccion/{accion}/{movimiento?}', [AsignacionAccionController::class, 'accionesConsulta'])->name('asignacion.accion');//revisar si esta bien
     Route::post('getDirector', [AsignacionDireccionController::class, 'getDirector'])->name('getDirector');
     Route::get('/asignaciondireccion/reasignacion/{auditoria}', [AsignacionDireccionController::class, 'reasignar'])->name('asignaciondireccion.reasignar');
+    /*Staff Juridico*/
+    //Route::post('asignaciondireccion/getStaff', [AsignacionDireccionController::class, 'getStaff'])->name('asignaciondireccion.getStaff');
+    Route::resource('asignacionstaff', AsignacionStaffJuridicoController::class, ['parameters'=> ['asignacionstaff'=> 'auditoria']]);
+    Route::get('asignacionstaff/reasignacion/{auditoria}', [AsignacionStaffJuridicoController::class, 'reasignar'])->name('asignacionstaff.reasignar');
+    Route::post('asignacionstaff/getStaff', [AsignacionStaffJuridicoController::class, 'getStaff'])->name('asignacionstaff.getStaff');
+    //Route::get('asignacionstaff/{auditoria}/reasignar', [AsignacionStaffJuridicoController::class, 'reasignar'])->name('asignacionstaff.reasignar');
+
+
     /*Departamentos*/
     Route::resource('asignaciondepartamento', AsignacionDepartamentoController::class, ['parameters' => ['asignaciondepartamento' => 'auditoria']]);
     Route::get('/asignaciondepartamento/acciones/consulta/{auditoria}', [AsignacionDepartamentoController::class, 'accionesConsulta'])->name('asignaciondepartamento.accionesconsulta');
