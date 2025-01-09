@@ -12,6 +12,7 @@
         "doctrine/dbal": "^3.6",
         "dompdf/dompdf": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^3.10",
         "jaspersoft/rest-client": "v2.0.0",
         "kartik-v/bootstrap-fileinput": "dev-master",
         "laracasts/flash": "^3.2",

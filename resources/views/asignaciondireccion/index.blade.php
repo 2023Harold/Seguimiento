@@ -48,7 +48,6 @@
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>                                                                 
                                 <th>Dirección asignada</th>
-                                <th>Staff Juridico</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,11 +109,7 @@
                                             @endif
                                               
                                         @endif                                                                          
-                                    </td>
-                                    <td class="text-center">
-                                        {{ $auditoria->staff_asignada}} <br>
-                                    </td>
-                                                            
+                                    </td>                                                            
                                 </tr>                                                           
                             @empty
                                 <tr>

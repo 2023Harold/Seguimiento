@@ -96,6 +96,7 @@ class RecomendacionesAccionesController extends Controller
 		  }           
 
          return redirect()->route('recomendacionesatencion.index');
+         
     }
 
     /**

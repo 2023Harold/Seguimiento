@@ -44,4 +44,9 @@ class Notificacion extends Model
     {
         return $this->hasOne(User::class, 'destinatario_id', 'id');
     }
+
+    public function auditoria()
+    {
+        return $this->belongsTo(Auditoria::class, 'segauditoria_id','id');
+    }
 }

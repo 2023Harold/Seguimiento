@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
+use App\Models\SolicitudesAclaracion;
 use Illuminate\Http\Request;
 
 class AuditoriaSeguimientoController extends Controller
@@ -21,8 +23,10 @@ class AuditoriaSeguimientoController extends Controller
     public function index(Request $request)
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
+        $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
 
-        return view('auditoriaseguimiento.index', compact('auditorias', 'request'));
+
+        return view('auditoriaseguimiento.index', compact('auditorias', 'request', 'solicitudesaclaracion'));
     }
 
     /**

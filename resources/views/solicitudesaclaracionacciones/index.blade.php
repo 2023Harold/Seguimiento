@@ -4,7 +4,8 @@
 @endsection
 @section('content')
 <div class="row">
-    @include('layouts.partials._menu')
+    <!--include('layouts.partials._menu')-->
+    @include('layouts.partials._menu', ['accion' => $acciones])
     <div class="col-md-9 mt-2">
         <div class="card">
             <div class="card-header">

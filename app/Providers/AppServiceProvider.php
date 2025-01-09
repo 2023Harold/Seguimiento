@@ -9,6 +9,8 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\View;
+use App\Models\AuditoriaAccion;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {        
+
         Paginator::useBootstrap();
         Blade::directive('btnSubmit', function ($parametros) {
             $parametros_separados = explode(',', $parametros);

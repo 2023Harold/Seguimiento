@@ -52,7 +52,6 @@
                                 <th>Asignación de departamentos</th>
                                 @endif
                                 <th>Staff juridico</th>
-                                
                             </tr>
                         </thead>
                         <tbody>
@@ -124,14 +123,14 @@
                                         @if ($auditoria->reasignacion_staff === 'Si')
                                             <span class="badge-light-secondary text-gray-600">
                                                 {{ $auditoria->staff_asignada }} <br>
-                                                Reasignado
                                             </span>
+                                            Reasignado
                                         @else
                                             @if($auditoria->staff_asignada)
                                                 <span class="badge-light-secondary text-gray-600">
                                                     {{ $auditoria->staff_asignada }} <br>
-                                                    Asignado
                                                 </span>
+                                                    Asignado
                                                 @can('asignacionstaff.edit') 
                                                     <!-- Si ya hay un staff asignado, redirige a reasignar -->
                                                     <a href="{{ route('asignacionstaff.reasignar', $auditoria) }}" class="btn btn-primary">
@@ -140,6 +139,7 @@
                                                 @endcan
                                             @else
                                                 <span class="badge-light-secondary text-gray-600">
+                                                    Sin asignación 
                                                     {{ $auditoria->staff_asignada }} <br>
                                                 </span>
                                                 @can('asignacionstaff.edit') 
@@ -151,7 +151,6 @@
                                             @endif
                                         @endif
                                     </td>
-                                    
                                     @endif                                                                    
                                 </tr>                                                           
                             @empty

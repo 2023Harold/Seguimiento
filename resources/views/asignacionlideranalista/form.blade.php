@@ -146,7 +146,6 @@
             });
         });
     });
-
 </script>
 {!! JsValidator::formRequest('App\Http\Requests\AsignacionLiderAnalistaRequest') !!}
 @endsection

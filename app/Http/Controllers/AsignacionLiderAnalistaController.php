@@ -128,7 +128,7 @@ class AsignacionLiderAnalistaController extends Controller
                     $titulo = 'Asignación de la auditoría '.$auditoria->numero_auditoria;
                     $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
                     auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id);
-    
+                    
                     $titulo = 'Asignación de la auditoría '.$auditoria->numero_auditoria;
                     $mensaje = '<strong>Estimado(a) ' . $userAnalista->name . ', ' . $userAnalista->puesto . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para darle seguimiento a las acciones asignadas.';
                     auth()->user()->insertNotificacion($titulo, $mensaje,
@@ -136,6 +136,7 @@ class AsignacionLiderAnalistaController extends Controller
     
                 setMessage('Se ha realizado la asignación del lider y analista correctamente.');
                 $auditoria->update(['asignacion_lider_analista'=>'Si']);
+
             }
         }else{
         if($request->acciond=='reasignarlider'){
@@ -151,7 +152,7 @@ class AsignacionLiderAnalistaController extends Controller
                 $accion->update($requestlider->all());
 
                 $titulo = 'Reasignación de la accion No. '.$accion->numero.'  de la auditoría '.$auditoria->numero_auditoria;
-                $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha reasignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
+                $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha reasignado la acción No. ' . $accion->numero .' de la auditoria No. '. $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
                 auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id);
             }
             setMessage('Se ha realizado la reasignación del lider de proyecto correctamente.');
@@ -170,7 +171,7 @@ class AsignacionLiderAnalistaController extends Controller
                 $accion->update($requestanalista->all());
 
                 $titulo = 'Reasignación de la accion No. '.$accion->numero.'  de la auditoría '.$auditoria->numero_auditoria;
-                $mensaje = '<strong>Estimado(a) ' . $userAnalista->name . ', ' . $userAnalista->puesto . '.</strong><br>Se le ha reasignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para darle seguimiento a las acciones asignadas.';
+                $mensaje = '<strong>Estimado(a) ' . $userAnalista->name . ', ' . $userAnalista->puesto . '.</strong><br>Se le ha reasignado la acción No. ' . $accion->numero .'  de la auditoria No. '. $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para darle seguimiento a las acciones asignadas.';
                 auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userAnalista->unidad_adscripcion_id, $userAnalista->id);
             }
             setMessage('Se ha realizado la reasignación del analista correctamente.');
@@ -184,11 +185,13 @@ class AsignacionLiderAnalistaController extends Controller
                 $accion->update($request->all());
 
                 $titulo = 'Asignación de la accion No. '.$accion->numero.'  de la auditoría '.$auditoria->numero_auditoria;
-                $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
+                $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha asignado la acción No. ' . $accion->numero .'de la auditoria No. ' .$auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
                 auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id);
 
+    
+
                 $titulo = 'Asignación de la accion No. '.$accion->numero.'  de la auditoría '.$auditoria->numero_auditoria;
-                $mensaje = '<strong>Estimado(a) ' . $userAnalista->name . ', ' . $userAnalista->puesto . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para darle seguimiento a las acciones asignadas.';
+                $mensaje = '<strong>Estimado(a) ' . $userAnalista->name . ', ' . $userAnalista->puesto . '.</strong><br>Se le ha asignado la acción No. ' . $accion->numero .'de la auditoria No. ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para darle seguimiento a las acciones asignadas.';
                 auth()->user()->insertNotificacion($titulo, $mensaje,
                 now(), $userAnalista->unidad_adscripcion_id, $userAnalista->id);
 

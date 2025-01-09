@@ -98,7 +98,8 @@ class AcuerdoConclusionController extends Controller
     public function edit(AcuerdoConclusion $auditoria)
     {
 		$acuerdoconclusion=$auditoria;
-        $auditoria = Auditoria::find(getSession('auditoria_id'));               
+        $auditoria = Auditoria::find(getSession('auditoria_id'));    
+        $fechaacuerdo=now();           
         
 		if($auditoria->acto_fiscalizacion=='Desempeño'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);

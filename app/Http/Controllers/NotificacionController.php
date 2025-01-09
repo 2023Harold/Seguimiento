@@ -8,10 +8,17 @@ use Illuminate\Http\Request;
 class NotificacionController extends Controller
 {
     public function index(Request $request){
+        /*
         $notificaciones = $this->setQuery($request)->paginate(25);
-        return view('notificaciones.index', compact('notificaciones','request'));
+        
+        return view('notificaciones.index', compact('notificaciones','request'));*/
+
+        $notificaciones = $this->setQuery($request)->paginate(25);
+
+        return view('notificaciones.index', compact('notificaciones', 'request'));
     }
 
+    /** 
     public function marcarleido(Request $request)
     {
         $notificacion = Notificacion::find($request->id);
@@ -19,6 +26,23 @@ class NotificacionController extends Controller
 
         return $request->id;
     }
+        */
+    public function marcarleido(Request $request)
+    {
+        $notificacion = Notificacion::find($request->id);
+        // Actualizar el estatus a 'Leído'
+        $notificacion->update(['estatus' => 'Leído']);
+
+        // Retornar la respuesta con el id y la fecha de lectura formateada
+        return response()->json([
+            'id' => $notificacion->id,
+            'fecha_leido' => $notificacion->updated_at->format('d/m/Y H:i'), // Formato de fecha
+            $request->id
+        ]);
+    }
+
+
+    
 
     private function setQuery($request)
     {
@@ -32,7 +56,28 @@ class NotificacionController extends Controller
         if ($request->filled('updated_at')) {
             $query = $query->whereDate('updated_at', $request->input('updated_at'))->where('estatus', 'Leído');
         }
+        if ($request->filled('numero_auditoria')) {
+            $numeroAuditoria = $request->input('numero_auditoria');
+            $query = $query->where('mensaje', 'LIKE', "%$numeroAuditoria%");
+        }
 
-        return $query;
+        return $query->orderBy('created_at', 'asc');
     }
+
+    
+    public function nuevas()
+    {
+        $notificaciones = auth()->user()->notificaciones;
+        $totalNotificaciones = $notificaciones->count();
+
+        return response()->json([
+            'notificaciones' => $notificaciones,
+            'total' => $totalNotificaciones,
+        ]);
+    }
+
+
+
+    
+
 }

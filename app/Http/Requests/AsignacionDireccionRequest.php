@@ -26,9 +26,7 @@ class AsignacionDireccionRequest extends FormRequest
         return [
             'direccion_asignada_id' => 'required|integer|max:999999999999',
             'nombre' => 'required|string|max:100',
-            'cargo' => 'required|string|max:200',         
-            'staff_asignada_id' => 'required|integer|max:999999999999',
-   
+            'cargo' => 'required|string|max:200',            
         ];
     }
 
@@ -38,7 +36,6 @@ class AsignacionDireccionRequest extends FormRequest
             'direccion_asignada_id' => 'departamento',
             'nombre' => 'nombre',
             'cargo' => 'cargo',
-            'staff_asignada_id'=> 'staff juridico',
         ];
     }
 

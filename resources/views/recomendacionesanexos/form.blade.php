@@ -23,7 +23,7 @@
                 </div>               
                 <div class="row">
                     <div class="col-md-6">
-                        {!! BootForm::text('nombre_archivo', 'Nombre del archivo: *', old('nombre_archivo', $anexo->nombre_archivo)); !!}
+                        {!! BootForm::text('nombre_archivo', 'Nombre del archivo: *', old('nombre_archivo', $anexo->nombre_archivo)) !!}
                     </div>
                 </div>               
                 <div class="row">

@@ -51,7 +51,7 @@
                                             $entidadparciales = explode("-", $auditoria->entidad_fiscalizable);                                            
                                         @endphp
                                         @foreach ($entidadparciales as $entidadparcial)
-                                            {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8"); }}<br>
+                                            {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8") }}<br>
                                         @endforeach                                        
                                     </td>
                                     <td>

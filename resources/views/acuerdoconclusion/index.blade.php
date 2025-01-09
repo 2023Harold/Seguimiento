@@ -114,37 +114,37 @@
                                             @endcan
                                     @endif
                                     @if(getSession('cp')!=2023)                               
-                                    @if ($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación')
-                                        @can('acuerdoconclusionvalidacion.edit')
-                                            <a href="{{ route('acuerdoconclusionvalidacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                <li class="fa fa-gavel"></li>
-                                                Validar
-                                            </a>
-                                        @else
-                                            <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
-                                        @endcan
-                                    @elseif($auditoria->acuerdoconclusion->fase_autorizacion == 'En revisión')                                    
-                                        @can('acuerdoconclusionrevision.edit')
-                                            <a href="{{ route('acuerdoconclusionrevision.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                <li class="fa fa-gavel"></li>
-                                                Revisar
-                                            </a>
-                                        @else
-                                            <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
-                                        @endcan
-                                    @endif       
+                                        @if ($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación')
+                                            @can('acuerdoconclusionvalidacion.edit')
+                                                <a href="{{ route('acuerdoconclusionvalidacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                    <li class="fa fa-gavel"></li>
+                                                    Validar
+                                                </a>
+                                            @else
+                                                <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                            @endcan
+                                        @elseif($auditoria->acuerdoconclusion->fase_autorizacion == 'En revisión')                                    
+                                            @can('acuerdoconclusionrevision.edit')
+                                                <a href="{{ route('acuerdoconclusionrevision.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                    <li class="fa fa-gavel"></li>
+                                                    Revisar
+                                                </a>
+                                            @else
+                                                <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                            @endcan
+                                        @endif       
                                     @endif       
                                     @if ($auditoria->acuerdoconclusion->fase_autorizacion == 'En autorización')
-                                    @can('acuerdoconclusionautorizacion.edit')
-                                        <a href="{{ route('acuerdoconclusionautorizacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                            <li class="fa fa-gavel"></li>
-                                            Autorizar
-                                        </a>
-                                        <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                        @can('acuerdoconclusionautorizacion.edit')
+                                            <a href="{{ route('acuerdoconclusionautorizacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                <li class="fa fa-gavel"></li>
+                                                Autorizar
+                                            </a>
+                                            <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
                                     @else
-                                        <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
-                                    @endcan
-                                @endif           
+                                            <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                        @endcan
+                                    @endif           
                                     @if ($auditoria->acuerdoconclusion->fase_autorizacion=='Autorizado')
                                         <span class="badge badge-light-success">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>                                                                                                                                               
                                     @endif                                                                                                 
