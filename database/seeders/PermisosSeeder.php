@@ -22,6 +22,7 @@ class PermisosSeeder extends Seeder
                         'rol',
                         'acceso',
                         'administracion',
+                        'asignacionunidadadministrativa2022',
                         'seguimientoauditoria',
                         'seguimientoauditoriaacciones',
                         'seguimientoauditoriaaccionrevision01',
@@ -29,7 +30,8 @@ class PermisosSeeder extends Seeder
                         'seguimientoauditoriarevision01',
                         'seguimientoauditoriarevision',
                         'seguimientoauditoriavalidacion',
-                        'seguimientoauditoriaautorizacion',                      
+                        'seguimientoauditoriaautorizacion',   
+                        'asignacionunidadadministrativa',                   
                         'asignaciondireccion',
                         'asignaciondepartamento',
                         'asignacionlideranalista',
@@ -193,6 +195,10 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'pliegosobservacioncontestacion.oficiospliegosobservacion']);     
         Permission::create(['name' => 'turnoui.export']);     
         Permission::create(['name' => 'turnooic.export']);     
-        Permission::create(['name' => 'turnoarchivo.export']);     
+        Permission::create(['name' => 'turnoarchivo.export']); 
+        Permission::create(['name' => 'cuenta']); 
+      
+        
+
     }
 }

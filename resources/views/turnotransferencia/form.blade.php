@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('breadcrums')
-@if (empty($turnotransferencia->turnotransferencia))
-    {{ Breadcrumbs::render('turnotransferencia.create') }}
+@if (empty($turnoarchivotransferencia->turnoarchivotransferencia))
+    {{ Breadcrumbs::render('turnoarchivotransferencia.create') }}
 @else
-    {{ Breadcrumbs::render('turnotransferencia.edit',$turnotransferencia) }}
+    {{ Breadcrumbs::render('turnoarchivotransferencia.edit',$turnoarchivotransferencia) }}
 @endif    
 @endsection
 @section('content')
@@ -14,34 +14,30 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('turnoarchivo.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
-                    &nbsp; Turno acuse envío al archivo de Trasferencia
+                    &nbsp; Turno envío al archivo de Trasferencia
                 </h1>
             </div>        
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                {!! BootForm::open(['model' => $turnotransferencia,'store' => 'turnoarchivotransferencia.store','update' => 'turnoarchivotransferencia.update','id' => 'form']) !!}
-                <div class="row">                   
-                    <div class="col-md-4">
-                        {!! BootForm::text('numero_transferencia', 'Número de oficio: *', old('numero_transferencia', $turnotransferencia->numero_transferencia)) !!}
-                    </div>
-                </div> 
+                @include('layouts.contextos._turnoarchivo')
+                {!! BootForm::open(['model' => $turnoarchivotransferencia,'store' => 'turnoarchivotransferencia.store','update' => 'turnoarchivotransferencia.update','id' => 'form']) !!}               
                 <div class="row"> 
                     <div class="row">
                         <div class="col-md-5">
-                            {!! archivo('inventario_transferencia', 'Inventario de documentos *', old('inventario_transferencia', $turnotransferencia->inventario_transferencia)) !!}
+                            {!! archivo('inventario_transferencia', 'Inventario de documentos *', old('inventario_transferencia', $turnoarchivotransferencia->inventario_transferencia)) !!}
                         </div>
                         <div class="col-md-3">
-                            {!! BootForm::date('fecha_transferencia', 'Fecha de transferencia', old('fecha_transferencia', fecha($turnotransferencia->fecha_transferencia, 'Y-m-d'))); !!}
+                            {!! BootForm::date('fecha_transferencia', 'Fecha de transferencia', old('fecha_transferencia', fecha($turnoarchivotransferencia->fecha_transferencia, 'Y-m-d'))); !!}
                         </div>
                     </div>
                 </div>        
                 <div class="row">                   
                     <div class="col-md-4">
-                        {!! BootForm::text('tiempo_resguardo', 'Tiempo de resguardo: *', old('tiempo_resguardo', $turnotransferencia->tiempo_resguardo)) !!}
+                        {!! BootForm::text('tiempo_resguardo', 'Tiempo de resguardo: *', old('tiempo_resguardo', $turnoarchivotransferencia->tiempo_resguardo)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!! BootForm::text('clave_topografica', 'Clave topográfica: *', old('clave_topografica', $turnotransferencia->clave_topografica)) !!}
+                        {!! BootForm::text('clave_topografica', 'Clave topográfica: *', old('clave_topografica', $turnoarchivotransferencia->clave_topografica)) !!}
                     </div>
                 </div>                     
                 <div class="row">

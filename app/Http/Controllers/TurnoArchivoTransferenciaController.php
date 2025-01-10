@@ -21,12 +21,12 @@ class TurnoArchivoTransferenciaController extends Controller
      */
     public function index(Request $request)
     {
-        // $auditoria = Auditoria :: find(getSession('auditoria_id'));
-        // $turnotransferencia=TurnoArchivoTransferencia::where('auditoria_id',getSession('auditoria_id'))->first(); 
+        $auditoria = Auditoria :: find(getSession('auditoria_id'));
+        $turnoarchivotransferencia=TurnoArchivoTransferencia::where('auditoria_id',getSession('auditoria_id'))->first(); 
         // //dd($turnotransferencia);  
 
 
-        // return view ('turnotransferencia.index', compact('request','auditoria', 'turnotransferencia'));
+        return view ('turnotransferencia.index', compact('request','auditoria', 'turnoarchivotransferencia'));
     }
 
     /**
@@ -37,9 +37,9 @@ class TurnoArchivoTransferenciaController extends Controller
     public function create()
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));               
-        $turnotransferencia = new TurnoArchivoTransferencia();
+        $turnoarchivotransferencia = new TurnoArchivoTransferencia();
        
-        return view('turnotransferencia.form', compact('auditoria','turnotransferencia'));
+        return view('turnotransferencia.form', compact('auditoria','turnoarchivotransferencia'));
     }
 
     /**
@@ -52,13 +52,13 @@ class TurnoArchivoTransferenciaController extends Controller
     {
         
     //   dd(getSession('auditoria_id'));
-      $request['auditoria_id']= getSession('auditoria_id');
-      mover_archivos($request, ['turnotransferencia']);
-     $turnotransferencia  = TurnoArchivoTransferencia::create($request->all());
+    mover_archivos($request, ['TurnoTransferencia']);
+    $request['auditoria_id']= getSession('auditoria_id');
+    $turnoarchivotransferencia  = TurnoArchivoTransferencia::create($request->all());
     // dd($turnotransferencia);
       setMessage("Los datos del archivo de transferencia se han guardado correctamente.");
 
-      return redirect() -> route('turnoarchivo.index',$turnotransferencia);
+      return redirect() -> route('turnoarchivo.index');
     }
 
     /**
@@ -78,9 +78,11 @@ class TurnoArchivoTransferenciaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(TurnoArchivoTransferencia $auditoria)
     {
-        //
+        $turnoarchivotransferencia=$auditoria;
+        $auditoria=$auditoria->auditoria;
+        return view('turnotransferencia.form', compact('turnoarchivotransferencia', 'auditoria'));
     }
 
     /**
@@ -90,16 +92,16 @@ class TurnoArchivoTransferenciaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, TurnoArchivoTransferencia $auditoria)
     {
         // dd(getSession('auditoria_id'));
       $request['auditoria_id']= getSession('auditoria_id');
-      mover_archivos($request, ['turnotransferencia']);
-      $turnotransferencia  = TurnoArchivoTransferencia::create($request->all());
+      mover_archivos($request, ['ArchivoTransferencia']);
+      $turnoarchivotransferencia  = TurnoArchivoTransferencia::create($request->all());
     // dd($turnotransferencia);  
         setMessage('Los datos de archivo trasferencia se han guardado correctamente');
 
-        return redirect()->route('turnoarchivo.index', $turnotransferencia);
+        return redirect()->route('turnoarchivo.index', $turnoarchivotransferencia);
     }
 
     /**
@@ -112,4 +114,19 @@ class TurnoArchivoTransferenciaController extends Controller
     {
         //
     }
+    private function normalizarDatos(Request $request)
+    {
+        if ($request->estatus == 'Aprobado') {
+            $request['motivo_rechazo'] = null;
+        }
+
+        return $request;
+    }
+    public function auditoria(Auditoria $auditoria)
+    {
+        setSession('turnotransferencia_auditoria_id',$auditoria->id);
+
+        return redirect()->route('turnoarchivotransferencia.create');
+    }
+
     }

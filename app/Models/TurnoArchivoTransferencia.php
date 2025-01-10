@@ -16,6 +16,10 @@ class TurnoArchivoTransferencia extends Model
         'tiempo_resguardo', 
         'clave_topografica',
         'auditoria_id',
+        'fase_autorizacion',
+        'nivel_autorizacion',
+        'usuario_creacion_id',
+        'usuario_modificacion_id',
     ];
     protected $cast=[
     'fecha_trasferencia'=>'date',        
@@ -33,6 +37,17 @@ class TurnoArchivoTransferencia extends Model
     {
         return $this->belongsTo(Auditoria::class, 'auditoria_id', 'id');
     }
-
+    public function usuarioCreacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_creacion_id');
+    }
+    public function usuarioActualizacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_modificacion_id');
+    }
+    public function movimientos()
+    {
+        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'ArchivoTransferencia')->orderBy('id', 'ASC');
+    }
 
 }

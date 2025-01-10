@@ -32,54 +32,50 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                            <tr>                                
                                 <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente Técnico de la Auditoría</th>
                                 <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente Técnico de Seguimiento</th>                                
                                 <th></th>
                                 <th></th>
+                                <th></th>
+                                <th></th>
                             </tr>
                             <tr>
-                                <th> Fecha </th>
-                                <th>Número del oficio</th>
-                                <th>Acuse de notificación</th>
+                                {{-- <th>Número del oficio</th> --}}                               
                                 <th>Número de legajos</th>
                                 <th>Número de fojas</th>
                                 <th>Número de legajos</th>
-                                <th>Número de fojas</th>                                
+                                <th>Número de fojas</th> 
+                                <th>Relación de expedientes al archivo</th>                               
+                                <th>Fecha de entrega</th>
                                 <th>Fase/Acción</th>
-                                <th>Envío</th>
+                                <th> Envío </th>
                             </tr>    
                         </thead>
                         <tbody>
                             @if (!empty($turnoarchivo))
-                            <tr>
+                            <tr>                                                            
                                 <td class="text-center">
-                                    {{ fecha($turnoarchivo->fecha_turno_archivo) }}
+                                    {{$turnoarchivo->legajos_tecnico_archivo }}
+                                </td>    
+                                <td class="text-center">
+                                    {{$turnoarchivo->fojas_tecnico_archivo }}
+                                </td>    
+                                <td class="text-center">
+                                    {{$turnoarchivo->legajos_tecnico_archivo }}
                                 </td>
                                 <td class="text-center">
-                                    {{$turnoarchivo->numero_turno_archivo }}
-                                </td>
+                                    {{$turnoarchivo->fojas_tecnico_archivo }}
+                                </td>  
                                 <td class="text-center">
                                     @btnFile($turnoarchivo->turno_archivo)<br>                         
                                     <small>{{ fecha($turnoarchivo->fecha_notificacion_archivo) }} <small>
                                 </td>
                                 <td class="text-center">
-                                    {{$turnoarchivo->legajos_tecnico_archivo }}
-                                </td>    
-                                <td class="text-center">
-                                    {{$turnoarchivo->fojas_tecnico_archivo }}
-                                </td>    
-                                <td class="text-center">
-                                    {{$turnoarchivo->legajos_tecnico_archivo }}
-                                </td>
-                                <td class="text-center">
-                                    {{$turnoarchivo->fojas_tecnico_archivo }}
-                                </td>    
+                                    {{ fecha($turnoarchivo->fecha_turno_archivo) }}
+                                </td>                                
                                 <td class="text-center">                                                                                                                                                                                                                                                                                       
-                                    @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
+                                @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
                                         @can('turnoarchivo.edit')                                                        
                                         <a href="{{ route('turnoarchivo.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
@@ -96,7 +92,7 @@
                                     @else
                                         <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
                                     @endcan
-                                @endif           
+                                    @endif           
                                     @if ($auditoria->turnoarchivo->fase_autorizacion == 'En validación')
                                         @can('turnoarchivovalidacion.edit')
                                             <a href="{{ route('turnoarchivovalidacion.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
@@ -143,19 +139,20 @@
                         </tbody>
                     </table>
                 </div> 
+            </div>  
                 <h1 class="card-title">
                     <span class="text-primary"> 
-                Envío archivo de transferencia
+                     Envío Archivo de Transferencia
                     </span>
                 </h1>
                 <div class="card-body">              
                     <div class="row">
                         <div class="col-md-12">
-                            @if (empty($auditoria->turnotransferencia) && empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
+                            @if (empty($auditoria->turnoarchivotransferencia) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
                             @can('turnoarchivotransferencia.create')
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <a href="{{ route('turnoarchivotransferencia.create',$auditoria->turnotransferencia) }}"  class="btn btn-primary float-end">
+                                        <a href="{{ route('turnoarchivotransferencia.create',$auditoria->turnoarchivotransferencia) }}"  class="btn btn-primary float-end">
                                             <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
                                         </a>
                                     </div>                    
@@ -166,40 +163,91 @@
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th>Número de oficio de transferencia</th>
+                                <tr>                                   
                                     <th>Inventario de documentos</th>
                                     <th>Fecha de de trasferencia</th>
                                     <th>Tiempo de resguardo</th>
                                     <th>Clave topográfica</th>
+                                    <th>Fase/Acción</th>
+                                    <th> Envío </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (!empty($auditoria->archivotransferencia))
-                                <tr>
+                                @if (!empty($auditoria->turnoarchivotransferencia))
+                                <tr>                                   
                                     <td class="text-center">
-                                        {{ ($auditoria->archivotransferencia->numero_transferencia) }}
+                                        @btnFile($auditoria->turnoarchivotransferencia->inventario_transferencia)
                                     </td>
                                     <td class="text-center">
-                                        @btnFile($auditoria->archivotransferencia->inventario_transferencia)
+                                        {{  fecha($auditoria->turnoarchivotransferencia->fecha_transferencia)}}
                                     </td>
                                     <td class="text-center">
-                                        {{  fecha($auditoria->archivotransferencia->fecha_transferencia)}}
+                                        {{ ($auditoria->turnoarchivotransferencia->tiempo_resguardo) }}
                                     </td>
                                     <td class="text-center">
-                                        {{ ($auditoria->archivotransferencia->tiempo_resguardo) }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{$auditoria->archivotransferencia->clave_topografica }}
-                                    </td>                                
-                                </tr>
-                                @else
-                                <tr>
-                                    <td class="text-center" colspan="5">
-                                        No se encuentran registros en este apartado.
-                                    </td>
-                                </tr>
-                                @endif
+                                        {{$auditoria->turnoarchivotransferencia->clave_topografica }}
+                                    </td> 
+                                    <td class="text-center">                                                                                                                                                                                                                                                                                       
+                                        @if (empty($auditoria->turnoarchivotransferencia->fase_autorizacion)||$auditoria->turnoarchivotransferencia->fase_autorizacion=='Rechazado')
+                                                <span class="badge badge-light-danger">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
+                                                @can('turnoarchivotransferencia.edit')                                                        
+                                                <a href="{{ route('turnoarchivotransferencia.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
+                                                    <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
+                                                </a>                                                                          
+                                                @endcan
+                                            @endif
+                                            @if ($auditoria->turnoarchivotransferencia->fase_autorizacion == 'En revisión')
+                                            @can('turnoarchivotransferenciarevision.edit')
+                                                <a href="{{ route('turnoarchivotransferenciarevision.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
+                                                    <li class="fa fa-gavel"></li>
+                                                    Revisar
+                                                </a>
+                                            @else
+                                                <span class="badge badge-light-warning">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
+                                            @endcan
+                                            @endif           
+                                            @if ($auditoria->turnoarchivotransferencia->fase_autorizacion == 'En validación')
+                                                @can('turnoarchivotransferenciavalidacion.edit')
+                                                    <a href="{{ route('turnoarchivotransferenciavalidacion.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
+                                                        <li class="fa fa-gavel"></li>
+                                                        Validar
+                                                    </a>
+                                                @else
+                                                    <span class="badge badge-light-warning">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
+                                                @endcan
+                                            @endif      
+                                            @if ($auditoria->turnoarchivotransferencia->fase_autorizacion == 'En autorización')
+                                            @can('turnoarchivotransferenciaautorizacion.edit')
+                                                <a href="{{ route('turnoarchivotransferenciaautorizacion.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
+                                                    <li class="fa fa-gavel"></li>
+                                                    Autorizar
+                                                </a>
+                                            @else
+                                                <span class="badge badge-light-warning">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
+                                            @endcan
+                                        @endif           
+                                            @if ($auditoria->turnoarchivotransferencia->fase_autorizacion=='Autorizado')
+                                                <span class="badge badge-light-success">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>                                                                                                                                               
+                                            @endif                                                                                                                                    
+                                        <td class="text-center">    
+                                            @if (empty($auditoria->turnoarchivotransferencia->fase_autorizacion)||$auditoria->turnoarchivotransferencia->fase_autorizacion=='Rechazado')                                       
+                                                @can('turnoarchivotransferencia.edit')                                                        
+                                                    <a href="{{ route('turnoarchivotransferenciaenvio.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
+                                                    Enviar
+                                                    </a>
+                                                @endcan
+                                            @endif
+                                        </td>  
+                                    </td>                                                                    
+                                </tr>               
+                                    @if (!empty($auditoria->turnoarchivotransferenciaenvio))
+                                            {!! movimientosDesglose($auditoria->turnoarchivotransferencia->id, 10, $auditoria->turnoarchivotransferencia->movimientos) !!}
+                                    @endif   
+                                    @else    
+                                        <td class="text-center" colspan="5">
+                                            No se encuentran registros en este apartado.
+                                        </td>
+                                    @endif                                
                             </tbody>
                         </table>
                     </div>                

@@ -873,10 +873,26 @@ Breadcrumbs::for('turnoarchivoautorizacion.edit', function (BreadcrumbTrail $tra
 });
 
 
-Breadcrumbs::for('turnotransferencia.create', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('turnoarchivotransferencia.create', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimiento.index');
     $trail->push('Envío de archivo', route('turnoarchivo.index'));
 });
+
+Breadcrumbs::for('turnoarchivotransferenciarevision.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoarchivo.index',$auditoria);
+    $trail->push('Revisión archivo transferencia ', route('turnoarchivo.index'));
+});
+
+Breadcrumbs::for('turnoarchivotransferenciavalidacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoarchivo.index',$auditoria);
+    $trail->push('Validación del Archivo Transferencia ', route('turnoarchivo.index'));
+});
+
+Breadcrumbs::for('turnoarchivotransferenciaautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoarchivo.index',$auditoria);
+    $trail->push('Autorización del Turno Archivo Transferencia ', route('turnoarchivo.index'));
+});
+
 
 
 Breadcrumbs::for('seguimientoauditoriascp.index', function (BreadcrumbTrail $trail) {

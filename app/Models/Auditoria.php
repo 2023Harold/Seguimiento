@@ -432,7 +432,7 @@ class Auditoria extends Model
             {
                 return $this->belongsTo(TurnoAcuseArchivo::class, 'id', 'auditoria_id');
             }
-            public function archivotransferencia()
+            public function turnoarchivotransferencia()
             {
                 return $this->belongsTo(TurnoArchivoTransferencia::class, 'id','auditoria_id');
             }

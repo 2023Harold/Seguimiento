@@ -23,11 +23,11 @@
                 {!! BootForm::open(['model' => $turnoarchivo,'store' => 'turnoarchivo.store','update' => 'turnoarchivo.update','id' => 'form']) !!}
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_turno_archivo', 'Fecha del Acuse del envío al archivo *', old('fecha_turno_archivo', fecha($turnoarchivo->fecha_turno_archivo, 'Y-m-d'))); !!}
+                        {!! BootForm::date('fecha_turno_archivo', 'Fecha del oficio *', old('fecha_turno_archivo', fecha($turnoarchivo->fecha_turno_archivo, 'Y-m-d'))); !!}
                     </div>
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         {!! BootForm::text('numero_turno_archivo', 'Número de oficio: *', old('numero_turno_archivo', $turnoarchivo->numero_turno_archivo)) !!}
-                    </div>
+                    </div> --}}
                 </div> 
                 <div class="row"> Expediente Técnico de la Auditoría:
                     <div class="row">
@@ -51,18 +51,17 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        {!! archivo('turno_archivo', 'Acuse envío al archivo: *', old('turno_archivo', $turnoarchivo->turno_archivo)) !!}
+                        {!! archivo('turno_archivo', 'Relación de expedientes al archivo: *', old('turno_archivo', $turnoarchivo->turno_archivo)) !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_notificacion_archivo', 'Fecha del Acuse del envío al archivo *', old('fecha_notificacion_archivo', fecha($turnoarchivo->fecha_notificacion_archivo, 'Y-m-d'))); !!}
+                        {!! BootForm::date('fecha_notificacion_archivo', 'Fecha de entrega *', old('fecha_notificacion_archivo', fecha($turnoarchivo->fecha_notificacion_archivo, 'Y-m-d'))); !!}
                     </div>
-                </div>       
-                
+                </div>
                 <div class="row">
                     <div class="col-md-6"> 
                         @canany(['turnoarchivo.store','turnoarchivo.update'])
                             <button type="submit" class="btn btn-primary">Guardar</button>
-                        @endcanany
+                        @endcan
                         <a href="{{ route('turnoarchivo.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>

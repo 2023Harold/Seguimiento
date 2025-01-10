@@ -15,7 +15,7 @@
                     Envío al Archivo de Transferencia
             </div>
             <div class="card-body">
-                @include('layouts.contextos._auditoria')
+                @include('layouts.contextos._auditoria')              
                 @include('flash::message')                
                 <div class="row">
                     <div class="col-md-12">
@@ -57,7 +57,6 @@
                                 <td class="text-center">
                                     {{$turnotransferencia->clave_topografica }}
                                 </td>
-                                
                             </tr>
                             @else
                             <tr>

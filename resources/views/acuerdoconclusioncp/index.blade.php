@@ -20,22 +20,22 @@
                 @include('flash::message')                
                 <div class="row">
                     <div class="col-md-12">
-                        @if(getSession('cp')==2022)                               
-                            @if (empty($auditoria->acuerdoconclusion) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
+                        @if(getSession('cp')!=2023)                               
+                            @if (empty($auditoria->acuerdoconclusion))
                                 @can('acuerdoconclusion.create')
                                     <a class="btn btn-primary float-end" href="{{ route('acuerdoconclusion.create') }}">
                                         <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Acuerdo
                                     </a> 
                                 @endcan
-                            @endif                                                       
-                        @elseif(getSession('cp')==2023)   
-                            @if (empty($auditoria->acuerdoconclusion) && $auditoria->lidercp_id==auth()->user()->id)
+                            @endif
+                            @else
+                            @if (empty($auditoria->acuerdoconclusion))
                             @can('acuerdoconclusioncp.create')
                                 <a class="btn btn-primary float-end" href="{{ route('acuerdoconclusioncp.create') }}">
                                     <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Acuerdo
                                 </a> 
                             @endcan
-                            @endif
+                        @endif
                         @endif    
                     </div>                    
                 </div>                                
@@ -49,11 +49,7 @@
                                 <th>Domicilio</th>                                
                                 <th>Acuerdo de conclusión UI</th> 
                                 <th>Fase / Acción</th>
-                            @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
                                 <th>Enviar</th> 
-                            @elseif(getSession('cp')==2023 && auth()->user()->siglas_rol=='LP')    
-                                <th>Enviar</th> 
-                            @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -153,22 +149,14 @@
                                         <span class="badge badge-light-success">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>                                                                                                                                               
                                     @endif                                                                                                 
                                 </td>
-                                <td class="text-center">                                        
-                                @if (empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')                                       
-                                        @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
-                                            @can('acuerdoconclusionenvio.edit')                                                        
-                                                <a href="{{ route('acuerdoconclusionenvio.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                Enviar
-                                                </a>
-                                            @endcan
-                                        @else
-                                            @can('acuerdoconclusionenviocp.edit')                                                        
-                                                <a href="{{ route('acuerdoconclusionenviocp.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                Enviar
-                                                </a> 
-                                            @endcan
-                                        @endif                                        
-                                @endif
+                                <td class="text-center">    
+                                    @if (empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')                                       
+                                        @can('acuerdoconclusionenvio.edit')                                                        
+                                            <a href="{{ route('acuerdoconclusionenvio.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                             Enviar
+                                            </a>
+                                        @endcan
+                                    @endif
                                 </td>            
                             </tr>
                            {{-- {{ dd($auditoria->acuerdoconclusion->movimientos); }}} --}}

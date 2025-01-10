@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('segturno_archivo_trasferencia', function (Blueprint $table) {
 
-            $table->id();
-            $table->string('numero_transferencia', 100);            
+            $table->id();          
             $table->string('inventario_transferencia',100);
             $table->date('fecha_transferencia')->nullable();
             $table->string('tiempo_resguardo', 100);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\Movimientos;
 use App\Models\TurnoOIC;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TurnoOICAutorizacionController extends Controller
@@ -99,7 +100,7 @@ class TurnoOICAutorizacionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
-        $director=User::where('unidad_administrativa_id',substr($radicacion->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();
+        $director=User::where('unidad_administrativa_id',substr($turnooic->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del Turno a la Unidad de Investigación de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'

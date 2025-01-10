@@ -6,6 +6,7 @@ use App\Http\Controllers\AccionesController;
 use App\Http\Controllers\AcuerdoConclusionAutorizacionController;
 use App\Http\Controllers\AcuerdoConclusionController;
 use App\Http\Controllers\AcuerdoConclusionCPController;
+use App\Http\Controllers\AcuerdoConclusionCPEnvioController;
 use App\Http\Controllers\AcuerdoConclusionEnvioController;
 use App\Http\Controllers\AcuerdoConclusionRevisionController;
 use App\Http\Controllers\AcuerdoConclusionValidacionController;
@@ -179,14 +180,22 @@ use App\Http\Controllers\TurnoArchivoController;
 use App\Http\Controllers\TurnoArchivoEnvioController;
 use App\Http\Controllers\TurnoArchivoRevisionController;
 use App\Http\Controllers\TurnoArchivoTransferencia;
+use App\Http\Controllers\TurnoArchivoTransferenciaAutorizacionController;
 use App\Http\Controllers\TurnoArchivoTransferenciaControler;
 use App\Http\Controllers\TurnoArchivoTransferenciaController;
+use App\Http\Controllers\TurnoArchivoTransferenciaEnvioController;
+use App\Http\Controllers\TurnoArchivoTransferenciaRevisionController;
+use App\Http\Controllers\TurnoArchivoTransferenciaValidacionController;
 use App\Http\Controllers\TurnoArchivoValidacionController;
 use App\Http\Controllers\TurnoOICAutorizacionController;
 use App\Http\Controllers\TurnoOICController;
 use App\Http\Controllers\TurnoOICEnvioController;
 use App\Http\Controllers\TurnoOICRevisionController;
 use App\Http\Controllers\TurnoOICValidacionController;
+use App\Http\Controllers\TurnoTransferenciaAutorizacionController;
+use App\Http\Controllers\TurnoTransferenciaEnvioController;
+use App\Http\Controllers\TurnoTransferenciaRevisionController;
+use App\Http\Controllers\TurnoTransferenciaValidacionController;
 use App\Http\Controllers\TurnoUIAutorizacionController;
 use App\Http\Controllers\TurnoUIController;
 use App\Http\Controllers\TurnoUIEnvioController;
@@ -326,7 +335,11 @@ Route::resource('turnoarchivovalidacion',TurnoArchivoValidacionController::class
 Route::resource('turnoarchivoautorizacion',TurnoArchivoAutortizacionController::class,['parameters' => ['turnoarchivoautorizacion' => 'auditoria']]);
 
 //turnotransferencia
-Route::resource('turnoarchivotransferencia',TurnoArchivoTransferenciaController::class,['parameters' => ['turnotransferencia' => 'auditoria']]);
+Route::resource('turnoarchivotransferencia',TurnoArchivoTransferenciaController::class,['parameters' => ['turnoarchivotransferencia' => 'auditoria']]);
+Route::resource('turnoarchivotransferenciaenvio',TurnoArchivoTransferenciaEnvioController::class,['parameters' => ['turnoarchivotransferenciaenvio' => 'auditoria']]);
+Route::resource('turnoarchivotransferenciarevision',TurnoArchivoTransferenciaRevisionController::class,['parameters' => ['turnoarchivotransferenciarevision' => 'auditoria']]);
+Route::resource('turnoarchivotransferenciavalidacion',TurnoArchivoTransferenciaValidacionController::class,['parameters' => ['turnoarchivotransferenciavalidacion' => 'auditoria']]);
+Route::resource('turnoarchivotransferenciaautorizacion',TurnoArchivoTransferenciaAutorizacionController::class,['parameters' => ['turnoarchivotransferenciaautorizacion' => 'auditoria']]);
 
 
 
@@ -337,6 +350,7 @@ Route::resource('acuerdoconclusion',AcuerdoConclusionController::class,['paramet
 Route::resource('acuerdoconclusioncp',AcuerdoConclusionCPController::class,['parameters' => ['acuerdoconclusion' => 'auditoria']]);
 Route::resource('acuerdoconclusionrevision',AcuerdoConclusionRevisionController::class,['parameters' => ['acuerdoconclusion' => 'auditoria']]);
 Route::resource('acuerdoconclusionenvio',AcuerdoConclusionEnvioController::class,['parameters' => ['acuerdoconclusionenvio' => 'auditoria']]);
+Route::resource('acuerdoconclusionenviocp', AcuerdoConclusionCPEnvioController::class,['parameters' => ['acuerdoconclusioncp' => 'acuerdoconclusion']]);
 Route::resource('acuerdoconclusionvalidacion', AcuerdoConclusionValidacionController::class, ['parameters' => ['acuerdoconclusionvalidacion' => 'auditoria']]);
 Route::resource('acuerdoconclusionautorizacion',AcuerdoConclusionAutorizacionController::class, ['parameters' => ['acuerdoconclusionautorizacion' => 'auditoria']]);
 
