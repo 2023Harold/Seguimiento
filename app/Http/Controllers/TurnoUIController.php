@@ -60,7 +60,6 @@ class TurnoUIController extends Controller
 
         setMessage("Los datos se han guardado correctamente.");
 
-        $turnoui = TurnoUI::create($request->all());
         return redirect() -> route('turnoui.index');
     }
 
@@ -86,7 +85,7 @@ class TurnoUIController extends Controller
         $turnoui=$auditoria;
         $auditoria=$auditoria->auditoria;
        
-        return view('turnoui.form', compact('turnoui','auditoria'));
+        return view('turnoui.form', compact('auditoria','turnoui'));
     }
 
     /**
@@ -98,6 +97,7 @@ class TurnoUIController extends Controller
      */
     public function update(Request $request,TurnoUI $auditoria)
     {
+        $turnoui=$auditoria;
         mover_archivos($request, ['turno_ui'],$auditoria);
         $request['usuario_modificacion_id'] = auth()->user()->id;
         //dd($request,$auditoria);
@@ -105,7 +105,7 @@ class TurnoUIController extends Controller
         $auditoria=$auditoria->auditoria;
         setMessage("Los datos se han actualizado correctamente.");
   
-        return redirect() -> route('turnoui.index');
+        return redirect() -> route('turnoui.index',compact('auditoria','turnoui'));
   
     }
 
@@ -118,6 +118,14 @@ class TurnoUIController extends Controller
     public function destroy($id)
     {
         //
+    }
+    private function normalizarDatos(Request $request)
+    {
+        if ($request->estatus == 'Aprobado') {
+            $request['motivo_rechazo'] = null;
+        }
+
+        return $request;
     }
     public function auditoria(Auditoria $auditoria)
     {

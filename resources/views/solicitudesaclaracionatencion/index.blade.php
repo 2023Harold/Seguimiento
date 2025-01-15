@@ -229,9 +229,9 @@
                     <div class="col-md-12">
                         <span>
                             <h3 class="card-title text-primary float">Comentarios
-                            <a class="btn btn-primary float-end popupcomentario" href="{{ route('revisionessolicitudes.create') }}">
+                            {{-- <a class="btn btn-primary float-end popupcomentario" href="{{ route('revisionessolicitudes.create') }}">
                                 Agregar
-                            </a>
+                            </a> --}}
                         </h3>
                         </span>
                     </div>

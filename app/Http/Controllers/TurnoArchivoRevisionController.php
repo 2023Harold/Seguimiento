@@ -93,7 +93,7 @@ class TurnoArchivoRevisionController extends Controller
 
     $turnoarchivo->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
     setMessage($request->estatus == 'Aprobado' ?
-        'La Revisión ha sido registrada y se ha enviado a validaci+on del superior.' :
+        'La Revisión ha sido registrada y se ha enviado a validación del superior.' :
         'El rechazo ha sido registrado.'
     );
 

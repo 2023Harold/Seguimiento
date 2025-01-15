@@ -99,17 +99,17 @@ class TurnoOICValidacionController extends Controller
        );
 
        if ($request->estatus == 'Aprobado') {
-        $titulo = 'Autorización de la radicación de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
+        $titulo = 'Autorización del Turno OIC de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
                         .auth()->user()->name.', '.auth()->user()->puesto.
-                        '; ha aprobado la validación de la radiación de la auditoría No. '.$turnooic->auditoria->numero_auditoria.
+                        '; ha aprobado la validación del Turno OIC de la auditoría No. '.$turnooic->auditoria->numero_auditoria.
                         ', por lo que se requiere realice la autorización oportuna de la misma.';
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
     }else {
         
-        $titulo = 'Rechazo de la radicación de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
+        $titulo = 'Rechazo del Turno OIC de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado(a) '.$turnooic->usuarioCreacion->name.', '.$turnooic->usuarioCreacion->puesto.':</strong><br>'
-                        .'Ha sido rechazado la radicación de auditoría No. '.$turnooic->auditoria->numero_auditoria.
+                        .'Ha sido rechazado Turno OIC de auditoría No. '.$turnooic->auditoria->numero_auditoria.
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
         
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnooic->usuarioCreacion->unidad_administrativa_id, $turnooic->usuarioCreacion->id);

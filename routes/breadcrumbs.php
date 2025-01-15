@@ -789,6 +789,18 @@ Breadcrumbs::for('informeprimeraetapa.create', function (BreadcrumbTrail $trail)
     $trail->push('Informe Primera Etapa', route('informeprimeraetapa.create'));
 });
 
+Breadcrumbs::for('informeprimeraetapavalidacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('informeprimeraetapa.index',$auditoria);
+    $trail->push('Validacion del Informe Primera Etapa', route('informeprimeraetapa.index'));
+});
+Breadcrumbs::for('informeprimeraetapaautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoui.index',$auditoria);
+    $trail->push('Autorizacion del Informe Primera Etapa ', route('informeprimeraetapa.index'));
+});
+
+
+
+
 // Breadcrumbs::for('informeprimeraetapa.edit', function (BreadcrumbTrail $trail,) {
 //     $trail->parent('auditoriaseguimiento');
 //     $trail->push('Editar', route('informeprimeraetapa.edit',$informe));

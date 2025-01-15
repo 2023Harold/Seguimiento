@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Auditoria;
 use App\Models\Movimientos;
 use App\Models\TurnoUI;
 use Illuminate\Http\Request;
@@ -76,7 +75,7 @@ class TurnoUIRevisionController extends Controller
        $this->normalizarDatos($request);
        $turnoui=$auditoria;
        Movimientos::create([
-           'tipo_movimiento' => 'Validación del Turno a la Unidad de Investigación',
+           'tipo_movimiento' => 'Revisión del Turno a la Unidad de Investigación',
            'accion' => 'TurnoUI',
            'accion_id' => $turnoui->id,
            'estatus' => $request->estatus,
@@ -102,11 +101,11 @@ class TurnoUIRevisionController extends Controller
         $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
                         .auth()->user()->name.', '.auth()->user()->puesto.
                         '; ha aprobado la revisión del Turno a la Unidad de Investigacion de la auditoría No. '.$turnoui->auditoria->numero_auditoria.
-                        ', por lo que se requiere realice la autorización oportuna de la misma.';
+                        ', por lo que se requiere realice la validación oportuna de la misma.';
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
     }else {
         
-        $titulo = 'Rechazo de la radicación de la auditoría No. '.$turnoui->auditoria->numero_auditoria;
+        $titulo = 'Rechazo del Turno UI de la auditoría No. '.$turnoui->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado(a) '.$turnoui->usuarioCreacion->name.', '.$turnoui->usuarioCreacion->puesto.':</strong><br>'
                         .'Ha sido rechazado el Turno a la Unidad de Investigación de auditoría No. '.$turnoui->auditoria->numero_auditoria.
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';

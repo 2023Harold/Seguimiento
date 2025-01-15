@@ -97,6 +97,7 @@ class TurnoArchivoTransferenciaController extends Controller
         // dd(getSession('auditoria_id'));
       $request['auditoria_id']= getSession('auditoria_id');
       mover_archivos($request, ['ArchivoTransferencia']);
+      $request['usuario_modificacion_id'] = auth()->user()->id;
       $turnoarchivotransferencia  = TurnoArchivoTransferencia::create($request->all());
     // dd($turnotransferencia);  
         setMessage('Los datos de archivo trasferencia se han guardado correctamente');

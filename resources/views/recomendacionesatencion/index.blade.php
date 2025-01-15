@@ -208,9 +208,9 @@
                     <div class="col-md-12">
                         <span>
                             <h3 class="card-title text-primary float">Comentarios
-                            <a class="btn btn-primary float-end popupcomentario" href="{{ route('revisionesrecomendaciones.create') }}">
+                            {{-- <a class="btn btn-primary float-end popupcomentario" href="{{ route('revisionesrecomendaciones.create') }}">
                                 Agregar
-                            </a>
+                            </a> --}}
                         </h3>
                         </span>
                     </div>

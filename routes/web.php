@@ -82,7 +82,10 @@ use App\Http\Controllers\CuentaPublicaHomeController;
 use App\Http\Controllers\FirmaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InformeDocumentoController;
+use App\Http\Controllers\InformePrimeraEtapaAutorizacionController;
 use App\Http\Controllers\InformePrimeraEtapaController;
+use App\Http\Controllers\InformePrimeraEtapaEnvioController;
+use App\Http\Controllers\InformePrimeraEtapaValidacionController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PacController;
 use App\Http\Controllers\PacAuditoriaController;
@@ -576,8 +579,15 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     // Route::resource('pliegosobservacionesacuses',PliegosObservacionAcusesController::class,['parameters' => ['pliegosobservacionacuses' => 'pliegosobservacion']]);
     // Route::resource('revisionespliegosobservacion',RevisionesPliegosObservacionController::class,['parameters' => ['revisionespliegosobservacion' => 'comentario']]);
     //Informe Primera Etapa
+    
+    //Informe primera etapa
     Route::resource('informeprimeraetapa',InformePrimeraEtapaController::class,['parameters' => ['informeprimeraetapa' => 'auditoria']]);
-   
+    Route::get('informepliegos', [InformePrimeraEtapaController::class,'informepliegos'])->name('informepliegos.create');
+    Route::resource('informeprimeraetapaenvio',InformePrimeraEtapaEnvioController::class,['parameters' => ['informeprimeraetapaenvio' => 'auditoria']]);
+    Route::resource('informeprimeraetapavalidacion', InformePrimeraEtapaValidacionController::class, ['parameters' => ['informeprimeraetapavalidacion' => 'auditoria']]);    
+    Route::resource('informeprimeraetapaautorizacion', InformePrimeraEtapaAutorizacionController::class, ['parameters' => ['informeprimeraetapaautorizacion' => 'auditoria']]);
+    
+
     // Route::resource('seguimientoauditoriaaccionrevision01', SeguimientoAuditoriaAccionRevision01Controller::class, ['parameters' => ['seguimientoauditoriaaccionrevision01' => 'accion']]);
     // Route::resource('seguimientoauditoriaaccionrevision', SeguimientoAuditoriaAccionRevisionController::class, ['parameters' => ['seguimientoauditoriaaccionrevision' => 'accion']]);
     // Route::get('/seguimientoauditoria/acciones/{auditoria}', [SeguimientoAuditoriaController::class, 'auditoriaAcciones'])->name('seguimientoauditoria.acciones');

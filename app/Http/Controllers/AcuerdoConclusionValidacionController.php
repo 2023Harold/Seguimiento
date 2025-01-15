@@ -77,7 +77,7 @@ class AcuerdoConclusionValidacionController extends Controller
         $this->normalizarDatos($request);
         $acuerdoconclusion=$auditoria;
         Movimientos::create([
-           'tipo_movimiento' => 'Validación del Turno a la Unidad de Investigación',
+           'tipo_movimiento' => 'Validación del acuerdo de conclusión',
            'accion' => 'AcuerdoConclusion',
            'accion_id' => $acuerdoconclusion->id,
            'estatus' => $request->estatus,

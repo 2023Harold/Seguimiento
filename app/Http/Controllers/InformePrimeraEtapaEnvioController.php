@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InformePrimeraEtapa;
 use App\Models\Movimientos;
-use App\Models\TurnoAcuseArchivo;
 use Illuminate\Http\Request;
 
-class TurnoArchivoEnvioController extends Controller
+class InformePrimeraEtapaEnvioController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -56,29 +56,29 @@ class TurnoArchivoEnvioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(TurnoAcuseArchivo $auditoria)
-    { 
-       $turnoarchivo=$auditoria;
+    public function edit(InformePrimeraEtapa $auditoria)
+    {
+        $informeprimeraetapa=$auditoria;
         Movimientos::create([
-            'tipo_movimiento' => 'Registro del turno archivo',
-                'accion' => 'TurnoArchivo',
-                'accion_id' => $turnoarchivo->id,
+            'tipo_movimiento' => 'Registro del Informe Primera Etapa',
+                'accion' => 'InformePrimeraEtapa',
+                'accion_id' => $informeprimeraetapa->id,
                 'estatus' => 'Aprobado',
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
             ]);
     
-            $turnoarchivo->update(['fase_autorizacion' =>  'En revisión']);
+            $informeprimeraetapa->update(['fase_autorizacion' =>  'En validación']);
     
-            $titulo = 'Revisión de los datos de turno archivo';
-            $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
-                        Ha sido registrada la turno archivo de la auditoría No. ' . $turnoarchivo->auditoria->numero_auditoria . ', por parte del ' .
-                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+            $titulo = 'Validación de los datos del Informe Primera Etapa';
+            $mensaje = '<strong>Estimado (a) ' . auth()->user()->director->name . ', ' . auth()->user()->director->puesto . ':</strong><br>
+                        Ha sido registrado el Informe Primera Etapa  de la auditoría No. ' . $informeprimeraetapa->auditoria->numero_auditoria . ', por parte del ' .
+                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
     
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
-            setMessage('Se ha enviado el turno archivo a Revisión');
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
+            setMessage('Se ha enviado el Informe Primera Etapa, a validación');
     
-        return redirect()->route('turnoarchivo.index');
+        return redirect()->route('informeprimeraetapa.index');
     }
 
     /**

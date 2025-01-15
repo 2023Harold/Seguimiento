@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 @section('breadcrums')
 {{ Breadcrumbs::render('recomendacionesanalisis.edit',$recomendacion) }}
 @endsection
@@ -8,7 +8,7 @@
         <h1 class="card-title">
             <a href="{{ route('recomendacionesatencion.index') }}"><i
                     class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-            &nbsp; Análisis de la atención
+            &nbsp; Análisis de la atención 
         </h1>
     </div>
     <div class="card-body">
@@ -102,4 +102,4 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection --}}

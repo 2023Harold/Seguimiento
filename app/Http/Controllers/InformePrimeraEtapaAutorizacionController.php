@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
-use App\Models\AcuerdoConclusion;
+use App\Models\InformePrimeraEtapa;
 use App\Models\Movimientos;
 use Illuminate\Http\Request;
 
-class AcuerdoConclusionAutorizacionController extends Controller
+class InformePrimeraEtapaAutorizacionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -57,12 +57,13 @@ class AcuerdoConclusionAutorizacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(AcuerdoConclusion $auditoria)
+    public function edit(InformePrimeraEtapa $auditoria)
     {
-        $acuerdoconclusion=$auditoria;
+        $informeprimeraetapa=$auditoria;
         $auditoria=$auditoria->auditoria;
+        // dd($informeprimeraetapa);
        
-         return view('acuerdoconclusionautorizacion.form', compact('acuerdoconclusion','auditoria'));
+        return view('informeprimeraetapaautorizacion.form', compact('informeprimeraetapa','auditoria'));
     }
 
     /**
@@ -72,15 +73,15 @@ class AcuerdoConclusionAutorizacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AprobarFlujoAutorizacionRequest $request, AcuerdoConclusion $auditoria)
+    public function update(AprobarFlujoAutorizacionRequest $request, InformePrimeraEtapa $auditoria)
     {
         $this->normalizarDatos($request);
-        $acuerdoconclusion=$auditoria;
- 
+        $informeprimeraetapa=$auditoria;
+
         Movimientos::create([
-            'tipo_movimiento' => 'Autorización del acuerdo de conclusión',
-            'accion' => 'AcuerdoConclusion',
-            'accion_id' => $acuerdoconclusion->id,
+            'tipo_movimiento' => 'Autorización del del Informe Primera Etapa',
+            'accion' => 'InformePrimeraEtapa',
+            'accion_id' => $informeprimeraetapa->id,
             'estatus' => $request->estatus,
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
@@ -93,30 +94,30 @@ class AcuerdoConclusionAutorizacionController extends Controller
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
 
-        $acuerdoconclusion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+        $informeprimeraetapa->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
         setMessage($request->estatus == 'Aprobado' ?
-            'Se ha autorizado el Acuerdo de Conclusión de la auditoría con exito.' :
+            'Se ha autorizado el Informe Primera Etapa de la auditoría con exito.' :
             'El rechazo ha sido registrado.'
         );
 
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del Acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
+            $titulo = 'Autorización del Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
+                            '; ha aprobado la autorización del Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
         }else {
             
-            $titulo = 'Rechazo Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
+            $titulo = 'Rechazo del Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$informeprimeraetapa->usuarioCreacion->name.', '.$informeprimeraetapa->usuarioCreacion->puesto.':</strong><br>'
+                            .'Ha sido rechazado el Informe Primera Etapa de auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
             
-                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
+                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $informeprimeraetapa->usuarioCreacion->unidad_administrativa_id, $informeprimeraetapa->usuarioCreacion->id);
                             
     }
-    return redirect()->route('acuerdoconclusion.index');
+        return redirect()->route('informeprimeraetapa.index');
     }
 
     /**
@@ -140,17 +141,9 @@ class AcuerdoConclusionAutorizacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro de la radicación de auditoría No. '.$numeroauditoria.'.';       
+                    .'Ha sido rechazado el registro del Informe Primera Etapa de auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }
 
-    private function mensajeAprobado(String $nombre, String $puesto, String $numeroauditoria)
-    {
-        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .' Ha sido autorizado el registro de radicación de la auditoría No. '.$numeroauditoria.
-                    ', por parte del Titular.';       
-
-        return $mensaje;
-    }
 }

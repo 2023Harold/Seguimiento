@@ -61,20 +61,20 @@ class TurnoUIEnvioController extends Controller
         
         $turnoui=$auditoria;
         Movimientos::create([
-            'tipo_movimiento' => 'Registro del turno a la UI',
-                'accion' => 'turno archivo',
+            'tipo_movimiento' => 'Registro del turno a la Unidad de Investigación',
+                'accion' => 'TurnoUI',
                 'accion_id' => $turnoui->id,
                 'estatus' => 'Aprobado',
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
             ]);
     
-            $turnoui->update(['fase_autorizacion' =>  'En Revisión']);
+            $turnoui->update(['fase_autorizacion' =>  'En revisión']);
     
             $titulo = 'Revisión de los datos del turno a la UI';
             $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
                         Ha sido registrada el turno a la UI de la auditoría No. ' . $turnoui->auditoria->numero_auditoria . ', por parte del ' .
-                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
+                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
     
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
             setMessage('Se ha enviado el turno a la UI, a revisión');

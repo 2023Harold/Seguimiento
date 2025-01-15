@@ -23,6 +23,14 @@ class InformePrimeraEtapa extends Model
         'fecha_notificacion',
 		'acuse_envio',
         'fecha_acuse_envio',
+        'tipo',
+        'fase_autorizacion',
+        'nivel_autorizacion',
+        'usuario_creacion_id',
+        'usuario_modificacion_id',
+
+       
+
     ];
     /**
      * The attributes that should be cast.
@@ -36,6 +44,7 @@ class InformePrimeraEtapa extends Model
         'updated_at'=>'datetime',
         'fecha_termino_recomendacion'=>'datetime',
 		'fecha_acuse_envio'=>'datetime',
+        
     ];
 
     public function getDepaasignadoAttribute()
@@ -43,17 +52,24 @@ class InformePrimeraEtapa extends Model
         return User::where('unidad_administrativa_id',$this->departamento_asignado_id)->first();
     }
 
-    // public function informe()
-    // {
-    //     return $this->belongsTo(InformePrimeraEtapa::class, 'numero_ordenauditoria','id');
-    // }
     // public function analista()
     // {
     //     return $this->belongsTo(User::class, 'analista_asignado_id', 'id');
     // }
-    // public function movimientos()
-    // {
-    //     return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Revisión Acción Registro Auditoría')->orderBy('id', 'ASC');
-    // }
-
+    public function auditoria()
+    {
+        return $this->belongsTo(Auditoria::class, 'auditoria_id', 'id');
+    }   
+    public function usuarioCreacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_creacion_id');
+    }
+    public function usuarioActualizacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_modificacion_id');
+    }
+    public function movimientos()
+    {
+        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'InformePrimeraEtapa')->orderBy('id', 'ASC');
+    }
 }

@@ -97,11 +97,46 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>                       
+                    </div>    
+                    
+                        @if (auth()->user()->siglas_rol!='ANA')
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span>
+                                    <h3 class="card-title text-primary float">Comentarios
+                                    <a class="btn btn-primary float-end popupcomentario" href="{{ route('revisionessolicitudes.create') }}">
+                                        Agregar comentario
+                                    </a>
+                                </h3>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                        @endif
+                    
+                </div>                
+            </div>                          
         </div>
     </div>
 </div>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('.popupcomentario').colorbox({
+                width:"65%",
+                height:"650px",
+                maxWidth:400,
+                maxHeight:"650px",
+                iframe: true,
+                onClosed: function() {
+                    location.reload(true);
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"65%",maxWidth:400, height:"650px", maxHeight:"650px"});
+                 $(window).trigger("resize");
+                }
+            });
+        });
+    </script>
 @endsection

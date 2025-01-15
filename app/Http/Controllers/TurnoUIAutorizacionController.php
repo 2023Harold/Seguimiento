@@ -142,7 +142,7 @@ class TurnoUIAutorizacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro de la radicación de auditoría No. '.$numeroauditoria.'.';       
+                    .'Ha sido rechazado el registro del Turno UI de la auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }
@@ -150,7 +150,7 @@ class TurnoUIAutorizacionController extends Controller
     private function mensajeAprobado(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .' Ha sido autorizado el registro de radicación de la auditoría No. '.$numeroauditoria.
+                    .' Ha sido autorizado el registro del Turno UI de la auditoría No. '.$numeroauditoria.
                     ', por parte del Titular.';       
 
         return $mensaje;

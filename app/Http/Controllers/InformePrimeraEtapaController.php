@@ -5,15 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InformePrimeraEtapaRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
-use App\Models\Constancia;
 use App\Models\InformePrimeraEtapa;
+use App\Models\Recomendaciones;
 use Illuminate\Http\Request;
 
 class InformePrimeraEtapaController extends Controller
 {
     protected $model;
 
-    public function __construct(AuditoriaAccion $model)
+    public function __construct(InformePrimeraEtapa $model)
     {
         $this->model = $model;
     }
@@ -26,9 +26,10 @@ class InformePrimeraEtapaController extends Controller
     {
         
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
+        $informeprimeraetapa=InformePrimeraEtapa::where('auditoria_id',getSession('auditoria_id'))->first();
+        
 
-        return view('informeprimeraetapa.index', compact('request','acciones', 'auditoria'));
+        return view('informeprimeraetapa.index', compact('request','informeprimeraetapa', 'auditoria'));
     }
 
     /**
@@ -38,11 +39,13 @@ class InformePrimeraEtapaController extends Controller
      */
     public function create()
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));               
+        $auditoria = Auditoria::find(getSession('auditoria_id'));     
+        $tipo='recomendaciones';          
         // $consecutivo=InformePrimeraEtapa::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->get()->count()+1;
-        $informe = new InformePrimeraEtapa();
+        $informeprimeraetapa = new InformePrimeraEtapa();
+        $request['usuario_creacion_id'] = auth()->user()->id;
        
-        return view('informeprimeraetapa.form', compact('auditoria','informe'));
+        return view('informeprimeraetapa.form', compact('auditoria','informeprimeraetapa','tipo'));
 
     }
 
@@ -54,12 +57,9 @@ class InformePrimeraEtapaController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $request['auditoria_id']=getSession('auditoria_id');
-    
-        mover_archivos($request, ['informe']);
-        $informe  = InformePrimeraEtapa::create($request->all());
-
+        mover_archivos($request, ['InformePrimeraEtapa']);
+        $request['auditoria_id']=getSession('auditoria_id');            
+        $informeprimeraetapa  = InformePrimeraEtapa::create($request->all());
         setMessage("Los datos se han guardado correctamente.");
 
         return redirect() -> route('informeprimeraetapa.index');
@@ -82,9 +82,15 @@ class InformePrimeraEtapaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Auditoria $auditoria)
+    public function edit(InformePrimeraEtapa $auditoria)
     {
-        //
+        // dd($auditoria);
+      
+        $informeprimeraetapa=$auditoria;       
+        $tipo=$informeprimeraetapa->tipo;                 
+        $auditoria = Auditoria::find(getSession('auditoria_id'));        
+       
+        return view('informeprimeraetapa.form', compact('auditoria','informeprimeraetapa','tipo'));
     }
 
     /**
@@ -94,10 +100,19 @@ class InformePrimeraEtapaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, InformePrimeraEtapa $auditoria)
     { 
-       
-        
+        $informeprimeraetapa=$auditoria;
+        mover_archivos($request, ['InformePrimeraEtapa']);
+        $request['usuario_modificacion_id'] = auth()->user()->id;        
+        $request['auditoria_id']=getSession('auditoria_id');            
+        $auditoria->update($request->all());
+        $auditoria=$auditoria->auditoria;
+
+
+
+        setMessage("Los datos se han actualizado correctamente.");
+        return redirect() -> route('informeprimeraetapa.index',compact('auditoria','informeprimeraetapa'));
 
     }
 
@@ -112,255 +127,37 @@ class InformePrimeraEtapaController extends Controller
         //
     }
 
-    public function setQuery(Request $request)
+    public function informepliegos()
     {
-         $query = $this->model;
+        $auditoria = Auditoria::find(getSession('auditoria_id'));     
+        $tipo='pliegos';          
+        $informeprimeraetapa = new InformePrimeraEtapa();
+        $request['usuario_creacion_id'] = auth()->user()->id;
+      
+       
+        return view('informeprimeraetapa.form', compact('auditoria','informeprimeraetapa','tipo'));
 
-         $query = $query->where('segauditoria_id',getSession('auditoria_id'));
-
-         
-        if ($request->filled('consecutivo')) {
-            $query = $query->where('consecutivo',$request->consecutivo);
-         }
-
-        if ($request->filled('tipo')) {
-            $query = $query->where('tipo',$request->tipo);
-        }
-        if ($request->filled('monto_aclarar')) {
-            $query = $query->where('monto_aclarar',$request->monto_aclarar);
-        }
-        return $query;
     }
-
-    public function export(){
-        
-        $auditoria=Auditoria::find(getSession('auditoria_id'));     
-        $directoruser = $auditoria->directorasignado;
-        $direccionseguimiento = $directoruser->unidadAdministrativa->descripcion;
-
-        $jefeuser = $auditoria->jefedepartamentoencargado;
-        $jefeseguimiento = $jefeuser->unidadAdministrativa->descripcion;
-
-        $ordenauditoria='NUMMORDN';
-        $numeroauditoria=$auditoria->numero_auditoria;
-
-        $numeroexpediente=$auditoria->radicacion->numero_expediente;
-
-        $tipoauditoria=$auditoria->tipo_auditoria->descripcion;
-
-        $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
-        $txtentidad=null;
-        if (count($entidades)>1) {
-            if ($entidades[1]=='MUNICIPIOS') {
-                $bar = ucwords($entidades[2]);       
-                $bar = ucwords(strtolower($bar));
-
-                $txtentidad='Municipio de '.$bar;
-            }
-         }
-
-        $periodo=$auditoria->periodo_revision;
-
-        $director=$directoruser->name;
-        $directorcargo=$directoruser->puesto;
-
-        $jefe=$jefeuser->name;
-        $jefecargo=$jefeuser->puesto;
-
-        $rectext1='';
-        $rectext2='';
-
-        if (count($auditoria->accionesrecomendaciones)>0) {   
-            $rectext1='y del Proceso de Atención a las Recomendaciones correspondientes'; 
-            $rectext2='y; se precisaran las mejoras realizadas y las acciones emprendidas en relación con las recomendaciones que le fueron formuladas, o en su caso, justificara su improcedencia';          
-        }
-        $potext1="del Pliego de Observaciones";
-
-        if(count($auditoria->totalpliegos)>0){
-            if(count($auditoria->totalpliegos)==1){
-                $potext1="del Pliego de";
-            }else{
-                $potext1="de los Pliegos de";
-            }
+    private function normalizarDatos(Request $request)
+    {
+        if ($request->estatus == 'Aprobado') {
+            $request['motivo_rechazo'] = null;
         }
 
-        $replacements=array();
-        $replacementsrec=array();
-        foreach ($auditoria->acciones as $accion) {
-            $descripcion='';
-            $analisis='';
-            /**Solicitud de aclaracion */
-            if($accion->segtipo_accion_id==1){
-                $analisis=$accion->solicitudesaclaracion->analisis;
-                $descripcion=$accion->solicitudesaclaracion->listado_documentos;
-                
-            }
-            /**Recomendación */
-            if($accion->segtipo_accion_id==2){
-                $analisis=$accion->recomendaciones->analisis;
-                $descripcion=$accion->recomendaciones->listado_documentos;
+        return $request;
+    }
+    public function auditoria(Auditoria $auditoria)
+    {
+        setSession('informeprimeraetapa_auditoria_id',$auditoria->id);
 
-                $recaccionArr=[
-                    'claveaccion'=>$accion->numero,
-                    'tipoaccion'=>$accion->tipo,
-                    'estado'=>'analisis',
-                    'observacion'=>$accion->accion,
-                    'descripcion'=>$descripcion,
-                    'analisis'=>$analisis,
-                    'normatividad'=>$accion->normativa_infringida,
-                ];
-
-                //$replacements=[$accionArr];
-                array_push($replacementsrec, $recaccionArr);               
-            }
-            /**Pliego de observación */
-            if($accion->segtipo_accion_id==3){
-                $analisis=$accion->pliegosobservacion->analisis;
-                $descripcion=$accion->pliegosobservacion->listado_documentos;
-            }
-            /**Promoción de responsabilidad administrativa sancionatoria */
-            if($accion->segtipo_accion_id!=4){
-
-                $accionArr=[
-                    'claveaccion'=>$accion->numero,
-                    'tipoaccion'=>$accion->tipo,
-                    'estado'=>'analisis',
-                    'observacion'=>$accion->accion,
-                    'descripcion'=>$descripcion,
-                    'analisis'=>$analisis,
-                    'normatividad'=>$accion->normativa_infringida,
-                ];
-
-                //$replacements=[$accionArr];
-                array_push($replacements, $accionArr);
-            }
-
-        }
-
-if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
-{
-        $auditoria->acto_fiscalizacion=='Cumplimiento Financiero';
-        $template=new TemplateProcessorMod('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/JEFE/2. IS.docx');
-
-        $template->setValue('direccionseguimiento',$direccionseguimiento);
-        $template->setValue('departamentoseguimiento',$jefeseguimiento);
-        $template->setValue('entidad',$txtentidad);
-        $template->setValue('tipoauditoria',$tipoauditoria);
-        $template->setValue('periodo',$periodo);
-        $template->setValue('ordenauditoria',$ordenauditoria);
-        $template->setValue('rectext1',$rectext1);
-        $template->setValue('rectext2',$rectext2);
-        $template->setValue('potext1',$potext1);
-        if(!str_contains($auditoria->tipo_auditoria->descripcion, 'Cumplimiento Financiero')){
-            $template->ddeleteBlock('bloquelegporec');
-        }else{
-            if(count($auditoria->totalpliegos) < 1 || count($auditoria->totalrecomendacion) < 1 ){           
-                $template->ddeleteBlock('bloquelegporec');
-            }else{
-                $template->dcloneBlock('bloquelegporec', 1, true, true);
-            }
-        }
-        $template->ddeleteBlock('bloquelegporecsi');       
-        $template->dcloneBlock('bloquepo', 0, true, false, $replacements);
-        $template->dcloneBlock('bloquerec', 0, true, false, $replacementsrec);
-
-
+        return redirect()->route('informeprimeraetapa.create');
+    }
+     public function export(){
+        $auditoria=Auditoria::find(getSession('auditoria_id')); 
+        $template=new TemplateProcessorMod('bases-word/informeprimeraetapa.docx');       
         $nombreword='IS';
-
         $template->saveAs($nombreword.'.docx');
- }
-    if( $auditoria->acto_fiscalizacion=='Legalidad')
-    {
-        $template=new TemplateProcessorMod('bases-word/PAC/LEGALIDAD/JEFE/2. IS.docx');
-    
-            $template->setValue('direccionseguimiento',$direccionseguimiento);
-            $template->setValue('departamentoseguimiento',$jefeseguimiento);
-            $template->setValue('entidad',$txtentidad);
-            $template->setValue('tipoauditoria',$tipoauditoria);
-            $template->setValue('periodo',$periodo);
-            $template->setValue('ordenauditoria',$ordenauditoria);
-            $template->setValue('rectext1',$rectext1);
-            $template->setValue('rectext2',$rectext2);
-            $template->setValue('potext1',$potext1);
-            if(!str_contains($auditoria->tipo_auditoria->descripcion, 'Legalidad')){
-                $template->ddeleteBlock('bloquelegporec');
-            }else{
-                if(count($auditoria->totalpliegos) < 1 || count($auditoria->totalrecomendacion) < 1 ){           
-                    $template->ddeleteBlock('bloquelegporec');
-                }else{
-                    $template->dcloneBlock('bloquelegporec', 1, true, true);
-                }
-            }
-            $template->ddeleteBlock('bloquelegporecsi');       
-            $template->dcloneBlock('bloquepo', 0, true, false, $replacements);
-            $template->dcloneBlock('bloquerec', 0, true, false, $replacementsrec);
-    
-    
-            $nombreword='IS';
-    
-            $template->saveAs($nombreword.'.docx');
-    }
-        if($auditoria->acto_fiscalizacion=='Inversión Física')
-        { 
-            $template=new TemplateProcessorMod('bases-word/PAC/INVERSION_FISICA/JEFE/2. IS.docx');
 
-            $template->setValue('direccionseguimiento',$direccionseguimiento);
-            $template->setValue('departamentoseguimiento',$jefeseguimiento);
-            $template->setValue('entidad',$txtentidad);
-            $template->setValue('tipoauditoria',$tipoauditoria);
-            $template->setValue('periodo',$periodo);
-            $template->setValue('ordenauditoria',$ordenauditoria);
-            $template->setValue('rectext1',$rectext1);
-            $template->setValue('rectext2',$rectext2);
-            $template->setValue('potext1',$potext1);
-            if(!str_contains($auditoria->tipo_auditoria->descripcion, 'Inversión Física')){
-                $template->ddeleteBlock('bloquelegporec');
-            }else{
-                if(count($auditoria->totalpliegos) < 1 || count($auditoria->totalrecomendacion) < 1 ){           
-                    $template->ddeleteBlock('bloquelegporec');
-                }else{
-                    $template->dcloneBlock('bloquelegporec', 1, true, true);
-                }
-            }
-            $template->ddeleteBlock('bloquelegporecsi');       
-            $template->dcloneBlock('bloquepo', 0, true, false, $replacements);
-            $template->dcloneBlock('bloquerec', 0, true, false, $replacementsrec);
-
-            $nombreword='IS';
-
-            $template->saveAs($nombreword.'.docx');
-        }
-        if( $auditoria->acto_fiscalizacion=='Desempeño')
-        {
-            $template=new TemplateProcessorMod('bases-word/PAC/DESEMPEÑO/JEFE/2. IS.docx');
-            $template->setValue('direccionseguimiento',$direccionseguimiento);
-            $template->setValue('departamentoseguimiento',$jefeseguimiento);
-            $template->setValue('entidad',$txtentidad);
-            $template->setValue('tipoauditoria',$tipoauditoria);
-            $template->setValue('periodo',$periodo);
-            $template->setValue('ordenauditoria',$ordenauditoria);
-            $template->setValue('rectext1',$rectext1);
-            $template->setValue('rectext2',$rectext2);
-            $template->setValue('potext1',$potext1);
-            if(!str_contains($auditoria->tipo_auditoria->descripcion, 'Desempeño')){
-                $template->ddeleteBlock('bloquelegporec');
-            }else{
-                if(count($auditoria->totalpliegos) < 1 || count($auditoria->totalrecomendacion) < 1 ){           
-                    $template->ddeleteBlock('bloquelegporec');
-                }else{
-                    $template->dcloneBlock('bloquelegporec', 1, true, true);
-                }
-            }
-            $template->ddeleteBlock('bloquelegporecsi');       
-            $template->dcloneBlock('bloquepo', 0, true, false, $replacements);
-            $template->dcloneBlock('bloquerec', 0, true, false, $replacementsrec);
-
-            $nombreword='IS';
-
-            $template->saveAs($nombreword.'.docx');
-        }
-    
-            return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
-        }    
-
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+     }         
 }

@@ -60,7 +60,7 @@ class TurnoOICEnvioController extends Controller
     {
         $turnooic=$auditoria;
         Movimientos::create([
-            'tipo_movimiento' => 'Registro del turno al Órgano Interno de Control',
+            'tipo_movimiento' => 'Registro del Turno al Órgano Interno de Control',
                 'accion' => 'TurnoOIC',
                 'accion_id' => $turnooic->id,
                 'estatus' => 'Aprobado',

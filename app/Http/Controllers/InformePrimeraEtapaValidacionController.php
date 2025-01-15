@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
+use App\Models\InformePrimeraEtapa;
 use App\Models\Movimientos;
-use App\Models\TurnoUI;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class TurnoUIValidacionController extends Controller
+class InformePrimeraEtapaValidacionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +26,7 @@ class TurnoUIValidacionController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -58,12 +57,14 @@ class TurnoUIValidacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(TurnoUI $auditoria)
+    public function edit(InformePrimeraEtapa $auditoria)
     {
-        $turnoui=$auditoria;
+        $informeprimeraetapa=$auditoria;
         $auditoria=$auditoria->auditoria;
+        // dd($informeprimeraetapa);
        
-        return view('turnouivalidacion.form', compact('turnoui','auditoria'));
+        return view('informeprimeraetapavalidacion.form', compact('informeprimeraetapa','auditoria'));
+        
     }
 
     /**
@@ -73,14 +74,14 @@ class TurnoUIValidacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AprobarFlujoAutorizacionRequest $request, TurnoUI $auditoria)
+    public function update(AprobarFlujoAutorizacionRequest $request, InformePrimeraEtapa $auditoria)
     {
         $this->normalizarDatos($request);
-       $turnoui=$auditoria;
-       Movimientos::create([
-           'tipo_movimiento' => 'Validación del Turno a la Unidad de Investigación',
-           'accion' => 'TurnoUI',
-           'accion_id' => $turnoui->id,
+        $informeprimeraetapa=$auditoria;
+        Movimientos::create([
+           'tipo_movimiento' => 'Validación del Informe Primera Etapa',
+           'accion' => 'InformePrimeraEtapa',
+           'accion_id' => $informeprimeraetapa->id,
            'estatus' => $request->estatus,
            'usuario_creacion_id' => auth()->id(),
            'usuario_asignado_id' => auth()->id(),
@@ -93,31 +94,31 @@ class TurnoUIValidacionController extends Controller
            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
        }
 
-       $turnoui->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+       $informeprimeraetapa->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
        setMessage($request->estatus == 'Aprobado' ?
            'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
            'El rechazo ha sido registrado.'
        );
 
        if ($request->estatus == 'Aprobado') {
-        $titulo = 'Validación del turno UI de la auditoría No. '.$turnoui->auditoria->numero_auditoria;
+        $titulo = 'Autorización del Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
                         .auth()->user()->name.', '.auth()->user()->puesto.
-                        '; ha aprobado la validación del Turno UI de la auditoría No. '.$turnoui->auditoria->numero_auditoria.
+                        '; ha aprobado la validación del Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                         ', por lo que se requiere realice la autorización oportuna de la misma.';
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
     }else {
         
-        $titulo = 'Rechazo del Turno UI de la auditoría No. '.$turnoui->auditoria->numero_auditoria;
-        $mensaje = '<strong>Estimado(a) '.$turnoui->usuarioCreacion->name.', '.$turnoui->usuarioCreacion->puesto.':</strong><br>'
-                        .'Ha sido rechazado el Turno UI de la auditoría No. '.$turnoui->auditoria->numero_auditoria.
+        $titulo = 'Rechazo del Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
+        $mensaje = '<strong>Estimado(a) '.$informeprimeraetapa->usuarioCreacion->name.', '.$informeprimeraetapa->usuarioCreacion->puesto.':</strong><br>'
+                        .'Ha sido rechazado el Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
         
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoui->usuarioCreacion->unidad_administrativa_id, $turnoui->usuarioCreacion->id);
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $informeprimeraetapa->usuarioCreacion->unidad_administrativa_id, $informeprimeraetapa->usuarioCreacion->id);
     }
 
-        return redirect()->route('turnoui.index');
-   }
+        return redirect()->route('informeprimeraetapa.index');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -140,9 +141,8 @@ class TurnoUIValidacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro del Turno a la Unidad de Investigación de auditoría No. '.$numeroauditoria.'.';       
+                    .'Ha sido rechazado el registro del Informe Primera Etapa de auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }
-
 }

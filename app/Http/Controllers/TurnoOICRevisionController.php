@@ -102,7 +102,7 @@ class TurnoOICRevisionController extends Controller
         $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
                         .auth()->user()->name.', '.auth()->user()->puesto.
                         '; ha aprobado la revisión del Turno al Órgano Interno de Control de la auditoría No. '.$turnooic->auditoria->numero_auditoria.
-                        ', por lo que se requiere realice la autorización oportuna de la misma.';
+                        ', por lo que se requiere realice la validación oportuna de la misma.';
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
     }else {
         

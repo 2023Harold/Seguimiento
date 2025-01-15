@@ -97,6 +97,7 @@ class TurnoOICController extends Controller
     {
         $turnooic=$auditoria;
         mover_archivos($request,['turnooic',$turnooic]);
+        $request['usuario_modificacion_id'] = auth()->user()->id;
         $turnooic->update($request->all());
         setMessage("Los datos se han actualizado correctamente.");
         return redirect() -> route('turnooic.index',compact('auditoria','turnooic'));
