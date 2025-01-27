@@ -578,7 +578,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                     $fecha = Carbon::parse($fecha);
                     $mes = $meses[($fecha->format('n')) - 1];
-                    $fechaactual = $diaMin. 'de ' . $mes . ' del ' .  $anioMin;
+                    $fechaactual = $diaMin. 'dias de ' . $mes . ' del ' .  $anioMin;
 
 
         return $fechaactual;

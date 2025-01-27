@@ -20,37 +20,42 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                {!! BootForm::open(['model' => $radicacion,'store' => 'radicacion.store','update' => 'radicacion.update','id' =>'form',]) !!}
-                {!! BootForm::hidden('acto_fiscalizacion_auditoria',$auditoria->acto_fiscalizacion)!!}
-                {!! BootForm::hidden('calculo_fecha','',['id'=> 'calculo_fecha'])!!}
+                {!!BootForm::open(['model' => $radicacion,'store' => 'radicacion.store','update' => 'radicacion.update','id' =>'form',]) !!}
+                {!!BootForm::hidden('acto_fiscalizacion_auditoria',$auditoria->acto_fiscalizacion)!!}
+                {!!BootForm::hidden('calculo_fecha','',['id'=> 'calculo_fecha'])!!}
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::text('num_memo_recepcion_expediente', 'Número del memorándum de recepción del expediente: *', old('num_memo_recepcion_expediente',$radicacion->num_memo_recepcion_expediente)) !!}
+                        {!!BootForm::text('num_memo_recepcion_expediente', 'Número del memorándum de recepción del expediente: *', old('num_memo_recepcion_expediente',$radicacion->num_memo_recepcion_expediente)) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_expediente_turnado', 'Fecha de recepción del expediente turnado: *', old('fecha_expediente_turnado',fecha($radicacion->fecha_expediente_turnado, 'Y-m-d'))) !!}
+                        {!!BootForm::date('fecha_expediente_turnado', 'Fecha de recepción del expediente turnado: *', old('fecha_expediente_turnado',fecha($radicacion->fecha_expediente_turnado, 'Y-m-d'))) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::text('numero_expediente', 'Número de expediente US: *', old('numero_expediente',$radicacion->numero_expediente)) !!}
+                        {!!BootForm::text('numero_expediente', 'Número de expediente US: *', old('numero_expediente',$radicacion->numero_expediente)) !!}
                     </div>
                 </div>
 				<div class="row">
                     <div class="col-md-2">
-                        {!! BootForm::date('fecha_notificacion', 'Fecha de radicación: *', old('fecha_notificacion',fecha($radicacion->fecha_notificacion,'Y-m-d'))) !!}
+                        {!!BootForm::date('fecha_notificacion', 'Fecha de radicación: *', old('fecha_notificacion',fecha($radicacion->fecha_notificacion,'Y-m-d'))) !!}
                     </div>
                 </div>
                 
                 <div class="row">
                     <div class="col-md-4">
-                        {!! BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
+                        {!!BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
                     </div>                    
                     <div class="col-lg-3 col-md-3">
-                        {!! BootForm::date('fecha_oficio_informe','Fecha del oficio: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
+                        {!!BootForm::date('fecha_oficio_informe','Fecha del oficio: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
                     </div>                      
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        {!!BootForm::text('fecha_cierre_auditoria', 'Fecha de cierre de la auditoría: *', old('fecha_cierre_auditoria',$radicacion->fecha_cierre_auditoria)) !!}
+                    </div>
                 </div>
                                                                                                   
                 
@@ -66,22 +71,22 @@
                 </div> --}}
                 <div class="row">
                     <div class="col-md-4">
-                        {!! BootForm::text('nombre_titular','Nombre del titular a quien se dirige la comparecencia: *',old('nombre_titular', optional($comparecencia)->nombre_titular),) !!}
+                        {!!BootForm::text('nombre_titular','Nombre del titular a quien se dirige la comparecencia: *',old('nombre_titular', optional($comparecencia)->nombre_titular),) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        {!! BootForm::text('cargo_titular','Cargo del titular a quien se dirige la comparecencia: *',old('cargo_titular', optional($comparecencia)->cargo_titular),) !!}
+                        {!!BootForm::text('cargo_titular','Cargo del titular a quien se dirige la comparecencia: *',old('cargo_titular', optional($comparecencia)->cargo_titular),) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
                         <span class="has-float-label">
-                            {!! BootForm::date('fecha_comparecencia','Fecha de la comparecencia: *',old('fecha_comparecencia', fecha(optional($comparecencia)->fecha_comparecencia, 'Y-m-d'))) !!}
+                            {!!BootForm::date('fecha_comparecencia','Fecha de la comparecencia: *',old('fecha_comparecencia', fecha(optional($comparecencia)->fecha_comparecencia, 'Y-m-d'))) !!}
                         </span>
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::time('hora_comparecencia_inicio','Hora de inicio de la comparecencia: *',old('hora_comparecencia_inicio', optional($comparecencia)->hora_comparecencia_inicio)) !!}
+                        {!!BootForm::time('hora_comparecencia_inicio','Hora de inicio de la comparecencia: *',old('hora_comparecencia_inicio', optional($comparecencia)->hora_comparecencia_inicio)) !!}
                     </div>
                 </div>
                 {{-- @if ($auditoria->acto_fiscalizacion!='Desempeño') --}}
@@ -93,28 +98,28 @@
 				@if ($auditoria->acto_fiscalizacion!='Desempeño')
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_inicio_aclaracion','Inicio de la etapa de aclaración: *',old('fecha_inicio_aclaracion', fecha(optional($comparecencia)->fecha_inicio_aclaracion, 'Y-m-d')))
+                        {!!BootForm::date('fecha_inicio_aclaracion','Inicio de la etapa de aclaración: *',old('fecha_inicio_aclaracion', fecha(optional($comparecencia)->fecha_inicio_aclaracion, 'Y-m-d')))
                         !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_termino_aclaracion','Término de la etapa de aclaración: *',old('fecha_termino_aclaracion', fecha(optional($comparecencia)->fecha_termino_aclaracion, 'Y-m-d'))) !!}
+                        {!!BootForm::date('fecha_termino_aclaracion','Término de la etapa de aclaración: *',old('fecha_termino_aclaracion', fecha(optional($comparecencia)->fecha_termino_aclaracion, 'Y-m-d'))) !!}
                     </div>
                 </div>
 				@endif
                 <div class="row">
                     <div class="col-md-2">
-                        {!! BootForm::text('plazo_maximo', 'Plazo máximo: *', old('numero_expediente',$radicacion->plazo_maximo)) !!}
+                        {!!BootForm::text('plazo_maximo', 'Plazo máximo: ', old('numero_expediente',$radicacion->plazo_maximo)) !!}
                     </div>
                 </div>                                                                                                  
                 {{-- @endif
                 @if ($auditoria->acto_fiscalizacion=='Legalidad' || $auditoria->acto_fiscalizacion=='Desempeño') --}}
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_inicio_proceso','Inicio del proceso de atención: *',old('fecha_inicio_proceso', fecha(optional($comparecencia)->fecha_inicio_proceso, 'Y-m-d')))
+                        {!!BootForm::date('fecha_inicio_proceso','Inicio del proceso de atención: ',old('fecha_inicio_proceso', fecha(optional($comparecencia)->fecha_inicio_proceso, 'Y-m-d')))
                         !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_termino_proceso','Término del proceso de atención: *',old('fecha_termino_proceso', fecha(optional($comparecencia)->fecha_termino_proceso, 'Y-m-d'))) !!}
+                        {!!BootForm::date('fecha_termino_proceso','Término del proceso de atención: ',old('fecha_termino_proceso', fecha(optional($comparecencia)->fecha_termino_proceso, 'Y-m-d'))) !!}
                     </div>
                 </div>
                 {{-- @endif --}}
@@ -126,14 +131,14 @@
                         <a href="{{ route('radicacion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>
-                {!! BootForm::close() !!}
+                {!!BootForm::close() !!}
             </div>
         </div>
     </div>
 </div>
 @endsection
 @section('script')
-{!! JsValidator::formRequest('App\Http\Requests\RadicacionRequest') !!}
+{!!JsValidator::formRequest('App\Http\Requests\RadicacionRequest') !!}
 <script>
     $(document).ready(function() {
               // function rmydays(date) {

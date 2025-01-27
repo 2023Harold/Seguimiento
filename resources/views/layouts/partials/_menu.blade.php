@@ -18,7 +18,7 @@
                                 @if (!empty($auditoria->radicacion) && $auditoria->radicacion->fase_autorizacion=='Autorizado')
                                     <span class="fa fa-circle" style="color: green"></span>
                                 @else
-                                    @if(!empty($auditoria->radicacion) && ($auditoria->radicacion->fase_autorizacion == 'En validación' || $auditoria->radicacion->fase_autorizacion == 'En autorización'))
+                                    @if(!empty($auditoria->radicacion) && ($auditoria->radicacion->fase_autorizacion == 'En validación' || $auditoria->radicacion->fase_autorizacion == 'En autorización' || $auditoria->radicacion->fase_autorizacion=='En revisión'))
                                         <span class="fa fa-circle" style="color: yellow"></span>
                                     @else 
                                         <span class="fa fa-circle" style="color: red"></span>
@@ -39,7 +39,7 @@
                                     <span class="fa fa-circle" style="color: green"></span>
                                 @else
                                     @if(!empty($auditoria->comparecencia) && ($auditoria->comparecencia->fase_autorizacion == 'En validación'
-                                     || $auditoria->comparecencia->fase_autorizacion == 'En autorización'))
+                                     || $auditoria->comparecencia->fase_autorizacion == 'En autorización' ))
                                         <span class="fa fa-circle" style="color: yellow"></span>
                                     @else 
                                         <span class="fa fa-circle" style="color: red"></span>
@@ -158,34 +158,34 @@
                                     </a>
                                 </div>     
                                 @can('prasacciones.index')
-                                <div class="menu-item mb-1">
-                                    <a href="{{ route('prasacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'prasacciones')||
-                                                                                                          str_contains(Route::current()->getName(), 'prasturno')||
-                                                                                                          str_contains(Route::current()->getName(), 'prasseguimiento')||
-                                                                                                          str_contains(Route::current()->getName(), 'prasmedida')
-                                                                                                         ) ? 'active' : '' }}">
-                                        @php
-                                            $totalAccionesPRAS = $auditoria->accionespras->count();
-                                            $accionesPRASAutorizadas = $auditoria->accionespras->where('pras.fase_autorizacion', 'Autorizado')->count();
-                                        @endphp
+                                    <div class="menu-item mb-1">
+                                        <a href="{{ route('prasacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'prasacciones')||
+                                                                                                            str_contains(Route::current()->getName(), 'prasturno')||
+                                                                                                            str_contains(Route::current()->getName(), 'prasseguimiento')||
+                                                                                                            str_contains(Route::current()->getName(), 'prasmedida')
+                                                                                                            ) ? 'active' : '' }}">
+                                            @php
+                                                $totalAccionesPRAS = $auditoria->accionespras->count();
+                                                $accionesPRASAutorizadas = $auditoria->accionespras->where('pras.fase_autorizacion', 'Autorizado')->count();
+                                            @endphp
+                                            
+                                            @if ($totalAccionesPRAS === 0)
+                                                {{-- No hay ninguna acción registrada --}}
+                                                <span class="fa fa-circle" style="color: red"></span>
+                                            @elseif ($accionesPRASAutorizadas === $totalAccionesPRAS)
+                                                {{-- Todas las acciones están autorizadas --}}
+                                                <span class="fa fa-circle" style="color: green"></span>
+                                            @else
+                                                {{-- Hay acciones pendientes, en revisión, en validación, etc. --}}
+                                                <span class="fa fa-circle" style="color: yellow"></span>
+                                            @endif
                                         
-                                        @if ($totalAccionesPRAS === 0)
-                                            {{-- No hay ninguna acción registrada --}}
-                                            <span class="fa fa-circle" style="color: red"></span>
-                                        @elseif ($accionesPRASAutorizadas === $totalAccionesPRAS)
-                                            {{-- Todas las acciones están autorizadas --}}
-                                            <span class="fa fa-circle" style="color: green"></span>
-                                        @else
-                                            {{-- Hay acciones pendientes, en revisión, en validación, etc. --}}
-                                            <span class="fa fa-circle" style="color: yellow"></span>
-                                        @endif
-                                    
-                                        <span class="menu-bullet">
-                                            <span class="fa fa-file-text"></span>
-                                        </span>
-                                        <span class="menu-title">PRAS</span>
-                                    </a>
-                                </div>
+                                            <span class="menu-bullet">
+                                                <span class="fa fa-file-text"></span>
+                                            </span>
+                                            <span class="menu-title">PRAS</span>
+                                        </a>
+                                    </div>
                                 @endcan
                                 @can('recomendacionesacciones.index')
                                 <div class="menu-item mb-1">
@@ -310,14 +310,19 @@
                                 <div class="menu-item mb-1">
                                     <a href="{{ route('informeprimeraetapa.index') }}"
                                         class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'informeprimeraetapa') ? 'active' : '' }}">
-                                        @if ($auditoria->informeprimeraetapa)
-                                            {{-- Si existe el registro --}}
+                                        
+
+                                        @if (!empty($auditoria->informeprimeraetapa && $auditoria->informepliegos) && ($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado' && $auditoria->informepliegos->fase_autorizacion=='Autorizado') )
                                             <span class="fa fa-circle" style="color: green"></span>
                                         @else
-                                            {{-- Si no existe el registro --}}
-                                            <span class="fa fa-circle" style="color: red"></span>
+                                            @if(!empty($auditoria->informeprimeraetapa || $auditoria->informepliegos) && ($auditoria->informeprimeraetapa->fase_autorizacion == 'En validación' 
+                                                || $auditoria->informeprimeraetapa->fase_autorizacion == 'En autorización' || $auditoria->informepliegos->fase_autorizacion == 'En validación'
+                                                ||  $auditoria->informepliegos->fase_autorizacion == 'En autorización'))
+                                                <span class="fa fa-circle" style="color: yellow"></span>
+                                            @else 
+                                                <span class="fa fa-circle" style="color: red"></span>
+                                            @endif
                                         @endif
-
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
@@ -336,37 +341,37 @@
                             </a>
                             <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3">
                                 @can('prasacciones.index')
-                                <div class="menu-item mb-1">
-                                    <a href="#" class="menu-link py-3">
-                                        <span class="fa fa-circle" style="color: red"></span>
-                                        <span class="menu-bullet">
-                                            <span class="fa fa-file-text"></span>
-                                        </span>
-                                        <span class="menu-title">PRAS</span>
-                                    </a>
-                                </div>
+                                    <div class="menu-item mb-1">
+                                        <a href="#" class="menu-link py-3">
+                                            <span class="fa fa-circle" style="color: red"></span>
+                                            <span class="menu-bullet">
+                                                <span class="fa fa-file-text"></span>
+                                            </span>
+                                            <span class="menu-title">PRAS</span>
+                                        </a>
+                                    </div>
                                 @endcan
                                 @can('recomendacionesacciones.index')
-                                <div class="menu-item mb-1">
-                                    <a href="#" class="menu-link py-3">
-                                        <span class="fa fa-circle" style="color: red"></span>
-                                        <span class="menu-bullet">
-                                            <span class="fa fa-file-text"></span>
-                                        </span>
-                                        <span class="menu-title">Recomendaciones</span>
-                                    </a>
-                                </div>
+                                    <div class="menu-item mb-1">
+                                        <a href="#" class="menu-link py-3">
+                                            <span class="fa fa-circle" style="color: red"></span>
+                                            <span class="menu-bullet">
+                                                <span class="fa fa-file-text"></span>
+                                            </span>
+                                            <span class="menu-title">Recomendaciones</span>
+                                        </a>
+                                    </div>
                                 @endcan                               
                                 @can('pliegosobservacionacciones.index')
-                                <div class="menu-item mb-1">
-                                    <a href="#" class="menu-link py-3">
-                                        <span class="fa fa-circle" style="color: red"></span>
-                                        <span class="menu-bullet">
-                                            <span class="fa fa-file-text"></span>
-                                        </span>
-                                        <span class="menu-title">Pliegos de observación</span>
-                                    </a>
-                                </div>
+                                    <div class="menu-item mb-1">
+                                        <a href="#" class="menu-link py-3">
+                                            <span class="fa fa-circle" style="color: red"></span>
+                                            <span class="menu-bullet">
+                                                <span class="fa fa-file-text"></span>
+                                            </span>
+                                            <span class="menu-title">Pliegos de observación</span>
+                                        </a>
+                                    </div>
                                 @endcan    
                                 <div class="menu-item mb-1">
                                     <a href="#"
@@ -398,7 +403,7 @@
                                         @if (!empty($auditoria->turnoui) && $auditoria->turnoui->fase_autorizacion=='Autorizado')
                                             <span class="fa fa-circle" style="color: green"></span>
                                         @else
-                                            @if(!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion == 'En Revisión' || $auditoria->turnoui->fase_autorizacion == 'En validación'
+                                            @if(!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion == 'En revisión' || $auditoria->turnoui->fase_autorizacion == 'En validación'
                                                 || $auditoria->turnoui->fase_autorizacion == 'En autorización'))
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else 

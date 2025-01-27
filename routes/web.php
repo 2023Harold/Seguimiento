@@ -475,6 +475,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('radicacion', RadicacionController::class);
     Route::get('auditoriaradicacion/{auditoria}', [RadicacionController::class,'auditoria'])->name('radicacion.auditoria');
 	Route::get('radicacionpdf/{radicacionpdf}', [RadicacionController::class,'radicacionpdf'])->name('radicacion.radicacionpdf');
+
+    Route::get('/radicacion/word/{radicacion}', [RadicacionController::class, 'radicacionWord'])->name('radicacion.word');
+    
     Route::resource('radicacionenvio',RadicacionEnvioController::class,['parameters' => ['radicacionenvio' => 'radicacion']]);
     Route::get('radicacionconcluir/{radicacion}', [RadicacionController::class,'concluir'])->name('radicacion.concluir');
     Route::resource('radicacionrevision', RadicacionRevisionController::class,['parameters' => ['radicacionrevision' => 'radicacion']]);

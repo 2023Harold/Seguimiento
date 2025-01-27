@@ -23,7 +23,14 @@
         <span class="text-primary">
             {{ optional($auditoria->radicacion)->numero_acuerdo }}
         </span>
-    </div>     
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12">                         
+        <label>Número de cierre de la auditoría: </label>
+        <span class="text-primary">
+            {{ optional($auditoria->radicacion)->fecha_cierre_auditoria }}
+        </span>
+    </div>       
+
 	<div class="col-lg-12 col-md-12 col-sm-12 col-12">
         <label>Fecha radicación: </label>
         <span class="text-primary">

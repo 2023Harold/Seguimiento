@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('radicacion.index',$auditoria) }}
+    {{Breadcrumbs::render('radicacion.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -13,7 +13,7 @@
                     Radicación
                 </h1>
 				<div class="float-end">
-                   <a href="{{route('radicacionar.exportar_ar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AR</a>                                  
+                   <a href="{{route('radicacion.word',$auditoria->radicacion)}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AR</a>                                  
                 </div>
             </div>
             <div class="card-body">
@@ -86,6 +86,10 @@
 												<?php echo htmlspecialchars_decode(iconoArchivo('.pdf')) ?>
 											</a>
 										@endcan
+                                        <!--AQUI SE COLOCA EL WORD-->
+                                        <!--<a href=" route('radicacion.word', $auditoria->radicacion) }}" class="btn btn-primary">Descargar Word</a>-->
+
+
                                     </td> 
                                     <td class="text-center">  
                                     @if(getSession('cp')==2022)                                                                     

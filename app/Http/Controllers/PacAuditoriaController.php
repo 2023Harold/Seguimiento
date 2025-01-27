@@ -17,7 +17,7 @@ class PacAuditoriaController extends Controller
         $auditoria= Auditoria::find(getSession('auditoria_id'));
         $siglas_rol=auth()->user()->siglas_rol;
         
-        return view("pacauditoria.index",compact('siglas_rol'));
+        return view("pacauditoria.index",compact('siglas_rol', 'auditoria'));
     }
 
     /**

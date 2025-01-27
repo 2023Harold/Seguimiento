@@ -14,22 +14,22 @@
             </div>
             <div class="card-body">
                 @include('flash::message')
-                {!! BootForm::open(['route'=>'seguimientoauditoriacp.index','method'=>'GET']) !!}
+                {!!BootForm::open(['route'=>'seguimientoauditoriacp.index','method'=>'GET']) !!}
                     <div class="row">
                         <div class="col-md-2">
-                            {!! BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria)) !!}
+                            {!!BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria)) !!}
                         </div>
                         <div class="col-md-2">
-                            {!! BootForm::text('entidad_fiscalizable', "Entidad fiscalizable:", old('entidad_fiscalizable', $request->entidad_fiscalizable)) !!}
+                            {!!BootForm::text('entidad_fiscalizable', "Entidad fiscalizable:", old('entidad_fiscalizable', $request->entidad_fiscalizable)) !!}
                         </div>
                         <div class="col-md-2">
-                            {!! BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion)) !!}
+                            {!!BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion)) !!}
                         </div>
                         <div class="col-md-6 mt-8">
                             <button type="submit" class="btn btn-primary">Buscar</button>                           
                         </div>
                     </div>
-                {!! BootForm::close() !!}
+                {!!BootForm::close() !!}
 				<div class="row">
 					<div class="col-md-12">
 						<div class="pagination float-end">
@@ -75,7 +75,7 @@
                                             $entidadparciales = explode("-", $auditoria->entidad_fiscalizable);                                            
                                         @endphp
                                         @foreach ($entidadparciales as $entidadparcial)
-                                            {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8"); }}<br>
+                                            {{mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8") }}<br>
                                         @endforeach                                        
                                     </td>
                                     <td>
@@ -167,7 +167,7 @@
 </div>
 @endsection
 @section('script')   
-    {!! JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
+    {!!JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
     <script>
         $(document).ready(function() {            
             $('.popuprevisar').colorbox({     

@@ -45,7 +45,8 @@ class RadicacionRequest extends FormRequest
             'fecha_expediente_turnado'=>'required|date|max:10',
             'fecha_oficio_informe'=>'required|date|max:10',
             'fecha_notificacion'=>'required|date|max:10',
-            'plazo_maximo'=>'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Desempeño|integer|max:120',            
+            'plazo_maximo'=>'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Desempeño|integer|max:120',
+            'fecha_cierre_auditoria'=>'required|string|max:150',            
         ];
     }
 
@@ -71,7 +72,8 @@ class RadicacionRequest extends FormRequest
             'fecha_expediente_turnado'=>'fecha de recepción del expediente turnado',
             'fecha_oficio_informe'=>'fecha oficio informe',
             'fecha_notificacion'=>'fecha radicación',
-            'plazo_maximo'=>'plazo máximo',           
+            'plazo_maximo'=>'plazo máximo', 
+            'fecha_cierre_auditoria'=> 'fecha de cierre de la auditoria',          
         ];
     }
 

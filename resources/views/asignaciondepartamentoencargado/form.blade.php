@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')    
-    {{ Breadcrumbs::render('asignaciondepartamentoencargado.edit',$auditoria) }}   
+    {{Breadcrumbs::render('asignaciondepartamentoencargado.edit',$auditoria) }}   
 @endsection
 @section('content')
 <div class="card">
@@ -13,26 +13,26 @@
     <div class="card-body">
         @include('flash::message')
         @include('layouts.contextos._auditoria')
-        {!! BootForm::open(['model' => $auditoria,'update' => 'asignaciondepartamentoencargado.update','id' => 'form']) !!}
+        {!!BootForm::open(['model' => $auditoria,'update' => 'asignaciondepartamentoencargado.update','id' => 'form']) !!}
         {{-- {!! BootForm::hidden('accion',$accion) !!} --}}
-        {!! BootForm::hidden('usuario_id',null,['id'=>'usuario_id']) !!}
+        {!!BootForm::hidden('usuario_id',null,['id'=>'usuario_id']) !!}
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::checkbox('auditoria_completa', 'Asignación de la auditoria completa', 'X', (getSession('cp')==2023?true:false), ['class' => 'i-checks', (getSession('cp')==2023?'disabled':'')]) !!}
+                {!!BootForm::checkbox('auditoria_completa', 'Asignación de la auditoria completa', 'X', (getSession('cp')==2023?true:false), ['class' => 'i-checks', (getSession('cp')==2023?'disabled':'')]) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
-                {!! BootForm::select('departamento_encargado_id', 'Departamento: *', $unidades->toArray() , old('departamento_encargado_id',$auditoria->departamento_encargado_id), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!!BootForm::select('departamento_encargado_id', 'Departamento: *', $unidades->toArray() , old('departamento_encargado_id',$auditoria->departamento_encargado_id), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div> 
-        {!! BootForm::hidden('departamento_encargado',$auditoria->departamento_encargado,['id'=>'departamento_id']) !!}
+        {!!BootForm::hidden('departamento_encargado',$auditoria->departamento_encargado,['id'=>'departamento_id']) !!}
         <div class="row">
             <div class="col-md-3">
-                {!! BootForm::text('nombre', 'Nombre: *', old('nombre'),['readonly']) !!}
+                {!!BootForm::text('nombre', 'Nombre: *', old('nombre'),['readonly']) !!}
             </div>
             <div class="col-md-3">
-                {!! BootForm::text('cargo', 'Cargo: *', old('cargo'),['readonly']) !!}
+                {!!BootForm::text('cargo', 'Cargo: *', old('cargo'),['readonly']) !!}
             </div>
         </div>       
         <div class="row">
@@ -43,7 +43,7 @@
                     <a href="{{ route('asignaciondepartamento.index') }}" class="btn btn-secondary me-2">Cancelar</a>                
             </div>
         </div>
-        {!! BootForm::close() !!}
+        {!!BootForm::close() !!}
     </div>
 </div>
 @endsection
@@ -87,5 +87,5 @@
     });
 
 </script>
-{!! JsValidator::formRequest('App\Http\Requests\AsignacionDepartamentoRequest') !!}
+{!!JsValidator::formRequest('App\Http\Requests\AsignacionDepartamentoRequest') !!}
 @endsection

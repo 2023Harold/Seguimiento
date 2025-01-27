@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('usuario_modificacion_id')->nullable()->constrained('segusers');
             $table->string('fase_autorizacion', 50)->nullable();
             $table->string('nivel_autorizacion', 5)->nullable();
-            $table->timestamps();
         });
     }
 

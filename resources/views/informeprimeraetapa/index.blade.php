@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('informeprimeraetapa.index',$auditoria) }}
+{{Breadcrumbs::render('informeprimeraetapa.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -251,5 +251,5 @@
             </div>        
         </div>                
     </div>                 
-</div>
+
 @endsection

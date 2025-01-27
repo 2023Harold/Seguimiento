@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('breadcrums')    
     @if ($accionstaff=='Asignación')
-    {{ Breadcrumbs::render('asignacionstaff.edit',$auditoria) }}   
+    {{Breadcrumbs::render('asignacionstaff.edit',$auditoria) }}   
     @else
-        {{ Breadcrumbs::render('asignacionstaff.reasignar', $auditoria, 'Reasignación') }}
+        {{Breadcrumbs::render('asignacionstaff.reasignar', $auditoria, 'Reasignación') }}
     @endif     
 @endsection
 @section('content')
@@ -17,25 +17,20 @@
     <div class="card-body">
         @include('flash::message')
         @include('layouts.contextos._auditoria')
-        {!! BootForm::open(['model' => $auditoria,'update' => 'asignacionstaff.update','id' => 'form']) !!}
-        {!! BootForm::hidden('accionstaff',$accionstaff) !!}
+        {!!BootForm::open(['model' => $auditoria,'update' => 'asignacionstaff.update','id' => 'form']) !!}
+        {!!BootForm::hidden('accionstaff',$accionstaff) !!}
         <!-- !! BootForm::hidden('usuario_id',null,['id'=>'usuario_id']) !! -->
         <div class="row">
-            <div class="col-md-6">
-                {!! BootForm::checkbox('auditoria_completa', 'Asignación de la auditoria completa', 'X', (getSession('cp')==2023?true:false), ['class' => 'i-checks', (getSession('cp')==2023?'disabled':'')]) !!}
-            </div>
-        </div>
-        <div class="row">
             <div class="col-md-3">
-                {!! BootForm::select('staff_juridico_id', 'Staff juridico: *',$staff , old('staff_juridico_id',$auditoria->staff_juridico_id), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!!BootForm::select('staff_juridico_id', 'Staff juridico: *',$staff , old('staff_juridico_id',$auditoria->staff_juridico_id), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div> 
             
-            {!! BootForm::hidden('staff_asignada', null, ['id' => 'staff_asignada']) !!}
+            {!!BootForm::hidden('staff_asignada', null, ['id' => 'staff_asignada']) !!}
 
         <div class="row">
             <div class="col-md-3">
-                {!! BootForm::text('cargo', 'Cargo: *', old('cargo'), ['readonly', 'id' => 'cargo']) !!}
+                {!!BootForm::text('cargo', 'Cargo: *', old('cargo'), ['readonly', 'id' => 'cargo']) !!}
             </div>
         </div>       
         <div class="row">
@@ -46,7 +41,7 @@
                     <a href="{{ route('asignaciondepartamento.index') }}" class="btn btn-secondary me-2">Cancelar</a>                
             </div>
         </div>
-        {!! BootForm::close() !!}
+        {!!BootForm::close() !!}
     </div>
 </div>
 @endsection
@@ -109,5 +104,5 @@
         });
     });
 </script>
-{!! JsValidator::formRequest('App\Http\Requests\AsignacionStaffJuridicoRequest') !!}
+{!!JsValidator::formRequest('App\Http\Requests\AsignacionStaffJuridicoRequest') !!}
 @endsection

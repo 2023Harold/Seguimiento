@@ -192,7 +192,7 @@ class AsignacionDepartamentoController extends Controller
         $usuario = [];
         $cargosasociados = [];
 
-        $users = User::where('unidad_administrativa_id', $request->unidadid)->get();     
+        $users = User::where('unidad_administrativa_id', $request->unidadid)->where('siglas_rol','JD')->get();     
 
         if (!empty($users) && count($users) > 0) {
             foreach ($users as $user) {

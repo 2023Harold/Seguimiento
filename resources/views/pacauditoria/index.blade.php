@@ -1,8 +1,9 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('pac.index') }}
+    {{Breadcrumbs::render('pac.index') }}
 @endsection
 @section('content')
+
 <style>
 .card-a:hover{
     background: #b64876!important;

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('asignaciondepartamento.index') }}
+    {{Breadcrumbs::render('asignaciondepartamento.index') }}
 @endsection
 @section('content')
 <div class="row">
@@ -14,22 +14,22 @@
             </div>
             <div class="card-body">
                 @include('flash::message')                
-                {!! BootForm::open(['route'=>'asignaciondepartamento.index','method'=>'GET']) !!}
+                {!!BootForm::open(['route'=>'asignaciondepartamento.index','method'=>'GET']) !!}
                     <div class="row">
                         <div class="col-md-2">
-                            {!! BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria)) !!}
+                            {!!BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria)) !!}
                         </div>
                         <div class="col-md-2">
-                            {!! BootForm::text('entidad_fiscalizable', "Entidad fiscalizable:", old('entidad_fiscalizable', $request->entidad_fiscalizable)) !!}
+                            {!!BootForm::text('entidad_fiscalizable', "Entidad fiscalizable:", old('entidad_fiscalizable', $request->entidad_fiscalizable)) !!}
                         </div>
                         <div class="col-md-2">
-                            {!! BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion)) !!}
+                            {!!BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion)) !!}
                         </div>
                         <div class="col-md-6 mt-8">
                             <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search" aria-hidden="true"></i>Buscar</button>                           
                         </div>
                     </div>
-                {!! BootForm::close() !!}        
+                {!!BootForm::close() !!}        
                 <div class="row">
 					<div class="col-md-12">
 						<div class="pagination float-end">
@@ -104,21 +104,54 @@
                                         @endif                                                                                                                                           
                                     </td>  
                                     @if(getSession('cp')!=2023)                                                                    
-                                    <td class="text-center">
-                                            @can('asignaciondepartamento.edit')                                          
-                                                @if ($auditoria->asignacion_departamentos=='Si'|| in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray()) || in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray()))
-                                                    <a href="{{ route('asignaciondepartamento.edit',$auditoria) }}" class="btn btn-primary">
-                                                        <i class="fa fa-magnifying-glass"></i> Consultar
-                                                    </a>
-                                                @else
-                                                    @if (empty($auditoria->asignacion_departamentos)&&($auditoria->departamento_encargado_id))
+                                        <td class="text-center">
+                                                @can('asignaciondepartamento.edit')                                          
+                                                    @if ($auditoria->asignacion_departamentos=='Si'|| in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray()) || in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray()))
                                                         <a href="{{ route('asignaciondepartamento.edit',$auditoria) }}" class="btn btn-primary">
+                                                            <i class="fa fa-magnifying-glass"></i> Consultar
+                                                        </a>
+                                                    @else
+                                                        @if (empty($auditoria->asignacion_departamentos)&&($auditoria->departamento_encargado_id))
+                                                            <a href="{{ route('asignaciondepartamento.edit',$auditoria) }}" class="btn btn-primary">
+                                                                <i class="fa fa-handshake"></i> Asignar
+                                                            </a>
+                                                        @endif 
+                                                    @endif                                               
+                                                @endcan                                                                                                          
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($auditoria->reasignacion_staff === 'Si')
+                                                <span class="badge-light-secondary text-gray-600">
+                                                    {{ $auditoria->staff_asignada }} <br>
+                                                </span>
+                                                Reasignado
+                                            @else
+                                                @if($auditoria->staff_asignada)
+                                                    <span class="badge-light-secondary text-gray-600">
+                                                        {{ $auditoria->staff_asignada }} <br>
+                                                    </span>
+                                                        Asignado
+                                                    @can('asignacionstaff.edit') 
+                                                        <!-- Si ya hay un staff asignado, redirige a reasignar -->
+                                                        <a href="{{ route('asignacionstaff.reasignar', $auditoria) }}" class="btn btn-primary">
+                                                            <i class="fa fa-user-edit"></i> Reasignar
+                                                        </a>
+                                                    @endcan
+                                                @else
+                                                    <span class="badge-light-secondary text-gray-600">
+                                                        Sin asignación 
+                                                        {{ $auditoria->staff_asignada }} <br>
+                                                    </span>
+                                                    @can('asignacionstaff.edit') 
+                                                        <!-- Si no hay staff asignado, redirige a editar -->
+                                                        <a href="{{ route('asignacionstaff.edit', $auditoria) }}" class="btn btn-primary">
                                                             <i class="fa fa-handshake"></i> Asignar
                                                         </a>
-                                                    @endif 
-                                                @endif                                               
-                                            @endcan                                                                                                          
-                                    </td>
+                                                    @endcan
+                                                @endif
+                                            @endif
+                                        </td>
+                                    @else
                                     <td class="text-center">
                                         @if ($auditoria->reasignacion_staff === 'Si')
                                             <span class="badge-light-secondary text-gray-600">

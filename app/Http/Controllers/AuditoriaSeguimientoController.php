@@ -22,7 +22,7 @@ class AuditoriaSeguimientoController extends Controller
      */
     public function index(Request $request)
     {
-        $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
+        $auditorias = $this->setQuery($request)->orderBy('id','ASC')->paginate(30);
         $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
 
 
