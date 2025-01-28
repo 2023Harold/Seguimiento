@@ -6,6 +6,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\SolicitudesAclaracion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AuditoriaSeguimientoController extends Controller
 {
@@ -22,7 +23,12 @@ class AuditoriaSeguimientoController extends Controller
      */
     public function index(Request $request)
     {
-        $auditorias = $this->setQuery($request)->orderBy('id','ASC')->paginate(30);
+        //$auditorias = $this->setQuery($request)->orderBy('id','ASC')->paginate(30);
+        //$auditoriasQuery = DB::table('segauditorias')->select('*')->orderBy("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, '\d+'))");
+        // Agrega la consulta RAW para usar funciones Oracle
+        $auditorias = $this->setQuery($request)->orderByRaw("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, '\\d+'))");
+        $auditorias = $auditorias->paginate(30);
+        //$auditorias = $this->setQuery($request)->paginate(30);
         $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
 
 
@@ -97,7 +103,7 @@ class AuditoriaSeguimientoController extends Controller
         //
     }
 
-    public function setQuery(Request $request)
+    public function setQuery(Request $request) 
     {
          $query = $this->model;
 		 $query = $query->where('cuenta_publica',getSession('cp'));
@@ -174,7 +180,6 @@ class AuditoriaSeguimientoController extends Controller
             $actoFiscalizacion=strtolower($request->acto_fiscalizacion);
             $query = $query->whereRaw('LOWER(acto_fiscalizacion) LIKE (?) ',["%{$actoFiscalizacion}%"]);
         }
-
         return $query;
     }
 
