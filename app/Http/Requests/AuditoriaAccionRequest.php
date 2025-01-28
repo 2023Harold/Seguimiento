@@ -34,7 +34,7 @@ class AuditoriaAccionRequest extends FormRequest
             'normativa_infringida' => 'required|string|max:3000',      
             'fecha_termino_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
             'plazo_recomendacion' => 'sometimes|nullable|required_if:segtipo_accion_id,2|string|max:250',
-            'tipologia_id' => 'integer|max:999999999',
+            // 'tipologia_id' => 'integer|max:999999999',
             'monto_aclarar'=> 'sometimes|nullable|required_if:segtipo_accion_id,1,3,4',
         ];        
     }
@@ -55,7 +55,7 @@ class AuditoriaAccionRequest extends FormRequest
             'tramo_control_recomendacion' => 'tramo de control',
             'fecha_termino_recomendacion' => 'fecha de término',
             'plazo_recomendacion' => 'plazo convenido',
-            'tipologia_id' => 'tipología',
+            // 'tipologia_id' => 'tipología',
             'monto_aclarar'=> 'monto por aclarar',
         ];
     }

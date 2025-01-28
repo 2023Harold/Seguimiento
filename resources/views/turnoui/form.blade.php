@@ -27,7 +27,7 @@
        
                 <div class="row">
                     <div class="col-md-4">
-                        {!! BootForm::date('fecha_turno_oi', 'Fecha del turno a la Unidad de Investigación *', old('fecha_turno_oi', fecha($turnoui->fecha_turno_oi, 'Y-m-d'))); !!}
+                        {!! BootForm::date('fecha_turno_oi', 'Fecha del oficio a la Unidad de Investigación *', old('fecha_turno_oi', fecha($turnoui->fecha_turno_oi, 'Y-m-d'))); !!}
                     </div>
                     <div class="col-md-4">
                         {!! BootForm::text('numero_turno_ui', 'Número de oficio *', old('numero_turno_ui', $turnoui->numero_turno_ui)) !!}

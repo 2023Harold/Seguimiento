@@ -24,7 +24,7 @@ class PrasaccionesController extends Controller
 
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
-
+       
 
         return view('prasacciones.index', compact('request','acciones', 'auditoria'));
         }
@@ -113,10 +113,9 @@ class PrasaccionesController extends Controller
          $query = $query->where('segauditoria_id',getSession('auditoria_id'))->whereNull('eliminado')->where('segtipo_accion_id',4);
 
          if(getSession('cp')==2023){
-            $query = $query->where('fase_revision','Atorizado');
+            $query = $query->where('fase_revision','Autorizado');
          }
 
-        
 
          if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){           
             $query = $query->where('lider_asignado_id',auth()->user()->id);

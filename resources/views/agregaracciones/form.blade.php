@@ -39,7 +39,7 @@
                 $divtipologiamostrar=(empty(old('acto_fiscalizacion_id', $accion->acto_fiscalizacion_id))?'none':'block');
             @endphp 
             <div class="col-md-4" id="divtipologia" style="display: {{$divtipologiamostrar}}">
-                {!! BootForm::select('tipologia_id', 'Tipología: *', $tipologias->toArray(), old('tipologia_id',$accion->tipologia_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!! BootForm::select('tipologia_id', 'Tipología: ', $tipologias->toArray(), old('tipologia_id',$accion->tipologia_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div> 
         <div class="row">

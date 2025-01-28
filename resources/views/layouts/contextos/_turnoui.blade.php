@@ -1,7 +1,7 @@
 <h3 class="card-title text-primary">Turno a la Unidad de Investigación</h3> 
     <div class="row">
         <div class="col-lg-5 col-md-6 col-sm-12 col-12">          
-            <label>Fecha del turno a la Unidad de Investigación:</label>
+            <label>Fecha del oficio a la Unidad de Investigación:</label>
             <span class="text-sistema">
                 {{ fecha($auditoria->turnoui->fecha_turno_oi) }}                
             </span>

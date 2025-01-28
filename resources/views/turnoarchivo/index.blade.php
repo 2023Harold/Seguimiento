@@ -140,15 +140,16 @@
                     </table>
                 </div> 
             </div>  
+            <div class="card-body">
                 <h1 class="card-title">
                     <span class="text-primary"> 
                      Envío Archivo de Transferencia
                     </span>
                 </h1>
-                <div class="card-body">              
+                          
                     <div class="row">
                         <div class="col-md-12">
-                            @if (empty($auditoria->turnoarchivotransferencia) || $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
+                            @if (empty($auditoria->turnoarchivotransferencia) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
                             @can('turnoarchivotransferencia.create')
                                 <div class="row">
                                     <div class="col-md-12">
