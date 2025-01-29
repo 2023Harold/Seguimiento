@@ -313,7 +313,6 @@
                                         
 
                                         @if (!empty($auditoria->informeprimeraetapa && $auditoria->informepliegos) && ($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado' && $auditoria->informepliegos->fase_autorizacion=='Autorizado') )
-                                        @if ($auditoria->informeprimeraetapa && ($auditoria->informeprimeraetapa->fase_autorizacion == 'validado'))
                                             {{-- Si existe el registro --}}
                                             <span class="fa fa-circle" style="color: green"></span>
                                         @else
