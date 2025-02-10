@@ -13,13 +13,11 @@
                     Radicación
                 </h1>
 				<div class="float-end">
-                   @if (empty($auditoria->radicacion))
-                       
-                    <a href="" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AR</a>                                  
-                       @else
-                    <a href="{{route('radicacion.word',$auditoria->radicacion)}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AR</a>                                  
-                   @endif
-                    
+                    @if (empty($auditoria->radicacion))
+                        <a href="#" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AR</a>                                  
+                    @else
+                    <a href="{{route('radicacion.word',$auditoria->radicacion)}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AR</a>                                                      
+                    @endif
                 </div>
             </div>
             <div class="card-body">

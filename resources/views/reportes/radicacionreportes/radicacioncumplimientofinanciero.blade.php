@@ -1,6 +1,6 @@
 @extends('layouts.reportedoc')
 @section('Titulo')
-Registro del acuerdo de radicación
+    Registro del acuerdo de radicación
 @endsection
 @section('content')
 {{-- CUMPLIMIENTO FINANCIERO --}}

@@ -1,15 +1,15 @@
 @extends('layouts.app')
 @section('breadcrums')
 @if (!empty($movimiento)&&$movimiento=='consultar')
-{{ Breadcrumbs::render('agregaracciones.consulta',$auditoria) }}
+    {{Breadcrumbs::render('agregaracciones.consulta',$auditoria) }}
 @elseif (!empty($movimiento)&&$movimiento=='direccionconsultar')
-{{ Breadcrumbs::render('agregaraccionesdireccion.accionesconsulta',$auditoria) }}
+    {{Breadcrumbs::render('agregaraccionesdireccion.accionesconsulta',$auditoria) }}
 @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')
-{{ Breadcrumbs::render('agregaraccionesdepartamento.accionesconsulta',$auditoria) }}
+    {{Breadcrumbs::render('agregaraccionesdepartamento.accionesconsulta',$auditoria) }}
 @elseif(!empty($movimiento)&&$movimiento=='lideranalistaconsultar')
-{{ Breadcrumbs::render('asignacionlideranalista.accionesconsulta',$auditoria) }}
+    {{Breadcrumbs::render('asignacionlideranalista.accionesconsulta',$auditoria) }}
 @else
-{{ Breadcrumbs::render('agregaracciones.index') }}
+    {{Breadcrumbs::render('agregaracciones.index') }}
 @endif
 @endsection
 @section('content')
@@ -37,25 +37,25 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                {!! BootForm::open(['route'=>'agregaracciones.index','method'=>'GET']) !!}
+                {!!BootForm::open(['route'=>'agregaracciones.index','method'=>'GET']) !!}
                 <div class="row">
                     <div class="col-md-2">
-                        {!! BootForm::number('consecutivo', "No. Consecutivo:", old('consecutivo',
+                        {!!BootForm::number('consecutivo', "No. Consecutivo:", old('consecutivo',
                         $request->consecutivo)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!! BootForm::select('segtipo_accion_id', 'Tipo de acción: ', $tiposaccion->toArray(),
+                        {!!BootForm::select('segtipo_accion_id', 'Tipo de acción: ', $tiposaccion->toArray(),
                         old('segtipo_accion_id',$request->segtipo_accion_id),['data-control'=>'select2',
                         'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::text('numero', "Número de acción:", old('numero', $request->numero)) !!}
+                        {!!BootForm::text('numero', "Número de acción:", old('numero', $request->numero)) !!}
                     </div>
                     <div class="col-md-3 mt-8">
                         <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
                 </div>
-                {!! BootForm::close() !!} 
+                {!!BootForm::close() !!} 
                 @if (count ($auditoria->acciones)==count($auditoria->accionessinenvio))               
                 @can('agregaracciones.create')
                 <div class="row">

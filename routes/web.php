@@ -476,10 +476,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     
     Route::resource('radicacion', RadicacionController::class);
     Route::get('auditoriaradicacion/{auditoria}', [RadicacionController::class,'auditoria'])->name('radicacion.auditoria');
-	Route::get('radicacionpdf/{radicacionpdf}', [RadicacionController::class,'radicacionpdf'])->name('radicacion.radicacionpdf');
+	Route::get('radicacionpdf/{radicacionpdf}', [RadicacionController::class,'radicacionpdf'])->name('radicacion.radicacionpdf');//RUTA PARA GENERAR PDF
+    Route::get('/radicacion/word/{radicacion}', [RadicacionController::class, 'radicacionWord'])->name('radicacion.word');//RUTA ARCHIVO WORD AR
+    Route::get('/radicacion/wordOF/{radicacion}', [RadicacionController::class, 'radicacionWordOF'])->name('radicacion.wordOF');//RUTA PARA ARCHIVO WORD OF.AR
 
-    Route::get('/radicacion/word/{radicacion}', [RadicacionController::class, 'radicacionWord'])->name('radicacion.word');
-    
     Route::resource('radicacionenvio',RadicacionEnvioController::class,['parameters' => ['radicacionenvio' => 'radicacion']]);
     Route::get('radicacionconcluir/{radicacion}', [RadicacionController::class,'concluir'])->name('radicacion.concluir');
     Route::resource('radicacionrevision', RadicacionRevisionController::class,['parameters' => ['radicacionrevision' => 'radicacion']]);

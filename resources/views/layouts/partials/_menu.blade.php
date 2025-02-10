@@ -168,16 +168,18 @@
                                                 $totalAccionesPRAS = $auditoria->accionespras->count();
                                                 $accionesPRASAutorizadas = $auditoria->accionespras->where('pras.fase_autorizacion', 'Autorizado')->count();
                                             @endphp
-                                            
-                                            @if ($totalAccionesPRAS === 0)
-                                                {{-- No hay ninguna acción registrada --}}
-                                                <span class="fa fa-circle" style="color: red"></span>
-                                            @elseif ($accionesPRASAutorizadas === $totalAccionesPRAS)
-                                                {{-- Todas las acciones están autorizadas --}}
-                                                <span class="fa fa-circle" style="color: green"></span>
-                                            @else
-                                                {{-- Hay acciones pendientes, en revisión, en validación, etc. --}}
-                                                <span class="fa fa-circle" style="color: yellow"></span>
+
+                                            @if ($totalAccionesPRAS > 0) 
+                                                @if ($accionesPRASAutorizadas === $totalAccionesPRAS)
+                                                    {{-- Todas las acciones están autorizadas --}}
+                                                    <span class="fa fa-circle" style="color: green"></span>
+                                                @elseif ($accionesPRASAutorizadas > 0)
+                                                    {{-- Hay algunas acciones autorizadas, pero no todas --}}
+                                                    <span class="fa fa-circle" style="color: yellow"></span>
+                                                @else
+                                                    {{-- Hay acciones registradas, pero ninguna está autorizada --}}
+                                                    <span class="fa fa-circle" style="color: red"></span>
+                                                @endif
                                             @endif
                                         
                                             <span class="menu-bullet">
@@ -206,17 +208,20 @@
                                             $totalAccionesRec = $auditoria->accionesrecomendaciones->count();
                                             $accionesAutorizadasRec = $auditoria->accionesrecomendaciones->where('recomendaciones.fase_autorizacion', 'Autorizado')->count();
                                         @endphp
-
-                                        @if ($totalAccionesRec === 0)
-                                            {{-- No hay ninguna acción registrada --}}
-                                            <span class="fa fa-circle" style="color: red"></span>
-                                        @elseif ($accionesAutorizadasRec === $totalAccionesRec)
-                                            {{-- Todas las acciones están autorizadas --}}
-                                            <span class="fa fa-circle" style="color: green"></span>
-                                        @else
-                                            {{-- Hay acciones pendientes, en revisión, en validación, etc. --}}
-                                            <span class="fa fa-circle" style="color: yellow"></span>
+                                        
+                                        @if ($totalAccionesRec > 0) 
+                                            @if ($accionesAutorizadasRec === $totalAccionesRec)
+                                                {{-- Todas las acciones están autorizadas --}}
+                                                <span class="fa fa-circle" style="color: green"></span>
+                                            @elseif ($accionesAutorizadasRec > 0)
+                                                {{-- Hay algunas acciones autorizadas, pero no todas --}}
+                                                <span class="fa fa-circle" style="color: yellow"></span>
+                                            @else
+                                                {{-- Hay acciones registradas, pero ninguna está autorizada --}}
+                                                <span class="fa fa-circle" style="color: red"></span>
+                                            @endif
                                         @endif
+
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
@@ -241,16 +246,18 @@
                                             $totalAccionesSolAcl = $auditoria->accionessolacl->count();
                                             $accionesSolAclAutorizadas = $auditoria->accionessolacl->where('solicitudesaclaracion.fase_autorizacion', 'Autorizado')->count();
                                         @endphp
-                                        
-                                        @if ($totalAccionesSolAcl === 0)
-                                            {{-- No hay ninguna acción registrada --}}
-                                            <span class="fa fa-circle" style="color: red"></span>
-                                        @elseif ($accionesSolAclAutorizadas === $totalAccionesSolAcl)
-                                            {{-- Todas las acciones están autorizadas --}}
-                                            <span class="fa fa-circle" style="color: green"></span>
-                                        @else
-                                            {{-- Hay acciones pendientes, en revisión, en validación, etc. --}}
-                                            <span class="fa fa-circle" style="color: yellow"></span>
+
+                                        @if ($totalAccionesSolAcl > 0) 
+                                            @if ($accionesSolAclAutorizadas === $totalAccionesSolAcl)
+                                                {{-- Todas las acciones están autorizadas --}}
+                                                <span class="fa fa-circle" style="color: green"></span>
+                                            @elseif ($accionesSolAclAutorizadas > 0)
+                                                {{-- Hay algunas acciones autorizadas, pero no todas --}}
+                                                <span class="fa fa-circle" style="color: yellow"></span>
+                                            @else
+                                                {{-- Hay acciones registradas, pero ninguna está autorizada --}}
+                                                <span class="fa fa-circle" style="color: red"></span>
+                                            @endif
                                         @endif
                                     
                                         <span class="menu-bullet">
@@ -275,16 +282,18 @@
                                             $totalAccionesPO = $auditoria->accionespo->count();
                                             $accionesPOAutorizadas = $auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')->count();
                                         @endphp
-                                        
-                                        @if ($totalAccionesPO === 0)
-                                            {{-- No hay ninguna acción registrada --}}
-                                            <span class="fa fa-circle" style="color: red"></span>
-                                        @elseif ($accionesPOAutorizadas === $totalAccionesPO)
-                                            {{-- Todas las acciones están autorizadas --}}
-                                            <span class="fa fa-circle" style="color: green"></span>
-                                        @else
-                                            {{-- Hay acciones pendientes, en revisión, en validación, etc. --}}
-                                            <span class="fa fa-circle" style="color: yellow"></span>
+
+                                        @if ($totalAccionesPO > 0) 
+                                            @if ($accionesPOAutorizadas === $totalAccionesPO)
+                                                {{-- Todas las acciones están autorizadas --}}
+                                                <span class="fa fa-circle" style="color: green"></span>
+                                            @elseif ($accionesPOAutorizadas > 0)
+                                                {{-- Hay algunas acciones autorizadas, pero no todas --}}
+                                                <span class="fa fa-circle" style="color: yellow"></span>
+                                            @else
+                                                {{-- Hay acciones registradas, pero ninguna está autorizada --}}
+                                                <span class="fa fa-circle" style="color: red"></span>
+                                            @endif
                                         @endif
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
@@ -313,7 +322,6 @@
                                         
 
                                         @if (!empty($auditoria->informeprimeraetapa && $auditoria->informepliegos) && ($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado' && $auditoria->informepliegos->fase_autorizacion=='Autorizado') )
-                                        @if ($auditoria->informeprimeraetapa && ($auditoria->informeprimeraetapa->fase_autorizacion == 'validado'))
                                             {{-- Si existe el registro --}}
                                             <span class="fa fa-circle" style="color: green"></span>
                                         @else

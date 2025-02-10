@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('breadcrums')
 @if ($accion=='Agregar')
-{{ Breadcrumbs::render('radicacion.create',$auditoria) }}
+{{Breadcrumbs::render('radicacion.create',$auditoria) }}
 @elseif($accion=='Editar')
-{{ Breadcrumbs::render('radicacion.edit',$radicacion,$auditoria) }}
+{{Breadcrumbs::render('radicacion.edit',$radicacion,$auditoria) }}
 @endif
 @endsection
 @section('content')
@@ -51,6 +51,11 @@
                     <div class="col-lg-3 col-md-3">
                         {!!BootForm::date('fecha_oficio_informe','Fecha del oficio: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
                     </div>                      
+                </div>
+                <div class="row">
+                <div class="col-md-4">
+                    {!!BootForm::text('oficio_acuerdo', 'Oficio de notificación del acuerdo: *', old('numero_acuerdo',$radicacion->oficio_acuerdo)) !!}
+                </div>    
                 </div>
                 <div class="row">
                 <div class="col-md-4">
