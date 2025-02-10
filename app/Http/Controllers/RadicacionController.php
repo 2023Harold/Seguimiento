@@ -52,7 +52,7 @@ class RadicacionController extends Controller
      */
     public function store(Request $request)
     {
-        mover_archivos($request, ['oficio_acuerdo','oficio_designacion'], null);
+        mover_archivos($request, ['oficio_designacion'], null);
         $request['usuario_creacion_id'] = auth()->user()->id;
         $request['auditoria_id']=getSession('radicacion_auditoria_id');
         $request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
@@ -133,7 +133,7 @@ class RadicacionController extends Controller
      */
     public function update(Request $request, Radicacion $radicacion)
     {
-        mover_archivos($request, ['oficio_acuerdo','oficio_designacion'], $radicacion);
+        mover_archivos($request, ['oficio_designacion'], $radicacion);
         $request['usuario_modificacion_id'] = auth()->user()->id;
         $radicacion->update($request->all());
         $auditoria=$radicacion->auditoria;

@@ -47,14 +47,19 @@
                 <div class="row">
                     <div class="col-md-4">
                         {!!BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
-                    </div>                    
+                    </div>                                         
                     <div class="col-lg-3 col-md-3">
                         {!!BootForm::date('fecha_oficio_informe','Fecha del oficio: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
                     </div>                      
                 </div>
                 <div class="row">
+                <div class="col-md-4">
+                    {!!BootForm::text('oficio_acuerdo', 'Oficio de notificación del acuerdo: *', old('numero_acuerdo',$radicacion->oficio_acuerdo)) !!}
+                </div>    
+                </div>
+                <div class="row">
                     <div class="col-md-3">
-                        {!!BootForm::text('fecha_cierre_auditoria', 'Fecha de cierre de la auditoría: *', old('fecha_cierre_auditoria',$radicacion->fecha_cierre_auditoria)) !!}
+                        {!!BootForm::text('fecha_cierre_auditoria', 'Cierre de la auditoría: *', old('fecha_cierre_auditoria',$radicacion->fecha_cierre_auditoria)) !!}
                     </div>
                 </div>
                                                                                                   

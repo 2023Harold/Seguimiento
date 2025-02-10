@@ -66,7 +66,7 @@ class AcuerdoConclusionCPEnvioController extends Controller
                 'accion_id' => $acuerdoconclusion->id,
                 'estatus' => 'Aprobado',
                 'usuario_creacion_id' => auth()->id(),
-                'usuario_asignado_id' => auth()->id(),
+                'usuario_modificacion_id' => auth()->id()
             ]);
     
             $acuerdoconclusion->update(['fase_autorizacion' =>  'En revisión']);
@@ -105,44 +105,5 @@ class AcuerdoConclusionCPEnvioController extends Controller
     {
         //
     }
-    public function setQuery(Request $request)
-    {
-        $query = new Auditoria();
-        $query = $query->whereNotNull('fase_autorizacion')
-           ->where('fase_autorizacion','Autorizado');
 
-       if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
-          in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
-          in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-
-
-
-       }elseif(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-
-           $query = $query->whereNotNull('fase_autorizacion')
-                       ->where('fase_autorizacion','Autorizado')
-                       ->whereNotNull('direccion_asignada_id')
-                       ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);
-       }elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-           $query = $query->whereNotNull('departamento_encargado_id')
-                       ->where('departamento_encargado_id',auth()->user()->unidad_administrativa_id);
-       }
-
-       if ($request->filled('numero_auditoria')) {
-            $numeroAuditoria=strtolower($request->numero_auditoria);
-            $query = $query->whereRaw('LOWER(numero_auditoria) LIKE (?) ',["%{$numeroAuditoria}%"]);
-        }
-
-       if ($request->filled('entidad_fiscalizable')) {
-           $entidadFiscalizable=strtolower($request->entidad_fiscalizable);
-           $query = $query->whereRaw('LOWER(entidad_fiscalizable) LIKE (?) ',["%{$entidadFiscalizable}%"]);
-       }
-
-       if ($request->filled('acto_fiscalizacion')) {
-           $actoFiscalizacion=strtolower($request->acto_fiscalizacion);
-           $query = $query->whereRaw('LOWER(acto_fiscalizacion) LIKE (?) ',["%{$actoFiscalizacion}%"]);
-       }
-
-       return $query;
-   }
 }

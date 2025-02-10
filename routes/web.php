@@ -74,7 +74,9 @@ use App\Http\Controllers\ComparecenciaAcusesController;
 use App\Http\Controllers\ComparecenciaAcusesCPController;
 use App\Http\Controllers\ComparecenciaAgendaController;
 use App\Http\Controllers\ComparecenciaController;
+use App\Http\Controllers\ComparecenciaCPEnvioController;
 use App\Http\Controllers\ComparecenciaEnvioController;
+use App\Http\Controllers\ComparecenciaRevisionController;
 use App\Http\Controllers\ComparecenciaValidacionController;
 use App\Http\Controllers\ConstanciaController;
 use App\Http\Controllers\CotejamientoController;
@@ -493,9 +495,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::get('auditoriacomparecencia/{auditoria}', [ComparecenciaController::class,'auditoria'])->name('comparecencia.auditoria');
     Route::resource('comparecenciaacta', ComparecenciaActaController::class,['parameters' => ['comparecenciaacta' => 'comparecencia']]);
 	Route::resource('comparecenciaenvio',ComparecenciaEnvioController::class,['parameters' => ['comparecenciaenvio' => 'comparecencia']]);
-    Route::get('comparecenciaconcluir/{comparecencia}', [ComparecenciaController::class,'concluir'])->name('comparecencia.concluir');
+    Route::resource('comparecenciacpenvio',ComparecenciaCPEnvioController::class,['parameters' => ['comparecenciacpenvio' => 'comparecencia']]);
+    
+    Route::resource('comparecenciarevision',ComparecenciaRevisionController::class,['parameters' => ['comparecenciarevision' => 'comparecencia']]);
     Route::resource('comparecenciavalidacion', ComparecenciaValidacionController::class,['parameters' => ['comparecenciavalidacion' => 'comparecencia']]);
-	
+	Route::get('comparecenciaconcluir/{comparecencia}', [ComparecenciaController::class,'concluir'])->name('comparecencia.concluir');
     /*pras*/
     Route::resource('pras',PrasController::class,['parameters' => ['pras' => 'auditoria']]);
 

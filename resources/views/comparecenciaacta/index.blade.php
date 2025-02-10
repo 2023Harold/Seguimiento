@@ -160,7 +160,7 @@
                                                             </a>
                                                         @endcan
                                                 @endif
-                                                @if(getSession('cp')!=2023)      
+                                                @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='Ld')
                                                     @if ($auditoria->comparecencia->fase_autorizacion == 'En validación')
                                                         @can('comparecenciavalidacion.edit')
                                                             <a href="{{ route('comparecenciavalidacion.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
@@ -170,7 +170,7 @@
                                                     @else
                                                             <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
                                                         @endcan
-                                                    @elseif($auditoria->comparecencia->fase_autorizacion == 'En revisión')                                    
+                                                @elseif($auditoria->comparecencia->fase_autorizacion == 'En revisión')                                    
                                                      @can('comparecenciarevision.edit')
                                                     <a href="{{ route('comparecenciarevision.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
                                                         <li class="fa fa-gavel"></li>
@@ -203,9 +203,9 @@
                                                         Enviar
                                                         </a>
                                                     @endcan
-                                                @else
+                                                @elseif (getSession('cp')==2023 && $auditoria->lidercp_id==auth()->user()->id)
                                                     @can('comparecenciaacta.edit')                                                        
-                                                        <a href="{{ route('comparecenciaenvio.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
+                                                        <a href="{{ route('comparecenciacpenvio.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
                                                         Enviar
                                                         </a> 
                                                     @endcan

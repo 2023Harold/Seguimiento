@@ -420,6 +420,7 @@ Breadcrumbs::for('comparecenciaacusecp.edit', function (BreadcrumbTrail $trail,$
     $trail->push('Acuses', route('comparecenciaacusecp.edit',$comparecencia));
 });
 
+
 //acuerdo conclusion
 Breadcrumbs::for('acuerdoconclusion.index', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('auditoriaseguimiento.index',$auditoria);
@@ -458,6 +459,12 @@ Breadcrumbs::for('comparecenciaacta.edit', function (BreadcrumbTrail $trail,$com
     $trail->parent('comparecenciaacta.index',$comparecencia,$auditoria);
     $trail->push('Acta', route('comparecenciaacta.edit',$comparecencia));
 });
+
+Breadcrumbs::for('comparecenciarevision.edit', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
+    $trail->parent('comparecenciaacta.index',$comparecencia,$auditoria);
+    $trail->push('Revisión', route('comparecenciarevision.edit',$comparecencia));
+});
+
 
 Breadcrumbs::for('comparecenciavalidacion.edit', function (BreadcrumbTrail $trail,$comparecencia,$auditoria) {
     $trail->parent('comparecenciaacta.index',$comparecencia,$auditoria);

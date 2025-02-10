@@ -6,7 +6,7 @@ use App\Models\Comparecencia;
 use App\Models\Movimientos;
 use Illuminate\Http\Request;
 
-class ComparecenciaEnvioController extends Controller
+class ComparecenciaCPEnvioController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -58,31 +58,27 @@ class ComparecenciaEnvioController extends Controller
      */
     public function edit(Comparecencia $comparecencia)
     {
-        
-        // $comparecencia->update($request->all());
-  
-  
+        // dd($auditoria);
         Movimientos::create([
-          'tipo_movimiento' => 'Envío de la comparecencia',
-              'accion' => 'comparecencia',
-              'accion_id' => $comparecencia->id,
-              'estatus' => 'Aprobado',
-              'usuario_creacion_id' => auth()->id(),
-              'usuario_asignado_id' => auth()->id(),
-          ]);
-  
-          $comparecencia->update(['fase_autorizacion' =>  'En validación']);
-  
-          $titulo = 'Validación de los datos de comparecencia';
-          $mensaje = '<strong>Estimado (a) ' . auth()->user()->director->name . ', ' . auth()->user()->director->puesto . ':</strong><br>
-                      Ha sido registrada la comparecencia de la auditoría No. ' . $comparecencia->auditoria->numero_auditoria . ', por parte del ' .
-                      auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
-  
-          auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
-          setMessage('Se ha enviado la comparecencia a validación');
-  
-      return redirect()->route('comparecenciaacta.index');
-      
+            'tipo_movimiento' => 'Envío de la comparecencia',
+                'accion' => 'comparecencia',
+                'accion_id' => $comparecencia->id,
+                'estatus' => 'Aprobado',
+                'usuario_creacion_id' => auth()->id(),
+                'usuario_asignado_id' => auth()->id(),
+            ]);
+    
+            $comparecencia->update(['fase_autorizacion' =>  'En revisión']);
+    
+            $titulo = 'Revisión de los datos de comparecencia';
+            $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
+                        Ha sido registrada la comparecencia de la auditoría No. ' . $comparecencia->auditoria->numero_auditoria . ', por parte del ' .
+                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+    
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
+            setMessage('Se ha enviado la comparecencia a revisión');
+    
+        return redirect()->route('comparecenciaacta.index');
     }
 
     /**
