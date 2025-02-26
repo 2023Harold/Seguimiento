@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('turnoui.index',$auditoria) }}
+{{Breadcrumbs::render('turnoui.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -65,16 +65,16 @@
                                             </a>                                                                          
                                             @endcan
                                         @endif
-                                        @if ($auditoria->turnoui->fase_autorizacion == 'En revisión')
-                                        @can('turnouirevision.edit')
-                                            <a href="{{ route('turnouirevision.edit',$auditoria->turnoui) }}" class="btn btn-primary">
-                                                <li class="fa fa-gavel"></li>
-                                                Revisar
-                                            </a>
-                                        @else
-                                            <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
-                                        @endcan
-                                    @endif           
+                                        @if ($auditoria->turnoui->fase_autorizacion == 'En Revisión')
+                                            @can('turnouirevision.edit')
+                                                <a href="{{ route('turnouirevision.edit',$auditoria->turnoui) }}" class="btn btn-primary">
+                                                    <li class="fa fa-gavel"></li>
+                                                    Revisar
+                                                </a>
+                                            @else
+                                                <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
+                                            @endcan
+                                        @endif           
                                         @if ($auditoria->turnoui->fase_autorizacion == 'En validación')
                                             @can('turnouivalidacion.edit')
                                                 <a href="{{ route('turnouivalidacion.edit',$auditoria->turnoui) }}" class="btn btn-primary">
@@ -86,15 +86,15 @@
                                             @endcan
                                         @endif      
                                         @if ($auditoria->turnoui->fase_autorizacion == 'En autorización')
-                                        @can('turnouiautorizacion.edit')
-                                            <a href="{{ route('turnouiautorizacion.edit',$auditoria->turnoui) }}" class="btn btn-primary">
-                                                <li class="fa fa-gavel"></li>
-                                                Autorizar
-                                            </a>
-                                        @else
-                                            <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
-                                        @endcan
-                                    @endif           
+                                            @can('turnouiautorizacion.edit')
+                                                <a href="{{ route('turnouiautorizacion.edit',$auditoria->turnoui) }}" class="btn btn-primary">
+                                                    <li class="fa fa-gavel"></li>
+                                                    Autorizar
+                                                </a>
+                                            @else
+                                                <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
+                                            @endcan
+                                        @endif           
                                         @if ($auditoria->turnoui->fase_autorizacion=='Autorizado')
                                             <span class="badge badge-light-success">{{ $auditoria->turnoui->fase_autorizacion }} </span>                                                                                                                                               
                                         @endif                                                                                                                                    

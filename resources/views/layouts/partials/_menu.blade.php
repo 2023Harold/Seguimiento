@@ -353,7 +353,7 @@
                                 @can('prasacciones.index')
                                     <div class="menu-item mb-1">
                                         <a href="#" class="menu-link py-3">
-                                            <span class="fa fa-circle" style="color: red"></span>
+                                            {{--<span class="fa fa-circle" style="color: red"></span>--}}
                                             <span class="menu-bullet">
                                                 <span class="fa fa-file-text"></span>
                                             </span>
@@ -364,7 +364,7 @@
                                 @can('recomendacionesacciones.index')
                                     <div class="menu-item mb-1">
                                         <a href="#" class="menu-link py-3">
-                                            <span class="fa fa-circle" style="color: red"></span>
+                                            {{--<span class="fa fa-circle" style="color: red"></span>--}}
                                             <span class="menu-bullet">
                                                 <span class="fa fa-file-text"></span>
                                             </span>
@@ -375,7 +375,7 @@
                                 @can('pliegosobservacionacciones.index')
                                     <div class="menu-item mb-1">
                                         <a href="#" class="menu-link py-3">
-                                            <span class="fa fa-circle" style="color: red"></span>
+                                            {{--<span class="fa fa-circle" style="color: red"></span>--}}
                                             <span class="menu-bullet">
                                                 <span class="fa fa-file-text"></span>
                                             </span>
@@ -386,7 +386,7 @@
                                 <div class="menu-item mb-1">
                                     <a href="#"
                                         class="menu-link py-3">
-                                        <span class="fa fa-circle" style="color: red"></span>
+                                        {{--<span class="fa fa-circle" style="color: red"></span>--}}
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
@@ -410,17 +410,25 @@
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnoui.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoui')
                                                                                                          ) ? 'active' : '' }}">
-                                        @if (!empty($auditoria->turnoui) && $auditoria->turnoui->fase_autorizacion=='Autorizado')
-                                            <span class="fa fa-circle" style="color: green"></span>
-                                        @else
-                                            @if(!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion == 'En revisión' || $auditoria->turnoui->fase_autorizacion == 'En validación'
-                                                || $auditoria->turnoui->fase_autorizacion == 'En autorización'))
-                                                <span class="fa fa-circle" style="color: yellow"></span>
-                                            @else 
-                                                <span class="fa fa-circle" style="color: red"></span>
+                                        @php 
+                                            $tAccPO = $auditoria->accionespo->count();
+                                            $accPOAutorizadas = $auditoria->accionespo->where('pliegosobservacion.calificacion_sugerida', 'No Solventado')->count();
+                                        @endphp
+
+                                        @if ((!empty( $auditoria->informepliegos) && ($auditoria->informepliegos->fase_autorizacion=='Autorizado')) && ($accPOAutorizadas >0) )
+                                            @if (!empty($auditoria->turnoui) && $auditoria->turnoui->fase_autorizacion=='Autorizado')
+                                                <span class="fa fa-circle" style="color: green"></span>
+                                            @else
+                                                @if(!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion == 'En Revisión' || $auditoria->turnoui->fase_autorizacion == 'En validación'
+                                                    || $auditoria->turnoui->fase_autorizacion == 'En autorización'))
+                                                    <span class="fa fa-circle" style="color: yellow"></span>
+                                                @else 
+                                                    <span class="fa fa-circle" style="color: red"></span>
+                                                @endif
                                             @endif
-        
-                                        @endif
+                                        @else
+                                        @endif              
+                                        
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
@@ -430,17 +438,29 @@
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnooic.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnooic')
                                                                                                          ) ? 'active' : '' }}">
-                                        @if (!empty($auditoria->turnooic) && $auditoria->turnooic->fase_autorizacion=='Autorizado')
-                                            <span class="fa fa-circle" style="color: green"></span>
-                                        @else
-                                            @if(!empty($auditoria->turnooic) && ($auditoria->turnooic->fase_autorizacion == 'En revisión' || $auditoria->turnooic->fase_autorizacion == 'En validación'
-                                                || $auditoria->turnooic->fase_autorizacion == 'En autorización'))
-                                                <span class="fa fa-circle" style="color: yellow"></span>
-                                            @else 
-                                                <span class="fa fa-circle" style="color: red"></span>
+
+                                         @php
+                                            $tAcRec = $auditoria->accionesrecomendaciones->count();
+                                            $aAutoRec = $auditoria->accionesrecomendaciones->where('recomendaciones.calificacion_sugerida', 'Autorizado')->count();
+                                        @endphp
+
+                                        @if ((!empty($auditoria->turnooic) && $auditoria->turnooic->fase_autorizacion=='Autorizado') && ($aAutoRec > 0) )
+                                            @if (!empty($auditoria->turnooic) && $auditoria->turnooic->fase_autorizacion=='Autorizado')
+                                                <span class="fa fa-circle" style="color: green"></span>
+                                            @else
+                                                @if(!empty($auditoria->turnooic) && ($auditoria->turnooic->fase_autorizacion == 'En revisión' || $auditoria->turnooic->fase_autorizacion == 'En validación'
+                                                    || $auditoria->turnooic->fase_autorizacion == 'En autorización'))
+                                                    <span class="fa fa-circle" style="color: yellow"></span>
+                                                @else 
+                                                    <span class="fa fa-circle" style="color: red"></span>
+                                                @endif
+            
                                             @endif
-        
-                                        @endif
+                                        @else
+                                        @endif    
+                                        
+                                        
+                                        
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>

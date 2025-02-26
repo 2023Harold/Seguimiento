@@ -383,7 +383,7 @@
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('asignaciondepartamento.index') }}">
-                                    Departamento
+                                    Departamentos y Staff Jurídico
                                 </a>
                             </li>
                             @endcan

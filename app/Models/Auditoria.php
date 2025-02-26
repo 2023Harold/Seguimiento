@@ -77,7 +77,11 @@ class Auditoria extends Model
                 'updated_at'=>'datetime'
             ];
 
-
+            public function auditoriausuarios()
+            {
+                return $this->hasMany(AuditoriaUsuarios::class, 'auditoria_id', 'id');
+            }
+            
             public function acciones()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->orderBy('consecutivo');
@@ -440,5 +444,14 @@ class Auditoria extends Model
             {
                 return $this->belongsTo(TurnoArchivoTransferencia::class, 'id','auditoria_id');
             }
+
+            public function catUMAS(){
+                return $this->belongsTo(CatalogoUMAS::class, 'id', 'id');    
+            }
+
+            public function listadoentidades(){
+                return $this->belongsTo(ListadoEntidades::class, 'id', 'no_auditoria');    
+            }
+
         
 }

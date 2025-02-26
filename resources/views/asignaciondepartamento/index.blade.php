@@ -9,7 +9,7 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                    Asignación Auditorias a Departamentos y Staff Juridico
+                    Asignación Auditorias a Departamentos y Staff Jurídico
                 </h1>
             </div>
             <div class="card-body">
@@ -51,7 +51,7 @@
                                 @if(getSession('cp')!=2023)                               
                                 <th>Asignación de departamentos</th>
                                 @endif
-                                <th>Staff juridico</th>
+                                <th>Staff Jurídico</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -119,71 +119,19 @@
                                                     @endif                                               
                                                 @endcan                                                                                                          
                                         </td>
+
                                         <td class="text-center">
-                                            @if ($auditoria->reasignacion_staff === 'Si')
-                                                <span class="badge-light-secondary text-gray-600">
-                                                    {{ $auditoria->staff_asignada }} <br>
-                                                </span>
-                                                Reasignado
-                                            @else
-                                                @if($auditoria->staff_asignada)
-                                                    <span class="badge-light-secondary text-gray-600">
-                                                        {{ $auditoria->staff_asignada }} <br>
-                                                    </span>
-                                                        Asignado
-                                                    @can('asignacionstaff.edit') 
-                                                        <!-- Si ya hay un staff asignado, redirige a reasignar -->
-                                                        <a href="{{ route('asignacionstaff.reasignar', $auditoria) }}" class="btn btn-primary">
-                                                            <i class="fa fa-user-edit"></i> Reasignar
-                                                        </a>
-                                                    @endcan
-                                                @else
-                                                    <span class="badge-light-secondary text-gray-600">
-                                                        Sin asignación 
-                                                        {{ $auditoria->staff_asignada }} <br>
-                                                    </span>
-                                                    @can('asignacionstaff.edit') 
-                                                        <!-- Si no hay staff asignado, redirige a editar -->
-                                                        <a href="{{ route('asignacionstaff.edit', $auditoria) }}" class="btn btn-primary">
-                                                            <i class="fa fa-handshake"></i> Asignar
-                                                        </a>
-                                                    @endcan
-                                                @endif
-                                            @endif
-                                        </td>
+                                            <a href="{{ route('asignacionstaff.consultar',$auditoria) }}" class="btn btn-primary">
+                                                <i class="fa fa-magnifying-glass"></i> Consultar
+                                            </a>
+                                         </td>
                                     @else
+                                    
                                     <td class="text-center">
-                                        @if ($auditoria->reasignacion_staff === 'Si')
-                                            <span class="badge-light-secondary text-gray-600">
-                                                {{ $auditoria->staff_asignada }} <br>
-                                            </span>
-                                            Reasignado
-                                        @else
-                                            @if($auditoria->staff_asignada)
-                                                <span class="badge-light-secondary text-gray-600">
-                                                    {{ $auditoria->staff_asignada }} <br>
-                                                </span>
-                                                    Asignado
-                                                @can('asignacionstaff.edit') 
-                                                    <!-- Si ya hay un staff asignado, redirige a reasignar -->
-                                                    <a href="{{ route('asignacionstaff.reasignar', $auditoria) }}" class="btn btn-primary">
-                                                        <i class="fa fa-user-edit"></i> Reasignar
-                                                    </a>
-                                                @endcan
-                                            @else
-                                                <span class="badge-light-secondary text-gray-600">
-                                                    Sin asignación 
-                                                    {{ $auditoria->staff_asignada }} <br>
-                                                </span>
-                                                @can('asignacionstaff.edit') 
-                                                    <!-- Si no hay staff asignado, redirige a editar -->
-                                                    <a href="{{ route('asignacionstaff.edit', $auditoria) }}" class="btn btn-primary">
-                                                        <i class="fa fa-handshake"></i> Asignar
-                                                    </a>
-                                                @endcan
-                                            @endif
-                                        @endif
-                                    </td>
+                                        <a href="{{ route('asignacionstaff.consultar',$auditoria) }}" class="btn btn-primary">
+                                            <i class="fa fa-magnifying-glass"></i> Consultar
+                                        </a>
+                                     </td>
                                     @endif                                                                    
                                 </tr>                                                           
                             @empty

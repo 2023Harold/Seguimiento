@@ -52,21 +52,21 @@
                         {!!BootForm::date('fecha_oficio_informe','Fecha del oficio: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
                     </div>                      
                 </div>
+
                 <div class="row">
                 <div class="col-md-4">
                     {!!BootForm::text('oficio_acuerdo', 'Oficio de notificación del acuerdo: *', old('numero_acuerdo',$radicacion->oficio_acuerdo)) !!}
                 </div>    
                 </div>
                 <div class="row">
-                <div class="col-md-4">
-                    {!!BootForm::text('oficio_acuerdo', 'Oficio de notificación del acuerdo: *', old('numero_acuerdo',$radicacion->oficio_acuerdo)) !!}
-                </div>    
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        {!!BootForm::text('fecha_cierre_auditoria', 'Cierre de la auditoría: *', old('fecha_cierre_auditoria',$radicacion->fecha_cierre_auditoria)) !!}
+                    <div class="col-md-4"> {{--El campo en la BD dice Fecha pero no es una fecha, para evitar mas conflictos con los registros ya activos se dejo asi--}}
+                        {!!BootForm::text('fecha_cierre_auditoria', 'Acta de reunión de resultados finales y cierre de auditoría: *', old('fecha_cierre_auditoria',$radicacion->fecha_cierre_auditoria)) !!}
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        {!!BootForm::date('fecha_acta','Fecha del Acta: *', old('fecha_acta',fecha($radicacion->fecha_acta,'Y-m-d'))) !!}
                     </div>
                 </div>
+                
                                                                                                   
                 
                 {{-- <div class="row">

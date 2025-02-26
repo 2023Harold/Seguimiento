@@ -430,6 +430,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('asignacionstaff', AsignacionStaffJuridicoController::class, ['parameters'=> ['asignacionstaff'=> 'auditoria']]);
     Route::get('asignacionstaff/reasignacion/{auditoria}', [AsignacionStaffJuridicoController::class, 'reasignar'])->name('asignacionstaff.reasignar');
     Route::post('asignacionstaff/getStaff', [AsignacionStaffJuridicoController::class, 'getStaff'])->name('asignacionstaff.getStaff');
+    Route::get('/asignacionstaff/consultar/{auditoria}', [AsignacionStaffJuridicoController::class, 'consultar'])->name('asignacionstaff.consultar');
+
     //Route::get('asignacionstaff/{auditoria}/reasignar', [AsignacionStaffJuridicoController::class, 'reasignar'])->name('asignacionstaff.reasignar');
     
 

@@ -26,7 +26,7 @@
             </div>
         </div> 
             
-            {!!BootForm::hidden('staff_asignada', null, ['id' => 'staff_asignada']) !!}
+            {{--!!BootForm::hidden('staff_asignada', null, ['id' => 'staff_asignada']) !!--}}
 
         <div class="row">
             <div class="col-md-3">
@@ -38,7 +38,7 @@
                     @can('asignacionstaff.update')                     
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     @endcan  
-                    <a href="{{ route('asignaciondepartamento.index') }}" class="btn btn-secondary me-2">Cancelar</a>                
+                    <a href="{{ route('asignacionstaff.index') }}" class="btn btn-secondary me-2">Cancelar</a>                
             </div>
         </div>
         {!!BootForm::close() !!}

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\AuditoriaUsuarios;
 use App\Models\CatalogoTipoAccion;
 use App\Models\CatalogoUnidadesAdministrativas;
 use App\Models\User;
@@ -24,7 +25,14 @@ class AsignacionStaffJuridicoController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+
+        // Obtener los registros de la tabla segauditorias_usuarios relacionados con la auditoría
+        $staffAsignado = User::where('segauditoria_id', $auditoria->id)
+            ->with('usuario') // Asegúrate de tener la relación en el modelo
+            ->get();
+    
+        return view('asignacionstaffjuridico.index', compact('auditoria', 'staffAsignado'));
     }
 
     /**
@@ -73,6 +81,8 @@ class AsignacionStaffJuridicoController extends Controller
         $acciones =  AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->orderBy('id')->get();
         $staffasignada = null;
 
+        
+
         // Obtener los usuarios STAFF de la dirección asignada
         $staff = User::where('unidad_administrativa_id', $auditoria->direccion_asignada_id)
             ->where('siglas_rol', 'STAFF')
@@ -92,6 +102,49 @@ class AsignacionStaffJuridicoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     public function update(Request $request, Auditoria $auditoria)
+    {
+        $existe = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('staff_id', $request->staff_juridico_id)->exists();
+
+        if ($request->accionstaff == 'Asignación') {
+
+            if ($existe) {
+                setMessage('Este staff ya está asignado a esta auditoría.', "error");
+            }else{
+
+             // Si no existe, lo insertamos en segauditoria_usuarios
+             AuditoriaUsuarios::create([
+                'auditoria_id' => $auditoria->id,
+                'staff_id' => $request->staff_juridico_id
+            ]);
+
+            setMessage('Se ha asignado el staff correctamente.');
+            }
+
+
+        } elseif ($request->accionstaff == 'Reasignación') {
+            if ($existe) {
+                setMessage('Este staff ya está asignado a esta auditoría.', "error");
+            }else{
+
+                // Si no existe, lo insertamos en segauditoria_usuarios
+                /**AuditoriaUsuarios::Update([
+                    'auditoria_id' => $auditoria->id,
+                    'staff_id' => $request->staff_juridico_id
+                ]);*/
+
+                AuditoriaUsuarios::where('auditoria_id', $auditoria->id)
+                ->update(['staff_id' => $request->staff_juridico_id]);
+
+
+                setMessage('Se ha reasignado el staff correctamente.');
+            }
+        }
+        
+        return redirect()->route('asignacionstaff.consultar', $auditoria);
+    }
+    /**
     public function update(Request $request, Auditoria $auditoria)
     {
         //dd($request);
@@ -115,8 +168,10 @@ class AsignacionStaffJuridicoController extends Controller
             setMessage('Se ha realizado la reasignación del staff juridico correctamente.');
         }
 
-        return redirect()->route('asignaciondepartamento.index');
+        return redirect()->route('asignacionstaffjuridico.index');
+
     }
+     */
 
 
     /**
@@ -129,6 +184,31 @@ class AsignacionStaffJuridicoController extends Controller
     {
         //
     }
+
+    public function consultar(Auditoria $auditoria)
+    {
+        $unidades = auth()->user()->unidadAdministrativa->departamentos->prepend('Seleccionar una opción', '');         
+        $accionstaff ='Asignación';   
+        $departamentoasignado = null;           
+        $acciones =  AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->orderBy('id')->get();
+        $staffasignada = null;
+
+        
+
+        // Obtener los usuarios STAFF de la dirección asignada
+        $staff = User::where('unidad_administrativa_id', $auditoria->direccion_asignada_id)
+            ->where('siglas_rol', 'STAFF')
+            ->pluck('name', 'id')
+            ->toArray();
+
+        $staffAsignado = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)
+            ->with('usuario') // Asegúrate de tener la relación en el modelo
+            ->get();
+        //return view('asignacionstaffjuridico.form', compact('auditoria', 'unidades', 'accion', 'directorasignado','staffasignada', 'staff'));
+        return view('asignacionstaffjuridico.index', compact('auditoria','unidades','accionstaff','departamentoasignado','acciones', 'staff', 'staffasignada', 'staffAsignado'));        
+
+    }
+
 
     public function setQuery(Request $request)
     {

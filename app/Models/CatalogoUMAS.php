@@ -9,43 +9,26 @@ use Laravel\Sanctum\HasApiTokens;
 use Propaganistas\LaravelFakeId\RoutesWithFakeIds;
 use Spatie\Permission\Traits\HasRoles;
 
-class Radicacion extends Model
+class CatalogoUMAS extends Model
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, RoutesWithFakeIds;
 
 
-    protected $table = 'segradicacion';
+    protected $table = 'segcatumas';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'auditoria_id',
-        'numero_expediente',
-        'numero_acuerdo',
-        'oficio_acuerdo',
-        'fecha_oficio_acuerdo',
-        'oficio_designacion',
-        'fecha_oficio_designacion',
-        'constancia',
-        'fase_autorizacion',
-        'nivel_autorizacion',
-        'num_memo_recepcion_expediente',
-        'fecha_expediente_turnado',
-        'fecha_oficio_informe',
-        'fecha_notificacion',
-        'plazo_maximo',
-        'calculo_fecha',
-        'usuario_creacion_id',
-        'usuario_modificacion_id',
-        'usuario_firmante_id',
-        'num_memo_recepcion_expediente',
-        'radicacion_sistema',
-        'fecha_cierre_auditoria',
+        'ejercicio',
+        'cant_por_dia',
+        'cant_multiplicada',
+        'fecha_publicacion'=>'datetime',
+        'fecha_vigencia'=>'datetime',
+        'texto',
         'created_at'=>'datetime',
-        'updated_at'=>'datetime',   
-        'fecha_acta',     
+        'updated_at'=>'datetime',
     ];
 
            
@@ -55,10 +38,6 @@ class Radicacion extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fecha_oficio_acuerdo'=>'datetime',
-        'fecha_oficio_designacion'=>'datetime',
-		'fecha_notificacion'=>'datetime',
-        'fecha_acta'=>'datetime',
         'created_at'=>'datetime',
         'updated_at'=>'datetime'
     ];
@@ -68,11 +47,6 @@ class Radicacion extends Model
         return $this->belongsTo(Auditoria::class, 'auditoria_id', 'id');
     }
 
-    public function movimientos()
-    {
-        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Radicación')->orderBy('id', 'ASC');
-    }
-    
     public function usuarioCreacion()
     {
         return $this->belongsTo('App\Models\User', 'usuario_creacion_id');
