@@ -121,7 +121,16 @@ class PrasaccionesController extends Controller
             $query = $query->where('lider_asignado_id',auth()->user()->id);
          } 
          if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){           
-            $query = $query->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
+            //$query = $query->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
+            if(getSession('cp')==2023){
+                $query = $query->whereHas('auditoria', function($q){
+                    $q->where('departamento_encargado_id',auth()->user()->cp_ua2023);
+                });
+             }else{
+                $query = $query->whereHas('auditoria', function($q){
+                    $q->where('departamento_encargado_id',auth()->user()->cp_ua2022);
+                 });
+             }
          }
 
         if ($request->filled('consecutivo')) {

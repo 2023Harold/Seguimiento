@@ -173,7 +173,8 @@
                                                 @if ($accionesPRASAutorizadas === $totalAccionesPRAS)
                                                     {{-- Todas las acciones están autorizadas --}}
                                                     <span class="fa fa-circle" style="color: green"></span>
-                                                @elseif ($accionesPRASAutorizadas > 0)
+                                                @elseif ($totalAccionesPRAS !=$accionesPRASAutorizadas)
+                                                
                                                     {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                     <span class="fa fa-circle" style="color: yellow"></span>
                                                 @else
@@ -213,7 +214,7 @@
                                             @if ($accionesAutorizadasRec === $totalAccionesRec)
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif ($accionesAutorizadasRec > 0)
+                                            @elseif ($totalAccionesRec !=$accionesAutorizadasRec)
                                                 {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
@@ -251,7 +252,7 @@
                                             @if ($accionesSolAclAutorizadas === $totalAccionesSolAcl)
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif ($accionesSolAclAutorizadas > 0)
+                                            @elseif ($totalAccionesSolAcl !=$accionesSolAclAutorizadas)
                                                 {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
@@ -287,7 +288,7 @@
                                             @if ($accionesPOAutorizadas === $totalAccionesPO)
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif ($accionesPOAutorizadas > 0)
+                                            @elseif($totalAccionesPO !=$accionesPOAutorizadas)
                                                 {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
