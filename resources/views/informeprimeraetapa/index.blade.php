@@ -93,7 +93,8 @@
                                                 Validar
                                             </a>
                                         @else
-                                            <span class="badge badge-light-warning">{{ $auditoria->informeprimeraetapa->fase_autorizacion }} </span>
+                                        
+                                            <span class="badge badge-light-warning">{{ $auditoria->informeprimeraetapa->fase_autorizacion}} </span>
                                         @endcan
                                     @endif      
                                     @if ($auditoria->informeprimeraetapa->fase_autorizacion == 'En autorización')

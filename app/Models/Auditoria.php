@@ -137,6 +137,8 @@ class Auditoria extends Model
                     $query->where('fase_autorizacion','Autorizado');
                 })->orderBy('consecutivo');
             }
+
+
 			
 			public function accionessolacl()
             {

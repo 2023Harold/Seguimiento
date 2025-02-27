@@ -414,20 +414,24 @@
                                             $tAccPO = $auditoria->accionespo->count();
                                             $accPOAutorizadas = $auditoria->accionespo->where('pliegosobservacion.calificacion_sugerida', 'No Solventado')->count();
                                         @endphp
+            
 
-                                        @if ((!empty( $auditoria->informepliegos) && ($auditoria->informepliegos->fase_autorizacion=='Autorizado')) && ($accPOAutorizadas >0) )
-                                            @if (!empty($auditoria->turnoui) && $auditoria->turnoui->fase_autorizacion=='Autorizado')
-                                                <span class="fa fa-circle" style="color: green"></span>
-                                            @else
-                                                @if(!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion == 'En Revisión' || $auditoria->turnoui->fase_autorizacion == 'En validación'
-                                                    || $auditoria->turnoui->fase_autorizacion == 'En autorización'))
-                                                    <span class="fa fa-circle" style="color: yellow"></span>
-                                                @else 
-                                                    <span class="fa fa-circle" style="color: red"></span>
-                                                @endif
+                                        @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
+                                            @if(count($auditoria->totalNOsolventadopliegos) >0)
+                                                @if (!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion=='Autorizado'))
+                                                        <span class="fa fa-circle" style="color: green"></span>
+                                                @else
+                                                        @if(empty($auditoria->turnoui))
+                                                        <span class="fa fa-circle" style="color: red"></span>
+                                                        @else 
+                                                           
+                                                            <span class="fa fa-circle" style="color: yellow"></span>
+                                                        @endif
+                                                    @endif
+                                            
                                             @endif
-                                        @else
-                                        @endif              
+                                        @endif
+
                                         
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
@@ -441,24 +445,25 @@
 
                                          @php
                                             $tAcRec = $auditoria->accionesrecomendaciones->count();
-                                            $aAutoRec = $auditoria->accionesrecomendaciones->where('recomendaciones.calificacion_sugerida', 'Autorizado')->count();
+                                            $aAutoRec = $auditoria->accionesrecomendaciones->where('recomendaciones.calificacion_sugerida', 'No Atendida')->count();
                                         @endphp
 
-                                        @if ((!empty($auditoria->turnooic) && $auditoria->turnooic->fase_autorizacion=='Autorizado') && ($aAutoRec > 0) )
-                                            @if (!empty($auditoria->turnooic) && $auditoria->turnooic->fase_autorizacion=='Autorizado')
-                                                <span class="fa fa-circle" style="color: green"></span>
-                                            @else
-                                                @if(!empty($auditoria->turnooic) && ($auditoria->turnooic->fase_autorizacion == 'En revisión' || $auditoria->turnooic->fase_autorizacion == 'En validación'
-                                                    || $auditoria->turnooic->fase_autorizacion == 'En autorización'))
-                                                    <span class="fa fa-circle" style="color: yellow"></span>
-                                                @else 
-                                                    <span class="fa fa-circle" style="color: red"></span>
-                                                @endif
-            
+                                    
+                                        @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
+                                            @if(count($auditoria->totalNOsolventadorecomendacion) >0)
+                                                @if (!empty($auditoria->turnooic) && ($auditoria->turnooic->fase_autorizacion=='Autorizado'))
+                                                        <span class="fa fa-circle" style="color: green"></span>
+                                                @else
+                                                        @if(empty($auditoria->turnooic))
+                                                        <span class="fa fa-circle" style="color: red"></span>
+                                                        @else 
+                                                           
+                                                            <span class="fa fa-circle" style="color: yellow"></span>
+                                                        @endif
+                                                    @endif
+                                            
                                             @endif
-                                        @else
-                                        @endif    
-                                        
+                                        @endif
                                         
                                         
                                         <span class="menu-bullet">
