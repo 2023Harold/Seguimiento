@@ -321,18 +321,17 @@
                                     <a href="{{ route('informeprimeraetapa.index') }}"
                                         class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'informeprimeraetapa') ? 'active' : '' }}">
                                         
+                                
 
-                                        @if (!empty($auditoria->informeprimeraetapa && $auditoria->informepliegos) && ($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado' && $auditoria->informepliegos->fase_autorizacion=='Autorizado') )
-                                            {{-- Si existe el registro --}}
+                                        @if(count($auditoria->informes) >0)
+                                            @if(count($auditoria->informesAutorizados) == count($auditoria->informes))
                                             <span class="fa fa-circle" style="color: green"></span>
-                                        @else
-                                            @if(!empty($auditoria->informeprimeraetapa || $auditoria->informepliegos) && ($auditoria->informeprimeraetapa->fase_autorizacion == 'En validación' 
-                                                || $auditoria->informeprimeraetapa->fase_autorizacion == 'En autorización' || $auditoria->informepliegos->fase_autorizacion == 'En validación'
-                                                ||  $auditoria->informepliegos->fase_autorizacion == 'En autorización'))
-                                                <span class="fa fa-circle" style="color: yellow"></span>
-                                            @else 
-                                                <span class="fa fa-circle" style="color: red"></span>
+                                            @else
+                                             <span class="fa fa-circle" style="color: yellow"></span>
                                             @endif
+
+                                        @else
+                                            <span class="fa fa-circle" style="color: red"></span>
                                         @endif
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>

@@ -987,6 +987,7 @@ class RadicacionController extends Controller
 
         $SiRecomendaciones = "";
         $SiRecomendaciones01 ='';
+        $SiRecomendaciones02 ='';
         $SiRecomendaciones03 ='';
         $SiRecomendaciones04 ='';
         $SiPRAS="";
@@ -1377,6 +1378,7 @@ class RadicacionController extends Controller
 
          $SiRecomendaciones = "";
          $SiRecomendaciones01 ='';
+         $SiRecomendaciones02 ='';
          $SiRecomendaciones03 ='';
          $SiRecomendaciones04 ='';
          $SiPRAS="";
