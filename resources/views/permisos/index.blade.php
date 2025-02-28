@@ -14,14 +14,14 @@
             </div>
         </div>
         <div class="card-body">
-            {!! BootForm::open(['id'=>'form', 'method' => 'GET']) !!}
+            {!! BootForm::open(['id'=>'form', 'method' => 'GET']); !!}
             <div class="row align-items-end-base">
                 <div class="col-md-5">
-                    {!! BootForm::text("permiso", "Nombre del permiso:", old("permiso", optional(request())->permiso)) !!}
+                    {!! BootForm::text("permiso", "Nombre del permiso:", old("permiso", optional(request())->permiso)); !!}
                 </div>
                 <div class="col-md-2">
                     {{-- @acceso('permiso.index') --}}
-                    {!! BootForm::submit('Buscar', ['class' => 'btn btn-primary mt-8']) !!}
+                    {!! BootForm::submit('Buscar', ['class' => 'btn btn-primary mt-8']); !!}
                     {{-- @endacceso --}}
                 </div>
             </div>
@@ -35,7 +35,7 @@
                     {{-- @endacceso --}}
                 </div>
             </div>            
-            <div class="row"> 
+            <div class="row">
                 <div class="col-md-12">
                     <table class="table table-striped table-hover table-rounded table-row-gray-300 gy-7">
                         <thead class="table-head">

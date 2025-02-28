@@ -193,10 +193,7 @@ class SeguimientoAuditoriaController extends Controller
     {
          $query = $this->model;
          $query = $query->where('cuenta_publica',getSession('cp'));
-         
-         if(in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray())){
-            $query = $query->where('staff_juridico_id',auth()->user()->id);
-            }
+
 
         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
             $query = $query->where('usuario_creacion_id',auth()->id());
@@ -318,13 +315,13 @@ class SeguimientoAuditoriaController extends Controller
 
     public function concluir(Auditoria $auditoria)
     {
-            if(empty($auditoria->fase_autorizacion))
-            {  
+        if(empty($auditoria->fase_autorizacion))
+        {
             foreach ($auditoria->acciones as $accionrevision)
-                {
-                    $accionrevision->update(['fase_revision'=>'En revisión 01']);
-                }
-            }else{
+            {
+                $accionrevision->update(['fase_revision'=>'En revisión 01']);
+            }
+        }else{
             if (count($auditoria->accionesrechazadaslider)>0)
             {
                 foreach ($auditoria->accionesrechazadaslider as $accionrechazada)
@@ -409,8 +406,10 @@ class SeguimientoAuditoriaController extends Controller
 
         if($request->tipo_accion==2 && $request->actoid==4)
         {
-            $tipologiassearch = CatalogoTipologia::where('tipo_auditoria_id', 5)->get();
-        }
+            $tipologiassearch = CatalogoTipologia::where('tipo_auditoria_id', 4)->get();
+        }else if($request->tipo_accion==3){
+			$tipologiassearch = CatalogoTipologia::all();
+		}
         if (!empty($tipologiassearch) && count($tipologiassearch) > 0) {
             foreach ($tipologiassearch as $tipologiasearch) {
                 $tipologias[] = ['id' => $tipologiasearch->id, 'text' => $tipologiasearch->tipologia];

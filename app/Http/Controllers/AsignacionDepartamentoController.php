@@ -138,7 +138,9 @@ class AsignacionDepartamentoController extends Controller
 
     public function setQuery(Request $request)
     {
-         $query = $this->model;         
+         $query = $this->model;   
+		 $query = $query->where('cuenta_publica',getSession('cp'));		
+		 
          if(in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray())){
             $query = $query->where('staff_juridico_id',auth()->user()->id);
             }
@@ -150,11 +152,11 @@ class AsignacionDepartamentoController extends Controller
             ->where('fase_autorizacion','Autorizado');
 
         }elseif(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-
+//dd(1);
             $query = $query->whereNotNull('fase_autorizacion')
                         ->where('fase_autorizacion','Autorizado')
                         ->whereNotNull('direccion_asignada_id')
-                        ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);  
+                        ->where('direccion_asignada_id',getSession('cp_ua'));  
         }
                 
         if ($request->filled('numero_auditoria')) {

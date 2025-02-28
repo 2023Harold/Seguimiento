@@ -55,8 +55,6 @@ class TurnoArchivoController extends Controller
     public function store(Request $request)
     {
       mover_archivos($request, ['turno_archivo']);
-      $request['usuario_creacion_id']= auth()->user()->id;
-      $request['usuario_modificacion_id']= auth()->user()->id;
       $request['auditoria_id']= getSession('auditoria_id');
       $turnoarchivo  = TurnoAcuseArchivo::create($request->all());
 
@@ -101,10 +99,10 @@ class TurnoArchivoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,TurnoAcuseArchivo $auditoria)
+    public function update(Request $request,TurnoAcuseArchivo $turnoarchivo)
     {
-        $turnoarchivo=$auditoria;
         mover_archivos($request, ['turno_archivo'],$turnoarchivo);
+        $request['usuario_modificacion_id'] = auth()->user()->id;
         $turnoarchivo->update($request->all());
         $auditoria=$turnoarchivo->auditoria;
         setMessage("Los datos se han actualizado correctamente.");
@@ -129,24 +127,47 @@ class TurnoArchivoController extends Controller
 
         return redirect()->route('turno_archivo.create');
     }
-    
-    private function normalizarDatos(Request $request)
+    public function setQuery(Request $request)
     {
-        if ($request->estatus == 'Aprobado') {
-            $request['motivo_rechazo'] = null;
+         $query = new Auditoria;
+         $query = $query->whereNotNull('fase_autorizacion')
+            ->where('fase_autorizacion','Autorizado');
+
+        if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
+           in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
+           in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){
+
+
+
+        }elseif(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
+
+            $query = $query->whereNotNull('fase_autorizacion')
+                        ->where('fase_autorizacion','Autorizado')
+                        ->whereNotNull('direccion_asignada_id')
+                        ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);
+        }elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
+            $query = $query->whereNotNull('departamento_encargado_id')
+                        ->where('departamento_encargado_id',auth()->user()->unidad_administrativa_id);
         }
 
-        return $request;
+        if ($request->filled('numero_auditoria')) {
+             $numeroAuditoria=strtolower($request->numero_auditoria);
+             $query = $query->whereRaw('LOWER(numero_auditoria) LIKE (?) ',["%{$numeroAuditoria}%"]);
+         }
+
+        if ($request->filled('entidad_fiscalizable')) {
+            $entidadFiscalizable=strtolower($request->entidad_fiscalizable);
+            $query = $query->whereRaw('LOWER(entidad_fiscalizable) LIKE (?) ',["%{$entidadFiscalizable}%"]);
+        }
+
+        if ($request->filled('acto_fiscalizacion')) {
+            $actoFiscalizacion=strtolower($request->acto_fiscalizacion);
+            $query = $query->whereRaw('LOWER(acto_fiscalizacion) LIKE (?) ',["%{$actoFiscalizacion}%"]);
+        }
+
+        return $query;
     }
 
-    // public function export(){
-    //     $auditoria=Auditoria::find(getSession('auditoria_id')); 
-    //     $template=new TemplateProcessorMod('bases-word/TurnoOIC.docx');       
-    //     $nombreword='Of. R_OICs';
-    //     $template->saveAs($nombreword.'.docx');
-
-    //     return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
-    // }
    
 
 }

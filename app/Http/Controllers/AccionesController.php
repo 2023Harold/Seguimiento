@@ -79,7 +79,7 @@ class AccionesController extends Controller
         $this->setValidator($request)->validate();       
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $this->normalizarDatos($request);
-        mover_archivos($request, ['cedula'], null);
+        mover_archivos($request, ['cedula','evidencia_recomendacion'], null);
         $accion  = AuditoriaAccion::create($request->all());
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');

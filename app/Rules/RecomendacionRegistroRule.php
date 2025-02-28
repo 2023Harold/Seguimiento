@@ -44,21 +44,13 @@ class RecomendacionRegistroRule implements Rule
                 break;      
         }
 
-        if(empty($value)){
-            if($tipoaccion==2){
-                if($actofiscalizacion==3||$actofiscalizacion==4){
-
-                    $this->message = 'El campo '.$namecampo.' es obligatorio. ';
-                    return false;
-                }
-            }
-        }else{
+        
             $tamano=strlen($value);
             if($tamano>250){
                 $this->message = 'El campo '.$namecampo.' no debe exceder de 250 caracteres.';
                     return false;
             }
-        }
+        
         
         return true;
         

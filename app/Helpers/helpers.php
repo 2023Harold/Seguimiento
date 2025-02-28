@@ -15,14 +15,7 @@ use Luecano\NumeroALetras\NumeroALetras;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat\NumberFormatter;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
-function paginaactual($numeropagina=null,$accion=null){
-    if(empty($numeropagina)&&empty($accion)){
-        return "";
-    }
-    setSession('numpagina'.$accion,$numeropagina);
-        
-    return $numeropagina;
-}
+
 
 function fecha($fecha = null, string $formato = 'd/m/Y')
 {	

@@ -81,7 +81,6 @@ class Auditoria extends Model
             {
                 return $this->hasMany(AuditoriaUsuarios::class, 'auditoria_id', 'id');
             }
-            
             public function acciones()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->orderBy('consecutivo');
@@ -124,12 +123,12 @@ class Auditoria extends Model
                     $query->where('fase_autorizacion','Autorizado');
                 })->orderBy('consecutivo');
             }
-			
+
 			 public function accionespo()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',3)->orderBy('consecutivo');
             }
-			
+
             public function accionespoautorizadas()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',3)
@@ -138,18 +137,16 @@ class Auditoria extends Model
                 })->orderBy('consecutivo');
             }
 
-
-			
 			public function accionessolacl()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',1)->orderBy('consecutivo');
             }
-			
+
 			public function accionessolaclpo()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->whereIn('segtipo_accion_id',[1,3])->orderBy('consecutivo');
             }
-			
+
             public function accionessolaclautorizadas()
             {
                 return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id',1)
@@ -157,7 +154,7 @@ class Auditoria extends Model
                     $query->where('fase_autorizacion','Autorizado');
                 })->orderBy('consecutivo');
             }
-           
+
 
             public function accionesDepartamento()
             {
@@ -223,22 +220,22 @@ class Auditoria extends Model
 
             public function totalrecomendacion()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 2);
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 2)->orderByRaw("TO_NUMBER(REGEXP_SUBSTR(numero,'\\d+',7))");
             }
 
             public function totalpras()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 4);
+			return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 4);
             }
 
             public function totalsolacl()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 1);
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 1)->orderBy('numero');
             }
 
             public function totalpliegos()
             {
-                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 3);
+                return $this->hasMany(AuditoriaAccion::class, 'segauditoria_id', 'id')->whereNull('eliminado')->where('segtipo_accion_id', 3)->orderBy('numero')->orderByRaw("TO_NUMBER(REGEXP_SUBSTR(numero,'\\d+',9))");
             }
 
             public function totalsolventadorecomendacion()
@@ -341,19 +338,19 @@ class Auditoria extends Model
             }
 
             public function cedulaanalitica()
-            {                       
+            {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula Analítica');
             }
 
             public function cedulaanaliticadesemp()
-            {                       
+            {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula Analítica Desempeño');
             }
 
             public function movimientosCedulaGeneral()
             {
                 return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Cédula General de Seguimiento')->orderBy('id', 'ASC');
-            }  
+            }
 
             public function movimientosCedulaPRAS()
             {
@@ -380,29 +377,29 @@ class Auditoria extends Model
                 return $this->hasOne(CatalogoTipoAuditoria::class, 'id', 'tipo_auditoria_id');
             }
             public function getPeriodoMesAttribute()
-            {       
-                          //ACF - 001/dian/001= 26/08/2024  
-                $p_mes= substr($this->periodo_revision,0,-4);                                       
+            {
+                          //ACF - 001/dian/001= 26/08/2024
+                $p_mes= substr($this->periodo_revision,0,-4);
                 return $p_mes;
-            } 
+            }
             public function getPeriodoAnioAttribute()
-            { 
-                $p_anio= substr($this->periodo_revision,-4);                                                        
+            {
+                $p_anio= substr($this->periodo_revision,-4);
                 return $p_anio;
-            }            
-           
+            }
+
             public function getTipoEntidadAmbitoAttribute(){
 
                 $entidadF=EntidadFiscalizableIntra::where('PkCveEntFis',$this->entidad_fiscalizable_id)->first();
 				if(empty($entidadF->NivEntFis)){
-                    
-                    return null;                    
+
+                    return null;
                 }
                 if($entidadF->NivEntFis==3){
                     $entidad2=EntidadFiscalizableIntra::where('PkCveEntFis',$entidadF->FkCveEntFis)->first();
                     $entidad=EntidadFiscalizableIntra::where('PkCveEntFis',$entidad2->FkCveEntFis)->first();
 
-                    return $entidad->NomEntFis;                    
+                    return $entidad->NomEntFis;
                 }
 
                 if($entidadF->NivEntFis==2){
@@ -412,7 +409,7 @@ class Auditoria extends Model
                 }
 
                 if($entidadF->NivEntFis==1){
-                    
+
                     return $entidadF->NomEntFis;
                 }
             }
@@ -423,7 +420,7 @@ class Auditoria extends Model
             }
             public function informepliegos()
             {
-                return $this->hasOne(InformePrimeraEtapa::class, 'auditoria_id', 'id')->where('tipo','pliegos');            
+                return $this->hasOne(InformePrimeraEtapa::class, 'auditoria_id', 'id')->where('tipo','pliegos');
             }
 
             public function informes(){
@@ -456,12 +453,12 @@ class Auditoria extends Model
             }
 
             public function catUMAS(){
-                return $this->belongsTo(CatalogoUMAS::class, 'id', 'id');    
+                return $this->belongsTo(CatalogoUMAS::class, 'id', 'id');
             }
 
             public function listadoentidades(){
-                return $this->belongsTo(ListadoEntidades::class, 'id', 'no_auditoria');    
+                return $this->belongsTo(ListadoEntidades::class, 'id', 'no_auditoria');
             }
 
-        
+
 }

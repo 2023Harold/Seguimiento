@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class TurnoAcuseArchivo extends Model
 {
     use HasFactory;
-    protected $table = 'segturno_acuse_envio_archivo'; 
+    protected $table = 'segturno_acuse_envio_archivo';
     protected $fillable = [
-       
+
         'numero_turno_archivo',
         'fecha_turno_archivo',
         'turno_archivo',
@@ -24,11 +24,11 @@ class TurnoAcuseArchivo extends Model
         'nivel_autorizacion',
         'usuario_creacion_id',
         'usuario_modificacion_id',
-        
+
     ];
     protected $cast=[
-    'fecha_turno_archivo'=>'date',        
-    'fecha_notificacion_archivo'=>'date',        
+    'fecha_turno_archivo'=>'date',
+    'fecha_notificacion_archivo'=>'date',
     'created_at' => 'datetime',
     'updated_at' => 'datetime',
 

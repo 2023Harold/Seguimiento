@@ -54,7 +54,7 @@
         </div>         
         <div class="row">
             <div class="col-md-12">
-                {!! BootForm::textarea('accion', 'Acción: *', old('accion', $accion->accion),['class'=>'editor']) !!}
+                {!! BootForm::textarea('accion', 'Acción: *', old('accion', $accion->accion)) !!}
             </div>
         </div>   
         <div class="row">
@@ -84,7 +84,7 @@
             </div>
             <div class="row" >
                 <div class="col-md-6">
-                    {!! archivo('evidencia_recomendacion', 'Soporte de la evidencia documental que acredite la atención de la recomendación: *',  old('evidencia_recomendacion', $accion->evidencia_recomendacion)) !!}
+                    {!! archivo('evidencia_recomendacion', 'Soporte de la evidencia documental que acredite la atención de la recomendación: ',  old('evidencia_recomendacion', $accion->evidencia_recomendacion)) !!}
                 </div>
             </div>              
             {{-- <div class="row">
@@ -104,7 +104,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    {!! BootForm::text('plazo_recomendacion', 'Plazo convenido: *', old('plazo_recomendacion', $accion->plazo_recomendacion)) !!}
+                    {!! BootForm::text('plazo_recomendacion', 'Plazo convenido: ', old('plazo_recomendacion', $accion->plazo_recomendacion)) !!}
                 </div>
             </div>
         </div>
@@ -120,14 +120,7 @@
     </div>
 </div>
 @endsection
-@section('script')
-    {{-- <script>
-        ClassicEditor
-            .create(document.querySelector('.editor'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script> --}}
+@section('script')   
     <script>
         $(document).ready(function() {
             $("#segtipo_accion_id").select2().on('change', function(e) {
@@ -175,9 +168,9 @@
                 , }
                 , beforeSend: function(objeto) {}
                 , success: function(respuesta) {
-                    console.log(respuesta);
+                    console.log(respuesta,'af'+actofiscalizacionId,'ta'+tipoaccionseleccionado);
                     var tipologias = respuesta[1];                   
-                    if (tipologias.length > 0 && tipoaccionseleccionado!=4) {
+                    if (tipologias.length > 0) {
                         $('#tipologia_id').empty();
                         $('#tipologia_id').append('<option value="" disable="">Seleccionar una opción</option>');
                         for (var i = 0; i < tipologias.length; i++) {

@@ -78,11 +78,11 @@ class AgregarAccionesRevision01Controller extends Controller
     {
 
         $auditoria = $accion->auditoria;
-        if ($request->estatus == 'Aprobado' && count($auditoria->accionesrechazadaslider)>0) {
+        /*if ($request->estatus == 'Aprobado' && count($auditoria->accionesrechazadaslider)>0) {
             setMessage('Si hay acciones rechazadas no se puede aprobar la auditoría.','error');
 
             return back()->withInput();
-        } 
+        } */
 
         $accion->update(['revision_lider' => $request->estatus == 'Aprobado' ? 'En revisión' : 'Rechazado']);
         $accion->update(['fase_revision' => $request->estatus == 'Aprobado' ? 'En revisión' : 'Rechazado']);

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{Breadcrumbs::render('comparecenciaacuse.show',$comparecencia,$auditoria) }}
+{{ Breadcrumbs::render('comparecenciaacuse.show',$comparecencia,$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -13,13 +13,6 @@
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp; Acuses
                 </h1>
-                <div class="float-end">
-                    @if (empty($auditoria->radicacion))
-                        <a href="#" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. AR</a>                                  
-                    @else
-                    <a href="{{route('radicacion.wordOF',$auditoria->radicacion)}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. AR</a>                                                      
-                    @endif
-                </div>
             </div>
             <div class="card-body">
                 @include('flash::message')

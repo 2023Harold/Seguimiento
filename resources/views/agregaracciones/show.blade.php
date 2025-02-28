@@ -101,11 +101,18 @@
                 </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                             <label>Soporte de la evidencia documental que acredite la atención de la recomendación: </label>
-                            <span class="text-primary">
+                            <span class="text-primary">							
                                 <a href="{{ asset($accion->evidencia_recomendacion) }}" target="_blank">
                                     <?php echo htmlspecialchars_decode(iconoArchivo($accion->evidencia_recomendacion)) ?>
                                 </a>
-                            </span>
+								
+								
+											@php
+												$archivo=str_replace('storage/','',$accion->evidencia_recomendacion);
+											@endphp
+											@btnFileMinio($archivo)
+											
+								</span>
                         </div>
                     @endif
                     @if (!empty($accion->tipo_recomendacion))

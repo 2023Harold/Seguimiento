@@ -63,7 +63,7 @@ class ComparecenciaEnvioController extends Controller
   
   
         Movimientos::create([
-          'tipo_movimiento' => 'Envío de la comparecencia',
+          'tipo_movimiento' => 'Registro de la comparecencia',
               'accion' => 'comparecencia',
               'accion_id' => $comparecencia->id,
               'estatus' => 'Aprobado',

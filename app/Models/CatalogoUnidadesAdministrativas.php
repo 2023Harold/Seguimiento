@@ -28,7 +28,7 @@ class CatalogoUnidadesAdministrativas extends Model
     public function getDireccionesAttribute()
     {
         return $this->whereIn('id', [122100,122200])->get()->pluck('descripcion', 'id');
-    }   
+    }    
 
     public function getDepartamentosAttribute()
     {

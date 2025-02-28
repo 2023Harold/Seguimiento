@@ -284,7 +284,7 @@ class SeguimientoAuditoria2023Controller extends Controller
 
         if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
             $unidadAdministrativa=getSession('cp_ua');
-            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('nivel_autorizacion');
+            $query = $query->whereNotNull('fase_autorizacion')->whereRaw('LOWER(unidad_administrativa_registro) LIKE (?) ',["%{$unidadAdministrativa}%"]);
         }
 		
 		if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
