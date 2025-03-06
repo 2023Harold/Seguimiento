@@ -73,17 +73,10 @@ class AsignacionDireccionController extends Controller
         $unidades = (new CatalogoUnidadesAdministrativas())->direcciones->prepend('Seleccionar una opción', '');
         $accion ='Asignación';
         $directorasignado = null;
-        $staffasignada = null;
 
-        // Obtener los usuarios STAFF de la dirección asignada
-        $staff = User::where('unidad_administrativa_id', $auditoria->direccion_asignada_id)
-            ->where('siglas_rol', 'STAFF')
-            ->pluck('name', 'id')
-            ->toArray();
 
-        //return view('asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
-        return view('asignaciondireccion.form', compact('auditoria', 'unidades', 'accion', 'directorasignado','staffasignada', 'staff'));
 
+        return view('asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
     }
 
     /**
@@ -93,7 +86,7 @@ class AsignacionDireccionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Auditoria $auditoria)
+     public function update(Request $request, Auditoria $auditoria)
     {
         if ($request->accion == 'Asignación') {
 
@@ -131,7 +124,7 @@ class AsignacionDireccionController extends Controller
         }elseif($request->accion=='Reasignación'){
             $request['reasignacion_direccion']='Si';
             $request['reasignacion_staff']='Si';
-            
+
             $auditoria->update($request->all());
 
             $titulo = 'Reasignación de auditoría';
@@ -215,19 +208,16 @@ class AsignacionDireccionController extends Controller
 
         return response()->json($datos);
     }
+
     public function reasignar(Auditoria $auditoria)
     {
         $unidades = (new CatalogoUnidadesAdministrativas())->direcciones;
-        $accion = 'Reasignación';
+        $accion='Reasignación';
 
         $directorasignado = User::where('unidad_administrativa_id', $auditoria->direccion_asignada_id)
             ->where('siglas_rol', 'DS')
             ->first();
 
-
-        // Retorna la vista con todas las variables necesarias
-        return view('asignaciondireccion.form', compact('auditoria', 'unidades', 'accion', 'directorasignado'));
+        return view('asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
     }
-
-
 }

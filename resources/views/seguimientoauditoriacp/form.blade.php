@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('breadcrums')
 @if (empty($auditoria->numero_auditoria))
-    {{Breadcrumbs::render('seguimientoauditorias.create') }}
+    {{ Breadcrumbs::render('seguimientoauditorias.create') }}
 @else
-    {{Breadcrumbs::render('seguimientoauditorias.edit',$auditoria) }}
+    {{ Breadcrumbs::render('seguimientoauditorias.edit',$auditoria) }}
 @endif    
 @endsection
 @section('content')
@@ -16,49 +16,49 @@
     </div>
     <div class="card-body">
         @include('flash::message')
-        {!!BootForm::open(['model' => $auditoria,'store' => 'seguimientoauditoriacp.store','update' => 'seguimientoauditoriacp.update','id' => 'form']) !!}
-        {!!BootForm::hidden('entidad_fiscalizable_id',$auditoria->entidad_fiscalizable_id,['id'=>'entidad_fiscalizable_id']) !!}       
+        {!! BootForm::open(['model' => $auditoria,'store' => 'seguimientoauditoriacp.store','update' => 'seguimientoauditoriacp.update','id' => 'form']) !!}
+        {!! BootForm::hidden('entidad_fiscalizable_id',$auditoria->entidad_fiscalizable_id,['id'=>'entidad_fiscalizable_id']) !!}       
         <div class="row">
             <div class="col-md-3">
-                {!!BootForm::text('numero_auditoria', 'Número de auditoría: *', old('numero_auditoria', $auditoria->numero_auditoria)) !!}
+                {!! BootForm::text('numero_auditoria', 'Número de auditoría: *', old('numero_auditoria', $auditoria->numero_auditoria)) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
-                {!!BootForm::text('numero_orden', 'Número de orden de auditoría: *', old('numero_orden', $auditoria->numero_orden)) !!}
+                {!! BootForm::text('numero_orden', 'Número de orden de auditoría: *', old('numero_orden', $auditoria->numero_orden)) !!}
             </div>
         </div>                      
-            {!!BootForm::label('lb_ebtidad','Entidad Fiscalizable: *') !!}
+            {!! BootForm::label('lb_ebtidad','Entidad Fiscalizable: *') !!}
         <div class="row">           
             <div class="col-md-3 mb-4">
-                {!!BootForm::select('entidad_n1', false, $entidades->prepend('Seleccionar una opción','')->toArray() , old('entidad_n1',$entidad1), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!! BootForm::select('entidad_n1', false, $entidades->prepend('Seleccionar una opción','')->toArray() , old('entidad_n1',$entidad1), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
             @php           
                 $mostrarDivEntidad2 = ((!empty($entidad2))?'block':'none');
             @endphp
             <div class="col-md-4 mb-4" id="div_ent_2" style="display:{!! $mostrarDivEntidad2 !!}">
-                {!!BootForm::select('entidad_n2', false, (!empty($entidades2)?$entidades2->toArray():[]) , old('entidad_n2',$entidad2), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!! BootForm::select('entidad_n2', false, (!empty($entidades2)?$entidades2->toArray():[]) , old('entidad_n2',$entidad2), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
             @php
             $mostrarDivEntidad3 = ((!empty($entidad3))?'block':'none');
             @endphp
             <div class="col-md-5 mb-4" id="div_ent_3" style="display:{!! $mostrarDivEntidad3 !!}">
-                {!!BootForm::select('entidad_n3', false, (!empty($entidades3)?$entidades3->toArray():[]) , old('entidad_n3',$entidad3), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!! BootForm::select('entidad_n3', false, (!empty($entidades3)?$entidades3->toArray():[]) , old('entidad_n3',$entidad3), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>           
         </div>    
         <div class="row">
             <div class="col-md-8">
-                {!!BootForm::text('entidad_descripcion', false, old('entidad_descripcion',$auditoria->entidad_descripcion)) !!}
+                {!! BootForm::text('entidad_descripcion', false, old('entidad_descripcion',$auditoria->entidad_descripcion)) !!}
             </div>
         </div>    
         <div class="row">
             <div class="col-md-4">
-                {!!BootForm::select('periodo_revision', 'Periodo de la revisión: *', $periodorevision , old('periodo_revision',$auditoria->periodo_revision), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!! BootForm::select('periodo_revision', 'Periodo de la revisión: *', $periodorevision , old('periodo_revision',$auditoria->periodo_revision), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div> 
         <div class="row">
             <div class="col-md-6">
-                {!!BootForm::select('tipo_auditoria_id', 'Acto de fiscalización: *', $tipos->toArray(), old('tipo_auditoria_id',$auditoria->tipo_auditoria_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!! BootForm::select('tipo_auditoria_id', 'Acto de fiscalización: *', $tipos->toArray(), old('tipo_auditoria_id',$auditoria->tipo_auditoria_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div>       
         <div class="row">
@@ -66,12 +66,12 @@
                 {!! archivo('informe_auditoria', 'Informe de auditoria: ', optional($auditoria)->informe_auditoria) !!}
             </div>
             <div class="col-md-2">
-                {!!BootForm::text('fojas_utiles', 'Número de fojas útiles: *', optional($auditoria)->fojas_utiles) !!}
+                {!! BootForm::text('fojas_utiles', 'Número de fojas útiles: *', optional($auditoria)->fojas_utiles) !!}
             </div>
         </div>        
         <div class="row">
             <div class="col-md-4">
-                {!!BootForm::select('lider_proyecto_id', 'Lider de proyecto: *', $lideresProyecto->toArray(), old('lider_proyecto_id',$auditoria->lider_proyecto_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!! BootForm::select('lider_proyecto_id', 'Lider de proyecto: *', $lideresProyecto->toArray(), old('lider_proyecto_id',$auditoria->lider_proyecto_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div>        
         <div class="row">
@@ -82,7 +82,7 @@
                 <a href="{{ route('seguimientoauditoria.index') }}" class="btn btn-secondary me-2">Cancelar</a>
             </div>
         </div>
-        {!!BootForm::close() !!}
+        {!! BootForm::close() !!}
     </div>
 </div>
 @endsection
@@ -175,5 +175,5 @@
     });
 
 </script>
-{!!JsValidator::formRequest('App\Http\Requests\AuditoriaRequest') !!}
+{!! JsValidator::formRequest('App\Http\Requests\AuditoriaRequest') !!}
 @endsection

@@ -14,21 +14,21 @@
                     </h1>
                 </div>
                 <div class="card-body">
-                    {!! BootForm::open(['id'=>'form', 'method' => 'GET']) !!}
+                    {!! BootForm::open(['id'=>'form', 'method' => 'GET']); !!}
                     <div class="row align-items-center">
                         <div class="col-md-4">
-                            {!! BootForm::text("name", "Nombre del usuario:", old("name", optional(request())->name)) !!}
+                            {!! BootForm::text("name", "Nombre del usuario:", old("name", optional(request())->name)); !!}
                         </div>
                         <div class="col-md-4">
-                            {!! BootForm::text("email", "Correo electrónico:", old("email", optional(request())->email)) !!}
+                            {!! BootForm::text("email", "Correo electrónico:", old("email", optional(request())->email)); !!}
                         </div>
                         <div class="col-md-3">
                             {!! BootForm::radios("estatus",
                             "Estatus:",['Todas'=>' Todas&nbsp;&nbsp;','Activo'=>' Activas&nbsp;&nbsp;','Inactivo'=>' Inactivas'] ,old("estatus",
-                            (request()->estatus != "")?request()->estatus:'Todas'),true,['class'=>'i-checks']) !!}
+                            (request()->estatus != "")?request()->estatus:'Todas'),true,['class'=>'i-checks']); !!}
                         </div>
                         <div class="col-md-1">
-                            {!! Form::submit('Buscar', ['class' => 'btn btn-primary pull-right']) !!}
+                            {!! Form::submit('Buscar', ['class' => 'btn btn-primary pull-right']); !!}
                         </div>
                     </div>
                     {!! BootForm::close() !!}
@@ -73,7 +73,7 @@
                                             @if (implode($user->getRoleNames()->toArray()) == 'Entidad Fiscalizable')
                                             {{ $user->entidadFiscalizable->descripcion }}
                                             @else
-                                            {{ optional($user->unidadAdministrativa)->descripcion }}
+                                            {{ $user->unidadAdministrativa->descripcion }}
                                             @endif
                                         </td>
                                         <td class="text-center">{{ fecha($user->fecha_ultimo_acceso,'d/m/Y H:i') }}</td>

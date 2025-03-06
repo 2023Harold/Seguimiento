@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{Breadcrumbs::render('comparecenciaacuse.edit',$comparecencia,$auditoria) }} 
+    {{ Breadcrumbs::render('comparecenciaacuse.edit',$comparecencia,$auditoria) }} 
 @endsection
 @section('content')
 <div class="row">
@@ -24,13 +24,13 @@
                 @include('layouts.contextos._auditoria')
                 @include('layouts.contextos._radicacion')
                 
-                {!!BootForm::open(['model' => $comparecencia,'update' => 'comparecenciaacuse.update','id' => 'form',]) !!}
+                {!! BootForm::open(['model' => $comparecencia,'update' => 'comparecenciaacuse.update','id' => 'form',]) !!}
                 <div class="row">
                     <div class="col-md-6">
                         {!! archivo('oficio_acuerdo', 'Acuerdo de radicación: *', old('oficio_acuerdo', $comparecencia->oficio_acuerdo)) !!}
                     </div>
                     <div class="col-md-3">
-                        {!!BootForm::date('fecha_oficio_acuerdo', 'Fecha del acuerdo de radicación: *', old('fecha_oficio_acuerdo', fecha($comparecencia->fecha_oficio_acuerdo, 'Y-m-d'))) !!}
+                        {!! BootForm::date('fecha_oficio_acuerdo', 'Fecha del acuerdo de radicación: *', old('fecha_oficio_acuerdo', fecha($comparecencia->fecha_oficio_acuerdo, 'Y-m-d'))); !!}
                     </div>
                 </div>    
                 <div class="row">
@@ -38,7 +38,7 @@
                             {!! archivo('oficio_recepcion', 'Comprobante de recepción depto. de notificaciones: *', old('oficio_recepcion', $comparecencia->oficio_recepcion)) !!}
                         </div>
                         <div class="col-md-3">
-                            {!!BootForm::date('fecha_recepcion', 'Fecha de recepción: *', old('fecha_recepcion', fecha($comparecencia->fecha_recepcion, 'Y-m-d'))) !!}
+                            {!! BootForm::date('fecha_recepcion', 'Fecha de recepción: *', old('fecha_recepcion', fecha($comparecencia->fecha_recepcion, 'Y-m-d'))); !!}
                         </div>
                     </div>
                     <div class="row">
@@ -46,7 +46,7 @@
                             {!! archivo('oficio_acuse', 'Acuse de notificación de informe de auditoría: *', old('oficio_acuse', $comparecencia->oficio_acuse)) !!}
                         </div>
                         <div class="col-md-3">
-                            {!!BootForm::date('fecha_acuse', 'Fecha del acuse: *', old('fecha_acuse', fecha($comparecencia->fecha_acuse, 'Y-m-d'))) !!}
+                            {!! BootForm::date('fecha_acuse', 'Fecha del acuse: *', old('fecha_acuse', fecha($comparecencia->fecha_acuse, 'Y-m-d'))); !!}
                         </div>
                     </div>                
                     <div class="row">
@@ -57,12 +57,12 @@
                             @btnCancelar('Cancelar', route('radicacion.index'))
                         </div>
                     </div>
-                {!!BootForm::close() !!}
+                {!! BootForm::close() !!}
             </div>
         </div>
     </div>
 </div>
 @endsection
 @section('script')
-    {!!JsValidator::formRequest('App\Http\Requests\ComparecenciaAcuseRequest') !!}  
+    {!! JsValidator::formRequest('App\Http\Requests\ComparecenciaAcuseRequest') !!}  
 @endsection

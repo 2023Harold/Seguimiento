@@ -47,10 +47,8 @@ class ComparecenciaController extends Controller
      */
     public function store(Request $request)
     {
-
         $auditoria = Auditoria::find(getSession('comparecencia_auditoria_id'));
         mover_archivos($request, ['acta_comparecencia']);
-        $request['auditoria_id']= getSession('auditoria_id');
         $request['usuario_creacion_id'] = auth()->id();
         $request['auditoria_id'] = $auditoria->id;
 

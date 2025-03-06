@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! BootForm::submit('Buscar', ['class' => 'btn btn-primary mt-8']) !!}
+                        {!! BootForm::submit('Buscar', ['class' => 'btn btn-primary mt-8']); !!}
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                                     <td class="table-active">{{$permiso->name}}</td>
                                     @foreach($roles as $rol)
                                         <td class="text-center">
-                                            {!! Form::checkbox($rol->name.'-'.$permiso->name, $permiso->id, old('check', $rol->hasPermissionTo($permiso)), ['id' => 'check'.$rol->id.'-'.$permiso->id, 'class' => 'i-checks btn-asig-per', 'data-rol'=>$rol->id, 'data-permiso'=>$permiso->id]) !!}
+                                            {!! Form::checkbox($rol->name.'-'.$permiso->name, $permiso->id, old('check', $rol->hasPermissionTo($permiso)), ['id' => 'check'.$rol->id.'-'.$permiso->id, 'class' => 'i-checks btn-asig-per', 'data-rol'=>$rol->id, 'data-permiso'=>$permiso->id]); !!}
                                         </td>
                                     @endforeach
                                 </tr>

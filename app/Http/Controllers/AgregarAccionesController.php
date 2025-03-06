@@ -154,6 +154,8 @@ class AgregarAccionesController extends Controller
     public function setQuery(Request $request)
     {
          $query = $this->model;
+		 
+		 $query=$query->whereNull('eliminado');
 
          $query = $query->where('segauditoria_id',getSession('auditoriacp_id'))->whereNull('eliminado');
 
@@ -184,7 +186,7 @@ class AgregarAccionesController extends Controller
         $request['tipo'] = $tiposaccion->descripcion;
         $request['segauditoria_id'] = getSession('auditoriacp_id');
         $request['usuario_actualizacion_id'] = auth()->id();
-        $request['accion'] = str_replace("\r\n", "</br>",$request->accion);
+        //$request['accion'] = str_replace("\r\n", "</br>",$request->accion);
         $request['acto_fiscalizacion'] = $actosfiscalizacion->descripcion;
 
         if ($request->segtipo_accion_id==2) {

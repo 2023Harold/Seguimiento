@@ -16,9 +16,14 @@
         <div class="card-body">
             @include('flash::message')
             {!! BootForm::open(['model' => $user, 'store' => 'user.store', 'update' => 'user.update','id'=>'form']) !!}
+			<ul>
+    @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+    @endforeach
+</ul>
                 <div class="row">
                     <div class="col-md-3 pt-2">
-                        {!! BootForm::text('name','Nombre del usuario: *',old("name",$user->name),['maxlength'=>'75']) !!}
+                        {!! BootForm::text('name','Nombre del usuario: *',old("name",$user->name),['maxlength'=>'75']); !!}
                     </div>
                 </div>
                 <div class="row">
@@ -28,7 +33,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        {!! BootForm::text('email','Correo electrónico: *',old("email",$user->email),['maxlength'=>'60']) !!}
+                        {!! BootForm::text('email','Correo electrónico: *',old("email",$user->email),['maxlength'=>'60']); !!}
                     </div>
                 </div>
                 @php
@@ -36,7 +41,7 @@
                 @endphp
                 <div class="row">
                     <div class="col-md-2">
-                        {!! BootForm::select('rol','Rol: *' ,$roles->toArray(),old("rol",$values[0])) !!}
+                        {!! BootForm::select('rol','Rol: *' ,$roles->toArray(),old("rol",$values[0])); !!}
                     </div>
                 </div>
                 @php
@@ -54,7 +59,7 @@
                         }
                     }
                 @endphp
-                <div id="div_mostrar_unidad" style="display:{{$mostrar_unidad}}">
+                <div id="div_mostrar_unidad" >
                     <div class="row">
                         <div class="col-md-4">
                             {!! BootForm::select('unidad_administrativa_id', 'Unidad Administrativa: *',
@@ -92,21 +97,17 @@
         $(document).ready(function() {
             $.validator.setDefaults({ ignore: ":hidden:not(.chosen-select)" })
             $("#rol").change(function(){
-                $("#div_mostrar_unidad").hide();
-                $("#div_mostrar_entidad").hide();
+                Ocultar(['#div_mostrar_unidad']);
+                Ocultar(['#div_mostrar_entidad']);
                 var rolSeleccionado = $(this).children("option:selected").val();
                 if (rolSeleccionado=='Entidad Fiscalizable'){
-                    $("#div_mostrar_unidad").hide();
-                    $("#div_mostrar_entidad").show();
-                    
+                    Ocultar(['#div_mostrar_unidad']);
+                    Mostrar(['#div_mostrar_entidad']);
                 } else {
-                   
-                   $("#div_mostrar_unidad").show();
-                    $("#div_mostrar_entidad").hide();
+                   Ocultar(['#div_mostrar_entidad']);
+                   Mostrar(['#div_mostrar_unidad']);
                 }
             });
         });
-        
     </script>
-    {!! $validator !!}
 @endsection

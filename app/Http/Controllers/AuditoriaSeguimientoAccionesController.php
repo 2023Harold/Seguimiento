@@ -99,6 +99,7 @@ class AuditoriaSeguimientoAccionesController extends Controller
     public function setQuery(Request $request)
     {
          $query = $this->model;
+		 $query=$query->whereNull('eliminado');
 
          $query = $query->where('segauditoria_id',getSession('acciones_auditoria_id'));
 

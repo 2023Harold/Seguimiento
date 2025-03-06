@@ -64,13 +64,13 @@
                             <br>
                             <div class="row">
                                 <div class="col-md-12">
-                                    {!! BootForm::password("password", "Contraseña:", ["width" => "col-md-12"]) !!}
+                                    {!! BootForm::password("password", "Contraseña:", ["width" => "col-md-12"]); !!}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     {!! BootForm::password("password_confirmation", "Confirmar contraseña:", ["width" =>
-                                    "col-md-12"]) !!}
+                                    "col-md-12"]); !!}
                                 </div>
                             </div>
                             <div class="row">

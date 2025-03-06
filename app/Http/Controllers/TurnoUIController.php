@@ -82,8 +82,11 @@ class TurnoUIController extends Controller
      */
     public function edit(TurnoUI $auditoria)
     {
+		
         $turnoui=$auditoria;
-        $auditoria=$auditoria->auditoria;
+        $auditoria=$turnoui->auditoria;
+		//dd($auditoria);
+		
        
         return view('turnoui.form', compact('auditoria','turnoui'));
     }

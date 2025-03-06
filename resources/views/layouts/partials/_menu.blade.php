@@ -173,7 +173,8 @@
                                                 @if ($accionesPRASAutorizadas === $totalAccionesPRAS)
                                                     {{-- Todas las acciones están autorizadas --}}
                                                     <span class="fa fa-circle" style="color: green"></span>
-                                                @elseif ($accionesPRASAutorizadas > 0)
+                                                @elseif ($totalAccionesPRAS !=$accionesPRASAutorizadas)
+                                                
                                                     {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                     <span class="fa fa-circle" style="color: yellow"></span>
                                                 @else
@@ -213,7 +214,7 @@
                                             @if ($accionesAutorizadasRec === $totalAccionesRec)
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif ($accionesAutorizadasRec > 0)
+                                            @elseif ($totalAccionesRec !=$accionesAutorizadasRec)
                                                 {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
@@ -251,7 +252,7 @@
                                             @if ($accionesSolAclAutorizadas === $totalAccionesSolAcl)
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif ($accionesSolAclAutorizadas > 0)
+                                            @elseif ($totalAccionesSolAcl !=$accionesSolAclAutorizadas)
                                                 {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
@@ -287,7 +288,7 @@
                                             @if ($accionesPOAutorizadas === $totalAccionesPO)
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif ($accionesPOAutorizadas > 0)
+                                            @elseif($totalAccionesPO !=$accionesPOAutorizadas)
                                                 {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
@@ -320,18 +321,17 @@
                                     <a href="{{ route('informeprimeraetapa.index') }}"
                                         class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'informeprimeraetapa') ? 'active' : '' }}">
                                         
+                                
 
-                                        @if (!empty($auditoria->informeprimeraetapa && $auditoria->informepliegos) && ($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado' && $auditoria->informepliegos->fase_autorizacion=='Autorizado') )
-                                            {{-- Si existe el registro --}}
+                                        @if(count($auditoria->informes) >0)
+                                            @if(count($auditoria->informesAutorizados) == count($auditoria->informes))
                                             <span class="fa fa-circle" style="color: green"></span>
-                                        @else
-                                            @if(!empty($auditoria->informeprimeraetapa || $auditoria->informepliegos) && ($auditoria->informeprimeraetapa->fase_autorizacion == 'En validación' 
-                                                || $auditoria->informeprimeraetapa->fase_autorizacion == 'En autorización' || $auditoria->informepliegos->fase_autorizacion == 'En validación'
-                                                ||  $auditoria->informepliegos->fase_autorizacion == 'En autorización'))
-                                                <span class="fa fa-circle" style="color: yellow"></span>
-                                            @else 
-                                                <span class="fa fa-circle" style="color: red"></span>
+                                            @else
+                                             <span class="fa fa-circle" style="color: yellow"></span>
                                             @endif
+
+                                        @else
+                                            <span class="fa fa-circle" style="color: red"></span>
                                         @endif
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
@@ -414,20 +414,24 @@
                                             $tAccPO = $auditoria->accionespo->count();
                                             $accPOAutorizadas = $auditoria->accionespo->where('pliegosobservacion.calificacion_sugerida', 'No Solventado')->count();
                                         @endphp
+            
 
-                                        @if ((!empty( $auditoria->informepliegos) && ($auditoria->informepliegos->fase_autorizacion=='Autorizado')) && ($accPOAutorizadas >0) )
-                                            @if (!empty($auditoria->turnoui) && $auditoria->turnoui->fase_autorizacion=='Autorizado')
-                                                <span class="fa fa-circle" style="color: green"></span>
-                                            @else
-                                                @if(!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion == 'En Revisión' || $auditoria->turnoui->fase_autorizacion == 'En validación'
-                                                    || $auditoria->turnoui->fase_autorizacion == 'En autorización'))
-                                                    <span class="fa fa-circle" style="color: yellow"></span>
-                                                @else 
-                                                    <span class="fa fa-circle" style="color: red"></span>
-                                                @endif
+                                        @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
+                                            @if(count($auditoria->totalNOsolventadopliegos) >0)
+                                                @if (!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion=='Autorizado'))
+                                                        <span class="fa fa-circle" style="color: green"></span>
+                                                @else
+                                                        @if(empty($auditoria->turnoui))
+                                                        <span class="fa fa-circle" style="color: red"></span>
+                                                        @else 
+                                                           
+                                                            <span class="fa fa-circle" style="color: yellow"></span>
+                                                        @endif
+                                                    @endif
+                                            
                                             @endif
-                                        @else
-                                        @endif              
+                                        @endif
+
                                         
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
@@ -441,24 +445,25 @@
 
                                          @php
                                             $tAcRec = $auditoria->accionesrecomendaciones->count();
-                                            $aAutoRec = $auditoria->accionesrecomendaciones->where('recomendaciones.calificacion_sugerida', 'Autorizado')->count();
+                                            $aAutoRec = $auditoria->accionesrecomendaciones->where('recomendaciones.calificacion_sugerida', 'No Atendida')->count();
                                         @endphp
 
-                                        @if ((!empty($auditoria->turnooic) && $auditoria->turnooic->fase_autorizacion=='Autorizado') && ($aAutoRec > 0) )
-                                            @if (!empty($auditoria->turnooic) && $auditoria->turnooic->fase_autorizacion=='Autorizado')
-                                                <span class="fa fa-circle" style="color: green"></span>
-                                            @else
-                                                @if(!empty($auditoria->turnooic) && ($auditoria->turnooic->fase_autorizacion == 'En revisión' || $auditoria->turnooic->fase_autorizacion == 'En validación'
-                                                    || $auditoria->turnooic->fase_autorizacion == 'En autorización'))
-                                                    <span class="fa fa-circle" style="color: yellow"></span>
-                                                @else 
-                                                    <span class="fa fa-circle" style="color: red"></span>
-                                                @endif
-            
+                                    
+                                        @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
+                                            @if(count($auditoria->totalNOsolventadorecomendacion) >0)
+                                                @if (!empty($auditoria->turnooic) && ($auditoria->turnooic->fase_autorizacion=='Autorizado'))
+                                                        <span class="fa fa-circle" style="color: green"></span>
+                                                @else
+                                                        @if(empty($auditoria->turnooic))
+                                                        <span class="fa fa-circle" style="color: red"></span>
+                                                        @else 
+                                                           
+                                                            <span class="fa fa-circle" style="color: yellow"></span>
+                                                        @endif
+                                                    @endif
+                                            
                                             @endif
-                                        @else
-                                        @endif    
-                                        
+                                        @endif
                                         
                                         
                                         <span class="menu-bullet">

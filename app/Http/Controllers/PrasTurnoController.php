@@ -38,6 +38,7 @@ class PrasTurnoController extends Controller
         $auditoria=$accion->auditoria;
         $pras=new Segpras();
         $usuariodirectorio=null;
+
         
 
         if(!empty($auditoria->entidad_fiscalizable_id)){

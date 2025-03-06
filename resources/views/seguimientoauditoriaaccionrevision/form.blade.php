@@ -136,7 +136,7 @@
                     [
                         'Aprobado' => 'Aprobar',
                         'Rechazado' => 'Rechazar'
-                    ], null,false,['class'=>'i-checks rechazado']) !!}
+                    ], null,false,['class'=>'i-checks rechazado']); !!}
                 </div>
             </div>
             <div class="row" id="justificacion" style="display: none;">
