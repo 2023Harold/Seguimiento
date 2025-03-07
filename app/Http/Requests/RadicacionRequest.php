@@ -28,7 +28,7 @@ class RadicacionRequest extends FormRequest
             'numero_acuerdo' => 'required|string|max:30',
             'oficio_acuerdo' => 'required|string|max:100',
             'fecha_oficio_acuerdo' => 'required|date|max:10',
-            
+
             // 'oficio_designacion' => 'required|string|max:100',
             // 'fecha_oficio_designacion' => 'required|date|max:10|after_or_equal:fecha_oficio_acuerdo',
             'nombre_titular' => 'required|string|max:120',
@@ -46,8 +46,9 @@ class RadicacionRequest extends FormRequest
             'fecha_oficio_informe'=>'required|date|max:10',
             'fecha_notificacion'=>'required|date|max:10',
             'plazo_maximo'=>'sometimes|nullable|required_if:acto_fiscalizacion_auditoria,Desempeño|integer|max:120',
-            'acta_cierre_auditoria'=>'required|string|max:150',          
+            'acta_cierre_auditoria'=>'required|string|max:150',
             'fecha_acta'=>'required|string|max:150',
+            'fecha_oficio_acuerdo'=>'required|string|max:150',
         ];
     }
 
@@ -73,9 +74,10 @@ class RadicacionRequest extends FormRequest
             'fecha_expediente_turnado'=>'fecha de recepción del expediente turnado',
             'fecha_oficio_informe'=>'fecha oficio informe',
             'fecha_notificacion'=>'fecha radicación',
-            'plazo_maximo'=>'plazo máximo', 
-            'acta_cierre_auditoria'=> 'acta de reunión de resultados finales y cierre de auditoría', 
-            'fecha_acta'  => 'fecha de acta', 
+            'plazo_maximo'=>'plazo máximo',
+            'acta_cierre_auditoria'=> 'acta de reunión de resultados finales y cierre de auditoría',
+            'fecha_acta'  => 'fecha de acta',
+            'fecha_oficio_acuerdo'=>'fecha de oficio',
 
         ];
     }

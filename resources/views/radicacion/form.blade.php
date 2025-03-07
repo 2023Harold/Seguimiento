@@ -14,7 +14,7 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('radicacion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                    &nbsp; {{ $accion }}                    
+                    &nbsp; {{ $accion }}
                 </h1>
             </div>
             <div class="card-body">
@@ -43,42 +43,34 @@
                         {!!BootForm::date('fecha_notificacion', 'Fecha de radicación: *', old('fecha_notificacion',fecha($radicacion->fecha_notificacion,'Y-m-d'))) !!}
                     </div>
                 </div>
-                
                 <div class="row">
                     <div class="col-md-4">
                         {!!BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
-                    </div>                                         
+                    </div>
                     <div class="col-lg-3 col-md-3">
-                        {!!BootForm::date('fecha_oficio_informe','Fecha del oficio: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
-                    </div>                      
+                        {!!BootForm::date('fecha_oficio_informe','Fecha de notificación: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
+                    </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-4">
-                        {!!BootForm::text('oficio_acuerdo', 'Oficio de notificación del acuerdo: *', old('numero_acuerdo',$radicacion->oficio_acuerdo)) !!}
-                    </div>    
+                        {!!BootForm::text('oficio_acuerdo', 'Oficio de notificación de acuerdos: *', old('numero_acuerdo',$radicacion->oficio_acuerdo)) !!}
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        {!!BootForm::date('fecha_oficio_acuerdo','Fecha de oficio: *', old('fecha_oficio_acuerdo',fecha($radicacion->fecha_oficio_acuerdo,'Y-m-d'))) !!}
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4"> 
+                    <div class="col-md-4">
                         {!!BootForm::text('acta_cierre_auditoria', 'Acta de reunión de resultados finales y cierre de auditoría: *', old('acta_cierre_auditoria',$radicacion->acta_cierre_auditoria)) !!}
                     </div>
                     <div class="col-lg-3 col-md-3">
-                        {!!BootForm::date('fecha_acta','Fecha del Acta: *', old('fecha_acta',fecha($radicacion->fecha_acta,'Y-m-d'))) !!}
+                        {!!BootForm::date('fecha_acta','Fecha del acta: *', old('fecha_acta',fecha($radicacion->fecha_acta,'Y-m-d'))) !!}
                     </div>
                 </div>
-                
-                                                                                                  
-                
-                {{-- <div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('oficio_designacion', 'Oficio de designación: *', old('oficio_designacion',
-                        $radicacion->oficio_designacion)) !!}
-                    </div>
-                    <div class="col-lg-2 col-md-3">
-                        {!! BootForm::date('fecha_oficio_designacion','Fecha del oficio: *',old('fecha_oficio_designacion',
-                        fecha($radicacion->fecha_oficio_designacion, 'Y-m-d')),) !!}
-                    </div>
-                </div> --}}
+
+
+
+
                 <div class="row">
                     <div class="col-md-4">
                         {!!BootForm::text('nombre_titular','Nombre del titular a quien se dirige la comparecencia: *',old('nombre_titular', optional($comparecencia)->nombre_titular),) !!}
@@ -120,7 +112,7 @@
                     <div class="col-md-2">
                         {!!BootForm::text('plazo_maximo', 'Plazo máximo: ', old('numero_expediente',$radicacion->plazo_maximo)) !!}
                     </div>
-                </div>                                                                                                  
+                </div>
                 {{-- @endif
                 @if ($auditoria->acto_fiscalizacion=='Legalidad' || $auditoria->acto_fiscalizacion=='Desempeño') --}}
                 <div class="row">
@@ -166,12 +158,12 @@
                   let date = new Date(dateu);
                   //let date = new Date(pd);
                   date.setDate(date.getDate() + 1);
-                  for (let index = 1; index <= 1; index++) {                        
+                  for (let index = 1; index <= 1; index++) {
                       date.setDate(date.getDate() + 1);
                       if (date.getDay() == 6 || date.getDay() == 0)
                           index--;
                   }
-                                               
+
                         //FEBRERO dias no laborables
                         if(date.getMonth()==1 && date.getFullYear()==2024){
                             if(date.getDate()==5){
@@ -187,7 +179,7 @@
                             if(date.getDate()==29 ){
                                 date.setDate(date.getDate() + 1);
                             }
-                            
+
                         }
 
                         //MAYO dias no laborables
@@ -202,7 +194,7 @@
                             if(date.getDate()==22){
                                 date.setDate(date.getDate() + 14);
                             }
-                        }                        
+                        }
 
                         //SEPTIEMBRE dias no laborables
                         if(date.getMonth()==8 && date.getFullYear()==2024){
@@ -212,8 +204,8 @@
                         }
                         //OCTUBRE dias no laborables
                         if(date.getMonth()==9 && date.getFullYear()==2024){
-                            if(date.getDate()==1){                        
-                                date.setDate(date.getDate() + 1);                                
+                            if(date.getDate()==1){
+                                date.setDate(date.getDate() + 1);
                             }
                         }
                         //NOVIEMBRE dias no laborables
@@ -230,17 +222,17 @@
                             }
                         }
 
-                        
+
                         var dd = String(date.getDate()).padStart(2, '0');
                         var mm = String(date.getMonth() + 1).padStart(2, '0');
                         var yyyy = date.getFullYear();
-                        today = yyyy + '-' + mm + '-' + dd;  
-                        
+                        today = yyyy + '-' + mm + '-' + dd;
+
                         date.setDate(date.getDate() + 1);
                         var dd2 = String(date.getDate()).padStart(2, '0');
                         var mm2 = String(date.getMonth() + 1).padStart(2, '0');
                         var yyyy2 = date.getFullYear();
-                        todayDP = yyyy2 + '-' + mm2 + '-' + dd2;  
+                        todayDP = yyyy2 + '-' + mm2 + '-' + dd2;
 
                         $("#fecha_inicio_aclaracion").val(today);
                         fechaTermino(30,'aclaracion',todayDP);
@@ -253,9 +245,9 @@
                   console.log('inicio In: '+inicio);
                   console.log('inicio PD : '+pickedDate);
                   console.log('inicio date: '+date);
-                 
+
                 //   date.setDate(date.getDate() + 2);
-                  for (let index = 1; index <= sumadias; index++) {                
+                  for (let index = 1; index <= sumadias; index++) {
                     if (date.getDay() == 5 ) {
 
                         date.setDate(date.getDate() + 3);
@@ -286,7 +278,7 @@
                             if(date.getDate()==22){
                                 date.setDate(date.getDate() + 14);
                             }
-                        }  
+                        }
                         //SEPTIEMBRE dias no laborables
                         if(date.getMonth()==8 && date.getFullYear()==2024){
                             if(date.getDate()==16){
@@ -295,8 +287,8 @@
                         }
                         //OCTUBRE dias no laborables
                         if(date.getMonth()==9 && date.getFullYear()==2024){
-                            if(date.getDate()==1){                        
-                                date.setDate(date.getDate() + 1);                                
+                            if(date.getDate()==1){
+                                date.setDate(date.getDate() + 1);
                             }
                         }
                         //NOVIEMBRE dias no laborables
@@ -308,7 +300,7 @@
 
                         //DICIEMBRE dias no laborables
                         if(date.getMonth()==11 && date.getFullYear()==2024){
-                            if(date.getDate()==20 ){                                
+                            if(date.getDate()==20 ){
                                 date.setDate(date.getDate() + 18);
                             }
                         }
@@ -343,7 +335,7 @@
                             if(date.getDate()==22){
                                 date.setDate(date.getDate() + 14);
                             }
-                        }  
+                        }
                         //SEPTIEMBRE dias no laborables
                         if(date.getMonth()==8 && date.getFullYear()==2024){
                             if(date.getDate()==16){
@@ -352,8 +344,8 @@
                         }
                         //OCTUBRE dias no laborables
                         if(date.getMonth()==9 && date.getFullYear()==2024){
-                            if(date.getDate()==1){                        
-                                date.setDate(date.getDate() + 1);                                
+                            if(date.getDate()==1){
+                                date.setDate(date.getDate() + 1);
                             }
                         }
                         //NOVIEMBRE dias no laborables
@@ -365,10 +357,10 @@
 
                         //DICIEMBRE dias no laborables
                         if(date.getMonth()==11 && date.getFullYear()==2024){
-                            if(date.getDate()==20 ){                                
+                            if(date.getDate()==20 ){
                                 date.setDate(date.getDate() + 18);
                             }
-                        }                       
+                        }
                     }
 
                     console.log(index+"---------"+date.getDate()+"-----"+date.getMonth()+"------"+date.getFullYear());
@@ -379,7 +371,7 @@
                   var mm = String(date.getMonth() + 1).padStart(2, '0');
                   var yyyy = date.getFullYear();
                   today = yyyy + '-' + mm + '-' + dd;
-                
+
                   if(etapa==='aclaracion') {
                     console.log(today,2);
                      $("#fecha_termino_aclaracion").val(today);
@@ -388,13 +380,13 @@
                   if(etapa==='analisis') {
                     console.log(today,4);
                      $("#calculo_fecha").val(today);
-                  } 
-                  
-                  
+                  }
+
+
               }
 
               function fechaanalisis(fechatermino) {
-                
+
                   let pd = fechatermino;
                   console.log(3);
                   let dateu = pd.substr(0, 4)+'-'+pd.substr(5, 2)+'-'+pd.substr(8, 2);
@@ -421,7 +413,7 @@
                     //     document.getElementById("fecha_termino_aclaracion").readOnly = false;
                     // }
                 });
-                
+
           });
 </script>
 @endsection
