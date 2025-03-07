@@ -18,9 +18,9 @@ class AccesosSeeder extends Seeder
     public function run()
     {
 
-        Excel::import(new AccesosImport, base_path().'/database/seeders/ACCESOS.xlsx');
+        Excel::import(new AccesosImport, base_path().'/database/seeders/ACCESOSIMPORTADOS.xlsx');
 
-        
+
         // Role::where('name','Administrador TI')->first()->givePermissionTo(Permission::all());
         // Role::where('name','Auditor Superior')->first()->givePermissionTo($permisosConsulta);
         // Role::where('name','Administrador del Sistema')->first()->givePermissionTo($permisosConsulta);

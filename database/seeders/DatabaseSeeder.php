@@ -15,18 +15,18 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        $this->call([ 
-            PermisosSeeder::class,     
-            RolesSeeder::class,   
-            AccesosSeeder::class,   
-            CatTipoAuditoriaSeeder::class,  
-            CatTiposAccionesSeeder::class,    
-            CatUnidadesAdministrativasSeeder::class,    
-            CatMunicipiosSeeder::class,  
-            CatTipologiasSeeder::class,  
-            UsersSeeder::class, 
-            LeyendaSeeder::class,    
+        $this->call([
+            //PermisosSeeder::class,
+            //RolesSeeder::class,
+            AccesosSeeder::class,
+            CatTipoAuditoriaSeeder::class,
+            CatTiposAccionesSeeder::class,
+            CatUnidadesAdministrativasSeeder::class,
+            CatMunicipiosSeeder::class,
+            CatTipologiasSeeder::class,
+            UsersSeeder::class,
+            LeyendaSeeder::class,
         ]);
-        
+
     }
 }

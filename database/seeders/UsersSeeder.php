@@ -28,10 +28,16 @@ class UsersSeeder extends Seeder
             'siglas_rol'=>'ATI',
             'estatus' => 'Activo',
             'usuario_creacion_id' => 1,
+            'cp_2021'=>null,
+            'cp_2022'=>'X',
+            'cp_2023'=>'X',
+            'cp_ua2021'=>null,
+            'cp_ua2022'=>130000,
+            'cp_ua2023'=>130000,
         ])->assignRole('Administrador TI');
         User::create([
             'usuario_plataforma_id'=>541,
-            'name' => 'Miroslava Carrillo Martínez',
+            'name' => 'Liliana Davalos Ham ',
             'curp' => 'CAMM730505MMCRRR07',
             'email' => 'miroslava.carrillo@osfem.gob.mx',
             'password' => Hash::make('d3s42023'),
@@ -40,6 +46,12 @@ class UsersSeeder extends Seeder
             'siglas_rol'=>'AS',
             'estatus' => 'Activo',
             'usuario_creacion_id' => 1,
+            'cp_2021'=>null,
+            'cp_2022'=>'X',
+            'cp_2023'=>'X',
+            'cp_ua2021'=>null,
+            'cp_ua2022'=>110000,
+            'cp_ua2023'=>110000,
         ])->assignRole('Administrador del Sistema');
         User::create([
             'usuario_plataforma_id'=>528,
@@ -52,6 +64,12 @@ class UsersSeeder extends Seeder
             'siglas_rol'=>'AS',
             'estatus' => 'Activo',
             'usuario_creacion_id' => 1,
+            'cp_2021'=>null,
+            'cp_2022'=>'X',
+            'cp_2023'=>'X',
+            'cp_ua2021'=>null,
+            'cp_ua2022'=>112000,
+            'cp_ua2023'=>112000,
         ])->assignRole('Administrador del Sistema');
         User::create([
             'usuario_plataforma_id'=>544,
@@ -64,6 +82,12 @@ class UsersSeeder extends Seeder
             'siglas_rol'=>'TUS',
             'estatus' => 'Activo',
             'usuario_creacion_id' => 1,
+            'cp_2021'=>null,
+            'cp_2022'=>'X',
+            'cp_2023'=>'X',
+            'cp_ua2021'=>null,
+            'cp_ua2022'=>122000,
+            'cp_ua2023'=>122000,
         ])->assignRole('Titular Unidad de Seguimiento');
         //Dirección A
         User::create([
@@ -77,6 +101,12 @@ class UsersSeeder extends Seeder
             'siglas_rol'=>'DS',
             'estatus' => 'Activo',
             'usuario_creacion_id' => 1,
+            'cp_2021'=>null,
+            'cp_2022'=>'X',
+            'cp_2023'=>'X',
+            'cp_ua2021'=>null,
+            'cp_ua2022'=>122100,
+            'cp_ua2023'=>122100,
         ])->assignRole('Director de Seguimiento');
         //Dirección B
         User::create([
@@ -90,6 +120,12 @@ class UsersSeeder extends Seeder
             'siglas_rol'=>'DS',
             'estatus' => 'Activo',
             'usuario_creacion_id' => 1,
+            'cp_2021'=>null,
+            'cp_2022'=>'X',
+            'cp_2023'=>'X',
+            'cp_ua2021'=>null,
+            'cp_ua2022'=>122200,
+            'cp_ua2023'=>122200,
         ])->assignRole('Director de Seguimiento');
 
         Excel::import(new UserImport, base_path().'/database/seeders/Usuarios.xlsx');

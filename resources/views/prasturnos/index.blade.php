@@ -93,10 +93,10 @@
                                         @endcan
                                     @endif
                                     @if ($pras->fase_autorizacion=='Autorizado')
-                                    <span class="badge badge-light-success">{{ $pras->fase_autorizacion }} </span> 
+                                    <span class="badge badge-light-success">{{ $pras->fase_autorizacion }} </span>
                                         {{-- <br>
                                         @btnFile($pras->constancia_turno)                                        --}}
-                                    @endif                     
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     @if ($pras->fase_autorizacion=='Autorizado')
@@ -115,7 +115,7 @@
                                         @endif
                                     @endif
                                 </td>
-                                <td class="text-center">  
+                                <td class="text-center">
                                     @if (!empty($pras->oficio_comprobante))
                                         @if (empty($pras->estatus_cumplimiento))
                                             <a href="{{ route('prasseguimiento.edit', $pras) }}" class="btn btn-primary">
@@ -125,7 +125,7 @@
                                             <a href="{{ route('prasseguimiento.show', $pras) }}" class="btn btn-secondary">
                                                 <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
                                             </a>
-                                        @endif                                        
+                                        @endif
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -136,7 +136,7 @@
                                             <span class="badge badge-light-success">{{ $pras->estatus_cumplimiento }} </span><br>
                                         @endif
                                     @endif
-                                    @if (!empty($pras->estatus_cumplimiento) && $pras->estatus_cumplimiento=='No Atendido')  
+                                    @if (!empty($pras->estatus_cumplimiento) && $pras->estatus_cumplimiento=='No Atendido')
                                         @if (empty($pras->oficio_medida_apremio))
                                             <a href="{{ route('prasmedida.edit', $pras) }}" class="btn btn-primary">
                                                 <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
@@ -145,11 +145,11 @@
                                             <a href="{{ route('prasmedida.show', $pras) }}" class="btn btn-secondary">
                                                 <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
                                             </a>
-                                        @endif                                        
-                                    @endif                                    
+                                        @endif
+                                    @endif
                                 </td>
                             </tr>
-                            {!! movimientosDesglose($pras->id, 6, $pras->movimientos) !!}
+                            {!! movimientosDesglose($pras->id, 10, $pras->movimientos) !!}
                             @empty
                             <td colspan="6" class="text-center">
                                 No se encontraron registros en este apartado.
