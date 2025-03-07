@@ -31,7 +31,8 @@
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^5.5",
         "watson/bootstrap-form": "^2.3",
-        "yajra/laravel-oci8": "^9.0"
+        "yajra/laravel-oci8": "^9.0",
+        "league/flysystem-aws-s3-v3": "1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

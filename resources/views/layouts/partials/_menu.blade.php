@@ -39,7 +39,7 @@
                                     <span class="fa fa-circle" style="color: green"></span>
                                 @else
                                     @if(!empty($auditoria->comparecencia) && ($auditoria->comparecencia->fase_autorizacion == 'En validación'
-                                     || $auditoria->comparecencia->fase_autorizacion == 'En autorización' ))
+                                     || $auditoria->comparecencia->fase_autorizacion == 'En autorización' || $auditoria->comparecencia->fase_autorizacion == 'En revisión' ))
                                         <span class="fa fa-circle" style="color: yellow"></span>
                                     @else 
                                         <span class="fa fa-circle" style="color: red"></span>
@@ -145,7 +145,8 @@
                                             <span class="fa fa-circle" style="color: green"></span>
                                         @else
                                             @if(!empty($auditoria->acuerdoconclusion) && ($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación'
-                                            || $auditoria->acuerdoconclusion->fase_autorizacion == 'En revisión' || $auditoria->acuerdoconclusion->fase_autorizacion == 'En autorización'))
+                                            || $auditoria->acuerdoconclusion->fase_autorizacion == 'En revisión' || $auditoria->acuerdoconclusion->fase_autorizacion == 'En autorización' 
+                                            || $auditoria->acuerdoconclusion->fase_autorizacion == 'Rechazado'))
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else 
                                                 <span class="fa fa-circle" style="color: red"></span>

@@ -57,9 +57,9 @@ class AcuerdoConclusionCPEnvioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(AcuerdoConclusion $auditoria)
+    public function edit(AcuerdoConclusion $acuerdoconclusion)
     {
-        $acuerdoconclusion=$auditoria;
+       //$acuerdoconclusion=$auditoria;
         Movimientos::create([
             'tipo_movimiento' => 'Registro del acuerdo de conclusión',
                 'accion' => 'AcuerdoConclusion',
@@ -81,6 +81,8 @@ class AcuerdoConclusionCPEnvioController extends Controller
             setMessage('Se ha enviado el acuerdo de conclusión a revisión');
     
         return redirect()->route('acuerdoconclusion.index');
+
+        
     }
 
     /**

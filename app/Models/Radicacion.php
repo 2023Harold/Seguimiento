@@ -42,7 +42,7 @@ class Radicacion extends Model
         'usuario_firmante_id',
         'num_memo_recepcion_expediente',
         'radicacion_sistema',
-        'fecha_cierre_auditoria',
+        'acta_cierre_auditoria',
         'created_at'=>'datetime',
         'updated_at'=>'datetime',   
         'fecha_acta',     

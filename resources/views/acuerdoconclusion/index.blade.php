@@ -137,19 +137,39 @@
                                                 <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
                                             @endcan
                                         @endif       
+                                    @else {{-- AQUI EMPIEZA EL 2023--}}
+                                         @if($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación' && auth()->user()->siglas_rol=='DS')
+                                            @can('acuerdoconclusionvalidacion.edit')
+                                                <a href="{{ route('acuerdoconclusionvalidacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                    <li class="fa fa-gavel"></li>
+                                                    Validar
+                                                </a>
+                                            @else
+                                                <span class="badge badge-light-warning">{{$auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                            @endcan
+                                        @elseif($auditoria->acuerdoconclusion->fase_autorizacion == 'En revisión')                                    
+                                            @can('acuerdoconclusionrevision.edit')
+                                                <a href="{{ route('acuerdoconclusionrevision.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                    <li class="fa fa-gavel"></li>
+                                                    Revisar
+                                                </a>
+                                            @else
+                                                <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                            @endcan
+                                        @endif       
                                     @endif       
                                     @if ($auditoria->acuerdoconclusion->fase_autorizacion == 'En autorización')
-                                    @can('acuerdoconclusionautorizacion.edit')
-                                        <a href="{{ route('acuerdoconclusionautorizacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                            <li class="fa fa-gavel"></li>
-                                            Autorizar
-                                        </a>                
-                                    @else
-                                        <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
-                                    @endcan
-                                @endif           
+                                        @can('acuerdoconclusionautorizacion.edit')
+                                            <a href="{{ route('acuerdoconclusionautorizacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                <li class="fa fa-gavel"></li>
+                                                Autorizar
+                                            </a>                
+                                        @else
+                                            <span class="badge badge-light-warning">111{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                        @endcan
+                                    @endif           
                                     @if ($auditoria->acuerdoconclusion->fase_autorizacion=='Autorizado')
-                                        <span class="badge badge-light-success">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>                                                                                                                                               
+                                        <span class="badge badge-light-success"> 1{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>                                                                                                                                               
                                     @endif                                                                                                 
                                 </td>
                                 <td class="text-center">                                        

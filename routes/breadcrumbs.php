@@ -441,6 +441,11 @@ Breadcrumbs::for('acuerdoconclusionautorizacion.edit', function (BreadcrumbTrail
     $trail->push('Autorizacion del Acuerdo de Conclusión ', route('acuerdoconclusion.index'));
 });
 
+Breadcrumbs::for('acuerdoconclusionrevision.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('acuerdoconclusion.index',$auditoria);
+    $trail->push('Revisión del Acuerdo de Conclusión ', route('acuerdoconclusion.index'));
+});
+
 //recomendaciones contestaciones
 
 Breadcrumbs::for('recomendacionescontestaciones.edit', function (BreadcrumbTrail $trail,$contestacion,$auditoria) {

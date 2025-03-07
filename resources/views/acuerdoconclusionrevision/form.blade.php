@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{Breadcrumbs::render('acuerdoconclusionvalidacion.edit',$acuerdoconclusion) }}  
+    {{Breadcrumbs::render('acuerdoconclusionrevision.edit',$acuerdoconclusion) }}  
 @endsection
 @section('content')
 <div class="row">
@@ -10,17 +10,14 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('acuerdoconclusion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
-                    &nbsp; Validar
+                    &nbsp; Revisar
                 </h1>
-                <div class="float-end">                    
-                    <a href="{{route('acuerdoconclusionac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;10. AC</a>                                                  
-                    <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;11. OF. AC</a>                                  
-                </div>
+
             </div>        
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._acuerdoconclusion')
-                {!!BootForm::open(['model' => $acuerdoconclusion,'update'=>'acuerdoconclusionvalidacion.update','id'=>'form'] )!!}
+                {!!BootForm::open(['model' => $acuerdoconclusion,'update'=>'acuerdoconclusionrevision.update','id'=>'form'] )!!}
                 <div class="row">
                     <div class="col-md-6">
                         {!!BootForm::radios("estatus", ' ',
@@ -42,7 +39,7 @@
                 </div>                     
                 <div class="row mt-3">
                     <div class="col-md-6 justify-content-end">
-                        @can('acuerdoconclusionvalidacion.update')
+                        @can('acuerdoconclusionrevision.update')
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         @endcan 
                         <a href="{{ route('acuerdoconclusion.index') }}" class="btn btn-secondary me-2">Cancelar</a>

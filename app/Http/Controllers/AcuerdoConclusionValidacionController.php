@@ -62,7 +62,7 @@ class AcuerdoConclusionValidacionController extends Controller
         $acuerdoconclusion=$auditoria;
         $auditoria=$auditoria->auditoria;
        
-        return view('acuerdoconclusionvalidacion.form', compact('acuerdoconclusion','auditoria'));
+        return view('acuerdoconclusionautorizacion.form', compact('acuerdoconclusion','auditoria'));
     }
 
     /**

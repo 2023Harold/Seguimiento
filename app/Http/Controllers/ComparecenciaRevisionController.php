@@ -92,7 +92,7 @@ class ComparecenciaRevisionController extends Controller
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
 
-        $comparecencia->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+        $comparecencia->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
         setMessage($request->estatus == 'Aprobado' ?
             'Se ha autorizado la comparecencia de la auditoría con exito.' :
             'El rechazo ha sido registrado.'

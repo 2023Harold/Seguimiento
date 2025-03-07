@@ -167,50 +167,80 @@
                                                                 <li class="fa fa-gavel"></li>
                                                                 Validar
                                                             </a>
-                                                    @else
+                                                        @else
                                                             <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
                                                         @endcan
                                                     @elseif($auditoria->comparecencia->fase_autorizacion == 'En revisión')                                    
-                                                     @can('comparecenciarevision.edit')
-                                                    <a href="{{ route('comparecenciarevision.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
-                                                        <li class="fa fa-gavel"></li>
-                                                        Revisar
-                                                    </a>
-                                                @else
-                                                    <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
-                                                @endcan
-                                            @endif       
-                                    @endif       
-                                    @if ($auditoria->comparecencia->fase_autorizacion == 'En autorización')
-                                    @can('comparecenciaautorizacion.edit')
-                                        <a href="{{ route('comparecenciaautorizacion.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
-                                            <li class="fa fa-gavel"></li>
-                                            Autorizar
-                                        </a>                
-                                    @else
-                                        <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
-                                    @endcan
-                                @endif  
-											@if ($auditoria->comparecencia->fase_autorizacion=='Autorizado')
-												<span class="badge badge-light-success">{{ $auditoria->radicacion->fase_autorizacion }} </span>                                                                                                                                               
-											@endif                                                                                                 
+                                                        @can('comparecenciarevision.edit')
+                                                            <a href="{{ route('comparecenciarevision.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
+                                                                <li class="fa fa-gavel"></li>
+                                                                Revisar
+                                                            </a>
+                                                        @else
+                                                            <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
+                                                        @endcan
+                                                    @endif       
+                                                @endif       
+                                                @if ($auditoria->comparecencia->fase_autorizacion == 'En autorización')
+                                                    @can('comparecenciaautorizacion.edit')
+                                                        <a href="{{ route('comparecenciaautorizacion.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
+                                                            <li class="fa fa-gavel"></li>
+                                                            Autorizar
+                                                        </a>                
+                                                    @else
+                                                        <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
+                                                    @endcan
+                                                @endif  
+                                                @if ($auditoria->comparecencia->fase_autorizacion=='Autorizado')
+                                                    <span class="badge badge-light-success">{{ $auditoria->radicacion->fase_autorizacion }} </span>                                                                                                                                               
+                                                @endif        
+                                                
+                                                @if (empty($auditoria->comparecencia->fase_autorizacion)||$auditoria->comparecencia->fase_autorizacion=='Rechazado')
+                                                        <span class="badge badge-light-danger">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
+                                                        @can('comparecenciaacta.edit')                                                        
+                                                                <a href="{{ route('comparecenciaacta.edit',$auditoria->comparecencia) }}" class="text-primary">
+                                                                <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+                                                                </a>
+                                                        @endcan
+                                                @endif
+                                                    @if(getSession('cp')==2023)      
+                                                        @if ($auditoria->comparecencia->fase_autorizacion == 'En validación')
+                                                            @can('comparecenciavalidacion.edit')
+                                                                <a href="{{ route('comparecenciavalidacion.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
+                                                                    <li class="fa fa-gavel"></li>
+                                                                    Validar
+                                                                </a>
+                                                            @else
+                                                                <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
+                                                            @endcan
+                                                        @elseif($auditoria->comparecencia->fase_autorizacion == 'En revisión')                                    
+                                                            @can('comparecenciarevision.edit')
+                                                                <a href="{{ route('comparecenciarevision.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
+                                                                    <li class="fa fa-gavel"></li>
+                                                                    Revisar
+                                                                </a>
+                                                            @else
+                                                                <span class="badge badge-light-warning">{{ $auditoria->comparecencia->fase_autorizacion }} </span>
+                                                            @endcan
+                                                        @endif 
+                                                    @endif    
 										</td>
 										<td class="text-center">    
 											@if (empty($auditoria->comparecencia->fase_autorizacion)||$auditoria->comparecencia->fase_autorizacion=='Rechazado')                                       
-                                                @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
-                                                    @can('comparecenciaacta.edit')                                                        
-                                                        <a href="{{ route('comparecenciaenvio.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
-                                                        Enviar
-                                                        </a>
-                                                    @endcan
-                                                @else
-                                                    @can('comparecenciaacta.edit')                                                        
-                                                        <a href="{{ route('comparecenciaenvio.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
-                                                        Enviar
-                                                        </a> 
-                                                    @endcan
-                                                @endif               
-											@endif
+                                                    @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
+                                                        @can('comparecenciaacta.edit')                                                        
+                                                            <a href="{{ route('comparecenciaenvio.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
+                                                            Enviar D
+                                                            </a>
+                                                        @endcan
+                                                    @elseif (getSession('cp')==2023 && $auditoria->lidercp_id==auth()->user()->id)
+                                                        @can('comparecenciaacta.edit')                                                        
+                                                            <a href="{{ route('comparecenciacpenvio.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
+                                                            Enviar JD
+                                                            </a> 
+                                                        @endcan
+                                                    @endif               
+                                            @endif
 										</td>            
                                     </tr>
 									@if (!empty($auditoria->comparecencia))

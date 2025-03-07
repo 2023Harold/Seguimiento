@@ -24,12 +24,27 @@
             {{ optional($auditoria->radicacion)->numero_acuerdo }}
         </span>
     </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-12">                         
-        <label>Número de cierre de la auditoría: </label>
-        <span class="text-primary">
-            {{ optional($auditoria->radicacion)->fecha_cierre_auditoria }}
-        </span>
-    </div>       
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <label>Fecha radicación: </label>
+            <span class="text-primary">
+                {{ fecha(optional($auditoria->radicacion)->fecha_notificacion)}}
+            </span>
+        </div> 
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">                         
+            <label>Acta de reunión de resultados finales y cierre de auditoría: </label>
+            <span class="text-primary">
+                {{ optional($auditoria->radicacion)->acta_cierre_auditoria }}
+            </span>
+        </div> 
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <label>Fecha acta: </label>
+            <span class="text-primary">
+                {{-- Aqui va la fecha del  Acta de reunión de resultados finales y cierre de auditoría--}}
+                {{ fecha(optional($auditoria->radicacion)->fecha_acta)}}
+            </span>
+        </div>       
+
 
 	<div class="col-lg-12 col-md-12 col-sm-12 col-12">
         <label>Fecha radicación: </label>
