@@ -55,7 +55,7 @@ class RadicacionRequest extends FormRequest
     {
         return [
             'numero_expediente'=>'número de expediente US',
-            'numero_acuerdo' => 'número de oficio de notificación del informe de auditoría',
+            'numero_acuerdo' => 'número de oficio de notificación de acuerdos',
             'oficio_acuerdo' => 'acuerdo de radicación',
             'fecha_oficio_acuerdo' => 'fecha del acuerdo',
             // 'oficio_designacion' => 'oficio de designación',

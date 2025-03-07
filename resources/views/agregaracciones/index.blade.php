@@ -176,7 +176,7 @@
                                     @endif
                                 </td>                            
                                 <td class="text-center">
-                                @if(empty($accion->fase_revision))
+                                @if(empty($accion->fase_revision)||$accion->fase_revision=='Rechazado')
                                     @can('agregaracciones.edit')
                                        @destroy(route('agregaracciones.destroy',$accion))
                                     @endcan

@@ -4,10 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Propaganistas\LaravelFakeId\RoutesWithFakeIds;
+use Spatie\Permission\Traits\HasRoles;
+
+
 
 class TurnoOIC extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, RoutesWithFakeIds;
     protected $table = 'segturno_oic';
     protected $fillable = [
         'numero_turno_oic',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Auditoria;
+use App\Models\Movimientos;
 use App\Models\TurnoOIC;
 
 use Illuminate\Http\Request;
@@ -48,13 +49,23 @@ class TurnoOICController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, TurnoOIC $auditoria )
     {
        //dd(getSession('auditoria_id'));
-     
-      mover_archivos($request, ['turno_oic']);
+       $turnooic=$auditoria;
+      mover_archivos($request, ['turnooic','acuse_notificacion']);
       $request['auditoria_id']= getSession('auditoria_id');
-      $turnooic  = TurnoOIC::create($request->all());
+      $request['usuario_creacion_id']= auth()->user()->id;
+      TurnoOIC::create($request->all());
+
+      Movimientos::create([
+        'tipo_movimiento' => 'Registro del Turno al Órgano Interno de Control',
+            'accion' => 'TurnoOIC',
+            'accion_id' => $turnooic->id,
+            'estatus' => 'Aprobado',
+            'usuario_creacion_id' => auth()->id(),
+            'usuario_asignado_id' => auth()->id(),
+        ]);
 
       setMessage("Los datos se han guardado correctamente.");
 
@@ -96,10 +107,19 @@ class TurnoOICController extends Controller
     public function update(Request $request, TurnoOIC $auditoria)
     {
         $turnooic=$auditoria;
-        mover_archivos($request,['turnooic',$turnooic]);
+        mover_archivos($request,['turnooic','acuse_notificacion'],$turnooic);
         $request['usuario_modificacion_id'] = auth()->user()->id;
         $turnooic->update($request->all());
         setMessage("Los datos se han actualizado correctamente.");
+        Movimientos::create([
+            'tipo_movimiento' => 'Registro del Turno al Órgano Interno de Control',
+                'accion' => 'TurnoOIC',
+                'accion_id' => $turnooic->id,
+                'estatus' => 'Aprobado',
+                'usuario_creacion_id' => auth()->id(),
+                'usuario_asignado_id' => auth()->id(),
+            ]);
+            
         return redirect() -> route('turnooic.index',compact('auditoria','turnooic'));
     }
 
