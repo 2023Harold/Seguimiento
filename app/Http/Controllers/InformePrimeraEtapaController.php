@@ -58,8 +58,9 @@ class InformePrimeraEtapaController extends Controller
     public function store(Request $request)
     {
         mover_archivos($request, ['InformePrimeraEtapa']);
+        $request['usuario_creacion_id'] = auth()->user()->id;
         $request['auditoria_id']=getSession('auditoria_id');            
-        $informeprimeraetapa  = InformePrimeraEtapa::create($request->all());
+        InformePrimeraEtapa::create($request->all());
         setMessage("Los datos se han guardado correctamente.");
 
         return redirect() -> route('informeprimeraetapa.index');
