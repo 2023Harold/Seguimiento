@@ -17,18 +17,20 @@
             </div>
             <div class="card-body">
                 @include('layouts.contextos._auditoria')
-                @include('flash::message')                
+                @include('flash::message')
                 <div class="row">
                     <div class="col-md-12">
+                    @if(count($auditoria->totalNOsolventadopliegos) >0)
                         @if (empty($turnoui))
                             @can('turnoui.create')
                                 <a class="btn btn-primary float-end" href="{{ route('turnoui.create') }}">
                                     <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Turno UI
-                                </a> 
+                                </a>
                             @endcan
                         @endif
-                    </div>                    
-                </div>                                
+                    @endif
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -55,14 +57,14 @@
                                 </td>
                                 <td class="text-center">
                                     {{ fecha($turnoui->fecha_notificacion_ui) }}
-                                </td>                             
-                                <td class="text-center">                                                                                                                                                                                                                                                                                       
+                                </td>
+                                <td class="text-center">
                                         @if (empty($auditoria->turnoui->fase_autorizacion)||$auditoria->turnoui->fase_autorizacion=='Rechazado')
                                             <span class="badge badge-light-danger">{{ $auditoria->turnoui->fase_autorizacion }} </span>
-                                            @can('turnoui.edit')                                                        
+                                            @can('turnoui.edit')
                                             <a href="{{ route('turnoui.edit',$auditoria->turnoui) }}" class="btn btn-primary">
                                                 <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
-                                            </a>                                                                          
+                                            </a>
                                             @endcan
                                         @endif
                                         @if ($auditoria->turnoui->fase_autorizacion == 'En Revisión')
@@ -74,7 +76,7 @@
                                             @else
                                                 <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
                                             @endcan
-                                        @endif           
+                                        @endif
                                         @if ($auditoria->turnoui->fase_autorizacion == 'En validación')
                                             @can('turnouivalidacion.edit')
                                                 <a href="{{ route('turnouivalidacion.edit',$auditoria->turnoui) }}" class="btn btn-primary">
@@ -84,7 +86,7 @@
                                             @else
                                                 <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
                                             @endcan
-                                        @endif      
+                                        @endif
                                         @if ($auditoria->turnoui->fase_autorizacion == 'En autorización')
                                             @can('turnouiautorizacion.edit')
                                                 <a href="{{ route('turnouiautorizacion.edit',$auditoria->turnoui) }}" class="btn btn-primary">
@@ -94,25 +96,25 @@
                                             @else
                                                 <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
                                             @endcan
-                                        @endif           
+                                        @endif
                                         @if ($auditoria->turnoui->fase_autorizacion=='Autorizado')
-                                            <span class="badge badge-light-success">{{ $auditoria->turnoui->fase_autorizacion }} </span>                                                                                                                                               
-                                        @endif                                                                                                                                    
-                                    <td class="text-center">    
-                                        @if (empty($auditoria->turnoui->fase_autorizacion)||$auditoria->turnoui->fase_autorizacion=='Rechazado')                                       
-                                            @can('turnoui.edit')                                                        
+                                            <span class="badge badge-light-success">{{ $auditoria->turnoui->fase_autorizacion }} </span>
+                                        @endif
+                                    <td class="text-center">
+                                        @if (empty($auditoria->turnoui->fase_autorizacion)||$auditoria->turnoui->fase_autorizacion=='Rechazado')
+                                            @can('turnoui.edit')
                                                 <a href="{{ route('turnouienvio.edit',$auditoria->turnoui) }}" class="btn btn-primary">
                                                  Enviar
                                                 </a>
                                             @endcan
                                         @endif
-                                    </td>  
-                                </td>                
+                                    </td>
+                                </td>
                                 </tr>
                                 @if (!empty($auditoria->turnoui))
                                     {!! movimientosDesglose($auditoria->turnoui->id, 10, $auditoria->turnoui->movimientos) !!}
-                                @endif   
-                                @else                                                             
+                                @endif
+                                @else
                             <tr>
                                 <td class="text-center" colspan="5">
                                     No se encuentran registros en este apartado.
@@ -121,7 +123,7 @@
                          @endif
                         </tbody>
                     </table>
-                </div>                
+                </div>
             </div>
         </div>
     </div>

@@ -17,70 +17,72 @@
             </div>
             <div class="card-body">
                 @include('layouts.contextos._auditoria')
-                @include('flash::message')                
+                @include('flash::message')
                 <div class="row">
                     <div class="col-md-12">
+                    @if ( ($auditoria->accionesrecomendacionesautorizadas == $auditoria->totalsolventadorecomendacion) && ($auditoria->accionespoautorizadas == $auditoria->totalsolventadopliegos) && ($auditoria->accionessolaclautorizadas == $auditoria->totalsolventadosolacl) )
                         @if (empty($turnoarchivo))
                             @can('turnoarchivo.create')
                                 <a class="btn btn-primary float-end" href="{{ route('turnoarchivo.create') }}">
                                     <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Acuse envío archivo
-                                </a> 
+                                </a>
                             @endcan
                         @endif
-                    </div>                    
-                </div>                                
+                    @endif
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
-                            <tr>                                
+                            <tr>
                                 <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente Técnico de la Auditoría</th>
-                                <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente Técnico de Seguimiento</th>                                
+                                <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente Técnico de Seguimiento</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                             </tr>
                             <tr>
-                                {{-- <th>Número del oficio</th> --}}                               
+                                {{-- <th>Número del oficio</th> --}}
                                 <th>Número de legajos</th>
                                 <th>Número de fojas</th>
                                 <th>Número de legajos</th>
-                                <th>Número de fojas</th> 
-                                <th>Relación de expedientes al archivo</th>                               
+                                <th>Número de fojas</th>
+                                <th>Relación de expedientes al archivo</th>
                                 <th>Fecha de entrega</th>
                                 <th>Fase/Acción</th>
                                 <th> Envío </th>
-                            </tr>    
+                            </tr>
                         </thead>
                         <tbody>
                             @if (!empty($turnoarchivo))
-                            <tr>                                                            
-                                <td class="text-center">
-                                    {{$turnoarchivo->legajos_tecnico_archivo }}
-                                </td>    
-                                <td class="text-center">
-                                    {{$turnoarchivo->fojas_tecnico_archivo }}
-                                </td>    
+                            <tr>
                                 <td class="text-center">
                                     {{$turnoarchivo->legajos_tecnico_archivo }}
                                 </td>
                                 <td class="text-center">
                                     {{$turnoarchivo->fojas_tecnico_archivo }}
-                                </td>  
+                                </td>
                                 <td class="text-center">
-                                    @btnFile($turnoarchivo->turno_archivo)<br>                         
+                                    {{$turnoarchivo->legajos_tecnico_archivo }}
+                                </td>
+                                <td class="text-center">
+                                    {{$turnoarchivo->fojas_tecnico_archivo }}
+                                </td>
+                                <td class="text-center">
+                                    @btnFile($turnoarchivo->turno_archivo)<br>
                                     <small>{{ fecha($turnoarchivo->fecha_notificacion_archivo) }} <small>
                                 </td>
                                 <td class="text-center">
                                     {{ fecha($turnoarchivo->fecha_turno_archivo) }}
-                                </td>                                
-                                <td class="text-center">                                                                                                                                                                                                                                                                                       
+                                </td>
+                                <td class="text-center">
                                 @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
-                                        @can('turnoarchivo.edit')                                                        
+                                        @can('turnoarchivo.edit')
                                         <a href="{{ route('turnoarchivo.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
                                             <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
-                                        </a>                                                                          
+                                        </a>
                                         @endcan
                                     @endif
                                     @if ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión')
@@ -92,7 +94,7 @@
                                     @else
                                         <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
                                     @endcan
-                                    @endif           
+                                    @endif
                                     @if ($auditoria->turnoarchivo->fase_autorizacion == 'En validación')
                                         @can('turnoarchivovalidacion.edit')
                                             <a href="{{ route('turnoarchivovalidacion.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
@@ -102,7 +104,7 @@
                                         @else
                                             <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
                                         @endcan
-                                    @endif      
+                                    @endif
                                     @if ($auditoria->turnoarchivo->fase_autorizacion == 'En autorización')
                                     @can('turnoarchivoautorizacion.edit')
                                         <a href="{{ route('turnoarchivoautorizacion.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
@@ -112,25 +114,25 @@
                                     @else
                                         <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
                                     @endcan
-                                @endif           
+                                @endif
                                     @if ($auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
-                                        <span class="badge badge-light-success">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>                                                                                                                                               
-                                    @endif                                                                                                                                    
-                                <td class="text-center">    
-                                    @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')                                       
-                                        @can('turnoarchivo.edit')                                                        
+                                        <span class="badge badge-light-success">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
+                                    @endif
+                                <td class="text-center">
+                                    @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
+                                        @can('turnoarchivo.edit')
                                             <a href="{{ route('turnoarchivoenvio.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
                                              Enviar
                                             </a>
                                         @endcan
                                     @endif
-                                </td>  
-                            </td>                
+                                </td>
+                            </td>
                             </tr>
                             @if (!empty($auditoria->turnoarchivo))
                                     {!! movimientosDesglose($auditoria->turnoarchivo->id, 10, $auditoria->turnoarchivo->movimientos) !!}
-                            @endif   
-                            @else    
+                            @endif
+                            @else
                                 <td class="text-center" colspan="5">
                                     No se encuentran registros en este apartado.
                                 </td>
@@ -138,15 +140,15 @@
                             @endif
                         </tbody>
                     </table>
-                </div> 
-            </div>  
+                </div>
+            </div>
             <div class="card-body">
                 <h1 class="card-title">
-                    <span class="text-primary"> 
+                    <span class="text-primary">
                      Envío Archivo de Transferencia
                     </span>
                 </h1>
-                          
+
                     <div class="row">
                         <div class="col-md-12">
                             @if (!empty($auditoria->turnoarchivotransferencia) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
@@ -156,15 +158,15 @@
                                         <a href="{{ route('turnoarchivotransferencia.create',$auditoria->turnoarchivotransferencia) }}"  class="btn btn-primary float-end">
                                             <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
                                         </a>
-                                    </div>                    
+                                    </div>
                                 </div>
-                            @endcan                 
-                        @endif  
-                        </div>                                                                        
+                            @endcan
+                        @endif
+                        </div>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
-                                <tr>                                   
+                                <tr>
                                     <th>Inventario de documentos</th>
                                     <th>Fecha de de trasferencia</th>
                                     <th>Tiempo de resguardo</th>
@@ -175,7 +177,7 @@
                             </thead>
                             <tbody>
                                 @if (!empty($auditoria->turnoarchivotransferencia))
-                                <tr>                                   
+                                <tr>
                                     <td class="text-center">
                                         @btnFile($auditoria->turnoarchivotransferencia->inventario_transferencia)
                                     </td>
@@ -187,14 +189,14 @@
                                     </td>
                                     <td class="text-center">
                                         {{$auditoria->turnoarchivotransferencia->clave_topografica }}
-                                    </td> 
-                                    <td class="text-center">                                                                                                                                                                                                                                                                                       
+                                    </td>
+                                    <td class="text-center">
                                         @if (empty($auditoria->turnoarchivotransferencia->fase_autorizacion)||$auditoria->turnoarchivotransferencia->fase_autorizacion=='Rechazado')
                                                 <span class="badge badge-light-danger">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
-                                                @can('turnoarchivotransferencia.edit')                                                        
+                                                @can('turnoarchivotransferencia.edit')
                                                 <a href="{{ route('turnoarchivotransferencia.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
                                                     <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
-                                                </a>                                                                          
+                                                </a>
                                                 @endcan
                                             @endif
                                             @if ($auditoria->turnoarchivotransferencia->fase_autorizacion == 'En revisión')
@@ -206,7 +208,7 @@
                                             @else
                                                 <span class="badge badge-light-warning">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
                                             @endcan
-                                            @endif           
+                                            @endif
                                             @if ($auditoria->turnoarchivotransferencia->fase_autorizacion == 'En validación')
                                                 @can('turnoarchivotransferenciavalidacion.edit')
                                                     <a href="{{ route('turnoarchivotransferenciavalidacion.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
@@ -216,7 +218,7 @@
                                                 @else
                                                     <span class="badge badge-light-warning">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
                                                 @endcan
-                                            @endif      
+                                            @endif
                                             @if ($auditoria->turnoarchivotransferencia->fase_autorizacion == 'En autorización')
                                             @can('turnoarchivotransferenciaautorizacion.edit')
                                                 <a href="{{ route('turnoarchivotransferenciaautorizacion.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
@@ -226,34 +228,34 @@
                                             @else
                                                 <span class="badge badge-light-warning">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
                                             @endcan
-                                        @endif           
+                                        @endif
                                             @if ($auditoria->turnoarchivotransferencia->fase_autorizacion=='Autorizado')
-                                                <span class="badge badge-light-success">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>                                                                                                                                               
-                                            @endif                                                                                                                                    
-                                        <td class="text-center">    
-                                            @if (empty($auditoria->turnoarchivotransferencia->fase_autorizacion)||$auditoria->turnoarchivotransferencia->fase_autorizacion=='Rechazado')                                       
-                                                @can('turnoarchivotransferencia.edit')                                                        
+                                                <span class="badge badge-light-success">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
+                                            @endif
+                                        <td class="text-center">
+                                            @if (empty($auditoria->turnoarchivotransferencia->fase_autorizacion)||$auditoria->turnoarchivotransferencia->fase_autorizacion=='Rechazado')
+                                                @can('turnoarchivotransferencia.edit')
                                                     <a href="{{ route('turnoarchivotransferenciaenvio.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
                                                     Enviar
                                                     </a>
                                                 @endcan
                                             @endif
-                                        </td>  
-                                    </td>                                                                    
-                                </tr>               
+                                        </td>
+                                    </td>
+                                </tr>
                                     @if (!empty($auditoria->turnoarchivotransferenciaenvio))
                                             {!! movimientosDesglose($auditoria->turnoarchivotransferencia->id, 10, $auditoria->turnoarchivotransferencia->movimientos) !!}
-                                    @endif   
-                                    @else    
+                                    @endif
+                                    @else
                                         <td class="text-center" colspan="5">
                                             No se encuentran registros en este apartado.
                                         </td>
-                                    @endif                                
+                                    @endif
                             </tbody>
                         </table>
-                    </div>                
+                    </div>
                 </div>
-            </div>    
+            </div>
         </div>
     </div>
 </div>

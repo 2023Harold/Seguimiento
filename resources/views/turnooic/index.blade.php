@@ -17,18 +17,20 @@
             </div>
             <div class="card-body">
                 @include('layouts.contextos._auditoria')
-                @include('flash::message')                
+                @include('flash::message')
                 <div class="row">
                     <div class="col-md-12">
+                    @if(count($auditoria->totalNOsolventadorecomendacion) >0)
                         @if (empty($turnooic))
                             @can('turnooic.create')
                                 <a class="btn btn-primary float-end" href="{{ route('turnooic.create') }}">
                                     <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Turno al OIC
-                                </a> 
+                                </a>
                             @endcan
                         @endif
-                    </div>                    
-                </div>                                
+                    @endif
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -68,13 +70,13 @@
                                     {{ fecha($turnooic->fecha_notificacion) }}
                                 </td>
 
-                                <td class="text-center">                                                                                                                                                                                                                                                                                       
+                                <td class="text-center">
                                     @if (empty($auditoria->turnooic->fase_autorizacion)||$auditoria->turnooic->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $auditoria->turnooic->fase_autorizacion }} </span>
-                                        @can('turnooic.edit')                                                        
+                                        @can('turnooic.edit')
                                         <a href="{{ route('turnooic.edit',$auditoria->turnooic) }}" class="btn btn-primary">
                                             <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
-                                        </a>                                                                          
+                                        </a>
                                         @endcan
                                     @endif
                                     @if ($auditoria->turnooic->fase_autorizacion == 'En revisión')
@@ -86,7 +88,7 @@
                                     @else
                                         <span class="badge badge-light-warning">{{ $auditoria->turnooic->fase_autorizacion }} </span>
                                     @endcan
-                                @endif           
+                                @endif
                                     @if ($auditoria->turnooic->fase_autorizacion == 'En validación')
                                         @can('turnooicvalidacion.edit')
                                             <a href="{{ route('turnooicvalidacion.edit',$auditoria->turnooic) }}" class="btn btn-primary">
@@ -96,7 +98,7 @@
                                         @else
                                             <span class="badge badge-light-warning">{{ $auditoria->turnooic->fase_autorizacion }} </span>
                                         @endcan
-                                    @endif      
+                                    @endif
                                     @if ($auditoria->turnooic->fase_autorizacion == 'En autorización')
                                     @can('turnooicautorizacion.edit')
                                         <a href="{{ route('turnooicautorizacion.edit',$auditoria->turnooic) }}" class="btn btn-primary">
@@ -106,26 +108,26 @@
                                     @else
                                         <span class="badge badge-light-warning">{{ $auditoria->turnooic->fase_autorizacion }} </span>
                                     @endcan
-                                @endif           
+                                @endif
                                     @if ($auditoria->turnooic->fase_autorizacion=='Autorizado')
-                                        <span class="badge badge-light-success">{{ $auditoria->turnooic->fase_autorizacion }} </span>                                                                                                                                               
-                                    @endif                                                                                                                                    
-                               
-                                    @if (empty($auditoria->turnooic->fase_autorizacion)||$auditoria->turnooic->fase_autorizacion=='Rechazado')                                       
-                                        @can('turnooic.edit')                                                        
+                                        <span class="badge badge-light-success">{{ $auditoria->turnooic->fase_autorizacion }} </span>
+                                    @endif
+
+                                    @if (empty($auditoria->turnooic->fase_autorizacion)||$auditoria->turnooic->fase_autorizacion=='Rechazado')
+                                        @can('turnooic.edit')
                                             <a href="{{ route('turnooicenvio.edit',$auditoria->turnooic) }}" class="btn btn-primary">
                                              Enviar
                                             </a>
                                         @endcan
                                     @endif
-                                </td>  
-  
+                                </td>
+
                             </tr>
                             @if (!empty($auditoria->turnooic))
                                 {!! movimientosDesglose($auditoria->turnooic->id, 10, $auditoria->turnooic->movimientos) !!}
-                            @endif 
+                            @endif
 
-                            @else    
+                            @else
                             <tr>
                                 <td class="text-center" colspan="5">
                                     No se encuentran registros en este apartado.
@@ -134,7 +136,7 @@
                             @endif
                         </tbody>
                     </table>
-                </div>                
+                </div>
             </div>
         </div>
     </div>

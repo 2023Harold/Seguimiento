@@ -13,14 +13,14 @@
                     </a>
                     <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3 show">
                         @can('radicacion.index')
-                        <div class="menu-item mb-1">                     
+                        <div class="menu-item mb-1">
                             <a href="{{ route('radicacion.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'radicacion') || str_contains(Route::current()->getName(), 'comparecenciaacuse')|| str_contains(Route::current()->getName(), 'comparecenciaagenda')) ? 'active' : '' }}">
                                 @if (!empty($auditoria->radicacion) && $auditoria->radicacion->fase_autorizacion=='Autorizado')
                                     <span class="fa fa-circle" style="color: green"></span>
                                 @else
                                     @if(!empty($auditoria->radicacion) && ($auditoria->radicacion->fase_autorizacion == 'En validación' || $auditoria->radicacion->fase_autorizacion == 'En autorización' || $auditoria->radicacion->fase_autorizacion=='En revisión'))
                                         <span class="fa fa-circle" style="color: yellow"></span>
-                                    @else 
+                                    @else
                                         <span class="fa fa-circle" style="color: red"></span>
                                     @endif
 
@@ -41,7 +41,7 @@
                                     @if(!empty($auditoria->comparecencia) && ($auditoria->comparecencia->fase_autorizacion == 'En validación'
                                      || $auditoria->comparecencia->fase_autorizacion == 'En autorización' || $auditoria->comparecencia->fase_autorizacion == 'En revisión' ))
                                         <span class="fa fa-circle" style="color: yellow"></span>
-                                    @else 
+                                    @else
                                         <span class="fa fa-circle" style="color: red"></span>
                                     @endif
                                 @endif
@@ -91,7 +91,7 @@
                                                                  str_contains(Route::current()->getName(), 'cedulaanalitica')||
                                                                  str_contains(Route::current()->getName(), 'cedulaanaliticarecomendacion')||
                                                                  str_contains(Route::current()->getName(), 'acuerdoconclusion')
-                                                                ) ? 'show' : ''  }}" 
+                                                                ) ? 'show' : ''  }}"
                                                                 data-kt-menu-trigger="click">
                             <a href="#" class="menu-link py-3" >
                                 <span class="menu-icon">
@@ -99,7 +99,7 @@
                                 </span>
                                 <span class="menu-title">Primer análisis</span>
                                 <span class="menu-arrow"></span>
-                            </a>                            
+                            </a>
                             <div class="menu-sub menu-sub-accordion {{ (str_contains(Route::current()->getName(), 'prasacciones')||
                                                                         str_contains(Route::current()->getName(), 'prasturno')||
                                                                         str_contains(Route::current()->getName(), 'prasseguimiento')||
@@ -145,10 +145,10 @@
                                             <span class="fa fa-circle" style="color: green"></span>
                                         @else
                                             @if(!empty($auditoria->acuerdoconclusion) && ($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación'
-                                            || $auditoria->acuerdoconclusion->fase_autorizacion == 'En revisión' || $auditoria->acuerdoconclusion->fase_autorizacion == 'En autorización' 
+                                            || $auditoria->acuerdoconclusion->fase_autorizacion == 'En revisión' || $auditoria->acuerdoconclusion->fase_autorizacion == 'En autorización'
                                             || $auditoria->acuerdoconclusion->fase_autorizacion == 'Rechazado'))
                                                 <span class="fa fa-circle" style="color: yellow"></span>
-                                            @else 
+                                            @else
                                                 <span class="fa fa-circle" style="color: red"></span>
                                             @endif
                                         @endif
@@ -157,7 +157,7 @@
                                         </span>
                                         <span class="menu-title">Acuerdo de conclusión</span>
                                     </a>
-                                </div>     
+                                </div>
                                 @can('prasacciones.index')
                                     <div class="menu-item mb-1">
                                         <a href="{{ route('prasacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'prasacciones')||
@@ -170,12 +170,12 @@
                                                 $accionesPRASAutorizadas = $auditoria->accionespras->where('pras.fase_autorizacion', 'Autorizado')->count();
                                             @endphp
 
-                                            @if ($totalAccionesPRAS > 0) 
+                                            @if ($totalAccionesPRAS > 0)
                                                 @if ($accionesPRASAutorizadas === $totalAccionesPRAS)
                                                     {{-- Todas las acciones están autorizadas --}}
                                                     <span class="fa fa-circle" style="color: green"></span>
                                                 @elseif ($totalAccionesPRAS !=$accionesPRASAutorizadas)
-                                                
+
                                                     {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                     <span class="fa fa-circle" style="color: yellow"></span>
                                                 @else
@@ -183,7 +183,7 @@
                                                     <span class="fa fa-circle" style="color: red"></span>
                                                 @endif
                                             @endif
-                                        
+
                                             <span class="menu-bullet">
                                                 <span class="fa fa-file-text"></span>
                                             </span>
@@ -210,8 +210,8 @@
                                             $totalAccionesRec = $auditoria->accionesrecomendaciones->count();
                                             $accionesAutorizadasRec = $auditoria->accionesrecomendaciones->where('recomendaciones.fase_autorizacion', 'Autorizado')->count();
                                         @endphp
-                                        
-                                        @if ($totalAccionesRec > 0) 
+
+                                        @if ($totalAccionesRec > 0)
                                             @if ($accionesAutorizadasRec === $totalAccionesRec)
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
@@ -231,7 +231,7 @@
                                     </a>
                                 </div>
                                 @endcan
-                                
+
                                 @can('solicitudesaclaracionacciones.index')
                                 <div class="menu-item mb-1">
                                     <a href="{{ route('solicitudesaclaracionacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'solicitudesaclaracionacciones')||
@@ -249,7 +249,7 @@
                                             $accionesSolAclAutorizadas = $auditoria->accionessolacl->where('solicitudesaclaracion.fase_autorizacion', 'Autorizado')->count();
                                         @endphp
 
-                                        @if ($totalAccionesSolAcl > 0) 
+                                        @if ($totalAccionesSolAcl > 0)
                                             @if ($accionesSolAclAutorizadas === $totalAccionesSolAcl)
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
@@ -261,7 +261,7 @@
                                                 <span class="fa fa-circle" style="color: red"></span>
                                             @endif
                                         @endif
-                                    
+
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
@@ -285,7 +285,7 @@
                                             $accionesPOAutorizadas = $auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')->count();
                                         @endphp
 
-                                        @if ($totalAccionesPO > 0) 
+                                        @if ($totalAccionesPO > 0)
                                             @if ($accionesPOAutorizadas === $totalAccionesPO)
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
@@ -303,7 +303,7 @@
                                         <span class="menu-title">Pliegos de observación</span>
                                     </a>
                                 </div>
-                                @endcan  
+                                @endcan
                                 <div class="menu-item mb-1">
                                     <a href="{{ route('cedulainicial.index') }}"
                                         class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'cedulainicial')||
@@ -317,12 +317,12 @@
                                         </span>
                                         <span class="menu-title">Cédulas</span>
                                     </a>
-                                </div>   
+                                </div>
                                 <div class="menu-item mb-1">
                                     <a href="{{ route('informeprimeraetapa.index') }}"
                                         class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'informeprimeraetapa') ? 'active' : '' }}">
-                                        
-                                
+
+
 
                                         @if(count($auditoria->informes) >0)
                                             @if(count($auditoria->informesAutorizados) == count($auditoria->informes))
@@ -339,9 +339,9 @@
                                         </span>
                                         <span class="menu-title">Informe</span>
                                     </a>
-                                </div>                            
+                                </div>
                             </div>
-                        </div>     
+                        </div>
                         <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
                             <a href="{{ route('pliegosobservacionacciones.index') }}" class="menu-link py-3" >
                                 <span class="menu-icon">
@@ -372,7 +372,7 @@
                                             <span class="menu-title">Recomendaciones</span>
                                         </a>
                                     </div>
-                                @endcan                               
+                                @endcan
                                 @can('pliegosobservacionacciones.index')
                                     <div class="menu-item mb-1">
                                         <a href="#" class="menu-link py-3">
@@ -383,7 +383,7 @@
                                             <span class="menu-title">Pliegos de observación</span>
                                         </a>
                                     </div>
-                                @endcan    
+                                @endcan
                                 <div class="menu-item mb-1">
                                     <a href="#"
                                         class="menu-link py-3">
@@ -393,29 +393,29 @@
                                         </span>
                                         <span class="menu-title">Informe</span>
                                     </a>
-                                </div>                            
+                                </div>
                             </div>
-                        </div>                     
+                        </div>
                         <div class="menu-item menu-accordion {{ (str_contains(Route::current()->getName(), 'turnoui')||
                                                                  str_contains(Route::current()->getName(), 'turnooic')||
                                                                  str_contains(Route::current()->getName(), 'turnoarchivo')
-                                                                ) ? 'show' : ''  }}" 
-                                                                data-kt-menu-trigger="click">                  
+                                                                ) ? 'show' : ''  }}"
+                                                                data-kt-menu-trigger="click">
                             <a href="#" class="menu-link py-3">
                                 <span class="menu-icon">
                                     <i class="fa fa-folder-open fs-3"></i>
                                 </span>
                                 <span class="menu-title">Turno</span>
                             </a>
-                            <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3">                              
+                            <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3">
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnoui.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoui')
                                                                                                          ) ? 'active' : '' }}">
-                                        @php 
+                                        @php
                                             $tAccPO = $auditoria->accionespo->count();
                                             $accPOAutorizadas = $auditoria->accionespo->where('pliegosobservacion.calificacion_sugerida', 'No Solventado')->count();
                                         @endphp
-            
+
 
                                         @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
                                             @if(count($auditoria->totalNOsolventadopliegos) >0)
@@ -424,16 +424,16 @@
                                                 @else
                                                         @if(empty($auditoria->turnoui))
                                                         <span class="fa fa-circle" style="color: red"></span>
-                                                        @else 
-                                                           
+                                                        @else
+
                                                             <span class="fa fa-circle" style="color: yellow"></span>
                                                         @endif
                                                     @endif
-                                            
+
                                             @endif
                                         @endif
 
-                                        
+
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
@@ -449,7 +449,7 @@
                                             $aAutoRec = $auditoria->accionesrecomendaciones->where('recomendaciones.calificacion_sugerida', 'No Atendida')->count();
                                         @endphp
 
-                                    
+
                                         @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
                                             @if(count($auditoria->totalNOsolventadorecomendacion) >0)
                                                 @if (!empty($auditoria->turnooic) && ($auditoria->turnooic->fase_autorizacion=='Autorizado'))
@@ -457,52 +457,53 @@
                                                 @else
                                                         @if(empty($auditoria->turnooic))
                                                         <span class="fa fa-circle" style="color: red"></span>
-                                                        @else 
-                                                           
+                                                        @else
+
                                                             <span class="fa fa-circle" style="color: yellow"></span>
                                                         @endif
                                                     @endif
-                                            
+
                                             @endif
                                         @endif
-                                        
-                                        
+
+
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
                                         <span class="menu-title">Turno OIC</span>
                                     </a>
-                                </div>                                                              
+                                </div>
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnoarchivo.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoarchivo')
                                                                                                          ) ? 'active' : '' }}">
+                                    @if (!empty($auditoria->turnooic) && !empty($auditoria->turnoui))
                                         @if (!empty($auditoria->turnoarchivo) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
                                             <span class="fa fa-circle" style="color: green"></span>
                                         @else
                                             @if(!empty($auditoria->turnoarchivo) && ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión' || $auditoria->turnoarchivo->fase_autorizacion == 'En validación'
                                                 || $auditoria->turnoarchivo->fase_autorizacion == 'En autorización'))
                                                 <span class="fa fa-circle" style="color: yellow"></span>
-                                            @else 
+                                            @else
                                                 <span class="fa fa-circle" style="color: red"></span>
                                             @endif
-        
-                                        @endif
+                                         @endif
+                                    @endif
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
-                                        <span class="menu-title">Acuse envio archivo</span>
+                                        <span class="menu-title">Acuse envío archivo</span>
                                     </a>
-                                </div>                                                                      
+                                </div>
                             </div>
-                        </div> 
-                        <div class="menu-item mb-1">                     
+                        </div>
+                        <div class="menu-item mb-1">
                             <a href="{{ route('pacauditoria.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'pacauditoria')) ? 'active' : '' }}">
                                 <span class="menu-bullet">
                                     <span class="bi bi-archive"></span>
                                 </span>
                                 <span class="menu-title">PAC</span>
                             </a>
-                        </div>                      
+                        </div>
                     </div>
                 </div>
             </div>
