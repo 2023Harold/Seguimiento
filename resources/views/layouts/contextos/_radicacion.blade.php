@@ -81,6 +81,12 @@
                 {{ optional($auditoria->comparecencia)->cargo_titular }}
             </span>
         </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+            <label>Domicilio: </label>
+            <span class="text-sistema">
+                {{ optional($auditoria->comparecencia)->domicilio_notificacion }}
+            </span>
+        </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-12">
             <label>Fecha y hora de la comparecencia: </label>
             <span class="text-sistema">

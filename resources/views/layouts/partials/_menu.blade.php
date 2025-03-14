@@ -476,7 +476,7 @@
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnoarchivo.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoarchivo')
                                                                                                          ) ? 'active' : '' }}">
-                                    @if (!empty($auditoria->turnooic) && !empty($auditoria->turnoui))
+                                    @if (empty($auditoria->turnooic) && empty($auditoria->turnoui))
                                         @if (!empty($auditoria->turnoarchivo) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
                                             <span class="fa fa-circle" style="color: green"></span>
                                         @else

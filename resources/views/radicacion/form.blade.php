@@ -82,6 +82,11 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-4">
+                        {!!BootForm::text('domicilio_notificacion','Domicilio: *',old('domicilio', optional($comparecencia)->domicilio_notificacion),) !!}
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-3">
                         <span class="has-float-label">
                             {!!BootForm::date('fecha_comparecencia','Fecha de la comparecencia: *',old('fecha_comparecencia', fecha(optional($comparecencia)->fecha_comparecencia, 'Y-m-d'))) !!}

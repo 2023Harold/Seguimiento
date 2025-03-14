@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('acuerdoconclusionautorizacion.edit',$acuerdoconclusion) }}  
+    {{ Breadcrumbs::render('acuerdoconclusionautorizacion.edit',$acuerdoconclusion) }}
 @endsection
 @section('content')
 <div class="row">
@@ -9,14 +9,14 @@
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('acuerdoconclusion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
+                    <a href="{{ route('acuerdoconclusion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp; Autorizar
                 </h1>
-                <div class="float-end">                    
-                    <a href="{{route('acuerdoconclusionac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;10. AC</a>                                                  
-                    <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;11. OF. AC</a>                                  
+                <div class="float-end">
+                    <a href="{{route('acuerdoconclusionac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;10. AC</a>
+                    <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;11. OF. AC</a>
                 </div>
-            </div>        
+            </div>
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._acuerdoconclusion')
@@ -39,12 +39,13 @@
                     <div class="col-md-6 mb-3">
                         {!! BootForm::checkbox('reenviar', 'Se envía al superior para su autorización', '', true, ['class' => 'i-checks', 'disabled']) !!}
                     </div>
-                </div>                     
+                </div>
                 <div class="row mt-3">
                     <div class="col-md-6 justify-content-end">
+
                         @can('acuerdoconclusionautorizacion.update')
                             <button type="submit" class="btn btn-primary">Guardar</button>
-                        @endcan 
+                        @endcan
                         <a href="{{ route('acuerdoconclusion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>

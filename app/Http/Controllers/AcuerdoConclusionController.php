@@ -38,10 +38,10 @@ class AcuerdoConclusionController extends Controller
      */
     public function create()
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));               
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acuerdoconclusion = new AcuerdoConclusion();
 		$fechaacuerdo=now();
-		
+
 		if($auditoria->acto_fiscalizacion=='Desempeño'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
 		}
@@ -54,8 +54,8 @@ class AcuerdoConclusionController extends Controller
 		if($auditoria->acto_fiscalizacion=='Inversión Física'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
 		}
-				
-       
+
+
         return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo'));
     }
 
@@ -66,7 +66,7 @@ class AcuerdoConclusionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {      
+    {
         mover_archivos($request, ['acuerdo_conclusion']);
         $request['auditoria_id']= getSession('auditoria_id');
         $acuerdoconclusion  = AcuerdoConclusion::create($request->all());
@@ -97,10 +97,11 @@ class AcuerdoConclusionController extends Controller
      */
     public function edit(AcuerdoConclusion $auditoria)
     {
+        $comparecencia=$auditoria->comparecencia;
 		$acuerdoconclusion=$auditoria;
-        $auditoria = Auditoria::find(getSession('auditoria_id'));    
-        $fechaacuerdo=now();           
-        
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $fechaacuerdo=now();
+
 		if($auditoria->acto_fiscalizacion=='Desempeño'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
 		}
@@ -113,9 +114,9 @@ class AcuerdoConclusionController extends Controller
 		if($auditoria->acto_fiscalizacion=='Inversión Física'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
 		}
-				
-       
-        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo'));
+
+
+        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo','comparecencia'));
     }
 
     /**
@@ -131,7 +132,7 @@ class AcuerdoConclusionController extends Controller
         mover_archivos($request, ['acuerdo_conclusion'],$acuerdoconclusion);
         $acuerdoconclusion->update($request->all());
 
-        setMessage("Los datos se han actualizado correctamente.");
+        setMessage("Los datos se han actualizado correctamente. ");
 
         return redirect() -> route('acuerdoconclusion.index');
     }
@@ -204,7 +205,7 @@ class AcuerdoConclusionController extends Controller
    }
 
     public function export(){
-        $auditoria=Auditoria::find(getSession('auditoria_id')); 
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
 
         $template=new TemplateProcessor('bases-word/A_conclusion.docx');
         $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
@@ -219,17 +220,17 @@ class AcuerdoConclusionController extends Controller
 
         $template->saveAs($nombreword.'.docx');/** */
 
-        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */   
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */
     }
 
 
 
     public function exportOFAC(){
-        $template=new TemplateProcessor('bases-word/OF_AC.docx'); 
+        $template=new TemplateProcessor('bases-word/OF_AC.docx');
         $nombreword='OF_AC';/** */
 
         $template->saveAs($nombreword.'.docx');/** */
 
-        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */   
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */
     }
 }
