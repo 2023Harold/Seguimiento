@@ -16,9 +16,15 @@
                 </h1>
                 <div class="float-end">
                     @if($auditoria->acto_fiscalizacion=='Legalidad')
-                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_EA" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. EA</span></a>
+                        @if((count($auditoria->accionesrecomendaciones)> 0)&& (count($auditoria->accionespo) > 0))
                         <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. PAR</span></a>
-                        <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. AC</a>
+                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_EA" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. EA</span></a>
+                        @elseif(count($auditoria->accionesrecomendaciones)> 0)
+                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. PAR</span></a>
+                        @elseif(count($auditoria->accionespo) > 0)
+                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_EA" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. EA</span></a>
+                        @endif
+                            <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. AC</a>
                     @else
                         <a href="{{route('acuerdoconclusionac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AC</a>
                         <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. AC</a>
