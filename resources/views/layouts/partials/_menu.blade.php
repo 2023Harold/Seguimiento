@@ -165,16 +165,11 @@
                                                                                                             str_contains(Route::current()->getName(), 'prasseguimiento')||
                                                                                                             str_contains(Route::current()->getName(), 'prasmedida')
                                                                                                             ) ? 'active' : '' }}">
-                                            @php
-                                                $totalAccionesPRAS = $auditoria->accionespras->count();
-                                                $accionesPRASAutorizadas = $auditoria->accionespras->where('pras.fase_autorizacion', 'Autorizado')->count();
-                                            @endphp
-
-                                            @if ($totalAccionesPRAS > 0)
-                                                @if ($accionesPRASAutorizadas === $totalAccionesPRAS)
+                                            @if (count($auditoria->accionespras) > 0)
+                                                @if (count($auditoria->accionespras->where('pras.fase_autorizacion', 'Autorizado')) === count($auditoria->accionespras))
                                                     {{-- Todas las acciones están autorizadas --}}
                                                     <span class="fa fa-circle" style="color: green"></span>
-                                                @elseif ($totalAccionesPRAS !=$accionesPRASAutorizadas)
+                                                @elseif (count($auditoria->accionespras) !=count($auditoria->accionespras->where('pras.fase_autorizacion', 'Autorizado')))
 
                                                     {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                     <span class="fa fa-circle" style="color: yellow"></span>
@@ -206,16 +201,13 @@
                                                                                                                      str_contains(Route::current()->getName(), 'recomendacionesautorizacion')
                                                                                                                      ) ? 'active' : '' }}">
                                                                                                                      <!-- accionesrecomendaciones-->
-                                        @php
-                                            $totalAccionesRec = $auditoria->accionesrecomendaciones->count();
-                                            $accionesAutorizadasRec = $auditoria->accionesrecomendaciones->where('recomendaciones.fase_autorizacion', 'Autorizado')->count();
-                                        @endphp
 
-                                        @if ($totalAccionesRec > 0)
-                                            @if ($accionesAutorizadasRec === $totalAccionesRec)
+
+                                        @if (count($auditoria->accionesrecomendaciones)> 0)
+                                            @if (count($auditoria->accionesrecomendaciones->where('recomendaciones.fase_autorizacion', 'Autorizado')) === count($auditoria->accionesrecomendaciones))
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif ($totalAccionesRec !=$accionesAutorizadasRec)
+                                            @elseif (count($auditoria->accionesrecomendaciones) !=count($auditoria->accionesrecomendaciones->where('recomendaciones.fase_autorizacion', 'Autorizado')))
                                                 {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
@@ -244,16 +236,12 @@
                                                                                                                            str_contains(Route::current()->getName(), 'solicitudesaclaracionautorizacion')||
                                                                                                                            str_contains(Route::current()->getName(), 'solicitudesaclaracionanexos')
                                                                                                                         ) ? 'active' : '' }}">
-                                        @php
-                                            $totalAccionesSolAcl = $auditoria->accionessolacl->count();
-                                            $accionesSolAclAutorizadas = $auditoria->accionessolacl->where('solicitudesaclaracion.fase_autorizacion', 'Autorizado')->count();
-                                        @endphp
 
-                                        @if ($totalAccionesSolAcl > 0)
-                                            @if ($accionesSolAclAutorizadas === $totalAccionesSolAcl)
+                                        @if (count($auditoria->accionessolacl) > 0)
+                                            @if (count($auditoria->accionessolacl->where('solicitudesaclaracion.fase_autorizacion', 'Autorizado')) === count($auditoria->accionessolacl))
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif ($totalAccionesSolAcl !=$accionesSolAclAutorizadas)
+                                            @elseif (count($auditoria->accionessolacl) !=count($auditoria->accionessolacl->where('solicitudesaclaracion.fase_autorizacion', 'Autorizado')))
                                                 {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
@@ -280,16 +268,12 @@
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')
                                                                                                                         ) ? 'active' : '' }}">
-                                        @php
-                                            $totalAccionesPO = $auditoria->accionespo->count();
-                                            $accionesPOAutorizadas = $auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')->count();
-                                        @endphp
 
-                                        @if ($totalAccionesPO > 0)
-                                            @if ($accionesPOAutorizadas === $totalAccionesPO)
+                                        @if (count($auditoria->accionespo) > 0)
+                                            @if (count($auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')) === count($auditoria->accionespo))
                                                 {{-- Todas las acciones están autorizadas --}}
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif($totalAccionesPO !=$accionesPOAutorizadas)
+                                            @elseif(count($auditoria->accionespo) !=count($auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')))
                                                 {{-- Hay algunas acciones autorizadas, pero no todas --}}
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
@@ -409,14 +393,8 @@
                             </a>
                             <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3">
                                 <div class="menu-item mb-1">
-                                    <a href="{{route('turnoui.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoui')
-                                                                                                         ) ? 'active' : '' }}">
-                                        @php
-                                            $tAccPO = $auditoria->accionespo->count();
-                                            $accPOAutorizadas = $auditoria->accionespo->where('pliegosobservacion.calificacion_sugerida', 'No Solventado')->count();
-                                        @endphp
-
-
+                                    <a href="{{route('turnoui.index')}}" class="menu-link py-3 {{(str_contains(Route::current()->getName() , 'turnoui')
+                                                                                                                                                            ) ? 'active' : '' }}">
                                         @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
                                             @if(count($auditoria->totalNOsolventadopliegos) >0)
                                                 @if (!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion=='Autorizado'))
@@ -437,19 +415,12 @@
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
-                                        <span class="menu-title">Turno a la UI</span>
+                                        <span class="menu-title"> Turno a la UI</span>
                                     </a>
                                 </div>
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnooic.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnooic')
                                                                                                          ) ? 'active' : '' }}">
-
-                                         @php
-                                            $tAcRec = $auditoria->accionesrecomendaciones->count();
-                                            $aAutoRec = $auditoria->accionesrecomendaciones->where('recomendaciones.calificacion_sugerida', 'No Atendida')->count();
-                                        @endphp
-
-
                                         @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
                                             @if(count($auditoria->totalNOsolventadorecomendacion) >0)
                                                 @if (!empty($auditoria->turnooic) && ($auditoria->turnooic->fase_autorizacion=='Autorizado'))
@@ -477,6 +448,7 @@
                                     <a href="{{route('turnoarchivo.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoarchivo')
                                                                                                          ) ? 'active' : '' }}">
                                     @if (empty($auditoria->turnooic) && empty($auditoria->turnoui))
+
                                         @if (!empty($auditoria->turnoarchivo) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
                                             <span class="fa fa-circle" style="color: green"></span>
                                         @else

@@ -249,7 +249,11 @@ class RadicacionController extends Controller
             $iniciales=$iniciales.substr($parte, 0,1);
          }
 
-
+         if(empty($auditoria->acuerdoconclusion->domicilio)){
+            $remitente_domicilio = "";
+        }else{
+            $remitente_domicilio = $auditoria->acuerdoconclusion->domicilio;
+        }
 
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $mes = $meses[(now()->format('n')) - 1];
@@ -275,7 +279,7 @@ class RadicacionController extends Controller
             $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
             $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
             $template->setValue('entidad',$txtentidad);
             $template->setValue('periodo',$auditoria->periodo_revision);
             $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -300,7 +304,7 @@ class RadicacionController extends Controller
             $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
             $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
             $template->setValue('entidad',$txtentidad);
             $template->setValue('periodo',$auditoria->periodo_revision);
             $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -326,7 +330,7 @@ class RadicacionController extends Controller
                 $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
                 $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
                 $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-                $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+                $template->setValue('remitente_domicilio',$remitente_domicilio);
                 $template->setValue('entidad',$txtentidad);
                 $template->setValue('periodo',$auditoria->periodo_revision);
                 $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -352,7 +356,7 @@ class RadicacionController extends Controller
             $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
             $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
             $template->setValue('entidad',$txtentidad);
             $template->setValue('periodo',$auditoria->periodo_revision);
             $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -402,8 +406,12 @@ class RadicacionController extends Controller
             }else{
                 $prassp='las Promociones de Responsabilidad Administrativa Sancionatoria (PRAS) identificadas ';
             }
-
-
+        }
+        
+        if(empty($auditoria->acuerdoconclusion->domicilio)){
+            $remitente_domicilio = "";
+        }else{
+            $remitente_domicilio = $auditoria->acuerdoconclusion->domicilio;
         }
 
         $nombre_ccp='';
@@ -425,7 +433,7 @@ class RadicacionController extends Controller
          }
 
          if($auditoria->acto_fiscalizacion=='Inversión Física')
-    {
+        {
         $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/3. Of. AR_OIC´s.docx');
         $template->setValue('anio',date("Y"));
         $template->setValue('mes',$mes);
@@ -435,7 +443,7 @@ class RadicacionController extends Controller
         $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
         $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
         $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-        $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+        $template->setValue('remitente_domicilio',$remitente_domicilio);
         $template->setValue('entidad',$txtentidad);
         $template->setValue('periodo',$auditoria->periodo_revision);
         $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -465,7 +473,7 @@ class RadicacionController extends Controller
         $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
         $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
         $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-        $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+        $template->setValue('remitente_domicilio',$remitente_domicilio);
         $template->setValue('entidad',$txtentidad);
         $template->setValue('periodo',$auditoria->periodo_revision);
         $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -495,7 +503,7 @@ class RadicacionController extends Controller
 
         $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
         $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-        $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+        $template->setValue('remitente_domicilio',$remitente_domicilio);
         $template->setValue('entidad',$txtentidad);
         $template->setValue('periodo',$auditoria->periodo_revision);
         $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -1390,6 +1398,12 @@ class RadicacionController extends Controller
                 $SiPRAS02="y al Órgano Interno de Control de".$nombreEntidad;
             }
         }
+        if(empty($auditoria->acuerdoconclusion->domicilio)){
+            $remitente_domicilio = "";
+        }else{
+            $remitente_domicilio = $auditoria->acuerdoconclusion->domicilio;
+        }
+
 
         if($auditoria->acto_fiscalizacion=='Inversión Física')
         {
@@ -1417,7 +1431,7 @@ class RadicacionController extends Controller
             $template->setValue('anio',date("Y"));
             $template->setValue('mes',$mes);
             $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
             $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
             $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
             $template->setValue('claves',count($auditoria->accionespras));
@@ -1474,7 +1488,7 @@ class RadicacionController extends Controller
             $template->setValue('anio',date("Y"));
             $template->setValue('mes',$mes);
             $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
             $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
             $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
             $template->setValue('claves',count($auditoria->accionespras));
@@ -1529,7 +1543,7 @@ class RadicacionController extends Controller
                 $template->setValue('anio',date("Y"));
                 $template->setValue('mes',$mes);
                 $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-                $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+                $template->setValue('remitente_domicilio',$remitente_domicilio);
                 $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
                 $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
                 $template->setValue('claves',count($auditoria->accionespras));
@@ -1579,7 +1593,7 @@ class RadicacionController extends Controller
                 $template->setValue('anio',date("Y"));
                 $template->setValue('mes',$mes);
                 $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-                $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+                $template->setValue('remitente_domicilio',$remitente_domicilio);
                 $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
                 $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
                 $template->setValue('claves',count($auditoria->accionespras));
@@ -1665,6 +1679,11 @@ class RadicacionController extends Controller
             $iniciales=$iniciales.substr($parte, 0,1);
          }
 
+         if(empty($auditoria->acuerdoconclusion->domicilio)){
+            $remitente_domicilio = "";
+        }else{
+            $remitente_domicilio = $auditoria->acuerdoconclusion->domicilio;
+        }
 
 
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -1691,7 +1710,7 @@ class RadicacionController extends Controller
             $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
             $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
             $template->setValue('entidad',$txtentidad);
             $template->setValue('periodo',$auditoria->periodo_revision);
             $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -1716,7 +1735,7 @@ class RadicacionController extends Controller
             $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
             $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
             $template->setValue('entidad',$txtentidad);
             $template->setValue('periodo',$auditoria->periodo_revision);
             $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -1742,7 +1761,7 @@ class RadicacionController extends Controller
                 $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
                 $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
                 $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-                $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+                $template->setValue('remitente_domicilio',$remitente_domicilio);
                 $template->setValue('entidad',$txtentidad);
                 $template->setValue('periodo',$auditoria->periodo_revision);
                 $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
@@ -1768,7 +1787,7 @@ class RadicacionController extends Controller
             $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
             $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente_domicilio',$auditoria->comparecencia->notificacion_estados);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
             $template->setValue('entidad',$txtentidad);
             $template->setValue('periodo',$auditoria->periodo_revision);
             $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);

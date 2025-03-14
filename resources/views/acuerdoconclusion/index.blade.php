@@ -14,6 +14,18 @@
                     &nbsp;
                     Acuerdo de conclusión
                 </h1>
+                <div class="float-end">
+                    @if($auditoria->acto_fiscalizacion=='Legalidad')
+                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_EA" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. EA</span></a>
+                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. PAR</span></a>
+                        <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. AC</a>
+                    @else
+                        <a href="{{route('acuerdoconclusionac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AC</a>
+                        <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. AC</a>
+                    @endif
+
+
+                </div>
             </div>
             <div class="card-body">
                 @include('layouts.contextos._auditoria')
@@ -165,11 +177,11 @@
                                                 Autorizar
                                             </a>
                                         @else
-                                            <span class="badge badge-light-warning">111{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                            <span class="badge badge-light-warning">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
                                         @endcan
                                     @endif
                                     @if ($auditoria->acuerdoconclusion->fase_autorizacion=='Autorizado')
-                                        <span class="badge badge-light-success"> 1{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
+                                        <span class="badge badge-light-success"> {{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
                                     @endif
                                 </td>
                                 <td class="text-center">
