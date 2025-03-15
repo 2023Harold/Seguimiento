@@ -47,7 +47,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            {!! archivo('oficio_acuse', 'Acuse de notificación de informe de auditoría: *', old('oficio_acuse', $comparecencia->oficio_acuse)) !!}
+                            {!! archivo('oficio_acuse', 'Acuse de notificación de acuerdos: *', old('oficio_acuse', $comparecencia->oficio_acuse)) !!}
                         </div>
                         <div class="col-md-3">
                             {!! BootForm::date('fecha_acuse', 'Fecha del acuse: *', old('fecha_acuse', fecha($comparecencia->fecha_acuse, 'Y-m-d'))); !!}

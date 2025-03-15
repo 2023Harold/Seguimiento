@@ -34,8 +34,8 @@
                                     <th>Hora aproximada de término</th>
                                     <th>Sala</th>
                                     {{-- <th>Periodo de la etapa de aclaración</th> --}}
-                                    <th>Comprobante de recepción depto. de notificaciones</th>
-                                    <th>Acuse de notificación de informe de auditoría</th>
+                                    <th>Comprobante de recepción depto. de notificaciones</th>									
+                                    <th>Acuse de notificación de acuerdos</th>
                                 </tr>
                             </thead>
                             <tbody>

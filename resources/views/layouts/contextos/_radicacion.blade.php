@@ -40,13 +40,13 @@
         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
             <label>Oficio de notificación de acuerdos: </label>
             <span class="text-primary">
-                {{ optional($auditoria->radicacion)->oficio_acuerdo }}
+                {{ str_contains(optional($auditoria->radicacion)->oficio_acuerdo,'storage')?'':optional($auditoria->radicacion)->oficio_acuerdo }}
             </span>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
             <label>Fecha de oficio: </label>
             <span class="text-primary">
-                {{ fecha(optional($auditoria->radicacion)->fecha_oficio_acuerdo)}}
+                {{ str_contains(optional($auditoria->radicacion)->oficio_acuerdo,'storage')?'': fecha(optional($auditoria->radicacion)->fecha_oficio_acuerdo) }}
             </span>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
@@ -79,12 +79,6 @@
             <label>Cargo del titular a quien se dirige la comparecencia: </label>
             <span class="text-sistema">
                 {{ optional($auditoria->comparecencia)->cargo_titular }}
-            </span>
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-            <label>Domicilio: </label>
-            <span class="text-sistema">
-                {{ optional($auditoria->comparecencia)->domicilio_notificacion }}
             </span>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-12">
@@ -141,4 +135,5 @@
         <div class="col-md-12">
             <hr>
         </div>
+    </div>
     </div>

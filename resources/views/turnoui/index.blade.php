@@ -67,7 +67,7 @@
                                             </a>
                                             @endcan
                                         @endif
-                                        @if ($auditoria->turnoui->fase_autorizacion == 'En Revisión')
+                                        @if ($auditoria->turnoui->fase_autorizacion == 'En revisión')
                                             @can('turnouirevision.edit')
                                                 <a href="{{ route('turnouirevision.edit',$auditoria->turnoui) }}" class="btn btn-primary">
                                                     <li class="fa fa-gavel"></li>

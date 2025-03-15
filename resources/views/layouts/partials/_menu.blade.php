@@ -165,6 +165,8 @@
                                                                                                             str_contains(Route::current()->getName(), 'prasseguimiento')||
                                                                                                             str_contains(Route::current()->getName(), 'prasmedida')
                                                                                                             ) ? 'active' : '' }}">
+
+
                                             @if (count($auditoria->accionespras) > 0)
                                                 @if (count($auditoria->accionespras->where('pras.fase_autorizacion', 'Autorizado')) === count($auditoria->accionespras))
                                                     {{-- Todas las acciones están autorizadas --}}
@@ -201,8 +203,6 @@
                                                                                                                      str_contains(Route::current()->getName(), 'recomendacionesautorizacion')
                                                                                                                      ) ? 'active' : '' }}">
                                                                                                                      <!-- accionesrecomendaciones-->
-
-
                                         @if (count($auditoria->accionesrecomendaciones)> 0)
                                             @if (count($auditoria->accionesrecomendaciones->where('recomendaciones.fase_autorizacion', 'Autorizado')) === count($auditoria->accionesrecomendaciones))
                                                 {{-- Todas las acciones están autorizadas --}}
@@ -236,7 +236,6 @@
                                                                                                                            str_contains(Route::current()->getName(), 'solicitudesaclaracionautorizacion')||
                                                                                                                            str_contains(Route::current()->getName(), 'solicitudesaclaracionanexos')
                                                                                                                         ) ? 'active' : '' }}">
-
                                         @if (count($auditoria->accionessolacl) > 0)
                                             @if (count($auditoria->accionessolacl->where('solicitudesaclaracion.fase_autorizacion', 'Autorizado')) === count($auditoria->accionessolacl))
                                                 {{-- Todas las acciones están autorizadas --}}
@@ -268,7 +267,6 @@
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
                                                                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')
                                                                                                                         ) ? 'active' : '' }}">
-
                                         @if (count($auditoria->accionespo) > 0)
                                             @if (count($auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')) === count($auditoria->accionespo))
                                                 {{-- Todas las acciones están autorizadas --}}
@@ -393,9 +391,9 @@
                             </a>
                             <div class="menu-sub menu-sub-accordion mx-5 me-0 pt-3">
                                 <div class="menu-item mb-1">
-                                    <a href="{{route('turnoui.index')}}" class="menu-link py-3 {{(str_contains(Route::current()->getName() , 'turnoui')
-                                                                                                                                                            ) ? 'active' : '' }}">
-                                        @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
+                                    <a href="{{route('turnoui.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoui')
+                                                                                                         ) ? 'active' : '' }}">
+                                       @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
                                             @if(count($auditoria->totalNOsolventadopliegos) >0)
                                                 @if (!empty($auditoria->turnoui) && ($auditoria->turnoui->fase_autorizacion=='Autorizado'))
                                                         <span class="fa fa-circle" style="color: green"></span>
@@ -415,13 +413,14 @@
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
-                                        <span class="menu-title"> Turno a la UI</span>
+                                        <span class="menu-title">Turno a la UI</span>
                                     </a>
                                 </div>
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnooic.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnooic')
                                                                                                          ) ? 'active' : '' }}">
-                                        @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
+
+                                         @if(count($auditoria->informesAutorizados) == count($auditoria->informes) )
                                             @if(count($auditoria->totalNOsolventadorecomendacion) >0)
                                                 @if (!empty($auditoria->turnooic) && ($auditoria->turnooic->fase_autorizacion=='Autorizado'))
                                                         <span class="fa fa-circle" style="color: green"></span>
@@ -447,7 +446,7 @@
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnoarchivo.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoarchivo')
                                                                                                          ) ? 'active' : '' }}">
-                                    @if (empty($auditoria->turnooic) && empty($auditoria->turnoui))
+                                        @if (empty($auditoria->turnooic) && empty($auditoria->turnoui))
 
                                         @if (!empty($auditoria->turnoarchivo) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
                                             <span class="fa fa-circle" style="color: green"></span>
@@ -463,7 +462,7 @@
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>
-                                        <span class="menu-title">Acuse envío archivo</span>
+                                        <span class="menu-title">Acuse envio archivo</span>
                                     </a>
                                 </div>
                             </div>

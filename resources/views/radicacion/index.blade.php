@@ -57,8 +57,12 @@
                         <thead>
                             <tr>  
                                 <th>Número de expediente</th>
-                                <th>Número de oficio de notificación del informe de auditoria</th>
-                                <th>Acuerdo de radicación</th>                          
+								 @if(getSession('cp')==2023)
+									<th>Oficio de notificación de acuerdos</th>
+								 @elseif(getSession('cp')==2022)
+									<th>Número de oficio de notificación del informe de auditoria</th>
+								 @endif
+ 							    <th>Acuerdo de radicación</th>                          
                                 <th>Fase / Acción / Constancia</th>
                                 <th>Acuses</th>
                             </tr>
@@ -72,9 +76,14 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if (!empty($auditoria->radicacion))
-                                            {{ $auditoria->radicacion->numero_acuerdo }}
-                                        @endif
+										@if(getSession('cp')==2023)
+											{{ optional($auditoria->radicacion)->oficio_acuerdo }}
+										 @elseif(getSession('cp')==2022)
+											@if (!empty($auditoria->radicacion))
+												{{ $auditoria->radicacion->numero_acuerdo }}
+											@endif
+										 @endif
+                                        
                                     </td>
                                     {{-- <td class="text-center">
                                         @if (!empty($auditoria->radicacion))
