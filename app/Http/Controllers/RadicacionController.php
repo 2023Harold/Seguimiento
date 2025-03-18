@@ -65,10 +65,6 @@ class RadicacionController extends Controller
         $radicacion = Radicacion::create($request->all());
         $comparecencia = Comparecencia::create($request->all());
 
-
-
-
-
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_comparecencia'], null, $ruta);
 
@@ -522,9 +518,6 @@ class RadicacionController extends Controller
         $nombreword='AROIC';
         $template->saveAs($nombreword.'.docx');
     }
-    // else{
-
-    // }
 
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
     }
@@ -538,21 +531,26 @@ class RadicacionController extends Controller
         $fechacomparecencia='';
         $fechainicioaclaracion='';
         $fechaterminoaclaracion='';
+        $SiRecomendaciones = "";
+        $SiRecomendaciones01 ='';
+        $SiRecomendaciones02 ='';
+        $SiRecomendaciones03 ='';
+        $SiRecomendaciones04 ='';
+        $SiPRAS="";
+        $SiPRAS01="";
+        $SiPRAS02="";
+        $SiPliegos01="";
+        $Orden = '';
+        $Orden01 = '';
+        $Orden02 = '';
+        $nombre_ccp='';
+        $info_ccp='';
+        $infodom_ccp='';
+        $info='';
+
         $auditoria=Auditoria::find(getSession('auditoria_id'));
         $formatter = new NumeroALetras();
 
-        $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
-
-         $txtentidad=null;
-
-         if (count($entidades)>1) {
-            if ($entidades[1]=='MUNICIPIOS') {
-                $bar = ucwords($entidades[2]);
-                $bar = ucwords(strtolower($bar));
-
-                $txtentidad='Municipio de '.$bar;
-            }
-         }
         $iniciales='';
         $nombre=auth()->user()->name;
         $esquemanombres=explode(' ',$nombre);
@@ -560,39 +558,14 @@ class RadicacionController extends Controller
             $iniciales=$iniciales.substr($parte, 0,1);
          }
 
-
-
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $mes = $meses[(now()->format('n')) - 1];
 
-
-
         $fecha_hora=fecha(optional($auditoria->comparecencia)->fecha_comparecencia) . ' ' . date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_inicio)) . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"":"-".date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_termino)));
         $date01 = fecha(optional($auditoria->comparecencia)->fecha_comparecencia);
-        $day01 = date('d', strtotime($date01));
-        $mes01 = $meses[($auditoria->comparecencia)->fecha_comparecencia->format('n') - 1];
-        $day02 = date('d', strtotime($auditoria->comparecencia->fecha_inicio_aclaracion));
-        $mes02 = $meses[($auditoria->comparecencia->fecha_inicio_aclaracion->format('n')) - 1];
-        $day03 = date('d', strtotime($auditoria->comparecencia->fecha_termino_aclaracion));
-        $mes03 = $meses[($auditoria->comparecencia->fecha_termino_aclaracion->format('n')) - 1];
-
-
-
+        
         $hora01 =  date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_inicio));
         $cierre = $auditoria->radicacion->acta_cierre_auditoria;
-
-
-        $nombre_ccp='';
-        $info_ccp='';
-        $infodom_ccp='';
-        $info='';
-        if ($auditoria->entidadFiscalizable->Ambito=='Estatal') {
-            $nombre_ccp='</w:t><w:br/><w:t>Luis David Fernández Araya';
-            $info_ccp='Subsecretario de Control y Evaluación de la Secretaría de la Contraloría del Gobierno del Estado de México. </w:t><w:br/><w:t>';
-            $infodom_ccp='Domicilio: Av. Primero de Mayo, número 1731, Esquina Robert Bosch, Colonia Zona Industrial, C.P. 50071, Toluca, México.</w:t><w:br/><w:t>';
-            $info=$info_ccp.' '.$infodom_ccp;
-        }
-
 
         $auditoria=$radicacion->auditoria;
 		$horas=explode(':',$auditoria->comparecencia->hora_comparecencia_inicio);
@@ -610,11 +583,16 @@ class RadicacionController extends Controller
             $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);
             $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);
             $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
+
+            $day02 = date('d', strtotime($auditoria->comparecencia->fecha_inicio_aclaracion));
+            $mes02 = $meses[($auditoria->comparecencia->fecha_inicio_aclaracion->format('n')) - 1];
+            $day03 = date('d', strtotime($auditoria->comparecencia->fecha_termino_aclaracion));
+            $mes03 = $meses[($auditoria->comparecencia->fecha_termino_aclaracion->format('n')) - 1];
 		}
+        $day01 = date('d', strtotime($date01));
+        $mes01 = $meses[($auditoria->comparecencia)->fecha_comparecencia->format('n') - 1];
 
-        $formatterPM = new NumeroALetras();
         $plazomax=$formatter->toString($radicacion->plazo_maximo);
-
         $plazomaxMax = ucwords($plazomax);
         $plazomaxMin = ucwords(strtolower($plazomaxMax));
 
@@ -625,6 +603,11 @@ class RadicacionController extends Controller
         $ent = $auditoria->entidad_fiscalizable;
         $frac ='';
         if($auditoria->entidadFiscalizable->Ambito = 'Estatal'){
+            $nombre_ccp='</w:t><w:br/><w:t>Luis David Fernández Araya';
+            $info_ccp='Subsecretario de Control y Evaluación de la Secretaría de la Contraloría del Gobierno del Estado de México. </w:t><w:br/><w:t>';
+            $infodom_ccp='Domicilio: Av. Primero de Mayo, número 1731, Esquina Robert Bosch, Colonia Zona Industrial, C.P. 50071, Toluca, México.</w:t><w:br/><w:t>';
+            $info=$info_ccp.' '.$infodom_ccp;
+
             if (stripos($ent, 'poder') !== false) {
                 $frac = 'fracción I.';
             }elseif(stripos($ent, 'órganos autónomos') !== false) {
@@ -652,36 +635,17 @@ class RadicacionController extends Controller
             $txt1 = '115 fracción IV penúltimo párrafo';
             $ambito01=3;
         }
-        $numeroAuditoria = Auditoria::find(getSession('auditoria_id'));
-
-        if ($numeroAuditoria) {
-        $entidad = ListadoEntidades::where('no_auditoria', $numeroAuditoria->numero_auditoria)
-            ->where('cuenta_publica', $numeroAuditoria->cuenta_publica)
-            ->select('entidades', 'textos_doc')
-            ->first();
-
-            if ($entidad) {
-                $nombreEntidad = $entidad->entidades;
-                $textoDocumento = $entidad->textos_doc;
-
-            }
+        if ($auditoria) {
+            $entidad = ListadoEntidades::where('no_auditoria', $auditoria->numero_auditoria)->where('cuenta_publica', $auditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();
+                if ($entidad) {
+                    $nombreEntidad = $entidad->entidades;
+                    $textoDocumento = $entidad->textos_doc;
+                }
         }
 
         $UMA = CatalogoUMAS::where('ejercicio', $datenow01)->select('texto')->first();
-
         $UMATEXT = $UMA->texto;
-        $SiRecomendaciones = "";
-        $SiRecomendaciones01 ='';
-        $SiRecomendaciones02 ='';
-        $SiRecomendaciones03 ='';
-        $SiRecomendaciones04 ='';
-        $SiPRAS="";
-        $SiPRAS01="";
-        $SiPRAS02="";
-        $SiPliegos01="";
-        $Orden = '';
-        $Orden01 = '';
-        $Orden02 = '';
+        
 
         if($auditoria->acto_fiscalizacion=='Inversión Física'){
             $Orden = 'CUARTO.';
@@ -867,21 +831,30 @@ class RadicacionController extends Controller
         $fechacomparecencia='';
         $fechainicioaclaracion='';
         $fechaterminoaclaracion='';
+        $day02 = '';
+        $mes02 = '';
+        $day03 = '';
+        $mes03 = '';
+        $SiRecomendaciones = "";
+        $SiRecomendaciones01 ='';
+        $SiRecomendaciones02 ='';
+        $SiRecomendaciones03 ='';
+        $SiRecomendaciones04 ='';
+        $SiPRAS="";
+        $SiPRAS01="";
+        $SiPRAS02="";
+        $SiPliegos01="";
+        $Orden = '';
+        $Orden01 = '';
+        $Orden02 = '';
+        $nombre_ccp='';
+        $info_ccp='';
+        $infodom_ccp='';
+        $info='';
+
         $auditoria=Auditoria::find(getSession('auditoria_id'));
         $formatter = new NumeroALetras();
 
-        $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
-
-         $txtentidad=null;
-
-         if (count($entidades)>1) {
-            if ($entidades[1]=='MUNICIPIOS') {
-                $bar = ucwords($entidades[2]);
-                $bar = ucwords(strtolower($bar));
-
-                $txtentidad='Municipio de '.$bar;
-            }
-         }
         $iniciales='';
         $nombre=auth()->user()->name;
         $esquemanombres=explode(' ',$nombre);
@@ -889,12 +862,9 @@ class RadicacionController extends Controller
             $iniciales=$iniciales.substr($parte, 0,1);
          }
 
-
-
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $mes = $meses[(now()->format('n')) - 1];
         
-
         $horas=explode(':',$auditoria->comparecencia->hora_comparecencia_inicio);
         if(empty($auditoria->comparecencia->fecha_comparecencia)){
 
@@ -910,48 +880,33 @@ class RadicacionController extends Controller
             $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);
             $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);
             $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
+
+            $day02 = date('d', strtotime($auditoria->comparecencia->fecha_inicio_aclaracion));
+            $mes02 = $meses[($auditoria->comparecencia->fecha_inicio_aclaracion->format('n')) - 1];
+            $day03 = date('d', strtotime($auditoria->comparecencia->fecha_termino_aclaracion));
+            $mes03 = $meses[($auditoria->comparecencia->fecha_termino_aclaracion->format('n')) - 1];
             }
 
         $fecha_hora=fecha(optional($auditoria->comparecencia)->fecha_comparecencia) . ' ' . date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_inicio)) . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"":"-".date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_termino)));
         $date01 = fecha(optional($auditoria->comparecencia)->fecha_comparecencia);
         $day01 = date('d', strtotime($date01));
         $mes01 = $meses[($auditoria->comparecencia)->fecha_comparecencia->format('n') - 1];
-        $day02 = date('d', strtotime($auditoria->comparecencia->fecha_inicio_aclaracion));
-        $mes02 = $meses[($auditoria->comparecencia->fecha_inicio_aclaracion->format('n')) - 1];
-        $day03 = date('d', strtotime($auditoria->comparecencia->fecha_termino_aclaracion));
-        $mes03 = $meses[($auditoria->comparecencia->fecha_termino_aclaracion->format('n')) - 1];
-        
-
-
         $hora01 =  date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_inicio));
-
-        $formatterPM = new NumeroALetras();
         $plazomax=$formatter->toString($auditoria->radicacion->plazo_maximo);
-
         $plazomaxMax = ucwords($plazomax);
         $plazomaxMin = ucwords(strtolower($plazomaxMax));
-
         $fechaactual=fechaaletra(now());
-
         $datenow = Carbon::now();
         $datenow01 = date('Y', strtotime($datenow));
         $cierre = $auditoria->radicacion->acta_cierre_auditoria;
 
-
-        $nombre_ccp='';
-        $info_ccp='';
-        $infodom_ccp='';
-        $info='';
-        if ($auditoria->entidadFiscalizable->Ambito=='Estatal') {
+        $ent = $auditoria->entidad_fiscalizable; 
+        $frac ='';
+        if($auditoria->entidadFiscalizable->Ambito = 'Estatal'){
             $nombre_ccp='</w:t><w:br/><w:t>Luis David Fernández Araya';
             $info_ccp='Subsecretario de Control y Evaluación de la Secretaría de la Contraloría del Gobierno del Estado de México. </w:t><w:br/><w:t>';
             $infodom_ccp='Domicilio: Av. Primero de Mayo, número 1731, Esquina Robert Bosch, Colonia Zona Industrial, C.P. 50071, Toluca, México.</w:t><w:br/><w:t>';
             $info=$info_ccp.' '.$infodom_ccp;
-        }
-
-        $ent = $auditoria->entidad_fiscalizable; 
-        $frac ='';
-        if($auditoria->entidadFiscalizable->Ambito = 'Estatal'){
             if (stripos($ent, 'poder') !== false) {
                 $frac = 'fracción I.';
             }elseif(stripos($ent, 'órganos autónomos') !== false) {
@@ -978,39 +933,17 @@ class RadicacionController extends Controller
             $ambito01=3;
         }
 
-        $numeroAuditoria = Auditoria::find(getSession('auditoria_id'));
-
-        if ($numeroAuditoria) {
-        $entidad = ListadoEntidades::where('no_auditoria', $numeroAuditoria->numero_auditoria)
-            ->where('cuenta_publica', $numeroAuditoria->cuenta_publica)
-            ->select('entidades', 'textos_doc')
-            ->first();
-
+        if ($auditoria) {
+        $entidad = ListadoEntidades::where('no_auditoria', $auditoria->numero_auditoria)->where('cuenta_publica', $auditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();
             if ($entidad) {
                 $nombreEntidad = $entidad->entidades;
                 $textoDocumento = $entidad->textos_doc;
-
             }
         }
 
-        $UMA = CatalogoUMAS::where('ejercicio', $datenow01)->select('texto')->first();
-
-        $UMATEXT = $UMA->texto;
-
-        $SiRecomendaciones = "";
-        $SiRecomendaciones01 ='';
-        $SiRecomendaciones02 ='';
-        $SiRecomendaciones03 ='';
-        $SiRecomendaciones04 ='';
-        $SiPRAS="";
-        $SiPRAS01="";
-        $SiPRAS02="";
-        $SiPliegos01="";
-        $Orden = '';
-        $Orden01 = '';
-        $Orden02 = '';
-         
-        if($auditoria->acto_fiscalizacion=='Inversión Física'){
+        /////////////////SE COMIENZAN A MANDAR LO DATOS AL ARCHIVO WORD///////////////////////////
+        if($auditoria->acto_fiscalizacion=='Inversión Física')
+        {
             $Orden = 'CUARTO.';
             if(count($auditoria->accionesrecomendaciones)>0){
                 $SiRecomendaciones = '54 Bis';
@@ -1031,8 +964,43 @@ class RadicacionController extends Controller
                 $Orden01 = 'QUINTO.';
                 $Orden02 = 'SEXTO.';
             }
+            $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/1. AR_01.docx'); //*
+            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+            $template->setValue('entidad',$textoDocumento);
+            $template->setValue('periodo',$auditoria->periodo_revision);
+            $template->setValue('fraccion',$frac);
+            $template->setValue('recomendaciones01',$SiRecomendaciones);
+            $template->setValue('recomendaciones02',$SiRecomendaciones01);
+            $template->setValue('siPRAS',$SiPRAS);
+            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+            $template->setValue('siPRAS01',$SiPRAS01);
+            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+            $template->setValue('hora01', $hora01);
+            $template->setValue('day01', $day01);
+            $template->setValue('mes01', $mes01);
+            $template->setValue('ambito01', $ambito01);
+            $template->setValue('orden01',$Orden01);
+            $template->setValue('recomendaciones03',$SiRecomendaciones03);
+            $template->setValue('day02', $day02);
+            $template->setValue('mes02', $mes02);
+            $template->setValue('day03', $day03);
+            $template->setValue('mes03', $mes03);
+            $template->setValue('recomendaciones04',$SiRecomendaciones04);
+            $template->setValue('ultimoOrden',$Orden02);
+            $template->setValue('siPRAS02',$SiPRAS02);
+            $template->setValue('fechahoy', $fechaactual);
+            $template->setValue('iniciales',$iniciales);
 
-        }elseif($auditoria->acto_fiscalizacion=='Legalidad'){
+            $nombreword='AR';/** */
+
+        $template->saveAs($nombreword.'.docx');/** */
+        }
+         if($auditoria->acto_fiscalizacion=='Legalidad'){
+                
+            $UMA = CatalogoUMAS::where('ejercicio', $datenow01)->select('texto')->first();
+            $UMATEXT = $UMA->texto;
             $Orden = 'QUINTO.';
             if(count($auditoria->accionesrecomendaciones)>0){
                 $SiRecomendaciones = '54 Bis';
@@ -1059,85 +1027,27 @@ class RadicacionController extends Controller
                 $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
             }
 
-        }elseif($auditoria->acto_fiscalizacion=='Desempeño'){
-            $Orden = 'QUINTO.';
-            if(count($auditoria->accionespras)>0){
-                $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
-            }
-
-        }elseif($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
-
-            $Orden = 'CUARTO.';
-            if(count($auditoria->accionesrecomendaciones)>0){
-                $SiRecomendaciones = '54 Bis';
-                $SiRecomendaciones01 = 'y XXIII Bis';
-                $SiRecomendaciones03 = 'y del Proceso de Atención a las Recomendaciones ';
-                $SiRecomendaciones04 = '; asimismo, se informe de las mejoras realizadas y las acciones emprendidas con relación a las recomendaciones de mérito, o en su caso, justifique su improcedencia, con el apercibimiento de que en caso de no dar cumplimiento en el plazo concedido, se entenderán por no atendidas ni justificadas dichas recomendaciones';
-            }
-            if(count($auditoria->accionespras)>0){
-                $SiPRAS="XIX, XXV";
-                $SiPRAS01 = $Orden.' Con fundamento en lo previsto en los artículos 42 Bis, 53 fracción I y 55 párrafo segundo de la Ley de Fiscalización Superior del Estado de México; 12 párrafo segundo y 103 de la Ley de Responsabilidades Administrativas del Estado de México y Municipios y; 23 fracciones XIX y XLIV y 47 fracciones III, V, XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, túrnese por oficio al Órgano Interno de Control de'. $nombreEntidad.' o a su equivalente, las Promociones de Responsabilidad Administrativa Sancionatoria (PRAS) que se desprenden  de los resultados obtenidos del acto de fiscalización de mérito, así como, su soporte documental correspondiente en copias certificadas, para el efecto de que dicha autoridad  continúe con las investigaciones pertinentes y promueva las acciones procedentes. ';
-                $SiPRAS02="y al Órgano Interno de Control de".$nombreEntidad;
-                $Orden = 'QUINTO.';
-            }
-            if($Orden == 'QUINTO.'){
-                $Orden01 = 'SEXTO.';
-                $Orden02 = 'SEPTIMO.';
-            }elseif($Orden == 'CUARTO.'){
-                $Orden01 = 'QUINTO.';
-                $Orden02 = 'SEXTO.';
-            }
-        }
-
-        /////////////////SE COMIENZAN A MANDAR LO DATOS AL ARCHIVO WORD///////////////////////////
-        if($auditoria->acto_fiscalizacion=='Inversión Física')
-        {
-            $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/1. AR_01.docx'); //*
-            /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-            $template->setValue('entidad_fiscalizable', $auditoria->entidad_fiscalizable);
-            $template->setValue('fecha_txt', $fechacomparecencia);
-            $template->setValue('day01', $day01);
-            $template->setValue('hora01', $hora01);
-            $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
-            $template->setValue('plazoMaximoletra', $plazomaxMin);
-            $template->setValue('fechahoy', $fechaactual);
-            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-            $template->setValue('periodo',$auditoria->periodo_revision);
-            $template->setValue('cierre',$auditoria->radicacion->acta_cierre_auditoria);
-            $template->setValue('ambito01', $ambito01);
-            $template->setValue('day02', $day02);
-            $template->setValue('day03', $day03);
-            $template->setValue('iniciales',$iniciales);
-
-
-            $nombreword='AR';/** */
-
-        $template->saveAs($nombreword.'.docx');/** */
-        }
-         if($auditoria->acto_fiscalizacion=='Legalidad'){
             $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/1. AR_01.docx'); //*
-            /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-            $template->setValue('entidad_fiscalizable', $auditoria->entidad_fiscalizable);
-            $template->setValue('fecha_txt', $fechacomparecencia);
-            $template->setValue('day01', $day01);
-            $template->setValue('hora01', $hora01);
-            $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
-            $template->setValue('plazoMaximoletra', $plazomaxMin);
-            $template->setValue('fechahoy', $fechaactual);
             $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+            $template->setValue('entidad',$textoDocumento);
+            $template->setValue('periodo',$auditoria->periodo_revision);
+            $template->setValue('fraccion',$frac);
+            $template->setValue('recomendaciones01',$SiRecomendaciones);
+            $template->setValue('recomendaciones02',$SiRecomendaciones01);
             $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
             $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-            $template->setValue('periodo',$auditoria->periodo_revision);
+            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+            $template->setValue('hora01', $hora01);
+            $template->setValue('day01', $day01);
+            $template->setValue('mes01', $mes01);
             $template->setValue('ambito01', $ambito01);
-            $template->setValue('day02', $day02);
-            $template->setValue('day03', $day03);
-            $template->setValue('cierre',$auditoria->radicacion->acta_cierre_auditoria);
+            $template->setValue('pliegos01', $SiPliegos01);
+            $template->setValue('recomendaciones03',$SiRecomendaciones03);
+            $template->setValue('recomendaciones04',$SiRecomendaciones04);
+            $template->setValue('ultimoOrden',$Orden02);
+            $template->setValue('siPRAS',$SiPRAS);
+            $template->setValue('fechahoy', $fechaactual);
             $template->setValue('iniciales',$iniciales);
 
             $nombreword='AR';/** */
@@ -1146,75 +1056,92 @@ class RadicacionController extends Controller
             }
             if($auditoria->acto_fiscalizacion=='Desempeño')
             {
+                $Orden = 'QUINTO.';
+                if(count($auditoria->accionespras)>0){
+                    $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
+                }
+                        
+                $UMA = CatalogoUMAS::where('ejercicio', $datenow01)->select('texto')->first();
+                $UMATEXT = $UMA->texto;
                 $template=new TemplateProcessor('bases-word/PAC/DESEMPEÑO/LIDER/1. AR_01.docx'); //*
-
-                /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-                $template->setValue('entidad_fiscalizable', $auditoria->entidad_fiscalizable);
-                $template->setValue('fecha_txt', $fechacomparecencia);
-                $template->setValue('day01', $day01);
-                $template->setValue('hora01', $hora01);
-                $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
-                $template->setValue('plazoMaximoletra', $plazomaxMin);
-                $template->setValue('fechahoy', $fechaactual);
                 $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+                $template->setValue('entidad',$textoDocumento);
+                $template->setValue('periodo',$auditoria->periodo_revision);
+                $template->setValue('fraccion',$frac);
                 $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
                 $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-                $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
                 $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-                $template->setValue('periodo',$auditoria->periodo_revision);
+                $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+                $template->setValue('hora01', $hora01);
+                $template->setValue('day01', $day01);
+                $template->setValue('mes01', $mes01);
                 $template->setValue('ambito01', $ambito01);
-                $template->setValue('day02', $day02);
-                $template->setValue('day03', $day03);
+                $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
+                $template->setValue('plazoMaximoletra', $plazomaxMin);
                 $template->setValue('cierre',$auditoria->radicacion->acta_cierre_auditoria);
+                $template->setValue('uma', $UMATEXT);
+                $template->setValue('siPRAS',$SiPRAS);
+                $template->setValue('fechahoy', $fechaactual);
                 $template->setValue('iniciales',$iniciales);
 
                 $nombreword='AR';/** */
 
             $template->saveAs($nombreword.'.docx');/** */
             }
-            if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
-        {
-            $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/1. AR_01.docx'); //*
-            /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-            $template->setValue('entidad_fiscalizable', $auditoria->entidad_fiscalizable);
-            $template->setValue('fecha_txt', $fechacomparecencia);
-            $template->setValue('day01', $day01);
-            $template->setValue('hora01', $hora01);
-            $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
-            $template->setValue('plazoMaximoletra', $plazomaxMin);
-            $template->setValue('fechahoy', $fechaactual);
-            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-            $template->setValue('periodo',$auditoria->periodo_revision);
-            $template->setValue('ambito01', $ambito01);
-            $template->setValue('day02', $day02);
-            $template->setValue('mes02', $mes02);
-            $template->setValue('day03', $day03);
-            $template->setValue('mes03', $mes03);
-            $template->setValue('cierre',$auditoria->radicacion->acta_cierre_auditoria);
-            $template->setValue('iniciales',$iniciales);
+            if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
+                $Orden = 'CUARTO.';
+                if(count($auditoria->accionesrecomendaciones)>0){
+                    $SiRecomendaciones = '54 Bis';
+                    $SiRecomendaciones01 = 'y XXIII Bis';
+                    $SiRecomendaciones03 = 'y del Proceso de Atención a las Recomendaciones ';
+                    $SiRecomendaciones04 = '; asimismo, se informe de las mejoras realizadas y las acciones emprendidas con relación a las recomendaciones de mérito, o en su caso, justifique su improcedencia, con el apercibimiento de que en caso de no dar cumplimiento en el plazo concedido, se entenderán por no atendidas ni justificadas dichas recomendaciones';
+                }
+                if(count($auditoria->accionespras)>0){
+                    $SiPRAS="XIX, XXV";
+                    $SiPRAS01 = $Orden.' Con fundamento en lo previsto en los artículos 42 Bis, 53 fracción I y 55 párrafo segundo de la Ley de Fiscalización Superior del Estado de México; 12 párrafo segundo y 103 de la Ley de Responsabilidades Administrativas del Estado de México y Municipios y; 23 fracciones XIX y XLIV y 47 fracciones III, V, XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, túrnese por oficio al Órgano Interno de Control de'. $nombreEntidad.' o a su equivalente, las Promociones de Responsabilidad Administrativa Sancionatoria (PRAS) que se desprenden  de los resultados obtenidos del acto de fiscalización de mérito, así como, su soporte documental correspondiente en copias certificadas, para el efecto de que dicha autoridad  continúe con las investigaciones pertinentes y promueva las acciones procedentes. ';
+                    $SiPRAS02="y al Órgano Interno de Control de".$nombreEntidad;
+                    $Orden = 'QUINTO.';
+                }
+                if($Orden == 'QUINTO.'){
+                    $Orden01 = 'SEXTO.';
+                    $Orden02 = 'SEPTIMO.';
+                }elseif($Orden == 'CUARTO.'){
+                    $Orden01 = 'QUINTO.';
+                    $Orden02 = 'SEXTO.';
+                }
+                $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/1. AR_01.docx'); //*
+                /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
+                $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+                $template->setValue('entidad',$textoDocumento);
+                $template->setValue('periodo',$auditoria->periodo_revision);
+                $template->setValue('fraccion',$frac);
+                $template->setValue('recomendaciones01',$SiRecomendaciones);
+                $template->setValue('recomendaciones02',$SiRecomendaciones01);
+                $template->setValue('siPRAS',$SiPRAS);
+                $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+                $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+                $template->setValue('siPRAS01',$SiPRAS01);
+                $template->setValue('orden',$Orden);
+                $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+                $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+                $template->setValue('hora01', $hora01);
+                $template->setValue('day01', $day01);
+                $template->setValue('mes01', $mes01);
+                $template->setValue('ambito01', $ambito01);
+                $template->setValue('orden01',$Orden01);
+                $template->setValue('recomendaciones03',$SiRecomendaciones03);
+                $template->setValue('day02', $day02);
+                $template->setValue('mes02', $mes02);
+                $template->setValue('day03', $day03);
+                $template->setValue('mes03', $mes03);
+                $template->setValue('recomendaciones04',$SiRecomendaciones04);
+                $template->setValue('ultimoOrden',$Orden02);
+                $template->setValue('siPRAS02',$SiPRAS02);
+                $template->setValue('iniciales',$iniciales);
+                $template->setValue('fechahoy', $fechaactual);
+                $nombreword='AR';/** */  
 
-            $template->setValue('entidad',$textoDocumento);
-            $template->setValue('entidad01',$nombreEntidad);
-            $template->setValue('recomendaciones01',$SiRecomendaciones);
-            $template->setValue('recomendaciones02',$SiRecomendaciones01);
-            $template->setValue('recomendaciones03',$SiRecomendaciones03);
-            $template->setValue('recomendaciones04',$SiRecomendaciones04);
-            $template->setValue('pliegos01', $SiPliegos01);
-            $template->setValue('siPRAS',$SiPRAS);
-            $template->setValue('siPRAS01',$SiPRAS01);
-            $template->setValue('siPRAS02',$SiPRAS02);
-            $template->setValue('orden',$Orden);
-            $template->setValue('orden01',$Orden01);
-            $template->setValue('ultimoOrden',$Orden02);
-            $template->setValue('fraccion',$frac);
-
-            $nombreword='AR';/** */  
-
-        $template->saveAs($nombreword.'.docx');/** */
+            $template->saveAs($nombreword.'.docx');/** */
         }
         
 		return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */
@@ -1227,12 +1154,29 @@ class RadicacionController extends Controller
         $fechacomparecencia='';
         $fechainicioaclaracion='';
         $fechaterminoaclaracion='';
+        $day02 = '';
+        $mes02 = '';
+        $day03 = '';
+        $mes03 = '';
+        $SiRecomendaciones = "";
+        $SiRecomendaciones01 ='';
+        $SiRecomendaciones02 ='';
+        $SiRecomendaciones03 ='';
+        $SiRecomendaciones04 ='';
+        $SiPRAS="";
+        $SiPRAS01="";
+        $SiPRAS02="";
+        $SiPliegos01="";
+        $Orden = '';
+        $Orden01 = '';
+        $Orden02 = '';
+        $nombre_ccp='';
+        $info_ccp='';
+        $infodom_ccp='';
+        $info='';
+
         $auditoria=Auditoria::find(getSession('auditoria_id'));       
         $formatter = new NumeroALetras();
-
-        $entidadWord = 'Instituto Materno Infantil del Estado de México';
-
-        $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
 
         $iniciales='';
         $nombre=auth()->user()->name;
@@ -1240,8 +1184,6 @@ class RadicacionController extends Controller
          foreach($esquemanombres as $parte){
             $iniciales=$iniciales.substr($parte, 0,1);
          }
-
-         
 
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $mes = $meses[(now()->format('n')) - 1];
@@ -1261,20 +1203,19 @@ class RadicacionController extends Controller
             $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);        
             $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);       
             $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
+
+            $date01 = fecha(optional($auditoria->comparecencia)->fecha_comparecencia);
+            $day01 = date('d', strtotime($date01)); 
+            $mes01 = $meses[($auditoria->comparecencia)->fecha_comparecencia->format('n') - 1]; 
+            $day02 = date('d', strtotime($auditoria->comparecencia->fecha_inicio_aclaracion));
+            $mes02 = $meses[($auditoria->comparecencia->fecha_inicio_aclaracion->format('n')) - 1]; 
+            $day03 = date('d', strtotime($auditoria->comparecencia->fecha_termino_aclaracion));
+            $mes03 = $meses[($auditoria->comparecencia->fecha_termino_aclaracion->format('n')) - 1];
             }
 
         $fecha_hora=fecha(optional($auditoria->comparecencia)->fecha_comparecencia) . ' ' . date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_inicio)) . (empty($auditoria->comparecencia->hora_comparecencia_termino)?"":"-".date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_termino)));
-        $date01 = fecha(optional($auditoria->comparecencia)->fecha_comparecencia);
-        $day01 = date('d', strtotime($date01)); 
-        $mes01 = $meses[($auditoria->comparecencia)->fecha_comparecencia->format('n') - 1]; 
-        $day02 = date('d', strtotime($auditoria->comparecencia->fecha_inicio_aclaracion));
-        $mes02 = $meses[($auditoria->comparecencia->fecha_inicio_aclaracion->format('n')) - 1]; 
-        $day03 = date('d', strtotime($auditoria->comparecencia->fecha_termino_aclaracion));
-        $mes03 = $meses[($auditoria->comparecencia->fecha_termino_aclaracion->format('n')) - 1];
-        
         $hora01 =  date("g:i a",strtotime($auditoria->comparecencia->hora_comparecencia_inicio));
 
-        $formatterPM = new NumeroALetras();
         $plazomax=$formatter->toString($auditoria->radicacion->plazo_maximo);
 
         $plazomaxMax = ucwords($plazomax);            
@@ -1283,13 +1224,7 @@ class RadicacionController extends Controller
         $fechaactual=fechaaletra(now());
         $datenow = Carbon::now();
         $datenow01 = date('Y', strtotime($datenow)); 
-        $cierre = $auditoria->radicacion->acta_cierre_auditoria;
 
-
-        $nombre_ccp='';
-        $info_ccp='';
-        $infodom_ccp='';
-        $info='';
         if ($auditoria->entidadFiscalizable->Ambito=='Estatal') {
             $nombre_ccp='</w:t><w:br/><w:t>Luis David Fernández Araya';
             $info_ccp='Subsecretario de Control y Evaluación de la Secretaría de la Contraloría del Gobierno del Estado de México. </w:t><w:br/><w:t>';
@@ -1329,41 +1264,69 @@ class RadicacionController extends Controller
         $numeroAuditoria = Auditoria::find(getSession('auditoria_id'));
 
         if ($numeroAuditoria) {
-        $entidad = ListadoEntidades::where('no_auditoria', $numeroAuditoria->numero_auditoria)
-            ->where('cuenta_publica', $numeroAuditoria->cuenta_publica)
-            ->select('entidades', 'textos_doc')
-            ->first();
+            $entidad = ListadoEntidades::where('no_auditoria', $numeroAuditoria->numero_auditoria)->where('cuenta_publica', $numeroAuditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();
+                if ($entidad) {
+                    $nombreEntidad = $entidad->entidades;
+                    $textoDocumento = $entidad->textos_doc;
 
-            if ($entidad) {
-                $nombreEntidad = $entidad->entidades;
-                $textoDocumento = $entidad->textos_doc;
-
-            }
+                }
         }
 
         $UMA = CatalogoUMAS::where('ejercicio', $datenow01)->select('texto')->first();
-
         $UMATEXT = $UMA->texto;
 
-         $SiRecomendaciones = "";
-         $SiRecomendaciones01 ='';
-         $SiRecomendaciones02 ='';
-         $SiRecomendaciones03 ='';
-         $SiRecomendaciones04 ='';
-         $SiPRAS="";
-         $SiPRAS01="";
-         $SiPRAS02="";
-         $SiPliegos01="";
-         
-        if($auditoria->acto_fiscalizacion=='Inversión Física'){
+        if(empty($auditoria->acuerdoconclusion->domicilio)){
+            $remitente_domicilio = "";
+        }else{
+            $remitente_domicilio = $auditoria->acuerdoconclusion->domicilio;
+        }
+
+        if($auditoria->acto_fiscalizacion=='Inversión Física')
+        {
             if(count($auditoria->accionesrecomendaciones)>0){
                 $SiRecomendaciones = '54 Bis';
                 $SiRecomendaciones01 = 'y XXIII Bis';
                 $SiRecomendaciones03 = 'y del Proceso de Atención a las Recomendaciones ';
                 $SiRecomendaciones04 = '; asimismo, se informe de las mejoras realizadas y las acciones emprendidas con relación a las recomendaciones de mérito, o en su caso, justifique su improcedencia, con el apercibimiento de que en caso de no dar cumplimiento en el plazo concedido, se entenderán por no atendidas ni justificadas dichas recomendaciones';
             }
+            $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/2. Of. AR_01.docx'); 
+            $template->setValue('mes',$mes);
+            $template->setValue('anio',date("Y"));
+            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+            $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
+            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
+            $template->setValue('txt1',$txt1);
+            $template->setValue('fraccion',$frac);
+            $template->setValue('recomendaciones01',$SiRecomendaciones);
+            $template->setValue('recomendaciones02',$SiRecomendaciones01);
+            $template->setValue('fecha_oficioAcuerdo', $auditoria->radicacion->fecha_oficio_acuerdo);
+            $template->setValue('entidad',$textoDocumento);
+            $template->setValue('periodo',$auditoria->periodo_revision);
+            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+            $template->setValue('hora01', $hora01);
+            $template->setValue('day01', $day01);
+            $template->setValue('mes01', $mes01);
+            $template->setValue('ambito01', $ambito01);
+            $template->setValue('recomendaciones03',$SiRecomendaciones03);
+            $template->setValue('day02', $day02);
+            $template->setValue('mes02', $mes02);
+            $template->setValue('day03', $day03);
+            $template->setValue('mes03', $mes03);
+            $template->setValue('recomendaciones04',$SiRecomendaciones04);
+            $template->setValue('nombre_ccp',$nombre_ccp);
+            $template->setValue('info',$info);
+            $template->setValue('iniciales',$iniciales);
 
-        }elseif($auditoria->acto_fiscalizacion=='Legalidad'){
+            $nombreword='Of. AR';/** */
+
+        $template->saveAs($nombreword.'.docx');/** */
+        }
+         if($auditoria->acto_fiscalizacion=='Legalidad'){
+            $cierre = $auditoria->radicacion->acta_cierre_auditoria;
             if(count($auditoria->accionesrecomendaciones)>0){
                 $SiRecomendaciones = '54 Bis';
                 $SiRecomendaciones01 = 'y XXIII Bis';
@@ -1380,137 +1343,35 @@ class RadicacionController extends Controller
                 $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
             }
 
-        }elseif($auditoria->acto_fiscalizacion=='Desempeño'){
-            if(count($auditoria->accionespras)>0){
-                $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
-            }
-
-        }elseif($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
-            if(count($auditoria->accionesrecomendaciones)>0){
-                $SiRecomendaciones = '54 Bis';
-                $SiRecomendaciones01 = 'y XXIII Bis';
-                $SiRecomendaciones03 = 'y del Proceso de Atención a las Recomendaciones ';
-                $SiRecomendaciones04 = '; asimismo, se informe de las mejoras realizadas y las acciones emprendidas con relación a las recomendaciones de mérito, o en su caso, justifique su improcedencia, con el apercibimiento de que en caso de no dar cumplimiento en el plazo concedido, se entenderán por no atendidas ni justificadas dichas recomendaciones';
-            }
-            if(count($auditoria->accionespras)>0){
-                $SiPRAS="XIX, XXV";
-                $SiPRAS01 = 'Con fundamento en lo previsto en los artículos 42 Bis, 53 fracción I y 55 párrafo segundo de la Ley de Fiscalización Superior del Estado de México; 12 párrafo segundo y 103 de la Ley de Responsabilidades Administrativas del Estado de México y Municipios y; 23 fracciones XIX y XLIV y 47 fracciones III, V, XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, túrnese por oficio al Órgano Interno de Control de'. $nombreEntidad.' o a su equivalente, las Promociones de Responsabilidad Administrativa Sancionatoria (PRAS) que se desprenden  de los resultados obtenidos del acto de fiscalización de mérito, así como, su soporte documental correspondiente en copias certificadas, para el efecto de que dicha autoridad  continúe con las investigaciones pertinentes y promueva las acciones procedentes. ';
-                $SiPRAS02="y al Órgano Interno de Control de".$nombreEntidad;
-            }
-        }
-        if(empty($auditoria->acuerdoconclusion->domicilio)){
-            $remitente_domicilio = "";
-        }else{
-            $remitente_domicilio = $auditoria->acuerdoconclusion->domicilio;
-        }
-
-
-        if($auditoria->acto_fiscalizacion=='Inversión Física')
-        {
-            $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/2. Of. AR_01.docx'); //*
-            /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-            $template->setValue('entidad_fiscalizable', $auditoria->entidad_fiscalizable);
-            $template->setValue('fecha_txt', $fechacomparecencia);
-            $template->setValue('day01', $day01);
-            $template->setValue('mes01', $mes01);
-            $template->setValue('hora01', $hora01);
-            $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
-            $template->setValue('plazoMaximoletra', $plazomaxMin);
-            $template->setValue('fechahoy', $fechaactual);
-            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-            $template->setValue('periodo',$auditoria->periodo_revision);
-            $template->setValue('cierre',$auditoria->radicacion->acta_cierre_auditoria);
-            $template->setValue('ambito01', $ambito01);
-            $template->setValue('day02', $day02);
-            $template->setValue('day03', $day03);
-            $template->setValue('iniciales',$iniciales);
-            $template->setValue('anio',date("Y"));
-            $template->setValue('mes',$mes);
-            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-            $template->setValue('remitente_domicilio',$remitente_domicilio);
-            $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
-            $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
-            $template->setValue('claves',count($auditoria->accionespras));
-            $template->setValue('nombre_ccp',$nombre_ccp);
-            $template->setValue('info_ccp',$info_ccp);
-            $template->setValue('infodom_ccp',$infodom_ccp);
-            $template->setValue('info',$info);
-            $template->setValue('fecha_oficioAcuerdo', $auditoria->radicacion->fecha_oficio_acuerdo);
-            $template->setValue('mes02', $mes02);
-            $template->setValue('mes03', $mes03);
-            $template->setValue('txt1',$txt1);
-
-            $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
-            $template->setValue('entidad',$textoDocumento);
-            $template->setValue('entidad01',$nombreEntidad);
-            $template->setValue('recomendaciones01',$SiRecomendaciones);
-            $template->setValue('recomendaciones02',$SiRecomendaciones01);
-            $template->setValue('recomendaciones03',$SiRecomendaciones03);
-            $template->setValue('recomendaciones04',$SiRecomendaciones04);
-            $template->setValue('pliegos01', $SiPliegos01);
-            $template->setValue('siPRAS',$SiPRAS);
-            $template->setValue('siPRAS01',$SiPRAS01);
-            $template->setValue('siPRAS02',$SiPRAS02);
-            $template->setValue('fraccion',$frac);
-
-            $nombreword='Of. AR';/** */
-
-        $template->saveAs($nombreword.'.docx');/** */
-        }
-         if($auditoria->acto_fiscalizacion=='Legalidad'){
             $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/2. Of. AR_01.docx'); //*
             /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-            $template->setValue('entidad_fiscalizable', $auditoria->entidad_fiscalizable);
-            $template->setValue('fecha_txt', $fechacomparecencia);
+            $template->setValue('mes',$mes);
+            $template->setValue('anio',date("Y"));
+            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+            $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
+            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+            $template->setValue('remitente_domicilio',$remitente_domicilio);
+            $template->setValue('txt1',$txt1);
+            $template->setValue('fraccion',$frac);
+            $template->setValue('recomendaciones01',$SiRecomendaciones);
+            $template->setValue('recomendaciones02',$SiRecomendaciones01);
+            $template->setValue('fecha_oficioAcuerdo', $auditoria->radicacion->fecha_oficio_acuerdo);
+            $template->setValue('entidad',$textoDocumento);
+            $template->setValue('periodo',$auditoria->periodo_revision);
+            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+            $template->setValue('hora01', $hora01);
             $template->setValue('day01', $day01);
             $template->setValue('mes01', $mes01);
-            $template->setValue('hora01', $hora01);
-            $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
-            $template->setValue('plazoMaximoletra', $plazomaxMin);
-            $template->setValue('fechahoy', $fechaactual);
-            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-            $template->setValue('periodo',$auditoria->periodo_revision);
             $template->setValue('ambito01', $ambito01);
-            $template->setValue('day02', $day02);
-            $template->setValue('mes02', $mes02);
-            $template->setValue('day03', $day03);
-            $template->setValue('mes03', $mes03);
-            $template->setValue('cierre',$auditoria->radicacion->acta_cierre_auditoria);
-            $template->setValue('iniciales',$iniciales);
-            $template->setValue('anio',date("Y"));
-            $template->setValue('mes',$mes);
-            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-            $template->setValue('remitente_domicilio',$remitente_domicilio);
-            $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
-            $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
-            $template->setValue('claves',count($auditoria->accionespras));
-            $template->setValue('nombre_ccp',$nombre_ccp);
-            $template->setValue('info_ccp',$info_ccp);
-            $template->setValue('infodom_ccp',$infodom_ccp);
-            $template->setValue('info',$info);
-            $template->setValue('fecha_oficioAcuerdo', $auditoria->radicacion->fecha_oficio_acuerdo);
-            $template->setValue('mes02', $mes02);
-            $template->setValue('mes03', $mes03);
-            $template->setValue('txt1',$txt1);
-
-            $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
-            $template->setValue('entidad',$textoDocumento);
-            $template->setValue('entidad01',$nombreEntidad);
-            $template->setValue('recomendaciones01', $SiRecomendaciones);
-            $template->setValue('recomendaciones02', $SiRecomendaciones01);
+            $template->setValue('pliegos01', $SiPliegos01);
             $template->setValue('recomendaciones03',$SiRecomendaciones02);
             $template->setValue('recomendaciones04',$SiRecomendaciones03);
-            $template->setValue('pliegos01', $SiPliegos01);
-            $template->setValue('siPRAS',$SiPRAS);
-            $template->setValue('fraccion',$frac);
+            $template->setValue('nombre_ccp',$nombre_ccp);
+            $template->setValue('info',$info);
+            $template->setValue('iniciales',$iniciales);
             
             $nombreword='Of. AR';/** */
 
@@ -1518,106 +1379,82 @@ class RadicacionController extends Controller
             }
             if($auditoria->acto_fiscalizacion=='Desempeño')
             {
+                $cierre = $auditoria->radicacion->acta_cierre_auditoria;
+                if(count($auditoria->accionespras)>0){
+                    $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
+                }
                 $template=new TemplateProcessor('bases-word/PAC/DESEMPEÑO/LIDER/2. Of. AR_01.docx'); //*
-
-                /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-                $template->setValue('entidad_fiscalizable', $auditoria->entidad_fiscalizable);
-                $template->setValue('fecha_txt', $fechacomparecencia);
-                $template->setValue('day01', $day01);
-                $template->setValue('mes01', $mes01);
+                $template->setValue('mes',$mes);
+                $template->setValue('anio',date("Y"));
+                $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
+                $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+                $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+                $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
+                $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+                $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+                $template->setValue('remitente_domicilio',$remitente_domicilio);
+                $template->setValue('txt1',$txt1);
+                $template->setValue('fraccion',$frac);
+                $template->setValue('fecha_oficioAcuerdo', $auditoria->radicacion->fecha_oficio_acuerdo);
+                $template->setValue('entidad',$textoDocumento);
+                $template->setValue('periodo',$auditoria->periodo_revision);
+                $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
                 $template->setValue('hora01', $hora01);
                 $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
                 $template->setValue('plazoMaximoletra', $plazomaxMin);
-                $template->setValue('fechahoy', $fechaactual);
-                $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-                $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-                $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-                $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-                $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-                $template->setValue('periodo',$auditoria->periodo_revision);
-                $template->setValue('ambito01', $ambito01);
-                $template->setValue('day02', $day02);
-                $template->setValue('day03', $day03);
                 $template->setValue('cierre',$auditoria->radicacion->acta_cierre_auditoria);
-                $template->setValue('iniciales',$iniciales);
-                $template->setValue('anio',date("Y"));
-                $template->setValue('mes',$mes);
-                $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-                $template->setValue('remitente_domicilio',$remitente_domicilio);
-                $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
-                $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
-                $template->setValue('claves',count($auditoria->accionespras));
-                $template->setValue('nombre_ccp',$nombre_ccp);
-                $template->setValue('info_ccp',$info_ccp);
-                $template->setValue('infodom_ccp',$infodom_ccp);
-                $template->setValue('info',$info);
-                $template->setValue('fecha_oficioAcuerdo', $auditoria->radicacion->fecha_oficio_acuerdo);
-                $template->setValue('mes02', $mes02);
-                $template->setValue('mes03', $mes03);
-                $template->setValue('txt1',$txt1);
-
-                $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
-                $template->setValue('entidad',$textoDocumento);
-                $template->setValue('entidad01',$nombreEntidad);
                 $template->setValue('uma', $UMATEXT);
-                $template->setValue('siPRAS',$SiPRAS);
-                $template->setValue('fraccion',$frac);
+                $template->setValue('nombre_ccp',$nombre_ccp);
+                $template->setValue('info',$info);
+                $template->setValue('iniciales',$iniciales);
 
                 $nombreword='Of. AR';/** */
     
             $template->saveAs($nombreword.'.docx');/** */
             }    
-            if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
-            {
+            if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
+                if(count($auditoria->accionesrecomendaciones)>0){
+                    $SiRecomendaciones = '54 Bis';
+                    $SiRecomendaciones01 = 'y XXIII Bis';
+                    $SiRecomendaciones03 = 'y del Proceso de Atención a las Recomendaciones ';
+                    $SiRecomendaciones04 = '; asimismo, se informe de las mejoras realizadas y las acciones emprendidas con relación a las recomendaciones de mérito, o en su caso, justifique su improcedencia, con el apercibimiento de que en caso de no dar cumplimiento en el plazo concedido, se entenderán por no atendidas ni justificadas dichas recomendaciones';
+                }
+                if(count($auditoria->accionespras)>0){
+                    $SiPRAS="XIX, XXV";
+                    $SiPRAS01 = 'Con fundamento en lo previsto en los artículos 42 Bis, 53 fracción I y 55 párrafo segundo de la Ley de Fiscalización Superior del Estado de México; 12 párrafo segundo y 103 de la Ley de Responsabilidades Administrativas del Estado de México y Municipios y; 23 fracciones XIX y XLIV y 47 fracciones III, V, XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, túrnese por oficio al Órgano Interno de Control de'. $nombreEntidad.' o a su equivalente, las Promociones de Responsabilidad Administrativa Sancionatoria (PRAS) que se desprenden  de los resultados obtenidos del acto de fiscalización de mérito, así como, su soporte documental correspondiente en copias certificadas, para el efecto de que dicha autoridad  continúe con las investigaciones pertinentes y promueva las acciones procedentes. ';
+                    $SiPRAS02="y al Órgano Interno de Control de".$nombreEntidad;
+                }
                 $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/2. Of. AR_01.docx'); //*
                 /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-                $template->setValue('entidad_fiscalizable', $auditoria->entidad_fiscalizable);
-                $template->setValue('fecha_txt', $fechacomparecencia);
-                $template->setValue('day01', $day01);
-                $template->setValue('mes01', $mes01);
-                $template->setValue('hora01', $hora01);
-                $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
-                $template->setValue('plazoMaximoletra', $plazomaxMin);
-                $template->setValue('fechahoy', $fechaactual);
-                $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-                $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-                $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-                $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-                $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-                $template->setValue('periodo',$auditoria->periodo_revision);
-                $template->setValue('ambito01', $ambito01);
-                $template->setValue('day02', $day02);
-                $template->setValue('day03', $day03);
-                $template->setValue('cierre',$auditoria->radicacion->acta_cierre_auditoria);
-                $template->setValue('iniciales',$iniciales);
-                $template->setValue('anio',date("Y"));
                 $template->setValue('mes',$mes);
+                $template->setValue('anio',date("Y"));
+                $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
                 $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-                $template->setValue('remitente_domicilio',$remitente_domicilio);
-                $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
-                $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
-                $template->setValue('claves',count($auditoria->accionespras));
-                $template->setValue('nombre_ccp',$nombre_ccp);
-                $template->setValue('info_ccp',$info_ccp);
-                $template->setValue('infodom_ccp',$infodom_ccp);
-                $template->setValue('info',$info);
-                $template->setValue('fecha_oficioAcuerdo', $auditoria->radicacion->fecha_oficio_acuerdo);
-                $template->setValue('mes02', $mes02);
-                $template->setValue('mes03', $mes03);
-                $template->setValue('txt1',$txt1);
-
+                $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
                 $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
-                $template->setValue('entidad',$textoDocumento);
-                $template->setValue('entidad01',$nombreEntidad);
+                $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
+                $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
+                $template->setValue('remitente_domicilio',$remitente_domicilio);
+                $template->setValue('txt1',$txt1);
+                $template->setValue('fraccion',$frac);
                 $template->setValue('recomendaciones01',$SiRecomendaciones);
                 $template->setValue('recomendaciones02',$SiRecomendaciones01);
+                $template->setValue('fecha_oficioAcuerdo', $auditoria->radicacion->fecha_oficio_acuerdo);
+                $template->setValue('entidad',$textoDocumento);
+                $template->setValue('periodo',$auditoria->periodo_revision);
+                $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+                $template->setValue('hora01', $hora01);
+                $template->setValue('day01', $day01);
+                $template->setValue('mes01', $mes01);
+                $template->setValue('ambito01', $ambito01);
                 $template->setValue('recomendaciones03',$SiRecomendaciones03);
-                $template->setValue('recomendaciones04',$SiRecomendaciones04);
-                $template->setValue('pliegos01', $SiPliegos01);
-                $template->setValue('siPRAS',$SiPRAS);
-                $template->setValue('siPRAS01',$SiPRAS01);
-                $template->setValue('siPRAS02',$SiPRAS02);
-                $template->setValue('fraccion',$frac);
+                $template->setValue('day02', $day02);
+                $template->setValue('mes02', $mes02);
+                $template->setValue('day03', $day03);
+                $template->setValue('mes03', $mes03);
+                $template->setValue('nombre_ccp',$nombre_ccp);
+                $template->setValue('info',$info);
+                $template->setValue('iniciales',$iniciales);
 
                 $nombreword='Of. AR';/** */  
 
@@ -1660,148 +1497,28 @@ class RadicacionController extends Controller
     {
         $auditoria=Auditoria::find(getSession('auditoria_id'));
 
-        $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
-
-         $txtentidad=null;
-
-         if (count($entidades)>1) {
-            if ($entidades[1]=='MUNICIPIOS') {
-                $bar = ucwords($entidades[2]);
-                $bar = ucwords(strtolower($bar));
-
-                $txtentidad='Municipio de '.$bar;
-            }
-         }
-        $iniciales='';
-        $nombre=auth()->user()->name;
-        $esquemanombres=explode(' ',$nombre);
-         foreach($esquemanombres as $parte){
-            $iniciales=$iniciales.substr($parte, 0,1);
-         }
-
-         if(empty($auditoria->acuerdoconclusion->domicilio)){
-            $remitente_domicilio = "";
-        }else{
-            $remitente_domicilio = $auditoria->acuerdoconclusion->domicilio;
-        }
-
-
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-        $mes = $meses[(now()->format('n')) - 1];
-
-        $nombre_ccp='';
-        $info_ccp='';
-        $infodom_ccp='';
-        $info='';
-        if ($auditoria->entidadFiscalizable->Ambito=='Estatal') {
-            $nombre_ccp='</w:t><w:br/><w:t>Luis David Fernández Araya';
-            $info_ccp='Subsecretario de Control y Evaluación de la Secretaría de la Contraloría del Gobierno del Estado de México. </w:t><w:br/><w:t>';
-            $infodom_ccp='Domicilio: Av. Primero de Mayo, número 1731, Esquina Robert Bosch, Colonia Zona Industrial, C.P. 50071, Toluca, México.</w:t><w:br/><w:t>';
-            $info=$info_ccp.' '.$infodom_ccp;
-        }
-        if($auditoria->acto_fiscalizacion=='Inversión Física')
-        {
+        if($auditoria->acto_fiscalizacion=='Inversión Física'){
             $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/1. AR.docx'); //*
-            $template->setValue('anio',date("Y"));
-            $template->setValue('mes',$mes);
-            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente_domicilio',$remitente_domicilio);
-            $template->setValue('entidad',$txtentidad);
-            $template->setValue('periodo',$auditoria->periodo_revision);
-            $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
-            $template->setValue('nombre_ccp',$nombre_ccp);
-            $template->setValue('info_ccp',$info_ccp);
-            $template->setValue('infodom_ccp',$infodom_ccp);
-            $template->setValue('info',$info);
-            $template->setValue('iniciales',$iniciales);
-            $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
-
             $nombreword='AR';/** */
-
-        $template->saveAs($nombreword.'.docx');/** */
+            $template->saveAs($nombreword.'.docx');/** */
         }
          if($auditoria->acto_fiscalizacion=='Legalidad'){
-            $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/1. AR.docx'); //*
-            $template->setValue('anio',date("Y"));
-            $template->setValue('mes',$mes);
-            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente_domicilio',$remitente_domicilio);
-            $template->setValue('entidad',$txtentidad);
-            $template->setValue('periodo',$auditoria->periodo_revision);
-            $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
-            $template->setValue('nombre_ccp',$nombre_ccp);
-            $template->setValue('info_ccp',$info_ccp);
-            $template->setValue('infodom_ccp',$infodom_ccp);
-            $template->setValue('info',$info);
-            $template->setValue('iniciales',$iniciales);
-            $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
-
-            $nombreword='AR';/** */
-
-        $template->saveAs($nombreword.'.docx');/** */
+                $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/1. AR.docx'); //*
+                $nombreword='AR';/** */
+                $template->saveAs($nombreword.'.docx');/** */
             }
             if($auditoria->acto_fiscalizacion=='Desempeño')
             {
                 $template=new TemplateProcessor('bases-word/PAC/DESEMPEÑO/LIDER/1. AR.docx'); //*
-                $template->setValue('anio',date("Y"));
-                $template->setValue('mes',$mes);
-                $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-                $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-                $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-                $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-                $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-                $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-                $template->setValue('remitente_domicilio',$remitente_domicilio);
-                $template->setValue('entidad',$txtentidad);
-                $template->setValue('periodo',$auditoria->periodo_revision);
-                $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
-                $template->setValue('nombre_ccp',$nombre_ccp);
-                $template->setValue('info_ccp',$info_ccp);
-                $template->setValue('infodom_ccp',$infodom_ccp);
-                $template->setValue('info',$info);
-                $template->setValue('iniciales',$iniciales);
-                $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
-
                 $nombreword='AR';/** */
-
-            $template->saveAs($nombreword.'.docx');/** */
+                $template->saveAs($nombreword.'.docx');/** */
             }
             if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
-        {
-            $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/1. AR.docx'); //*
-            $template->setValue('anio',date("Y"));
-            $template->setValue('mes',$mes);
-            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
-            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
-            $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
-            $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
-            $template->setValue('remitente_domicilio',$remitente_domicilio);
-            $template->setValue('entidad',$txtentidad);
-            $template->setValue('periodo',$auditoria->periodo_revision);
-            $template->setValue('tipo_auditoria',$auditoria->tipo_auditoria->descripcion);
-            $template->setValue('nombre_ccp',$nombre_ccp);
-            $template->setValue('info_ccp',$info_ccp);
-            $template->setValue('infodom_ccp',$infodom_ccp);
-            $template->setValue('info',$info);
-            $template->setValue('iniciales',$iniciales);
-            $template->setValue('ambito',$auditoria->entidadFiscalizable->Ambito);
-
-            $nombreword='AR';/** */
-
-        $template->saveAs($nombreword.'.docx');/** */
-        }
+            {
+                $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/1. AR.docx'); //*
+                $nombreword='AR';/** */
+                $template->saveAs($nombreword.'.docx');/** */
+            }
 
 		return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);/** */
 

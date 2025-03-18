@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AutorizarFlujoAutorizacionRequest extends FormRequest
+class FlujoAutorizacionFinalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,7 +32,8 @@ class AutorizarFlujoAutorizacionRequest extends FormRequest
     {
         return [
             'estatus' => '',
-            'motivo_rechazo' => 'motivo del rechazo',            
+            'motivo_rechazo' => 'motivo del rechazo',     
+        ];       
     }
 
     public function messages()

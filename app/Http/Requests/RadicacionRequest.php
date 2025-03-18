@@ -27,8 +27,6 @@ class RadicacionRequest extends FormRequest
             'numero_expediente'=>'required|string|max:150',
             'numero_acuerdo' => 'required|string|max:30',
             'oficio_acuerdo' => 'required|string|max:100',
-            'fecha_oficio_acuerdo' => 'required|date|max:10',
-
             // 'oficio_designacion' => 'required|string|max:100',
             // 'fecha_oficio_designacion' => 'required|date|max:10|after_or_equal:fecha_oficio_acuerdo',
             'nombre_titular' => 'required|string|max:120',
@@ -58,7 +56,6 @@ class RadicacionRequest extends FormRequest
             'numero_expediente'=>'número de expediente US',
             'numero_acuerdo' => 'número de oficio de notificación de acuerdos',
             'oficio_acuerdo' => 'acuerdo de radicación',
-            'fecha_oficio_acuerdo' => 'fecha del acuerdo',
             // 'oficio_designacion' => 'oficio de designación',
             // 'fecha_oficio_designacion' => 'fecha del oficio',
             'nombre_titular' => 'nombre del titular  a quien se dirige la comparecencia',
