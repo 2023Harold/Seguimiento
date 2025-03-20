@@ -6,6 +6,8 @@ use App\Models\AcuerdoConclusion;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use Illuminate\Http\Request;
+use App\Models\ListadoEntidades;
+use Luecano\NumeroALetras\NumeroALetras;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class AcuerdoConclusionController extends Controller
@@ -256,19 +258,11 @@ class AcuerdoConclusionController extends Controller
     }
     $iniciales= $inicialesLM."/".$inicialesD."/".$inicialesA."/".$inicialesJD;
 
-
-     $numeroAuditoria = Auditoria::find(getSession('auditoria_id'));
-
-    if ($numeroAuditoria) {
-    $entidad = ListadoEntidades::where('no_auditoria', $numeroAuditoria->numero_auditoria)
-        ->where('cuenta_publica', $numeroAuditoria->cuenta_publica)
-        ->select('entidades', 'textos_doc')
-        ->first();
-
+    if ($auditoria) {
+    $entidad = ListadoEntidades::where('no_auditoria', $auditoria->numero_auditoria)->where('cuenta_publica', $auditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();
         if ($entidad) {
             $nombreEntidad = $entidad->entidades;
             $textoDocumento = $entidad->textos_doc;
-
         }
     }
 

@@ -547,6 +547,10 @@ class RadicacionController extends Controller
         $info_ccp='';
         $infodom_ccp='';
         $info='';
+        $day02 = "";
+        $mes02 = "";
+        $day03 = "";
+        $mes03 =  "";
 
         $auditoria=Auditoria::find(getSession('auditoria_id'));
         $formatter = new NumeroALetras();
