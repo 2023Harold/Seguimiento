@@ -64,7 +64,7 @@
                                 <th>Nombre del titular a quien se dirige</th>
                                 <th>Cargo del titular a quien se dirige</th>
                                 <th>Domicilio</th>
-                                <th>Acuerdo de conclusión UI</th>
+                                <th>Acuerdo de conclusión</th>
                                 <th>Fase / Acción</th>
                             @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
                                 <th>Enviar</th>

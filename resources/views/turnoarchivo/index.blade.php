@@ -36,7 +36,7 @@
                         <thead>
                             <tr>
                                 <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente Técnico de la Auditoría</th>
-                                <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente Técnico de Seguimiento</th>
+                                <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente de Seguimiento</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
