@@ -105,7 +105,7 @@
 
                                     </td> 
                                     <td class="text-center">  
-                                    @if(getSession('cp')==2022)                                                                     
+                                    @if(getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')                                                                   
                                             @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
                                                     @can('radicacion.edit')
@@ -149,7 +149,7 @@
                                                 @endif
                                                                                                  
                                             @endif  
-                                    @elseif(getSession('cp')==2023) 
+                                    @elseif(getSession('cp')==2023 && auth()->user()->siglas_rol=='LP')
                                             @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
                                                     @can('radicacion.edit')
