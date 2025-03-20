@@ -55,10 +55,11 @@
                     <div class="col-md-4">
                         {!!BootForm::text('oficio_acuerdo', 'Oficio de notificación de acuerdos: *', old('numero_acuerdo',$radicacion->oficio_acuerdo)) !!}
                     </div>
-                    <div class="col-lg-3 col-md-3">
+
+                <div class="col-lg-3 col-md-3">
                         {!!BootForm::date('fecha_oficio_acuerdo','Fecha de oficio: *', old('fecha_oficio_acuerdo',fecha($radicacion->fecha_oficio_acuerdo,'Y-m-d'))) !!}
                     </div>
-                </div>
+					</div>
                 <div class="row">
                     <div class="col-md-4">
                         {!!BootForm::text('acta_cierre_auditoria', 'Acta de reunión de resultados finales y cierre de auditoría: *', old('acta_cierre_auditoria',$radicacion->acta_cierre_auditoria)) !!}

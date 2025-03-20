@@ -26,7 +26,7 @@
                             {!! BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion)) !!}
                         </div>
                         <div class="col-md-6 mt-8">
-                            <button type="submit" class="btn btn-primary">Buscar</button>
+                            <button type="submit" class="btn btn-primary">Buscar</button>                           
                         </div>
                     </div>
                 {!! BootForm::close() !!}
@@ -36,16 +36,16 @@
 							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
 						</div>
 					</div>
-				</div>
+				</div>	
                 @can('seguimientoauditoria.create')
                     <div class="row">
                         <div class="col-md-12">
                             <a class="btn btn-primary float-end" href="{{ route('seguimientoauditoria.create') }}">
                                 Agregar auditoria
                             </a>
-                        </div>
-                    </div>
-                @endcan
+                        </div>                    
+                    </div> 
+                @endcan          
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -57,8 +57,8 @@
                                 <th>Informe de auditoría</th>
                                 <th>Número de fojas</th>
                                 <th>Acciones promovidas</th>
-                                <th>Monto por aclarar</th>
-                                <th>Fase</th>
+                                <th>Monto por aclarar</th> 
+                                <th>Fase</th>                                
                                 <th></th>
                             </tr>
                         </thead>
@@ -73,22 +73,22 @@
                                     </td>
                                     <td  width='40%'>
                                         @php
-                                            $entidadparciales = explode("-", $auditoria->entidad_fiscalizable);
+                                            $entidadparciales = explode("-", $auditoria->entidad_fiscalizable);                                            
                                         @endphp
                                         @foreach ($entidadparciales as $entidadparcial)
                                             {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8"); }}<br>
-                                        @endforeach
+                                        @endforeach                                        
                                     </td>
                                     <td>
                                         {{ $auditoria->acto_fiscalizacion }}
-                                    </td>
+                                    </td>                                    
                                     <td class="text-center">
                                         @if (!empty($auditoria->informe_auditoria))
 											@php
 												$archivo=str_replace('storage/','',$auditoria->informe_auditoria);
 											@endphp
-											{{-- @btnFileMinio($archivo) --}}
-
+											@btnFileMinio($archivo)
+                                                                              
                                         @endif
                                     </td>
                                     <td>
@@ -97,13 +97,13 @@
                                     <td class="text-center">
                                         @if(!empty($auditoria->fase_autorizacion) && auth()->user()->siglas_rol!='ANA')
                                             <a href="{{ route('seguimientoauditoria.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
-                                        @endif
+                                        @endif   
                                         @if(!empty($auditoria->fase_autorizacion) && $auditoria->fase_autorizacion!='Rechazado' && auth()->user()->siglas_rol=='ANA')
                                             <a href="{{ route('seguimientoauditoria.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
-                                        @endif
+                                        @endif                                       
                                     </td>
                                     <td style="text-align: right!important;">
-                                        {{ '$'.number_format( $auditoria->total(), 2) }}
+                                        {{ '$'.number_format( $auditoria->total(), 2) }}                                         
                                     </td>
                                     <td class="text-center">
                                         @if ($auditoria->fase_autorizacion == 'En revisión 01')
@@ -118,30 +118,30 @@
                                             <span class="badge badge-light-danger">{{ $auditoria->fase_autorizacion }}</span>
                                         @elseif($auditoria->fase_autorizacion == 'Autorizado')
                                             <span class="badge badge-light-success">{{ $auditoria->fase_autorizacion }}</span>
-                                        @endif
+                                        @endif         
                                     </td>
-                                    <td class="text-center">
-										 @if ($auditoria->numero_auditoria=='AD-098')
-                                            @can('seguimientoauditoria.edit')
+                                    <td class="text-center"> 
+										 @if ($auditoria->numero_auditoria=='AD-098')   
+                                            @can('seguimientoauditoria.edit')                                         
                                                 <a href="{{ route('seguimientoauditoria.edit',$auditoria) }}">
                                                     <i class="align-middle fas fa-edit text-primary" aria-hidden="true"></i>
-                                                </a>
-                                            @endcan
+                                                </a>  
+                                            @endcan                                                                              
                                         @endif
-                                        @if (empty($auditoria->fase_autorizacion)||$auditoria->fase_autorizacion=='Rechazado')
-                                            @can('seguimientoauditoria.edit')
+                                        @if (empty($auditoria->fase_autorizacion)||$auditoria->fase_autorizacion=='Rechazado')   
+                                            @can('seguimientoauditoria.edit')                                         
                                                 <a href="{{ route('seguimientoauditoria.edit',$auditoria) }}">
                                                     <i class="align-middle fas fa-edit text-primary" aria-hidden="true"></i>
-                                                </a>
-                                            @endcan
-                                        @endif
+                                                </a>  
+                                            @endcan                                                                              
+                                        @endif  
                                         @if ($auditoria->fase_autorizacion == 'En revisión 01')
                                             @can('seguimientoauditoriarevision01.edit')
                                                 <a href="{{ route('seguimientoauditoriarevision01.edit',$auditoria) }}" class="btn btn-primary">
                                                     Revisar
                                                 </a>
                                             @endcan
-                                        @endif
+                                        @endif                                                                                                              
                                         @if ($auditoria->fase_autorizacion == 'En revisión')
                                             @can('seguimientoauditoriarevision.edit')
                                                 <a href="{{ route('seguimientoauditoriarevision.edit',$auditoria) }}" class="btn btn-primary">
@@ -161,11 +161,11 @@
                                                 <a href="{{ route('seguimientoauditoriaautorizacion.edit',$auditoria) }}" class="btn btn-primary popuprevisar">
                                                     Autorizar
                                                 </a>
-                                            @endcan
-                                        @endif
-                                    </td>
-                                </tr>
-                                    {!! movimientosDesglose($auditoria->id, 10, $auditoria->movimientos) !!}
+                                            @endcan                                           
+                                        @endif                                                                           
+                                    </td>                                  
+                                </tr>                                
+                                    {!! movimientosDesglose($auditoria->id, 10, $auditoria->movimientos) !!}                               
                             @empty
                                 <tr>
                                     <td class="text-center" colspan="8">
@@ -184,25 +184,25 @@
     </div>
 </div>
 @endsection
-@section('script')
+@section('script')   
     {!! JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
     <script>
-        $(document).ready(function() {
-            $('.popuprevisar').colorbox({
+        $(document).ready(function() {            
+            $('.popuprevisar').colorbox({     
                 width:"65%",
                 height:"650px",
                 maxWidth:400,
-                maxHeight:"650px",
-                iframe: true,
+                maxHeight:"650px",               
+                iframe: true,                
                 onClosed: function() {
-                    location.reload(true);
+                    location.reload(true);                    
                 },
                 onComplete: function () {
                  $(this).colorbox.resize({width:"65%",maxWidth:400, height:"650px", maxHeight:"650px"});
-                 $(window).trigger("resize");
+                 $(window).trigger("resize");                
                 }
             });
         });
-    </script>
+    </script>    
 @endsection
 

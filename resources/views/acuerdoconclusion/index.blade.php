@@ -30,7 +30,6 @@
                         <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. AC</a>
                     @endif
 
-
                 </div>
             </div>
             <div class="card-body">
@@ -82,13 +81,13 @@
                                     {{ $auditoria->acuerdoconclusion->numero_oficio }}
                                 </td>
                                 <td>
-                                    {{ $auditoria->comparecencia->nombre_titular }}
+                                    {{ $auditoria->acuerdoconclusion->nombre_titular }}
                                 </td>
                                 <td>
-                                    {{ $auditoria->comparecencia->cargo_titular }}
+                                    {{ $auditoria->acuerdoconclusion->cargo_titular }}
                                 </td>
                                 <td>
-                                    {{ $auditoria->comparecencia->domicilio_notificacion }}
+                                    {{ $auditoria->acuerdoconclusion->domicilio }}
                                 </td>
 
                                 <td class="text-center">
@@ -97,32 +96,8 @@
                                     </a><br>
                                     <small>{{ fecha($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion) }}</small>
 
-								@if($auditoria->numero_auditoria=='AD-097'||
-									$auditoria->numero_auditoria=='AD-108'||
-									$auditoria->numero_auditoria=='AD-120'||
-									$auditoria->numero_auditoria=='AD-107'||
-									$auditoria->numero_auditoria=='AL-078'||
-									$auditoria->numero_auditoria=='AL-077'||
-									$auditoria->numero_auditoria=='AL-130'||
-									$auditoria->numero_auditoria=='AL-091'||
-									$auditoria->numero_auditoria=='ACF-10'||
-									$auditoria->numero_auditoria=='AL-089'||
-									$auditoria->numero_auditoria=='ACF-119'||
-									$auditoria->numero_auditoria=='AD-063'||
-									$auditoria->numero_auditoria=='AD-046'||
-									$auditoria->numero_auditoria=='ACF-025.'||
-									$auditoria->numero_auditoria=='ACF-016'||
-									$auditoria->numero_auditoria=='ACF-015'||
-									$auditoria->numero_auditoria=='ACF-01'
-									)
-                                    <a href="{{ route('acuerdoconclusion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                        <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
-                                    </a>
-								@endif
+
                                 </td>
-                                {{-- <td class="text-center">
-                                    {{ fecha($auditoria->acuerdoconclusion->fecha_acuerdo_conclusion) }}
-                                </td> --}}
 
                             {{-- fase de validación --}}
 

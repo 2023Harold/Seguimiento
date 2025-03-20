@@ -73,37 +73,37 @@ class RadicacionAutorizacionController extends Controller
         $fechacomparecencia='';
         $fechainicioaclaracion='';
         $fechaterminoaclaracion='';
-
-
+		
+		
         $auditoria=$radicacion->auditoria;
-		$horas=explode(':',$auditoria->comparecencia->hora_comparecencia_inicio);
+		$horas=explode(':',$auditoria->comparecencia->hora_comparecencia_inicio); 
         $formatter = new NumeroALetras();
 		if(empty($auditoria->comparecencia->fecha_comparecencia)){
 
-
+        
         $hora = $formatter->toString($horas[0]);
         $minutos = $formatter->toString($horas[1]);
-
-        $horaMax = ucwords($hora);
+      
+        $horaMax = ucwords($hora);             
         $horaMin = ucwords(strtolower($horaMax));
-
-        $minutosMax = ucwords($minutos);
+       
+        $minutosMax = ucwords($minutos);            
         $minutosMin = ucwords(strtolower($minutosMax));
 
-        $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);
-        $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);
+        $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);        
+        $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);       
         $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
 		}
 
         $formatterPM = new NumeroALetras();
         $plazomax=$formatter->toString($radicacion->plazo_maximo);
 
-        $plazomaxMax = ucwords($plazomax);
+        $plazomaxMax = ucwords($plazomax);            
         $plazomaxMin = ucwords(strtolower($plazomaxMax));
 
         $fechaactual=fechaaletra(now());
-
-
+		
+        
         $relacion4=[
             'horastxt'=> $horaMin,
             'mintxt'=> $minutosMin,
@@ -117,14 +117,14 @@ class RadicacionAutorizacionController extends Controller
         $datosConstancia = [
             'nombrereporte' => 'radicacionconstancia',
             'auditoriaseleccionada'=>base64_encode(Str::random(5).$radicacion->auditoria_id.Str::random(5)),
-            'accionseleccionada'=>'',
+            'accionseleccionada'=>'',            
             'modelo_principal'=>['tbl'=>$radicacion->getTable(),'vinculo'=>base64_encode(Str::random(5).$radicacion->id.Str::random(5))],
             'relacion1'=>null,
             'relacion2'=>null,
             'relacion3'=>null,
-            'relacion4'=>$relacion4,
+            'relacion4'=>$relacion4,  
             'firmante'=>auth()->user()->name,
-            'firmante_puesto'=>auth()->user()->puesto,
+            'firmante_puesto'=>auth()->user()->puesto,  
         ];
 
         $b64archivoxml=reportepdf($datosConstancia['nombrereporte'],1,'Temporal',
@@ -136,8 +136,8 @@ class RadicacionAutorizacionController extends Controller
         $preconstancia ='/storage/temporales/'.$datosConstancia['nombrereporte'] .'.pdf';
 
         $b64pdf=base64_encode(file_get_contents(asset($preconstancia)));
-
-
+       
+        
          return view('radicacionautorizacion.form', compact('radicacion', 'auditoria', 'preconstancia', 'b64archivoxml','b64pdf', 'datosConstancia'));
     }
 
@@ -150,7 +150,7 @@ class RadicacionAutorizacionController extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, Radicacion $radicacion)
     {
-
+       
         $this->normalizarDatos($request);
         // if(empty($request->radicacion_sistema)){
 
@@ -162,17 +162,17 @@ class RadicacionAutorizacionController extends Controller
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
                 'motivo_rechazo' => $request->motivo_rechazo,
-            ]);
+            ]);  
             // dd($request);
-
+            
             $constancia = guardarConstanciasFirmadas($radicacion, 'radicacionconstancia', $request, 'constancia');
-
+           
             $radicacion->update([
                 'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
                 'constancia' => $constancia->constancia_pdf,
             ]);
 
-
+            
 
             // dd($constancia);
 
@@ -181,7 +181,7 @@ class RadicacionAutorizacionController extends Controller
         // }else{
             //dd($request);
             //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
-
+            
             $request['id_proceso_pdf'] = $radicacion->id;
             $request['hash_pdf'] = 'nmbmjb';
 
@@ -195,41 +195,41 @@ class RadicacionAutorizacionController extends Controller
             //     'usuario_creacion_id' => auth()->id(),
             //     'usuario_asignado_id' => auth()->id(),
             //     'motivo_rechazo' => $request->motivo_rechazo,
-            // ]);
-
+            // ]);       
+        
             // $radicacion->update([
             //     'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
             //     'constancia' => $constancia->constancia_pdf,
             // ]);
         // }
 
-
+        
         $director=User::where('unidad_administrativa_id',substr($radicacion->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la radiación de la auditoría No. '.$radicacion->auditoria->numero_auditoria;
-
+            
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($radicacion->usuarioCreacion->name,$radicacion->usuarioCreacion->puesto,$radicacion->auditoria->numero_auditoria), now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$radicacion->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
-
+            
             setMessage('Se ha autorizado el registro de la radicación de la auditoría con exito.');
         } else {
             $titulo = 'Rechazo del registro de radiación de la auditoría No. '.$radicacion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$radicacion->usuarioCreacion->name.', '.$radicacion->usuarioCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la radicación de auditoría No. '.$radicacion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id);
+            
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id);           
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$radicacion->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
-
+            
             setMessage('Se ha rechazado el registro de la radicación de la auditoría con exito.');
-
-        }
+            
+        }    
 
         if(empty($request->radicacion_sistema)){
 
             return redirect()->route('radicacion.index');
         } else{
-
+            
             return redirect()->route('constancia.mostrarConstancia', ['constancia'=>$constancia, 'rutaCerrar'=>'radicacion.index']);
         }
     }
@@ -257,7 +257,7 @@ class RadicacionAutorizacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro de la radicación de auditoría No. '.$numeroauditoria.'.';
+                    .'Ha sido rechazado el registro de la radicación de auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }
@@ -266,7 +266,7 @@ class RadicacionAutorizacionController extends Controller
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
                     .' Ha sido autorizado el registro de radicación de la auditoría No. '.$numeroauditoria.
-                    ', por parte del Titular.';
+                    ', por parte del Titular.';       
 
         return $mensaje;
     }

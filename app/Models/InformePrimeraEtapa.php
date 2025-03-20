@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Propaganistas\LaravelFakeId\RoutesWithFakeIds;
 
 class InformePrimeraEtapa extends Model
 {
-    // use HasFactory;
+     use HasFactory;
+	 use RoutesWithFakeIds;
     // protected $fillable = ['numero_ordenauditoria','fecha_notificacion_oficio','numero_oficio_entro'];
     protected $table = 'seginforme_primeraetapa';
     protected $fillable = [

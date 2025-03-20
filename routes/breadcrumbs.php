@@ -431,21 +431,24 @@ Breadcrumbs::for('acuerdoconclusion.create', function (BreadcrumbTrail $trail) {
     $trail->push('Acuerdo de conclusión', route('auditoriaseguimiento.create'));
 });
 
+Breadcrumbs::for('acuerdoconclusionrevision.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('acuerdoconclusion.index',$auditoria);
+    $trail->push('Revisión del Acuerdo de Conclusion ', route('acuerdoconclusionrevision.edit',$auditoria));
+});
+
 Breadcrumbs::for('acuerdoconclusionvalidacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('acuerdoconclusion.index',$auditoria);
-    $trail->push('Validacion del Acuerdo de Conclusion ', route('acuerdoconclusion.index'));
+    $trail->push('Validacion del Acuerdo de Conclusion ', route('acuerdoconclusionvalidacion.edit',$auditoria));
 });
 
 Breadcrumbs::for('acuerdoconclusionautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('acuerdoconclusion.index',$auditoria);
     $trail->push('Autorizacion del Acuerdo de Conclusión ', route('acuerdoconclusion.index'));
 });
-
 Breadcrumbs::for('acuerdoconclusionrevision.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('acuerdoconclusion.index',$auditoria);
     $trail->push('Revisión del Acuerdo de Conclusión ', route('acuerdoconclusion.index'));
 });
-
 //recomendaciones contestaciones
 
 Breadcrumbs::for('recomendacionescontestaciones.edit', function (BreadcrumbTrail $trail,$contestacion,$auditoria) {

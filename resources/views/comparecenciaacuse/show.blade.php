@@ -56,7 +56,7 @@
                                 <tr>
                                     <th>Acuerdo de radicación</th>
                                     <th>Comprobante de recepción depto. de notificaciones</th>
-                                    <th>Acuse de notificación de informe de auditoría</th>
+                                    <th>Acuse de notificación de acuerdos</th>
                                 </tr>
                             </thead>
                             <tbody>
