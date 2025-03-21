@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class TurnoArchivoTransferencia extends Model
 {
     use HasFactory;
-    protected $table = 'segturno_archivo_trasferencia'; 
+    protected $table = 'segturno_archivo_trasferencia';
     protected $fillable = [
-        'numero_transferencia',            
+        'numero_transferencia',
         'inventario_transferencia',
         'fecha_transferencia',
-        'tiempo_resguardo', 
+        'tiempo_resguardo',
         'clave_topografica',
         'auditoria_id',
         'fase_autorizacion',
@@ -22,7 +22,7 @@ class TurnoArchivoTransferencia extends Model
         'usuario_modificacion_id',
     ];
     protected $cast=[
-    'fecha_trasferencia'=>'date',        
+    'fecha_trasferencia'=>'date',
 
     'created_at' => 'datetime',
     'updated_at' => 'datetime',
@@ -47,7 +47,7 @@ class TurnoArchivoTransferencia extends Model
     }
     public function movimientos()
     {
-        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'ArchivoTransferencia')->orderBy('id', 'ASC');
+        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'TurnoTransferencia')->orderBy('id', 'ASC');
     }
 
 }

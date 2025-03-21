@@ -183,6 +183,7 @@ use App\Http\Controllers\TipologiaAuditoriasController;
 use App\Http\Controllers\TurnoArchivoAutortizacionController;
 use App\Http\Controllers\TurnoArchivoController;
 use App\Http\Controllers\TurnoArchivoEnvioController;
+use App\Http\Controllers\TurnoArchivoRevision01Controller;
 use App\Http\Controllers\TurnoArchivoRevisionController;
 use App\Http\Controllers\TurnoArchivoTransferencia;
 use App\Http\Controllers\TurnoArchivoTransferenciaAutorizacionController;
@@ -536,6 +537,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     /** Seguimiento - Auditorias - TurnoArchivo */
     Route::resource('turnoarchivo', TurnoArchivoController::class, ['parameters' => ['turnoarchivo' => 'auditoria']]);
     Route::resource('turnoarchivoenvio', TurnoArchivoEnvioController::class, ['parameters' => ['turnoarchivoenvio' => 'auditoria']]);
+    Route::resource('turnoarchivorevision01', TurnoArchivoRevision01Controller::class, ['parameters' => ['turnoarchivorevision01' => 'auditoria']]);
     Route::resource('turnoarchivorevision', TurnoArchivoRevisionController::class, ['parameters' => ['turnoarchivorevision' => 'auditoria']]);
     Route::resource('turnoarchivovalidacion', TurnoArchivoValidacionController::class, ['parameters' => ['turnoarchivovalidacion' => 'auditoria']]);
     Route::resource('turnoarchivoautorizacion', TurnoArchivoAutortizacionController::class, ['parameters' => ['turnoarchivoautorizacion' => 'auditoria']]);

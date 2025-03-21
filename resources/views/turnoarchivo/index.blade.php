@@ -64,10 +64,10 @@
                                     {{$turnoarchivo->fojas_tecnico_archivo }}
                                 </td>
                                 <td class="text-center">
-                                    {{$turnoarchivo->legajos_tecnico_archivo }}
+                                    {{$turnoarchivo->legajos_seg_archivo }}
                                 </td>
                                 <td class="text-center">
-                                    {{$turnoarchivo->fojas_tecnico_archivo }}
+                                    {{$turnoarchivo->fojas_seg_archivo }}
                                 </td>
                                 <td class="text-center">
                                     @btnFile($turnoarchivo->turno_archivo)<br>
@@ -84,6 +84,16 @@
                                             <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
                                         </a>
                                         @endcan
+                                    @endif
+                                    @if ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión01')
+                                    @can('turnoarchivorevision01.edit')
+                                        <a href="{{ route('turnoarchivorevision01.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
+                                            <li class="fa fa-gavel"></li>
+                                            Revisar
+                                        </a>
+                                    @else
+                                        <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
+                                    @endcan
                                     @endif
                                     @if ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión')
                                     @can('turnoarchivorevision.edit')
@@ -151,7 +161,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            @if (!empty($auditoria->turnoarchivotransferencia) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
+                            @if (empty($auditoria->turnoarchivotransferencia) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
                             @can('turnoarchivotransferencia.create')
                                 <div class="row">
                                     <div class="col-md-12">
@@ -242,15 +252,17 @@
                                             @endif
                                         </td>
                                     </td>
-                                </tr>
-                                    @if (!empty($auditoria->turnoarchivotransferenciaenvio))
-                                            {!! movimientosDesglose($auditoria->turnoarchivotransferencia->id, 10, $auditoria->turnoarchivotransferencia->movimientos) !!}
+
+                                    @if (!empty($auditoria->turnoarchivotransferencia))
+                                    {!! movimientosDesglose($auditoria->turnoarchivotransferencia->id, 10, $auditoria->turnoarchivotransferencia->movimientos) !!}
                                     @endif
                                     @else
-                                        <td class="text-center" colspan="5">
-                                            No se encuentran registros en este apartado.
-                                        </td>
+                                     <td class="text-center" colspan="5">
+                                    No se encuentran registros en este apartado.
+                                    </td>
+                                    </tr>
                                     @endif
+                        </tr>
                             </tbody>
                         </table>
                     </div>

@@ -880,6 +880,11 @@ Breadcrumbs::for('turnoarchivo.create', function (BreadcrumbTrail $trail) {
     $trail->push('Acuse envío de archivo', route('auditoriaseguimiento.create'));
 });
 
+Breadcrumbs::for('turnoarchivorevision01.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoarchivo.index',$auditoria);
+    $trail->push('Revisión acuse envío archivo ', route('turnoarchivo.index'));
+});
+
 Breadcrumbs::for('turnoarchivorevision.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('turnoarchivo.index',$auditoria);
     $trail->push('Revisión acuse envío archivo ', route('turnoarchivo.index'));

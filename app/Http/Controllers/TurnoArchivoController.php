@@ -23,14 +23,14 @@ class TurnoArchivoController extends Controller
      */
     public function index(Request $request)
     {
-        
+
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
         $turnoarchivo=TurnoAcuseArchivo::where('auditoria_id',getSession('auditoria_id'))->first();
-        
+
 
         return view ('turnoarchivo.index', compact('request','auditoria','turnoarchivo'));
 
-        
+
     }
 
     /**
@@ -40,9 +40,9 @@ class TurnoArchivoController extends Controller
      */
     public function create()
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));               
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $turnoarchivo = new TurnoAcuseArchivo();
-       
+
         return view('turnoarchivo.form', compact('auditoria','turnoarchivo'));
     }
 
@@ -56,6 +56,8 @@ class TurnoArchivoController extends Controller
     {
       mover_archivos($request, ['turno_archivo']);
       $request['auditoria_id']= getSession('auditoria_id');
+      $request['usuario_creacion_id'] = auth()->user()->id;
+      $request['usuario_modificacion_id'] = auth()->user()->id;
       $turnoarchivo  = TurnoAcuseArchivo::create($request->all());
 
       setMessage("Los datos se han guardado correctamente.");
@@ -99,16 +101,17 @@ class TurnoArchivoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,TurnoAcuseArchivo $turnoarchivo)
+    public function update(Request $request,TurnoAcuseArchivo $auditoria)
     {
+        $turnoarchivo=$auditoria;
         mover_archivos($request, ['turno_archivo'],$turnoarchivo);
         $request['usuario_modificacion_id'] = auth()->user()->id;
         $turnoarchivo->update($request->all());
         $auditoria=$turnoarchivo->auditoria;
         setMessage("Los datos se han actualizado correctamente.");
-  
-        return redirect() -> route('turnoarchivo.index');
-  
+
+        return redirect() -> route('turnoarchivo.index',compact('auditoria','turnoarchvo'));
+
     }
 
     /**
@@ -120,6 +123,14 @@ class TurnoArchivoController extends Controller
     public function destroy($id)
     {
         //
+    }
+    private function normalizarDatos(Request $request)
+    {
+        if ($request->estatus == 'Aprobado') {
+            $request['motivo_rechazo'] = null;
+        }
+
+        return $request;
     }
     public function auditoria(Auditoria $auditoria)
     {
@@ -168,6 +179,20 @@ class TurnoArchivoController extends Controller
         return $query;
     }
 
-   
+    private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
+    {
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .'Ha sido rechazado el registro del Turno acuse envío archivo de la auditoría No. '.$numeroauditoria.'.';
+
+        return $mensaje;
+    }
+    private function mensajeAprobado(String $nombre, String $puesto, String $numeroauditoria)
+    {
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .' Ha sido autorizado el registro de radicación de la auditoría No. '.$numeroauditoria.
+                    ', por parte del Titular.';
+
+        return $mensaje;
+    }
 
 }

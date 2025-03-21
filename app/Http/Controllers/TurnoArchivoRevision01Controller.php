@@ -6,7 +6,7 @@ use App\Models\Movimientos;
 use App\Models\TurnoAcuseArchivo;
 use Illuminate\Http\Request;
 
-class TurnoArchivoRevisionController extends Controller
+class TurnoArchivoRevision01Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -61,7 +61,7 @@ class TurnoArchivoRevisionController extends Controller
         $turnoarchivo=$auditoria;
         $auditoria=$auditoria->auditoria;
 
-        return view('turnoarchivorevision.form', compact('turnoarchivo','auditoria'));
+        return view('turnoarchivorevision01.form', compact('turnoarchivo','auditoria'));
     }
 
     /**
@@ -85,15 +85,16 @@ class TurnoArchivoRevisionController extends Controller
            'motivo_rechazo' => $request->motivo_rechazo,
        ]);
 
-       if ($request->estatus == 'Aprobado') {
-        $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
-    } else {
-        $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
-    }
+      if (strlen($auditoria->nivel_autorizacion) == 3 || strlen($auditoria->nivel_autorizacion) == 4) {
+            $nivel_autorizacion = $auditoria->nivel_autorizacion;
+        } else {
+            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 5);
+        }
 
-    $turnoarchivo->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+
+    $turnoarchivo->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En revisión' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
     setMessage($request->estatus == 'Aprobado' ?
-        'La Revisión ha sido registrada y se ha enviado a validación del superior.' :
+        'La Revisión ha sido registrada y se ha enviado a revisión del superior.' :
         'El rechazo ha sido registrado.'
     );
 
@@ -125,9 +126,8 @@ class TurnoArchivoRevisionController extends Controller
      */
     public function destroy($id)
     {
-       //
+        //
     }
-
     private function normalizarDatos(Request $request)
     {
          if ($request->estatus == 'Aprobado') {
