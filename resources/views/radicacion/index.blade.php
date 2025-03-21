@@ -105,8 +105,8 @@
 
                                     </td> 
                                     <td class="text-center">  
-                                    @if(getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')                                                                   
-                                            @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
+                                    @if(getSession('cp')==2022)                                                                   
+                                            @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado' && auth()->user()->siglas_rol=='JD')
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
                                                     @can('radicacion.edit')
                                                         <a href="{{ route('radicacion.edit',$auditoria->radicacion) }}" class="btn btn-primary">
@@ -149,8 +149,8 @@
                                                 @endif
                                                                                                  
                                             @endif  
-                                    @elseif(getSession('cp')==2023 && auth()->user()->siglas_rol=='LP')
-                                            @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
+                                    @elseif(getSession('cp')==2023 )
+                                            @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado' && auth()->user()->siglas_rol=='LP')
                                                 <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
                                                     @can('radicacion.edit')
                                                         <a href="{{ route('radicacion.edit',$auditoria->radicacion) }}" class="btn btn-primary">

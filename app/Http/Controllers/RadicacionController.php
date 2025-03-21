@@ -1279,10 +1279,10 @@ class RadicacionController extends Controller
         $UMA = CatalogoUMAS::where('ejercicio', $datenow01)->select('texto')->first();
         $UMATEXT = $UMA->texto;
 
-        if(empty($auditoria->acuerdoconclusion->domicilio)){
+        if(empty($auditoria->comparecencia->domicilio_notificacio)){
             $remitente_domicilio = "";
         }else{
-            $remitente_domicilio = $auditoria->acuerdoconclusion->domicilio;
+            $remitente_domicilio = $auditoria->comparecencia->domicilio_notificacio;
         }
 
         if($auditoria->acto_fiscalizacion=='Inversión Física')

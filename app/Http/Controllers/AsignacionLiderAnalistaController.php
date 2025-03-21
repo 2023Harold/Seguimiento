@@ -68,8 +68,8 @@ class AsignacionLiderAnalistaController extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-        $lideres = usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','LP')->where('status', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
-        $analistas = usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','ANA')->where('status', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $lideres = usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','LP')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $analistas = usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','ANA')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $accion="asignar";
 
         return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
@@ -217,16 +217,16 @@ class AsignacionLiderAnalistaController extends Controller
 
     public function reasignarlider(Auditoria $auditoria)
     {
-        $lideres=usuariocp(auth()->user()->director->unidad_administrativa_id)->where('siglas_rol','LP')->where('status', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
-        $analistas=usuariocp(auth()->user()->unidad_administrativa_id)->where('siglas_rol','ANA')->where('status', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $lideres=usuariocp(auth()->user()->director->unidad_administrativa_id)->where('siglas_rol','LP')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $analistas=usuariocp(auth()->user()->unidad_administrativa_id)->where('siglas_rol','ANA')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $accion="reasignarlider";
         return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
     }
 
     public function reasignaranalista(Auditoria $auditoria)
     {
-        $lideres=usuariocp(auth()->user()->director->unidad_administrativa_id)->where('siglas_rol','LP')->where('status', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
-        $analistas=usuariocp(auth()->user()->unidad_administrativa_id)->where('siglas_rol','ANA')->where('status', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $lideres=usuariocp(auth()->user()->director->unidad_administrativa_id)->where('siglas_rol','LP')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $analistas=usuariocp(auth()->user()->unidad_administrativa_id)->where('siglas_rol','ANA')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $accion="reasignaranalista";
 
         return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));

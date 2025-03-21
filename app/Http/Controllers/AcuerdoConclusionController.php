@@ -342,6 +342,7 @@ class AcuerdoConclusionController extends Controller
             $template->setValue('fechahoy', $fechaactual);
             $template->setValue('iniciales',$iniciales);
             $template->setValue('entidad',$textoDocumento);
+            $template->setValue('entidad01',$nombreEntidad);
             $template->setValue('direccion_asig',$auditoria->direccion_asignada);
             $template->setValue('departamento_asig',$auditoria->departamento_encargado);
             $template->setValue('siPliegos01',$siPliegos01);
