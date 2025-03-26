@@ -510,7 +510,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     /** Seguimiento - Auditorias - Informe*/
     Route::resource('informeprimeraetapa', InformePrimeraEtapaController::class, ['parameters' => ['informeprimeraetapa' => 'auditoria']]);
     Route::get('informepliegos', [InformePrimeraEtapaController::class, 'informepliegos'])->name('informepliegos.create');
-    Route::get('/informeprimeraetapa/exportar', [InformePrimeraEtapaController::class, 'export'])->name('informeprimeraetapa.exportar');
+    //Route::get('/informeprimeraetapa/exportar', [InformePrimeraEtapaController::class, 'export'])->name('informeprimeraetapa.exportar');
+    Route::get('/informeprimeraetapais', [InformePrimeraEtapaController::class, 'export'])->name('informeprimeraetapa.exportar');
+    Route::get('/informeprimeraetapaofis', [InformePrimeraEtapaController::class, 'exportOFIS'])->name('informeprimeraetapaofis.exportar');
+    
     Route::resource('informeprimeraetapaenvio', InformePrimeraEtapaEnvioController::class, ['parameters' => ['informeprimeraetapaenvio' => 'auditoria']]);
     Route::resource('informeprimeraetapavalidacion', InformePrimeraEtapaValidacionController::class, ['parameters' => ['informeprimeraetapavalidacion' => 'auditoria']]);
     Route::resource('informeprimeraetapaautorizacion', InformePrimeraEtapaAutorizacionController::class, ['parameters' => ['informeprimeraetapaautorizacion' => 'auditoria']]);
