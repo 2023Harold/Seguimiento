@@ -14,7 +14,7 @@ class RecomendacionesAtencionContestacionController extends Controller
     protected $model;
 
     public function __construct(RecomendacionesContestacion $model)
-    {       
+    {
         $this->model = $model;
     }
     /**
@@ -57,12 +57,12 @@ class RecomendacionesAtencionContestacionController extends Controller
     {
         mover_archivos($request, ['oficio_contestacion']);
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
-        
+
         $request->merge([
             'recomendacion_id' => getSession('recomendacioncalificacion_id'),
             'usuario_creacion_id' => auth()->id(),
         ]);
-       
+
         RecomendacionesContestacion::create($request->all());
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');
@@ -78,12 +78,12 @@ class RecomendacionesAtencionContestacionController extends Controller
      */
     public function show(Recomendaciones $contestacion)
     {
-        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$contestacion->id)->paginate(10); 
+        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$contestacion->id)->paginate(10);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
-        return view('recomendacionesatencioncontestacion.show', compact('contestaciones','auditoria','accion','recomendacion'));        
+        return view('recomendacionesatencioncontestacion.show', compact('contestaciones','auditoria','accion','recomendacion'));
     }
 
     /**
@@ -93,7 +93,7 @@ class RecomendacionesAtencionContestacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(RecomendacionesContestacion $contestacion)
-    {        
+    {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
@@ -110,15 +110,15 @@ class RecomendacionesAtencionContestacionController extends Controller
      */
     public function update(Request $request, RecomendacionesContestacion $contestacion)
     {
-        mover_archivos($request, ['oficio_contestacion'],$contestacion);        
-        $request->merge([          
+        mover_archivos($request, ['oficio_contestacion'],$contestacion);
+        $request->merge([
             'usuario_modificacion_id' => auth()->id(),
-        ]);       
+        ]);
         $contestacion->update($request->all());
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');
 
-        return redirect()->route('recomendacionescontestaciones.index');        
+        return redirect()->route('recomendacionescontestaciones.index');
     }
 
     /**
@@ -165,13 +165,13 @@ class RecomendacionesAtencionContestacionController extends Controller
 
     public function oficiosrecomendacion(Recomendaciones $recomendacion)
     {
-        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$recomendacion->id)->paginate(10); 
+        $contestaciones = RecomendacionesContestacion::where('recomendacion_id',$recomendacion->id)->paginate(10);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
-        return view('recomendacionesatencioncontestacionoficios.show', compact('contestaciones','auditoria','accion','recomendacion'));        
+        return view('recomendacionesatencioncontestacionoficios.show', compact('contestaciones','auditoria','accion','recomendacion'));
 
-      
+
     }
 }

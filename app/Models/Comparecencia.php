@@ -57,6 +57,7 @@ class Comparecencia extends Model
         'fecha_cedula',
         'usuario_creacion_id',
         'usuario_modificacion_id',
+        'usuario_actualizacion_id',
         'created_at',
         'updated_at',
         'nombre_representante',
@@ -135,6 +136,10 @@ class Comparecencia extends Model
     }
 
     public function usuarioActualizacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_actualizacion_id');
+    }
+    public function usuarioModificacion()
     {
         return $this->belongsTo(User::class, 'usuario_modificacion_id');
     }

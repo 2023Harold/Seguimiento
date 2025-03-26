@@ -65,6 +65,8 @@ class RadicacionEnvioController extends Controller
                 'estatus' => 'Aprobado',
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
+                'usuario_modificacion_id' => auth()->id(),
+
             ]);
     
             $comparecencia->update(['fase_autorizacion' =>  'En validación']);

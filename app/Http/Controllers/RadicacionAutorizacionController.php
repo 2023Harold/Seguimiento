@@ -161,6 +161,7 @@ class RadicacionAutorizacionController extends Controller
                 'estatus' => $request->estatus,
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
+                'usuario_firmante_id' => auth()->id(),
                 'motivo_rechazo' => $request->motivo_rechazo,
             ]);  
             // dd($request);
