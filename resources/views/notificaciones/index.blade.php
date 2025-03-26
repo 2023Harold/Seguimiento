@@ -26,16 +26,21 @@
                             {!! BootForm::date('updated_at', 'Fecha de lectura', old('updated_at', $request->updated_at)) !!}
                         </div>
                         
-                        <div class="col-md-3 mt-8">
-                            <button type="submit" class="btn btn-primary">Buscar</button>  
-                        </div>
+                       
 
                     </div>
                     <div class="row align-items-center">
                         <div class="col-md-3">
                             {!! BootForm::text('numero_auditoria', 'Número de Auditoría', old('numero_auditoria', $request->numero_auditoria)) !!}
                         </div>
-                        
+						<div class="col-md-3">
+                            {!! BootForm::radios("cuenta", 'Cuenta Pública: ',['Todas' => ' Todas', '|2022'=>' 2022','|2023'=>' 2023'],
+                                old('cuenta', empty($request->cuenta) ? 'Todas' : $request->cuenta),true,['class'=>'i-checks']) !!}
+                        </div> 
+						
+						<div class="col-md-3 mt-8">
+                            <button type="submit" class="btn btn-primary">Buscar</button>  
+                        </div>
                     </div>
                     {!! BootForm::close() !!}
                     <div class="row">
@@ -43,7 +48,8 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Mensaje</th>
+                                        <th>Cuenta Pública</th>
+										<th>Mensaje</th>
                                         <th>Fecha y hora de recibido</th>
                                         <th>Estatus</th>
                                         <th>Fecha y hora de lectura</th>
@@ -53,6 +59,7 @@
                                     @forelse($notificaciones as $notificacion)
                                         
                                         <tr id="rownotificacion{{ $notificacion->id }}">
+											<td>{{ $notificacion->cp??'Sin registro'}}</td>
                                             <td>{{ explode("<br>", $notificacion->mensaje)[1]}}</td>
                                             <td>{{ fecha($notificacion->created_at, 'd/m/Y H:i') }}</td>
                                             <td class="text-center">
@@ -80,7 +87,11 @@
                         </div>
                         <div class="col-md-12 mt-5">
                             <div class="pagination justify-content-start">
-                                {{ $notificaciones->appends(['estatus'=>$request->estatus])->links('vendor.pagination.bootstrap-5') }}
+                                {{ $notificaciones->appends(['estatus'=>$request->estatus,
+															 'created_at'=>$request->created_at,
+															 'updated_at'=>$request->updated_at,
+															 'numero_auditoria'=>$request->numero_auditoria,
+															 'cuenta'=>$request->cuenta])->links('vendor.pagination.bootstrap-5') }}
                             </div>
                         </div> 
                     </div>

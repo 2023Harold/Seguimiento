@@ -16,6 +16,7 @@ trait NotificacionTrait
             'unidad_administrativa_id' => $unidad,
             'destinatario_id' => $destinatario,
             'usuario_creacion_id' => (empty(auth()->user()->id) ? 1 : auth()->user()->id),
+			'cp'=> (empty(getSession('cp')) ? 1 : getSession('cp')),
         ];
 
         Notificacion::create($params);

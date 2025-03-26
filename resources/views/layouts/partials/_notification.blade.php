@@ -45,11 +45,18 @@
                 <!--begin::Items-->
                 <div class="p-0 w-100 pe-5" id="rownotificacion{{ $notificacion->id }}">
                     <div class="mh-300px mh-lg-325px border-1 border-bottom border-top p-2">
-                        <div class="d-flex justify-content-end">
-                            <span class="small text-muted fw-bold">
-                                {{ fecha($notificacion->fecha_muestra_inicio, 'd/m/Y H:i') }}
-                            </span>
-                        </div>
+                        <div class="d-flex justify-content-between">
+								<div>
+									<span class="small text-muted fw-bold">
+										Cuenta Pública {{$notificacion->cp}}
+									</span>
+								</div>	
+								<div>
+									<span class="small text-muted fw-bold">
+										{{ fecha($notificacion->fecha_muestra_inicio, 'd/m/Y H:i') }}
+									</span>
+								</div>	
+						</div>	
                         <div class="d-flex align-items-center mb-2">
                             <!--begin::Symbol-->
                             <div class="symbol symbol-40px me-4 d-flex flex-column w-50px text-center">

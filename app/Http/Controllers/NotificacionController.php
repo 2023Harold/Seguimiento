@@ -12,8 +12,8 @@ class NotificacionController extends Controller
         $notificaciones = $this->setQuery($request)->paginate(25);
         
         return view('notificaciones.index', compact('notificaciones','request'));*/
-
-        $notificaciones = $this->setQuery($request)->paginate(25);
+		$notificaciones = $this->setQuery($request)->paginate(25);
+		
 
         return view('notificaciones.index', compact('notificaciones', 'request'));
     }
@@ -59,6 +59,10 @@ class NotificacionController extends Controller
         if ($request->filled('numero_auditoria')) {
             $numeroAuditoria = $request->input('numero_auditoria');
             $query = $query->where('mensaje', 'LIKE', "%$numeroAuditoria%");
+        }
+		 if ($request->filled('cuenta') && $request->input('cuenta') != 'Todas') {
+			$cp = str_replace("|", "", $request->input('cuenta'));
+            $query = $query->where('cp', $cp);
         }
 
         return $query->orderBy('created_at', 'asc');

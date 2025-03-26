@@ -26,6 +26,7 @@ class Notificacion extends Model
         'usuario_actualizacion_id',
         'created_at',
         'updated_at',
+		'cp',
     ];
 
     protected $dates = [
