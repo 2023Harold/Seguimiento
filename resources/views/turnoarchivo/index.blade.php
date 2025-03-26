@@ -161,7 +161,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            @if (empty($auditoria->turnoarchivotransferencia) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
+                            @if (empty($auditoria->turnoarchivotransferencia) && (!empty($auditoria->turnoarchivo) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado'))
                             @can('turnoarchivotransferencia.create')
                                 <div class="row">
                                     <div class="col-md-12">
