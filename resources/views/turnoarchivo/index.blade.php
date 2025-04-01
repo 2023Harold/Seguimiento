@@ -20,7 +20,7 @@
                 @include('flash::message')
                 <div class="row">
                     <div class="col-md-12">
-                    @if ( ($auditoria->accionesrecomendacionesautorizadas == $auditoria->totalsolventadorecomendacion) && ($auditoria->accionespoautorizadas == $auditoria->totalsolventadopliegos) && ($auditoria->accionessolaclautorizadas == $auditoria->totalsolventadosolacl) )
+                    {{-- @if ( ($auditoria->accionesrecomendacionesautorizadas == $auditoria->totalsolventadorecomendacion) && ($auditoria->accionespoautorizadas == $auditoria->totalsolventadopliegos) && ($auditoria->accionessolaclautorizadas == $auditoria->totalsolventadosolacl) ) --}}
                         @if (empty($turnoarchivo))
                             @can('turnoarchivo.create')
                                 <a class="btn btn-primary float-end" href="{{ route('turnoarchivo.create') }}">
@@ -28,7 +28,7 @@
                                 </a>
                             @endcan
                         @endif
-                    @endif
+                    {{-- @endif --}}
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -152,7 +152,7 @@
                     </table>
                 </div>
             </div>
-            <div class="card-body">
+            {{-- <div class="card-body">
                 <h1 class="card-title">
                     <span class="text-primary">
                      Envío Archivo de Transferencia
@@ -262,7 +262,7 @@
                                     </td>
                                     </tr>
                                     @endif
-                        </tr>
+                        </tr> --}}
                             </tbody>
                         </table>
                     </div>

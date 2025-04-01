@@ -60,7 +60,7 @@ class TurnoArchivoTransferenciaController extends Controller
     // dd($turnotransferencia);
       setMessage("Los datos del archivo de transferencia se han guardado correctamente.");
 
-      return redirect() -> route('turnoarchivo.index');
+      return redirect() -> route('inicioarchivotransferencia.index');
     }
 
     /**
@@ -106,7 +106,7 @@ class TurnoArchivoTransferenciaController extends Controller
       $auditoria=$turnoarchivotransferencia->auditoria;
         setMessage('Los datos de archivo trasferencia se han guardado correctamente');
 
-        return redirect() -> route('turnoarchivo.index',compact('auditoria','turnoarchvotrasferencia'));
+        return redirect() -> route('inicioarchivotransferencia.index',compact('auditoria','turnoarchivotransferencia'));
     }
 
     /**

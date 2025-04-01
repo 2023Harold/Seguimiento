@@ -109,14 +109,27 @@ Breadcrumbs::for('tipologiaaccion.index', function (BreadcrumbTrail $trail) {
     $trail->push('Acciones', route('tipologiaaccion.index'));
 });
 
+//Turno Archivo Transferencia
+Breadcrumbs::for('inicioarchivotransferencia.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Archivo Transferencia', route('inicioarchivotransferencia.index'));
+});
+
+Breadcrumbs::for('inicioarchivotransferencia.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('inicioarchivotransferencia.index');
+    $trail->push('Envío Archivo Transferencia', route('inicioarchivotransferencia.create'));
+});
+
+Breadcrumbs::for('turnoarchivotransferencia.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('inicioarchivotransferencia.index');
+    $trail->push('Consulta Archivo Transferencia', route('turnoarchivotransferencia.index'));
+});
+
 //Reportes de Registro de Auditorias
 Breadcrumbs::for('reportesregistrosauditorias.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Reportes de Registro de Auditorias', route('reportesregistrosauditorias.index'));
 });
-
-
-
 
 Breadcrumbs::for('seguimientoauditorias.create', function (BreadcrumbTrail $trail) {
     $trail->parent('seguimientoauditorias');

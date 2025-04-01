@@ -88,6 +88,7 @@ use App\Http\Controllers\InformePrimeraEtapaAutorizacionController;
 use App\Http\Controllers\InformePrimeraEtapaController;
 use App\Http\Controllers\InformePrimeraEtapaEnvioController;
 use App\Http\Controllers\InformePrimeraEtapaValidacionController;
+use App\Http\Controllers\InicioArchivoTransferenciaController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PacController;
 use App\Http\Controllers\PacAuditoriaController;
@@ -349,6 +350,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
      Route::resource('agregaraccionesvalidacion', AgregarAccionesValidacionController::class, ['parameters' => ['agregaraccionesvalidacion' => 'accion']]);
      Route::resource('agregaraccionesautorizacion', AgregarAccionesAutorizacionController::class, ['parameters' => ['agregaraccionesautorizacion' => 'accion']]);
     /**Fin del apartado de Auditorias */
+
+    //Inicio Archivo Transferencia
+    Route::resource('inicioarchivotransferencia', InicioArchivoTransferenciaController::class, ['parameters' => ['inicioarchivotransferencia' => 'turnoarchivotransferencia']]);
+    Route::resource('turnoarchivotransferencia', InicioArchivoTransferenciaController::class, ['parameters' => ['turnoarchivotransferencia' => 'turnoarchivotransferencia']]);
 
     /**Seguimiento - Auditorias - Radicacion */
     Route::resource('radicacion', RadicacionController::class);
