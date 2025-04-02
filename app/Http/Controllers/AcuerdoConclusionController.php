@@ -208,6 +208,20 @@ class AcuerdoConclusionController extends Controller
 
    public function export(Request $request){
     $auditoria=Auditoria::find(getSession('auditoria_id'));
+    $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para legalidad
+    $siRecomendaciones01 = "";
+    $siRecomendaciones02 = "";
+    $siRecomendaciones03 = "";
+    $siRecomendaciones04 = "";
+    $siRecomendaciones05 = "";
+    $siPliegos01 ="";
+    $siPliegos02 ="";
+    $siPliegos03 ="";
+    $iniciales='';
+    $inicialesLM='MAOV';
+    $inicialesA="";
+    $inicialesD='';
+    $inicialesJD='';
 
     $formatter = new NumeroALetras();
     $plazomax=$formatter->toString($auditoria->radicacion->plazo_maximo);
@@ -229,14 +243,6 @@ class AcuerdoConclusionController extends Controller
     $anio03 = date('Y', strtotime($auditoria->comparecencia->fecha_termino_aclaracion));
     $fecha_acta = fecha(optional($auditoria->radicacion)->fecha_acta);
     $fecha_oficio_acuerdo = fecha(optional($auditoria->radicacion)->fecha_oficio_acuerdo);
-
-
-
-    $iniciales='';
-    $inicialesLM='MAOV';
-    $inicialesA="";
-    $inicialesD='';
-    $inicialesJD='';
 
     //$nombre=auth()->user()->name;
     $nD = $auditoria->directorasignado->name;
@@ -271,18 +277,6 @@ class AcuerdoConclusionController extends Controller
     }else{
         $remitente_domicilio = $auditoria->acuerdoconclusion->domicilio;
     }
-
-    $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para legalidad
-    $siRecomendaciones01 = "";
-    $siRecomendaciones02 = "";
-    $siRecomendaciones03 = "";
-    $siRecomendaciones04 = "";
-    $siRecomendaciones05 = "";
-    $siPliegos01 ="";
-    $siPliegos02 ="";
-    $siPliegos03 ="";
-
-
     /**///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
     if($auditoria->acto_fiscalizacion=='Legalidad'){
         if ($tipo === 'AC_EA') {

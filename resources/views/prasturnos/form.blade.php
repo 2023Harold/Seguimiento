@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('prasturno.create',$auditoria) }}
+{{Breadcrumbs::render('prasturno.create',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -17,11 +17,11 @@
     <div class="card-body">
         @include('flash::message')
         @include('layouts.contextos._auditoria')
-        {!! BootForm::open(['model' => $pras,'store' => 'prasturno.store','update' => 'prasturno.update','id' =>
+        {!!BootForm::open(['model' => $pras,'store' => 'prasturno.store','update' => 'prasturno.update','id' =>
         'form',]) !!}
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('nombre_titular_oic','Nombre del titular del Órgano Interno de Control:
+                {!!BootForm::text('nombre_titular_oic','Nombre del titular del Órgano Interno de Control:
                 *',old('nombre_titular_oic', (empty($pras->nombre_titular_oic)?$nombreuseroic:$pras->nombre_titular_oic)),) !!}
             </div>
         </div>
@@ -31,31 +31,29 @@
                 $pras->oficio_remision),['data-allowedFileExtensions' => 'pdf'],) !!}
             </div>
             <div class="col-md-3">
-                {!! BootForm::date('fecha_acuse_oficio','Fecha del oficio: *',old('fecha_acuse_oficio',
+                {!!BootForm::date('fecha_acuse_oficio','Fecha del oficio: *',old('fecha_acuse_oficio',
                 fecha($pras->fecha_acuse_oficio, 'Y-m-d'))) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
-                {!! BootForm::text('numero_oficio', 'Número del oficio: *', old('numero_oficio', $pras->numero_oficio))
-                !!}
+                {!!BootForm::text('numero_oficio', 'Número del oficio: *', old('numero_oficio', $pras->numero_oficio))!!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('nombre_unidad','Área de adscripción del firmante:
+                {!!BootForm::text('nombre_unidad','Área de adscripción del firmante:
                 *',auth()->user()->titular->unidadAdministrativa->descripcion,['disabled']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('nombre_firmante', 'Nombre del firmante: *',
-                auth()->user()->titular->name,['disabled']) !!}
+                {!!BootForm::text('nombre_firmante', 'Nombre del firmante: *',auth()->user()->titular->name,['disabled']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                {!! BootForm::text('categoria_firmante', 'Categoría del firmante: *',
+                {!!BootForm::text('categoria_firmante', 'Categoría del firmante: *',
                 auth()->user()->titular->puesto,['disabled']) !!}
             </div>
         </div>
@@ -67,10 +65,10 @@
                 @btnCancelar('Cancelar', route('prasacciones.index'))
             </div>
         </div>
-        {!! BootForm::close() !!}
+        {!!BootForm::close() !!}
     </div>
 </div>
 @endsection
 @section('script')
-{!! JsValidator::formRequest('App\Http\Requests\PRASTurnosRequest') !!}
+{!!JsValidator::formRequest('App\Http\Requests\PRASTurnosRequest') !!}
 @endsection

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('prasseguimiento.edit',$auditoria,$pras) }}
+    {{Breadcrumbs::render('prasseguimiento.edit',$auditoria,$pras) }}
 @endsection
 @section('content')
 <div class="row">
@@ -18,23 +18,23 @@
             @include('layouts.contextos._auditoria')
             @include('layouts.contextos._accion')
             @include('layouts.contextos._pras')
-            {!! BootForm::open(['model' => $pras,'update' => 'prasseguimiento.update','id' => 'form',]) !!}
+            {!!BootForm::open(['model' => $pras,'update' => 'prasseguimiento.update','id' => 'form',]) !!}
                 <div class="row">
                     <div class="col-md-6">
                         {!! archivo('oficio_contestacion', 'Contestación OIC: *', old('oficio_contestacion', $pras->oficio_contestacion)) !!}
                     </div>
                     <div class="col-md-3">
-                        {!! BootForm::date('fecha_acuse_contestacion', 'Fecha del acuse de contestación: *', old('fecha_acuse_contestacion', fecha($pras->fecha_acuse_contestacion, 'Y-m-d'))); !!}
+                        {!!BootForm::date('fecha_acuse_contestacion', 'Fecha del acuse de contestación: *', old('fecha_acuse_contestacion', fecha($pras->fecha_acuse_contestacion, 'Y-m-d'))) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        {!! BootForm::radios("estatus_cumplimiento", ' Estatus de cumplimiento: *', ['Atendido'=>'Atendido', 'No Atendido'=>'No Atendido'],old('estatus_cumplimiento',$pras->estatus_cumplimiento),false,['class'=>'i-checks']); !!}
+                        {!!BootForm::radios("estatus_cumplimiento", ' Estatus de cumplimiento: *', ['Atendido'=>'Atendido', 'No Atendido'=>'No Atendido'],old('estatus_cumplimiento',$pras->estatus_cumplimiento),false,['class'=>'i-checks']) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        {!! BootForm::textarea('conlusion_pras', 'Conclusión: *',old('conlusion_pras', $pras->conlusion_pras),['rows'=>'10']) !!}
+                        {!!BootForm::textarea('conlusion_pras', 'Conclusión: *',old('conlusion_pras', $pras->conlusion_pras),['rows'=>'10']) !!}
                     </div>
                 </div>
                 <div class="row">
@@ -43,10 +43,10 @@
                         @btnCancelar('Cancelar', route('prasturno.index'))
                     </div>
                 </div>
-            {!! BootForm::close() !!}
+            {!!BootForm::close() !!}
         </div>
     </div>
 @endsection
 @section('script')
-    {!! JsValidator::formRequest('App\Http\Requests\PRASSeguimientoRequest') !!}    
+    {!!JsValidator::formRequest('App\Http\Requests\PRASSeguimientoRequest') !!}    
 @endsection
