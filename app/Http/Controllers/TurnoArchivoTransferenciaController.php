@@ -21,8 +21,8 @@ class TurnoArchivoTransferenciaController extends Controller
      */
     public function index(Request $request)
     {
-        $auditoria = Auditoria :: find(getSession('auditoria_id'));
-        $turnoarchivotransferencia=TurnoArchivoTransferencia::where('auditoria_id',getSession('auditoria_id'))->first();
+        $auditoria = Auditoria :: find(getSession('auditoriatat_id'));
+        $turnoarchivotransferencia=TurnoArchivoTransferencia::where('auditoria_id',getSession('auditoriatat_id'))->first();
         // //dd($turnotransferencia);
 
 
@@ -36,9 +36,10 @@ class TurnoArchivoTransferenciaController extends Controller
      */
     public function create()
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $turnoarchivotransferencia = new TurnoArchivoTransferencia();
+        $auditoria = Auditoria::find(getSession('auditoriatat_id'));
+        // dd($auditoria,getSession('auditoriatat_id' ));
 
+        $turnoarchivotransferencia = new TurnoArchivoTransferencia();
         return view('turnotransferencia.form', compact('auditoria','turnoarchivotransferencia'));
     }
 
@@ -50,14 +51,14 @@ class TurnoArchivoTransferenciaController extends Controller
      */
     public function store(Request $request)
     {
-
-    //   dd(getSession('auditoria_id'));
+    // dd($auditoria);
+  
     mover_archivos($request, ['TurnoTransferencia']);
-    $request['auditoria_id']= getSession('auditoria_id');
     $request['usuario_creacion_id'] = auth()->user()->id;
     $request['usuario_modificacion_id'] = auth()->user()->id;
+    $request['auditoria_id'] = getSession('auditoriatat_id');
     $turnoarchivotransferencia  = TurnoArchivoTransferencia::create($request->all());
-    // dd($turnotransferencia);
+    // dd($turnoarchivotransferencia);
       setMessage("Los datos del archivo de transferencia se han guardado correctamente.");
 
       return redirect() -> route('inicioarchivotransferencia.index');

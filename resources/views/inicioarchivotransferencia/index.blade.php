@@ -115,10 +115,10 @@
                                 <td class="text-center">                                                        
                                     @if (empty($auditoria->turnoarchivotransferencia))      
                                     {{-- {{ dd($auditoria->turnoarchivotransferencia) }} --}}
-                                    <a href="{{ route('inicioarchivotransferencia.create', $auditoria) }}" class="btn btn-primary">Ingresar</a>                                      
+                                    <a href="{{ route('inicioarchivotransferencia.edit', $auditoria) }}" class="btn btn-primary">Ingresar</a>                                      
                                     @else
                                     {{-- {{ dd($auditoria->turnoarchivotransferencia) }}                                                                               --}}
-                                        <a href="{{ route('turnoarchivotransferencia.index') }}" class="btn btn-secondary">Consultar</a>  
+                                        <a href="{{ route('inicioarchivotransferencia.edit',$auditoria) }}" class="btn btn-secondary">Consultar</a>  
                                     @endif    
                                 </td>
                                 

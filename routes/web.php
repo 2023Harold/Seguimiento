@@ -352,8 +352,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     /**Fin del apartado de Auditorias */
 
     //Inicio Archivo Transferencia
-    Route::resource('inicioarchivotransferencia', InicioArchivoTransferenciaController::class, ['parameters' => ['inicioarchivotransferencia' => 'turnoarchivotransferencia']]);
-    Route::resource('turnoarchivotransferencia', InicioArchivoTransferenciaController::class, ['parameters' => ['turnoarchivotransferencia' => 'turnoarchivotransferencia']]);
+    Route::resource('inicioarchivotransferencia', InicioArchivoTransferenciaController::class, ['parameters' => ['inicioarchivotransferencia' => 'auditoria']]);
+    Route::resource('turnoarchivotransferencia', InicioArchivoTransferenciaController::class, ['parameters' => ['turnoarchivotransferencia' => 'auditoria']]);
 
     /**Seguimiento - Auditorias - Radicacion */
     Route::resource('radicacion', RadicacionController::class);

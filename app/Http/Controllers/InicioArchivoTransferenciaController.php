@@ -30,12 +30,9 @@ class InicioArchivoTransferenciaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $turnoarchivotransferencia = new TurnoArchivoTransferencia();
-
-        return view('turnotransferencia.form', compact('auditoria','turnoarchivotransferencia'));
+    public function create(Request $request)
+    {      
+       //
     }
 
     /**
@@ -44,7 +41,7 @@ class InicioArchivoTransferenciaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         //
     }
@@ -66,9 +63,16 @@ class InicioArchivoTransferenciaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Auditoria $auditoria)
     {
-        //
+        setSession ('auditoriatat_id', $auditoria->id);
+        // dd($auditoria);
+        if(empty($auditoria->turnoarchivotransferencia)){    
+        return redirect()-> route('turnoarchivotransferencia.create');
+        }else{ 
+            return redirect()-> route('turnoarchivotransferencia.index');
+        }
+        
     }
 
     /**

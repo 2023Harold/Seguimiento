@@ -3,7 +3,7 @@
 @if (empty($turnoarchivotransferencia->turnoarchivotransferencia))
     {{ Breadcrumbs::render('turnoarchivotransferencia.create') }}
 @else
-    {{ Breadcrumbs::render('turnoarchivotransferencia.edit',$turnoarchivotransferencia) }}
+    {{ Breadcrumbs::render('turnoarchivotransferencia.edit',$auditorias) }}
 @endif    
 @endsection
 @section('content')
