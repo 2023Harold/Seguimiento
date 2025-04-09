@@ -7,6 +7,7 @@ use App\Models\AuditoriaAccion;
 use App\Models\Recomendaciones;
 use App\Models\RecomendacionesContestacion;
 use Illuminate\Http\Request;
+use App\Models\FolioCrr;
 use File;
 
 class RecomendacionesAtencionContestacionController extends Controller
@@ -43,8 +44,10 @@ class RecomendacionesAtencionContestacionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
+        //$folios = FolioCrr::where('auditoria_id',getSession('auditoria_id'));
+        $folios = FolioCrr::where('auditoria_id',getSession('auditoria_id'))->pluck('folio', 'id')->prepend('Seleccionar',null);
 
-        return view('recomendacionesatencioncontestacion.form', compact('contestacion','auditoria','recomendacion','accion'));
+        return view('recomendacionesatencioncontestacion.form', compact('contestacion','auditoria','recomendacion','accion','folios'));
     }
 
     /**
@@ -55,12 +58,21 @@ class RecomendacionesAtencionContestacionController extends Controller
      */
     public function store(Request $request)
     {
+        $folio = FolioCrr::find($request->foliocrr_id);
+
         mover_archivos($request, ['oficio_contestacion']);
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
         $request->merge([
             'recomendacion_id' => getSession('recomendacioncalificacion_id'),
             'usuario_creacion_id' => auth()->id(),
+            'fecha_oficio_contestacion'=>$folio->fecha_oficio_contestacion,
+            'numero_oficio'=>$folio->numero_oficio,
+            'nombre_remitente'=>$folio->nombre_remitente,
+            'cargo_remitente'=>$folio->cargo_remitente,
+            'fecha_recepcion_oficialia'=>$folio->fecha_recepcion_oficialia,
+            'folio_correspondencia'=>$folio->folio,
+            'fecha_recepcion_seguimiento'=>$folio->fecha_recepcion_us
         ]);
 
         RecomendacionesContestacion::create($request->all());
@@ -97,8 +109,9 @@ class RecomendacionesAtencionContestacionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
+        $folios = FolioCrr::where('auditoria_id',getSession('auditoria_id'))->pluck('folio', 'id');
 
-        return view('recomendacionesatencioncontestacion.form', compact('contestacion','auditoria','recomendacion','accion'));
+        return view('recomendacionesatencioncontestacion.form', compact('contestacion','auditoria','recomendacion','accion','folios'));
     }
 
     /**
@@ -110,9 +123,16 @@ class RecomendacionesAtencionContestacionController extends Controller
      */
     public function update(Request $request, RecomendacionesContestacion $contestacion)
     {
+        $folio = FolioCrr::find($request->foliocrr_id);
         mover_archivos($request, ['oficio_contestacion'],$contestacion);
         $request->merge([
-            'usuario_modificacion_id' => auth()->id(),
+            'fecha_oficio_contestacion'=>$folio->fecha_oficio_contestacion,
+            'numero_oficio'=>$folio->numero_oficio,
+            'nombre_remitente'=>$folio->nombre_remitente,
+            'cargo_remitente'=>$folio->cargo_remitente,
+            'fecha_recepcion_oficialia'=>$folio->fecha_recepcion_oficialia,
+            'folio_correspondencia'=>$folio->folio,
+            'fecha_recepcion_seguimiento'=>$folio->fecha_recepcion_us
         ]);
         $contestacion->update($request->all());
         $this->actualizaProgresivo();

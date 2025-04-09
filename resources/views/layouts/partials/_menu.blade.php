@@ -475,6 +475,14 @@
                                 <span class="menu-title">PAC</span>
                             </a>
                         </div>
+                        <div class="menu-item mb-1">
+                            <a href="{{ route('folioscrr.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'folioscrr')) ? 'active' : '' }}">
+                                <span class="menu-bullet">
+                                    <span class="bi bi-archive"></span>
+                                </span>
+                                <span class="menu-title">Folios de Correspondencia</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
