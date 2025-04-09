@@ -1,15 +1,15 @@
 @extends('layouts.app')
 @section('breadcrums')
 @if (!empty($movimiento)&&$movimiento=='consultar')
-{{ Breadcrumbs::render('agregaracciones.consulta',$auditoria) }}
+{{Breadcrumbs::render('agregaracciones.consulta',$auditoria) }}
 @elseif (!empty($movimiento)&&$movimiento=='direccionconsultar')
-{{ Breadcrumbs::render('agregaraccionesdireccion.accion',$accion->id,$movimiento,$auditoria) }}
+{{Breadcrumbs::render('agregaraccionesdireccion.accion',$accion->id,$movimiento,$auditoria) }}
 @elseif (!empty($movimiento)&&$movimiento=='departamentoconsultar')
-{{ Breadcrumbs::render('agregaracciones.acciondepa',$accion->id,$movimiento,$auditoria) }}
+{{Breadcrumbs::render('agregaracciones.acciondepa',$accion->id,$movimiento,$auditoria) }}
 @elseif(!empty($movimiento)&&$movimiento=='lideranalistaconsultar')
-{{ Breadcrumbs::render('agregaracciones.accionlider',$accion->id,$movimiento,$auditoria) }}
+{{Breadcrumbs::render('agregaracciones.accionlider',$accion->id,$movimiento,$auditoria) }}
 @else
-{{ Breadcrumbs::render('agregaracciones.accion',$accion) }} 
+{{Breadcrumbs::render('agregaracciones.accion',$accion) }} 
 @endif
 @endsection
 @section('content')
@@ -64,14 +64,14 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <label>Acción: </label><br>
-                        {!! BootForm::textarea('accionlb', false,old('accionlb', $accion->accion),['rows'=>'3','disabled']) !!}
+                        {!!BootForm::textarea('accionlb', false,old('accionlb', $accion->accion),['rows'=>'3','disabled']) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <label>Antecedentes de la acción: </label>
                         <span class="text-primary">
-                            {!! BootForm::textarea('antecedentes_accionlb', false,old('antecedentes_accionlb', $accion->antecedentes_accion),['rows'=>'3','disabled']) !!}
+                            {!!BootForm::textarea('antecedentes_accionlb', false,old('antecedentes_accionlb', $accion->antecedentes_accion),['rows'=>'3','disabled']) !!}
                         </span>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <label>Normatividad infringida: </label>
                         <span class="text-primary">
-                            {!! BootForm::textarea('normativa_infringidalb', false,old('normativa_infringidalb', $accion->normativa_infringida),['rows'=>'3','disabled']) !!}
+                            {!!BootForm::textarea('normativa_infringidalb', false,old('normativa_infringidalb', $accion->normativa_infringida),['rows'=>'3','disabled']) !!}
                         </span>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <label>Evidencia documental que acredite la atención de la recomendación: </label>
                         <span class="text-primary">
-                            {!! BootForm::textarea('evidencia_resumen', false,old('evidencia_resumen', $accion->evidencia_resumen),['rows'=>'3','disabled']) !!}
+                            {!!BootForm::textarea('evidencia_resumen', false,old('evidencia_resumen', $accion->evidencia_resumen),['rows'=>'3','disabled']) !!}
                         </span>
                     </div>
                 </div>
@@ -105,12 +105,10 @@
                                 <a href="{{ asset($accion->evidencia_recomendacion) }}" target="_blank">
                                     <?php echo htmlspecialchars_decode(iconoArchivo($accion->evidencia_recomendacion)) ?>
                                 </a>
-								
-								
 											@php
 												$archivo=str_replace('storage/','',$accion->evidencia_recomendacion);
 											@endphp
-											@btnFileMinio($archivo)
+											@btnFile($archivo)
 											
 								</span>
                         </div>

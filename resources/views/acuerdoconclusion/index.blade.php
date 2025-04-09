@@ -131,8 +131,8 @@
                                             @endcan
                                         @endif
                                     @else {{-- AQUI EMPIEZA EL 2023--}}
-                                         @if($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación' && auth()->user()->siglas_rol=='DS')
-                                            @can('acuerdoconclusionvalidacion.edit')
+                                         @if($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación' )
+                                            @can('acuerdoconclusionvalidacion.edit' && auth()->user()->siglas_rol=='DS')
                                                 <a href="{{ route('acuerdoconclusionvalidacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
                                                     <li class="fa fa-gavel"></li>
                                                     Validar
@@ -167,8 +167,8 @@
                                 </td>
                                 <td class="text-center">
                                 @if (empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')
-                                        @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
-                                            @can('acuerdoconclusionenvio.edit')
+                                        @if (getSession('cp')==2022 )
+                                            @can('acuerdoconclusionenvio.edit' && auth()->user()->siglas_rol=='JD')
                                                 <a href="{{ route('acuerdoconclusionenvio.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
                                                 Enviar
                                                 </a>

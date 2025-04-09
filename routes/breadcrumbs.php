@@ -950,3 +950,14 @@ Breadcrumbs::for('seguimientoauditoriascp.edit', function (BreadcrumbTrail $trai
     $trail->parent('seguimientoauditoriascp.index');
     $trail->push('Editar', route('seguimientoauditoriacp.edit',$auditoria));
 });
+
+/**Folios CRR*/
+Breadcrumbs::for('folioscrr.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('auditoriaseguimiento.edit',$auditoria);
+    $trail->push('Folios', route('folioscrr.index'));
+});
+
+Breadcrumbs::for('folioscrr.create', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('folioscrr.index',$auditoria);
+    $trail->push('Folios', route('folioscrr.create'));
+});

@@ -27,6 +27,7 @@ class RecomendacionesContestacion extends Model
         'recomendacion_id',
         'usuario_creacion_id',
         'usuario_modificacion_id',
+        'foliocrr_id',
         'created_at',
         'updated_at'
     ];

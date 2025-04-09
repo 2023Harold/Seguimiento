@@ -210,6 +210,7 @@ use App\Http\Controllers\TurnoUIRevisionController;
 use App\Http\Controllers\TurnoUIValidacionController;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\FolioCRRController;
 use App\Http\Middleware\CheckPermission;
 use App\Http\Requests\PliegosObservacionContestacionRequest;
 use App\Models\PliegosObservacion;
@@ -518,7 +519,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Route::get('/informeprimeraetapa/exportar', [InformePrimeraEtapaController::class, 'export'])->name('informeprimeraetapa.exportar');
     Route::get('/informeprimeraetapais', [InformePrimeraEtapaController::class, 'export'])->name('informeprimeraetapa.exportar');
     Route::get('/informeprimeraetapaofis', [InformePrimeraEtapaController::class, 'exportOFIS'])->name('informeprimeraetapaofis.exportar');
-    
+
     Route::resource('informeprimeraetapaenvio', InformePrimeraEtapaEnvioController::class, ['parameters' => ['informeprimeraetapaenvio' => 'auditoria']]);
     Route::resource('informeprimeraetapavalidacion', InformePrimeraEtapaValidacionController::class, ['parameters' => ['informeprimeraetapavalidacion' => 'auditoria']]);
     Route::resource('informeprimeraetapaautorizacion', InformePrimeraEtapaAutorizacionController::class, ['parameters' => ['informeprimeraetapaautorizacion' => 'auditoria']]);
@@ -605,5 +606,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('reportesregistrosauditorias', ReportesRegistrosAuditoriasController::class);
     Route::get('/reportesseg/excel', [ReportesSeguimientoController::class, 'export'])->name('reporteseguimiento.exportar');
     /**Fin del apartado de Seguimiento - Auditorias - Reportes*/
+
+    /*** Seguimiento - Auditorias - folios */
+    Route::resource('folioscrr', FolioCRRController::class);
+    /**Fin del apartado de Seguimiento - Auditorias - folios*/
+
+
+
 
    });
