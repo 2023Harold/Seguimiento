@@ -87,6 +87,8 @@ class AgregarAccionesController extends Controller
         $request['analista_asignado'] = auth()->user()->name;
         $request['lider_asignado_id'] = $auditoria->lider->id;
         $request['lider_asignado'] = $auditoria->lider->name;
+        $request['departamento_asignado_id'] = $auditoria->departamento_encargado_id;
+        $request['departamento_asignado'] = $auditoria->departamento_encargado;
 
         $accion  = AuditoriaAccion::create($request->all());
         $this->actualizaProgresivo();

@@ -101,7 +101,7 @@ class ComparecenciaValidacionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; ha aprobado la validación de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';

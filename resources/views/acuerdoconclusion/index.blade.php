@@ -131,8 +131,8 @@
                                             @endcan
                                         @endif
                                     @else {{-- AQUI EMPIEZA EL 2023--}}
-                                         @if($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación' )
-                                            @can('acuerdoconclusionvalidacion.edit' && auth()->user()->siglas_rol=='DS')
+                                         @if($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación')
+                                            @can('acuerdoconclusionvalidacion.edit')
                                                 <a href="{{ route('acuerdoconclusionvalidacion.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
                                                     <li class="fa fa-gavel"></li>
                                                     Validar

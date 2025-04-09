@@ -106,11 +106,11 @@ class AcuerdoConclusionRevisionController extends Controller
        if ($request->estatus == 'Aprobado') {
         
         $titulo = 'Validación del acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria;
-        $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
+        $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
                         .auth()->user()->name.', '.auth()->user()->puesto.
                         '; ha aprobado la validación del acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria.
                         ', por lo que se requiere realice la autorización oportuna de la misma.';
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
     }else {
         
         $titulo = 'Rechazo el acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria;
@@ -119,6 +119,7 @@ class AcuerdoConclusionRevisionController extends Controller
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
         
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $auditoria->acuerdoconclusion->usuarioCreacion->id);
+
     }
 
         return redirect()->route('acuerdoconclusion.index');
