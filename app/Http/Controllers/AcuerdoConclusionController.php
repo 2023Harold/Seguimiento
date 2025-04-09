@@ -204,6 +204,7 @@ class AcuerdoConclusionController extends Controller
        }
 
        return $query;
+       
    }
 
    public function export(Request $request){

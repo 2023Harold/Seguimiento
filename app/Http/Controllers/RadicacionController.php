@@ -620,8 +620,6 @@ class RadicacionController extends Controller
                 $frac = 'fracción IV.';
             }elseif(stripos($ent, 'fideicomiso') !== false){
                 $frac = 'fracción V.';
-            }else{
-                $frac = '';
             }
             $txt1 = '';
             $ambito01 = 5;
@@ -633,8 +631,6 @@ class RadicacionController extends Controller
                 $frac = 'fracción IV.';
             }elseif(stripos($ent, 'municipios') !== false){
                 $frac = 'fracción II.';
-            }else{
-                $frac = '';
             }
             $txt1 = '115 fracción IV penúltimo párrafo';
             $ambito01=3;
@@ -1158,6 +1154,8 @@ class RadicacionController extends Controller
         $fechacomparecencia='';
         $fechainicioaclaracion='';
         $fechaterminoaclaracion='';
+        $day01 ='';
+        $mes01 = '';
         $day02 = '';
         $mes02 = '';
         $day03 = '';
@@ -1279,10 +1277,10 @@ class RadicacionController extends Controller
         $UMA = CatalogoUMAS::where('ejercicio', $datenow01)->select('texto')->first();
         $UMATEXT = $UMA->texto;
 
-        if(empty($auditoria->comparecencia->domicilio_notificacio)){
+        if(empty($auditoria->comparecencia->domicilio_notificacion)){
             $remitente_domicilio = "";
         }else{
-            $remitente_domicilio = $auditoria->comparecencia->domicilio_notificacio;
+            $remitente_domicilio = $auditoria->comparecencia->domicilio_notificacion;
         }
 
         if($auditoria->acto_fiscalizacion=='Inversión Física')

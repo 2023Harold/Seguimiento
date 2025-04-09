@@ -58,15 +58,6 @@ class TurnoOICController extends Controller
       $request['usuario_creacion_id']= auth()->user()->id;
       TurnoOIC::create($request->all());
 
-      Movimientos::create([
-        'tipo_movimiento' => 'Registro del Turno al Órgano Interno de Control',
-            'accion' => 'TurnoOIC',
-            'accion_id' => $turnooic->id,
-            'estatus' => 'Aprobado',
-            'usuario_creacion_id' => auth()->id(),
-            'usuario_asignado_id' => auth()->id(),
-        ]);
-
       setMessage("Los datos se han guardado correctamente.");
 
         return redirect() -> route('turnooic.index');

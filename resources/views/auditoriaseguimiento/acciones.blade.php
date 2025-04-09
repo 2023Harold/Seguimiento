@@ -26,7 +26,7 @@
                                 <td>{{ $resultado_final->accion_descripcion}}</td>
                                 <td>{{ $resultado_final->tipo->descripcion}}</td>
                                 <td class="text-center">{{ $resultado_final->accion_numero}}</td>
-                                <td class="text-center"> @btnFileMinio($resultado_final->cedula_accion)</td>
+                                <td class="text-center"> @btnFile($resultado_final->cedula_accion)</td>
                             </tr>
                         @endforeach
                     </tbody>
