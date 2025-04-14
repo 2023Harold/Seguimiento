@@ -45,7 +45,7 @@
                 <span style="font-size: 0.6rem"><strong>&nbsp;ENTIDAD</strong></span>
             </td>
             <td colspan="5" style="border: .5 solid; width:60%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.7rem"><strong>&nbsp;{{ $auditoria->entidad_fiscalizable }}</strong></span>
+                <span style="font-size: 0.7rem"><strong>&nbsp;{{ ($auditoria->nombreentidadcedula)?$auditoria->nombreentidadcedula->entidades:'' }}</strong></span>
             </td>
         </tr>
         <tr style="border-collapse:separate;border-spacing:0 500px;">
@@ -156,7 +156,7 @@
                     @foreach ($auditoria->totalpras as $pras)
                         <tr>
                             <td style="text-align: center; width: 5%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong> {{ $loop->iteration }}</strong></span></td>
-                            <td style="text-align: justify; width: 35%; border: 1px solid; border-color: #424242;" colspan="5"><span style="font-size: .6rem;"><strong>{{ $pras->accion }}</strong></span></td>
+                            <td style="text-align: justify; width: 35%; border: 1px solid; border-color: #424242;" colspan="5"><span style="font-size: .6rem;"><strong><?php echo nl2br(htmlspecialchars($pras->accion)); ?></strong></span></td>
                             <td style="text-align: center; width: 15%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $pras->numero }}</strong></span></td>
                             <td style="text-align: center; width: 10%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ ((!empty($pras->pras->fase_autorizacion)&&$pras->pras->fase_autorizacion=='Autorizado')? 'Turnado':'Sin turnar') }}</td>
                         </tr>                        

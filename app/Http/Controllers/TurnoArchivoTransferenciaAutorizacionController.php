@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
-use App\Models\Auditoria;
 use App\Models\Movimientos;
 use App\Models\TurnoArchivoTransferencia;
 use App\Models\User;
@@ -63,7 +62,7 @@ class TurnoArchivoTransferenciaAutorizacionController extends Controller
     {
         $turnoarchivotransferencia=$auditoria;
         $auditoria=$auditoria->auditoria;
-
+       
         return view('turnotransferenciaautorizacion.form', compact('turnoarchivotransferencia','auditoria'));
     }
 
@@ -109,19 +108,19 @@ class TurnoArchivoTransferenciaAutorizacionController extends Controller
                             '; ha aprobado la autorización del  Turno acuse envío archivo de la auditoría No. '.$turnoarchivotransferencia->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($titular->name,$titular->puesto,$turnoarchivotransferencia->auditoria->numero_auditoria), now(), $titular->unidad_administrativa_id, $director->id);
+            // auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($titular->name,$titular->puesto,$turnoarchivo->auditoria->numero_auditoria), now(), $titular->unidad_administrativa_id, $director->id);
 
 
         }else {
-
+            
             $titulo = 'Rechazo del  Turno archivo transferencia de la auditoría No. '.$turnoarchivotransferencia->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$turnoarchivotransferencia->usuarioCreacion->name.', '.$turnoarchivotransferencia->usuarioCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el  Turno acuse envío archivo de la auditoría No. '.$turnoarchivotransferencia->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
-
+            
                             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivotransferencia->usuarioCreacion->unidad_administrativa_id, $turnoarchivotransferencia->usuarioCreacion->id);
                             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($titular->name,$titular->puesto,$turnoarchivotransferencia->auditoria->numero_auditoria), now(), $titular->unidad_administrativa_id, $titular->id);
-
+                            
     }
     return redirect()->route('turnoarchivo.index');
     }
@@ -136,7 +135,6 @@ class TurnoArchivoTransferenciaAutorizacionController extends Controller
     {
         //
     }
-
     private function normalizarDatos(Request $request)
     {
          if ($request->estatus == 'Aprobado') {
@@ -145,19 +143,18 @@ class TurnoArchivoTransferenciaAutorizacionController extends Controller
 
          return $request;
     }
-
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro del Turno Archivo Transferencia de la auditoría No. '.$numeroauditoria.'.';
+                    .'Ha sido rechazado el registro del Turno acuse envío archivo de la auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }
     private function mensajeAprobado(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .' Ha sido autorizado el registro del Turno Archivo Transferencia de la auditoría No. '.$numeroauditoria.
-                    ', por parte del Titular.';
+                    .' Ha sido autorizado el registro de radicación de la auditoría No. '.$numeroauditoria.
+                    ', por parte del Titular.';       
 
         return $mensaje;
     }

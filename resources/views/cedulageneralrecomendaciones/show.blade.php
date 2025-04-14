@@ -47,7 +47,7 @@
                 <span style="font-size: 0.6rem"><strong>&nbsp;ENTIDAD</strong></span>
             </td>
             <td colspan="5" style="border: .5 solid; width:60%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.7rem"><strong>&nbsp;{{ $auditoria->entidad_fiscalizable }}</strong></span>
+                <span style="font-size: 0.7rem"><strong>&nbsp;{{ ($auditoria->nombreentidadcedula)?$auditoria->nombreentidadcedula->entidades:'' }}</strong></span>
             </td>
         </tr>
         <tr style="border-collapse:separate;border-spacing:0 500px;">
@@ -166,7 +166,7 @@
                             <td colspan="4" style="text-align: center; width: 90%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Recomendación Determinada</strong></span></td>
                         </tr>
                         <tr>
-                            <td style="text-align: justify; width: 90%; border: 1px solid; border-color: #424242;" colspan="4"><span style="font-size: .6rem;"><strong>{{ $recomendacion->accion }}</strong></span></td>
+                            <td style="text-align: justify; width: 90%; border: 1px solid; border-color: #424242;" colspan="4"><span style="font-size: .6rem;"><strong><?php echo nl2br(htmlspecialchars($recomendacion->accion)); ?></strong></span></td>
                         </tr>
                     @endforeach
                 </table>

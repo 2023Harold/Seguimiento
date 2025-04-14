@@ -60,7 +60,7 @@ class TurnoArchivoRevisionController extends Controller
     {
         $turnoarchivo=$auditoria;
         $auditoria=$auditoria->auditoria;
-
+       
         return view('turnoarchivorevision.form', compact('turnoarchivo','auditoria'));
     }
 
@@ -105,14 +105,14 @@ class TurnoArchivoRevisionController extends Controller
                         ', por lo que se requiere realice la validación oportuna de la misma.';
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
     }else {
-
+        
         $titulo = 'Rechazo del Turno Acuse Envío de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado(a) '.$turnoarchivo->usuarioCreacion->name.', '.$turnoarchivo->usuarioCreacion->puesto.':</strong><br>'
                         .'Ha sido rechazado el Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria.
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
-
+        
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivo->usuarioCreacion->unidad_administrativa_id, $turnoarchivo->usuarioCreacion->id);
-    }
+    }  
 
         return redirect()->route('turnoarchivo.index');
     }
@@ -139,7 +139,7 @@ class TurnoArchivoRevisionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro del Turno acuse envío archivo de la auditoría No. '.$numeroauditoria.'.';
+                    .'Ha sido rechazado el registro del Turno acuse envío archivo de la auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }

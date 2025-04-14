@@ -61,8 +61,8 @@ class AcuerdoConclusionValidacionController extends Controller
     {
         $acuerdoconclusion=$auditoria;
         $auditoria=$auditoria->auditoria;
-
-        return view('acuerdoconclusionvalidacion.form', compact('acuerdoconclusion','auditoria'));
+       
+        return view('acuerdoconclusionautorizacion.form', compact('acuerdoconclusion','auditoria'));
     }
 
     /**
@@ -106,12 +106,12 @@ class AcuerdoConclusionValidacionController extends Controller
                         ', por lo que se requiere realice la autorización oportuna de la misma.';
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
     }else {
-
+        
         $titulo = 'Rechazo de la radicación de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
                         .'Ha sido rechazado el acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
-
+        
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
     }
 
@@ -139,7 +139,7 @@ class AcuerdoConclusionValidacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro del Acuerdo de Conclusión de las auditoría No. '.$numeroauditoria.'.';
+                    .'Ha sido rechazado el registro del Acuerdo de Conclusión de las auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }

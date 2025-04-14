@@ -51,7 +51,7 @@
                             <span style="font-size: 0.6rem"><strong>&nbsp;ENTIDAD:</strong></span>
                         </td>
                         <td style="border: 1px solid; border-collapse:collapse; border-color: #424242; width:500px;">
-                            <span style="font-size: 0.6rem"><strong>&nbsp;{{ $auditoria->entidad_fiscalizable }}</strong></span>
+                            <span style="font-size: 0.6rem"><strong>&nbsp;{{ ($auditoria->nombreentidadcedula)?$auditoria->nombreentidadcedula->entidades:'' }}</strong></span>
                         </td>
                     </tr>
                     <tr>

@@ -86,6 +86,7 @@ class AsignacionStaffJuridicoController extends Controller
         // Obtener los usuarios STAFF de la dirección asignada
         $staff = User::where('unidad_administrativa_id', $auditoria->direccion_asignada_id)
             ->where('siglas_rol', 'STAFF')
+			->where('estatus', 'Activo')
             ->pluck('name', 'id')
             ->toArray();
 

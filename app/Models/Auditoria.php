@@ -460,5 +460,11 @@ class Auditoria extends Model
                 return $this->belongsTo(ListadoEntidades::class, 'id', 'no_auditoria');
             }
 
+			public function nombreentidadcedula()
+            {
+                return $this->hasOne(ListadoEntidades::class, 'no_auditoria','numero_auditoria')->where('cuenta_publica',getSession('cp'));            ;
+            }
+			
+
 
 }

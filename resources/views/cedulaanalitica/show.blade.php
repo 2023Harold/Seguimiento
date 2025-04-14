@@ -51,7 +51,7 @@
                                 <span style="font-size: 0.6rem"><strong>&nbsp;ENTIDAD:</strong></span>
                             </td>
                             <td style="border: 1px solid; border-collapse:collapse; border-color: #424242; width:500px;">
-                                <span style="font-size: 0.6rem"><strong>&nbsp;{{ $auditoria->entidad_fiscalizable }}</strong></span>
+                                <span style="font-size: 0.6rem"><strong>&nbsp;{{ ($auditoria->nombreentidadcedula)?$auditoria->nombreentidadcedula->entidades:'' }}</strong></span>
                             </td>
                         </tr>
                         <tr>
@@ -229,9 +229,13 @@
                         <tr>
                             <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ANALISIS DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
                         </tr>
-                        <tr>
-                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;font-size: 0.6rem;">
-                                <span>
+                       
+                    </table>
+                </td>
+            </tr>         
+        </table>
+		<div style="text-align: justify; border: .5 solid black; width:100%; color: #960048; vertical-align:middle;font-size: 0.6rem; page-break-after:auto;">
+		<span style="font-size: 0.6rem">
                                     <strong>
 										@php
 											if ($accion->tipo=='Solicitud de aclaración'){
@@ -258,12 +262,7 @@
 										@endphp
                                     </strong>
                                 </span> 
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>         
-        </table>
+		</div>
         @php
             $i=$i+1;
         @endphp

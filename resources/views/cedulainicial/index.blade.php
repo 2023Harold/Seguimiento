@@ -112,9 +112,7 @@
 
                                                             <!-- ---------------------------------------------------------------------------CG Seguimiento Revision------------------------------------------------------------------------- -->
                                                             @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion == 'En revisión')
-                                                            1
                                                                 @can('cedulainicialprimerarevision.edit')
-                                                                
                                                                     @if(in_array(auth()->user()->unidad_administrativa_id, $cg_resultado['jefesF']))
                                                                         <a href="{{ route('cedulainicialprimerarevision.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar">
                                                                             <li class="fa fa-gavel"></li>
@@ -122,7 +120,6 @@
                                                                         </a>
                                                                     @endif
                                                                 @else
-                                                                2
                                                                     <p class="text-gray-600 h4">
                                                                         Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralseguimiento[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralseguimiento[0]->fase_autorizacion }}</span>
                                                                     </p>
