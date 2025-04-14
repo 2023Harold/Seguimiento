@@ -24,41 +24,16 @@
         <div class="card-body">
             @include('flash::message')
             {!! BootForm::open(['model' => $contestacion, 'store' => 'pliegosobservacionatencioncontestacion.store', 'update' => 'pliegosobservacionatencioncontestacion.update', 'id' => 'form']) !!}
-                <div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('oficio_contestacion', 'Oficio de contestación de los pliegos de observación: *', old('oficio_contestacion', $contestacion->oficio_contestacion)) !!}
+            <div class="row">
+                        <div class="col-md-6">
+                            {!! archivo('oficio_contestacion', 'Oficio de contestación de la recomendación: *', old('oficio_contestacion', $contestacion->oficio_contestacion)) !!}
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        {!! BootForm::date('fecha_oficio_contestacion', 'Fecha del oficio de contestación: ', old('fecha_oficio_contestacion', fecha($contestacion->fecha_oficio_contestacion, 'Y-m-d'))); !!}
+                    <div class="row">
+                        <div class="col-md-6">
+                        {!! BootForm::select('foliocrr_id', 'Folio de correspondencia: *', $folios->toArray() , old('foliocrr_id'), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        {!! BootForm::text('numero_oficio', 'Número del oficio: *', old('numero_oficio', $contestacion->numero_oficio)); !!}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        {!! BootForm::text('nombre_remitente', 'Remitente: *', old('nombre_remitente', $contestacion->nombre_remitente)); !!}
-                    </div>
-                    <div class="col-md-6">
-                        {!! BootForm::text('cargo_remitente', 'Cargo del remitente: *', old('cargo_remitente', $contestacion->cargo_remitente)); !!}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        {!! BootForm::date('fecha_recepcion_oficialia', 'Fecha de recepción en oficialía: *', old('fecha_recepcion_oficialia', fecha($contestacion->fecha_recepcion_oficialia, 'Y-m-d'))); !!}
-                    </div>
-                    <div class="col-md-3">
-                        {!! BootForm::number('folio_correspondencia', 'Folio de correspondencia: *', old('folio_correspondencia', $contestacion->folio_correspondencia)); !!}
-                    </div>
-                </div>
-                <div class="row">
-                    {!! BootForm::label('lbfecha','Fecha de recepción en la unidad de seguimiento: *') !!}
-                    <div class="col-md-3">
-                        {!! BootForm::date('fecha_recepcion_seguimiento', false, old('fecha_recepcion_seguimiento', fecha($contestacion->fecha_recepcion_seguimiento, 'Y-m-d'))); !!}
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-12">
                         @btnSubmit("Guardar")

@@ -27,7 +27,9 @@ class FolioCRR extends Model
         'solicitudes',
         'presentacion',
         'usuario_creacion_id',
-        'usuario_modificacion_id'
+        'usuario_modificacion_id',
+        'recomendaciones_extemp',
+        'acciones_extemp',
     ];
 
 
@@ -35,6 +37,5 @@ class FolioCRR extends Model
     protected $cast = [
         'fecha_recepcion_oficialia',
         'fecha_recepcion_us',
-
     ];
 }

@@ -33,6 +33,7 @@
                                 <th>Remitente</th>
                                 <th>Recepción en oficialía</th>
                                 <th>Fecha de recepción en la unidad de seguimiento</th>
+                                <th>Acuerdos de valoración</th>
                             </tr>
                         </thead>
                         <tbody>

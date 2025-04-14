@@ -4,7 +4,7 @@
     {{ Breadcrumbs::render('acuerdoconclusion.create') }}
 @else
     {{ Breadcrumbs::render('acuerdoconclusion.edit',$acuerdoconclusion) }}
-@endif    
+@endif
 @endsection
 @section('content')
 <div class="row">
@@ -13,13 +13,13 @@
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('acuerdoconclusion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
+                    <a href="{{ route('acuerdoconclusion.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp; Acuerdo de Conclusión
                 </h1>
-            </div>        
+            </div>
             <div class="card-body">
                 @include('flash::message')
-                @include('layouts.contextos._auditoria')			
+                @include('layouts.contextos._auditoria')
                 {!! BootForm::open(['model' => $acuerdoconclusion,'store' => 'acuerdoconclusion.store','update' => 'acuerdoconclusion.update','id' => 'form']) !!}
                 <div class= "row">
                     <div class="col-md-5">
@@ -40,34 +40,34 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-5">						
+					<div class="col-md-5">
 						  {!! BootForm::date('fecha_oficio', 'Fecha del Oficio *', old('fecha_oficio', fecha($acuerdoconclusion->fecha_oficio, 'Y-m-d'))) !!}
 					</div>
-				</div>				
+				</div>
                 <div class="row">
                     <div class="col-md-5">
                         {!! archivo('acuerdo_conclusion', 'Acuerdo de conclusión: *', old('acuerdo_conclusion', $acuerdoconclusion->acuerdo_conclusion)) !!}
-                        
-                    </div>                    
-                </div>       
+
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-5">
                         {!! BootForm::date('fecha_acuerdo_conclusion', 'Fecha del acuerdo de conclusión *', old('fecha_acuerdo_conclusion', fecha($acuerdoconclusion->fecha_acuerdo_conclusion, 'Y-m-d'))) !!}
                     </div>
-                </div> 
+                </div>
                 <div class="row">
-                    <div class="col-md-6"> 
+                    <div class="col-md-6">
                         @canany(['acuerdoconclusion.store','acuerdoconclusion.update'])
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         @endcanany
                         <a href="{{ route('acuerdoconclusion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>
-                {!! BootForm::close() !!}    
-            </div>    
-        </div>  
+                {!! BootForm::close() !!}
+            </div>
+        </div>
     </div>
-</div> 
+</div>
 @endsection
 @section('script')
 {!! JsValidator::formRequest('App\Http\Requests\AcuerdoConclusionRequest') !!}

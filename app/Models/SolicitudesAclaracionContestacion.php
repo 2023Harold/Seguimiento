@@ -27,8 +27,9 @@ class SolicitudesAclaracionContestacion extends Model
         ,'solicitudaclaracion_id'
         ,'usuario_creacion_id'
         ,'usuario_modificacion_id'
+        ,'foliocrr_id'
         ,'created_at'
-        ,'updated_at'       
+        ,'updated_at'
     ];
 
     protected $dates = [
@@ -36,7 +37,7 @@ class SolicitudesAclaracionContestacion extends Model
         'fecha_recepcion_oficialia',
         'fecha_recepcion_seguimiento',
         'created_at',
-        'updated_at',        
+        'updated_at',
     ];
 
     public function accion()

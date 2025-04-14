@@ -19,7 +19,7 @@
                 {!!BootForm::open(['model' => $folio,'store' => 'folioscrr.store','update' => 'folioscrr.update','id' =>'form',]) !!}
                 {!! BootForm::hidden('fecha_aclaracion',fecha($auditoria->comparecencia->fecha_termino_aclaracion, 'Y-m-d'),['id'=>'fecha_aclaracion']); !!}
                 {!! BootForm::hidden('fecha_atencion',fecha($auditoria->comparecencia->fecha_termino_proceso, 'Y-m-d'),['id'=>'fecha_atencion']); !!}
-                {!! BootForm::hidden('presentacion','',['id'=>'presentacion']); !!}
+
                     <div class="row">
                         <div class="col-md-6">
                         {!! BootForm::radios("solicitudes", 'Solicitudes en el oficio: *',
@@ -31,10 +31,21 @@
                         !!}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" id="divsolambas" style="display:none;">
                         <div class="col-md-6">
-                            {!!BootForm::checkbox('entiempoacciones', ' Acciones a destiempo', 'X', ($folio->entiempoacciones == 'X'?true:false), ['class' => 'i-checks']) !!}
-                            {!!BootForm::checkbox('entiemporecomendaciones',' Recomendaciones a destiempo', 'X', ($folio->entiemporecomendaciones?true:false), ['class' => 'i-checks']) !!}
+                        {!! BootForm::radios("presentacionambs", "Presenta: *",
+                        [
+                            'En tiempo' => 'En tiempo',
+                            'Extemporaneo' => 'Extemporaneo',
+                        ], old('presentacionambs',$folio->presentacion),true,['class'=>'i-checks rechazado']);
+                        !!}
+                        </div>
+                    </div>
+                    <div class="row" id="divextempambas" style="display:none;">
+                        <div class="col-md-6">
+                            {!!BootForm::checkbox('sol_extemp_ad', ' Acciones a destiempo', 'XAD', ($folio->acciones_extemp == 'X'?true:false), ['class' => 'i-checks','id'=>'sol_extemp_ad']) !!}
+                            {!!BootForm::checkbox('sol_extemp_rd',' Recomendaciones a destiempo', 'XRD', ($folio->recomendaciones_extemp?true:false), ['class' => 'i-checks','id'=>'sol_extemp_rd']) !!}
+                            {!! BootForm::hidden('presentacion','',['id'=>'presentacion']); !!}
                         </div>
                     </div>
                     <div class="row">
@@ -92,31 +103,71 @@
             if(event.target.checked){
                 solicitud = event.target.value;
                // fecha = $('#fecha').val();
-                alert(solicitud);
+                //alert(solicitud);
                 //setTimeout(mostrarCitas(), 1000);
                 if(solicitud=='Acciones'){
-
+                    $('#divsolambas').hide();
+                    $('#divextempambas').hide();
                 }
 
                 if(solicitud=='Recomendaciones'){
-
+                    $('#divsolambas').hide();
+                    $('#divextempambas').hide();
                 }
 
                 if(solicitud=='Ambas'){
+                $('#divsolambas').show();
 
                 }
             }
         });
+
+        $('input[name="presentacionambs"]').on('ifChanged', function(event) {
+            if(event.target.checked){
+                solicitud = event.target.value;
+               // fecha = $('#fecha').val();
+                //alert(solicitud);
+                //setTimeout(mostrarCitas(), 1000);
+                if(solicitud=='Extemporaneo'){
+                    $('#divextempambas').show();
+                }else{
+                    $('#divextempambas').hide();
+                }
+            }
+        });
+
+        $("#sol_extemp_ad").change(function() {
+            if (this.checked) {
+                //alert(1);
+                        $('#presentacion').val('Acciones Extemporaneas');
+                        $('#presentacion-error').text(null);
+                    }else{
+                        $('#presentacion').val(null);
+                    }
+        });
+
+        $("#sol_extemp_rd").change(function() {
+            if (this.checked) {
+               // alert(1);
+                        $('#presentacion').val('Acciones Extemporaneas');
+                        $('#presentacion-error').text(null);
+                    }else{
+                        $('#presentacion').val(null);
+                    }
+        });
+
     });
 
+
+
     function handler(e){
-        alert(e.target.value);
+        //alert(e.target.value);
         let solicitudes = $('input[name="solicitudes"]:checked').val();
-        alert(solicitudes);
+        //alert(solicitudes);
         let fechaatencion = $('#fecha_atencion').val();
-        alert(fechaatencion);
+        //alert(fechaatencion);
         let fechaaclaracion = $('#fecha_aclaracion').val();
-        alert(fechaaclaracion);
+        //alert(fechaaclaracion);
 
 
         if(solicitud=='Acciones'){
@@ -140,10 +191,8 @@
         }
 
         if(solicitud=='Ambas'){
-
+            $('#presentacion').val(null);
         }
-
-
     }
 </script>
 @endsection

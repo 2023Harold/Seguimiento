@@ -33,6 +33,9 @@ class FoliosRequest extends FormRequest
             'fecha_recepcion_oficialia' => 'required|date|max:10',
             'fecha_recepcion_us' => 'required|date|max:10',
             'solicitudes'=> 'required|string|in:Acciones,Recomendaciones,Ambas',
+            'presentacionambs'=>'sometimes|nullable|required_if:solicitudes,Ambas|string|in:En tiempo,Extemporaneo',
+            //'sol_extemp_rd'=>'sometimes|nullable|required_without:presentacion',
+            'presentacion'=>'sometimes|nullable|required_if:presentacionambs,Extemporaneo',
             ];
     }
 
@@ -47,7 +50,8 @@ class FoliosRequest extends FormRequest
             'folio' => 'folio',
             'fecha_recepcion_oficialia' => 'Fecha de recepción en Oficialia de Partes',
             'fecha_recepcion_us' => 'Fecha de recepción en la Unidad de Seguimiento',
-            'solicitudes'=> 'solicitudes en el oficio de contestación',
+            'presentacionambs'=>'presentación',
+            'sol_extemp_rd'=> 'solicitudes en el oficio de contestación',
            ];
     }
 
@@ -55,6 +59,8 @@ class FoliosRequest extends FormRequest
     {
         return [
             'required' => 'El campo :attribute es obligatorio.',
+            'required_if' => 'El campo :attribute es obligatorio.',
+            'presentacion.required_if' => 'Se necesita seleccionar al menos una opción.',
         ];
     }
 }

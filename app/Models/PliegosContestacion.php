@@ -25,6 +25,7 @@ class PliegosContestacion extends Model
         ,'fecha_recepcion_seguimiento'
         ,'nombre_archivo'
         ,'pliegosobservacion_id'
+        ,'foliocrr_id'
         ,'usuario_creacion_id'
         ,'usuario_modificacion_id'
         ,'created_at'

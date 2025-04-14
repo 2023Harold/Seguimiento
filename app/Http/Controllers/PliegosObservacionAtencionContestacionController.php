@@ -8,6 +8,7 @@ use App\Models\PliegosContestacion;
 use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
 use File;
+use App\Models\FolioCrr;
 
 class PliegosObservacionAtencionContestacionController extends Controller
 {
@@ -43,8 +44,9 @@ class PliegosObservacionAtencionContestacionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
+        $folios = FolioCrr::where('auditoria_id',getSession('auditoria_id'))->pluck('folio', 'id')->prepend('Seleccionar',null);
 
-        return view('pliegosatencioncontestacion.form', compact('contestacion','auditoria','pliegosobservacion','accion'));
+        return view('pliegosatencioncontestacion.form', compact('contestacion','auditoria','pliegosobservacion','accion','folios'));
     }
 
     /**
@@ -55,12 +57,20 @@ class PliegosObservacionAtencionContestacionController extends Controller
      */
     public function store(Request $request)
     {
+        $folio = FolioCrr::find($request->foliocrr_id);
         mover_archivos($request, ['oficio_contestacion']);
         $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
 
         $request->merge([
             'pliegosobservacion_id' => getSession('pliegosobservacionatencion_id'),
             'usuario_creacion_id' => auth()->id(),
+            'fecha_oficio_contestacion'=>$folio->fecha_oficio_contestacion,
+            'numero_oficio'=>$folio->numero_oficio,
+            'nombre_remitente'=>$folio->nombre_remitente,
+            'cargo_remitente'=>$folio->cargo_remitente,
+            'fecha_recepcion_oficialia'=>$folio->fecha_recepcion_oficialia,
+            'folio_correspondencia'=>$folio->folio,
+            'fecha_recepcion_seguimiento'=>$folio->fecha_recepcion_us
         ]);
         PliegosContestacion::create($request->all());
         $this->actualizaProgresivo();
@@ -96,8 +106,9 @@ class PliegosObservacionAtencionContestacionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
+        $folios = FolioCrr::where('auditoria_id',getSession('auditoria_id'))->pluck('folio', 'id');
 
-        return view('pliegosatencioncontestacion.form', compact('contestacion','auditoria','pliegosobservacion','accion'));
+        return view('pliegosatencioncontestacion.form', compact('contestacion','auditoria','pliegosobservacion','accion','folios'));
     }
 
     /**
@@ -109,9 +120,17 @@ class PliegosObservacionAtencionContestacionController extends Controller
      */
     public function update(Request $request, PliegosContestacion $contestacion)
     {
+        $folio = FolioCrr::find($request->foliocrr_id);
         mover_archivos($request, ['oficio_contestacion'],$contestacion);
         $request->merge([
             'usuario_modificacion_id' => auth()->id(),
+            'fecha_oficio_contestacion'=>$folio->fecha_oficio_contestacion,
+            'numero_oficio'=>$folio->numero_oficio,
+            'nombre_remitente'=>$folio->nombre_remitente,
+            'cargo_remitente'=>$folio->cargo_remitente,
+            'fecha_recepcion_oficialia'=>$folio->fecha_recepcion_oficialia,
+            'folio_correspondencia'=>$folio->folio,
+            'fecha_recepcion_seguimiento'=>$folio->fecha_recepcion_us
         ]);
         $contestacion->update($request->all());
         $this->actualizaProgresivo();
