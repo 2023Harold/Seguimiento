@@ -18,7 +18,9 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\ToArray;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat\NumberFormatter;
 use PhpOffice\PhpWord\TemplateProcessor;
+use PhpParser\Node\Stmt\Else_;
 use SebastianBergmann\Type\TrueType;
+use Carbon\Carbon;
 
 
 
@@ -442,6 +444,13 @@ class InformePrimeraEtapaController extends Controller
             $template->setValue('accionSolventada01', $accionSolventada01);
             $template->setValue('accionSolventada02', $accionSolventada02);
             $template->setValue('accionSolventada03', $accionSolventada03);
+            $template->setValue('accionSolventada04', $accionSolventada04);
+            $template->setValue('accionSolventada05', $accionSolventada05);
+            $template->setValue('accionSolventada06', $accionSolventada06);
+            $template->setValue('accionSolventada07', $accionSolventada07);
+            $template->setValue('accionSolventada08', $accionSolventada08);
+            $template->setValue('accionSolventada09', $accionSolventada09);
+            $template->setValue('accionSolventada10', $accionSolventada10);
             $template->setValue('fechaInformeLetras', $fechaInformeLetras);
             $template->setValue('nT', $nT[0]);
             $template->setValue('nD', $auditoria->directorasignado->name);
@@ -457,7 +466,233 @@ class InformePrimeraEtapaController extends Controller
         $template->saveAs($nombreword.'.docx');
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
      }        
-     public function exportOFIS(){
-        dd("OF ");
+     public function exportOFIS(Request $request){
+        $siRecomendaciones01 = ""; $siRecomendaciones02 = ""; $siRecomendaciones03 = ""; $siRecomendaciones04 = ""; $siRecomendaciones05 = ""; $siPRAS01 = ""; $siPliegoNoS01 = "";
+        $siPrimeraEtapa01 = ""; $siSegundaEtapa01 = ""; $siPlazoSegundaEtapa = ""; $iniciales=''; $inicialesLM='MAOV'; $inicialesA=""; $inicialesD=''; $inicialesJD=''; $oficio_numero_informe = "";
+        $fojasU = ""; $fojasULetras = ""; $remitente=""; $remitente_cargo = "";$remitente_domicilio = ""; $siEtapaAclaracion01 =""; $siEtapaAclaracion02 ="";
+        $nombreword = "OF";
+        $auditoria=Auditoria::find(getSession('auditoria_id')); 
+        $pras = Segpras::where('accion_id',getSession('prasauditoriaaccion_id'))->get();
+        $formatter = new NumeroALetras();
+
+        $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para legalidad
+        $ent = $auditoria->entidad_fiscalizable;
+        $frac ='';
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $mes = $meses[(now()->format('n')) - 1];
+        
+        if($auditoria->entidadFiscalizable->Ambito = 'Estatal'){
+            $nombre_ccp='</w:t><w:br/><w:t>Luis David Fernández Araya.';
+            $info_ccp= 'C.c.p.  '.$nombre_ccp.' Encargado del Despacho de la Subsecretaría de Control y Auditoría de la Secretaría de la Contraloría del Gobierno del Estado de México. </w:t><w:br/><w:t>';
+            $infodom_ccp='Domicilio: Av. Primero de Mayo, número 1731, Esquina Robert Bosch, Colonia Zona Industrial, C.P. 50071, Toluca, México.</w:t><w:br/><w:t>';
+            $info=$info_ccp.' '.$infodom_ccp;
+            $ambito01 = "";
+            if (stripos($ent, 'poder') !== false) {
+                $frac = 'fracción I.';
+            }elseif(stripos($ent, 'órganos autónomos') !== false) {
+                $frac = 'fracción III.';
+            }elseif(stripos($ent, 'organismo auxiliar') !== false){
+                $frac = 'fracción IV.';
+            }elseif(stripos($ent, 'fideicomiso') !== false){
+                $frac = 'fracción V.';
+            }
+            
+        }elseif($auditoria->entidadFiscalizable->Ambito = 'Municipal'){
+            $ambito01 = "115 fracción IV penúltimo párrafo,";
+            if (stripos($ent, 'fideicomiso') !== false) {
+                $frac = 'fracción V.';
+            }elseif(stripos($ent, 'organismo auxiliar') !== false) {
+                $frac = 'fracción IV.';
+            }elseif(stripos($ent, 'municipios') !== false){
+                $frac = 'fracción II.';
+            }
+        }
+        
+        if ($auditoria) {
+            $entidad = ListadoEntidades::where('no_auditoria', $auditoria->numero_auditoria)->where('cuenta_publica', $auditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();
+                if ($entidad) {
+                    $nombreEntidad = $entidad->entidades;
+                    $textoDocumento = $entidad->textos_doc;
+                }
+            }
+        
+        $nD = $auditoria->directorasignado->name;
+        $nJD = $auditoria->jefedepartamentoencargado->name;
+        $nA = $auditoria->analistacp->name;
+
+        $nD=explode(' ',$nD);
+        foreach($nD as $parte){
+            $inicialesD=$inicialesD.substr($parte, 0,1);
+        }
+        $nJD=explode(' ',$nJD);
+            foreach($nJD as $parte){
+                $inicialesJD=$inicialesJD.substr($parte, 0,1);
+        }
+        $nA=explode(' ',$nA);
+            foreach($nA as $parte){
+                $inicialesA=$inicialesA.substr($parte, 0,1);
+        }
+
+        $fecha_oficio = fecha(optional($auditoria->radicacion)->fecha_notificacion);
+        $numero_oficio = $auditoria->radicacion->numero_acuerdo;
+        
+        if(empty($auditoria->informepliegos)){
+            $fojasU =$auditoria->informeprimeraetapa->numero_fojas;
+            $fojasULetras = ucwords(strtolower($formatter->toString($auditoria->informeprimeraetapa->numero_fojas)));
+            $remitente =  $auditoria->informeprimeraetapa->nombre_titular_informe;
+            $remitente_cargo =  $auditoria->informeprimeraetapa->cargo_titular_informe;
+            $remitente_domicilio =  $auditoria->informeprimeraetapa->domicilio_informe;
+            $oficio_numero_informe = $auditoria->informeprimeraetapa->numero_informe;
+        }elseif(empty($auditoria->informeprimeraetapa)){
+            $fojasU =$auditoria->informepliegos->numero_fojas;
+            $fojasULetras = ucwords(strtolower($formatter->toString($auditoria->informepliegos->numero_fojas)));
+            $remitente =  $auditoria->informepliegos->nombre_titular_informe;
+            $remitente_cargo =  $auditoria->informepliegos->cargo_titular_informe;
+            $remitente_domicilio =  $auditoria->informepliegos->domicilio_informe;  
+            $oficio_numero_informe = $auditoria->informepliegos->numero_informe;
+        }
+
+        if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero' || $auditoria->acto_fiscalizacion=='Inversión Física'){
+
+            if(count($auditoria->accionesrecomendaciones)>0){ /**PUEDO PONERLO TANTO PARA IF Y CF */
+                $siRecomendaciones01 = "y 54 Bis";
+                $siRecomendaciones02 = "y XXIII Bis,";
+                $siRecomendaciones03 = " X,";
+                $siRecomendaciones04 = "y del Proceso de Atención a las Recomendaciones correspondientes, ";
+                $siRecomendaciones05 = "así como, se precisaran las mejoras realizadas y las acciones emprendidas en relación a las recomendaciones , o en su caso, justificara su improcedencia ; ";
+            }
+            if(count($auditoria->accionespras)>0){
+                $siPRAS01 = ", XIX";
+            }
+            if(count($auditoria->totalNOsolventadopliegos)>0){
+                $siPliegoNoS01 = "XVIII ";
+            }
+
+            if((count($auditoria->accionespo)>0) || (count($auditoria->accionesrecomendaciones)>0) && ('siPrimeraEtapa' == 'siPrimeraEtapa')){
+                $siPrimeraEtapa01 = "Derivado del seguimiento al Informe de Auditoría correspondiente a la Auditoría de {$auditoria->acto_fiscalizacion}, practicada {$textoDocumento}, por el período comprendido del {$auditoria->periodo_revision}; en fecha ${fecha_oficio} le fue notificado a la entidad fiscalizada, el oficio número ${numero_oficio}, por medio del cual, se le hizo del conocimiento la emisión del Acuerdo de Radicación respectivo y se le citó a comparecencia para el efecto de que en ella se puntualizaran las observaciones de mérito y se pusiera a la vista el Expediente Técnico para su consulta e informarle de la apertura de la Etapa de Aclaración {$siRecomendaciones04}, con el objeto de que en un plazo de 30 (Treinta) días hábiles, solventara, aclarara o manifestara lo que a su derecho conviniera en relación al contenido de las acciones aludidas; ${siRecomendaciones05}; en ese sentido, remito a usted el Informe de Seguimiento por el que se notifica la situación que guardan las citadas observaciones, constante de {$fojasU} ({$fojasULetras}) fojas útiles.";
+            }
+            if('siSegundaEtapa01'=='no'){
+                $siSegundaEtapa01 = "En seguimiento al oficio número X {oficioNumero_informe}X y notificado en fecha X {fecha_not_informe}X a esa entidad fiscalizada respecto de la Auditoría de {$auditoria->acto_fiscalizacion}, practicada a XXXX, por el período comprendido del XXX; remito a usted el Informe de Seguimiento por el que se notifica la situación que guardan las observaciones, constante de XXX fojas útiles.";
+                $siPlazoSegundaEtapa = "Cabe señalar que las observaciones mencionadas en el párrafo que antecede, se encuentran sustentadas con las constancias agregadas en los expedientes técnicos respectivos, mismos que la entidad fiscalizada a través de sus titulares, o en su caso, representantes legales o enlaces debidamente autorizados, pueden consultar en las oficinas que ocupa esta Unidad, sito en Avenida José María Pino Suárez Sur, núms. 104, 106 y 108, Colonia Cinco de Mayo, Toluca, Estado de México, C.P. 50090, con cita que deberá ser agendada en el número de teléfono (722) 167 8450 (opción 3).";
+            }
+
+            $replacements = array(
+                array('remitente' => "{$remitente}", 'remitente_cargo' => "{$remitente_cargo}", 'remitente_domicilio' => "{$remitente_domicilio}", 'ambito01' =>$ambito01 , 'frac'=>$frac,'siRecomendaciones01' => "{$siRecomendaciones01}", 'siRecomendaciones02' => "{$siRecomendaciones02}",'siPRAS01' => "{$siPRAS01}", 'siRecomendaciones03' => "{$siRecomendaciones03}",
+                    'siPliegoNoS01' => "{$siPliegoNoS01}",'siPrimeraEtapa01' => "{$siPrimeraEtapa01}", 'siRecomendaciones04' => "{$siRecomendaciones04}",'siRecomendaciones05' => "{$siRecomendaciones05}", 'siSegundaEtapa01' => "{$siSegundaEtapa01}",'siPlazoSegundaEtapa' => "{$siPlazoSegundaEtapa}"),
+
+                );
+                     //array('customer_name' => 'Superman', 'customer_address' => 'Metropolis').
+            
+            $template=new TemplateProcessor('bases-word/IS/CUMPLIMIENTO_FINANCIERO/Of_IS_01.docx');     
+            $template->setValue('direccion_asig',$auditoria->direccion_asignada);
+            $template->setValue('departamento_asig',$auditoria->departamento_encargado);
+            $template->setValue('anio',date("Y"));
+            $template->setValue('dia', Carbon::now()->day);
+            $template->setValue('mes',$mes);
+            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+            $template->setValue('oficio_numero_informe', $oficio_numero_informe);
+            $template->setValue('info', $info);
+            $template->setValue('inicialesJD', $inicialesJD);
+            $template->setValue('inicialesLM', $inicialesLM);
+            $template->setValue('inicialesA', $inicialesA);
+            $template->setValue('inicialesD', $inicialesD);
+
+            
+            $template->cloneBlock('block', 1, true, false, $replacements);
+
+            
+            $nombreword='Of. IS';
+            $template->saveAs($nombreword.'.docx');
+        }
+        elseif($auditoria->acto_fiscalizacion=='Desempeño'){
+
+            $replacements = array(
+                array('remitente' => "{$remitente}", 'remitente_cargo' => "{$remitente_cargo}", 'remitente_domicilio' => "{$remitente_domicilio}", 'ambito01' =>$ambito01 , 'frac'=>$frac,'siPRAS01' => "{$siPRAS01}",
+                        'entidad' => "{$nombreEntidad}", 'periodo'=> "{$auditoria->periodo_revision}", 'fecha_noti'=> "{$fecha_oficio}", 'oficio_numero01' => "{$numero_oficio}", 'fojasU'=>"{$fojasU}", 'fojasULetras' => "{$fojasULetras}"),
+                );
+
+            $template=new TemplateProcessor('bases-word/IS/DESEMPEÑO/Of_IS_PAR_01.docx');     
+            $template->setValue('direccion_asig',$auditoria->direccion_asignada);
+            $template->setValue('departamento_asig',$auditoria->departamento_encargado);
+            $template->setValue('anio',date("Y"));
+            $template->setValue('dia', Carbon::now()->day);
+            $template->setValue('mes',$mes);
+            $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+            $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+            $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+            $template->setValue('oficio_numero', $auditoria->radicacion->oficio_acuerdo);
+            $template->setValue('info', $info);
+            $template->setValue('inicialesJD', $inicialesJD);
+            $template->setValue('inicialesLM', $inicialesLM);
+            $template->setValue('inicialesA', $inicialesA);
+            $template->setValue('inicialesD', $inicialesD);
+
+            
+            $template->cloneBlock('block', 1, true, false, $replacements);
+
+            
+            $nombreword='Of. IS PAR';
+            $template->saveAs($nombreword.'.docx');
+        }else{
+            if($auditoria->acto_fiscalizacion=='Legalidad'){
+                if(count($auditoria->accionesrecomendaciones)>0){ /**PUEDO PONERLO TANTO PARA IF Y CF */
+                    $siRecomendaciones01 = "y 54 Bis";
+                    $siRecomendaciones03 = " X,";
+                }
+                if(count($auditoria->accionespras)>0){
+                    $siPRAS01 = ", XIX";
+                }
+                if(count($auditoria->accionespo)>0){
+                    $siPo01 = "de la Etapa de Aclaración del Pliego de Observaciones";
+                }
+                if(count($auditoria->totalNOsolventadopliegos)>0){
+                    $siPliegoNoS01 = "XVIII ";
+                }
+                if("Si etapa de aclaracion"=="no"){
+                    $siEtapaAclaracion01 = "en un plazo de 30 (Treinta) días hábiles, solventara, aclarara o manifestara lo que a su derecho conviniera en relación al contenido de los Pliegos de Observaciones;";
+                    $siEtapaAclaracion02 = "así como, se precisaran las mejoras realizadas y las acciones emprendidas en relación a las recomendaciones, o en su caso, justificara su improcedencia dentro del plazo convenido;";
+                }
+                if(count($auditoria->informes)>0 && "No hay segunda Etapa"=="No hay segunda Etapa"){
+                    $siUnicoInforme01 = "Derivado del seguimiento al Informe de Auditoría correspondiente a la Auditoría de Legalidad, practicada {$textoDocumento} , por el período comprendido del {$auditoria->periodo_revision}; en fecha ${fecha_oficio}  le fue notificado a la entidad fiscalizada, el oficio número ${numero_oficio} , por medio del cual, se le hizo del conocimiento la emisión del Acuerdo de Radicación respectivo y se le citó a comparecencia para el efecto de que en ella se puntualizaran las observaciones  de mérito y se pusiera a la vista el Expediente Técnico para su consulta e informarle de la apertura ${siPo01} ${siRecomendaciones04} , con el objeto de que ${siEtapaAclaracion01}  ${siEtapaAclaracion02} en ese sentido, remito a usted el Informe de Seguimiento por el que se notifica la situación que guardan las observaciones, constante de {$fojasU} ({$fojasULetras}) fojas útiles.";
+                }                   
+                if('siSegundaEtapa01'=='no'){
+                    $siSegundaEtapa01 = "En seguimiento al oficio número X {oficioNumero_informe}X y notificado en fecha X {fecha_not_informe}X a esa entidad fiscalizada respecto de la Auditoría de {$auditoria->acto_fiscalizacion}, practicada a XXXX, por el período comprendido del XXX; remito a usted el Informe de Seguimiento por el que se notifica la situación que guardan las observaciones, constante de XXX fojas útiles.";
+                    $siPlazoSegundaEtapa = "Cabe señalar que las observaciones mencionadas en el párrafo que antecede, se encuentran sustentadas con las constancias agregadas en los expedientes técnicos respectivos, mismos que la entidad fiscalizada a través de sus titulares, o en su caso, representantes legales o enlaces debidamente autorizados, pueden consultar en las oficinas que ocupa esta Unidad, sito en Avenida José María Pino Suárez Sur, núms. 104, 106 y 108, Colonia Cinco de Mayo, Toluca, Estado de México, C.P. 50090, con cita que deberá ser agendada en el número de teléfono (722) 167 8450 (opción 3).";
+                }
+
+                $replacements = array(
+                    array('remitente' => "{$remitente}", 'remitente_cargo' => "{$remitente_cargo}", 'remitente_domicilio' => "{$remitente_domicilio}", 'ambito01' =>$ambito01 , 'frac'=>$frac,'siPRAS01' => "{$siPRAS01}",'siRecomendaciones01' => "{$siRecomendaciones01}",
+                    'siRecomendaciones03' => "{$siRecomendaciones03}",'siPliegoNoS01' => "{$siPliegoNoS01}" , 'siUnicoInforme01' => "{$siUnicoInforme01}", 'siSegundaEtapa01' => "{$siSegundaEtapa01}",'siPlazoSegundaEtapa' => "{$siPlazoSegundaEtapa}"),
+                    );
+                
+                $template=new TemplateProcessor('bases-word/IS/LEGALIDAD/Of_IS_01.docx');
+                $template->setValue('direccion_asig',$auditoria->direccion_asignada);
+                $template->setValue('departamento_asig',$auditoria->departamento_encargado);
+                $template->setValue('anio',date("Y"));
+                $template->setValue('dia', Carbon::now()->day);
+                $template->setValue('mes',$mes);
+                $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
+                $template->setValue('numero_auditoria',$auditoria->numero_auditoria); 
+                $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
+                $template->setValue('oficio_numero', $auditoria->radicacion->oficio_acuerdo);
+                $template->setValue('info', $info);
+                $template->setValue('inicialesJD', $inicialesJD);
+                $template->setValue('inicialesLM', $inicialesLM);
+                $template->setValue('inicialesA', $inicialesA);
+                $template->setValue('inicialesD', $inicialesD);
+
+                $template->cloneBlock('block', 1, true, false, $replacements);
+
+                $nombreword='Of. IS';
+                $template->saveAs($nombreword.'.docx');
+            }
+            
+        }
+
+
+        
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
      } 
 }

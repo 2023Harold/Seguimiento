@@ -167,19 +167,11 @@
                                 </td>
                                 <td class="text-center">
                                 @if (empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')
-                                        @if (getSession('cp')==2022 )
-                                            @can('acuerdoconclusionenvio.edit' && auth()->user()->siglas_rol=='JD')
-                                                <a href="{{ route('acuerdoconclusionenvio.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                Enviar
-                                                </a>
-                                            @endcan
-                                        @else
-                                            @can('acuerdoconclusionenviocp.edit')
-                                                <a href="{{ route('acuerdoconclusionenviocp.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                Enviar
-                                                </a>
-                                            @endcan
-                                        @endif
+                                    @can('acuerdoconclusionenviocp.edit')
+                                        <a href="{{ route('acuerdoconclusionenviocp.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                            Enviar
+                                        </a>
+                                    @endcan
                                 @endif
                                 </td>
                             </tr>

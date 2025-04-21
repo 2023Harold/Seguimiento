@@ -17,17 +17,22 @@
 				<div class="float-end">                    
                     @if($auditoria->acto_fiscalizacion=='Legalidad')
                         @if((count($auditoria->accionesrecomendaciones)> 0)&& (count($auditoria->accionespo) > 0))
-                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. PAR</span></a>
-                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_EA" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. EA</span></a>
+                            <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_EA_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;IS. EA Y PAR</span></a>
+                            
                         @elseif(count($auditoria->accionesrecomendaciones)> 0)
-                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. PAR</span></a>
+                            <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. PAR</span></a>
                         @elseif(count($auditoria->accionespo) > 0)
-                        <a href="{{ route('acuerdoconclusionac.exportar') }}?tipo=AC_EA" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. EA</span></a>
+                            <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_EA" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. EA</span></a>
                         @endif
-                            <a href="{{route('acuerdoconclusionofac.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. AC</a>
+                            <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;Of. IS</a>
                     @else
-                        <a href="{{route('informeprimeraetapa.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;IS</a>                                  
-                        <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. IS</a>                                  
+                        @if($auditoria->acto_fiscalizacion=='Desempeño')
+                            <a href="{{route('informeprimeraetapa.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;IS PAR</a>                                  
+                            <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. IS PAR</a>          
+                        @else
+                            <a href="{{route('informeprimeraetapa.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;IS</a>                                  
+                            <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. IS</a> 
+                        @endif                             
                     @endif
                 </div>
                 
