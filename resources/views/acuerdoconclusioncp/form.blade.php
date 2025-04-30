@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('breadcrums')
 @if (empty($acuerdoconclusion->numero_ordenauditoria))
-    {{ Breadcrumbs::render('acuerdoconclusion.create') }}
+    {{ Breadcrumbs::render('acuerdoconclusioncp.create') }}
 @else
-    {{ Breadcrumbs::render('acuerdoconclusion.edit',$acuerdoconclusion) }}
+    {{ Breadcrumbs::render('acuerdoconclusioncp.edit',$acuerdoconclusion,$acuerdoconclusionpliegos) }}
 @endif    
 @endsection
 @section('content')
@@ -25,6 +25,7 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')			
                 {!! BootForm::open(['model' => $acuerdoconclusion,'store' => 'acuerdoconclusioncp.store','update' => 'acuerdoconclusioncp.update','id' => 'form']) !!}
+                {!! BootForm::hidden('tipo',$tipo) !!}
                 <div class= "row">
                     <div class="col-md-5">
                         {!! BootForm::text('nombre_titular', 'Nombre del titular a quien se dirige : *', old('nombre_titular', $acuerdoconclusion->nombre_titular)) !!}

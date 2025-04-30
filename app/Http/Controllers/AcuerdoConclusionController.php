@@ -41,9 +41,10 @@ class AcuerdoConclusionController extends Controller
     public function create()
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $tipo='recomendaciones';          
         $acuerdoconclusion = new AcuerdoConclusion();
 		$fechaacuerdo=now();
-
+        
 		if($auditoria->acto_fiscalizacion=='Desempeño'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
 		}
@@ -56,9 +57,9 @@ class AcuerdoConclusionController extends Controller
 		if($auditoria->acto_fiscalizacion=='Inversión Física'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
 		}
+       
 
-
-        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo'));
+        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo','tipo'));
     }
 
     /**
@@ -70,11 +71,11 @@ class AcuerdoConclusionController extends Controller
     public function store(Request $request)
     {
         mover_archivos($request, ['acuerdo_conclusion']);
+        $request['usuario_creacion_id'] = auth()->user()->id;
         $request['auditoria_id']= getSession('auditoria_id');
-        $acuerdoconclusion  = AcuerdoConclusion::create($request->all());
-
+        $acuerdoconclusion  = AcuerdoConclusion::create($request->all());              
         setMessage("Los datos se han guardado correctamente.");
-
+        // dd($acuerdoconclusion);
         return redirect() -> route('acuerdoconclusion.index');
     }
 
@@ -100,6 +101,7 @@ class AcuerdoConclusionController extends Controller
     public function edit(AcuerdoConclusion $auditoria)
     {
 		$acuerdoconclusion=$auditoria;
+        $tipo=$acuerdoconclusion->tipo;                 
         $comparecencia=$auditoria->comparecencia;
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $fechaacuerdo=now();
@@ -117,8 +119,8 @@ class AcuerdoConclusionController extends Controller
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
 		}
 
-
-        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo','comparecencia'));
+        $request['usuario_creacion_id'] = auth()->user()->id;
+        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo','comparecencia','tipo'));
     }
 
     /**
@@ -132,6 +134,9 @@ class AcuerdoConclusionController extends Controller
     {
         $acuerdoconclusion=$auditoria;
         mover_archivos($request, ['acuerdo_conclusion'],$acuerdoconclusion);
+
+        $request['usuario_modificacion_id'] = auth()->user()->id;        
+
         $acuerdoconclusion->update($request->all());
 
         setMessage("Los datos se han actualizado correctamente.");
@@ -149,6 +154,34 @@ class AcuerdoConclusionController extends Controller
     {
         //
     }
+    public function acuerdoconclusionpliegos()
+    {
+        $auditoria = Auditoria::find(getSession('auditoria_id'));     
+        $tipo='pliegos';          
+        $request['usuario_creacion_id'] = auth()->user()->id;
+        $acuerdoconclusion = new AcuerdoConclusion();
+		$fechaacuerdo=now();
+        
+
+		if($auditoria->acto_fiscalizacion=='Desempeño'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Legalidad'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Inversión Física'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+
+        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','tipo'));
+
+    }
+
+
+
     private function normalizarDatos(Request $request)
     {
         if ($request->estatus == 'Aprobado') {
@@ -158,12 +191,12 @@ class AcuerdoConclusionController extends Controller
         return $request;
     }
 
-    // public function auditoria(Auditoria $auditoria)
-    // {
-    //     setSession('acuerdo_auditoria_id',$auditoria->id);
+    public function auditoria(Auditoria $auditoria)
+    {
+        setSession('acuerdo_auditoria_id',$auditoria->id);
 
-    //     return redirect()->route('acuerdoconclusion.create');
-    // }
+        return redirect()->route('acuerdoconclusion.create');
+    }
 
     public function setQuery(Request $request)
     {

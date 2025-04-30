@@ -446,18 +446,21 @@
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnoarchivo.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoarchivo')
                                                                                                          ) ? 'active' : '' }}">
-                                        @if (empty($auditoria->turnooic) && empty($auditoria->turnoui))
-
-                                        @if (!empty($auditoria->turnoarchivo) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
-                                            <span class="fa fa-circle" style="color: green"></span>
+                                    @if (empty($auditoria->turnooic) && empty($auditoria->turnoui))
+                                        @if (!empty($auditoria->turnoarchivo->no_aplica) && $auditoria->turnoarchivo->no_aplica=="X")                
+                                            
                                         @else
-                                            @if(!empty($auditoria->turnoarchivo) && ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión' || $auditoria->turnoarchivo->fase_autorizacion == 'En validación'
-                                                || $auditoria->turnoarchivo->fase_autorizacion == 'En autorización'))
-                                                <span class="fa fa-circle" style="color: yellow"></span>
+                                            @if (!empty($auditoria->turnoarchivo) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
+                                                <span class="fa fa-circle" style="color: green"></span>
                                             @else
-                                                <span class="fa fa-circle" style="color: red"></span>
+                                                @if(!empty($auditoria->turnoarchivo) && ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión' || $auditoria->turnoarchivo->fase_autorizacion == 'En validación'
+                                                    || $auditoria->turnoarchivo->fase_autorizacion == 'En autorización'))
+                                                    <span class="fa fa-circle" style="color: yellow"></span>
+                                                @else
+                                                    <span class="fa fa-circle" style="color: red"></span>
+                                                @endif
                                             @endif
-                                         @endif
+                                        @endif
                                     @endif
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>

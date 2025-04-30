@@ -24,6 +24,7 @@ class TurnoAcuseArchivo extends Model
         'nivel_autorizacion',
         'usuario_creacion_id',
         'usuario_modificacion_id',
+        'no_aplica',
 
     ];
     protected $cast=[

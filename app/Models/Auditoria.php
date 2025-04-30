@@ -433,8 +433,13 @@ class Auditoria extends Model
 
             public function acuerdoconclusion()
             {
-                return $this->belongsTo(AcuerdoConclusion::class, 'id', 'auditoria_id');
+                return $this->hasOne(AcuerdoConclusion::class,'auditoria_id', 'id')->where('tipo','recomendaciones');
             }
+            public function acuerdoconclusionpliegos()
+            {
+                return $this->hasOne(Acuerdoconclusion::class, 'auditoria_id' , 'id')->where('tipo','pliegos');
+            }
+
             public function turnoui()
             {
                 return $this->belongsTo(TurnoUI::class, 'id', 'auditoria_id');

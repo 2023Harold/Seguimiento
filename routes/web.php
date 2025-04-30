@@ -354,7 +354,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
     //Inicio Archivo Transferencia
     Route::resource('inicioarchivotransferencia', InicioArchivoTransferenciaController::class, ['parameters' => ['inicioarchivotransferencia' => 'auditoria']]);
-    Route::resource('turnoarchivotransferencia', InicioArchivoTransferenciaController::class, ['parameters' => ['turnoarchivotransferencia' => 'auditoria']]);
+    Route::resource('turnoarchivotransferencia', TurnoArchivoTransferenciaController::class, ['parameters' => ['turnoarchivotransferencia' => 'auditoria']]);
+    Route::resource('turnoarchivotransferenciaenvio', TurnoArchivoTransferenciaEnvioController::class, ['parameters' => ['turnoarchivotransferenciaenvio' => 'auditoria']]);
+    Route::resource('turnoarchivotransferenciarevision', TurnoArchivoTransferenciaRevisionController::class, ['parameters' => ['turnoarchivotransferenciarevision' => 'auditoria']]);
+    Route::resource('turnoarchivotransferenciavalidacion', TurnoArchivoTransferenciaValidacionController::class, ['parameters' => ['turnoarchivotransferenciavalidacion' => 'auditoria']]);
+    Route::resource('turnoarchivotransferenciaautorizacion', TurnoArchivoTransferenciaAutorizacionController::class, ['parameters' => ['turnoarchivotransferenciaautorizacion' => 'auditoria']]);
+    
 
     /**Seguimiento - Auditorias - Radicacion */
     Route::resource('radicacion', RadicacionController::class);
@@ -394,9 +399,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::get('/acuerdoconclusion/ofac', [AcuerdoConclusionController::class, 'exportOFAC'])->name('acuerdoconclusionofac.exportar');
     Route::resource('acuerdoconclusion', AcuerdoConclusionController::class, ['parameters' => ['acuerdoconclusion' => 'auditoria']]);
     Route::resource('acuerdoconclusioncp', AcuerdoConclusionCPController::class, ['parameters' => ['acuerdoconclusioncp' => 'auditoria']]);
-    Route::resource('acuerdoconclusionrevision', AcuerdoConclusionRevisionController::class, ['parameters' => ['acuerdoconclusionrevision' => 'auditoria']]);
+    Route::get('acuerdoconclusionpliegos', [AcuerdoConclusionController::class, 'acuerdoconclusionpliegos'])->name('acuerdoconclusionpliegos.create');
+    Route::get('acuerdoconclusioncppliegos', [AcuerdoConclusionCPController::class, 'acuerdoconclusionpliegos'])->name('acuerdoconclusioncppliegos.create');
     Route::resource('acuerdoconclusionenvio', AcuerdoConclusionEnvioController::class, ['parameters' => ['acuerdoconclusionenvio' => 'auditoria']]);
-    Route::resource('acuerdoconclusionenviocp', AcuerdoConclusionCPEnvioController::class, ['parameters' => ['acuerdoconclusionenviocp' => 'acuerdoconclusion']]);
+    Route::resource('acuerdoconclusionenviopliegos', AcuerdoConclusionEnvioController::class, ['parameters' => ['acuerdoconclusionenviopliegos' => 'auditoria']]);    
+    Route::resource('acuerdoconclusionrevision', AcuerdoConclusionRevisionController::class, ['parameters' => ['acuerdoconclusionrevision' => 'auditoria']]);
+    Route::resource('acuerdoconclusionenviocp', AcuerdoConclusionCPEnvioController::class, ['parameters' => ['acuerdoconclusionenviocp' => 'auditoria']]);
+    Route::resource('acuerdoconclusionenviocppliegos', AcuerdoConclusionCPEnvioController::class, ['parameters' => ['acuerdoconclusionenviocppliegos' => 'auditoria']]);
     Route::resource('acuerdoconclusionvalidacion', AcuerdoConclusionValidacionController::class, ['parameters' => ['acuerdoconclusionvalidacion' => 'auditoria']]);
     Route::resource('acuerdoconclusionautorizacion', AcuerdoConclusionAutorizacionController::class, ['parameters' => ['acuerdoconclusionautorizacion' => 'auditoria']]);
     /**Fin del apartado de Seguimiento - Auditorias - Acuerdo de conclusion*/
@@ -550,12 +559,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('turnoarchivorevision', TurnoArchivoRevisionController::class, ['parameters' => ['turnoarchivorevision' => 'auditoria']]);
     Route::resource('turnoarchivovalidacion', TurnoArchivoValidacionController::class, ['parameters' => ['turnoarchivovalidacion' => 'auditoria']]);
     Route::resource('turnoarchivoautorizacion', TurnoArchivoAutortizacionController::class, ['parameters' => ['turnoarchivoautorizacion' => 'auditoria']]);
-    /**Transferencia */
-    Route::resource('turnoarchivotransferencia', TurnoArchivoTransferenciaController::class, ['parameters' => ['turnoarchivotransferencia' => 'auditoria']]);
-    Route::resource('turnoarchivotransferenciaenvio', TurnoArchivoTransferenciaEnvioController::class, ['parameters' => ['turnoarchivotransferenciaenvio' => 'auditoria']]);
-    Route::resource('turnoarchivotransferenciarevision', TurnoArchivoTransferenciaRevisionController::class, ['parameters' => ['turnoarchivotransferenciarevision' => 'auditoria']]);
-    Route::resource('turnoarchivotransferenciavalidacion', TurnoArchivoTransferenciaValidacionController::class, ['parameters' => ['turnoarchivotransferenciavalidacion' => 'auditoria']]);
-    Route::resource('turnoarchivotransferenciaautorizacion', TurnoArchivoTransferenciaAutorizacionController::class, ['parameters' => ['turnoarchivotransferenciaautorizacion' => 'auditoria']]);
     /**Fin del apartado de Seguimiento - Auditorias - TurnoArchivo*/
 
     /** Seguimiento - Auditorias - PAC */

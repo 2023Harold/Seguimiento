@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movimientos;
+use App\Models\Auditoria;
 use App\Models\TurnoArchivoTransferencia;
 use Illuminate\Http\Request;
 
@@ -58,6 +59,7 @@ class TurnoArchivoTransferenciaEnvioController extends Controller
      */
     public function edit(TurnoArchivoTransferencia $auditoria)
     {
+        // setSession ('auditoriatat_id', $auditoria->id);
         $turnoarchivotransferencia=$auditoria;
         Movimientos::create([
             'tipo_movimiento' => 'Registro del turno archivo',
@@ -66,19 +68,20 @@ class TurnoArchivoTransferenciaEnvioController extends Controller
                 'estatus' => 'Aprobado',
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
+                'usuario_modificacion_id' => auth()->id(),
             ]);
     
             $turnoarchivotransferencia->update(['fase_autorizacion' =>  'En revisión']);
     
             $titulo = 'Revisión de los datos de turno archivo transferencia';
             $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
-                        Ha sido registrada la turno archivo de la auditoría No. ' . $turnoarchivotransferencia->auditoria->numero_auditoria . ', por parte del ' .
+                        Ha sido registrado el turno transferencia de la auditoría No. ' . $turnoarchivotransferencia->auditoria->numero_auditoria . ', por parte del ' .
                         auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
     
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
             setMessage('Se ha enviado el turno archivo transferencia a Revisión');
     
-        return redirect()->route('turnoarchivo.index');
+        return redirect()->route('turnoarchivotransferencia.index');
     }
 
     /**

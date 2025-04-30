@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\AcuerdoConclusion;
 use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use Illuminate\Http\Request;
+use App\Models\ListadoEntidades;
+use Luecano\NumeroALetras\NumeroALetras;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class AcuerdoConclusionCPController extends Controller
@@ -38,9 +41,10 @@ class AcuerdoConclusionCPController extends Controller
     public function create()
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $tipo='recomendaciones';
         $acuerdoconclusion = new AcuerdoConclusion();
 		$fechaacuerdo=now();
-
+            
 		if($auditoria->acto_fiscalizacion=='Desempeño'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
 		}
@@ -54,7 +58,7 @@ class AcuerdoConclusionCPController extends Controller
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
 		}
 
-        return view('acuerdoconclusioncp.form', compact('auditoria','acuerdoconclusion','fechaacuerdo'));
+        return view('acuerdoconclusioncp.form', compact('auditoria','acuerdoconclusion','fechaacuerdo','tipo'));
 
     }
 
@@ -67,11 +71,9 @@ class AcuerdoConclusionCPController extends Controller
     public function store(Request $request)
     {
         mover_archivos($request, ['acuerdo_conclusion']);
-        $request['auditoria_id']= getSession('auditoria_id');
         $request['usuario_creacion_id']=auth()->user()->id;
-
+        $request['auditoria_id']= getSession('auditoria_id');
         $acuerdoconclusion  = AcuerdoConclusion::create($request->all());
-
 
         setMessage("Los datos se han guardado correctamente.");
 
@@ -84,9 +86,11 @@ class AcuerdoConclusionCPController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(AcuerdoConclusion $acuerdoconclusion)
     {
-        //
+        $auditoria=$acuerdoconclusion->auditoria;
+
+        return view('acuerdoconclusion.show', compact('acuerdoconclusion', 'auditoria'));
     }
 
     /**
@@ -98,7 +102,10 @@ class AcuerdoConclusionCPController extends Controller
     public function edit(AcuerdoConclusion $auditoria)
     {
         $acuerdoconclusion=$auditoria;
+        $tipo=$acuerdoconclusion->tipo;                 
         $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $comparecencia=$auditoria->comparecencia;
+        $fechaacuerdo=now();
 
 		if($auditoria->acto_fiscalizacion=='Desempeño'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
@@ -113,8 +120,8 @@ class AcuerdoConclusionCPController extends Controller
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
 		}
 
-
-        return view('acuerdoconclusioncp.form', compact('auditoria','acuerdoconclusion','fechaacuerdo'));
+        $request['usuario_creacion_id'] = auth()->user()->id;
+        return view('acuerdoconclusioncp.form', compact('auditoria','acuerdoconclusion','fechaacuerdo','tipo'));
     }
 
     /**
@@ -146,6 +153,37 @@ class AcuerdoConclusionCPController extends Controller
     {
         //
     }
+
+    public function acuerdoconclusionpliegos()
+    {
+        $auditoria = Auditoria::find(getSession('auditoria_id'));     
+        $tipo='pliegos';          
+        $request['usuario_creacion_id'] = auth()->user()->id;
+        $acuerdoconclusion = new AcuerdoConclusion();
+		$fechaacuerdo=now();
+        
+
+		if($auditoria->acto_fiscalizacion=='Desempeño'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Legalidad'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+		if($auditoria->acto_fiscalizacion=='Inversión Física'){
+			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+		}
+
+        return view('acuerdoconclusioncp.form', compact('auditoria','acuerdoconclusion','tipo'));
+
+    }
+
+
+
+
+
     private function normalizarDatos(Request $request)
     {
         if ($request->estatus == 'Aprobado') {
@@ -153,6 +191,13 @@ class AcuerdoConclusionCPController extends Controller
         }
 
         return $request;
+    }
+    
+    public function auditoria(Auditoria $auditoria)
+    {
+        setSession('acuerdo_auditoria_id',$auditoria->id);
+
+        return redirect()->route('acuerdoconclusion.create');
     }
 
     public function setQuery(Request $request)

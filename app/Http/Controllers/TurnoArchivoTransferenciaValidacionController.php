@@ -107,7 +107,7 @@ class TurnoArchivoTransferenciaValidacionController extends Controller
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->titular->id);
     }else {
         
-        $titulo = 'Rechazo del Turno acuse envío archivo de la auditoría No. '.$turnoarchivotransferencia->auditoria->numero_auditoria;
+        $titulo = 'Rechazo del Turno archivo transferencia de la auditoría No. '.$turnoarchivotransferencia->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado(a) '.$turnoarchivotransferencia->usuarioCreacion->name.', '.$turnoarchivotransferencia->usuarioCreacion->puesto.':</strong><br>'
                         .'Ha sido rechazado la validación del Turno acuse envío archivo de la auditoría No. '.$turnoarchivotransferencia->auditoria->numero_auditoria.
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
@@ -115,7 +115,7 @@ class TurnoArchivoTransferenciaValidacionController extends Controller
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivotransferencia->usuarioCreacion->unidad_administrativa_id, $turnoarchivotransferencia->usuarioCreacion->id);
     }
 
-        return redirect()->route('turnoarchivo.index');
+        return redirect()->route('turnoarchivotransferencia.index');
     }
 
     /**

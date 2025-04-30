@@ -29,6 +29,8 @@ class AcuerdoConclusion extends Model
         'usuario_modificacion_id',
         'fase_autorizacion',
         'nivel_autorizacion',
+        'tipo',
+
     ];
 protected $cast = [
     'created_at'=>'datetime',

@@ -57,9 +57,9 @@ class AcuerdoConclusionCPEnvioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(AcuerdoConclusion $acuerdoconclusion)
+    public function edit(AcuerdoConclusion $auditoria)
     {
-       //$acuerdoconclusion=$auditoria;
+       $acuerdoconclusion=$auditoria;
         Movimientos::create([
             'tipo_movimiento' => 'Registro del acuerdo de conclusión',
                 'accion' => 'AcuerdoConclusion',

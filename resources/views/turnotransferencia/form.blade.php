@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('breadcrums')
 @if (empty($turnoarchivotransferencia->turnoarchivotransferencia))
-    {{ Breadcrumbs::render('turnoarchivotransferencia.create') }}
+    {{ Breadcrumbs::render('turnoarchivotransferencia.create',$auditoria) }}
 @else
-    {{ Breadcrumbs::render('turnoarchivotransferencia.edit',$auditorias) }}
+    {{ Breadcrumbs::render('turnoarchivotransferencia.edit',$auditoria) }}
 @endif    
 @endsection
 @section('content')

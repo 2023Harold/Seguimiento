@@ -114,7 +114,7 @@ class TurnoArchivoTransferenciaRevisionController extends Controller
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivotransferencia->usuarioCreacion->unidad_administrativa_id, $turnoarchivotransferencia->usuarioCreacion->id);
     }  
 
-        return redirect()->route('turnoarchivo.index');
+        return redirect()->route('turnoarchivotransferencia.index');
     }
 
     /**

@@ -107,8 +107,8 @@
                                 <td class="text-center">                                                                                                                                
                                     @if (empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
-                                        @can('acuerdoconclusion.edit')                                                        
-                                                <a href="{{ route('acuerdoconclusion.edit',$auditoria->acuerdoconclusion) }}" class="text-primary">
+                                        @can('acuerdoconclusioncp.edit')                                                        
+                                                <a href="{{ route('acuerdoconclusioncp.edit',$auditoria->acuerdoconclusion) }}" class="text-primary">
                                                 <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
                                                 </a>
                                             @endcan

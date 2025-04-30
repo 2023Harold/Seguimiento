@@ -22,41 +22,50 @@
                 @include('layouts.contextos._auditoria')
                 {!! BootForm::open(['model' => $turnoarchivo,'store' => 'turnoarchivo.store','update' => 'turnoarchivo.update','id' => 'form']) !!}
                 <div class="row">
-                    <div class="col-md-3">
-                        {!! BootForm::date('fecha_turno_archivo', 'Fecha de entrega *', old('fecha_turno_archivo', fecha($turnoarchivo->fecha_turno_archivo, 'Y-m-d'))); !!}
-                    </div>
-                    {{-- <div class="col-md-4">
-                        {!! BootForm::text('numero_turno_archivo', 'Número de oficio: *', old('numero_turno_archivo', $turnoarchivo->numero_turno_archivo)) !!}
-                    </div> --}}
-                </div>
-                <div class="row"> Expediente Técnico de la Auditoría:
-                    <div class="row">
-                        <div class="col-md-2">
-                            {!! BootForm::text('legajos_tecnico_archivo', 'Número de legajos:  ', old('legajos_tecnico_archivo', ($turnoarchivo->legajos_tecnico_archivo))); !!}
-                        </div>
-                        <div class="col-md-4">
-                            {!! BootForm::text('fojas_tecnico_archivo', 'Número de fojas:  ', old('fojas_tecnico_archivo', ($turnoarchivo->fojas_tecnico_archivo))); !!}
-                        </div>
-                    </div>
-                </div>
-                <div class="row"> Expediente de Seguimiento:
-                    <div class="row">
-                        <div class="col-md-2">
-                            {!! BootForm::text('legajos_seg_archivo', 'Número de legajos:  ', old('legajos_seg_archivo', ($turnoarchivo->legajos_seg_archivo))); !!}
-                        </div>
-                        <div class="col-md-4">
-                            {!! BootForm::text('fojas_seg_archivo', 'Número de fojas:  ', old('fojas_seg', ($turnoarchivo->fojas_seg_archivo))); !!}
-                        </div>
-                    </div>
+                    <div class="col-md-12">
+                        {!! BootForm::checkbox('no_aplica', 'No Aplica', 'X', false, ['class' => 'i-checks rxs']) !!}
+                    </div>                    
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('turno_archivo', 'Relación de expedientes al archivo: *', old('turno_archivo', $turnoarchivo->turno_archivo)) !!}
+                    <div class="col-md-12" style="display: none;" id="no_aplica"> 
+                    <div class="row">
+                        <div class="col-md-3">
+                            {!! BootForm::date('fecha_turno_archivo', 'Fecha de entrega *', old('fecha_turno_archivo', fecha($turnoarchivo->fecha_turno_archivo, 'Y-m-d'))); !!}
+                        </div>
+                        {{-- <div class="col-md-4">
+                            {!! BootForm::text('numero_turno_archivo', 'Número de oficio: *', old('numero_turno_archivo', $turnoarchivo->numero_turno_archivo)) !!}
+                        </div> --}}
                     </div>
-                    <div class="col-md-3">
-                        {!! BootForm::date('fecha_notificacion_archivo', 'Fecha: *', old('fecha_notificacion_archivo', fecha($turnoarchivo->fecha_notificacion_archivo, 'Y-m-d'))); !!}
+                
+                    <div class="row"> Expediente Técnico de la Auditoría:
+                        <div class="row">
+                            <div class="col-md-2">
+                                {!! BootForm::text('legajos_tecnico_archivo', 'Número de legajos:  ', old('legajos_tecnico_archivo', ($turnoarchivo->legajos_tecnico_archivo))); !!}
+                            </div>
+                            <div class="col-md-4">
+                                {!! BootForm::text('fojas_tecnico_archivo', 'Número de fojas:  ', old('fojas_tecnico_archivo', ($turnoarchivo->fojas_tecnico_archivo))); !!}
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="row"> Expediente de Seguimiento:
+                        <div class="row">
+                            <div class="col-md-2">
+                                {!! BootForm::text('legajos_seg_archivo', 'Número de legajos:  ', old('legajos_seg_archivo', ($turnoarchivo->legajos_seg_archivo))); !!}
+                            </div>
+                            <div class="col-md-4">
+                                {!! BootForm::text('fojas_seg_archivo', 'Número de fojas:  ', old('fojas_seg', ($turnoarchivo->fojas_seg_archivo))); !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {!! archivo('turno_archivo', 'Relación de expedientes al archivo: *', old('turno_archivo', $turnoarchivo->turno_archivo)) !!}
+                        </div>
+                        <div class="col-md-3">
+                            {!! BootForm::date('fecha_notificacion_archivo', 'Fecha: *', old('fecha_notificacion_archivo', fecha($turnoarchivo->fecha_notificacion_archivo, 'Y-m-d'))); !!}
+                        </div>
+                    </div>
+                </div>    
                 <div class="row">
                     <div class="col-md-6">
                         @canany(['turnoarchivo.store','turnoarchivo.update'])
@@ -72,5 +81,23 @@
 </div>
 @endsection
 @section('script')
+<script>
+    $(document).ready(function() {
+        $('.rxs').on('ifChanged', function(event) {              
+            var estado = $(this).is(':checked')? 1 : 0;
+
+            if(estado==0){
+                $('#no_aplica').show();                   
+                $('#btn-guardar').show();
+
+            }else{
+                $('#no_aplica').hide();
+                $('#btn-guardar').show();
+
+            }
+            //alert(estado);            
+        });
+    });
+</script> 
 {{-- {!! JsValidator::formRequest('App\Http\Requests\InformePrimeraEtapaRequest') !!} --}}
 @endsection

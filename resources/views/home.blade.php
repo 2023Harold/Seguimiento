@@ -400,7 +400,7 @@
                 </div>
             </div>
             @endcan
-            @canany(['radicacion.index','comparecencia.index'])
+            @canany(['radicacion.index','comparecencia.index','inicioarchivotransferencia.index'])
             <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">

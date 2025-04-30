@@ -101,11 +101,9 @@ class AcuerdoConclusionAutorizacionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del Acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
-                            .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
-                            ', por lo que se requiere realice la autorización oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
+            $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
+                            .'Se ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.                          
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
         }else {
             
             $titulo = 'Rechazo Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;

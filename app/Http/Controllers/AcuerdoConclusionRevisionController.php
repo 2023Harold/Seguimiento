@@ -62,10 +62,10 @@ class AcuerdoConclusionRevisionController extends Controller
      */
     public function edit(AcuerdoConclusion $auditoria)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acuerdoconclusion=$auditoria;
-        
-       
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+    
+
         return view('acuerdoconclusionrevision.form', compact('acuerdoconclusion','auditoria'));
     }
 
@@ -76,15 +76,16 @@ class AcuerdoConclusionRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AprobarFlujoAutorizacionRequest $request, AcuerdoConclusion $acuerdoconclusion)
+    public function update(AprobarFlujoAutorizacionRequest $request, AcuerdoConclusion $auditoria)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $this->normalizarDatos($request);
+        ##dd($auditoria->acuerdoconclusionpliegos->tipo);
+        $acuerdoconclusion=$auditoria;
 
         Movimientos::create(attributes: [
            'tipo_movimiento' => 'Revisión del acuerdo de conclusión',
            'accion' => 'AcuerdoConclusion',
-           'accion_id' => $auditoria->acuerdoconclusion->id,
+           'accion_id' => $acuerdoconclusion->id,
            'estatus' => $request->estatus,
            'usuario_creacion_id' => auth()->id(),
            'usuario_asignado_id' => auth()->id(),
@@ -97,7 +98,8 @@ class AcuerdoConclusionRevisionController extends Controller
            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
        }
 
-       $auditoria->acuerdoconclusion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+       //$acuerdoconclusion->update(['fase_autorizacion' =>  'En validación']);
+       $acuerdoconclusion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
        setMessage($request->estatus == 'Aprobado' ?
            'La aprobación ha sido registrada y se ha enviado a validación del superior.' :
            'El rechazo ha sido registrado.'

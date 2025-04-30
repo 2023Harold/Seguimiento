@@ -3,13 +3,11 @@
     {{ Breadcrumbs::render('turnoarchivotransferenciavalidacion.edit',$turnoarchivotransferencia) }}  
 @endsection
 @section('content')
-<div class="row">
-    @include('layouts.partials._menu')
-    <div class="col-md-9 mt-2">
+<div class="row">   
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('turnoarchivo.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
+                    <a href="{{ route('turnoarchivotransferencia.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
                     &nbsp; Validar
                 </h1>            
             </div>        
@@ -42,13 +40,12 @@
                         @can('turnoarchivotransferenciavalidacion.update')
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         @endcan 
-                        <a href="{{ route('turnoarchivo.index') }}" class="btn btn-secondary me-2">Cancelar</a>
+                        <a href="{{ route('turnoarchivotransferencia.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>
             {!! BootForm::close() !!}
         </div>
     </div>
-</div>
 </div>
 @endsection
 @section('script')

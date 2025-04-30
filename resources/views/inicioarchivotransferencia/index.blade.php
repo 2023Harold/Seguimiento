@@ -9,7 +9,7 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                    Auditorias
+                    Turnos
                 </h1>
             </div>
             <div class="card-body">

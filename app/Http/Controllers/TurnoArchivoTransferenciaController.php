@@ -36,6 +36,7 @@ class TurnoArchivoTransferenciaController extends Controller
      */
     public function create()
     {
+        // dd(1);
         $auditoria = Auditoria::find(getSession('auditoriatat_id'));
         // dd($auditoria,getSession('auditoriatat_id' ));
 
@@ -61,7 +62,7 @@ class TurnoArchivoTransferenciaController extends Controller
     // dd($turnoarchivotransferencia);
       setMessage("Los datos del archivo de transferencia se han guardado correctamente.");
 
-      return redirect() -> route('inicioarchivotransferencia.index');
+      return redirect() -> route('turnoarchivotransferencia.index');
     }
 
     /**
@@ -107,7 +108,7 @@ class TurnoArchivoTransferenciaController extends Controller
       $auditoria=$turnoarchivotransferencia->auditoria;
         setMessage('Los datos de archivo trasferencia se han guardado correctamente');
 
-        return redirect() -> route('inicioarchivotransferencia.index',compact('auditoria','turnoarchivotransferencia'));
+        return redirect() -> route('turnoarchivotransferencia.index');
     }
 
     /**

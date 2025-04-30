@@ -24,8 +24,8 @@
                                     <th>Fecha de transferencia</th>
                                     <th>Tiempo de resguardo</th>
                                     <th>Clave topográfica</th>
-                                    {{-- <th>Fase/Acción</th>
-                                    <th> Envío </th> --}}
+                                    <th>Fase/Acción</th>
+                                    <th> Envío </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,7 +43,7 @@
                                     <td class="text-center">
                                         {{$auditoria->turnoarchivotransferencia->clave_topografica }}
                                     </td>
-                                    {{-- <td class="text-center">
+                                    <td class="text-center">
                                         @if (empty($auditoria->turnoarchivotransferencia->fase_autorizacion)||$auditoria->turnoarchivotransferencia->fase_autorizacion=='Rechazado')
                                                 <span class="badge badge-light-danger">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
                                                 @can('turnoarchivotransferencia.edit')
@@ -95,14 +95,13 @@
                                             @endif
                                         </td>
                                     </td>
-
                                     @if (!empty($auditoria->turnoarchivotransferencia))
                                     {!! movimientosDesglose($auditoria->turnoarchivotransferencia->id, 10, $auditoria->turnoarchivotransferencia->movimientos) !!}
                                     @endif
                                     @else
                                      <td class="text-center" colspan="5">
                                     No se encuentran registros en este apartado.
-                                    </td> --}}
+                                    </td>
                                     </tr>
                                     @endif
                      

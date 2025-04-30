@@ -28,11 +28,17 @@
                                 </a>
                             @endcan
                         @endif
+                        
                     {{-- @endif --}}
                     </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
+                    @if (!empty($auditoria->turnoarchivo->no_aplica) && $auditoria->turnoarchivo->no_aplica=="X")                
+                        
+                        <h4 class="text-primary">No aplica </h4><br>    
+
+                    @else
                         <thead>
                             <tr>
                                 <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente Técnico de la Auditoría</th>
@@ -149,6 +155,7 @@
                             </tr>
                             @endif
                         </tbody>
+                    @endif    
                     </table>
                 </div>
             </div>

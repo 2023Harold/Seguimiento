@@ -32,7 +32,7 @@ class InicioArchivoTransferenciaController extends Controller
      */
     public function create(Request $request)
     {      
-       //
+    //
     }
 
     /**
@@ -68,9 +68,11 @@ class InicioArchivoTransferenciaController extends Controller
         setSession ('auditoriatat_id', $auditoria->id);
         // dd($auditoria);
         if(empty($auditoria->turnoarchivotransferencia)){    
+    //    dd(1);    
         return redirect()-> route('turnoarchivotransferencia.create');
         }else{ 
             return redirect()-> route('turnoarchivotransferencia.index');
+            dd(2);
         }
         
     }

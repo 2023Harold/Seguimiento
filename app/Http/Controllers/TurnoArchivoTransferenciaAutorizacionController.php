@@ -85,6 +85,7 @@ class TurnoArchivoTransferenciaAutorizacionController extends Controller
             'estatus' => $request->estatus,
             'usuario_creacion_id' => auth()->id(),
             'usuario_asignado_id' => auth()->id(),
+            'usuario_modificacion_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);
 
