@@ -382,6 +382,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     /**Fin del apartado de Seguimiento - Auditorias - Radicacion */
 
     /**Seguimiento - Auditorias - Comparecencia */
+    Route::get('/comparecencia/ac', [ComparecenciaController::class, 'export'])->name('comparecencia.exportar');
     Route::resource('comparecencia', ComparecenciaController::class, ['parameters' => ['comparecencia' => 'comparecencia']]);
     Route::get('auditoriacomparecencia/{auditoria}', [ComparecenciaController::class, 'auditoria'])->name('comparecencia.auditoria');
     Route::resource('comparecenciaacta', ComparecenciaActaController::class, ['parameters' => ['comparecenciaacta' => 'comparecencia']]);
@@ -390,7 +391,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
     Route::resource('comparecenciarevision', ComparecenciaRevisionController::class, ['parameters' => ['comparecenciarevision' => 'comparecencia']]);
     Route::resource('comparecenciavalidacion', ComparecenciaValidacionController::class, ['parameters' => ['comparecenciavalidacion' => 'comparecencia']]);
-    Route::get('/comparecencia/ac', [ComparecenciaController::class, 'export'])->name('comparecencia.exportar');
+    
     //Route::get('comparecenciaconcluir/{comparecencia}', [ComparecenciaController::class, 'concluir'])->name('comparecencia.concluir');
     /**Fin del apartado de Seguimiento - Auditorias - Comparecencia*/
 

@@ -52,6 +52,7 @@ class RevisionesPliegosAtencionController extends Controller
             'usuario_creacion_id'=>auth()->user()->id,
         ]);        
         Revisiones::create($request->all()); 
+
             
         setMessage('se ha agregado el comentario correctamente.');
 
@@ -101,5 +102,12 @@ class RevisionesPliegosAtencionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function mensajeComentario(String $nombre, String $puesto)
+    {
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .'Se ha dado atención al comentario, realizando las modificaciones pertinentes según lo indicado.';    
+        return $mensaje;
     }
 }

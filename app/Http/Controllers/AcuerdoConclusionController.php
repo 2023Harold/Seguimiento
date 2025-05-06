@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\ListadoEntidades;
 use Luecano\NumeroALetras\NumeroALetras;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Carbon\Carbon;
+
 
 class AcuerdoConclusionController extends Controller
 {
@@ -251,11 +253,11 @@ class AcuerdoConclusionController extends Controller
     $siPliegos01 ="";
     $siPliegos02 ="";
     $siPliegos03 ="";
-    $iniciales='';
     $inicialesLM='MAOV';
     $inicialesA="";
     $inicialesD='';
     $inicialesJD='';
+    $inicialesLP='';
 
     $formatter = new NumeroALetras();
     $plazomax=$formatter->toString($auditoria->radicacion->plazo_maximo);
@@ -282,6 +284,7 @@ class AcuerdoConclusionController extends Controller
     $nD = $auditoria->directorasignado->name;
     $nJD = $auditoria->jefedepartamentoencargado->name;
     $nA = $auditoria->analistacp->name;
+    $nLP = $auditoria->lidercp->name;
 
      $nD=explode(' ',$nD);
      foreach($nD as $parte){
@@ -296,7 +299,10 @@ class AcuerdoConclusionController extends Controller
         foreach($nA as $parte){
             $inicialesA=$inicialesA.substr($parte, 0,1);
     }
-    $iniciales= $inicialesLM."/".$inicialesD."/".$inicialesA."/".$inicialesJD;
+    $nLP=explode(' ',$nLP);
+            foreach($nLP as $parte){
+                $inicialesLP=$inicialesLP.substr($parte, 0,1);
+        }
 
     if ($auditoria) {
     $entidad = ListadoEntidades::where('no_auditoria', $auditoria->numero_auditoria)->where('cuenta_publica', $auditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();
@@ -339,7 +345,11 @@ class AcuerdoConclusionController extends Controller
             $template->setValue('siRecomendaciones04', $siRecomendaciones04);
             $template->setValue('fechahoy', $fechaactual);
             $template->setValue('fecha_comparencia', $date01);
-            $template->setValue('iniciales',$iniciales);
+            $template->setValue('inicialesJD', $inicialesJD);
+            $template->setValue('inicialesLM', $inicialesLM);
+            $template->setValue('inicialesA', $inicialesA);
+            $template->setValue('inicialesD', $inicialesD);
+            $template->setValue('inicialesLP', $inicialesLP);
             $template->setValue('entidad',$textoDocumento);
             $template->setValue('entidad01',$nombreEntidad);
             $template->setValue('direccion_asig',$auditoria->direccion_asignada);
@@ -368,7 +378,11 @@ class AcuerdoConclusionController extends Controller
             $template->setValue('day03', $day03);
             $template->setValue('mes03', $mes03);
             $template->setValue('fechahoy', $fechaactual);
-            $template->setValue('iniciales',$iniciales);
+            $template->setValue('inicialesJD', $inicialesJD);
+            $template->setValue('inicialesLM', $inicialesLM);
+            $template->setValue('inicialesA', $inicialesA);
+            $template->setValue('inicialesD', $inicialesD);
+            $template->setValue('inicialesLP', $inicialesLP);
             $template->setValue('entidad',$textoDocumento);
             $template->setValue('entidad01',$nombreEntidad);
             $template->setValue('direccion_asig',$auditoria->direccion_asignada);
@@ -398,7 +412,11 @@ class AcuerdoConclusionController extends Controller
         $template->setValue('day03', $day03);
         $template->setValue('mes03', $mes03);
         $template->setValue('fechahoy', $fechaactual);
-        $template->setValue('iniciales',$iniciales);
+        $template->setValue('inicialesJD', $inicialesJD);
+        $template->setValue('inicialesLM', $inicialesLM);
+        $template->setValue('inicialesA', $inicialesA);
+        $template->setValue('inicialesD', $inicialesD);
+        $template->setValue('inicialesLP', $inicialesLP);
         $template->setValue('entidad',$textoDocumento);
         $template->setValue('entidad01',$nombreEntidad);
         $template->setValue('direccion_asig',$auditoria->direccion_asignada);
@@ -441,7 +459,11 @@ class AcuerdoConclusionController extends Controller
         $template->setValue('siRecomendaciones04', $siRecomendaciones04);
         $template->setValue('siRecomendaciones05', $siRecomendaciones05);
         $template->setValue('fechahoy', $fechaactual);
-        $template->setValue('iniciales',$iniciales);
+        $template->setValue('inicialesJD', $inicialesJD);
+        $template->setValue('inicialesLM', $inicialesLM);
+        $template->setValue('inicialesA', $inicialesA);
+        $template->setValue('inicialesD', $inicialesD);
+        $template->setValue('inicialesLP', $inicialesLP);
 
         $nombreword='AC';/** */
 
@@ -478,7 +500,12 @@ class AcuerdoConclusionController extends Controller
         $template->setValue('siRecomendaciones04', $siRecomendaciones04);
         $template->setValue('siRecomendaciones05', $siRecomendaciones05);
         $template->setValue('fechahoy', $fechaactual);
-        $template->setValue('iniciales',$iniciales);
+        $template->setValue('inicialesJD', $inicialesJD);
+        $template->setValue('inicialesLM', $inicialesLM);
+        $template->setValue('inicialesA', $inicialesA);
+        $template->setValue('inicialesD', $inicialesD);
+        $template->setValue('inicialesLP', $inicialesLP);
+        
 
         $nombreword='AC';/** */
 
@@ -508,31 +535,37 @@ public function exportOFAC(){
     $fecha_acta = fecha(optional($auditoria->radicacion)->fecha_acta);
     $fecha_oficio_acuerdo = fecha(optional($auditoria->radicacion)->fecha_oficio_acuerdo);
 
-    $iniciales='';
+
     $inicialesLM='MAOV';
     $inicialesA="";
     $inicialesD='';
     $inicialesJD='';
+    $inicialesLP='';
 
     //$nombre=auth()->user()->name;
     $nD = $auditoria->directorasignado->name;
-    $nJD = $auditoria->jefedepartamentoencargado->name;
-    $nA = $auditoria->analistacp->name;
+        $nJD = $auditoria->jefedepartamentoencargado->name;
+        $nA = $auditoria->analistacp->name;
+        $nLP = $auditoria->lidercp->name;
 
-     $nD=explode(' ',$nD);
-     foreach($nD as $parte){
-        $inicialesD=$inicialesD.substr($parte, 0,1);
-     }
+        $nD=explode(' ',$nD);
+        foreach($nD as $parte){
+            $inicialesD=$inicialesD.substr($parte, 0,1);
+        }
+        $nJD=explode(' ',$nJD);
+            foreach($nJD as $parte){
+                $inicialesJD=$inicialesJD.substr($parte, 0,1);
+        }
+        $nA=explode(' ',$nA);
+            foreach($nA as $parte){
+                $inicialesA=$inicialesA.substr($parte, 0,1);
+        }
+        $nLP=explode(' ',$nLP);
+            foreach($nLP as $parte){
+                $inicialesLP=$inicialesLP.substr($parte, 0,1);
+        }
 
-    $nJD=explode(' ',$nJD);
-        foreach($nJD as $parte){
-            $inicialesJD=$inicialesJD.substr($parte, 0,1);
-    }
-    $nA=explode(' ',$nA);
-        foreach($nA as $parte){
-            $inicialesA=$inicialesA.substr($parte, 0,1);
-    }
-    $iniciales= $inicialesLM."/".$inicialesD."/".$inicialesA."/".$inicialesJD;
+
     $numeroAuditoria = Auditoria::find(getSession('auditoria_id'));
 
     if ($numeroAuditoria) {
@@ -565,8 +598,7 @@ public function exportOFAC(){
             $template->setValue('periodo',$auditoria->periodo_revision);
             $template->setValue('numero_orden',$auditoria->numero_orden);
             $template->setValue('fecha_oficio_acuerdo',$fecha_oficio_acuerdo);
-            $template->setValue('oficio_numero', $auditoria->radicacion->oficio_acuerdo);
-            $template->setValue('iniciales',$iniciales);
+            $template->setValue('oficio_numero_AC', $auditoria->acuerdoconclusion->numero_oficio);
             $template->setValue('entidad',$textoDocumento);
             $template->setValue('entidad01',$nombreEntidad);
             $template->setValue('direccion_asig',$auditoria->direccion_asignada);
@@ -574,12 +606,19 @@ public function exportOFAC(){
             $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
             $template->setValue('anio',date("Y"));
             $template->setValue('mes',$mes);
+            $template->setValue('dia', Carbon::now()->day);
             $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
             $template->setValue('remitente_domicilio',$remitente_domicilio);
             $template->setValue('fecha_oficioAcuerdo', $fecha_oficio_acuerdo);
             $template->setValue('fecha_acuerdoLetra', $fecha_acuerdoLetra);
             $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
+            $template->setValue('inicialesJD', $inicialesJD);
+            $template->setValue('inicialesLM', $inicialesLM);
+            $template->setValue('inicialesA', $inicialesA);
+            $template->setValue('inicialesD', $inicialesD);
+            $template->setValue('inicialesLP', $inicialesLP);
+
             $nombreword='OF. AC';/** */
 
         $template->saveAs($nombreword.'.docx');/** */
@@ -594,17 +633,22 @@ public function exportOFAC(){
         $template->setValue('fecha_oficio_acuerdo',$fecha_oficio_acuerdo);
         $template->setValue('anio',date("Y"));
         $template->setValue('mes',$mes);
+        $template->setValue('dia', Carbon::now()->day);
         $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
         $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
         $template->setValue('remitente_domicilio',$remitente_domicilio);
         $template->setValue('fecha_oficioAcuerdo', $fecha_oficio_acuerdo);
         $template->setValue('fecha_acuerdoLetra', $fecha_acuerdoLetra);
         $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-        $template->setValue('oficio_numero', $auditoria->radicacion->oficio_acuerdo);
+        $template->setValue('oficio_numero_AC', $auditoria->acuerdoconclusion->numero_oficio);
         $template->setValue('entidad',$textoDocumento);
-        $template->setValue('iniciales',$iniciales);
         $template->setValue('direccion_asig',$auditoria->direccion_asignada);
         $template->setValue('departamento_asig',$auditoria->departamento_encargado);
+        $template->setValue('inicialesJD', $inicialesJD);
+        $template->setValue('inicialesLM', $inicialesLM);
+        $template->setValue('inicialesA', $inicialesA);
+        $template->setValue('inicialesD', $inicialesD);
+        $template->setValue('inicialesLP', $inicialesLP);
 
         $nombreword='OF. AC PAR';/** */
 
@@ -624,16 +668,21 @@ public function exportOFAC(){
         $template->setValue('departamento_asig',$auditoria->departamento_encargado);
         $template->setValue('anio',date("Y"));
         $template->setValue('mes',$mes);
+        $template->setValue('dia', Carbon::now()->day);
         $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
         $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-        $template->setValue('oficio_numero', $auditoria->radicacion->oficio_acuerdo);
+        $template->setValue('oficio_numero_AC', $auditoria->acuerdoconclusion->numero_oficio);
         $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
         $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
         $template->setValue('remitente_domicilio',$remitente_domicilio);
         $template->setValue('siRecomendaciones01',$siRecomendaciones01);
         $template->setValue('fecha_acuerdoLetra', $fecha_acuerdoLetra);
         $template->setValue('entidad',$textoDocumento);
-        $template->setValue('iniciales',$iniciales);
+        $template->setValue('inicialesJD', $inicialesJD);
+        $template->setValue('inicialesLM', $inicialesLM);
+        $template->setValue('inicialesA', $inicialesA);
+        $template->setValue('inicialesD', $inicialesD);
+        $template->setValue('inicialesLP', $inicialesLP);
 
 
 
@@ -654,16 +703,21 @@ public function exportOFAC(){
         $template->setValue('departamento_asig',$auditoria->departamento_encargado);
         $template->setValue('anio',date("Y"));
         $template->setValue('mes',$mes);
+        $template->setValue('dia', Carbon::now()->day);
         $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
         $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
-        $template->setValue('oficio_numero', $auditoria->radicacion->oficio_acuerdo);
+        $template->setValue('oficio_numero_AC', $auditoria->acuerdoconclusion->numero_oficio);
         $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
         $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
         $template->setValue('remitente_domicilio',$remitente_domicilio);
         $template->setValue('siRecomendaciones01',$siRecomendaciones01);
         $template->setValue('fecha_acuerdoLetra', $fecha_acuerdoLetra);
         $template->setValue('entidad',$textoDocumento);
-        $template->setValue('iniciales',$iniciales);
+        $template->setValue('inicialesJD', $inicialesJD);
+        $template->setValue('inicialesLM', $inicialesLM);
+        $template->setValue('inicialesA', $inicialesA);
+        $template->setValue('inicialesD', $inicialesD);
+        $template->setValue('inicialesLP', $inicialesLP);
 
         $nombreword='OF. AC';/** */
 

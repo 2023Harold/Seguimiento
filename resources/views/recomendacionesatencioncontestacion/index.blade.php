@@ -52,12 +52,14 @@
                     </div>                    
                 </div>
                 <div class="row">
-                    <div class="col-md-12">                          
+                    <div class="col-md-12">    
+           
                         <span>                            
                             <a class="btn btn-primary float-end" href="{{ route('recomendacionescontestaciones.create') }}">
                                 Agregar
                             </a>                        
-                        </span>                     
+                        </span>     
+           
                     </div>                    
                 </div>
                 <div class="table-responsive">

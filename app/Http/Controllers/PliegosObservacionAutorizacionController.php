@@ -101,6 +101,7 @@ class PliegosObservacionAutorizacionController extends Controller
      */
     public function update(Request $request, PliegosObservacion $pliegosobservacion)
     {
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $this->normalizarDatos($request);
         //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
         //$constancia = guardarConstanciasFirmadas($pliegosobservacion, 'constancia_atencion_pliego', $request, 'constancia');
@@ -119,16 +120,22 @@ class PliegosObservacionAutorizacionController extends Controller
             'fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado',
             //'constancia_autorizacion' => $constancia->constancia_pdf,
         ]);
-
-
-        $director=User::where('unidad_administrativa_id',substr($pliegosobservacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
-        $jefe=$pliegosobservacion->accion->depaasignado;
-        $lider=$pliegosobservacion->accion->lider;
-        $analista=$pliegosobservacion->accion->analista;
+        if(getSession('cp')==2022){
+            $director=User::where('unidad_administrativa_id',substr($pliegosobservacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $jefe=$pliegosobservacion->accion->depaasignado;
+            $lider=$pliegosobservacion->accion->lider;
+            $analista=$pliegosobservacion->accion->analista;
+        }else{
+            
+            $director = $auditoria->directorasignado;
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la calificación y conclusión del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
-
+            
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($analista->name,$analista->puesto,$pliegosobservacion), now(), $analista->unidad_administrativa_id, $analista->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$pliegosobservacion), now(), $director->unidad_administrativa_id, $director->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name,$jefe->puesto,$pliegosobservacion), now(), $jefe->unidad_administrativa_id, $jefe->id);

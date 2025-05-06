@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('pliegosobservacionrevision.edit', $pliegosobservacion, $auditoria)}}
+    {{Breadcrumbs::render('pliegosobservacionrevision.edit', $pliegosobservacion, $auditoria)}}
 @endsection
 @section('content')
     <div class="row">
@@ -18,24 +18,24 @@
                     @include('layouts.contextos._auditoria')
                     @include('layouts.contextos._accionpliego')
                     @include('layouts.contextos._pliego')
-                    {!! BootForm::open(['model' => $pliegosobservacion,'update'=>'pliegosobservacionrevision.update','id'=>'form'] )!!}
+                    {!!BootForm::open(['model' => $pliegosobservacion,'update'=>'pliegosobservacionrevision.update','id'=>'form'] )!!}
                         <div class="row" style="padding-left: 2rem;">
                             <div class="col-md-6">
-                                {!! BootForm::radios("estatus", ' ',
+                                {!!BootForm::radios("estatus", ' ',
                                 [
                                     'Aprobado' => 'Aprobar',
                                     'Rechazado' => 'Rechazar'
-                                ], null,false,['class'=>'i-checks rechazado']); !!}
+                                ], null,false,['class'=>'i-checks rechazado']) !!}
                             </div>
                         </div>
                         <div class="row" id="justificacion" style="display: none; padding-left: 2rem;">
                             <div class="col-md-12">
-                                {!! BootForm::textarea('motivo_rechazo','Motivo del rechazo:*','',["rows" => "2", "style" => "rezise:none"])!!}
+                                {!!BootForm::textarea('motivo_rechazo','Motivo del rechazo:*','',["rows" => "2", "style" => "rezise:none"])!!}
                             </div>
                         </div>
                         <div class="row" id="enviar" style="display: none; padding-left: 2rem;">
                             <div class="col-md-6 mb-3">
-                                {!! BootForm::checkbox('reenviar', 'Se envía al superior para su revisión', '', true, ['class' => 'i-checks', 'disabled']) !!}
+                                {!!BootForm::checkbox('reenviar', 'Se envía al superior para su revisión', '', true, ['class' => 'i-checks', 'disabled']) !!}
                             </div>
                         </div>
                         <div class="row mt-3" style="padding-left: 2rem;">
@@ -44,12 +44,12 @@
                                 <a href="{{ route('pliegosobservacionatencion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                             </div>
                         </div>
-                    {!! BootForm::close() !!}
+                    {!!BootForm::close() !!}
                 </div>
             </div>
         </div>
     </div>
 @endsection
 @section('script')
-    {!! JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
+    {!!JsValidator::formRequest('App\Http\Requests\AprobarFlujoAutorizacionRequest') !!}
 @endsection

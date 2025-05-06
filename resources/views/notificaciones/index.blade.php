@@ -49,6 +49,7 @@
                                 <thead>
                                     <tr>
                                         <th>Cuenta Pública</th>
+                                        <th>Asunto</th>
 										<th>Mensaje</th>
                                         <th>Fecha y hora de recibido</th>
                                         <th>Estatus</th>
@@ -60,12 +61,13 @@
                                         
                                         <tr id="rownotificacion{{ $notificacion->id }}">
 											<td>{{ $notificacion->cp??'Sin registro'}}</td>
+                                            <td>{{ $notificacion->titulo}}</td>
                                             <td>{{ explode("<br>", $notificacion->mensaje)[1]}}</td>
                                             <td>{{ fecha($notificacion->created_at, 'd/m/Y H:i') }}</td>
                                             <td class="text-center">
                                                 @if( $notificacion->estatus == 'Pendiente' ) 
                                                     <!-- Checkbox para marcar como leído -->
-                                                    {!! BootForm::checkbox('notificacion' . $notificacion->id, false, $notificacion->id, old('notificacion' . $notificacion->id, $notificacion->estatus) == 'Leído' ? true : false, ['class' => 'i-checks mr-3 casilla', 'id' => 'notificacion' . $notificacion->id]) !!}
+                                                    {!!BootForm::checkbox('notificacion' . $notificacion->id, false, $notificacion->id, old('notificacion' . $notificacion->id, $notificacion->estatus) == 'Leído' ? true : false, ['class' => 'i-checks mr-3 casilla', 'id' => 'notificacion' . $notificacion->id]) !!}
                                                     <span class="badge badge-light-warning">No leído</span>
                                                     
                                                 @else

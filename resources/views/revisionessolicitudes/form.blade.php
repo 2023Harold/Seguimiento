@@ -8,10 +8,23 @@
     </div>
     <div class="card-body">
         @include('flash::message')
-        {!! BootForm::open(['model' => $comentario, 'store' => 'revisionessolicitudes.store', 'update' => 'revisionessolicitudes.update', 'id' => 'form']) !!}
+        {!!BootForm::open(['model' => $comentario, 'store' => 'revisionessolicitudes.store', 'update' => 'revisionessolicitudes.update', 'id' => 'form']) !!}
+            <div class="row">
+                {!!BootForm::hidden('tipo', $tipo) !!}
+                @if($tipo == "Analisis")
+                    <div class="col-md-12">
+                        {!!BootForm::textarea('muestra_rev','Analisis: *', old('muestra_rev', $acciones->solicitudesaclaracion->analisis),['rows'=>'10']) !!}
+                    </div>
+                @endif
+                @if($tipo == "Conclusión")
+                    <div class="col-md-12">
+                        {!!BootForm::textarea('muestra_rev','Conclusión: *', old('muestra_rev', $acciones->solicitudesaclaracion->conclusion),['rows'=>'10']) !!}
+                    </div>
+                @endif
+            </div>
             <div class="row">
                 <div class="col-md-12">
-                    {!! BootForm::textarea('comentario', 'Comentario: *', old("comentario", $comentario->comentario))!!}
+                    {!!BootForm::textarea('comentario', 'Comentario: *', old("comentario", $comentario->comentario))!!}
                 </div>
             </div>
             <div class="row">
@@ -19,10 +32,10 @@
                     @btnSubmit("Guardar")
                 </div>
             </div>
-        {!! BootForm::close() !!}
+        {!!BootForm::close() !!}
     </div>
 </div>
 @endsection
 @section('script')
-{!! JsValidator::formRequest('App\Http\Requests\RevisionRequest') !!}
+{!!JsValidator::formRequest('App\Http\Requests\RevisionRequest') !!}
 @endsection

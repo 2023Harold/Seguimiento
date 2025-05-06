@@ -1,25 +1,15 @@
 <!--begin::Navbar-->
-<div class="d-flex align-items-stretch" id="kt_header_nav">
-    <!--begin::Menu wrapper-->
-    <div class="header-menu align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_header_menu_mobile_toggle" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
-        <!--begin::Menu-->
-        <div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu" data-kt-menu="true">
-            <div data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
-                <div class="aside-logo flex-column-auto" id="kt_aside_logo">
-                    <!--begin::Logo-->
-                    <a href="{{route('home')}}">
-                        <img alt="Logo" src="{{asset('assets/img/logo-left.svg')}}" class="h-60px logo" />
-                    </a>
-                    <!--end::Logo-->
-                </div>
-                {{-- <a class="mx-2 py-3" href="{{route('home')}}" title="Inicio">
-                    <i class="fa fa-home fs-2x text-primary"></i>
-                </a> --}}
-            </div>
-        </div>
-        <!--end::Menu-->
+<div class="d-flex align-items-stretch flex-shrink-0" id="kt_header_nav">
+    <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
+        <span class="text-primary h2">Seguimiento a las observaciones de fiscalización</span>
     </div>
-    <!--end::Menu wrapper-->
+</div>
+
+<div class="d-flex align-items-stretch" id="kt_header_nav">
+
+    <img alt="Logo" src="{{asset('assets/img/legislatura.png')}}" class="w-100" style="border-right: 2px solid gray;"/>
+&nbsp;
+    <img alt="Logo" src="{{asset('assets/img/logo.png')}}" class="w-100"/>
 </div>
 <!--end::Navbar-->
 <!--begin::Topbar-->
@@ -29,7 +19,7 @@
     <!--begin::Quick links-->
     @if (auth()->check())
     <div class="d-flex align-items-center ms-1 ms-lg-3">
-        @include('layouts.partials._notification')
+		@include('layouts.partials._notification')
     </div>
     @endif
     <!--end::Quick links-->
@@ -141,10 +131,10 @@
     </div>
     <!--end::Heaeder menu toggle-->
 
-    <div class="menu-link py-1">
+    <div class="menu-link p-10">
         <!--begin::Logo-->
-        <a href="{{route('home')}}">
-            <img alt="Logo" src="{{asset('assets/img/logo-right.svg')}}" class="align-middle h-100 img-fluid" />
+        <a href="#">
+
         </a>
         <!--end::Logo-->
     </div>

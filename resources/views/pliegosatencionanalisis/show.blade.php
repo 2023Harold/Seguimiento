@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('pliegosobservacionanalisis.show',$pliegosobservacion,$auditoria) }}
+{{Breadcrumbs::render('pliegosobservacionanalisis.show',$pliegosobservacion,$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -21,28 +21,57 @@
                   <div class="card-body mt-2">
                       <div class="row">
                           <div class="col-md-12">
-                              {!! BootForm::textarea('analisis', false,old('analisis', $pliegosobservacion->analisis),['rows'=>'10','readonly']) !!}
+                              {!!BootForm::textarea('analisis', false,old('analisis', $pliegosobservacion->analisis),['rows'=>'10','readonly']) !!}
                           </div>
                       </div>
                       <div class="row">
                         <div class="col-md-12">
                             <span>
-                                <a class="btn btn-primary float-end" href="{{ route('pliegosobservacionanexos.show',['anexo'=>$pliegosobservacion]) }}">
-                                    Anexos
-                                </a>
+                                <div class="col-md-12">
+                                    <a class="btn btn-primary float-end" href="{{ route('pliegosobservacionanexos.show',['anexo'=>$pliegosobservacion]) }}">
+                                        Anexos
+                                    </a>
+                                </div>
+                            </span>
+                            <span>
+                                @if (auth()->user()->siglas_rol!='ANA')
+                                    <div class="col-md-11">
+                                        <span>
+                                            <a class="btn btn-icon bi bi-chat-fill text-sistema float popupcomentario" href="{{ route('revisionespliegos.create') }}?tipo=Analisis">
+
+                                            </a>
+
+
+                                        </span>
+                                    </div>
+                                @endif
                             </span>
                         </div>
                     </div>
                   </div>
               </div>
+              
                   <div>
                     <h3 class="card-title text-primary">Conclusión</h3>
                     <div class="card-body mt-2">
                         <div class="row">
                             <div class="col-md-12">
-                                {!! BootForm::textarea('conclusion', false,old('conclusion', $pliegosobservacion->conclusion),['rows'=>'10','readonly']) !!}
+                                {!!BootForm::textarea('conclusion', false,old('conclusion', $pliegosobservacion->conclusion),['rows'=>'10','readonly']) !!}
                             </div>
                         </div>
+                        @if (auth()->user()->siglas_rol!='ANA')
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span>
+                                    <!-- <h3 class="card-title text-primary float">Comentarios -->
+                                        <a class="btn btn-icon bi bi-chat-fill text-sistema float popupcomentario" href="{{ route('revisionespliegos.create') }}?tipo=Conclusión">
+
+                                        </a>
+                                </h3>
+                                </span>
+                            </div>
+                        </div>
+                        @endif
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                 <label>Calificación de la atención: </label>
@@ -101,22 +130,7 @@
                                 </table>
                             </div>
                         </div>                      
-                    
-                        @if (auth()->user()->siglas_rol!='ANA')
-                        <div class="row">
-                            <div class="col-md-12">
-                                <span>
-                                    <h3 class="card-title text-primary float">Comentarios
-                                    <a class="btn btn-primary float-end popupcomentario" href="{{ route('revisionespliegos.create') }}">
-                                        Agregar comentario
-                                    </a>
-                                </h3>
-                                </span>
-                            </div>
-                        </div>
-                        @endif
-                        
-
+                        <!-- Antes aqui iban los comentarios-->
                     </div>
                 </div>
             </div>

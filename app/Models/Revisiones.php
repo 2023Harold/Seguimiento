@@ -29,7 +29,9 @@ class Revisiones extends Model
         'usuario_creacion_id',
         'usuario_modificacion_id',
         'created_at',
-        'updated_at',            
+        'updated_at', 
+        'muestra_rev',           
+        'tipo',           
     ];
 
     protected $dates = [

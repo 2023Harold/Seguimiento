@@ -16,7 +16,7 @@
                 </h1>
 				<div class="float-end">                    
                     @if($auditoria->acto_fiscalizacion=='Legalidad')
-                        @if((count($auditoria->accionesrecomendaciones)> 0)&& (count($auditoria->accionespo) > 0))
+                        @if((count($auditoria->accionesrecomendaciones)> 0)&& (count(value: $auditoria->accionespo) > 0))
                             <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_EA_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;IS. EA Y PAR</span></a>
                             
                         @elseif(count($auditoria->accionesrecomendaciones)> 0)

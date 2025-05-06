@@ -16,9 +16,11 @@
                     <a href="{{ route('auditoriaseguimiento.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp; Comparecencia
+                    
                 </h1>
 				 <div class="float-end">
-                    <a href="{{route('comparecencia.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AC</a>
+                    <a href="{{route('comparecencia.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AC </a>
+
                 </div>
             </div>
             <div class="card-body">

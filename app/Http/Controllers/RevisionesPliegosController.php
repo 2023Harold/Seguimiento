@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Revisiones;
 use App\Models\User;
@@ -24,13 +25,15 @@ class RevisionesPliegosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $comentario = new Revisiones();
-             
         $accion = 'Agregar';
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $acciones=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para 
 
-        return view('revisionespliegos.form', compact('comentario', 'accion'));
+        return view('revisionespliegos.form', compact('comentario', 'accion', 'auditoria', 'acciones', 'tipo'));
     }
 
     /**
@@ -42,6 +45,7 @@ class RevisionesPliegosController extends Controller
     public function store(Request $request)
     {
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
 
         $request->merge([
             'de_usuario_id'=>auth()->user()->id,
@@ -55,12 +59,20 @@ class RevisionesPliegosController extends Controller
         Revisiones::create($request->all());      
         $titulo='Se ha realizado un comentario en el pliego de observación de la Acción No. '.$accion->numero.' de la Auditoría No. '.$accion->auditoria->numero_auditoria;
         
-        
             $titular=User::where('siglas_rol','TUS')->first();
-            $director = $accion->auditoria->directorasignado;
-            $jefe=$accion->depaasignado;
-            $lider=$accion->lider;
-            $analista=$accion->analista;
+            if(getSession('cp')==2022){
+                $director = $accion->auditoria->directorasignado;
+                $jefe=$accion->depaasignado;
+                $lider=$accion->lider;
+                $analista=$accion->analista;
+            }else{
+                
+                $director = $auditoria->directorasignado;
+                $jefe = $auditoria->jefedepartamentoencargado;
+                $analista = $auditoria->analistacp;
+                $lider = $auditoria->lidercp; 
+            }
+            
         
         if(auth()->user()->siglas_rol=='AS'){
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($titular->name,$titular->puesto), now(), $titular->unidad_administrativa_id, $titular->id);           
@@ -92,7 +104,13 @@ class RevisionesPliegosController extends Controller
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($director->name,$director->puesto), now(), $director->unidad_administrativa_id, $director->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($jefe->name,$jefe->puesto), now(), $jefe->unidad_administrativa_id, $jefe->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id);
-       }     
+       }elseif(auth()->user()->siglas_rol=='STAFF'){
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($titular->name,$titular->puesto), now(), $titular->unidad_administrativa_id, $titular->id);           
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($director->name,$director->puesto), now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($jefe->name,$jefe->puesto), now(), $jefe->unidad_administrativa_id, $jefe->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id);
+       }
         
         
         setMessage('se ha agregado el comentario correctamente.');
@@ -151,7 +169,6 @@ class RevisionesPliegosController extends Controller
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
                     .'Se registro un comentario por parte del '.auth()->user()->puesto.'; '.auth()->user()->name.', por lo que se debe atender.';    
-
         return $mensaje;
     }
 }

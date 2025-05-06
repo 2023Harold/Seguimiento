@@ -207,7 +207,8 @@
     @endif
     @endif
     @endforeach  
-    @if (count($auditoria->cedulaanaliticadesemp)>0 && $auditoria->cedulaanaliticadesemp[0]->fase_autorizacion=='Autorizado')
+
+
     <table width="100%">
     <tr>
         <td colspan="1"></td>
@@ -233,9 +234,8 @@
                     <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
                 </tr>
                 <tr>
-                    @foreach ($nombresJefesL as $jefe)
-                    <td colspan="{{(count($nombresJefesL)==3?'2': (count($nombresJefesL)==2?'3': '6')) }}" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
-                    @endforeach 
+                     <td colspan="6" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe->name }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
+
                 </tr>
                 <tr>
                     <td colspan="3"  style="text-align: center; color: black; width: 50%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>VALIDÓ: <br><br><br><br><br>  {{ $director->name }} <br>DIRECTOR</strong></span></td>
@@ -254,6 +254,5 @@
         <td colspan="1"></td>          
     </tr> 
     </table> 
-    @endif   
 </body>
 </html>

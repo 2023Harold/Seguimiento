@@ -101,15 +101,15 @@ class InformePrimeraEtapaAutorizacionController extends Controller
         );
 
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
+            $titulo = 'Autorización del Informe Primera Etapa de'.$informeprimeraetapa->tipo .'de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; ha aprobado la autorización del Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
+                            '; ha aprobado la autorización del Informe Primera Etapa de'.$informeprimeraetapa->tipo.' de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
         }else {
             
-            $titulo = 'Rechazo del Informe Primera Etapa de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
+            $titulo = 'Rechazo del Informe Primera Etapa de'.$informeprimeraetapa->tipo.' de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$informeprimeraetapa->usuarioCreacion->name.', '.$informeprimeraetapa->usuarioCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el Informe Primera Etapa de auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';

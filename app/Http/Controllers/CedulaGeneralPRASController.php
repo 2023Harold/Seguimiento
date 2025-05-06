@@ -70,8 +70,7 @@ class CedulaGeneralPRASController extends Controller
         $analistasL = $resultado['analistasL'];        
         $lideresF = $resultado['lideresF'];
         $lideresL = $resultado['lideresL'];        
-        $jefesF = $resultado['jefesF'];
-        $jefesL = $resultado['jefesL'];      
+        $jefe = $resultado['jefe'];       
         $nombre = $resultado['nombre'];  
 		
 		return redirect(asset($nombre));        
@@ -236,9 +235,44 @@ class CedulaGeneralPRASController extends Controller
         $lideresF=array_unique($accionesLideresFaltantes->pluck('lider_asignado_id', 'id')->toArray());
         $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());        
         $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
-        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
-        
+        $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());     
 
+			//$director=User::where('unidad_administrativa_id',substr($cedula->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+            //$jefe=User::where('unidad_administrativa_id',substr($cedula->userCreacion->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','JD')->first();
+		$director=$auditoria->directorasignado;
+        $jefe=$auditoria->jefedepartamentoencargado;
+               
+            $accionesanalistasListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get(); 
+            $accionesLideresListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get();  
+            //$accionesJefesListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get();    
+            $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());
+            $nombresanalistasL=array_unique($accionesanalistasListos->pluck('analista_asignado', 'id')->toArray());
+            $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());
+            $nombreslideresL=array_unique($accionesLideresListos->pluck('lider_asignado', 'id')->toArray());
+			/*
+            $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());
+            $nombresJefesL=[];
+
+            if(count($jefesL)>0){            
+                foreach($jefesL as $jefeid){
+                    $jefe=User::where('unidad_administrativa_id',$jefeid)->first();
+                    $nombresJefesL[$jefe->id] = $jefe->name;
+                }
+            }*/
+            
+            $fechaminima=Segpras::where('auditoria_id',$auditoria->id)->min('fecha_acuse_oficio');
+            $fechainicio = Carbon::parse($fechaminima); 
+            $fechamaxima=Segpras::where('auditoria_id',$auditoria->id)->max('fecha_proxima_seguimiento');
+            $fechavencimiento = Carbon::parse($fechamaxima); 
+
+                
+            $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])
+			->loadView('cedulageneralpras.show',compact('auditoria','fechainicio','fechavencimiento','director','nombresanalistasL','nombreslideresL','jefe'))
+			->setPaper('a4', 'landscape')->stream('archivo.pdf');
+            $nombre='storage/temporales/CedulaGeneralPRAS'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+            $pdfgenrado = file_put_contents($nombre, $pdf);		
+        
+/*
         $fechaminima=Segpras::where('auditoria_id',$auditoria->id)->min('fecha_acuse_oficio');
         $fechainicio = Carbon::parse($fechaminima); 
         $fechamaxima=Segpras::where('auditoria_id',$auditoria->id)->max('fecha_proxima_seguimiento');
@@ -251,7 +285,7 @@ class CedulaGeneralPRASController extends Controller
             
         }else{
             $nombre=$auditoria->cedulageneralpras[0]->cedula; 
-        }
+        }*/
 
         $resultado=[
             'nombre'=>$nombre,            
@@ -259,8 +293,9 @@ class CedulaGeneralPRASController extends Controller
             'analistasL'=>$analistasL,
             'lideresF'=>$lideresF,
             'lideresL'=>$lideresL,
-            'jefesF'=>$jefesF,
-            'jefesL'=>$jefesL,
+            //'jefesF'=>$jefesF,
+            //'jefesL'=>$jefesL,
+			'jefe'=>$jefe,
         ];
 
         return $resultado;

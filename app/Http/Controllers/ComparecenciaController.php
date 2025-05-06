@@ -178,7 +178,6 @@ class ComparecenciaController extends Controller
     }
 
     public function export(){
-        
         $auditoria=Auditoria::find(getSession('auditoria_id'));     
         $entidades=explode(' - ',$auditoria->entidad_fiscalizable);
 
@@ -297,5 +296,6 @@ class ComparecenciaController extends Controller
                 $template->saveAs($nombreword.'.docx');
             }
                 return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+                
     }
 }

@@ -835,41 +835,38 @@ class RadicacionController extends Controller
 
     public function radicacionWord()
     {
-        $horaMin='';
-        $minutosMin='';
-        $fechacomparecencia='';
-        $fechainicioaclaracion='';
-        $fechaterminoaclaracion='';
-        $day02 = '';
-        $mes02 = '';
-        $day03 = '';
-        $mes03 = '';
-        $SiRecomendaciones = "";
-        $SiRecomendaciones01 ='';
-        $SiRecomendaciones02 ='';
-        $SiRecomendaciones03 ='';
-        $SiRecomendaciones04 ='';
-        $SiPRAS="";
-        $SiPRAS01="";
-        $SiPRAS02="";
+        $horaMin=''; $minutosMin=''; $fechacomparecencia=''; $fechainicioaclaracion=''; $fechaterminoaclaracion='';$day02 = '';$mes02 = '';$day03 = ''; $mes03 = '';
+        $SiRecomendaciones = ""; $SiRecomendaciones01 =''; $SiRecomendaciones02 =''; $SiRecomendaciones03 =''; $SiRecomendaciones04 ='';
+        $SiPRAS=""; $SiPRAS01=""; $SiPRAS02="";
         $SiPliegos01="";
-        $Orden = '';
-        $Orden01 = '';
-        $Orden02 = '';
-        $nombre_ccp='';
-        $info_ccp='';
-        $infodom_ccp='';
-        $info='';
+        $Orden = ''; $Orden01 = ''; $Orden02 = '';
+        $nombre_ccp=''; $info_ccp=''; $infodom_ccp=''; $info='';
+        $inicialesLM='MAOV'; $inicialesA=""; $inicialesD=''; $inicialesJD=''; $inicialesLP='';
 
         $auditoria=Auditoria::find(getSession('auditoria_id'));
         $formatter = new NumeroALetras();
 
-        $iniciales='';
-        $nombre=auth()->user()->name;
-        $esquemanombres=explode(' ',$nombre);
-         foreach($esquemanombres as $parte){
-            $iniciales=$iniciales.substr($parte, 0,1);
-         }
+        $nD = $auditoria->directorasignado->name;
+        $nJD = $auditoria->jefedepartamentoencargado->name;
+        $nA = $auditoria->analistacp->name;
+        $nLP = $auditoria->lidercp->name;
+
+        $nD=explode(' ',$nD);
+        foreach($nD as $parte){
+            $inicialesD=$inicialesD.substr($parte, 0,1);
+        }
+        $nJD=explode(' ',$nJD);
+            foreach($nJD as $parte){
+                $inicialesJD=$inicialesJD.substr($parte, 0,1);
+        }
+        $nA=explode(' ',$nA);
+            foreach($nA as $parte){
+                $inicialesA=$inicialesA.substr($parte, 0,1);
+        }
+        $nLP=explode(' ',$nLP);
+            foreach($nLP as $parte){
+                $inicialesLP=$inicialesLP.substr($parte, 0,1);
+        }
 
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $mes = $meses[(now()->format('n')) - 1];
@@ -973,7 +970,7 @@ class RadicacionController extends Controller
                 $Orden01 = 'QUINTO.';
                 $Orden02 = 'SEXTO.';
             }
-            $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/1. AR_01.docx'); //*
+            $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/AR_01.docx'); //*
             $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
             $template->setValue('entidad',$textoDocumento);
             $template->setValue('periodo',$auditoria->periodo_revision);
@@ -1000,7 +997,11 @@ class RadicacionController extends Controller
             $template->setValue('ultimoOrden',$Orden02);
             $template->setValue('siPRAS02',$SiPRAS02);
             $template->setValue('fechahoy', $fechaactual);
-            $template->setValue('iniciales',$iniciales);
+
+            $template->setValue('inicialesJD', $inicialesJD);
+            $template->setValue('inicialesLM', $inicialesLM);
+            $template->setValue('inicialesA', $inicialesA);
+            $template->setValue('inicialesD', $inicialesD);
 
             $nombreword='AR';/** */
 
@@ -1036,7 +1037,7 @@ class RadicacionController extends Controller
                 $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
             }
 
-            $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/1. AR_01.docx'); //*
+            $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/AR_01.docx'); //*
             $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
             $template->setValue('entidad',$textoDocumento);
             $template->setValue('periodo',$auditoria->periodo_revision);
@@ -1057,7 +1058,10 @@ class RadicacionController extends Controller
             $template->setValue('ultimoOrden',$Orden02);
             $template->setValue('siPRAS',$SiPRAS);
             $template->setValue('fechahoy', $fechaactual);
-            $template->setValue('iniciales',$iniciales);
+            $template->setValue('inicialesJD', $inicialesJD);
+            $template->setValue('inicialesLM', $inicialesLM);
+            $template->setValue('inicialesA', $inicialesA);
+            $template->setValue('inicialesD', $inicialesD);
 
             $nombreword='AR';/** */
 
@@ -1072,7 +1076,7 @@ class RadicacionController extends Controller
 
                 $UMA = CatalogoUMAS::where('ejercicio', $datenow01)->select('texto')->first();
                 $UMATEXT = $UMA->texto;
-                $template=new TemplateProcessor('bases-word/PAC/DESEMPEÑO/LIDER/1. AR_01.docx'); //*
+                $template=new TemplateProcessor('bases-word/PAC/DESEMPEÑO/LIDER/AR_01.docx'); //*
                 $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
                 $template->setValue('entidad',$textoDocumento);
                 $template->setValue('periodo',$auditoria->periodo_revision);
@@ -1091,17 +1095,21 @@ class RadicacionController extends Controller
                 $template->setValue('uma', $UMATEXT);
                 $template->setValue('siPRAS',$SiPRAS);
                 $template->setValue('fechahoy', $fechaactual);
-                $template->setValue('iniciales',$iniciales);
+                $template->setValue('inicialesJD', $inicialesJD);
+                $template->setValue('inicialesLM', $inicialesLM);
+                $template->setValue('inicialesA', $inicialesA);
+                $template->setValue('inicialesD', $inicialesD);
 
                 $nombreword='AR';/** */
 
-            $template->saveAs($nombreword.'.docx');/** */
+                $template->saveAs($nombreword.'.docx');/** */
             }
             if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
                 $Orden = 'CUARTO.';
                 if(count($auditoria->accionesrecomendaciones)>0){
                     $SiRecomendaciones = '54 Bis';
                     $SiRecomendaciones01 = 'y XXIII Bis';
+                    $SiRecomendaciones02 = "es III";
                     $SiRecomendaciones03 = 'y del Proceso de Atención a las Recomendaciones ';
                     $SiRecomendaciones04 = '; asimismo, se informe de las mejoras realizadas y las acciones emprendidas con relación a las recomendaciones de mérito, o en su caso, justifique su improcedencia, con el apercibimiento de que en caso de no dar cumplimiento en el plazo concedido, se entenderán por no atendidas ni justificadas dichas recomendaciones';
                 }
@@ -1118,7 +1126,7 @@ class RadicacionController extends Controller
                     $Orden01 = 'QUINTO.';
                     $Orden02 = 'SEXTO.';
                 }
-                $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/1. AR_01.docx'); //*
+                $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/AR_01.docx'); //*
                 /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
                 $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
                 $template->setValue('entidad',$textoDocumento);
@@ -1146,8 +1154,15 @@ class RadicacionController extends Controller
                 $template->setValue('recomendaciones04',$SiRecomendaciones04);
                 $template->setValue('ultimoOrden',$Orden02);
                 $template->setValue('siPRAS02',$SiPRAS02);
-                $template->setValue('iniciales',$iniciales);
                 $template->setValue('fechahoy', $fechaactual);
+
+                $template->setValue('siRecomendaciones05', $SiRecomendaciones02);
+                $template->setValue('inicialesJD', $inicialesJD);
+                $template->setValue('inicialesLM', $inicialesLM);
+                $template->setValue('inicialesA', $inicialesA);
+                $template->setValue('inicialesD', $inicialesD);
+                $template->setValue('inicialesLP', $inicialesLP);
+
                 $nombreword='AR';/** */
 
             $template->saveAs($nombreword.'.docx');/** */
@@ -1158,43 +1173,37 @@ class RadicacionController extends Controller
 
     public function radicacionWordOF()
     {
-        $horaMin='';
-        $minutosMin='';
-        $fechacomparecencia='';
-        $fechainicioaclaracion='';
-        $fechaterminoaclaracion='';
-        $day01 ='';
-        $mes01 = '';
-        $day02 = '';
-        $mes02 = '';
-        $day03 = '';
-        $mes03 = '';
-        $SiRecomendaciones = "";
-        $SiRecomendaciones01 ='';
-        $SiRecomendaciones02 ='';
-        $SiRecomendaciones03 ='';
-        $SiRecomendaciones04 ='';
-        $SiPRAS="";
-        $SiPRAS01="";
-        $SiPRAS02="";
+        $horaMin='';$minutosMin='';$fechacomparecencia='';$fechainicioaclaracion='';$fechaterminoaclaracion='';
+        $day01 ='';$mes01 = '';$day02 = '';$mes02 = '';$day03 = '';$mes03 = '';
+        $SiRecomendaciones = "";$SiRecomendaciones01 ='';$SiRecomendaciones02 ='';$SiRecomendaciones03 ='';$SiRecomendaciones04 ='';
         $SiPliegos01="";
-        $Orden = '';
-        $Orden01 = '';
-        $Orden02 = '';
-        $nombre_ccp='';
-        $info_ccp='';
-        $infodom_ccp='';
-        $info='';
+        $nombre_ccp='';$info_ccp='';$infodom_ccp='';$info='';
+        $inicialesLM='MAOV'; $inicialesA=""; $inicialesD=''; $inicialesJD=''; $inicialesLP='';
 
         $auditoria=Auditoria::find(getSession('auditoria_id'));
         $formatter = new NumeroALetras();
 
-        $iniciales='';
-        $nombre=auth()->user()->name;
-        $esquemanombres=explode(' ',$nombre);
-         foreach($esquemanombres as $parte){
-            $iniciales=$iniciales.substr($parte, 0,1);
-         }
+        $nD = $auditoria->directorasignado->name;
+        $nJD = $auditoria->jefedepartamentoencargado->name;
+        $nA = $auditoria->analistacp->name;
+        $nLP = $auditoria->lidercp->name;
+
+        $nD=explode(' ',$nD);
+        foreach($nD as $parte){
+            $inicialesD=$inicialesD.substr($parte, 0,1);
+        }
+        $nJD=explode(' ',$nJD);
+            foreach($nJD as $parte){
+                $inicialesJD=$inicialesJD.substr($parte, 0,1);
+        }
+        $nA=explode(' ',$nA);
+            foreach($nA as $parte){
+                $inicialesA=$inicialesA.substr($parte, 0,1);
+        }
+        $nLP=explode(' ',$nLP);
+            foreach($nLP as $parte){
+                $inicialesLP=$inicialesLP.substr($parte, 0,1);
+        }
 
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $mes = $meses[(now()->format('n')) - 1];
@@ -1300,13 +1309,14 @@ class RadicacionController extends Controller
                 $SiRecomendaciones03 = 'y del Proceso de Atención a las Recomendaciones ';
                 $SiRecomendaciones04 = '; asimismo, se informe de las mejoras realizadas y las acciones emprendidas con relación a las recomendaciones de mérito, o en su caso, justifique su improcedencia, con el apercibimiento de que en caso de no dar cumplimiento en el plazo concedido, se entenderán por no atendidas ni justificadas dichas recomendaciones';
             }
-            $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/2. Of. AR_01.docx');
-            $template->setValue('mes',$mes);
+            $template=new TemplateProcessor('bases-word/PAC/INVERSION_FISICA/LIDER/Of_AR_01.docx');
             $template->setValue('anio',date("Y"));
+            $template->setValue('dia', Carbon::now()->day);
+            $template->setValue('mes',$mes);
             $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
             $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
             $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
+            $template->setValue('oficio_numero_radicacion', $auditoria->radicacion->oficio_acuerdo);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
             $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
             $template->setValue('remitente_domicilio',$remitente_domicilio);
@@ -1330,11 +1340,15 @@ class RadicacionController extends Controller
             $template->setValue('recomendaciones04',$SiRecomendaciones04);
             $template->setValue('nombre_ccp',$nombre_ccp);
             $template->setValue('info',$info);
-            $template->setValue('iniciales',$iniciales);
+            $template->setValue('inicialesJD', $inicialesJD);
+            $template->setValue('inicialesLM', $inicialesLM);
+            $template->setValue('inicialesA', $inicialesA);
+            $template->setValue('inicialesD', $inicialesD);
+            $template->setValue('inicialesLP', $inicialesLP);
 
             $nombreword='Of. AR';/** */
 
-        $template->saveAs($nombreword.'.docx');/** */
+            $template->saveAs($nombreword.'.docx');/** */
         }
          if($auditoria->acto_fiscalizacion=='Legalidad'){
             $cierre = $auditoria->radicacion->acta_cierre_auditoria;
@@ -1354,14 +1368,15 @@ class RadicacionController extends Controller
                 $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
             }
 
-            $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/2. Of. AR_01.docx'); //*
+            $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/Of_AR_01.docx'); //*
             /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-            $template->setValue('mes',$mes);
             $template->setValue('anio',date("Y"));
+            $template->setValue('dia', Carbon::now()->day);
+            $template->setValue('mes',$mes);
             $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
             $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
             $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
+            $template->setValue('oficio_numero_radicacion', $auditoria->radicacion->oficio_acuerdo);
             $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
             $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
             $template->setValue('remitente_domicilio',$remitente_domicilio);
@@ -1382,7 +1397,11 @@ class RadicacionController extends Controller
             $template->setValue('recomendaciones04',$SiRecomendaciones03);
             $template->setValue('nombre_ccp',$nombre_ccp);
             $template->setValue('info',$info);
-            $template->setValue('iniciales',$iniciales);
+            $template->setValue('inicialesJD', $inicialesJD);
+            $template->setValue('inicialesLM', $inicialesLM);
+            $template->setValue('inicialesA', $inicialesA);
+            $template->setValue('inicialesD', $inicialesD);
+            $template->setValue('inicialesLP', $inicialesLP);
 
             $nombreword='Of. AR';/** */
 
@@ -1394,13 +1413,14 @@ class RadicacionController extends Controller
                 if(count($auditoria->accionespras)>0){
                     $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
                 }
-                $template=new TemplateProcessor('bases-word/PAC/DESEMPEÑO/LIDER/2. Of. AR_01.docx'); //*
-                $template->setValue('mes',$mes);
+                $template=new TemplateProcessor('bases-word/PAC/DESEMPEÑO/LIDER/Of_AR_01.docx'); //*
                 $template->setValue('anio',date("Y"));
+                $template->setValue('dia', Carbon::now()->day);
+                $template->setValue('mes',$mes);
                 $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
                 $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
                 $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-                $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
+                $template->setValue('oficio_numero_radicacion', $auditoria->radicacion->oficio_acuerdo);
                 $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
                 $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
                 $template->setValue('remitente_domicilio',$remitente_domicilio);
@@ -1417,7 +1437,11 @@ class RadicacionController extends Controller
                 $template->setValue('uma', $UMATEXT);
                 $template->setValue('nombre_ccp',$nombre_ccp);
                 $template->setValue('info',$info);
-                $template->setValue('iniciales',$iniciales);
+                $template->setValue('inicialesJD', $inicialesJD);
+                $template->setValue('inicialesLM', $inicialesLM);
+                $template->setValue('inicialesA', $inicialesA);
+                $template->setValue('inicialesD', $inicialesD);
+                $template->setValue('inicialesLP', $inicialesLP);
 
                 $nombreword='Of. AR';/** */
 
@@ -1429,20 +1453,22 @@ class RadicacionController extends Controller
                     $SiRecomendaciones01 = 'y XXIII Bis';
                     $SiRecomendaciones03 = 'y del Proceso de Atención a las Recomendaciones ';
                     $SiRecomendaciones04 = '; asimismo, se informe de las mejoras realizadas y las acciones emprendidas con relación a las recomendaciones de mérito, o en su caso, justifique su improcedencia, con el apercibimiento de que en caso de no dar cumplimiento en el plazo concedido, se entenderán por no atendidas ni justificadas dichas recomendaciones';
+                    
                 }
                 if(count($auditoria->accionespras)>0){
                     $SiPRAS="XIX, XXV";
                     $SiPRAS01 = 'Con fundamento en lo previsto en los artículos 42 Bis, 53 fracción I y 55 párrafo segundo de la Ley de Fiscalización Superior del Estado de México; 12 párrafo segundo y 103 de la Ley de Responsabilidades Administrativas del Estado de México y Municipios y; 23 fracciones XIX y XLIV y 47 fracciones III, V, XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, túrnese por oficio al Órgano Interno de Control de'. $nombreEntidad.' o a su equivalente, las Promociones de Responsabilidad Administrativa Sancionatoria (PRAS) que se desprenden  de los resultados obtenidos del acto de fiscalización de mérito, así como, su soporte documental correspondiente en copias certificadas, para el efecto de que dicha autoridad  continúe con las investigaciones pertinentes y promueva las acciones procedentes. ';
                     $SiPRAS02="y al Órgano Interno de Control de".$nombreEntidad;
                 }
-                $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/2. Of. AR_01.docx'); //*
+                $template=new TemplateProcessor('bases-word/PAC/CUMPLIMIENTO_FINANCIERO/LIDER/Of_AR_01.docx'); //*
                 /**Se usan los mismos valores que en radicacionpdf por si se añaden despues algunos, ya estan solo que elimine los que no se usan */
-                $template->setValue('mes',$mes);
                 $template->setValue('anio',date("Y"));
+                $template->setValue('dia', Carbon::now()->day);
+                $template->setValue('mes',$mes);
                 $template->setValue('numero_oficio',$auditoria->radicacion->numero_acuerdo);
                 $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
                 $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-                $template->setValue('oficio_num', $auditoria->radicacion->oficio_acuerdo);
+                $template->setValue('oficio_numero_radicacion', $auditoria->radicacion->oficio_acuerdo);
                 $template->setValue('remitente',$auditoria->comparecencia->nombre_titular);
                 $template->setValue('remitente_cargo',$auditoria->comparecencia->cargo_titular);
                 $template->setValue('remitente_domicilio',$remitente_domicilio);
@@ -1465,7 +1491,11 @@ class RadicacionController extends Controller
                 $template->setValue('mes03', $mes03);
                 $template->setValue('nombre_ccp',$nombre_ccp);
                 $template->setValue('info',$info);
-                $template->setValue('iniciales',$iniciales);
+                $template->setValue('inicialesJD', $inicialesJD);
+                $template->setValue('inicialesLM', $inicialesLM);
+                $template->setValue('inicialesA', $inicialesA);
+                $template->setValue('inicialesD', $inicialesD);
+                $template->setValue('inicialesLP', $inicialesLP);
 
                 $nombreword='Of. AR';/** */
 

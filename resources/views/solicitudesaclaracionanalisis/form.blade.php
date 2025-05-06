@@ -45,7 +45,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    {!! BootForm::radios("calificacion_sugerida", ' Calificación de la atención: *', ['Solventada'=>'Solventada', 'No Solventada'=>'No Solventada','Solventada Parcialmente'=>'Solventada Parcialmente'],old('calificacion_atencion',$solicitud->calificacion_atencion),false,['class'=>'i-checks']); !!}
+                                    {!!BootForm::radios("calificacion_sugerida", ' Calificación de la atención: *', ['Solventada'=>'Solventada', 'No Solventada'=>'No Solventada','Solventada Parcialmente'=>'Solventada Parcialmente'],old('calificacion_atencion',$solicitud->calificacion_atencion),false,['class'=>'i-checks']) !!}
                                 </div>
                             </div>
                             @php

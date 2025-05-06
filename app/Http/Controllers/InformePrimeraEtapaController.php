@@ -466,10 +466,13 @@ class InformePrimeraEtapaController extends Controller
         $template->saveAs($nombreword.'.docx');
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
      }        
+
+
+     
      public function exportOFIS(Request $request){
         $siRecomendaciones01 = ""; $siRecomendaciones02 = ""; $siRecomendaciones03 = ""; $siRecomendaciones04 = ""; $siRecomendaciones05 = ""; $siPRAS01 = ""; $siPliegoNoS01 = "";
-        $siPrimeraEtapa01 = ""; $siSegundaEtapa01 = ""; $siPlazoSegundaEtapa = ""; $iniciales=''; $inicialesLM='MAOV'; $inicialesA=""; $inicialesD=''; $inicialesJD=''; $oficio_numero_informe = "";
-        $fojasU = ""; $fojasULetras = ""; $remitente=""; $remitente_cargo = "";$remitente_domicilio = ""; $siEtapaAclaracion01 =""; $siEtapaAclaracion02 ="";
+        $siPrimeraEtapa01 = ""; $siSegundaEtapa01 = ""; $siPlazoSegundaEtapa = ""; $inicialesLM='MAOV'; $inicialesA=""; $inicialesD=''; $inicialesJD=''; $oficio_numero_informe = "";
+        $fojasU = ""; $fojasULetras = ""; $remitente=""; $remitente_cargo = "";$remitente_domicilio = ""; $siEtapaAclaracion01 =""; $siEtapaAclaracion02 =""; $siPo01 = "";
         $nombreword = "OF";
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
         $pras = Segpras::where('accion_id',getSession('prasauditoriaaccion_id'))->get();
@@ -622,7 +625,8 @@ class InformePrimeraEtapaController extends Controller
             $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
             $template->setValue('numero_auditoria',$auditoria->numero_auditoria);
             $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-            $template->setValue('oficio_numero', $auditoria->radicacion->oficio_acuerdo);
+            $template->setValue('oficio_numero_informe', $oficio_numero_informe);
+            
             $template->setValue('info', $info);
             $template->setValue('inicialesJD', $inicialesJD);
             $template->setValue('inicialesLM', $inicialesLM);
@@ -676,7 +680,7 @@ class InformePrimeraEtapaController extends Controller
                 $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
                 $template->setValue('numero_auditoria',$auditoria->numero_auditoria); 
                 $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
-                $template->setValue('oficio_numero', $auditoria->radicacion->oficio_acuerdo);
+                $template->setValue('oficio_numero_informe', $oficio_numero_informe);
                 $template->setValue('info', $info);
                 $template->setValue('inicialesJD', $inicialesJD);
                 $template->setValue('inicialesLM', $inicialesLM);
