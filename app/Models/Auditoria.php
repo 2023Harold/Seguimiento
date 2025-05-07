@@ -217,6 +217,10 @@ class Auditoria extends Model
             {
                 return User::where('unidad_administrativa_id',$this->staff_juridico_id)->where('siglas_rol','STAFF')->first();
             }
+            public function Staff()
+            {
+                return $this->hasMany(AuditoriaUsuarios::class, 'auditoria_id', 'id');
+            }            
 
             public function totalrecomendacion()
             {

@@ -6,6 +6,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
 use App\Models\Recomendaciones;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RecomendacionesRevisionController extends Controller
@@ -77,7 +78,9 @@ class RecomendacionesRevisionController extends Controller
     public function update(Request $request, Recomendaciones $recomendacion)
     {
         $director=auth()->user()->director;
-
+        $licMartha=User::where('siglas_rol','ATUS')->first();
+        //dd($licMartha);
+       
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -89,6 +92,8 @@ class RecomendacionesRevisionController extends Controller
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);
+
+        
 
         if (strlen($recomendacion->nivel_autorizacion) == 3) {
             $nivel_autorizacion = $recomendacion->nivel_autorizacion;
@@ -108,12 +113,13 @@ class RecomendacionesRevisionController extends Controller
             $recomendacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
 
             $titulo = 'Validación del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-
+            
             $mensaje = '<strong>Estimado(a) '.$director->name.', '.$director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($licMartha->name,$licMartha->puesto, $recomendacion), now(), $licMartha->unidad_administrativa_id, $licMartha->id); 
         } else {
             $titulo = 'Rechazo del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
@@ -135,6 +141,18 @@ class RecomendacionesRevisionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function mensajeComentario(String $nombre, String $puesto, Recomendaciones $recomendacion)
+    {
+
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                            .auth()->user()->name.', '.auth()->user()->puesto.
+                            '; se ha aprobado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+
+        /*$mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .'Se registro un comentario por parte del '.auth()->user()->puesto.'; '.auth()->user()->name.', por lo que se debe atender.'; */   
+        return $mensaje;
     }
 
     private function mensajeRechazo(String $nombre, String $puesto, Recomendaciones $recomendacion)

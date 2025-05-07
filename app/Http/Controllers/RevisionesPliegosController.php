@@ -60,6 +60,8 @@ class RevisionesPliegosController extends Controller
         $titulo='Se ha realizado un comentario en el pliego de observación de la Acción No. '.$accion->numero.' de la Auditoría No. '.$accion->auditoria->numero_auditoria;
         
             $titular=User::where('siglas_rol','TUS')->first();
+            $licMartha=User::where('siglas_rol','ATUS')->first();
+            
             if(getSession('cp')==2022){
                 $director = $accion->auditoria->directorasignado;
                 $jefe=$accion->depaasignado;

@@ -7,7 +7,10 @@ use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
 use App\Models\Recomendaciones;
 use App\Models\User;
+use App\Models\AuditoriaUsuarios;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Concerns\ToArray;
+use Illuminate\Support\Facades\DB;
 
 class RecomendacionesRevision01Controller extends Controller
 {
@@ -77,6 +80,25 @@ class RecomendacionesRevision01Controller extends Controller
      */
     public function update(Request $request, Recomendaciones $recomendacion)
     {
+        $auditoria = Auditoria::find(getSession('auditoria_id'));   
+        // $staffA = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->get();  -> esto es igual a $auditoria->Staff
+
+        $staffA = AuditoriaUsuarios::select('segusers.id',
+                                            'segusers.name',
+                                                    'segusers.puesto',                                
+                                                    'segusers.unidad_administrativa_id',                                
+                                                    'segusers.siglas_rol',                                
+                                                    'segusers.estatus',   
+                                                    DB::raw("(case when(segusers.id = segauditoria_usuarios.staff_id) THEN segusers.name ELSE NULL END) AS staffAsignado01"),                             
+
+                                                    )
+                                            ->join('segusers', 'segusers.id', '=', 'segauditoria_usuarios.staff_id')
+                                            ->where('auditoria_id', $auditoria->id)
+                                            ->get()
+                                            ->toArray();
+
+        //dd($staffA);
+
         $jefe=auth()->user()->jefe;
       
         $this->normalizarDatos($request);
@@ -102,6 +124,7 @@ class RecomendacionesRevision01Controller extends Controller
             'La aprobación ha sido registrada y se ha enviado a revisión del superior.' :
             'El rechazo ha sido registrado.'
         );
+        
 
         if ($request->estatus == 'Aprobado') {
             $recomendacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
@@ -119,6 +142,18 @@ class RecomendacionesRevision01Controller extends Controller
                             .'Ha sido rechazado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
+        }
+        foreach ($staffA as $staff) {
+            if (!empty($staff['id'])) {
+                $tituloStaff = 'Revisión del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+
+                $mensajeStaff = '<strong>Estimado(a) '.$staff['name'].', '.$staff['puesto'].':</strong><br>'
+                                .auth()->user()->name.', '.auth()->user()->puesto.
+                                '; ha aprobado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
+                                ', por lo que se le notifica para su conocimiento.';
+
+                auth()->user()->insertNotificacion($tituloStaff, $mensajeStaff, now(), $staff['unidad_administrativa_id'], $staff['id']);
+            }
         }
 
         return redirect()->route('recomendacionesatencion.index');

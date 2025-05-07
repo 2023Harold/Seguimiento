@@ -173,9 +173,8 @@
             </td>
         </tr>
         <tr></tr>
-        <tr>
-            <td colspan="1"></td>
-            <td colspan="6">
+		</table>
+   
                 <table style="border-collapse:collapse;" width="100%">
                     <tr>
                         <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:</strong></span></td>
@@ -213,10 +212,8 @@
                         <td style="width: 20%;"></td>
                     </tr>
                 </table>
-            </td>
-            <td colspan="1"></td>
-        </tr>
-    </table>
+            
+   
 
 </body>
 </html>

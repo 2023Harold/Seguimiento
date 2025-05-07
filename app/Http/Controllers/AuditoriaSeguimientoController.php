@@ -107,7 +107,7 @@ class AuditoriaSeguimientoController extends Controller
     {
          $query = $this->model;
 		 $query = $query->where('cuenta_publica',getSession('cp'));
-
+        
          if(in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray())){
             $query = $query->whereHas('auditoriausuarios', function($q){
                

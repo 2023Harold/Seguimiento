@@ -39,7 +39,7 @@
                     </tr> 
                     <tr>
                         <td colspan="3" style="text-align: center; align-content: center; align-items: center;">
-                            <span style="color: #960048; font-size: .6rem;"><strong>CÉDULA GENERAL DE SEGUIMIENTO</strong></span>
+                            <span style="color: #960048; font-size: .6rem;"><strong>CÉDULA ANALÍTICA DE SEGUIMIENTO</strong></span>
                         </td>
                     </tr>                   
                 </table>
