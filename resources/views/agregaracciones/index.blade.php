@@ -70,6 +70,17 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
+                        <th> </th>
+                        <th> </th>
+                        <th> </th>
+                        <th> </th>
+                        <th> </th>
+                        <th> </th>
+                        <th> </th>    
+                        <th> </th>
+                        <th> </th>
+                        <th> </th>
+                        <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Tipología</th>    
                             <tr>
                                 <th> </th>
                                 <th>No. Consecutivo</th>
@@ -81,6 +92,8 @@
                                 <th>Estatus</th>                               
                                 <th>Editar</th>
                                 <th>Eliminar</th>
+                                <th>Estatus</th>
+                                <th>Enviar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -123,7 +136,7 @@
                                 </td>                            
                                 <td style="text-align: right!important;">
                                     {{ '$'.number_format( $accion->monto_aclarar, 2) }}
-                                </td>
+                                </td>                                
                                 <td class="text-center">                                   
                                        
                                         @if (($accion->fase_revision=='Rechazado'))
@@ -181,6 +194,41 @@
                                        @destroy(route('agregaracciones.destroy',$accion))
                                     @endcan
                                 @endif
+                                </td>
+                                <td class="text-center">
+                                    {{1}}
+                                 @if (empty($auditoria->tipologiaacciones->fase_autorizacion)||$auditoria->tipologiaacciones->fase_autorizacion=='Rechazado')
+                                        <span class="badge badge-light-danger">{{ $auditoria->tipologiaacciones->fase_autorizacion }} </span>
+                                        @can('tipologiaacciones.edit')
+                                        <a href="{{ route('tipologiaacciones.edit',$auditoria->tipologiaacciones) }}" class="btn btn-primary">
+                                            <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
+                                        </a>
+                                        @endcan
+                                    @endif
+                                    {{-- @if ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión01')
+                                    @can('turnoarchivorevision01.edit')
+                                        <a href="{{ route('turnoarchivorevision01.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
+                                            <li class="fa fa-gavel"></li>
+                                            Revisar
+                                        </a>
+                                    @else
+                                        <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
+                                    @endcan
+                                    @endif --}}
+                                
+                                    {{-- @if (empty($segcattipologia->tipologia)||$segcattipologia->tipologia=='Rechazado')
+                                        @can('tipologiaacciones.edit')
+                                            <a href="{{ route('tipologiaaccionesenvio.edit',$auditoria->segcattipologia->tipologia) }}" class="btn btn-primary">
+                                             Enviar
+                                            </a>
+                                        @endcan
+                                @endif --}}
+                                </td>
+                                <td class="text-center">                                
+                                
+                                <a class="btn btn-primary text-sistema float popuptipologia" href="{{ route('tipologiaacciones.create',$auditoria) }}">
+                                </a>
+                               
                                 </td>
                             </tr>
                             {!! movimientosDesglose($accion->id, 10, $accion->movimientos) !!}

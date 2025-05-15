@@ -48,6 +48,7 @@ class AgregarAccionesController extends Controller
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
         $monto_aclarar=$this->setQuery($request)->orderBy('monto_aclarar');
         $movimiento=null;
+        // dd( $auditoria->tipologiaacciones->fase_autorizacion );
 
         return view('agregaracciones.index', compact('acciones', 'request', 'auditoria','tiposaccion','monto_aclarar','movimiento'));
     }

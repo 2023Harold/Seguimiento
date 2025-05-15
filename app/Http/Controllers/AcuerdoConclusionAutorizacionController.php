@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\AcuerdoConclusion;
 use App\Models\Movimientos;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AcuerdoConclusionAutorizacionController extends Controller
@@ -99,21 +100,23 @@ class AcuerdoConclusionAutorizacionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
-        if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del Acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
-                            .'Se ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.                          
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
-        }else {
+        
+        // if ($request->estatus == 'Aprobado') {
+        //     $titulo = 'Autorización del Acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
+        //     $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
+        //                     .'Se ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.                                      
+        //     // auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($acuerdoconclusion->userCreacion->name,$acuerdoconclusion->userCreacion->puesto,$acuerdoconclusion), now(), $acuerdoconclusion->userCreacion->unidad_administrativa_id, $acuerdoconclusion->userCreacion->id);
+        //     auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
+        // }else{
             
-            $titulo = 'Rechazo Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
-                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
+        //     $titulo = 'Rechazo Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
+        //     $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
+        //                     .'Ha sido rechazado el Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
+        //                     ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
             
-                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
+        //                     auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
                             
-    }
+        // }
     return redirect()->route('acuerdoconclusion.index');
     }
 

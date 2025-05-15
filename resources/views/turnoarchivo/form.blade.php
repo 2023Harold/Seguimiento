@@ -82,6 +82,7 @@
 @endsection
 @section('script')
 <script>
+    $('#no_aplica').show();  
     $(document).ready(function() {
         $('.rxs').on('ifChanged', function(event) {              
             var estado = $(this).is(':checked')? 1 : 0;

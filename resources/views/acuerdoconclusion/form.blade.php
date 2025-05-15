@@ -24,11 +24,19 @@
                 {!! BootForm::hidden('tipo',$tipo) !!}
 
                 <div class= "row">
+                    <div class="col-md-12">
+                        {!! BootForm::checkbox('no_aplica', 'No Aplica', 'X', false, ['class' => 'i-checks rxs']) !!}
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-md-12" style="display: none;" id="no_aplica"> 
+                    <div class="row">                       
                     <div class="col-md-5">
                         {!! BootForm::text('nombre_titular', 'Nombre del titular a quien se dirige : *', old('nombre_titular', $acuerdoconclusion->nombre_titular)) !!}
                     </div>
                     <div class="col-md-3">
                         {!! BootForm::text('cargo_titular', 'Cargo del titular a quien se dirige : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->cargo_titular)) !!}
+                    </div>
                     </div>
                 </div>
                 <div class= "row">
@@ -72,5 +80,24 @@
 </div>
 @endsection
 @section('script')
+<script>
+    $(document).ready(function() {
+         $('#no_aplica').show();    
+        $('.rxs').on('ifChanged', function(event) {              
+            var estado = $(this).is(':checked')? 1 : 0;
+
+            if(estado==0){
+                $('#no_aplica').show();                   
+                $('#btn-guardar').show();
+
+            }else{
+                $('#no_aplica').hide();
+                $('#btn-guardar').show();
+
+            }
+            //alert(estado);            
+        });
+    });
+</script> 
 {!! JsValidator::formRequest('App\Http\Requests\AcuerdoConclusionRequest') !!}
 @endsection

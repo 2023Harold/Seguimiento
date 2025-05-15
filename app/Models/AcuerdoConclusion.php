@@ -30,6 +30,12 @@ class AcuerdoConclusion extends Model
         'fase_autorizacion',
         'nivel_autorizacion',
         'tipo',
+        'no_aplica',
+        'oficio_recepcion',
+        'fecha_recepcion',
+        'oficio_acuse',
+        'fecha_acuse',
+
 
     ];
 protected $cast = [

@@ -109,6 +109,13 @@ Breadcrumbs::for('tipologiaaccion.index', function (BreadcrumbTrail $trail) {
     $trail->push('Acciones', route('tipologiaaccion.index'));
 });
 
+Breadcrumbs::for('tipologiaacciones.create', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('agregaracciones.index',$auditoria);
+    $trail->push('Acciones', route('tipologiaacciones.create',$auditoria));
+});
+
+
+
 //Turno Archivo Transferencia
 Breadcrumbs::for('inicioarchivotransferencia.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
@@ -488,6 +495,20 @@ Breadcrumbs::for('acuerdoconclusionvalidacion.edit', function (BreadcrumbTrail $
 Breadcrumbs::for('acuerdoconclusionautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('acuerdoconclusion.index',$auditoria);
     $trail->push('Autorizacion del Acuerdo de Conclusión ', route('acuerdoconclusion.index'));
+});
+
+
+Breadcrumbs::for('acuerdoconclusionacuse.edit', function (BreadcrumbTrail $trail,$acuerdoconclusion,$auditoria) {
+    $trail->parent('acuerdoconclusion.index',$auditoria);
+    $trail->push('Acuses', route('acuerdoconclusion.edit',$acuerdoconclusion));
+});
+Breadcrumbs::for('acuerdoconclusionacusecp.edit', function (BreadcrumbTrail $trail,$acuerdoconclusion,$auditoria) {
+    $trail->parent('acuerdoconclusion.index',$auditoria);
+    $trail->push('Acuses', route('acuerdoconclusionacusecp.edit',$acuerdoconclusion));
+});
+Breadcrumbs::for('acuerdoconclusionacusecp.show', function (BreadcrumbTrail $trail,$acuerdoconclusion,$auditoria) {
+    $trail->parent('acuerdoconclusion.index',$auditoria);
+    $trail->push('Acuses', route('acuerdoconclusionacusecp.show',$acuerdoconclusion));
 });
 
 //recomendaciones contestaciones

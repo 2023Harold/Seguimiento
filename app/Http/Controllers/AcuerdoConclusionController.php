@@ -104,25 +104,25 @@ class AcuerdoConclusionController extends Controller
     {
 		$acuerdoconclusion=$auditoria;
         $tipo=$acuerdoconclusion->tipo;                 
-        $comparecencia=$auditoria->comparecencia;
+        $acuerdoconclusion=$auditoria->acuerdoconclusion;
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $fechaacuerdo=now();
 
 		if($auditoria->acto_fiscalizacion=='Desempeño'){
-			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_proceso,1);
+			$fechaacuerdo=fechadias($auditoria->acuerdoconclusion->fecha_termino_proceso,1);
 		}
 		if($auditoria->acto_fiscalizacion=='Legalidad'){
-			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+			$fechaacuerdo=fechadias($auditoria->acuerdoconclusion->fecha_termino_aclaracion,1);
 		}
 		if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero'){
-			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+			$fechaacuerdo=fechadias($auditoria->acuerdoconclusion->fecha_termino_aclaracion,1);
 		}
 		if($auditoria->acto_fiscalizacion=='Inversión Física'){
-			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
+			$fechaacuerdo=fechadias($auditoria->acuerdoconclusion->fecha_termino_aclaracion,1);
 		}
 
         $request['usuario_creacion_id'] = auth()->user()->id;
-        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo','comparecencia','tipo'));
+        return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo','tipo'));
     }
 
     /**

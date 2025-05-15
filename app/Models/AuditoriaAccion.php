@@ -163,4 +163,9 @@ class AuditoriaAccion extends Model
     {
         return $this->belongsTo(User::class, 'usuario_actualizacion_id', 'id');
     }
+    public function tipologiaacciones()
+            {
+                return $this->hasMany(CatalogoTipologia::class, 'id', 'tipo_accion_id')->first();
+            }
+
 }

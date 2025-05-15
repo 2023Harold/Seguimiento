@@ -444,6 +444,10 @@ class Auditoria extends Model
                 return $this->hasOne(Acuerdoconclusion::class, 'auditoria_id' , 'id')->where('tipo','pliegos');
             }
 
+            public function acuerdosautorizados(){
+                return $this->hasMany(acuerdoconclusion::class, 'auditoria_id', 'id')->where('fase_autorizacion', 'Autorizado');
+            }
+
             public function turnoui()
             {
                 return $this->belongsTo(TurnoUI::class, 'id', 'auditoria_id');
@@ -473,7 +477,10 @@ class Auditoria extends Model
             {
                 return $this->hasOne(ListadoEntidades::class, 'no_auditoria','numero_auditoria')->where('cuenta_publica',getSession('cp'));            ;
             }
-			
+             public function tipologiaacciones()
+            {
+                return $this->belongsTo(CatalogoTipologia::class, 'id', 'tipo_auditoria_id');
+            }
 
 
 }

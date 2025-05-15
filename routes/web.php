@@ -10,6 +10,8 @@ use App\Http\Controllers\AcuerdoConclusionCPEnvioController;
 use App\Http\Controllers\AcuerdoConclusionEnvioController;
 use App\Http\Controllers\AcuerdoConclusionRevisionController;
 use App\Http\Controllers\AcuerdoConclusionValidacionController;
+use App\Http\Controllers\AcuerdoConclusionAcuseController;
+use App\Http\Controllers\AcuerdoConclusionAcuseCPController;
 use App\Http\Controllers\AdministracionController;
 use App\Http\Controllers\AgregarAccionesAutorizacionController;
 use App\Http\Controllers\AgregarAccionesController;
@@ -180,6 +182,7 @@ use App\Http\Controllers\SolicitudesAclaracionRevision01Controller;
 use App\Http\Controllers\SolicitudesAclaracionRevisionController;
 use App\Http\Controllers\SolicitudesAclaracionValidacionController;
 use App\Http\Controllers\TipologiaAccionController;
+use App\Http\Controllers\TipologiaAccionesController;
 use App\Http\Controllers\TipologiaAuditoriasController;
 use App\Http\Controllers\TurnoArchivoAutortizacionController;
 use App\Http\Controllers\TurnoArchivoController;
@@ -350,6 +353,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
      Route::resource('agregaraccionesrevision', AgregarAccionesRevisionController::class, ['parameters' => ['agregaraccionesrevision' => 'accion']]);
      Route::resource('agregaraccionesvalidacion', AgregarAccionesValidacionController::class, ['parameters' => ['agregaraccionesvalidacion' => 'accion']]);
      Route::resource('agregaraccionesautorizacion', AgregarAccionesAutorizacionController::class, ['parameters' => ['agregaraccionesautorizacion' => 'accion']]);
+     Route::resource('tipologiaacciones', TipologiaAccionesController::class);
+     Route::get('/tipologiaacciones/create/{auditoria}', [TipologiaAccionesController::class,'create'])->name('tipologiaacciones.create') ;
+    //  Route::resource('revisionesrecomendaciones', RevisionesRecomendacionesController::class, ['parameters' => ['revisionesrecomendaciones' => 'comentario']]);
     /**Fin del apartado de Auditorias */
 
     //Inicio Archivo Transferencia
@@ -409,6 +415,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('acuerdoconclusionenviocppliegos', AcuerdoConclusionCPEnvioController::class, ['parameters' => ['acuerdoconclusionenviocppliegos' => 'auditoria']]);
     Route::resource('acuerdoconclusionvalidacion', AcuerdoConclusionValidacionController::class, ['parameters' => ['acuerdoconclusionvalidacion' => 'auditoria']]);
     Route::resource('acuerdoconclusionautorizacion', AcuerdoConclusionAutorizacionController::class, ['parameters' => ['acuerdoconclusionautorizacion' => 'auditoria']]);
+    Route::resource('acuerdoconclusionacuse', AcuerdoConclusionAcuseController::class, ['parameters' => ['acuerdoconclusionacuse' => 'acuerdoconclusion']]);
+    Route::resource('acuerdoconclusionacuse', AcuerdoConclusionAcuseController::class, ['parameters' => ['acuerdoconclusionacuse' => 'acuerdoconclusion']]);
+    Route::resource('acuerdoconclusionacusecp', AcuerdoConclusionAcuseCPController::class, ['parameters' => ['acuerdoconclusionacusecp' => 'acuerdoconclusion']]);
     /**Fin del apartado de Seguimiento - Auditorias - Acuerdo de conclusion*/
 
     /**Seguimiento - Auditorias - PRAS  */
