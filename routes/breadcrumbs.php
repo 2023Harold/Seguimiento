@@ -983,10 +983,28 @@ Breadcrumbs::for('seguimientoauditoriascp.edit', function (BreadcrumbTrail $trai
 /**Folios CRR*/
 Breadcrumbs::for('folioscrr.index', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('auditoriaseguimiento.edit',$auditoria);
-    $trail->push('Folios', route('folioscrr.index'));
+    $trail->push('Folios', route('folioscrr.index',$auditoria));
 });
 
 Breadcrumbs::for('folioscrr.create', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('folioscrr.index',$auditoria);
-    $trail->push('Folios', route('folioscrr.create'));
+    $trail->push('Folios', route('folioscrr.create',$auditoria));
 });
+
+Breadcrumbs::for('remitentes.show', function (BreadcrumbTrail $trail, $auditoria) {
+    $trail->parent('folioscrr.index',$auditoria);
+    $trail->push('Folios Remitentes', route('remitentes.show',$auditoria ));
+
+});
+
+Breadcrumbs::for('remitentes.create', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('remitentes.show',$auditoria);
+    $trail->push('Folios Remitentes', route('remitentes.create', $auditoria));
+});
+Breadcrumbs::for('remitentes.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('remitentes.show',$auditoria);
+    $trail->push('Folios Editar Remitentes', route('remitentes.edit', $auditoria));
+});
+
+
+

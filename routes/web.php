@@ -84,6 +84,7 @@ use App\Http\Controllers\ConstanciaController;
 use App\Http\Controllers\CotejamientoController;
 use App\Http\Controllers\CuentaPublicaHomeController;
 use App\Http\Controllers\FirmaController;
+use App\Http\Controllers\FolioRemitentesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InformeDocumentoController;
 use App\Http\Controllers\InformePrimeraEtapaAutorizacionController;
@@ -144,6 +145,7 @@ use App\Http\Controllers\RecomendacionesController;
 use App\Http\Controllers\RecomendacionesRevision01Controller;
 use App\Http\Controllers\RecomendacionesRevisionController;
 use App\Http\Controllers\RecomendacionesValidacionController;
+use App\Http\Controllers\RemitentesController;
 use App\Http\Controllers\ReportesRegistrosAuditoriasController;
 use App\Http\Controllers\ReportesSeguimientoController;
 use App\Http\Controllers\RevisionesPliegosAtencionController;
@@ -622,6 +624,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
     /*** Seguimiento - Auditorias - folios */
     Route::resource('folioscrr', FolioCRRController::class);
+    Route::resource('remitentes', FolioRemitentesController::class);
+    Route::get('/remitentes/create/{folioscrr}', [FolioRemitentesController::class, 'create'])->name('remitentes.create');
+    Route::get('/remitentes/edit/{remitente}', [FolioRemitentesController::class, 'edit'])->name('remitentes.edit');
+
+    
+
+
+
     /**Fin del apartado de Seguimiento - Auditorias - folios*/
 
 

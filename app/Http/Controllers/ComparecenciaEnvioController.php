@@ -58,13 +58,11 @@ class ComparecenciaEnvioController extends Controller
      */
     public function edit(Comparecencia $comparecencia)
     {
-        
         // $comparecencia->update($request->all());
-  
   
         Movimientos::create([
           'tipo_movimiento' => 'Registro de la comparecencia',
-              'accion' => 'comparecencia',
+              'accion' => 'Comparecencia',
               'accion_id' => $comparecencia->id,
               'estatus' => 'Aprobado',
               'usuario_creacion_id' => auth()->id(),

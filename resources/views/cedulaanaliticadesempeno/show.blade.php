@@ -188,7 +188,8 @@
                                 <strong>
 									@php
 										if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->conclusion)){
-										 echo nl2br(htmlentities($accion->recomendaciones->conclusion));	
+                                            echo nl2br(htmlentities($accion->recomendaciones->analisis."\n\n"));
+										    echo nl2br(htmlentities($accion->recomendaciones->conclusion));	
 										}
 									@endphp                                                           
                                 </strong>

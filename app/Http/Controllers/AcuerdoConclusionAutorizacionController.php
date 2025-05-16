@@ -77,6 +77,7 @@ class AcuerdoConclusionAutorizacionController extends Controller
     {
         $this->normalizarDatos($request);
         $acuerdoconclusion=$auditoria;
+        $mensaje = "";
  
         Movimientos::create([
             'tipo_movimiento' => 'Autorización del acuerdo de conclusión',
@@ -100,14 +101,12 @@ class AcuerdoConclusionAutorizacionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
-        
-        // if ($request->estatus == 'Aprobado') {
-        //     $titulo = 'Autorización del Acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
-        //     $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
-        //                     .'Se ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.                                      
-        //     // auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($acuerdoconclusion->userCreacion->name,$acuerdoconclusion->userCreacion->puesto,$acuerdoconclusion), now(), $acuerdoconclusion->userCreacion->unidad_administrativa_id, $acuerdoconclusion->userCreacion->id);
-        //     auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
-        // }else{
+        if ($request->estatus == 'Aprobado') {
+            $titulo = 'Autorización del Acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
+                            .'Se ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;                          
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
+        }else {
             
         //     $titulo = 'Rechazo Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
         //     $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'

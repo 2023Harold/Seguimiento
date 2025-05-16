@@ -77,8 +77,7 @@ class RecomendacionesValidacionController extends Controller
     public function update(Request $request, Recomendaciones $recomendacion)
     {
         $titular=auth()->user()->titular;
-        $jefe=User::where('unidad_administrativa_id', substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 5).'0')->first();
-
+        
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -90,6 +89,16 @@ class RecomendacionesValidacionController extends Controller
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);
+        
+        if(getSession('cp')==2022){
+            $jefe=User::where('unidad_administrativa_id', substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 5).'0')->first();
+            $lider=$recomendacion->accion->lider;
+            $analista=$recomendacion->accion->analista;
+        }else{
+            $jefe = $recomendacion->jefedepartamentoencargado;
+            $analista = $recomendacion->analistacp;
+            $lider = $recomendacion->lidercp; 
+        }
 
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
@@ -115,11 +124,11 @@ class RecomendacionesValidacionController extends Controller
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $titular->unidad_administrativa_id, $titular->id);
         } else {
             $titulo = 'Rechazo del registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$recomendacion->accion->depaasignado->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($recomendacion->accion->lider->name,$recomendacion->accion->lider->puesto,$recomendacion), now(), $recomendacion->accion->lider->unidad_administrativa_id, $recomendacion->accion->lider->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$recomendacion), now(), $lider->unidad_administrativa_id, $lider->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$recomendacion), now(), $jefe->unidad_administrativa_id, $jefe->id);
         }
 

@@ -435,6 +435,11 @@ class Auditoria extends Model
                 return $this->hasMany(InformePrimeraEtapa::class, 'auditoria_id', 'id')->where('fase_autorizacion', 'Autorizado');
             }
 
+            public function AC()
+            {
+                return $this->hasMany(AcuerdoConclusion::class, 'auditoria_id', 'id');
+                //return $this->belongsTo(AcuerdoConclusion::class, 'id', 'auditoria_id');
+            }
             public function acuerdoconclusion()
             {
                 return $this->hasOne(AcuerdoConclusion::class,'auditoria_id', 'id')->where('tipo','recomendaciones');

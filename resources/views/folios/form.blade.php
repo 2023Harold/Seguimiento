@@ -17,27 +17,27 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                 {!!BootForm::open(['model' => $folio,'store' => 'folioscrr.store','update' => 'folioscrr.update','id' =>'form',]) !!}
-                {!! BootForm::hidden('fecha_aclaracion',fecha($auditoria->comparecencia->fecha_termino_aclaracion, 'Y-m-d'),['id'=>'fecha_aclaracion']); !!}
-                {!! BootForm::hidden('fecha_atencion',fecha($auditoria->comparecencia->fecha_termino_proceso, 'Y-m-d'),['id'=>'fecha_atencion']); !!}
+                {!!BootForm::hidden('fecha_aclaracion',fecha($auditoria->comparecencia->fecha_termino_aclaracion, 'Y-m-d'),['id'=>'fecha_aclaracion']) !!}
+                {!!BootForm::hidden('fecha_atencion',fecha($auditoria->comparecencia->fecha_termino_proceso, 'Y-m-d'),['id'=>'fecha_atencion']) !!}
 
                     <div class="row">
                         <div class="col-md-6">
-                        {!! BootForm::radios("solicitudes", 'Solicitudes en el oficio: *',
+                        {!!BootForm::radios("solicitudes", 'Solicitudes en el oficio: *',
                         [
                             'Acciones' => 'Acciones',
                             'Recomendaciones' => 'Recomendaciones',
                             'Ambas' => 'Ambas'
-                        ], old('solicitudes',$folio->solicitudes),true,['class'=>'i-checks rechazado']);
+                        ], old('solicitudes',$folio->solicitudes),true,['class'=>'i-checks rechazado'])
                         !!}
                         </div>
                     </div>
                     <div class="row" id="divsolambas" style="display:none;">
                         <div class="col-md-6">
-                        {!! BootForm::radios("presentacionambs", "Presenta: *",
+                        {!!BootForm::radios("presentacionambs", "Presenta: *",
                         [
                             'En tiempo' => 'En tiempo',
                             'Extemporaneo' => 'Extemporaneo',
-                        ], old('presentacionambs',$folio->presentacion),true,['class'=>'i-checks rechazado']);
+                        ], old('presentacionambs',$folio->presentacion),true,['class'=>'i-checks rechazado'])
                         !!}
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                         <div class="col-md-6">
                             {!!BootForm::checkbox('sol_extemp_ad', ' Acciones a destiempo', 'XAD', ($folio->acciones_extemp == 'X'?true:false), ['class' => 'i-checks','id'=>'sol_extemp_ad']) !!}
                             {!!BootForm::checkbox('sol_extemp_rd',' Recomendaciones a destiempo', 'XRD', ($folio->recomendaciones_extemp?true:false), ['class' => 'i-checks','id'=>'sol_extemp_rd']) !!}
-                            {!! BootForm::hidden('presentacion','',['id'=>'presentacion']); !!}
+                            {!!BootForm::hidden('presentacion','',['id'=>'presentacion']) !!}
                         </div>
                     </div>
                     <div class="row">
@@ -55,18 +55,10 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            {!! BootForm::date('fecha_oficio_contestacion', 'Fecha del oficio de contestación: ', old('fecha_oficio_contestacion', fecha($folio->fecha_oficio_contestacion, 'Y-m-d'))); !!}
+                            {!!BootForm::date('fecha_oficio_contestacion', 'Fecha del oficio de contestación: *', old('fecha_oficio_contestacion', fecha($folio->fecha_oficio_contestacion, 'Y-m-d'))) !!}
                         </div>
                         <div class="col-md-3">
-                            {!! BootForm::text('numero_oficio', 'Número del oficio: *', old('numero_oficio', $folio->numero_oficio)); !!}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            {!! BootForm::text('nombre_remitente', 'Nombre del remitente: *', old('nombre_remitente', $folio->nombre_remitente)); !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! BootForm::text('cargo_remitente', 'Cargo del remitente: *', old('cargo_remitente', $folio->cargo_remitente)); !!}
+                            {!!BootForm::text('numero_oficio', 'Número del oficio: ', old('numero_oficio', $folio->numero_oficio)) !!} {{--si el numero es NULL es memorandum si es S/N o XXX/XXX/XX/XX entonces es Oficio --}}
                         </div>
                     </div>
                 <div class="row">
@@ -74,7 +66,7 @@
                         {!!BootForm::text('folio', 'Folio de correspondencia: *', old('num_memo_recepcion_expediente',$folio->num_memo_recepcion_expediente)) !!}
                     </div>
                     <div class="col-md-3">
-                        {!!BootForm::date('fecha_recepcion_oficialia', 'Fecha de recepción en Oficialia de Partes: *', old('fecha_recepcion_oficilia',fecha($folio->fecha_recepcion_oficilia, 'Y-m-d')),['onchange'=>'handler(event)']) !!}
+                        {!!BootForm::date('fecha_recepcion_oficialia', 'Fecha de recepción en Oficialia de Partes: *', old('fecha_recepcion_oficialia',fecha($folio->fecha_recepcion_oficialia, 'Y-m-d')),['onchange'=>'handler(event)']) !!}
                     </div>
                     <div class="col-md-4">
                         {!!BootForm::date('fecha_recepcion_us', 'Fecha de recepción en la Unidad de Seguimiento: *', old('fecha_recepcion_us',fecha($folio->fecha_recepcion_us,'Y-m-d'))) !!}
@@ -83,7 +75,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         @canany(['folioscrr.store','folioscrr.update'])
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="submit" class="btn btn-primary">Guardar y continuar</button>
                         @endcan
                         <a href="{{ route('folioscrr.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>

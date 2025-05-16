@@ -26,7 +26,7 @@ class FoliosRequest extends FormRequest
         return [
             'oficio_contestacion_general' => 'required|string|max:500',
             'fecha_oficio_contestacion' => 'required|date|max:100',
-            'numero_oficio' => 'required|string|max:100',
+            'numero_oficio' => 'string|max:100',
             'nombre_remitente' => 'required|string|max:300',
             'cargo_remitente' => 'required|string|max:300',
             'folio' => 'required|string|max:100',

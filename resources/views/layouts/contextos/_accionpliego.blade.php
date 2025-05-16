@@ -57,6 +57,7 @@
                     <span class="text-primary">
                         {!! BootForm::textarea('normativa_infringidalb', false,old('normativa_infringidalb', $accion->normativa_infringida),['rows'=>'3','disabled']) !!}
                     </span>
+                    <a class="btn btn-icon bi bi-chat-fill text-sistema float popupcomentario" href="{{ route('revisionespliegos.create') }}?tipo=Normatividad"></a>
                 </div>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">

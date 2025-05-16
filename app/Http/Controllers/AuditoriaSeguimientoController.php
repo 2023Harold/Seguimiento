@@ -166,7 +166,7 @@ class AuditoriaSeguimientoController extends Controller
             $query = $query->whereNotNull('fase_autorizacion')->where('fase_autorizacion','Autorizado');
         }
 
-        if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
+        if(auth()->user()->siglas_rol == 'UC'){
             $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
             $query = $query->whereRaw('LOWER(direccion_asignada_id) LIKE (?) ',["%{$unidadAdministrativa}%"]);
         }

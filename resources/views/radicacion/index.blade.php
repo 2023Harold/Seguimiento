@@ -10,7 +10,7 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('auditoriaseguimiento.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                    Radicación
+                    Radicación 
                 </h1>
 				<div class="float-end">
                     @if (empty($auditoria->radicacion))

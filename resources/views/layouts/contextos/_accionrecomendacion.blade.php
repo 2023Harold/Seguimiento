@@ -40,14 +40,14 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <label>Acción: </label><br>
-                    {!! BootForm::textarea('accionlb', false,old('accionlb', $accion->accion),['rows'=>'3','disabled']) !!}
+                    {!!BootForm::textarea('accionlb', false,old('accionlb', $accion->accion),['rows'=>'3','disabled']) !!}
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <label>Antecedentes de la acción: </label>
                     <span class="text-primary">
-                        {!! BootForm::textarea('antecedentes_accionlb', false,old('antecedentes_accionlb', $accion->antecedentes_accion),['rows'=>'3','disabled']) !!}
+                        {!!BootForm::textarea('antecedentes_accionlb', false,old('antecedentes_accionlb', $accion->antecedentes_accion),['rows'=>'3','disabled']) !!}
                     </span>
                 </div>
             </div>
@@ -55,8 +55,9 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <label>Normatividad infringida: </label>
                     <span class="text-primary">
-                        {!! BootForm::textarea('normativa_infringidalb', false,old('normativa_infringidalb', $accion->normativa_infringida),['rows'=>'3','disabled']) !!}
+                        {!!BootForm::textarea('normativa_infringidalb', false,old('normativa_infringidalb', $accion->normativa_infringida),['rows'=>'3','disabled']) !!}
                     </span>
+                    <a class="btn btn-icon bi bi-chat-fill text-sistema float popupcomentario" href="{{ route('revisionesrecomendaciones.create') }}?tipo=Normatividad"></a>
                 </div>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
@@ -71,7 +72,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <label>Evidencia documental que acredite la atención de la recomendación: </label>
                     <span class="text-primary">
-                        {!! BootForm::textarea('evidencia_resumen', false,old('evidencia_resumen', $accion->evidencia_resumen),['rows'=>'3','disabled']) !!}
+                        {!!BootForm::textarea('evidencia_resumen', false,old('evidencia_resumen', $accion->evidencia_resumen),['rows'=>'3','disabled']) !!}
                     </span>
                 </div>
             </div>

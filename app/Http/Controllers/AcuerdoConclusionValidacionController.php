@@ -74,6 +74,7 @@ class AcuerdoConclusionValidacionController extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, AcuerdoConclusion $auditoria)
     {
+        $mensaje = "";
         $this->normalizarDatos($request);
         $acuerdoconclusion=$auditoria;
         Movimientos::create([

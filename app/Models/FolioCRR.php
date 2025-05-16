@@ -38,4 +38,9 @@ class FolioCRR extends Model
         'fecha_recepcion_oficialia',
         'fecha_recepcion_us',
     ];
+
+    public function remitentes()
+    {
+        return $this->hasMany(RemitentesFolio::class, 'folio_id');
+    }
 }

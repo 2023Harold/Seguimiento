@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RemitentesFolio;
 use Illuminate\Http\Request;
 use App\Models\FolioCrr;
 use App\Models\Auditoria;
@@ -46,15 +47,19 @@ class FolioCRRController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, )
     {
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $request['auditoria_id'] =getSession('auditoria_id');
         $request['usuario_creacion_id'] = auth()->id();
         mover_archivos($request, ['oficio_contestacion_general']);
         $folio  = FolioCrr::create($request->all());
-
+        $folioscrr = $folio;
+        $remitentes = RemitentesFolio::where('folio_id',$folioscrr->id)->get();
+        
         setMessage('El folio ha sido agregado');
-        return redirect()->route('folioscrr.index');
+        //return redirect()->route('folioscrr.index');
+        return view('remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
     }
 
     /**
@@ -63,9 +68,16 @@ class FolioCRRController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(FolioCrr $folioscrr)
     {
-        //
+        //dd($folioscrr->id);
+
+        $remitentes = RemitentesFolio::where('folio_id',$folioscrr->id)->get();
+
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+
+        // Aquí podrías mandar más datos si necesitas, además del folio
+        return view('remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
     }
 
     /**
@@ -74,9 +86,14 @@ class FolioCRRController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(FolioCrr $folioscrr)
     {
-        //
+        
+		$folio = $folioscrr;
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        
+
+        return view('folios.form', compact('auditoria','folio'));
     }
 
     /**
@@ -86,9 +103,18 @@ class FolioCRRController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, FolioCrr $folioscrr)
     {
-        //
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $remitentes = RemitentesFolio::where('folio_id',$folioscrr->id)->get();
+        $request['usuario_modificacion_id'] = auth()->id();
+        mover_archivos($request, ['oficio_contestacion_general'],$folioscrr);
+        $folioscrr->update($request->all());
+
+        setMessage('El folio ha sido actualizado');
+        //return redirect()->route('folioscrr.index');
+        return redirect()->route('remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
+		
     }
 
     /**
@@ -100,6 +126,39 @@ class FolioCRRController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function remitentes(FolioCrr $folio){
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+
+        return view('remitentes.form', compact('auditoria', 'folio'));        
+    }
+
+    public function remitentesSave(Request $request, FolioCrr $folio){
+        //dd($request);
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $request['usuario_creacion_id'] = auth()->id();
+
+        RemitentesFolio::create($request->all());
+
+        setMessage('El Remitente ha sido agregado');
+
+        //return redirect()->route('folios.remitentesconsultar', $folio);
+        //return redirect()->route('folios.remitentesconsultar', ['folio' => $folio->id]);
+        //return view('remitentes.index', compact('auditoria'));        
+        return redirect()->route('folioscrr.index');
+    }
+
+
+
+
+    public function remitentesconsultar(FolioCrr $folio)
+    {
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $remitentes = $folio->remitentes;
+
+        return view('remitentes.index', compact('auditoria', 'folio', 'remitentes'));      
+
     }
 
     private function setQuery($request)

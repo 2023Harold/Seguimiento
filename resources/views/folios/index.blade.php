@@ -30,10 +30,11 @@
                         <thead>
                             <tr>
                                 <th>Oficio</th>
-                                <th>Remitente</th>
+                                <th>Remitentes</th>
                                 <th>Recepción en oficialía</th>
                                 <th>Fecha de recepción en la unidad de seguimiento</th>
                                 <th>Acuerdos de valoración</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,9 +47,12 @@
                                     <small>Número de oficio: {{ $folio->numero_oficio }}</small> <br>
                                     <small>Fecha: {{ fecha($folio->fecha_oficio_contestacion) }}</small>
                                 </td>
-                                <td>
-                                    {{ $folio->nombre_remitente }} <br>
-                                    <span class="badge-light-dark text-gray-500">{{ $folio->cargo_remitente }}</span>
+                                <td class="text-center">
+                                    <a href="{{ route('folioscrr.show',$folio) }}" class="btn btn-primary">
+                                        <i class="fa fa-magnifying-glass"></i> Consultar
+                                    </a>
+                                    {{-- $folio->nombre_remitente --}} <br>
+                                  {{--  <span class="badge-light-dark text-gray-500">{{ $folio->cargo_remitente }}</span>--}}
                                 </td>
                                 <td class="text-center">
                                     CRR: {{ $folio->folio }} <br>
@@ -57,6 +61,14 @@
                                 <td class="text-center">
                                     {{ fecha($folio->fecha_recepcion_us) }}
                                 </td>
+                                <td class="text-center">
+
+                                </td>
+                                <td>
+								    <a href="{{ route('folioscrr.edit', $folio) }}"  class="btn btn-primary float-end">
+                                        <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
+                                    </a>
+								</td>
                             </tr>
                             @empty
                             <tr>

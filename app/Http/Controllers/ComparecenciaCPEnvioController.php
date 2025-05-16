@@ -58,10 +58,10 @@ class ComparecenciaCPEnvioController extends Controller
      */
     public function edit(Comparecencia $comparecencia)
     {
-        // dd($auditoria);
+        //dd($comparecencia);
         Movimientos::create([
             'tipo_movimiento' => 'Envío de la comparecencia',
-                'accion' => 'comparecencia',
+                'accion' => 'Comparecencia',
                 'accion_id' => $comparecencia->id,
                 'estatus' => 'Aprobado',
                 'usuario_creacion_id' => auth()->id(),

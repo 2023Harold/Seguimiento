@@ -21,6 +21,11 @@
                         {!!BootForm::textarea('muestra_rev','Conclusión: *', old('muestra_rev', $acciones->solicitudesaclaracion->conclusion),['rows'=>'10']) !!}
                     </div>
                 @endif
+                @if($tipo == "Normatividad")
+                    <div class="col-md-12">
+                        {!!BootForm::textarea('muestra_rev','Normatividad: *', old('muestra_rev', $acciones->normativa_infringida),['rows'=>'10']) !!}
+                    </div>
+                @endif
             </div>
             <div class="row">
                 <div class="col-md-12">

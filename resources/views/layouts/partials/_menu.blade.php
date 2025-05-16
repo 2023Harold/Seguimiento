@@ -141,12 +141,10 @@
                                                                         ) ? 'show' : ''  }} mx-5 me-0 pt-3">
                                  <div class="menu-item mb-1">
                                     <a href="{{route('acuerdoconclusion.index')}}" class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'acuerdoconclusion') ? 'active' : '' }}">
-                                        @if (!empty($auditoria->acuerdoconclusion) && $auditoria->acuerdoconclusion->fase_autorizacion=='Autorizado')
-                                            <span class="fa fa-circle" style="color: green"></span>
-                                        @else
-                                            @if(!empty($auditoria->acuerdoconclusion) && ($auditoria->acuerdoconclusion->fase_autorizacion == 'En validación'
-                                            || $auditoria->acuerdoconclusion->fase_autorizacion == 'En revisión' || $auditoria->acuerdoconclusion->fase_autorizacion == 'En autorización'
-                                            || $auditoria->acuerdoconclusion->fase_autorizacion == 'Rechazado'))
+                                        @if (count($auditoria->AC)> 0)
+                                            @if (count($auditoria->AC->where('fase_autorizacion','Autorizado')) === count($auditoria->AC))
+                                                <span class="fa fa-circle" style="color: green"></span>
+                                            @elseif (count($auditoria->AC) !=count($auditoria->AC->where('fase_autorizacion','Autorizado')))
                                                 <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
                                                 <span class="fa fa-circle" style="color: red"></span>
@@ -453,7 +451,7 @@
                                             @if (!empty($auditoria->turnoarchivo) && $auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
                                                 <span class="fa fa-circle" style="color: green"></span>
                                             @else
-                                                @if(!empty($auditoria->turnoarchivo) && ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión' || $auditoria->turnoarchivo->fase_autorizacion == 'En validación'
+                                                @if(!empty($auditoria->turnoarchivo) && ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión'|| $auditoria->turnoarchivo->fase_autorizacion == 'En revisión01' || $auditoria->turnoarchivo->fase_autorizacion == 'En validación'
                                                     || $auditoria->turnoarchivo->fase_autorizacion == 'En autorización'))
                                                     <span class="fa fa-circle" style="color: yellow"></span>
                                                 @else

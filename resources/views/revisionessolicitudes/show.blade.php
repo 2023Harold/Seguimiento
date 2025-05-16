@@ -9,12 +9,14 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                {!! BootForm::textarea('muestra_rev', false, old("muestra_rev", $comentario->muestra_rev),['disabled'])!!}
+                Texto:
+                {!!BootForm::textarea('muestra_rev', false, old("muestra_rev", $comentario->muestra_rev),['disabled'])!!}
             </div>
         </div>          
         <div class="row">
             <div class="col-md-12">
-                {!! BootForm::textarea('comentario', false, old("comentario", $comentario->comentario),['disabled'])!!}
+                Comentario:
+                {!!BootForm::textarea('comentario', false, old("comentario", $comentario->comentario),['disabled'])!!}
             </div>
         </div>           
     </div>
