@@ -44,8 +44,14 @@
                                                     <a href="{{ route('cedulainicialprimera.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 align-items-sm-center">
                                                         Seguimiento &nbsp;&nbsp;&nbsp;&nbsp;
                                                         <span class="fa fa-eye"></span>
-                                                    </a>                                 
+                                                    </a>                               
                                                 </div>
+                                                
+                                                @if(getSession('cp')==2022)
+                                                    <a href="{{ route('agregarcedula.create',$auditoria) }}?tipo=Seguimiento" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario">
+                                                        Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1 "></i>
+                                                    </a>
+                                                @endif    
                                                 <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0 text-center">
 												
 													
@@ -58,7 +64,7 @@
                                                                 <p class="text-gray-600 h4">
                                                                     Fase: <span class="badge badge-danger">{{str_contains($auditoria->cedulageneralseguimiento[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralseguimiento[0]->fase_autorizacion }}</span>
                                                                 </p>              
-                                                                    {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulainicialprimera.update','id'=>'form']) !!}            
+                                                                    {!!BootForm::open(['model' => $auditoria, 'update' => 'cedulainicialprimera.update','id'=>'form']) !!}            
                                                                         <div class="row">
                                                                             <div class="col-md-12">                                                
                                                                                 @if (auth()->user()->can('cedulainicialprimera.store') || auth()->user()->can('cedulainicialprimera.update'))
@@ -66,7 +72,7 @@
                                                                                 @endif
                                                                             </div>
                                                                         </div>
-                                                                    {!! BootForm::close() !!}
+                                                                    {!!BootForm::close() !!}
                                                                                                                                 
                                                                 @else
                                                                 <p class="text-gray-600 h4">
@@ -195,7 +201,12 @@
                                                 <div class="d-flex flex-column mr-3 text-center">
                                                     <a href="{{ route('cedulageneralrecomendacion.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                         Recomendaciones  &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
-                                                    </a>                                                    
+                                                    </a>          
+                                                    @if(getSession('cp')==2022)
+                                                        <a href="#" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
+                                                           Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1"></i>
+                                                        </a>
+                                                    @endif                                      
                                                 </div>
                                                 <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0 text-center">
                                                                                                       
@@ -343,7 +354,12 @@
                                                 <div class="d-flex flex-column mr-3 text-center">
                                                     <a href="{{ route('cedulageneralpras.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                         PRAS &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span> 
-                                                    </a>                                                    
+                                                    </a> 
+                                                    @if(getSession('cp')==2022)
+                                                        <a href="#" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
+                                                            Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1"></i>
+                                                        </a>
+                                                    @endif                                                     
                                                 </div>
                                                 @if (count($auditoria->totalpras)==$totalprasautorizadas)                                                
                                                     @if(count($auditoria->cedulageneralpras)>0)    
@@ -493,6 +509,11 @@
                                                     <a href="{{ route('cedulaanalitica.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                        Seguimiento &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                     </a>
+                                                    @if(getSession('cp')==2022)
+                                                        <a href="#" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
+                                                            Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1"></i>
+                                                        </a>
+                                                    @endif  
                                                 </div>                                               
                                                 <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0 text-center">
                                                 @if ($totaut==$totalacciones)
@@ -633,7 +654,12 @@
                                                 <div class="d-flex flex-column mr-3 text-center">
                                                     <a href="{{ route('cedulaanaliticadesemp.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                         Desempeño &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
-                                                    </a>                                                   
+                                                    </a>     
+                                                    @if(getSession('cp')==2022)
+                                                        <a href="#" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
+                                                            Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1"></i>
+                                                        </a>
+                                                    @endif                                               
                                                 </div>
                                                 @if (count($auditoria->totalrecomendacion)==$totalrecomendacionesautorizadas)
                                                     @if(count($auditoria->cedulaanaliticadesemp)>0) 
@@ -858,6 +884,24 @@
                 }
             });
         });
+        $(document).ready(function() {
+            $('.popupcomentario').colorbox({
+                width:"65%",
+                height:"650px",
+                maxWidth:400,
+                maxHeight:"650px",
+                iframe: true,
+                onClosed: function() {
+                    location.reload(true);
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"65%",maxWidth:400, height:"650px", maxHeight:"650px"});
+                 $(window).trigger("resize");
+                }
+            });
+        });
 </script>
+
+
     
 @endsection

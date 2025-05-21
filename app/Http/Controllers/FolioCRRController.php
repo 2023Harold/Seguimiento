@@ -108,13 +108,14 @@ class FolioCRRController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $remitentes = RemitentesFolio::where('folio_id',$folioscrr->id)->get();
         $request['usuario_modificacion_id'] = auth()->id();
+		$request = $this->normalizarDatos($request);
         mover_archivos($request, ['oficio_contestacion_general'],$folioscrr);
         $folioscrr->update($request->all());
 
         setMessage('El folio ha sido actualizado');
         //return redirect()->route('folioscrr.index');
-        return redirect()->route('remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
-		
+        //return redirect()->route('remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
+		return view('remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
     }
 
     /**
@@ -126,6 +127,23 @@ class FolioCRRController extends Controller
     public function destroy($id)
     {
         //
+    }
+	
+	public function normalizarDatos(Request $request){
+        if($request->solicitudes!='Ambas'){
+			
+			$request['presentacion']=null;
+			$request['acciones_extemp']=null;
+			$request['recomendaciones_extemp']=null;
+		}
+		
+		if(str_contains($request->presentacion,'tiempo')){		
+			
+			$request['acciones_extemp']=null;
+			$request['recomendaciones_extemp']=null;
+		}
+
+        return $request;        
     }
 
     public function remitentes(FolioCrr $folio){

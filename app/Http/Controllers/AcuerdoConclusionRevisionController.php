@@ -105,13 +105,15 @@ class AcuerdoConclusionRevisionController extends Controller
            'El rechazo ha sido registrado.'
        );
 
+       $auditoria = $acuerdoconclusion->auditoria;
+
        if ($request->estatus == 'Aprobado') {
         
         $titulo = 'Validación del acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
                         .auth()->user()->name.', '.auth()->user()->puesto.
-                        '; ha aprobado la validación del acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria.
-                        ', por lo que se requiere realice la autorización oportuna de la misma.';
+                        '; ha aprobado la revisión del acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria.
+                        ', por lo que se requiere realice la validación oportuna de la misma.';
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
     }else {
         

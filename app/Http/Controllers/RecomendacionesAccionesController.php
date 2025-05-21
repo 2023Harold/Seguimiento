@@ -57,10 +57,12 @@ class RecomendacionesAccionesController extends Controller
      */
     public function show(AuditoriaAccion $accion)
     {
+        /*
         $acciones =  $this->setQuery($request)->orderBy('numero')->get()->pluck('id')->toArray();
 		$nuevaaccion=AuditoriaAccion::find($idactual);
+
 		
-		return redirect()->route('edit',$nuevaaccion);
+		return redirect()->route('edit',$nuevaaccion);*/
     }
 
     /**

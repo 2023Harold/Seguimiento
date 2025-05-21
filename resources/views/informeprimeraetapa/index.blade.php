@@ -14,26 +14,31 @@
                     &nbsp;
                     Informe Primera Etapa
                 </h1>
-				<div class="float-end">                    
-                    @if($auditoria->acto_fiscalizacion=='Legalidad')
-                        @if((count($auditoria->accionesrecomendaciones)> 0)&& (count(value: $auditoria->accionespo) > 0))
-                            <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_EA_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;IS. EA Y PAR</span></a>
-                            
-                        @elseif(count($auditoria->accionesrecomendaciones)> 0)
-                            <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. PAR</span></a>
-                        @elseif(count($auditoria->accionespo) > 0)
-                            <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_EA" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;AC. EA</span></a>
-                        @endif
-                            <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;Of. IS</a>
-                    @else
-                        @if($auditoria->acto_fiscalizacion=='Desempeño')
-                            <a href="{{route('informeprimeraetapa.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;IS PAR</a>                                  
-                            <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. IS PAR</a>          
+				<div class="float-end">        
+                    @can('informeprimeraetapa.exportar')            
+                        @if($auditoria->acto_fiscalizacion=='Legalidad')
+                            @if((count($auditoria->accionesrecomendaciones)> 0)&& (count(value: $auditoria->accionespo) > 0))
+                                <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_EA_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;</span>IS. EA Y PAR</a> 
+                            @endif
+                            @if(count($auditoria->accionesrecomendaciones)> 0)
+                                <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_PAR" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;</span>IS. PAR</a>
+                            @endif
+                            @if(count($auditoria->accionespo) > 0)
+                                <a href="{{ route('informeprimeraetapa.exportar') }}?tipo=IS_EA" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;</span>IS. EA</a>
+                            @endif
+
+                                <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;Of. IS</a>
                         @else
-                            <a href="{{route('informeprimeraetapa.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;IS</a>                                  
-                            <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. IS</a> 
-                        @endif                             
-                    @endif
+                            <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;Of. IS</a>
+                            @if($auditoria->acto_fiscalizacion=='Desempeño')
+                                <a href="{{route('informeprimeraetapa.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;IS PAR</a>                                  
+                                <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. IS PAR</a>          
+                            @else
+                                <a href="{{route('informeprimeraetapa.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;IS</a>                                  
+                                <a href="{{route('informeprimeraetapaofis.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;OF. IS</a> 
+                            @endif                             
+                        @endif
+                    @endcan
                 </div>
                 
             </div>           
@@ -50,8 +55,16 @@
                                    <h1 class="card-title">
                                     <span class="text-primary"> 
                                         Informe Recomendaciones
+                                        @if (empty($auditoria->informeprimeraetapa))
+                                            @can('informeprimeraetapa.create')
+                                                <a class="btn btn-primary float-end" href="{{ route('informeprimeraetapa.create') }}">
+                                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
+                                                </a> 
+                                            @endcan
+                                        @endif
                                     </span>
                                 </h1>  
+                                
                                    <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -148,14 +161,8 @@
                                         </tbody>
                                     </table>
                                 </div>     
-                        @if (empty($auditoria->informeprimeraetapa))
-                            @can('informeprimeraetapa.create')
-                                <a class="btn btn-primary float-end" href="{{ route('informeprimeraetapa.create') }}">
-                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
-                                </a> 
-                            @endcan
-                        @endif
-                        @endif
+                        
+                            @endif
                         @endif
                     </div>                    
 
@@ -171,6 +178,13 @@
                         <h1 class="card-title">
                             <span class="text-primary"> 
                                 Informe Pliegos
+                                @if (empty($auditoria->informepliegos))                        
+                                    @can('informepliegos.create')
+                                        <a class="btn btn-primary float-end" href="{{ route('informepliegos.create') }}">
+                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
+                                        </a>
+                                    @endcan                 
+                                @endif  
                             </span>
                         </h1>     
                         <div class="table-responsive">
@@ -268,15 +282,9 @@
                                     @endif
                                 </tbody>
                             </table>
-                    </div>                        
-                        @if (empty($auditoria->informepliegos))                        
-                        @can('informepliegos.create')
-                            <a class="btn btn-primary float-end" href="{{ route('informepliegos.create') }}">
-                                 <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
-                             </a>
+                        </div>                         
                     </div>                                        
-                        @endcan                 
-                        @endif  
+                       
                         @endif 
                         @endif           
                 </div>                                                                                              

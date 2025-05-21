@@ -31,21 +31,32 @@
                         !!}
                         </div>
                     </div>
-                    <div class="row" id="divsolambas" style="display:none;">
+					@php
+					$ambasdiv = ((!empty($folio->solicitudes)&&($folio->solicitudes=='Ambas'))?'block':'none');
+					@endphp
+                    <div class="row" id="divsolambas" style="display:{{$ambasdiv}};">
                         <div class="col-md-6">
                         {!!BootForm::radios("presentacionambs", "Presenta: *",
                         [
                             'En tiempo' => 'En tiempo',
                             'Extemporaneo' => 'Extemporaneo',
-                        ], old('presentacionambs',$folio->presentacion),true,['class'=>'i-checks rechazado'])
+                        ], old('presentacionambs',(str_contains($folio->presentacion,'Extempo')?'Extemporaneo':
+						
+						(str_contains($folio->presentacion,'tiempo')?'En tiempo':'')))					
+						,true,['class'=>'i-checks rechazado'])
                         !!}
                         </div>
                     </div>
-                    <div class="row" id="divextempambas" style="display:none;">
+					
+					@php
+						$extempambasdiv = (str_contains($folio->presentacion,'Extempo')?'block':'none');
+					@endphp					
+                    <div class="row" id="divextempambas" style="display:{{$extempambasdiv}};">
                         <div class="col-md-6">
-                            {!!BootForm::checkbox('sol_extemp_ad', ' Acciones a destiempo', 'XAD', ($folio->acciones_extemp == 'X'?true:false), ['class' => 'i-checks','id'=>'sol_extemp_ad']) !!}
-                            {!!BootForm::checkbox('sol_extemp_rd',' Recomendaciones a destiempo', 'XRD', ($folio->recomendaciones_extemp?true:false), ['class' => 'i-checks','id'=>'sol_extemp_rd']) !!}
-                            {!!BootForm::hidden('presentacion','',['id'=>'presentacion']) !!}
+						
+                            {!!BootForm::checkbox('acciones_extemp', ' Acciones a destiempo', 'XAD', ($folio->acciones_extemp?true:false), ['class' => 'i-checks','id'=>'sol_extemp_ad']) !!}
+                            {!!BootForm::checkbox('recomendaciones_extemp',' Recomendaciones a destiempo', 'XRD', ($folio->recomendaciones_extemp?true:false), ['class' => 'i-checks','id'=>'sol_extemp_rd']) !!}
+                            {!!BootForm::hidden('presentacion',old('',($folio->presentacion)),['id'=>'presentacion']) !!}
                         </div>
                     </div>
                     <div class="row">
@@ -100,15 +111,18 @@
                 if(solicitud=='Acciones'){
                     $('#divsolambas').hide();
                     $('#divextempambas').hide();
+					$('#presentacion').val('En tiempo');
                 }
 
                 if(solicitud=='Recomendaciones'){
                     $('#divsolambas').hide();
                     $('#divextempambas').hide();
+					$('#presentacion').val('En tiempo');
                 }
 
                 if(solicitud=='Ambas'){
                 $('#divsolambas').show();
+				$('#presentacion').val(null);
 
                 }
             }
@@ -122,8 +136,10 @@
                 //setTimeout(mostrarCitas(), 1000);
                 if(solicitud=='Extemporaneo'){
                     $('#divextempambas').show();
+					$('#presentacion').val(null);
                 }else{
                     $('#divextempambas').hide();
+					 $('#presentacion').val('En tiempo');
                 }
             }
         });
@@ -141,7 +157,7 @@
         $("#sol_extemp_rd").change(function() {
             if (this.checked) {
                // alert(1);
-                        $('#presentacion').val('Acciones Extemporaneas');
+                        $('#presentacion').val('Recomendaciones Extemporaneas');
                         $('#presentacion-error').text(null);
                     }else{
                         $('#presentacion').val(null);

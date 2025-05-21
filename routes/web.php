@@ -18,6 +18,7 @@ use App\Http\Controllers\AgregarAccionesController;
 use App\Http\Controllers\AgregarAccionesRevision01Controller;
 use App\Http\Controllers\AgregarAccionesRevisionController;
 use App\Http\Controllers\AgregarAccionesValidacionController;
+use App\Http\Controllers\AgregarCedulaInicialController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\AsignacionAccionController;
@@ -532,6 +533,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('cedanadesemprevision', CedulaAnaliticaDesempenoRevisionController::class, ['parameters' => ['cedanadesemprevision' => 'cedula']]);
     Route::resource('cedanadesempvalidacion', CedulaAnaliticaDesempenoValidacionController::class, ['parameters' => ['cedanadesempvalidacion' => 'cedula']]);
     Route::resource('cedanadesempautorizacion', CedulaAnaliticaDesempenoAutorizacionController::class, ['parameters' => ['cedanadesempautorizacion' => 'cedula']]);
+    
+    Route::resource('agregarcedula', AgregarCedulaInicialController::class, ['parameters' => ['agregarcedula' => 'auditoria']]);
     /**Fin del apartado de Seguimiento - Auditorias - Cedulas*/
 
     /** Seguimiento - Auditorias - Informe*/

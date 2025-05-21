@@ -4,7 +4,7 @@
     <i class="fa fa-bell fs-2x"></i>
     @if (auth()->user()->NotificacionesCount>0)
     <!--end::Svg Icon-->
-    <span class="badge badge-square badge-danger h-20px w-20px t-10 position-static translate-middle pulse pulse-danger top-0 start-100 animation-blink" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="badge_id">
+    <span class="badge badge-square badge-danger h-20px w-20px t-10 position-static translate-middle pulse pulse-danger top-0 start-100 animation-blink" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="badge_id"> 
         <span id="numero_notificaciones">{{ auth()->user()->NotificacionesCount }}</span>
         <span class="pulse-ring" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="pulse_id"></span>
     </span>

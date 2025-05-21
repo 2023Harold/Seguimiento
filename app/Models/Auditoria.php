@@ -330,25 +330,45 @@ class Auditoria extends Model
             {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Seguimiento');
             }
+            public function cedulageneralseguimientoarchivo()
+            {
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Seguimiento');
+            }
 
             public function cedulageneralrecomendaciones()
             {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Recomendación');
+            }
+            public function cedulageneralrecomendacionesarchivo()
+            {
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Recomendación');
             }
 
             public function cedulageneralpras()
             {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General PRAS');
             }
+            public function cedulageneralprasarchivo()
+            {
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','PRAS');
+            }
 
             public function cedulaanalitica()
             {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula Analítica');
             }
+            public function cedulaanaliticaarchivo()
+            {
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Analítica');
+            }
 
             public function cedulaanaliticadesemp()
             {
                 return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula Analítica Desempeño');
+            }
+            public function cedulaanaliticadesemparchivo()
+            {
+                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Analitica Desempeño');
             }
 
             public function movimientosCedulaGeneral()
