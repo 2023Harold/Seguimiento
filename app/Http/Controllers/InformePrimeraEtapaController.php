@@ -247,7 +247,8 @@ class InformePrimeraEtapaController extends Controller
                                                 DB::raw("(case when(segsolicitudes_aclaracion.promocion = 4) THEN segauditoria_acciones.numero ELSE NULL END) AS numprompras"),
 
                                                 DB::raw("(case when(segsolicitudes_aclaracion.calificacion_sugerida = 'Solventada') THEN segauditoria_acciones.numero ELSE NULL END) AS tsolac01")
-                                                )        
+                                                )  
+
                             ->join('segsolicitudes_aclaracion', 'segsolicitudes_aclaracion.accion_id', '=', 'segauditoria_acciones.id')
                             ->leftJoin('segsolicitudes_acl_contestaciones', 'segsolicitudes_acl_contestaciones.solicitudaclaracion_id',"=",'segsolicitudes_aclaracion.id')
                             ->where('auditoria_id', $auditoria->id)
@@ -302,7 +303,8 @@ class InformePrimeraEtapaController extends Controller
                                                 'segrecomendaciones.analisis', 'segrecomendaciones.conclusion', 'segrecomendaciones.listado_documentos',
                                                 DB::raw("(case when(segrecomendaciones.calificacion_sugerida = 'Atendida') THEN 'En ese sentido, con fundamento en lo dispuesto por los artículos 54 fracción III de la Ley de Fiscalización Superior del Estado de México y; 23 fracciones XIX y XLIV y; 47 fracciones XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, se determina que XXX ha quedado aclarado y solventado.' ELSE NULL END) AS sicalificacionsugerida01"),
                                                 DB::raw("(case when(segrecomendaciones.calificacion_sugerida = 'Atendida') THEN segauditoria_acciones.numero ELSE NULL END) AS tr01"),
-                                                DB::raw("(case when(segrecomendaciones.calificacion_sugerida = 'No Atendida') THEN 'Por tanto, se tiene como no atendida para este Órgano Superior de Fiscalización del Estado de México, la Recomendación con clave de acción '||segauditoria_acciones.numero||'; en consecuencia, con fundamento en los artículos 8 fracción XXVII de la Ley de Fiscalización Superior del Estado de México y 23 fracciones XIX y XLIV y 47 fracción XV segundo párrafo y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; la Recomendación será turnada al Órgano Interno de Control de XXX o su equivalente, para el efecto de que dicha autoridad de control interno XXX promueva las acciones procedentes que garanticen su atención y cumplimiento.' ELSE NULL END) AS sicalificacionsugerida02"),
+                                                DB::raw("(case when(segrecomendaciones.calificacion_sugerida = 'No Atendida') THEN 'Por tanto se tiene como no atendida para este Órgano Superior de Fiscalización del Estado de México, la Recomendación con clave de acción XXX; en consecuencia, con fundamento en los artículos 8 fracción XXVII de la Ley de Fiscalización Superior del Estado de México y 23 fracciones XIX y XLIV y 47 fracción XV segundo párrafo y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; la Recomendación será turnada al Órgano Interno de Control de XXX o su equivalente, para el efecto de que dicha autoridad de control interno XXX promueva las acciones procedentes que garanticen su atención y cumplimiento.' ELSE NULL END)  AS sirecomendaciones08" ),
+                                             
                                             )
                                              
                                 ->join('segrecomendaciones', 'segrecomendaciones.accion_id', '=', 'segauditoria_acciones.id')
@@ -317,6 +319,7 @@ class InformePrimeraEtapaController extends Controller
             $entidad = ListadoEntidades::where('no_auditoria', $auditoria->numero_auditoria)->where('cuenta_publica', $auditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();
                 if ($entidad) {
                     $nombreEntidad = $entidad->entidades;
+                    $entidad01 = $nombreEntidad;
                     $textoDocumento = $entidad->textos_doc;
                 }
             }
@@ -498,20 +501,21 @@ class InformePrimeraEtapaController extends Controller
                 $siRecomendaciones02 = "así como, se precisaran las mejoras realizadas y las acciones emprendidas en relación a las recomendaciones que le fueron formuladas, o en su caso, justificara su improcedencia";
                 $siRecomendaciones03 = "No obstante, esta instancia de fiscalización vigilará y corroborará a través de las siguientes revisiones técnicas, que los compromisos y acciones en materia de la presente, se estén cumpliendo conforme a la responsabilidad que tiene encomendada {$nombreEntidad}.";
                 $siRecomendaciones04 = "En ese sentido, con fundamento en lo dispuesto por los artículos 23 fracciones XIX y XLIV y; 47 fracciones III, XII, XV y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; se determina que la recomendación ha quedado atendida.";            
+                $siRecomendaciones08 = "Con referencia al cumplimiento del requerimiento para la atnción de las recomendaciones identificadas con clave número: XXX, que no fueron atendidas por parte de la entidad fiscalizada; se remitirán a la Unidad de Asuntos Jurídicos del órgano Superior de Fiscalización del Estado de México y Municipios, la Ley de Fiscalización Superior del Estado de México, para que aplique el medio de apremio que corresponda, en términos de la Ley General de Responsabilidades Administrativas del Estado de México y Municipios, la ley de Fiscalización Superior del Estado de México y demás disposiciones jurídicas aplicables.";            
                 if(count($auditoria->totalNOsolventadorecomendacion)>0){
                     $recNoAt = collect($auditoria->totalNOsolventadorecomendacion)->pluck('numero')->filter()->implode(', ');
                     $siRecomendaciones05 = "DE LAS RECOMENDACIONES NO ATENDIDAS ";
-                    $siRecomendaciones06 = "Por cuanto hace a las Recomendaciones identificadas con las claves de acción: ${recNoAt} , se determinó que las mismas no fueron atendidas ; por lo que con fundamento en los artículos 8 fracción XXVII de la Ley de Fiscalización Superior del Estado de México y 23 fracciones XIX y XLIV y 47 fracción XV segundo párrafo y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; los resultados obtenidos del acto de fiscalización de mérito, así como el soporte documental, se enviarán al Órgano Interno de Control de ${nombreEntidad} o su equivalente, para el efecto de que dicha autoridad de control interno {$auditoria->entidadFiscalizable->Ambito} promueva las acciones procedentes que garanticen su atención y cumplimiento, por lo cual, dichas recomendaciones se integrarán  en un expedientillo para el seguimiento correspondiente.";
+                    $siRecomendaciones06 = "Por cuanto hace a las Recomendaciones identificadas con las claves de acción: <b> ${recNoAt} </b>, se determinó que las mismas no fueron atendidas ; por lo que con fundamento en los artículos 8 fracción XXVII de la Ley de Fiscalización Superior del Estado de México y 23 fracciones XIX y XLIV y 47 fracción XV segundo párrafo y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; los resultados obtenidos del acto de fiscalización de mérito, así como el soporte documental, se enviarán al Órgano Interno de Control de ${nombreEntidad} o su equivalente, para el efecto de que dicha autoridad de control interno {$auditoria->entidadFiscalizable->Ambito} promueva las acciones procedentes que garanticen su atención y cumplimiento, por lo cual, dichas recomendaciones se integrarán  en un expedientillo para el seguimiento correspondiente.";
                 }
                 $siRecomendaciones07 = "y 54 Bis";
             }
+            //Si contestación extemporanea
+
             if(count($auditoria->accionespras)>0){
-                $SiPRAS01 ="Adicional a lo anterior y en términos de lo previsto en los artículos 42 Bis, 53 fracción I y 55 párrafo segundo de la Ley de Fiscalización Superior del Estado de México; 12 párrafo segundo y 103 de la Ley de Responsabilidades Administrativas del Estado de México y Municipios y;
-                             23 fracciones XIX y XLIV y 47 fracciones III, V, XII y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, por medio del diverso número". $pras->numero_oficio .", se turnaron por cuerda separada al Órgano Interno de Control competente, 
-                             las Promociones de Responsabilidad Administrativa Sancionatoria, para que se continúe con la investigación pertinente y promueva las acciones procedentes, ordenándose formar expedientillo relativo a las Promociones de Responsabilidad Administrativa Sancionatoria.";
+                $SiPRAS01 ="En ese tenor, po lo que hace al oficio número" . $pras->numero_oficio . "suscrito por XXX, en su cáracter de XXX, durante la administración pública XXX, durante la administración pública XXX, presentado en la fecha XXX ante el Departamentp de Oficilia de partes del Órgano Superior de Fiscalización del Estado de Mexico, con asignación de folio XXX, del sistema de Gestión de Correspondencia, se advierte que se presentó de manera extemporánea con el objeto de dar la atención a las observaciones en cuestión; por lo que mediante oficio número XXXXX, el día XXXX, se hizo del conocimiento a la entidad fiscalizada, que el mismo no será considerado para su valoración.";
                 if($pras->estatus_cumplimiento == 'No Atendido'){
-                    $SiPRAS02= "Así pues, agotado el plazo para la atención de las observaciones a que se alude en el segundo párrafo del presente apartado, sin que a la fecha de emisión del presente se tenga evidencia documental ingresada por parte de la entidad fiscalizada, se llegó a la conclusión de los siguientes: ===================================";
-                }
+                    $SiPRAS02= "Así pues, una vez agotado el plazo convenido correspondiente al Proceso de Atención a las Recomendaciones descrito en el segundo párrafo del presente apartado, sin que a la fecha de emisión del presente se tenga evidencia documental ingresada por parte de la entidad fiscalizada, se llegó a la conclusión de los siguientes: ===================================";
+                  }
             }
             if(count($auditoria->accionespo)>0){
                 if(count($auditoria->totalNOsolventadopliegos)>0){
@@ -559,17 +563,21 @@ class InformePrimeraEtapaController extends Controller
                     $accionSolventada03 = "Que en términos del acuerdo que antecede, se determina la conclusión del seguimiento a dichas observaciones.";   
                     $accionSolventada04 = "";
                     $accionSolventada08 = "Por lo antes expuesto, con fundamento en los artículos 16, 116 fracción II sexto párrafo y 134 segundo y quinto párrafos de la Constitución Política de los Estados Unidos Mexicanos; 34, 61 fracciones XXXII, XXXIII y XXXIV y 129 penúltimo párrafo de la Constitución Política del Estado Libre y Soberano de México; 94 fracción I y 95 de la Ley Orgánica del Poder Legislativo del Estado Libre y Soberano de México; 1, 3, 4 {$frac} , 5, 6, 7, 8, 9, 21, 53, 54 {$siRecomendaciones07} de la Ley de Fiscalización Superior del Estado de México; 4, 6 fracciones XVIII y XXXVII, 23 y 47 fracciones III, XII, XVI y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; el Titular de la Unidad de Seguimiento; determina lo siguiente:";
-                    $accionSolventada09 = "PRIMERO. Se emite y autoriza el presente Informe de Seguimiento.";
-                    $accionSolventada10 = "SEGUNDO. Notifíquese por oficio a la entidad fiscalizada en el domicilio ubicado en {$auditoria->acuerdoconclusion->domicilio}.";
+                    $accionSolventada09 = "<b>PRIMERO.</b> Se emite y autoriza el presente Informe de Seguimiento.";
+                    $accionSolventada10 = "<b>SEGUNDO. Notifíquese </b> por oficio a la entidad fiscalizada en el domicilio ubicado en {$auditoria->acuerdoconclusion->domicilio}.";
                 }
-                $accionSolventada02 = "PRIMERO. Se emite y autoriza el presente Informe de Seguimiento.";
-                $accionSolventada03 = "SEGUNDO. Que las observaciones descritas e identificadas con clave número " .collect($tsolac01.', '.$tpo01.', '.$tr01.', '). "han quedado aclaradas y solventadas/atendidas.";   
-                $accionSolventada04 = "TERCERO. Que en términos del numeral que antecede, se determina la conclusión del seguimiento a los resultados obtenidos en la Auditoría de Cumplimiento Financiero, practicada {$textoDocumento}, por el período comprendido del {$auditoria->periodo_revision} y ordenada mediante oficio número {$auditoria->numero_orden}. ";
+                $accionSolventada02 = "<b>PRIMERO.</b> Se emite y autoriza el presente Informe de Seguimiento.";
+                $accionSolventada03 = "<b>SEGUNDO.</b> Que las observaciones descritas e identificadas con clave número " .collect($tsolac01.', '.$tpo01.', '.$tr01.', '). "han quedado aclaradas y solventadas/atendidas.";   
+                $accionSolventada04 = "<b>TERCERO.</b> Que en términos del numeral que antecede, se determina la conclusión del seguimiento a los resultados obtenidos en la Auditoría de Desempeño, practicada  a {$entidad01}, por el período comprendido del {$auditoria->periodo_revision} y ordenada mediante oficio número {$auditoria->numero_orden}. ";
                 $accionSolventada05 = "Lo anterior, sin que implique la liberación de responsabilidades que pudieran llegarse a determinar con posterioridad por las autoridades de control y/o fiscalización federales o estatales que efectúen en el ámbito de su competencia; o bien, de aquellas que pudieran resultar de auditorías o revisiones que en ejercicio de sus atribuciones realice esta entidad estatal de fiscalización, al mismo período o períodos diferentes.";
-                $accionSolventada06 = "CUARTO. Archívese el Expediente Técnico de Auditoría y el de la Etapa de Aclaración para su guarda y custodia en la Unidad de Seguimiento del Órgano Superior de Fiscalización del Estado de México, únicamente por lo que hace a las observaciones que han quedado totalmente aclaradas y Solventadas/Atendidas .";
-                $accionSolventada07 = "QUINTO. Notifíquese por oficio a la entidad fiscalizada en el domicilio ubicado en {$auditoria->acuerdoconclusion->domicilio}.";
+                $accionSolventada06 = "<b> CUARTO. Archívese el Expediente Técnico de Auditoría y el de la Etapa de Aclaración para su guarda y custodia <\b> en la Unidad de Seguimiento del Órgano Superior de Fiscalización del Estado de México, únicamente por lo que hace a las observaciones que han quedado totalmente aclaradas y atendidas .";
                 $accionSolventada08 = "";$accionSolventada09 = "";$accionSolventada10 = "";
             }
+
+            $accionSolventada07 = " <b> QUINTO. Notifíquese <\b> por oficio a la entidad fiscalizada en el domicilio ubicado en {$auditoria->acuerdoconclusion->domicilio}.";
+           
+            //dd($accionSolventada01, $accionSolventada02, $accionSolventada03, $accionSolventada04, $accionSolventada05, $accionSolventada06, $accionSolventada07, $accionSolventada08);
+                
             if(empty($auditoria->informeprimeraetapa->fecha_informe)){
                 $fechaInformeLetras = fechaaletra($auditoria->informepliegos->fecha_informe);
             }else{
@@ -587,7 +595,7 @@ class InformePrimeraEtapaController extends Controller
             $template->setValue('fechaPAA',$fecha_PAA);
             $template->setValue('numero_orden',$auditoria->numero_orden);
             $template->setValue('fecha_orden',$fecha_orden);
-            $template->setValue('entidad',$textoDocumento);
+            $template->setValue('entidad',$textoDocumento);                    
 
             $template->setValue('fecha_oficio_acuerdo',$fecha_oficio_acuerdo);
             $template->setValue('oficio_numero', $auditoria->radicacion->oficio_acuerdo);
@@ -641,6 +649,9 @@ class InformePrimeraEtapaController extends Controller
             $template->setValue('cJD',  'Jefe de '.$auditoria->departamento_encargado);
             $template->setValue('nLP', $auditoria->lidercp->name);
             $template->setValue('nA', $auditoria->analistacp->name);
+
+            // $template->setValue('numero_oficio', $folio->numero_oficio);    
+
 
             $nombreword='IS';
         }                
@@ -778,7 +789,6 @@ class InformePrimeraEtapaController extends Controller
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
         $pras = Segpras::where('accion_id',getSession('prasauditoriaaccion_id'))->get();
         $formatter = new NumeroALetras();
-
         $plazomax=$formatter->toString($auditoria->radicacion->plazo_maximo);
         $plazomaxMax = ucwords($plazomax);
         $plazomaxMin = ucwords(strtolower($plazomaxMax));
@@ -932,17 +942,27 @@ class InformePrimeraEtapaController extends Controller
             $template->setValue('numero_expediente',$auditoria->radicacion->numero_expediente);
             $template->setValue('oficio_numero_informe', $oficio_numero_informe);
             
+
+            
             $template->setValue('plazo', $auditoria->radicacion->plazo_maximo);
             $template->setValue('plazoMaximoletra', $plazomaxMin);
+            $template->setValue('acta_cierre_auditoria',$auditoria->radicacion->acta_cierre_auditoria);
 
             $template->setValue('info', $info);
             $template->setValue('inicialesJD', $inicialesJD);
             $template->setValue('inicialesLM', $inicialesLM);
             $template->setValue('inicialesA', $inicialesA);
             $template->setValue('inicialesD', $inicialesD);
-
+            // $template->setValue('calificacion_sugerida',$calificacion_sugerida);
+            // $template->setValue('analisis',$analisis);
+            // $template->setValue('conclusion',$conclusion);            
+            
+           
             
             $template->cloneBlock('block', 1, true, false, $replacements);
+
+
+
 
             
             $nombreword='Of. IS PAR';
