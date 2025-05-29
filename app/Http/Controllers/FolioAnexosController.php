@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\FolioCrr;
 use App\Models\Auditoria;
 
-class FolioRemitentesController extends Controller
+class FolioAnexosController extends Controller
 {
     protected $model;
 
@@ -20,14 +20,9 @@ class FolioRemitentesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $folioscrr = FolioCrr::find(getSession('folio_id_session'));
-        $remitentes = RemitentesFolio::where('folio_id',$folioscrr->id)->get();
-        //dd($folioscrr, $remitentes );
-        //dd($request->folio); //si obtengo el folio
-        return view('remitentes.index', compact('folioscrr', 'auditoria','remitentes'));
+       //
     }
 
     /**
@@ -35,12 +30,10 @@ class FolioRemitentesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(FolioCrr $folioscrr)
+    public function create(FolioCrr $folio)
     {
-        $folioremitente = new RemitentesFolio();
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-
-        return view('remitentes.form', compact('auditoria','folioscrr', 'folioremitente'));
+        dd($folio);
+       
     }
 
     /**
@@ -49,17 +42,9 @@ class FolioRemitentesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $folioscrr = FolioCrr::where('id', $request->folio_id)->first();
-        $request['usuario_creacion_id'] = auth()->id();
-        $remitentes = RemitentesFolio::where('folio_id',$folioscrr->id)->get();
-        
-        $folio  = RemitentesFolio::create($request->all());
-
-        setMessage('El Remitente del Folio:'.$folioscrr->folio.' ha sido agregado');
-        return redirect()->route('remitentes.index');
+        //
     }
 
     /**
@@ -80,13 +65,11 @@ class FolioRemitentesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, RemitentesFolio $remitente)
+    public function edit(FolioCrr $folio)
     {
-        $folioscrr = FolioCrr::where('id', $remitente->folio_id)->first();
-        $folioremitente = $remitente;
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-
-        return view('remitentes.form', compact('auditoria','remitente','folioscrr','folioremitente'));
+        
+        return view('foliosanexos.form', compact('auditoria','folio'));
     }
 
     /**

@@ -57,7 +57,9 @@
                     <span class="text-primary">
                         {!! BootForm::textarea('normativa_infringidalb', false,old('normativa_infringidalb', $accion->normativa_infringida),['rows'=>'3','disabled']) !!}
                     </span>
-                    <a class="btn btn-icon bi bi-chat-fill text-sistema float popupcomentario" href="{{ route('revisionessolicitudes.create') }}?tipo=Normatividad"></a>
+                    @if (auth()->user()->siglas_rol!='ANA')
+                        <a class="btn btn-icon bi bi-chat-fill text-sistema float popupcomentario" href="{{ route('revisionessolicitudes.create') }}?tipo=Normatividad"></a>
+                    @endif
                 </div>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">

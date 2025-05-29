@@ -136,3 +136,23 @@
     </div>
 </div>
 @endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('.popupcomentario').colorbox({
+                width:"80%",
+                height:"1050px",
+                maxWidth:700,
+                maxHeight:"1050px",
+                iframe: true,
+                onClosed: function() {
+                    location.reload(true);
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"80%",maxWidth:600, height:"800px", maxHeight:"800px"});
+                 $(window).trigger("resize");
+                }
+            });
+        });
+    </script>
+@endsection

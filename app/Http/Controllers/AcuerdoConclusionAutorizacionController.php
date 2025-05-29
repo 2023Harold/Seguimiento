@@ -115,7 +115,7 @@ class AcuerdoConclusionAutorizacionController extends Controller
             
         //                     auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
                             
-        // }
+        }
     return redirect()->route('acuerdoconclusion.index');
     }
 

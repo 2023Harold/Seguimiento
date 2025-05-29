@@ -33,8 +33,8 @@
                                 <th>Remitentes</th>
                                 <th>Recepción en oficialía</th>
                                 <th>Fecha de recepción en la unidad de seguimiento</th>
-                                <th>Acuerdos de valoración</th>
                                 <th></th>
+                                <th>Acuerdos</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,14 +61,24 @@
                                 <td class="text-center">
                                     {{ fecha($folio->fecha_recepcion_us) }}
                                 </td>
-                                <td class="text-center">
-
-                                </td>
+                                
                                 <td>
-								    <a href="{{ route('folioscrr.edit', $folio) }}"  class="btn btn-primary float-end">
-                                        <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
-                                    </a>
+                                    @if(empty($folio->usuario_modificacion_id))
+                                        <a href="{{ route('folioscrr.edit', $folio) }}"  class="btn btn-primary float-end">
+                                            <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
+                                        </a>
+                                    @endif
 								</td>
+                                <td class="text-center">
+                                    <a href="{{ route('foliosanexos.edit', $folio) }}" class="btn btn-primary">
+                                        <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                    </a>
+                                    @can('foliosanexos.show')
+                                        <a href="{{ route('comparecenciaacuse.show', $folio) }}" class="btn btn-secondary" >
+                                            <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                        </a>
+                                    @endcan
+                                </td>
                             </tr>
                             @empty
                             <tr>

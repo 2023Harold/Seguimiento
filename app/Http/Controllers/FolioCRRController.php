@@ -56,10 +56,11 @@ class FolioCRRController extends Controller
         $folio  = FolioCrr::create($request->all());
         $folioscrr = $folio;
         $remitentes = RemitentesFolio::where('folio_id',$folioscrr->id)->get();
+        setSession('folio_id_session',$folio->id);
         
         setMessage('El folio ha sido agregado');
         //return redirect()->route('folioscrr.index');
-        return view('remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
+        return view('remitentes.index', compact('folioscrr', 'auditoria','remitentes'));
     }
 
     /**
@@ -91,8 +92,8 @@ class FolioCRRController extends Controller
         
 		$folio = $folioscrr;
         $auditoria = Auditoria::find(getSession('auditoria_id'));
+        setSession('folio_id_session',$folio->id);
         
-
         return view('folios.form', compact('auditoria','folio'));
     }
 
@@ -113,9 +114,8 @@ class FolioCRRController extends Controller
         $folioscrr->update($request->all());
 
         setMessage('El folio ha sido actualizado');
-        //return redirect()->route('folioscrr.index');
-        //return redirect()->route('remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
-		return view('remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
+        return redirect()->route('remitentes.index', [$request]);
+		//return view('remitentes.index', compact('folioscrr', 'auditoria','remitentes'));
     }
 
     /**
@@ -144,39 +144,6 @@ class FolioCRRController extends Controller
 		}
 
         return $request;        
-    }
-
-    public function remitentes(FolioCrr $folio){
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-
-        return view('remitentes.form', compact('auditoria', 'folio'));        
-    }
-
-    public function remitentesSave(Request $request, FolioCrr $folio){
-        //dd($request);
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $request['usuario_creacion_id'] = auth()->id();
-
-        RemitentesFolio::create($request->all());
-
-        setMessage('El Remitente ha sido agregado');
-
-        //return redirect()->route('folios.remitentesconsultar', $folio);
-        //return redirect()->route('folios.remitentesconsultar', ['folio' => $folio->id]);
-        //return view('remitentes.index', compact('auditoria'));        
-        return redirect()->route('folioscrr.index');
-    }
-
-
-
-
-    public function remitentesconsultar(FolioCrr $folio)
-    {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $remitentes = $folio->remitentes;
-
-        return view('remitentes.index', compact('auditoria', 'folio', 'remitentes'));      
-
     }
 
     private function setQuery($request)

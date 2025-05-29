@@ -85,6 +85,7 @@ use App\Http\Controllers\ConstanciaController;
 use App\Http\Controllers\CotejamientoController;
 use App\Http\Controllers\CuentaPublicaHomeController;
 use App\Http\Controllers\FirmaController;
+use App\Http\Controllers\FolioAnexosController;
 use App\Http\Controllers\FolioRemitentesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InformeDocumentoController;
@@ -628,6 +629,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     /*** Seguimiento - Auditorias - folios */
     Route::resource('folioscrr', FolioCRRController::class);
     Route::resource('remitentes', FolioRemitentesController::class);
+    Route::resource('foliosanexos', FolioAnexosController::class);
+    Route::get('foliosanexos/{folio}/edit', [FolioAnexosController::class, 'edit'])->name('foliosanexos.edit');
     Route::get('/remitentes/create/{folioscrr}', [FolioRemitentesController::class, 'create'])->name('remitentes.create');
     Route::get('/remitentes/edit/{remitente}', [FolioRemitentesController::class, 'edit'])->name('remitentes.edit');
 

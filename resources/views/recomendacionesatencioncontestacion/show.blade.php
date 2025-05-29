@@ -58,7 +58,7 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Oficio</th>
-                                <th>Remitente</th>
+                                <th>Remitentes</th>
                                 <th>Recepción en oficialía</th>
                                 <th>Fecha de recepción en la unidad de seguimiento</th>
                             </tr>
@@ -78,8 +78,14 @@
                                             <small>Fecha: {{ fecha($contestacion->fecha_oficio_contestacion) }}</small> 
                                         </td>                                                              
                                         <td>
-                                           {{ $contestacion->nombre_remitente }} <br>
-                                           <span class="badge-light-dark text-gray-500">{{ $contestacion->cargo_remitente }}</span> 
+                                           {{-- $contestacion->nombre_remitente --}}
+                                           {{--<span class="badge-light-dark text-gray-500">{{ $contestacion->cargo_remitente }}</span> --}}
+                                            @foreach($contestacion->remitentes as $remitente)
+                                                {{ $remitente->nombre_remitente ?? $contestacion->nombre_remitente }}<br>
+                                                <span class="badge-light-dark text-gray-500">{{ $remitente->cargo_remitente ?? $contestacion->cargo_remitente }}</span> <br>
+                                                <span class="badge-light-dark text-gray-700">{{ $remitente->domicilio_remitente ?? '' }}</span> <br><br>
+                                            @endforeach
+                                    
                                         </td>
                                         <td class="text-center">
                                             CRR: {{ $contestacion->folio_correspondencia }} <br>
@@ -105,4 +111,24 @@
         </div>
     </div>
 </div>
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('.popupcomentario').colorbox({
+                width:"80%",
+                height:"1050px",
+                maxWidth:700,
+                maxHeight:"1050px",
+                iframe: true,
+                onClosed: function() {
+                    location.reload(true);
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"80%",maxWidth:600, height:"800px", maxHeight:"800px"});
+                 $(window).trigger("resize");
+                }
+            });
+        });
+    </script>
 @endsection

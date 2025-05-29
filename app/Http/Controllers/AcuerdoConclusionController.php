@@ -102,9 +102,11 @@ class AcuerdoConclusionController extends Controller
      */
     public function edit(AcuerdoConclusion $auditoria)
     {
+		
 		$acuerdoconclusion=$auditoria;
-        $tipo=$acuerdoconclusion->tipo;                 
-        $acuerdoconclusion=$auditoria->acuerdoconclusion;
+		$tipo=$acuerdoconclusion->tipo;                 
+        
+		//$acuerdoconclusion=$auditoria->acuerdoconclusion;
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $fechaacuerdo=now();
 
@@ -122,6 +124,7 @@ class AcuerdoConclusionController extends Controller
 		}
 
         $request['usuario_creacion_id'] = auth()->user()->id;
+		//dd($acuerdoconclusion);
         return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','fechaacuerdo','tipo'));
     }
 
@@ -177,12 +180,11 @@ class AcuerdoConclusionController extends Controller
 		if($auditoria->acto_fiscalizacion=='Inversión Física'){
 			$fechaacuerdo=fechadias($auditoria->comparecencia->fecha_termino_aclaracion,1);
 		}
-
+		
+		//dd($auditoria,$acuerdoconclusion,$tipo);
         return view('acuerdoconclusion.form', compact('auditoria','acuerdoconclusion','tipo'));
 
     }
-
-
 
     private function normalizarDatos(Request $request)
     {

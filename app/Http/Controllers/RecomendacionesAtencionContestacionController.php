@@ -95,7 +95,10 @@ class RecomendacionesAtencionContestacionController extends Controller
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
 
-        return view('recomendacionesatencioncontestacion.show', compact('contestaciones','auditoria','accion','recomendacion'));
+        $recomendaciones_contestacion = Recomendaciones::with(['contestaciones.remitentes'])->where('accion_id', getSession('recomendacionesauditoriaaccion_id'))->get();
+        
+
+        return view('recomendacionesatencioncontestacion.show', compact('contestaciones','auditoria','accion','recomendacion', 'recomendaciones_contestacion'));
     }
 
     /**

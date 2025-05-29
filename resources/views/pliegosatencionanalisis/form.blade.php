@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('pliegosobservacionanalisis.edit',$pliegosobservacion,$auditoria) }}
+{{Breadcrumbs::render('pliegosobservacionanalisis.edit',$pliegosobservacion,$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -22,20 +22,20 @@
                         <h3 class="card-title text-primary">Análisis</h3>
                         <div class="card-body mt-2">
                             <div class="row">
-                        {!! BootForm::open(['model' => $pliegosobservacion,'update' =>'pliegosobservacionanalisis.update','id' =>'form',]) !!}
+                        {!!BootForm::open(['model' => $pliegosobservacion,'update' =>'pliegosobservacionanalisis.update','id' =>'form',]) !!}
                         <div class="row">
                             <div class="col-md-12">
-                                {!! BootForm::textarea('analisis', 'Análisis *',old('analisis', $pliegosobservacion->analisis),['rows'=>'10']) !!}
+                                {!!BootForm::textarea('analisis', 'Análisis *',old('analisis', $pliegosobservacion->analisis),['rows'=>'10']) !!}
                             </div>
                         </div>                        
                         <div class="row">
                             <div class="col-md-12">
-                                {!! BootForm::textarea('conclusion', 'Conclusión *',old('conclusion', $pliegosobservacion->conclusion),['rows'=>'10']) !!}
+                                {!!BootForm::textarea('conclusion', 'Conclusión *',old('conclusion', $pliegosobservacion->conclusion),['rows'=>'10']) !!}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                {!! BootForm::radios("calificacion_sugerida", ' Calificación de la atención: *', ['Solventado'=>'Solventado', 'No Solventado'=>'No Solventado','Solventado Parcialmente'=>'Solventado Parcialmente'],old('calificacion_sugerida',$pliegosobservacion->calificacion_sugerida),false,['class'=>'i-checks']); !!}
+                                {!!BootForm::radios("calificacion_sugerida", ' Calificación de la atención: *', ['Solventado'=>'Solventado', 'No Solventado'=>'No Solventado','Solventado Parcialmente'=>'Solventado Parcialmente'],old('calificacion_sugerida',$pliegosobservacion->calificacion_sugerida),false,['class'=>'i-checks']) !!}
                             </div>
                         </div>
                         @php
@@ -43,7 +43,7 @@
                         @endphp
                         <div class="row" id="id_monto_solventa" style="display:{!! $mostrarDivMonto !!}">
                             <div class="col-md-6">
-                                {!! BootForm::text('monto_solventado', 'Monto solventado: *', old('monto_solventado', $pliegosobservacion->monto_solventado),['class' => 'numeric']) !!}
+                                {!!BootForm::text('monto_solventado', 'Monto solventado: *', old('monto_solventado', $pliegosobservacion->monto_solventado),['class' => 'numeric']) !!}
                             </div>
                         </div>
                         @php
@@ -52,7 +52,7 @@
                         <div id="div_promocion">
                             <div class="row">
                                 <div class="col-md-4">
-                                {!! BootForm::select('promocion', 'Promoción: ', $promocion->toArray(), old('promocion',$pliegosobservacion->promocion),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                                {!!BootForm::select('promocion', 'Promoción: ', $promocion->toArray(), old('promocion',$pliegosobservacion->promocion),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
                                 </div>
                             </div>
                             @php
@@ -60,7 +60,7 @@
                             @endphp
                             <div class="row" id="div_monto_promocion" style="display:{!! $mostrarDivMontoPromo !!}">
                                 <div class="col-md-6">
-                                {!! BootForm::text('monto_promocion', 'Monto de la promoción: *', old('monto_promocion', '$'.number_format( $pliegosobservacion->monto_promocion, 2)),['disabled']) !!}
+                                {!!BootForm::text('monto_promocion', 'Monto de la promoción: *', old('monto_promocion', '$'.number_format( $pliegosobservacion->monto_promocion, 2)),['disabled']) !!}
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                 @btnCancelar('Cancelar', route('pliegosobservacionatencion.index'))
                             </div>
                         </div>
-                        {!! BootForm::close() !!}
+                        {!!BootForm::close() !!}
                     </div>
                 </div>
             </div>
@@ -125,7 +125,24 @@
             $('#monto_promocion').val('$'+formatoMexico(montoacls.toFixed(2)));
         });
     });
+
+    $(document).ready(function() {
+            $('.popupcomentario').colorbox({
+                width:"80%",
+                height:"1050px",
+                maxWidth:700,
+                maxHeight:"1050px",
+                iframe: true,
+                onClosed: function() {
+                    location.reload(true);
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"80%",maxWidth:600, height:"800px", maxHeight:"800px"});
+                 $(window).trigger("resize");
+                }
+            });
+        });
 </script>
-{!! JsValidator::formRequest('App\Http\Requests\PliegosObservacionAnalisisRequest') !!}
+{!!JsValidator::formRequest('App\Http\Requests\PliegosObservacionAnalisisRequest') !!}
 @endsection
 

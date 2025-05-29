@@ -996,6 +996,11 @@ Breadcrumbs::for('remitentes.show', function (BreadcrumbTrail $trail, $auditoria
     $trail->push('Folios Remitentes', route('remitentes.show',$auditoria ));
 
 });
+Breadcrumbs::for('remitentes.index', function (BreadcrumbTrail $trail, $auditoria) {
+    $trail->parent('folioscrr.index',$auditoria);
+    $trail->push('Folios Remitentes', route('remitentes.index',$auditoria ));
+
+});
 
 Breadcrumbs::for('remitentes.create', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('remitentes.show',$auditoria);
@@ -1004,6 +1009,13 @@ Breadcrumbs::for('remitentes.create', function (BreadcrumbTrail $trail,$auditori
 Breadcrumbs::for('remitentes.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('remitentes.show',$auditoria);
     $trail->push('Folios Editar Remitentes', route('remitentes.edit', $auditoria));
+});
+
+Breadcrumbs::for('foliosanexos.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('folioscrr.index',$auditoria);
+    //$trail->push('Acuses', route('foliosanexos.edit',$folio));
+    $trail->push('Acuses', route('foliosanexos.edit', $auditoria));
+
 });
 
 
