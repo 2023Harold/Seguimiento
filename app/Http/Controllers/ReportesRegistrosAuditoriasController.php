@@ -3,8 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\TurnoUI;
+use App\Models\TurnoOIC;
+use App\Models\TurnoArchivoTransferencia;
 use App\Models\AuditoriaAccion;
+use App\Models\Radicacion;
+use App\Models\Comparecencia;
+use App\Models\AcuerdoConclusion;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class ReportesRegistrosAuditoriasController extends Controller
 {
@@ -22,9 +29,39 @@ class ReportesRegistrosAuditoriasController extends Controller
      } 
 
     public function index(Request $request)
-    {
-        $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-        return view('reportesregistrosauditorias.index', compact('request','auditorias')); 
+    {	
+        //$auditorias = $this->setQuery($request)->orderBy('id')->get();
+		$auditorias = Auditoria::select('id')->where('cuenta_publica',getSession('cp'))->count();
+		
+		$turnosui = TurnoUI::whereHas('auditoria', function (Builder $query) {
+											$query->where('cuenta_publica', getSession('cp'));
+									})->count();
+									
+		$turnooic = TurnoOIC::whereHas('auditoria', function (Builder $query) {
+											$query->where('cuenta_publica', getSession('cp'));
+									})->count();
+									
+		$turnotat = TurnoArchivoTransferencia::whereHas('auditoria', function (Builder $query) {
+											$query->where('cuenta_publica', getSession('cp'));
+									})->count();
+									
+		$radicaciones = Radicacion::whereHas('auditoria', function (Builder $query) {
+											$query->where('cuenta_publica', getSession('cp'));
+									})->count();
+									
+		$comparecencias = Comparecencia::whereHas('auditoria', function (Builder $query) {
+											$query->where('cuenta_publica', getSession('cp'));
+									})->count();
+		
+		$acuerdoconclusion = AcuerdoConclusion::whereHas('auditoria', function (Builder $query) {
+											$query->where('cuenta_publica', getSession('cp'));
+									})->count();
+
+		
+		//dd($auditorias,$turnosui,$turnooic,$turnotat);
+		
+		
+        return view('reportesregistrosauditorias.index', compact('request','auditorias','turnosui','turnooic','turnotat','radicaciones','comparecencias','acuerdoconclusion')); 
     }
 
     /**
@@ -96,9 +133,10 @@ class ReportesRegistrosAuditoriasController extends Controller
     public function setQuery(Request $request)
     {
          $query = $this->model;
+		 $query = $query->where('cuenta_publica',getSession('cp'));
 
 
-        if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
+        /*if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
             $query = $query->where('usuario_creacion_id',auth()->id());
         }
 
@@ -134,7 +172,7 @@ class ReportesRegistrosAuditoriasController extends Controller
         if ($request->filled('acto_fiscalizacion')) {
             $actoFiscalizacion=strtolower($request->acto_fiscalizacion);
             $query = $query->whereRaw('LOWER(acto_fiscalizacion) LIKE (?) ',["%{$actoFiscalizacion}%"]);
-        }
+        }*/
 
         return $query;
     }
