@@ -840,6 +840,12 @@ Breadcrumbs::for('cedulaanaliticadesemp.edit', function (BreadcrumbTrail $trail,
     $trail->push('Cédula Analítica Desempeño', route('cedulaanaliticadesemp.edit',$auditoria));
 });
 
+Breadcrumbs::for('agregarcedulainicial.edit', function (BreadcrumbTrail $trail,$cedula,$auditoria) {
+    $trail->parent('cedulainicial.index',$auditoria,$cedula);
+    $trail->push('Acuses', route('agregarcedulainicial.edit',$auditoria,$cedula));
+});
+
+
 //PAC
 Breadcrumbs::for('pac.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');

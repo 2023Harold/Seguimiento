@@ -3,13 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\CatalogoTipologia;
-use App\Models\Auditoria;
-use App\Models\AuditoriaAccion;
 
-
-
-class TipologiaAccionesController extends Controller
+class CedulasRevisionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,15 +21,9 @@ class TipologiaAccionesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Auditoria $auditoria)
+    public function create()
     {
-        //dd($auditoria);
-
-        $tipologia = new CatalogoTipologia();             
-        $accion = 'Agregar';
-        
- 
-        return view('tipologias.form', compact('tipologia','accion','auditoria'));
+        //
     }
 
     /**
@@ -45,20 +34,7 @@ class TipologiaAccionesController extends Controller
      */
     public function store(Request $request)
     {
-     
-        // $accion = AuditoriaAccion::find(getSession('tipologiaacciones_id'));
-        //    dd($accion);
-        //dd($request);
-
-        $auditoria = Auditoria::where('id',$request->tipo_auditoria_id)->first();
-        // dd($auditoria);
-               
-        $request['usuario_creacion_id'] = auth()->user()->id;
-
-        
-        // $request['tipologia_auditoria_id']=getSession('auditoria_id');
-        $tipologia = CatalogoTipologia::create($request->all());
-        return view('agregaracciones.index', compact('tipologia','auditoria','request'));
+        //
     }
 
     /**
@@ -67,11 +43,9 @@ class TipologiaAccionesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Auditoria $auditoria)
+    public function show($id)
     {
-        // $auditoria = Auditoria::find(getSession('auditoria_id'));
-        // dd($auditoria);
-        
+        //
     }
 
     /**

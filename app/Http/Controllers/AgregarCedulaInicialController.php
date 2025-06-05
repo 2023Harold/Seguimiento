@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Auditoria;
-use App\Models\AuditoriaAccion;
-use App\Models\Cedula;
-use App\Models\Revisiones;
 use App\Models\User;
+use App\Models\Cedula;
+use App\Models\Auditoria;
+use App\Models\Revisiones;
 use Illuminate\Http\Request;
+use App\Models\AuditoriaAccion;
 
 class AgregarCedulaInicialController extends Controller
 {
@@ -26,16 +26,9 @@ class AgregarCedulaInicialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-
-        $cedulaA = new Cedula();
-        $accion = 'Agregar';
-        $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para 
-        dd($tipo);
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-
-        return view('agregarcedula.form', compact('cedulaA', 'accion','auditoria', 'tipo'));
+       
     }
 
     /**
@@ -46,17 +39,32 @@ class AgregarCedulaInicialController extends Controller
      */
     public function store(Request $request)
     {
-
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $request['usuario_creacion_id'] = auth()->id();
-        $request['auditoria_id'] = $auditoria->id;
-        dd($request);
-
-        Revisiones::create($request->all());             
         
-        setMessage('se ha agregado el comentario correctamente.');
+
+        if ($request->tipo=='Cedula Analítica Desempeño') {
+            $tipo='Analítica Desempeño';
+        }elseif($request->tipo=='Cedula General Recomendación'){
+            $tipo='General Recomendación';
+        }elseif($request->tipo=='Cedula Analítica'){
+            $tipo='Analítica';
+        }elseif($request->tipo=='Cedula General Seguimiento'){
+            $tipo='General Seguimiento';
+        }elseif($request->tipo=='Cédula General PRAS'){
+            $tipo='General PRAS';
+        }
+
+        mover_archivos($request, ['cedula_cargada']);
+        $request['auditoria_id']=getSession('auditoria_id'); 
+        $request['usuario_creacion_id'] = auth()->user()->id;
+        $request['usuario_modificacion_id'] = auth()->user()->id;
+        $request['cedula_tipo'] = $tipo;
+        $cedula = Cedula::create($request->all());
+        
+        // dd($agregarcedula);
+        setMessage('Se ha cargado correctamente la cédula.');
 
         return view('layouts.close');
+        
     }
 
     /**
@@ -65,9 +73,11 @@ class AgregarCedulaInicialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Revisiones $comentario)
-    {
-        return view('revisionessolicitudes.show', compact('comentario'));
+    public function show(Cedula $cedula)
+    {        
+        $auditoria = $cedula->auditoria; 
+
+        return view('agregarcedula.show', compact( 'auditoria','cedula'));
     }
 
     /**
@@ -76,9 +86,14 @@ class AgregarCedulaInicialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit(Cedula $auditoria, Request $request)
     {
-        //
+    
+        //  setSession('auditoria_id',$auditoria->id);
+        $cedula= Auditoria::find(getSession('auditoria_id'));
+        $tipo = $request->query('tipo');
+        $cedula = new Cedula();
+        return view('agregarcedula.form', compact('cedula', 'auditoria','tipo','request',));   
     }
 
     /**
@@ -88,9 +103,15 @@ class AgregarCedulaInicialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Cedula $auditoria)
     {
-        //
+        $request['usuario_modificacion_id'] = auth()->id();        
+        mover_archivos($request, ['cedula_cargada']);
+    //   dd($request);
+        $cedula->update($request->all());
+        setMessage('Los acuses se han guardado correctamente');
+        dd($request);
+        return redirect()->route('cedulainicial.index');
     }
 
     /**

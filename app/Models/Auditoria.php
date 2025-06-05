@@ -341,7 +341,7 @@ class Auditoria extends Model
             }
             public function cedulageneralrecomendacionesarchivo()
             {
-                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Recomendación');
+                return $this->hasOne(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','General Recomendación');
             }
 
             public function cedulageneralpras()
@@ -350,7 +350,7 @@ class Auditoria extends Model
             }
             public function cedulageneralprasarchivo()
             {
-                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','PRAS');
+                return $this->hasOne(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','General PRAS');
             }
 
             public function cedulaanalitica()
@@ -359,7 +359,7 @@ class Auditoria extends Model
             }
             public function cedulaanaliticaarchivo()
             {
-                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Analítica');
+                return $this->hasOne(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Analítica');
             }
 
             public function cedulaanaliticadesemp()
@@ -368,7 +368,7 @@ class Auditoria extends Model
             }
             public function cedulaanaliticadesemparchivo()
             {
-                return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Analitica Desempeño');
+                return $this->hasOne(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Analítica Desempeño');
             }
 
             public function movimientosCedulaGeneral()
@@ -506,6 +506,10 @@ class Auditoria extends Model
             {
                 return $this->belongsTo(CatalogoTipologia::class, 'id', 'tipo_auditoria_id');
             }
+            //  public function agregarcedulas()
+            // {
+            //     return $this->hasOne(Cedulas::class, 'auditoria_id','id')->where('tipo','Cedula General Seguimiento');     
+            // }
 
 
 }

@@ -45,149 +45,116 @@
                                                         Seguimiento &nbsp;&nbsp;&nbsp;&nbsp;
                                                         <span class="fa fa-eye"></span>
                                                     </a>                               
-                                                </div>
+                                                </div>    
                                                 
-                                                @if(getSession('cp')==2022)
-                                                    <a href="{{ route('agregarcedula.create',$auditoria) }}?tipo=Seguimiento" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario">
-                                                        Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1 "></i>
-                                                    </a>
-                                                @endif    
-                                                <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0 text-center">
-												
-													
-                                                    @if ($totaut==$totalacciones)
-                                                        @if(count($auditoria->cedulageneralseguimiento)>0)
-
-                                                            <!-- ---------------------------------------------------------------------------CG Seguimiento Rechazado ------------------------------------------------------------ -->
-                                                            @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion == 'Rechazado')
-                                                                @can('cedulainicialprimera.update')  
-                                                                <p class="text-gray-600 h4">
-                                                                    Fase: <span class="badge badge-danger">{{str_contains($auditoria->cedulageneralseguimiento[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralseguimiento[0]->fase_autorizacion }}</span>
-                                                                </p>              
-                                                                    {!!BootForm::open(['model' => $auditoria, 'update' => 'cedulainicialprimera.update','id'=>'form']) !!}            
-                                                                        <div class="row">
-                                                                            <div class="col-md-12">                                                
-                                                                                @if (auth()->user()->can('cedulainicialprimera.store') || auth()->user()->can('cedulainicialprimera.update'))
-                                                                                <button type="submit" name="enviar" class="btn btn-primary float-end">Enviar a revisión</button>
-                                                                                @endif
-                                                                            </div>
-                                                                        </div>
-                                                                    {!!BootForm::close() !!}
-                                                                                                                                
-                                                                @else
-                                                                <p class="text-gray-600 h4">
-                                                                    Fase: <span class="badge badge-danger">{{str_contains($auditoria->cedulageneralseguimiento[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralseguimiento[0]->fase_autorizacion }}</span>
-                                                                </p>
-                                                                @endcan                                                           
-                                                            @endif                                                 
-                                                        
-                                                            <!-- ---------------------------------------------------------------------------CG Seguimiento Enviar a Revision o Aprobar------------------------------------------------- -->
-                                                            @if(count($cg_resultado['analistasF'])>0 && count($cg_resultado['analistasL'])== 0 && empty($auditoria->cedulageneralseguimiento[0]->fase_autorizacion))
-                                                                {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulainicialprimera.update','id'=>'form']) !!}            
-                                                                <div class="row">
-                                                                    <div class="col-md-12">                         
-                                                                        {!! BootForm::hidden('cedula2',$nombre)!!}                            
-                                                                        @if (auth()->user()->can('cedulainicialprimera.update'))
-                                                                        <button type="submit" name="enviar" class="btn btn-primary float-end">Enviar a revisión</button>
-                                                                        @endif 
-                                                                    </div>
-                                                                </div>
-                                                                {!! BootForm::close() !!}
-                                                            @elseif(in_array(auth()->user()->id, $cg_resultado['analistasF']) && count($cg_resultado['analistasL'])>0)
-                                                                <a href="{{ route('cedulainicialprimeraanalista.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar float-end">
-                                                                    <li class="fa fa-gavel"></li>
-                                                                    Aprobar
-                                                                </a>                                                    
-                                                            @endif
-
-                                                            <!-- ---------------------------------------------------------------------------CG Seguimiento Revision 01-------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion == 'En revisión 01')
-                                                                @can('cedulainicialprimerarevision01.edit')
-                                                                    @if(in_array(auth()->user()->id, $cg_resultado['lideresF']))
-                                                                        <a href="{{ route('cedulainicialprimerarevision01.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar ">
-                                                                            <li class="fa fa-gavel"></li>
-                                                                            Revisar
-                                                                        </a>
-                                                                    @endif
-                                                                @else
-                                                                    <p class="text-gray-600 h4">
-                                                                        Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralseguimiento[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralseguimiento[0]->fase_autorizacion }}</span>
-                                                                    </p>
-                                                                @endcan
-                                                            @endif
-
-                                                            <!-- ---------------------------------------------------------------------------CG Seguimiento Revision------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion == 'En revisión')
-                                                                @can('cedulainicialprimerarevision.edit')
-                                                                    @if(in_array(auth()->user()->unidad_administrativa_id, $cg_resultado['jefesF']))
-                                                                        <a href="{{ route('cedulainicialprimerarevision.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar">
-                                                                            <li class="fa fa-gavel"></li>
-                                                                            Revisar
-                                                                        </a>
-                                                                    @endif
-                                                                @else
-                                                                    <p class="text-gray-600 h4">
-                                                                        Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralseguimiento[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralseguimiento[0]->fase_autorizacion }}</span>
-                                                                    </p>
-                                                                @endcan
-                                                            @endif
-
-                                                            <!-- ---------------------------------------------------------------------------CG Seguimiento Validar--------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion == 'En validación')
-                                                                @can('cedulainicialprimeravalidacion.edit')
-                                                                    <a href="{{ route('cedulainicialprimeravalidacion.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar">
-                                                                        <li class="fa fa-gavel"></li>
-                                                                        Validar
-                                                                    </a>
-                                                                @else
-                                                                    <p class="text-gray-600 h4">
-                                                                        Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralseguimiento[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralseguimiento[0]->fase_autorizacion }}</span>
-                                                                    </p>
-                                                                @endcan                        
-                                                            @endif    
-                                                            
-                                                            <!-- ---------------------------------------------------------------------------CG Seguimiento Autorizar-------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion == 'En autorización')
-                                                                @can('cedulainicialprimeraautorizacion.edit')
-                                                                    <a href="{{ route('cedulainicialprimeraautorizacion.edit',$auditoria->cedulageneralseguimiento[0]) }}" class="btn btn-primary popuprevisar">
-                                                                        <li class="fa fa-gavel"></li>
-                                                                        Autorizar
-                                                                    </a>                                                             
-                                                                @else
-                                                                    <p class="text-gray-600 h4">
-                                                                        Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralseguimiento[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralseguimiento[0]->fase_autorizacion }}</span>
-                                                                    </p>
-                                                                @endcan
-                                                            @endif
-                                                            
-                                                            <!-- ---------------------------------------------------------------------------CG Seguimiento Autorizado------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralseguimiento[0]->fase_autorizacion=='Autorizado')
-                                                                <p class="text-gray-600 h4">
-                                                                    Fase: <span class="badge badge-success">{{str_contains($auditoria->cedulageneralseguimiento[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralseguimiento[0]->fase_autorizacion }}</span>
-                                                                </p>
-                                                                {{-- <a href="#" class="btn btn-outline-primary"><span class="fa fa-list"></span> Movimientos</a> --}}
-                                                            @endif                                                         
-                                                        @else  
-
-                                                        <!-- ---------------------------------------------------------------------------CG Seguimiento Enviar a revision------------------------------------------------------------------------ -->
-                                                        {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulainicialprimera.update','id'=>'form']) !!}            
-                                                            <div class="row">
-                                                                <div class="col-md-12">                                                                                    
-                                                                    @if (auth()->user()->can('cedulainicialprimera.update'))
-                                                                        <button type="submit" name="enviar" class="btn font-weight-bolder btn-primary py-4 px-6">Enviar a revisión</button>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            {!! BootForm::close() !!}                                                                                                      
-                                                        @endif
-                                                    @endif 
-												
+                                 @if((getSession('cp')==2022) )        
+                                   
+                                    @if (empty($auditoria->cedulaanaliticadesemparchivo->cedula_cargada) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
+                                        @can('agregarcedulainicial.edit')
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula Analítica Desempeño" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                                    Agregar Cédula <i class="bi bi-cloud-arrow-up-fill fs-1 "></i>
+                                                </a>             
                                                 </div>
+                                            </div>
+                                        @endcan
+                                    @endif
+
+                                 @endif   
+                                 
+                                 @if (!empty($auditoria->cedulaanaliticadesemparchivo->cedula_cargada))                                      
+                                            <td class="text-center">
+                                                @if (!empty($auditoria->cedulaanaliticadesemparchivo->cedula_cargada))
+                                                <a href="{{ asset($auditoria->cedulaanaliticadesemparchivo->cedula_cargada) }}" target="_blank">
+                                                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->cedulaanaliticadesemparchivo->cedula_cargada)) ?>
+                                                </a>
+                                                @endif
+                                @endif                
+<!-- ********************************************************************************************************** Fasde de Autorización Seguimiento ******************************************************************************************************************************************* -->
+                            @if (!empty($auditoria->cedulaanaliticadesemparchivo))
+                                @if (empty($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion)||$auditoria->cedulaanaliticadesemparchivo->fase_autorizacion=='Rechazado')
+                                    <span class="badge badge-light-danger">{{ $auditoria->cedulaanaliticadesemparchivo->fase_autorizacion }} </span>
+                                    @can('agregarcedulainicial.edit')
+                                    <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula Analítica Desempeño" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                    <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+                                    </a>
+                                    @endcan
+                                @endif
+                                 @if(getSession('cp')!=2023)
+                                 @if ($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion == 'En revisión')
+                                    @can('cedulaanaliticadesempenorevision.edit')
+                                                            <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulaanaliticadesemparchivo) }}"class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario">
+                                                                <li class="fa fa-gavel"></li>
+                                                                Revisar
+                                                            </a>
+                                                        @else
+                                                            <span class="badge badge-light-warning">{{ $auditoria->cedulaanaliticadesemparchivo->fase_autorizacion }} </span>
+                                    @endcan
+                                                    @endif
+                                                @endif                                              
+                                                @if ($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion=='Autorizado')
+                                                    <span class="badge badge-light-success">{{ $auditoria->cedulaanaliticadesemparchivo->fase_autorizacion }} </span>
+                                                @endif
+                                @endif   
+                                @if (!empty($auditoria->cedulaanaliticadesemparchivo)||(optional($auditoria->cedulaanaliticadesemparchivo)->fase_autorizacion=='Rechazado'))
+                                                    @if (getSession('cp')==2022 )
+                                                        @can('agregarcedulainicial.edit')
+                                                            <a href="{{ route('cedulasenvio.edit',$auditoria->cedulaanaliticadesemparchivo) }}" class="btn btn-primary">
+                                                            Enviar
+                                                            </a>
+                                                        @endcan                                                    
+                                @endif 
+                             @endif
+                            @endif
+
+                                                {{-- @if((getSession('cp')==2022) )
+                                                     @if($auditoria->cedulaanaliticadesemparchivo)
+                                                            @can ('agregarcedulainicial.show')
+                                                                <a href="{{ route('agregarcedulainicial.show', $auditoria) }} " >
+                                                                @btnFile($auditoria->cedulaanaliticadesemparchivo->cedula_cargada)                                             
+                                                                </a>                                                                                                            
+                                                            @endcan
+                                                    @elseif (empty($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion)||$auditoria->cedulaanaliticadesemparchivo->fase_autorizacion=='Rechazado')                                                    
+                                                        @can('agregarcedulainicial.edit')
+                                                            <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula Analítica Desempeño" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                                                Agregar Cédula <i class="bi bi-cloud-arrow-up-fill fs-1 "></i>
+                                                            </a>                                                      
+                                                        @endcan 
+                                                    @else
+                                                        <span class="badge badge-light-danger">{{ $auditoria->cedulaanaliticadesemparchivo->fase_autorizacion }} </span>                                                       
+                                                    @endif
+                                                @endif
+                                                <td class="text-center"> --}}
+                                                  {{-- @if($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion == 'En revisión') --}}
+                                                        {{-- @can('cedulaanaliticadesempenorevision.edit')
+                                                            <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulaanaliticadesemparchivo) }}" class="btn btn-primary">
+                                                                <li class="fa fa-gavel"></li>
+                                                                Revisar
+                                                            </a>
+                                                        @else
+                                                            <span class="badge badge-light-warning">{{ $auditoria->cedulaanaliticadesemparchivo->fase_autorizacion }} </span>
+                                                        @endcan --}}
+                                                    {{-- @endif --}}
+                                                    {{-- @if (empty($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion) ||$auditoria->cedulaanaliticadesemparchivo->fase_autorizacion=='Rechazado')
+                                                            @if (getSession('cp')==2022 )
+                                                                @can('agregarcedulainicial.edit')
+                                                                    <a href="{{ route('cedulasenvio.edit',$auditoria->cedulaanaliticadesemparchivo) }}" class="btn btn-primary">
+                                                                    Enviar
+                                                                    </a>
+                                                                @endcan
+                                                             @else --}}
+                                                                {{-- <p class="text-gray-600 h4">
+                                                                    Fase: <span class="badge badge-danger">{{str_contains($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanaliticadesemparchivo->fase_autorizacion }}</span>
+                                                                </p>                                                               --}}
+                                                            {{-- @endif
+                                                    @endif
+                                                </td>                                              
                                             </div>                                            
                                         </div>
                                     </div>
-                                </div>
-                                @endif
+                                </div>--}}
+                                {{-- @endif  --}}
 
                                 <!-- *************************************************************************************CG Recomendación ************************************************************************************************** -->
                                 @if (count($auditoria->totalrecomendacion)>0)    
@@ -201,9 +168,75 @@
                                                 <div class="d-flex flex-column mr-3 text-center">
                                                     <a href="{{ route('cedulageneralrecomendacion.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                         Recomendaciones  &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
-                                                    </a>          
-                                                    @if(getSession('cp')==2022)
-                                                        <a href="#" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
+                                                    </a>    
+                                                 </div>          
+                                                 
+                                                 @if((getSession('cp')==2022) )        
+                                   
+                                    @if (empty($auditoria->cedulageneralrecomendacionesarchivo->cedula_cargada) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
+                                        @can('agregarcedulainicial.edit')
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula General Recomendación" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                                    Agregar Cédula <i class="bi bi-cloud-arrow-up-fill fs-1 "></i>
+                                                </a>             
+                                                </div>
+                                            </div>
+                                        @endcan
+                                    @endif
+
+                                 @endif   
+                                 
+                                 @if (!empty($auditoria->cedulageneralrecomendacionesarchivo->cedula_cargada))                                      
+                                            <td class="text-center">
+                                                @if (!empty($auditoria->cedulageneralrecomendacionesarchivo->cedula_cargada))
+                                                <a href="{{ asset($auditoria->cedulageneralrecomendacionesarchivo->cedula_cargada) }}" target="_blank">
+                                                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->cedulageneralrecomendacionesarchivo->cedula_cargada)) ?>
+                                                </a>
+                                                @endif
+                                @endif                
+<!-- ********************************************************************************************************** Fasde de Autorización Recomendaciones ******************************************************************************************************************************************* -->
+                            @if (!empty($auditoria->cedulageneralrecomendacionesarchivo))
+                                @if (empty($auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion)||$auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion=='Rechazado')
+                                    <span class="badge badge-light-danger">{{ $auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion }} </span>
+                                    @can('agregarcedulainicial.edit')
+                                    <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula General Recomendación" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                    <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+                                    </a>
+                                    @endcan
+                                @endif
+                                 @if(getSession('cp')!=2023)
+                                 @if ($auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion == 'En revisión')
+                                    @can('cedulaanaliticadesempenorevision.edit')
+                                                            <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulageneralrecomendacionesarchivo) }}"class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario">
+                                                                <li class="fa fa-gavel"></li>
+                                                                Revisar
+                                                            </a>
+                                                        @else
+                                                            <span class="badge badge-light-warning">{{ $auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion }} </span>
+                                    @endcan
+                                                    @endif
+                                                @endif                                              
+                                                @if ($auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion=='Autorizado')
+                                                    <span class="badge badge-light-success">{{ $auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion }} </span>
+                                                @endif
+                                @endif   
+                                @if (!empty($auditoria->cedulageneralrecomendacionesarchivo)&&(empty($auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion)||$auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion=='Rechazado'))
+                                                    @if (getSession('cp')==2022 )
+                                                        @can('agregarcedulainicial.edit')
+                                                            <a href="{{ route('cedulasenvio.edit',$auditoria->cedulageneralrecomendacionesarchivo) }}" class="btn btn-primary">
+                                                            Enviar
+                                                            </a>
+                                                        @endcan                                                    
+                                @endif 
+                             @endif                                          
+                                                 
+                                           
+                                                 
+                                                 
+                                                 
+                                                    {{-- @if(getSession('cp')==2022)
+                                                         <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula General Recomendación" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario">
                                                            Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1"></i>
                                                         </a>
                                                     @endif                                      
@@ -211,10 +244,10 @@
                                                 <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0 text-center">
                                                                                                       
                                                     @if (count($auditoria->totalrecomendacion)==$totalrecomendacionesautorizadas)
-                                                        @if(count($auditoria->cedulageneralrecomendaciones)>0) 
+                                                        @if(count($auditoria->cedulageneralrecomendaciones)>0)  --}}
 
                                                         <!-- --------------------------------------------------------------------------- CG Recomendación Rechazado----------------------------------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'Rechazado')
+                                                            {{-- @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'Rechazado')
                                                                 @can('cedulageneralrecomendacion.update')   
                                                                 <p class="text-gray-600 h4">
                                                                     Fase: <span class="badge badge-danger">{{str_contains($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion }}</span>
@@ -231,13 +264,13 @@
                                                                 @else
                                                                     <p class="text-gray-600 h4">
                                                                         Fase: <span class="badge badge-danger">{{str_contains($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion }}</span>
-                                                                    </p>
+                                                                    </p> --}}
                                                                     {{-- <a href="#" class="btn btn-outline-primary"><span class="fa fa-list"></span> Movimientos</a> --}}
-                                                                @endcan
-                                                            @endif 
+                                                                {{-- @endcan
+                                                            @endif  --}}
 
                                                             <!-- --------------------------------------------------------------------------- CG Recomendación Enviar a Revision o Aprobar----------------------------------------------------------------------------------------------------- -->
-                                                            @if(count($cg_recresultado['analistasF'])>0 && count($cg_recresultado['analistasL'])== 0 && empty($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion))                           
+                                                            {{-- @if(count($cg_recresultado['analistasF'])>0 && count($cg_recresultado['analistasL'])== 0 && empty($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion))                           
                                                                 {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulageneralrecomendacion.update','id'=>'form']) !!}            
                                                                 <div class="row">
                                                                     <div class="col-md-12">     
@@ -252,9 +285,9 @@
                                                                     <li class="fa fa-gavel"></li>
                                                                     Aprobar
                                                                 </a>
-                                                            @endif                                                              
+                                                            @endif                                                               --}}
                                                             <!-- --------------------------------------------------------------------------- CG Recomendación Revisar01----------------------------------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'En revisión 01')          
+                                                            {{-- @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'En revisión 01')          
                                                                 @can('cedgralrecomendacionrevision01.edit') 
                                                                     @if(in_array(auth()->user()->id, $cg_recresultado['lideresF']))
                                                                         <a href="{{ route('cedgralrecomendacionrevision01.edit',$auditoria->cedulageneralrecomendaciones[0]) }}" class="btn btn-primary popuprevisar">
@@ -265,13 +298,13 @@
                                                                 @else
                                                                     <p class="text-gray-600 h4">
                                                                         Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion }}</span>
-                                                                    </p>
+                                                                    </p> --}}
                                                                     {{-- <a href="#" class="btn btn-outline-primary"><span class="fa fa-list"></span> Movimientos</a> --}}
-                                                                @endcan
-                                                            @endif
+                                                                {{-- @endcan
+                                                            @endif --}}
 
                                                             <!-- --------------------------------------------------------------------------- CG Recomendación Revisar----------------------------------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'En revisión')     
+                                                            {{-- @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'En revisión')     
                                                                 @can('cedgralrecomendacionrevision.edit')
                                                                     @if(in_array(auth()->user()->unidad_administrativa_id, $cg_recresultado['jefesF']))
                                                                         <a href="{{ route('cedgralrecomendacionrevision.edit',$auditoria->cedulageneralrecomendaciones[0]) }}" class="btn btn-primary popuprevisar">
@@ -282,13 +315,13 @@
                                                                 @else
                                                                     <p class="text-gray-600 h4">
                                                                         Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion }}</span>
-                                                                    </p>
+                                                                    </p> --}}
                                                                     {{-- <a href="#" class="btn btn-outline-primary"><span class="fa fa-list"></span> Movimientos</a>                                                             --}}
-                                                                @endcan
-                                                            @endif
+                                                                {{-- @endcan
+                                                            @endif --}}
 
                                                             <!-- --------------------------------------------------------------------------- CG Recomendación Validar----------------------------------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'En validación')
+                                                            {{-- @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'En validación')
                                                                 @can('cedgralrecomendacionvalidacion.edit')
                                                                     <a href="{{ route('cedgralrecomendacionvalidacion.edit',$auditoria->cedulageneralrecomendaciones[0]) }}" class="btn btn-primary popuprevisar">
                                                                         <li class="fa fa-gavel"></li>
@@ -299,10 +332,10 @@
                                                                         Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion }}</span>
                                                                     </p>
                                                                 @endcan
-                                                            @endif
+                                                            @endif --}}
 
                                                             <!-- --------------------------------------------------------------------------- CG Recomendación Autorizar----------------------------------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'En autorización')
+                                                            {{-- @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion == 'En autorización')
                                                                 @can('cedgralrecomendacionautorizacion.edit')
                                                                     <a href="{{ route('cedgralrecomendacionautorizacion.edit',$auditoria->cedulageneralrecomendaciones[0]) }}" class="btn btn-primary popuprevisar">
                                                                         <li class="fa fa-gavel"></li>
@@ -313,18 +346,18 @@
                                                                         Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion }}</span>
                                                                     </p>
                                                                 @endcan
-                                                            @endif
+                                                            @endif --}}
                                                             
                                                             <!-- --------------------------------------------------------------------------- CG Recomendación Autorizado----------------------------------------------------------------------------------------------------- -->
-                                                            @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion=='Autorizado')
+                                                            {{-- @if ($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion=='Autorizado')
                                                                 <p class="text-gray-600 h4">
                                                                     Fase: <span class="badge badge-success">{{str_contains($auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralrecomendaciones[0]->fase_autorizacion }}</span>
                                                                 </p>
                                                             @endif
 
-                                                        @else
+                                                        @else --}}
                                                         <!-- --------------------------------------------------------------------------- CG Recomendaciones Enviar a revision----------------------------------------------------------------------------------------------------------------------------------- -->   
-                                                            {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulageneralrecomendacion.update','id'=>'form']) !!}                                                                      
+                                                            {{-- {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulageneralrecomendacion.update','id'=>'form']) !!}                                                                      
                                                                 <div class="row">
                                                                     <div class="col-md-12" >
                                                                         @if (auth()->user()->can('cedulageneralrecomendacion.update'))
@@ -334,7 +367,7 @@
                                                                 </div>
                                                             {!! BootForm::close() !!}
                                                         @endif
-                                                    @endif
+                                                    @endif --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -355,16 +388,94 @@
                                                     <a href="{{ route('cedulageneralpras.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
                                                         PRAS &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span> 
                                                     </a> 
-                                                    @if(getSession('cp')==2022)
-                                                        <a href="#" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
+                                                    @if(getSession('cp')==2022)                                                       
                                                             Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1"></i>
                                                         </a>
                                                     @endif                                                     
                                                 </div>
-                                                @if (count($auditoria->totalpras)==$totalprasautorizadas)                                                
+
+             @if((getSession('cp')==2022) )        
+                                   
+                                    @if (empty($auditoria->cedulageneralprasarchivo->cedula_cargada) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
+                                        @can('agregarcedulainicial.edit')
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cédula General PRAS" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                                    Agregar Cédula <i class="bi bi-cloud-arrow-up-fill fs-1 "></i>
+                                                </a>             
+                                                </div>
+                                            </div>
+                                        @endcan
+                                    @endif
+
+                                 @endif   
+                                 
+                                 @if (!empty($auditoria->cedulageneralprasarchivo->cedula_cargada))                                      
+                                            <td class="text-center">
+                                                @if (!empty($auditoria->cedulageneralprasarchivo->cedula_cargada))
+                                                <a href="{{ asset($auditoria->cedulageneralprasarchivo->cedula_cargada) }}" target="_blank">
+                                                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->cedulageneralprasarchivo->cedula_cargada)) ?>
+                                                </a>
+                                                @endif
+                                @endif                
+<!-- ********************************************************************************************************** Fasde de Autorización PRAS ******************************************************************************************************************************************* -->
+                            @if (!empty($auditoria->cedulageneralprasarchivo))
+                                @if (empty($auditoria->cedulageneralprasarchivo->fase_autorizacion)||$auditoria->cedulageneralprasarchivo->fase_autorizacion=='Rechazado')
+                                    <span class="badge badge-light-danger">{{ $auditoria->cedulageneralprasarchivo->fase_autorizacion }} </span>
+                                    @can('agregarcedulainicial.edit')
+                                    <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cédula General PRAS" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                    <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+                                    </a>
+                                    @endcan
+                                @endif
+                                 @if(getSession('cp')!=2023)
+                                 @if ($auditoria->cedulageneralprasarchivo->fase_autorizacion == 'En revisión')
+                                    @can('cedulaanaliticadesempenorevision.edit')
+                                                            <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulageneralprasarchivo) }}"class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario">
+                                                                <li class="fa fa-gavel"></li>
+                                                                Revisar
+                                                            </a>
+                                                        @else
+                                                            <span class="badge badge-light-warning">{{ $auditoria->cedulageneralprasarchivo->fase_autorizacion }} </span>
+                                    @endcan
+                                                    @endif
+                                                @endif                                              
+                                                @if ($auditoria->cedulageneralprasarchivo->fase_autorizacion=='Autorizado')
+                                                    <span class="badge badge-light-success">{{ $auditoria->cedulageneralprasarchivo->fase_autorizacion }} </span>
+                                                @endif
+                                @endif   
+                                @if (!empty($auditoria->cedulageneralprasarchivo)&&(empty($auditoria->cedulageneralprasarchivo->fase_autorizacion)||$auditoria->cedulageneralprasarchivo->fase_autorizacion=='Rechazado'))
+                                                    @if (getSession('cp')==2022 )
+                                                        @can('agregarcedulainicial.edit')
+                                                            <a href="{{ route('cedulasenvio.edit',$auditoria->cedulageneralprasarchivo) }}" class="btn btn-primary">
+                                                            Enviar
+                                                            </a>
+                                                        @endcan                                                    
+                                @endif 
+                             @endif 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                {{-- @if (count($auditoria->totalpras)==$totalprasautorizadas)                                                
                                                     @if(count($auditoria->cedulageneralpras)>0)    
                                                     
-                                                        <!-- --------------------------------------------------------------------------- CG PRAS Rechazado----------------------------------------------------------------------------------------------------- -->
+                                                      
                                                         @if ($auditoria->cedulageneralpras[0]->fase_autorizacion == 'Rechazado')
                                                             @can('cedulageneralpras.update')                
                                                                 {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulageneralpras.update','id'=>'form']) !!}            
@@ -383,7 +494,7 @@
                                                             @endcan
                                                         @endif 
                                                         
-                                                         <!-- --------------------------------------------------------------------------- CG PRAS Enviar a Revision o Aprobar----------------------------------------------------------------------------------------------------- -->
+                                                         
                                                         @if(count($cg_prasresultado['lideresF'])>0 && count($cg_prasresultado['lideresL'])== 0 && empty($auditoria->cedulageneralpras[0]->fase_autorizacion))                           
                                                             {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulageneralpras.update','id'=>'form']) !!}            
                                                             <div class="row">
@@ -401,8 +512,8 @@
                                                             </a>
                                                         @endif
 
-                                                        <!-- --------------------------------------------------------------------------- CG PRAS Revisar01----------------------------------------------------------------------------------------------------- -->
-                                                        {{-- @if ($auditoria->cedulageneralpras[0]->fase_autorizacion == 'En revisión 01')                                                        
+                                                        
+                                                        @if ($auditoria->cedulageneralpras[0]->fase_autorizacion == 'En revisión 01')                                                        
                                                             @can('cedulageneralprasrevision01.edit')                                                             
                                                                 @if(in_array(auth()->user()->id,$cg_prasresultado['lideresF']))                                                              
                                                                     <a href="{{ route('cedulageneralprasrevision01.edit',$auditoria->cedulageneralpras[0]) }}" class="btn btn-primary popuprevisar">
@@ -415,9 +526,9 @@
                                                                     Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulageneralpras[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralpras[0]->fase_autorizacion }}</span>
                                                                 </p>
                                                             @endcan
-                                                        @endif --}}
+                                                        @endif
 
-                                                        <!-- --------------------------------------------------------------------------- CG PRAS Revisar----------------------------------------------------------------------------------------------------- -->
+                                                        
                                                         @if ($auditoria->cedulageneralpras[0]->fase_autorizacion == 'En revisión')                    
                                                             @can('cedulageneralprasrevision.edit')
                                                                 @if(in_array(auth()->user()->unidad_administrativa_id, $cg_prasresultado['jefesF']))
@@ -433,7 +544,7 @@
                                                             @endcan
                                                         @endif
 
-                                                        <!-- --------------------------------------------------------------------------- CG PRAS Validar----------------------------------------------------------------------------------------------------- -->
+                                                       
                                                         @if ($auditoria->cedulageneralpras[0]->fase_autorizacion == 'En validación')
                                                             @can('cedulageneralprasvalidacion.edit')
                                                                 <a href="{{ route('cedulageneralprasvalidacion.edit',$auditoria->cedulageneralpras[0]) }}" class="btn btn-primary popuprevisar">
@@ -447,7 +558,7 @@
                                                             @endcan
                                                         @endif
 
-                                                        <!-- --------------------------------------------------------------------------- CG PRAS Autorizar----------------------------------------------------------------------------------------------------- -->
+                                                      
                                                         @if ($auditoria->cedulageneralpras[0]->fase_autorizacion == 'En autorización')
                                                             @can('cedulageneralprasautorizacion.edit')
                                                                 <a href="{{ route('cedulageneralprasautorizacion.edit',$auditoria->cedulageneralpras[0]) }}" class="btn btn-primary popuprevisar">
@@ -461,7 +572,7 @@
                                                             @endcan
                                                         @endif
                                                         
-                                                        <!-- --------------------------------------------------------------------------- CG PRAS Autorizado----------------------------------------------------------------------------------------------------- -->
+                                                        
                                                         @if ($auditoria->cedulageneralpras[0]->fase_autorizacion=='Autorizado')
                                                             <p class="text-gray-600 h4">
                                                                 Fase: <span class="badge badge-success">{{str_contains($auditoria->cedulageneralpras[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulageneralpras[0]->fase_autorizacion }}</span>
@@ -469,7 +580,7 @@
                                                         @endif                                                    
                                                     @else  
 
-                                                         <!-- --------------------------------------------------------------------------- CG PRAS Enviar a revision----------------------------------------------------------------------------------------------------------------------------------- -->   
+                                                         
                                                         {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulageneralpras.update','id'=>'form']) !!} 
                                                         <div class="row">
                                                             <div class="col-md-12" >
@@ -484,7 +595,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>  --}}
                                 @endif                                   
                             </div>
                         </div>
@@ -507,104 +618,129 @@
                                             <div class="d-flex align-items-center justify-content-between p-4 flex-lg-wrap flex-xl-nowrap">
                                                 <div class="d-flex flex-column mr-3 text-center">
                                                     <a href="{{ route('cedulaanalitica.edit',$auditoria) }}" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
-                                                       Seguimiento &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
+                                                       Seguimiento 2 &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                     </a>
-                                                    @if(getSession('cp')==2022)
-                                                        <a href="#" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
-                                                            Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1"></i>
-                                                        </a>
-                                                    @endif  
-                                                </div>                                               
-                                                <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0 text-center">
-                                                @if ($totaut==$totalacciones)
-                                                    @if(count($auditoria->cedulaanalitica)>0) 
+                                                </div>     
+                            @if((getSession('cp')==2022) )        
+                                   
+                                    @if (empty($auditoria->cedulaanaliticaarchivo->cedula_cargada) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
+                                        @can('agregarcedulainicial.edit')
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula Analítica" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                                    Agregar Cédula <i class="bi bi-cloud-arrow-up-fill fs-1 "></i>
+                                                </a>             
+                                                </div>
+                                            </div>
+                                        @endcan
+                                    @endif
+
+                                 @endif   
+                                 
+                                 @if (!empty($auditoria->cedulaanaliticaarchivo->cedula_cargada))                                      
+                                            <td class="text-center">
+                                                @if (!empty($auditoria->cedulaanaliticaarchivo->cedula_cargada))
+                                                <a href="{{ asset($auditoria->cedulaanaliticaarchivo->cedula_cargada) }}" target="_blank">
+                                                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->cedulaanaliticaarchivo->cedula_cargada)) ?>
+                                                </a>
+                                                @endif
+                                @endif                
+<!-- ********************************************************************************************************** Fasde de Autorización Seguimiento ******************************************************************************************************************************************* -->
+                            @if (!empty($auditoria->cedulaanaliticaarchivo))
+                                @if (empty($auditoria->cedulaanaliticaarchivo->fase_autorizacion)||$auditoria->cedulaanaliticaarchivo->fase_autorizacion=='Rechazado')
+                                    <span class="badge badge-light-danger">{{ $auditoria->cedulaanaliticaarchivo->fase_autorizacion }} </span>
+                                    @can('agregarcedulainicial.edit')
+                                    <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula Analítica" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                    <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+                                    </a>
+                                    @endcan
+                                @endif
+                                 @if(getSession('cp')!=2023)
+                                 @if ($auditoria->cedulaanaliticaarchivo->fase_autorizacion == 'En revisión')
+                                    @can('cedulaanaliticadesempenorevision.edit')
+                                                            <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulaanaliticaarchivo) }}"class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario">
+                                                                <li class="fa fa-gavel"></li>
+                                                                Revisar
+                                                            </a>
+                                                        @else
+                                                            <span class="badge badge-light-warning">{{ $auditoria->cedulaanaliticaarchivo->fase_autorizacion }} </span>
+                                    @endcan
+                                                    @endif
+                                                @endif                                              
+                                                @if ($auditoria->cedulaanaliticaarchivo->fase_autorizacion=='Autorizado')
+                                                    <span class="badge badge-light-success">{{ $auditoria->cedulaanaliticaarchivo->fase_autorizacion }} </span>
+                                                @endif
+                                @endif   
+                                {{-- {{ dd($auditoria->cedulaanaliticaarchivo) }} --}}
+                                @if (!empty($auditoria->cedulaanaliticaarchivo)&&(empty($auditoria->cedulaanaliticaarchivo->fase_autorizacion)||$auditoria->cedulaanaliticaarchivo->fase_autorizacion=='Rechazado'))
+                                                    @if (getSession('cp')==2022 )
+                                                        @can('agregarcedulainicial.edit')
+                                                            <a href="{{ route('cedulasenvio.edit',$auditoria->cedulaanaliticaarchivo) }}" class="btn btn-primary">
+                                                            Enviar
+                                                            </a>
+                                                        @endcan                                                    
+                                @endif 
+                             @endif
+                            
+
+
+{{-- 
+
+                                                    @if((getSession('cp')==2022) )
+                                                     @if($auditoria->cedulaanaliticaarchivo)
+                                                            @can ('agregarcedulainicial.show')
+                                                                <a href="{{ route('agregarcedulainicial.show', $auditoria->cedulaanaliticaarchivo) }} " >
+                                                                @btnFile($auditoria->cedulaanaliticaarchivo->cedula_cargada)                                             
+                                                                </a>                                                                                                            
+                                                            @endcan
+                                                    @elseif (empty($auditoria->cedulaanaliticaarchivo->fase_autorizacion)||$auditoria->cedulaanaliticaarchivo->fase_autorizacion=='Rechazado')                                                    
+                                                        @can('agregarcedulainicial.edit')
+                                                            <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula Analítica" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario"> 
+                                                                Agregar Cédula <i class="bi bi-cloud-arrow-up-fill fs-1 "></i>
+                                                            </a>                                                      
+                                                        @endcan 
+                                                    @else
+                                                        <span class="badge badge-light-danger">{{ $auditoria->cedulaanaliticaarchivo->fase_autorizacion }} </span>                                                       
+                                                    @endif
+                                                @endif
+                                                <td class="text-center">
+ --}}
+
+
+
+
+
+
+
+                                                  {{-- @if($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion == 'En revisión')
+                                                        @can('cedulasrevision.edit')
+                                                            <a href="{{ route('cedulasrevision.edit',$auditoria->cedulaanaliticadesemparchivo) }}" class="btn btn-primary">
+                                                                <li class="fa fa-gavel"></li>
+                                                                Revisar
+                                                            </a>
+                                                        @else
+                                                            <span class="badge badge-light-warning">{{ $auditoria->cedulaanaliticadesemparchivo->fase_autorizacion }} </span>
+                                                        @endcan
+                                                    @endif
+                                                    @if (empty($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion) ||$auditoria->cedulaanaliticadesemparchivo->fase_autorizacion=='Rechazado')
+                                                            @if (getSession('cp')==2022 )
+                                                                @can('agregarcedulainicial.edit')
+                                                                    <a href="{{ route('cedulasenvio.edit',$auditoria->cedulaanaliticadesemparchivo) }}" class="btn btn-primary">
+                                                                    Enviar
+                                                                    </a>
+                                                                @endcan
+                                                             @else
+                                                                <p class="text-gray-600 h4">
+                                                                    Fase: <span class="badge badge-danger">{{str_contains($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanaliticadesemparchivo->fase_autorizacion }}</span>
+                                                                </p>                                                              
+                                                            @endif
+                                                    @endif --}}
+                                                </td>
 
                                                         <!-- --------------------------------------------------------------------------- CA Seguimiento Rechazado----------------------------------------------------------------------------------------------------- -->
-                                                        @if ($auditoria->cedulaanalitica[0]->fase_autorizacion == 'Rechazado')
-                                                            @can('cedulaanalitica.update')  
-                                                                {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulaanalitica.update','id'=>'form']) !!}            
-                                                                <div class="row">
-                                                                    <div class="col-md-12">         
-                                                                        @if (auth()->user()->can('cedulaanalitica.update'))
-                                                                            <button type="submit" name="enviar" class="btn btn-primary">Enviar a revisión</button>
-                                                                        @endif 
-                                                                    </div>
-                                                                </div>
-                                                                {!! BootForm::close() !!}
-                                                            @else
-                                                                <p class="text-gray-600 h4">
-                                                                    Fase: <span class="badge badge-danger">{{str_contains($auditoria->cedulaanalitica[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanalitica[0]->fase_autorizacion }}</span>
-                                                                </p>
-                                                            @endcan
-                                                        @endif 
-
-                                                         <!-- --------------------------------------------------------------------------- CA Seguimiento Enviar a Revision o Aprobar----------------------------------------------------------------------------------------------------- -->
-                                                        @if(count($ca_seguimiento['analistasF'])>0 && count($ca_seguimiento['analistasL'])== 0 && empty($auditoria->cedulaanalitica[0]->fase_autorizacion))                           
-                                                            {!! BootForm::open(['model' => $auditoria, 'update' => 'cedulaanalitica.update','id'=>'form']) !!}            
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    @if (auth()->user()->can('cedulaanalitica.update'))
-                                                                        <button type="submit" name="enviar" class="btn btn-primary float-end">Iniciar revisión</button>
-                                                                    @endif 
-                                                                </div>
-                                                            </div>
-                                                            {!! BootForm::close() !!}
-                                                        @elseif(in_array(auth()->user()->id, $ca_seguimiento['analistasF']) && count($ca_seguimiento['analistasL'])>0)                    
-                                                            <a href="{{ route('cedulaanaliticaanalista.edit',$auditoria->cedulaanalitica[0]) }}" class="btn btn-primary popuprevisar float-end">
-                                                                <li class="fa fa-gavel"></li>
-                                                                Aprobar
-                                                            </a>
-                                                        @endif                    
-
-
-                                                        <!-- --------------------------------------------------------------------------- CA Seguimiento Revisar01----------------------------------------------------------------------------------------------------- -->
-                                                        @if ($auditoria->cedulaanalitica[0]->fase_autorizacion == 'En revisión 01')          
-                                                            @can('cedulaanaliticarevision01.edit') 
-                                                                @if(in_array(auth()->user()->id, $ca_seguimiento['lideresF']))
-                                                                    <a href="{{ route('cedulaanaliticarevision01.edit',$auditoria->cedulaanalitica[0]) }}" class="btn btn-primary popuprevisar">
-                                                                        <li class="fa fa-gavel"></li>
-                                                                        Revisar
-                                                                    </a>
-                                                                @endif
-                                                            @else
-                                                                <p class="text-gray-600 h4">
-                                                                    Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulaanalitica[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanalitica[0]->fase_autorizacion }}</span>
-                                                                </p>
-                                                            @endcan
-                                                        @endif
-
-                                                        <!-- --------------------------------------------------------------------------- CA Seguimiento Revisar----------------------------------------------------------------------------------------------------- -->
-                                                        @if ($auditoria->cedulaanalitica[0]->fase_autorizacion == 'En revisión')     
-                                                            @can('cedulaanaliticarevision.edit')
-                                                                @if(in_array(auth()->user()->unidad_administrativa_id, $ca_seguimiento['jefesF']))
-                                                                    <a href="{{ route('cedulaanaliticarevision.edit',$auditoria->cedulaanalitica[0]) }}" class="btn btn-primary popuprevisar">
-                                                                        <li class="fa fa-gavel"></li>
-                                                                        Revisar
-                                                                    </a>
-                                                                @endif
-                                                            @else
-                                                                <p class="text-gray-600 h4">
-                                                                    Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulaanalitica[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanalitica[0]->fase_autorizacion }}</span>
-                                                                </p>
-                                                            @endcan
-                                                        @endif
-
-                                                        <!-- --------------------------------------------------------------------------- CA Seguimiento Validar----------------------------------------------------------------------------------------------------- -->
-                                                        @if ($auditoria->cedulaanalitica[0]->fase_autorizacion == 'En validación')
-                                                            @can('cedulaanaliticavalidacion.edit')
-                                                                <a href="{{ route('cedulaanaliticavalidacion.edit',$auditoria->cedulaanalitica[0]) }}" class="btn btn-primary popuprevisar">
-                                                                    <li class="fa fa-gavel"></li>
-                                                                    Validar
-                                                                </a>
-                                                            @else
-                                                                <p class="text-gray-600 h4">
-                                                                    Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulaanalitica[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanalitica[0]->fase_autorizacion }}</span>
-                                                                </p>
-                                                            @endcan
-                                                        @endif
-
+                                                        
                                                         <!-- --------------------------------------------------------------------------- CA Seguimiento Autorizar----------------------------------------------------------------------------------------------------- -->
-                                                        @if ($auditoria->cedulaanalitica[0]->fase_autorizacion == 'En autorización')
+                                                        {{-- @if ($auditoria->cedulaanalitica[0]->fase_autorizacion == 'En autorización')
                                                             @can('cedulaanaliticaautorizacion.edit')
                                                                 <a href="{{ route('cedulaanaliticaautorizacion.edit',$auditoria->cedulaanalitica[0]) }}" class="btn btn-primary popuprevisar float-end">
                                                                     <li class="fa fa-gavel"></li>
@@ -615,10 +751,10 @@
                                                                     Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulaanalitica[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanalitica[0]->fase_autorizacion }}</span>
                                                                 </p>
                                                             @endcan
-                                                        @endif
+                                                        @endif --}}
 
                                                         <!-- --------------------------------------------------------------------------- CA Seguimiento Autorizado----------------------------------------------------------------------------------------------------- -->
-                                                        @if ($auditoria->cedulaanalitica[0]->fase_autorizacion=='Autorizado')
+                                                        {{-- @if ($auditoria->cedulaanalitica[0]->fase_autorizacion=='Autorizado')
                                                             <p class="text-gray-600 h4">
                                                                 Fase: <span class="badge badge-success">{{str_contains($auditoria->cedulaanalitica[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanalitica[0]->fase_autorizacion }}</span>
                                                             </p>
@@ -637,13 +773,13 @@
                                                         {!! BootForm::close() !!}
                                                     @endif                                                
                                                 @endif
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 								@endif
-                                @if (count($auditoria->totalrecomendacion)>0 && (str_contains($auditoria->acto_fiscalizacion, 'Desempeño')||str_contains($auditoria->acto_fiscalizacion, 'Legalidad')))
+                                {{-- @if (count($auditoria->totalrecomendacion)>0 && (str_contains($auditoria->acto_fiscalizacion, 'Desempeño')||str_contains($auditoria->acto_fiscalizacion, 'Legalidad')))
                                 @php
                                      $ca_desempenio=$resultado['ca_desempeno'];
                                 @endphp
@@ -656,7 +792,7 @@
                                                         Desempeño &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                     </a>     
                                                     @if(getSession('cp')==2022)
-                                                        <a href="#" target="_blank" class="h6 text-gray-600 text-hover-primary mb-5">
+                                                         <a href="{{ route('agregarcedulainicial.edit',$auditoria)}}?tipo=Cedula Analítica" " target="_blank" class="h6 text-gray-600 text-hover-primary mb-5 float popupcomentario">    
                                                             Agregar Cedula <i class="bi bi-cloud-arrow-up-fill fs-1"></i>
                                                         </a>
                                                     @endif                                               
@@ -698,10 +834,10 @@
                                                                 <li class="fa fa-gavel"></li>
                                                                 Aprobar
                                                             </a>
-                                                        @endif      
+                                                        @endif       --}}
 
                                                         <!-- --------------------------------------------------------------------------- CA Desempenio Revisar 01---------------------------------------------------------------------------------- -->
-                                                        @if ($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion == 'En revisión 01')          
+                                                        {{-- @if ($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion == 'En revisión 01')          
                                                             @can('cedanadesemprevision01.edit') 
                                                                 @if(in_array(auth()->user()->id, $ca_desempenio['lideresF']))
                                                                     <a href="{{ route('cedanadesemprevision01.edit',$auditoria->cedulaanaliticadesemp[0]) }}" class="btn btn-primary popuprevisar">
@@ -714,10 +850,10 @@
                                                                     Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanaliticadesemp[0]->fase_autorizacion }}</span>
                                                                 </p>
                                                             @endcan
-                                                        @endif
+                                                        @endif --}}
 
                                                         <!-- --------------------------------------------------------------------------- CA Desempenio Revisar ------------------------------------------------------------------------------------ -->
-                                                        @if ($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion == 'En revisión')     
+                                                        {{-- @if ($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion == 'En revisión')     
                                                             @can('cedanadesemprevision.edit')
                                                                 @if(in_array(auth()->user()->unidad_administrativa_id, $ca_desempenio['jefesF']))
                                                                     <a href="{{ route('cedanadesemprevision.edit',$auditoria->cedulaanaliticadesemp[0]) }}" class="btn btn-primary popuprevisar">
@@ -730,10 +866,10 @@
                                                                     Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanaliticadesemp[0]->fase_autorizacion }}</span>
                                                                 </p>
                                                             @endcan
-                                                        @endif
+                                                        @endif --}}
 
                                                         <!-- --------------------------------------------------------------------------- CA Desempenio Validar ------------------------------------------------------------------------------------ -->
-                                                        @if ($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion == 'En validación')
+                                                        {{-- @if ($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion == 'En validación')
                                                             @can('cedanadesempvalidacion.edit')
                                                                 <a href="{{ route('cedanadesempvalidacion.edit',$auditoria->cedulaanaliticadesemp[0]) }}" class="btn btn-primary popuprevisar">
                                                                     <li class="fa fa-gavel"></li>
@@ -744,10 +880,10 @@
                                                                     Fase: <span class="badge badge-warning">{{str_contains($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion, 'revisión')?'En revision':$auditoria->cedulaanaliticadesemp[0]->fase_autorizacion }}</span>
                                                                 </p>
                                                             @endcan
-                                                        @endif
+                                                        @endif --}}
 
                                                         <!-- --------------------------------------------------------------------------- CA Desempenio Autorizar ------------------------------------------------------------------------------------ -->
-                                                        @if ($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion == 'En autorización')
+                                                        {{-- @if ($auditoria->cedulaanaliticadesemp[0]->fase_autorizacion == 'En autorización')
                                                             @can('cedanadesempautorizacion.edit')
                                                                 <a href="{{ route('cedanadesempautorizacion.edit',$auditoria->cedulaanaliticadesemp[0]) }}" class="btn btn-primary popuprevisar">
                                                                     <li class="fa fa-gavel"></li>
@@ -789,7 +925,7 @@
                             </div>   
                         </div>
                     </div> 
-                </div> 
+                </div>  --}}
 
                 {{-- <div class="row">
                     @can('cedulainicialprimera.edit')

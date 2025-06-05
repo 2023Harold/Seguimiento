@@ -51,7 +51,7 @@ use App\Http\Controllers\CedulaAnaliticaRecomendacionRevisionController;
 use App\Http\Controllers\CedulaAnaliticaRecomendacionValidacionController;
 use App\Http\Controllers\CedulaAnaliticaRevision01Controller;
 use App\Http\Controllers\CedulaAnaliticaRevisionController;
-use App\Http\Controllers\CedulaAnaliticaValidacionController;
+use App\Http\Controllers\CedulasEnvioController;
 use App\Http\Controllers\CedulaGeneralPrasAnalistaController;
 use App\Http\Controllers\CedulaGeneralPRASAutorizacionController;
 use App\Http\Controllers\CedulaGeneralPRASController;
@@ -72,6 +72,7 @@ use App\Http\Controllers\CedulaInicialPrimeraEtapaController;
 use App\Http\Controllers\CedulaInicialRevision01Controller;
 use App\Http\Controllers\CedulaInicialRevisionController;
 use App\Http\Controllers\CedulaInicialValidacionController;
+use App\Http\Controllers\CedulasRevisionController;
 use App\Http\Controllers\ComparecenciaActaController;
 use App\Http\Controllers\ComparecenciaAcusesController;
 use App\Http\Controllers\ComparecenciaAcusesCPController;
@@ -419,7 +420,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('acuerdoconclusionvalidacion', AcuerdoConclusionValidacionController::class, ['parameters' => ['acuerdoconclusionvalidacion' => 'auditoria']]);
     Route::resource('acuerdoconclusionautorizacion', AcuerdoConclusionAutorizacionController::class, ['parameters' => ['acuerdoconclusionautorizacion' => 'auditoria']]);
     Route::resource('acuerdoconclusionacuse', AcuerdoConclusionAcuseController::class, ['parameters' => ['acuerdoconclusionacuse' => 'acuerdoconclusion']]);
-    Route::resource('acuerdoconclusionacuse', AcuerdoConclusionAcuseController::class, ['parameters' => ['acuerdoconclusionacuse' => 'acuerdoconclusion']]);
+    // Route::resource('acuerdoconclusionacuse', AcuerdoConclusionAcuseController::class, ['parameters' => ['acuerdoconclusionacuse' => 'acuerdoconclusion']]);
     Route::resource('acuerdoconclusionacusecp', AcuerdoConclusionAcuseCPController::class, ['parameters' => ['acuerdoconclusionacusecp' => 'acuerdoconclusion']]);
     /**Fin del apartado de Seguimiento - Auditorias - Acuerdo de conclusion*/
 
@@ -504,6 +505,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('cedulainicialprimerarevision', CedulaInicialRevisionController::class, ['parameters' => ['cedulainicialprimerarevision' => 'cedula']]);
     Route::resource('cedulainicialprimeravalidacion', CedulaInicialValidacionController::class, ['parameters' => ['cedulainicialprimeravalidacion' => 'cedula']]);
     Route::resource('cedulainicialprimeraautorizacion', CedulaInicialAutorizacionController::class, ['parameters' => ['cedulainicialprimeraautorizacion' => 'cedula']]);
+
+    Route::resource('agregarcedulainicial', AgregarCedulaInicialController::class, ['parameters' => ['agregracedulainicial' => 'cedula']]);
+    Route::resource('cedulasenvio', CedulasEnvioController::class, ['parameters' => ['cedulasenvio' => 'auditoria']]);
+    Route::resource('cedulaanaliticadesempenorevision', CedulaAnaliticaDesempenoRevisionController::class, ['parameters' => ['cedulaanaliticadesempenorevision' => 'auditoria']]);
+    
+
     /**     Cedula General Recomendaciones      */
     Route::resource('cedulageneralrecomendacion', CedulaGeneralRecomendacionesController::class, ['parameters' => ['cedulageneralrecomendacion' => 'auditoria']]);
     Route::resource('cedgralrecomendacionanalista', CedulaGeneralRecomendacionesAnalistaController::class, ['parameters' => ['cedgralrecomendacionanalista' => 'cedula']]);
@@ -530,11 +537,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('cedulaanaliticadesemp', CedulaAnaliticaDesempenoController::class, ['parameters' => ['cedulaanaliticadesemp' => 'auditoria']]);
     Route::resource('cedanadesempanalista', CedulaAnaliticaDesempenoAnalistaController::class, ['parameters' => ['cedanadesempanalista' => 'cedula']]);
     Route::resource('cedanadesemprevision01', CedulaAnaliticaDesempenoRevision01Controller::class, ['parameters' => ['cedanadesemprevision01' => 'cedula']]);
-    Route::resource('cedanadesemprevision', CedulaAnaliticaDesempenoRevisionController::class, ['parameters' => ['cedanadesemprevision' => 'cedula']]);
+    // Route::resource('cedanadesemprevision', CedulaAnaliticaDesempenoRevisionController::class, ['parameters' => ['cedanadesemprevision' => 'cedula']]);
     Route::resource('cedanadesempvalidacion', CedulaAnaliticaDesempenoValidacionController::class, ['parameters' => ['cedanadesempvalidacion' => 'cedula']]);
     Route::resource('cedanadesempautorizacion', CedulaAnaliticaDesempenoAutorizacionController::class, ['parameters' => ['cedanadesempautorizacion' => 'cedula']]);
     
-    Route::resource('agregarcedula', AgregarCedulaInicialController::class, ['parameters' => ['agregarcedula' => 'auditoria']]);
+    
+    
+
     /**Fin del apartado de Seguimiento - Auditorias - Cedulas*/
 
     /** Seguimiento - Auditorias - Informe*/

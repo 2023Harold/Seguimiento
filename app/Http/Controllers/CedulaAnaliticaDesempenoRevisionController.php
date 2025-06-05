@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Cedula;
 use App\Models\Movimientos;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CedulaAnaliticaDesempenoRevisionController extends Controller
@@ -58,12 +60,15 @@ class CedulaAnaliticaDesempenoRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cedula $cedula)
-    {
+    public function edit(Cedula $auditoria)
+    {     
+        $cedula=$auditoria;
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $nombre=$cedula->cedula;
         
-        return view('cedulaanaliticadesempenorevision.form',compact('nombre','auditoria','cedula'));
+        // dd($cedula);
+        // $nombre=$cedula->cedula;
+        
+        return view('cedulaanaliticadesempenorevision.form',compact('auditoria','cedula'));
     }
 
     /**
@@ -73,86 +78,51 @@ class CedulaAnaliticaDesempenoRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cedula $cedula)
+    public function update(AprobarFlujoAutorizacionRequest $request, Cedula $auditoria)
     {
-        $director=auth()->user()->director;
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        
-        $accionesjefe=AuditoriaAccion::whereNull('aprobar_cedanades_jefe')->where('segauditoria_id',$auditoria->id)->get();   
-        $jefes=array_unique($accionesjefe->pluck('departamento_asignado_id', 'id')->toArray()); 
+        // dd(1);
+        $this->normalizarDatos($request);
+        $cedula=$auditoria;
+        $mensaje = "";
+ 
+        Movimientos::create([
+            'tipo_movimiento' => 'Autorización de la Cédula',
+            'accion' => 'Cedula',
+            'accion_id' => $cedula->id,
+            'estatus' => $request->estatus,
+            'usuario_creacion_id' => auth()->id(),
+            'usuario_asignado_id' => auth()->id(),
+            'motivo_rechazo' => $request->motivo_rechazo,
+        ]);
 
-        if(count($jefes)>1){
-            if($request->estatus=='Aprobado'){
-                AuditoriaAccion::where('departamento_asignado_id',auth()->user()->unidad_administrativa_id)->where('segauditoria_id',$auditoria->id)->update(['aprobar_cedanades_jefe'=>'Si']);
-            }else{               
-                AuditoriaAccion::where('segauditoria_id',$auditoria->id)->update(['aprobar_cedanades_jefe'=>null,'aprobar_cedanades_lider'=>null,'aprobar_cedanades_analista'=>null]);
-                $cedula->update(['fase_autorizacion' => 'Rechazado']);
-            }
+        if ($request->estatus == 'Aprobado') {
+            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
+        } else {
+            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
+        }
 
-            $this->normalizarDatos($request);
+        $cedula->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+        setMessage($request->estatus == 'Aprobado' ?
+            'Se ha autorizado el Acuerdo de Conclusión de la auditoría con exito.' :
+            'El rechazo ha sido registrado.'
+        );
 
-            Movimientos::create([
-                'tipo_movimiento' => 'Revisión de la Cédula Analítica de Desempeño',
-                'accion' => 'Cédula Analítica Desempeño',
-                'accion_id' => $auditoria->id,
-                'estatus' => $request->estatus,
-                'usuario_creacion_id' => auth()->id(),
-                'usuario_asignado_id' => auth()->id(),
-                'motivo_rechazo' => $request->motivo_rechazo,
-            ]);      
+        if ($request->estatus == 'Aprobado') {
+            $titulo = 'Autorización del Acuerdo de conclusión de la auditoría No. '.$cedula->auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$cedula->usuarioCreacion->name.', '.$cedula->usuarioCreacion->puesto.':</strong><br>'
+                            .'Se ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$cedula->auditoria->numero_auditoria;                          
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $cedula->usuarioCreacion->unidad_administrativa_id, $cedula->usuarioCreacion->id);
+        }else {
             
-            setMessage($request->estatus == 'Aprobado' ?
-                'La aprobación ha sido registrada y se ha enviado a revisión del superior.' :
-                'El rechazo ha sido registrado.'
-            );
-                    
-        }else{
-            $this->normalizarDatos($request);
-            Movimientos::create([
-                'tipo_movimiento' => 'Revisión de la Cédula Analítica de Desempeño',
-                'accion' => 'Cédula Analítica Desempeño',
-                'accion_id' => $auditoria->id,
-                'estatus' => $request->estatus,
-                'usuario_creacion_id' => auth()->id(),
-                'usuario_asignado_id' => auth()->id(),
-                'motivo_rechazo' => $request->motivo_rechazo,
-            ]);
-
-            if (strlen($cedula->nivel_autorizacion) == 3) {
-                $nivel_autorizacion = $cedula->nivel_autorizacion;
-            } elseif ($request->estatus == 'Aprobado') {
-                $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
-            } else {
-                $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 5);
-            }
-    
-            $cedula->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado']);
-            setMessage($request->estatus == 'Aprobado' ?
-                'La aprobación ha sido registrada y se ha enviado a revisión del superior.' :
-                'El rechazo ha sido registrado.'
-            );
-    
-            if ($request->estatus == 'Aprobado') {
-                AuditoriaAccion::where('departamento_asignado_id',auth()->user()->unidad_administrativa_id)->where('segauditoria_id',$auditoria->id)->update(['aprobar_cedanades_jefe'=>'Si']);
-                $cedula->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
-    
-                $titulo = 'Validación de la Cédula Analítica de Desempeño de la Auditoría No. '.$auditoria->numero_auditoria;
-    
-                $mensaje = '<strong>Estimado(a) '.$director->name.', '.$director->puesto.':</strong><br>'
-                                .auth()->user()->name.', '.auth()->user()->puesto.
-                                '; se ha aprobado el registro de la Cédula Analítica de Desempeño de la Auditoría No. '.$auditoria->numero_auditoria.
-                                ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
-            } else { 
-                AuditoriaAccion::where('segauditoria_id',$auditoria->id)->update(['aprobar_cedanades_jefe'=>null,'aprobar_cedanades_lider'=>null,'aprobar_cedanades_analista'=>null]);         
-                $titulo = 'Rechazo de la Cédula Analítica de Desempeño de la Auditoría No. '.$auditoria->numero_auditoria;
-                $mensaje = '<strong>Estimado(a) '.$cedula->userCreacion->name.', '.$cedula->userCreacion->puesto.':</strong><br>'
-                                .'Ha sido rechazado el registro de la Cédula Analítica de Desempeño de la Auditoría No. '.$auditoria->numero_auditoria.
-                                ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $cedula->userCreacion->unidad_administrativa_id, $cedula->userCreacion->id);
-            }
-        }       
-
+            $titulo = 'Rechazo Acuerdo de Conclusión de la auditoría No. '.$cedula->auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$cedula->usuarioCreacion->name.', '.$cedula->usuarioCreacion->puesto.':</strong><br>'
+                            .'Ha sido rechazado el Acuerdo de Conclusión de la auditoría No. '.$cedula->auditoria->numero_auditoria.
+                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
+            
+                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $cedula->usuarioCreacion->unidad_administrativa_id, $cedula->usuarioCreacion->id);
+                            
+        }    
+        
         return view('layouts.close');
     }
 
@@ -166,13 +136,29 @@ class CedulaAnaliticaDesempenoRevisionController extends Controller
     {
         //
     }
-
     private function normalizarDatos(Request $request)
     {
-        if ($request->estatus == 'Aprobado') {
-            $request['motivo_rechazo'] = null;
-        }
+         if ($request->estatus == 'Aprobado') {
+             $request['motivo_rechazo'] = null;
+         }
 
-        return $request;
+         return $request;
     }
+    private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
+    {
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .'Ha sido rechazado el registro de la radicación de auditoría No. '.$numeroauditoria.'.';       
+
+        return $mensaje;
+    }
+
+    private function mensajeAprobado(String $nombre, String $puesto, String $numeroauditoria)
+    {
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .' Ha sido autorizado el registro de radicación de la auditoría No. '.$numeroauditoria.
+                    ', por parte del Titular.';       
+
+        return $mensaje;
+    }
+
 }

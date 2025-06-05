@@ -1,25 +1,12 @@
 @extends('layouts.appPopup')
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <h1 class="card-title">           
-            Comentario
-        </h1>
-    </div>
-    <div class="card-body">        
-        <div class="row">
-            <div class="col-md-12">
-                Texto:
-                {!!BootForm::textarea('muestra_rev', false, old("muestra_rev", $comentario->muestra_rev),['disabled'])!!}
-            </div>
-        </div>           
-        <div class="row">
-            <div class="col-md-12">
-                Comentario:
-                {!! BootForm::textarea('comentario', false, old("comentario", $comentario->comentario),['disabled'])!!}
-            </div>
-        </div>           
-
-    </div>
+     <td class="text-center">
+     @if (!empty($cedula->cedula_tipo))
+         <a href="{{ asset($cedula->cedula_cargada) }}" target="_blank">
+                 <?php echo htmlspecialchars_decode(iconoArchivo($cedula->cedula_cargada)); ?>
+         </a><br>       
+     @endif
+    </td>   
 </div>
 @endsection

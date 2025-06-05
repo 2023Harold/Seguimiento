@@ -69,18 +69,7 @@
                 @endif      
                 <div class="table-responsive">
                     <table class="table">
-                        <thead>
-                        <th> </th>
-                        <th> </th>
-                        <th> </th>
-                        <th> </th>
-                        <th> </th>
-                        <th> </th>
-                        <th> </th>    
-                        <th> </th>
-                        <th> </th>
-                        <th> </th>
-                        <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Tipología</th>    
+                        <thead>                        
                             <tr>
                                 <th> </th>
                                 <th>No. Consecutivo</th>
@@ -92,8 +81,7 @@
                                 <th>Estatus</th>                               
                                 <th>Editar</th>
                                 <th>Eliminar</th>
-                                <th>Estatus</th>
-                                <th>Enviar</th>
+                                <th>Tipología</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -195,7 +183,7 @@
                                     @endcan
                                 @endif
                                 </td>
-                                <td class="text-center">
+                                {{-- <td class="text-center">
                                     
                                  {{-- @if (empty($auditoria->tipologiaacciones->fase_autorizacion)||$auditoria->tipologiaacciones->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $auditoria->tipologiaacciones->fase_autorizacion }} </span>
@@ -222,11 +210,11 @@
                                              Enviar
                                             </a>
                                         @endcan
-                                @endif --}}
-                                </td>
+                                @endif 
+                                </td> --}}
                                 <td class="text-center">                                
                                 
-                                <a class="btn btn-primary text-sistema float popuptipologia" href="{{ route('tipologiaacciones.create',$auditoria) }}">
+                                <a href="{{ route('tipologiaacciones.create',$auditoria) }}" class="btn btn-primary">Agregar
                                 </a>
                                
                                 </td>

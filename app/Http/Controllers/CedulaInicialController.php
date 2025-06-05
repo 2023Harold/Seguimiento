@@ -232,6 +232,17 @@ class CedulaInicialController extends Controller
     {
         //
     }
+private function normalizarDatos(Request $request)
+    {
+        if ($request->estatus == 'Aprobado') {
+            $request['motivo_rechazo'] = null;
+        }
+
+        return $request;
+    }
+
+
+
 
     public function setQuery(Request $request)
     {
