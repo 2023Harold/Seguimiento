@@ -141,15 +141,16 @@
                                                                         ) ? 'show' : ''  }} mx-5 me-0 pt-3">
                                  <div class="menu-item mb-1">
                                     <a href="{{route('acuerdoconclusion.index')}}" class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'acuerdoconclusion') ? 'active' : '' }}">
-                                        @if (count($auditoria->AC)> 0)
-                                            @if (count($auditoria->AC->where('fase_autorizacion','Autorizado')) === count($auditoria->AC))
+                                        @if (count($auditoria->AC)>0)
+                                            @if (count($auditoria->acuerdosautorizados) == count($auditoria->AC))
                                                 <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif (count($auditoria->AC) !=count($auditoria->AC->where('fase_autorizacion','Autorizado')))
-                                                <span class="fa fa-circle" style="color: yellow"></span>
                                             @else
-                                                <span class="fa fa-circle" style="color: red"></span>
+                                                <span class="fa fa-circle" style="color: yellow"></span>
                                             @endif
+                                        @else
+                                            <span class="fa fa-circle" style="color: red"></span>
                                         @endif
+
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>

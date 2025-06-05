@@ -31,8 +31,8 @@
                 <div class="row">
                     <div class="col-md-12" style="display: none;" id="no_aplica"> 
                     <div class="row">                       
-                    <div class="col-md-5">
-                        {!! BootForm::text('nombre_titular', 'Nombre del titular a quien se dirige : *', old('nombre_titular', $acuerdoconclusion->nombre_titular)) !!}
+                     <div class="col-md-5">
+                        {!! BootForm::text('nombre_titular', 'Nombre del titular a quien se dirige : *', old('nombre_titular', optional($acuerdoconclusion->auditoria)->nombre_titular)) !!}
                     </div>
                     <div class="col-md-3">
                         {!! BootForm::text('cargo_titular', 'Cargo del titular a quien se dirige : *', old('numero_acuerdo_conclusion', $acuerdoconclusion->cargo_titular)) !!}

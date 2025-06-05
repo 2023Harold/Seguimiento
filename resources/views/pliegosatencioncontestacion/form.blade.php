@@ -26,7 +26,7 @@
             {!! BootForm::open(['model' => $contestacion, 'store' => 'pliegosobservacionatencioncontestacion.store', 'update' => 'pliegosobservacionatencioncontestacion.update', 'id' => 'form']) !!}
             <div class="row">
                         <div class="col-md-6">
-                            {!! archivo('oficio_contestacion', 'Oficio de contestación de la recomendación: *', old('oficio_contestacion', $contestacion->oficio_contestacion)) !!}
+                            {!! archivo('oficio_contestacion', 'Oficio de contestación:*', old('oficio_contestacion', $contestacion->oficio_contestacion)) !!}
                         </div>
                     </div>
                     <div class="row">

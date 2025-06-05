@@ -7,6 +7,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
 use App\Models\Recomendaciones;
+use App\Models\RecomendacionesContestacion;
 use App\Models\User;
 use Illuminate\Http\Request;
 

@@ -317,16 +317,16 @@
     <script>
         $(document).ready(function() {
             $('.popupcomentario').colorbox({
-                width:"65%",
-                height:"650px",
-                maxWidth:400,
-                maxHeight:"650px",
+                width:"80%",
+                height:"1050px",
+                maxWidth:700,
+                maxHeight:"1050px",
                 iframe: true,
                 onClosed: function() {
                     location.reload(true);
                 },
                 onComplete: function () {
-                 $(this).colorbox.resize({width:"65%",maxWidth:400, height:"650px", maxHeight:"650px"});
+                 $(this).colorbox.resize({width:"80%",maxWidth:600, height:"800px", maxHeight:"800px"});
                  $(window).trigger("resize");
                 }
             });

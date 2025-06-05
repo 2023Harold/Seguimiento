@@ -21,31 +21,19 @@ class PliegosObservacionContestacionRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+       public function rules()
     {
         return [
             'oficio_contestacion'=>'required|string|max:100',
-            'fecha_oficio_contestacion'=>'sometimes|nullable|date|max:10',
-            'numero_oficio'=>'required|string|max:250',
-            'nombre_remitente'=>'required|string|max:500',
-            'cargo_remitente'=>'required|string|max:500',
-            'fecha_recepcion_oficialia'=>'required|date|max:10',
-            'folio_correspondencia'=>'required|integer|max:9999999999',
-            'fecha_recepcion_seguimiento'=>'required|date|max:10'
+            'foliocrr_id'=>'required|sometimes|integer',
         ];
     }
 
     public function attributes()
     {
         return [
-            'oficio_contestacion'=>'oficio de contestación de la recomendación',
-            'fecha_oficio_contestacion'=>'fecha del oficio de contestación',
-            'numero_oficio'=>'número del oficio',
-            'nombre_remitente'=>'remitente',
-            'cargo_remitente'=>'cargo del remitente',
-            'fecha_recepcion_oficialia'=>'fecha de recepción en oficialía',
-            'folio_correspondencia'=>'folio de correspondencia',
-            'fecha_recepcion_seguimiento'=>'fecha de recepción en la unidad de seguimiento',
+            'oficio_contestacion'=>'oficio de contestación del pliego',
+            'foliocrr_id'=>'folio de correspondencia',
         ];
     }
 

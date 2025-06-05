@@ -341,14 +341,15 @@
                                     No aplica.
                                 </td>                                
                                 </tr>
-                            @elseif ((getSession('cp')==2022) && empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion)||$auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado'&& ($auditoria->acuerdoconclusion->no_aplica==' ') )
+                            @elseif ((getSession('cp')==2022) && empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion)||$auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado'&& ($auditoria->acuerdoconclusionpliegos->no_aplica==' ') )
                                     <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusionpliegos->fase_autorizacion }} </span>
                                     @can('acuerdoconclusion.edit')
                                             <a href="{{ route('acuerdoconclusion.edit',$auditoria->acuerdoconclusionpliegos) }}" class="text-primary">
                                             <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
                                             </a>
-                                        @endcan                                
-                                @elseif( (getSession('cp')==2023) && empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion)||$auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado'&& ($auditoria->acuerdoconclusion->no_aplica==' '))
+                                        @endcan      
+                                                          
+                                @elseif( (getSession('cp')==2023) && empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion)||$auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado'&& ($auditoria->acuerdoconclusionpliegos->no_aplica==' '))
                                     <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusionpliegos->fase_autorizacion }} </span>
                                     @can('acuerdoconclusioncp.edit')
                                     <a href="{{ route('acuerdoconclusioncp.edit',$auditoria->acuerdoconclusionpliegos) }}" class="text-primary">
@@ -378,6 +379,15 @@
                                     @endif
                                 @else {{--
                                 AQUI EMPIEZA EL 2023--}}
+                                    @if( (getSession('cp')==2023) && (empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion) && empty($auditoria->acuerdoconclusionpliegos->no_aplica=='X') ||$auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado'))
+                                        <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusionpliegos->fase_autorizacion }} </span>
+                                        @can('acuerdoconclusioncp.edit')
+                                            <a href="{{ route('acuerdoconclusioncp.edit',$auditoria->acuerdoconclusionpliegos) }}" class="text-primary">
+                                                <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+                                            </a>
+                                        @endcan                                    
+                                    @endif  
+
                                      @if($auditoria->acuerdoconclusionpliegos->fase_autorizacion == 'En validación')
                                         @can('acuerdoconclusionvalidacion.edit')
                                             <a href="{{ route('acuerdoconclusionvalidacion.edit',$auditoria->acuerdoconclusionpliegos) }}" class="btn btn-primary">

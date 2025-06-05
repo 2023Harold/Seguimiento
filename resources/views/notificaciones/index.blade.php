@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('notificaciones') }}
+    {{Breadcrumbs::render('notificaciones') }}
 @endsection
 @section('content')
     <div class="row">
@@ -13,17 +13,17 @@
                     </h1>
                 </div>
                 <div class="card-body">
-                    {!! BootForm::open(['id' => 'form', 'method' => 'GET']) !!}
+                    {!!BootForm::open(['id' => 'form', 'method' => 'GET']) !!}
                     <div class="row align-items-center">
                         <div class="col-md-3">
-                            {!! BootForm::radios("estatus", 'Estatus: ',['Todos' => ' Todos', 'Pendiente'=>' No leído','Leído'=>' Leído'],
+                            {!!BootForm::radios("estatus", 'Estatus: ',['Todos' => ' Todos', 'Pendiente'=>' No leído','Leído'=>' Leído'],
                                 old('estatus', empty($request->estatus) ? 'Todos' : $request->estatus),true,['class'=>'i-checks']) !!}
                         </div>
                         <div class="col-md-3">
-                            {!! BootForm::date('created_at', 'Fecha de recepción', old('created_at', $request->created_at)) !!}
+                            {!!BootForm::date('created_at', 'Fecha de recepción', old('created_at', $request->created_at)) !!}
                         </div>
                         <div class="col-md-3">
-                            {!! BootForm::date('updated_at', 'Fecha de lectura', old('updated_at', $request->updated_at)) !!}
+                            {!!BootForm::date('updated_at', 'Fecha de lectura', old('updated_at', $request->updated_at)) !!}
                         </div>
                         
                        
@@ -31,10 +31,10 @@
                     </div>
                     <div class="row align-items-center">
                         <div class="col-md-3">
-                            {!! BootForm::text('numero_auditoria', 'Número de Auditoría', old('numero_auditoria', $request->numero_auditoria)) !!}
+                            {!!BootForm::text('numero_auditoria', 'Número de Auditoría', old('numero_auditoria', $request->numero_auditoria)) !!}
                         </div>
 						<div class="col-md-3">
-                            {!! BootForm::radios("cuenta", 'Cuenta Pública: ',['Todas' => ' Todas', '|2022'=>' 2022','|2023'=>' 2023'],
+                            {!!BootForm::radios("cuenta", 'Cuenta Pública: ',['Todas' => ' Todas', '|2022'=>' 2022','|2023'=>' 2023'],
                                 old('cuenta', empty($request->cuenta) ? 'Todas' : $request->cuenta),true,['class'=>'i-checks']) !!}
                         </div> 
 						
@@ -42,7 +42,7 @@
                             <button type="submit" class="btn btn-primary">Buscar</button>  
                         </div>
                     </div>
-                    {!! BootForm::close() !!}
+                    {!!BootForm::close() !!}
                     <div class="row">
                         <div class="col-md-12">
                             <table class="table table-hover">
@@ -66,10 +66,9 @@
                                             <td>{{ fecha($notificacion->created_at, 'd/m/Y H:i') }}</td>
                                             <td class="text-center">
                                                 @if( $notificacion->estatus == 'Pendiente' ) 
-                                                    <!-- Checkbox para marcar como leído -->
-                                                    {!!BootForm::checkbox('notificacion' . $notificacion->id, false, $notificacion->id, old('notificacion' . $notificacion->id, $notificacion->estatus) == 'Leído' ? true : false, ['class' => 'i-checks mr-3 casilla', 'id' => 'notificacion' . $notificacion->id]) !!}
-                                                    <span class="badge badge-light-warning">No leído</span>
-                                                    
+														<!-- Checkbox para marcar como leído -->
+														{!!BootForm::checkbox('notificacion' . $notificacion->id, false, $notificacion->id, old('notificacion' . $notificacion->id, $notificacion->estatus) == 'Leído' ? true : false, ['class' => 'i-checks mr-3 casilla', 'id' => 'notificacion' . $notificacion->id]) !!}
+														<span class="badge badge-light-warning">No leído</span>                                                    
                                                 @else
                                                     <span class="badge badge-light-success">{{$notificacion->estatus}}</span>
                                                 @endif
@@ -127,8 +126,9 @@
                 } else {
                     $('#span-ntf').text('notificaciones');
                 }
+				$(this).hide();
                 // Recargar la página completa
-                window.location.reload();
+                //window.location.reload();
             },
             error: function() {
                 alert('Error al generar la petición');

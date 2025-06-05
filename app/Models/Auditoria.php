@@ -457,9 +457,10 @@ class Auditoria extends Model
 
             public function AC()
             {
-                return $this->hasMany(AcuerdoConclusion::class, 'auditoria_id', 'id');
+                return $this->hasMany(AcuerdoConclusion::class, 'auditoria_id', 'id')->whereNull('no_aplica');
                 //return $this->belongsTo(AcuerdoConclusion::class, 'id', 'auditoria_id');
             }
+
             public function acuerdoconclusion()
             {
                 return $this->hasOne(AcuerdoConclusion::class,'auditoria_id', 'id')->where('tipo','recomendaciones');
@@ -470,7 +471,7 @@ class Auditoria extends Model
             }
 
             public function acuerdosautorizados(){
-                return $this->hasMany(acuerdoconclusion::class, 'auditoria_id', 'id')->where('fase_autorizacion', 'Autorizado');
+                return $this->hasMany(acuerdoconclusion::class, 'auditoria_id', 'id')->whereNull('no_aplica')->where('fase_autorizacion', 'Autorizado');;
             }
 
             public function turnoui()

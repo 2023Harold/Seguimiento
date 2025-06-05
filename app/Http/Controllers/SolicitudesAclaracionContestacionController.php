@@ -28,6 +28,8 @@ class SolicitudesAclaracionContestacionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $solicitud= SolicitudesAclaracion::find(getSession('solicitudesaclaracioncalificacion_id'));
+        $sol_contestacion = SolicitudesAclaracion::with(['contestaciones.remitentes'])->where('accion_id', getSession('solicitudesauditoriaaccion_id'))->get();
+        //dd($sol_contestacion->toArray());
 
         return view('solicitudesaclaracioncontestacion.index', compact('contestaciones','auditoria','accion','solicitud','request'));
     }
@@ -91,8 +93,11 @@ class SolicitudesAclaracionContestacionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
+        
+        $sol_contestacion = SolicitudesAclaracion::with(['contestaciones.remitentes'])->where('accion_id', getSession('solicitudesauditoriaaccion_id'))->get();
+        dd($sol_contestacion);
 
-        return view('solicitudesaclaracioncontestacion.show', compact('contestaciones','auditoria','accion','solicitud'));
+        return view('solicitudesaclaracioncontestacion.show', compact('contestaciones','auditoria','accion','solicitud', 'sol_contestacion'));
     }
 
     /**
