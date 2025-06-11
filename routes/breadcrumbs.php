@@ -880,6 +880,10 @@ Breadcrumbs::for('informeprimeraetapaautorizacion.edit', function (BreadcrumbTra
     $trail->push('Autorizacion del Informe Primera Etapa ', route('informeprimeraetapa.index'));
 });
 
+Breadcrumbs::for('informeacuses.edit', function (BreadcrumbTrail $trail, $informe,$auditoria) {
+    $trail->parent('informeprimeraetapa.index',$auditoria);
+    $trail->push('Informe Acuses', route('informeacuses.edit',$informe));
+});
 
 
 

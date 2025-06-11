@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Informe;
 
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
+use App\Models\Auditoria;
+use App\Models\AuditoriaAccion;
 use App\Models\InformePrimeraEtapa;
 use App\Models\Movimientos;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class InformePrimeraEtapaAutorizacionController extends Controller
 {
@@ -75,18 +79,27 @@ class InformePrimeraEtapaAutorizacionController extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, InformePrimeraEtapa $auditoria)
     {
+        
+        
         $this->normalizarDatos($request);
         $informeprimeraetapa=$auditoria;
 
-        Movimientos::create([
-            'tipo_movimiento' => 'Autorización del del Informe Primera Etapa',
-            'accion' => 'InformePrimeraEtapa',
-            'accion_id' => $informeprimeraetapa->id,
-            'estatus' => $request->estatus,
-            'usuario_creacion_id' => auth()->id(),
-            'usuario_asignado_id' => auth()->id(),
-            'motivo_rechazo' => $request->motivo_rechazo,
-        ]);
+        
+            $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+            $auditorias = Auditoria::find(getSession('auditoria_id'));
+
+            $titular=User::where('siglas_rol','TUS')->first();
+            $licMartha=User::where('siglas_rol','ATUS')->first();
+            
+            if(getSession('cp')==2022){
+                $director = $accion->auditoria->directorasignado;
+                $jefe=$accion->depaasignado;
+
+            }else{
+                
+                $director = $auditorias->directorasignado;
+                $jefe = $auditorias->jefedepartamentoencargado;
+            }
 
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
@@ -106,7 +119,8 @@ class InformePrimeraEtapaAutorizacionController extends Controller
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; ha aprobado la autorización del Informe Primera Etapa de'.$informeprimeraetapa->tipo.' de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $informeprimeraetapa->usuarioCreacion->unidad_administrativa_id, $informeprimeraetapa->usuarioCreacion->id);
+            
         }else {
             
             $titulo = 'Rechazo del Informe Primera Etapa de'.$informeprimeraetapa->tipo.' de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
@@ -114,9 +128,19 @@ class InformePrimeraEtapaAutorizacionController extends Controller
                             .'Ha sido rechazado el Informe Primera Etapa de auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
             
-                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $informeprimeraetapa->usuarioCreacion->unidad_administrativa_id, $informeprimeraetapa->usuarioCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $informeprimeraetapa->usuarioCreacion->unidad_administrativa_id, $informeprimeraetapa->usuarioCreacion->id);
                             
     }
+    Movimientos::create([
+            'tipo_movimiento' => 'Autorización del del Informe Primera Etapa',
+            'accion' => 'InformePrimeraEtapa',
+            'accion_id' => $informeprimeraetapa->id,
+            'estatus' => $request->estatus,
+            'usuario_creacion_id' => auth()->id(),
+            'usuario_asignado_id' => auth()->id(),
+            'motivo_rechazo' => $request->motivo_rechazo,
+        ]);
+        
         return redirect()->route('informeprimeraetapa.index');
     }
 

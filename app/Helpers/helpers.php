@@ -592,7 +592,86 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             ->where('cp_ua2023','LIKE','%'.$ua .'%' );
         }
         return $users;
-    }    
+    } 
+    
+    function convertirPeriodo($texto)
+    {
+        // Diccionarios para días
+        $dias = [
+            '01' => 'primero',
+            '02' => 'dos',
+            '03' => 'tres',
+            '04' => 'cuatro',
+            '05' => 'cinco',
+            '06' => 'seis',
+            '07' => 'siete',
+            '08' => 'ocho',
+            '09' => 'nueve',
+            '10' => 'diez',
+            '11' => 'once',
+            '12' => 'doce',
+            '13' => 'trece',
+            '14' => 'catorce',
+            '15' => 'quince',
+            '16' => 'dieciséis',
+            '17' => 'diecisiete',
+            '18' => 'dieciocho',
+            '19' => 'diecinueve',
+            '20' => 'veinte',
+            '21' => 'veintiuno',
+            '22' => 'veintidós',
+            '23' => 'veintitrés',
+            '24' => 'veinticuatro',
+            '25' => 'veinticinco',
+            '26' => 'veintiséis',
+            '27' => 'veintisiete',
+            '28' => 'veintiocho',
+            '29' => 'veintinueve',
+            '30' => 'treinta',
+            '31' => 'treinta y uno'
+        ];
+
+        // Diccionario para el año
+        $anios = [
+            '2023' => 'dos mil veintitrés',
+            '2022' => 'dos mil veintidós',
+            '2021' => 'dos mil veintiuno',
+            // Agrega más años si los necesitas
+        ];
+
+        // Expresión regular para extraer las partes
+        if (preg_match('/(\d{2}) de (\w+) al (\d{2}) de (\w+) (\d{4})/', $texto, $partes)) {
+            $diaInicio = $dias[$partes[1]] ?? $partes[1];
+            $mesInicio = strtolower($partes[2]);
+            $diaFin = $dias[$partes[3]] ?? $partes[3];
+            $mesFin = strtolower($partes[4]);
+            $anio = $anios[$partes[5]] ?? $partes[5];
+
+            return "$diaInicio de $mesInicio al $diaFin de $mesFin del $anio";
+        }
+
+        // Si no se pudo hacer match, regresamos el texto original en minúsculas
+        return strtolower($texto);
+    }
+
+    function Iniciales($nombre) {
+        //funcion obtener las iniciales de los nombres  y para quitar los acentos   
+        $iniciales = '';
+        $partes = explode(' ', $nombre);
+
+        foreach ($partes as $parte) {
+            $letra = mb_substr($parte, 0, 1, 'UTF-8');
+            // Quitar acento usando iconv
+            $letraSinAcento = iconv('UTF-8', 'ASCII//TRANSLIT', $letra);
+            // Quitar cualquier carácter no alfabético
+            $letraSinAcento = preg_replace('/[^A-Za-z]/', '', $letraSinAcento);
+            $iniciales .= strtoupper($letraSinAcento);
+        }
+
+        return $iniciales;
+    }
+
+
 
 
 

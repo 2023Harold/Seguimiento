@@ -239,7 +239,7 @@
                                     <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('revisionesrecomendaciones.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                    <a href="{{ route('revisionesrecomendaciones.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
                                         <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
                                     </a>
                                 </td>

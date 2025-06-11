@@ -9,7 +9,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                Texto:
+                {{$comentario->tipo}}
                 {!! BootForm::textarea('muestra_rev', false, old("muestra_rev", $comentario->muestra_rev),['disabled'])!!}
             </div>
         </div>          

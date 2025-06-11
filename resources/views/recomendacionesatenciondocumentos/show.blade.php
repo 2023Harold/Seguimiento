@@ -10,7 +10,7 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('recomendacionesatencion.index') }}"><i  class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                    &nbsp; Listado de documentos
+                    &nbsp; Listado de documentos 
                 </h1>
             </div>
             <div class="card-body">
@@ -48,20 +48,50 @@
                     </div>
                 </div>
 				@include('layouts.contextos._accionrecomendacion')
-                                
-                    
-                        <div class="row">
-                            <div class="col-md-12">
-                                {!! BootForm::textarea('listado_documentoslb', 'Listado de documentos',old('listado_documentoslb', $recomendacion->listado_documentos),['rows'=>'10','disabled']) !!}
-                            </div>
-                        </div>   
+                <div class="row">
+                    <div class="col-md-12">
+                        {!!BootForm::textarea('listado_documentoslb', 'Listado de documentos',old('listado_documentoslb', $recomendacion->listado_documentos),['rows'=>'10','disabled']) !!}
+                    </div>
+                </div> 
+                @if (auth()->user()->siglas_rol!='ANA')
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span>
+                                <!-- <h3 class="card-title text-primary float">Comentarios -->
+                                    <a class="btn btn-icon bi bi-chat-fill text-sistema float popupcomentario" href="{{ route('revisionesrecomendaciones.create') }}?tipo=Listado Documentos">
+
+                                    </a>
+
+                            </span>
+                        </div>
+                    </div>
+                @endif  
             </div>
         </div>
     </div>
 </div>
 @endsection
 @section('script')
-{!! JsValidator::formRequest('App\Http\Requests\RecomendacionesDocumentoRequest') !!}
+{!!JsValidator::formRequest('App\Http\Requests\RecomendacionesDocumentoRequest') !!}
+    <script>
+        $(document).ready(function() {
+            $('.popupcomentario').colorbox({
+                width:"80%",
+                height:"1050px",
+                maxWidth:700,
+                maxHeight:"1050px",
+                iframe: true,
+                onClosed: function() {
+                    location.reload(true);
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"80%",maxWidth:600, height:"800px", maxHeight:"800px"});
+                 $(window).trigger("resize");
+                }
+            });
+        });
+    </script>
 @endsection
+
 
 

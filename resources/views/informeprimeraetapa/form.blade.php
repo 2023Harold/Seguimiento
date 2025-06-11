@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('breadcrums')
 @if (empty($informeprimeraetapa->numero_ordenauditoria))
-    {{ Breadcrumbs::render('informeprimeraetapa.create') }}
+    {{Breadcrumbs::render('informeprimeraetapa.create') }}
 @else
-    {{ Breadcrumbs::render('informeprimeraetapa.edit',$informeprimeraetapa,$informepliegos) }}
+    {{Breadcrumbs::render('informeprimeraetapa.edit',$informeprimeraetapa,$informepliegos) }}
 @endif    
 @endsection
 @section('content')
@@ -14,7 +14,7 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('informeprimeraetapa.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>            
-                    &nbsp; informe Primera Etapa                   
+                    &nbsp; informe Primera Etapa            
 
                 </h1>
                 <div class="float-end">
@@ -25,36 +25,39 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                
-                {!! BootForm::open(['model' => $informeprimeraetapa,'store' => 'informeprimeraetapa.store','update' => 'informeprimeraetapa.update','id' => 'form']) !!}
+                {!!BootForm::open(['model' => $informeprimeraetapa,'store' => 'informeprimeraetapa.store','update' => 'informeprimeraetapa.update','id' => 'form']) !!}
                 
-                {!! BootForm::hidden('tipo',$tipo) !!}
+                {!!BootForm::hidden('tipo',$tipo) !!}
             
                                 
                 <div class="row">
                     <div class="col-md-5">
-                        {!! BootForm::date('fecha_informe', 'Fecha del oficio de notificación del informe de seguimiento: *', old('fecha_informe', fecha($informeprimeraetapa->fecha_informe, 'Y-m-d'))) !!}
+                        {!!BootForm::date('fecha_informe', 'Fecha del oficio de notificación del informe de seguimiento: *', old('fecha_informe', fecha($informeprimeraetapa->fecha_informe, 'Y-m-d'))) !!}
                     </div>
                 </div> 
 				<div class="row">                    
                     <div class="col-md-4">
-                        {!! BootForm::text('numero_informe', 'Número de oficio de notificación: *', old('numero_informe', $informeprimeraetapa->numero_informe)) !!}
+                        {!!BootForm::text('numero_informe', 'Número de oficio de notificación: *', old('numero_informe', $informeprimeraetapa->numero_informe)) !!}
                     </div>
                 </div> 
                      
                 <div class="row">                    
                     <div class="col-md-4">
-                        {!! BootForm::text('nombre_titular_informe', 'Nombre del titular a quien se dirige: *', old('nombre_titular_informe', $informeprimeraetapa->nombre_titular_informe)) !!}
+                        {!!BootForm::text('nombre_titular_informe', 'Nombre del titular a quien se dirige: *', old('nombre_titular_informe', $informeprimeraetapa->nombre_titular_informe)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!! BootForm::text('cargo_titular_informe', 'Cargo del titular a quien se dirige: *', old('cargo_titular_informe', $informeprimeraetapa->cargo_titular_informe)) !!}
+                        {!!BootForm::text('cargo_titular_informe', 'Cargo del titular a quien se dirige: *', old('cargo_titular_informe', $informeprimeraetapa->cargo_titular_informe)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!! BootForm::text('domicilio_informe', 'Domicilio: *', old('domicilio_informe', $informeprimeraetapa->domicilio_informe)) !!}
+                        {!!BootForm::text('periodo_gestion', 'Periodo de Gestión: *', old('periodo_gestion', $informeprimeraetapa->periodo_gestion)) !!}
+                    </div>
+                    <div class="col-md-4">
+                        {!!BootForm::text('domicilio_informe', 'Domicilio: *', old('domicilio_informe', $informeprimeraetapa->domicilio_informe)) !!}
                     </div>
                 </div>       
                 <div class="row">                    
                     <div class="col-md-4">
-                        {!! BootForm::text('numero_fojas', 'Número de fojas: *', old('numero_fojas', $informeprimeraetapa->numero_fojas)) !!}
+                        {!!BootForm::text('numero_fojas', 'Número de fojas: *', old('numero_fojas', $informeprimeraetapa->numero_fojas)) !!}
                     </div>
                 </div>
 				
@@ -64,23 +67,6 @@
                     </div>
                 </div>		
                 <div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('acuse_envio', 'Acuse envío a notificar: *', old('acuse_envio', $informeprimeraetapa->acuse_envio)) !!}
-                    </div>
-                    <div class="col-md-5">
-                        {!! BootForm::date('fecha_acuse_envio', 'Fecha del envío a notificar: *', old('fecha_acuse_envio', fecha($informeprimeraetapa->fecha_acuse_envio, 'Y-m-d'))) !!}
-                    </div>
-                </div>  
-				<div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('acuse_notificacion', 'Acuse de notificación: *', old('acuse_notificacion', $informeprimeraetapa->acuse_notificacion)) !!}
-                    </div>
-                    <div class="col-md-5">
-                        {!! BootForm::date('fecha_notificacion', 'Fecha de notificación: *', old('fecha_notificacion', fecha($informeprimeraetapa->fecha_notificacion, 'Y-m-d'))); !!}
-                    </div>
-                </div> 
-				
-                <div class="row">
                     <div class="col-md-6"> 
                         @canany(['informeprimeraetapa.store','informeprimeraetapa.update'])
                             <button type="submit" class="btn btn-primary">Guardar</button>
@@ -88,7 +74,7 @@
                         <a href="{{ route('informeprimeraetapa.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>
-                {!! BootForm::close() !!}    
+                {!!BootForm::close() !!}    
             </div>    
         </div>  
     </div>

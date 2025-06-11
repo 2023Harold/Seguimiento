@@ -73,7 +73,7 @@
                                                         <a class="btn btn-icon bi bi-chat-fill text-sistema float popupcomentario" href="{{ route('revisionesrecomendaciones.create') }}?tipo=Analisis">
 
                                                         </a>
-                                                </h3>
+
                                                 </span>
                                             </div>
                                         </div>

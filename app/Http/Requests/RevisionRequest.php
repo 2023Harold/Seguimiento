@@ -24,7 +24,7 @@ class RevisionRequest extends FormRequest
     public function rules()
     {
         return [
-            'comentario' => 'required|string|max:1500',           
+            'comentario' => 'required|string',           
         ];
     }
 

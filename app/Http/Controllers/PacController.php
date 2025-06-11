@@ -133,6 +133,7 @@ class PacController extends Controller
         return response()->download($preconstancia);
         
     }
+    
     public function fccd()
     {
 
@@ -470,7 +471,6 @@ class PacController extends Controller
             'oficio_orden'=>'XXXXXXX',
             'oficio_notifico'=>'OSFEM/XXXX/XXX/XXX/202X',
             'fecha_notifico'=>'xx/xx/xxxx',
-            'oficio_notifico'=>'XXXXXX',
             'resul_cumplimiento'=>'XXXXXX',
             'recomendaciones_clave'=>'xxxxxxx',
             'lisv'=>'xxxxx/xxxxxx/xxxxx',

@@ -133,6 +133,7 @@
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
                                                                         str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')||
                                                                         str_contains(Route::current()->getName(), 'informeprimeraetapa')||
+                                                                        str_contains(Route::current()->getName(), 'informeacuses')||
                                                                         str_contains(Route::current()->getName(), 'cedulainicial')||
                                                                         str_contains(Route::current()->getName(), 'cedulageneralrecomendacion')||
                                                                         str_contains(Route::current()->getName(), 'cedulageneralpras')||
@@ -256,34 +257,34 @@
                                 </div>
                                 @endcan
                                 @can('pliegosobservacionacciones.index')
-                                <div class="menu-item mb-1">
-                                    <a href="{{ route('pliegosobservacionacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'pliegosobservacionacciones')||
-                                                                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionatencion')||
-                                                                                                                        str_contains(Route::current()->getName(), 'pliegosobservaciondocumentos')||
-                                                                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionanalisis')||
-                                                                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionanexos')||
-                                                                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionrevision')||
-                                                                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
-                                                                                                                        str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')
-                                                                                                                        ) ? 'active' : '' }}">
-                                        @if (count($auditoria->accionespo) > 0)
-                                            @if (count($auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')) === count($auditoria->accionespo))
-                                                {{-- Todas las acciones están autorizadas --}}
-                                                <span class="fa fa-circle" style="color: green"></span>
-                                            @elseif(count($auditoria->accionespo) !=count($auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')))
-                                                {{-- Hay algunas acciones autorizadas, pero no todas --}}
-                                                <span class="fa fa-circle" style="color: yellow"></span>
-                                            @else
-                                                {{-- Hay acciones registradas, pero ninguna está autorizada --}}
-                                                <span class="fa fa-circle" style="color: red"></span>
+                                    <div class="menu-item mb-1">
+                                        <a href="{{ route('pliegosobservacionacciones.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'pliegosobservacionacciones')||
+                                                                                                                            str_contains(Route::current()->getName(), 'pliegosobservacionatencion')||
+                                                                                                                            str_contains(Route::current()->getName(), 'pliegosobservaciondocumentos')||
+                                                                                                                            str_contains(Route::current()->getName(), 'pliegosobservacionanalisis')||
+                                                                                                                            str_contains(Route::current()->getName(), 'pliegosobservacionanexos')||
+                                                                                                                            str_contains(Route::current()->getName(), 'pliegosobservacionrevision')||
+                                                                                                                            str_contains(Route::current()->getName(), 'pliegosobservacionvalidacion')||
+                                                                                                                            str_contains(Route::current()->getName(), 'pliegosobservacionautorizacion')
+                                                                                                                            ) ? 'active' : '' }}">
+                                            @if (count($auditoria->accionespo) > 0)
+                                                @if (count($auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')) === count($auditoria->accionespo))
+                                                    {{-- Todas las acciones están autorizadas --}}
+                                                    <span class="fa fa-circle" style="color: green"></span>
+                                                @elseif(count($auditoria->accionespo) !=count($auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')))
+                                                    {{-- Hay algunas acciones autorizadas, pero no todas --}}
+                                                    <span class="fa fa-circle" style="color: yellow"></span>
+                                                @else
+                                                    {{-- Hay acciones registradas, pero ninguna está autorizada --}}
+                                                    <span class="fa fa-circle" style="color: red"></span>
+                                                @endif
                                             @endif
-                                        @endif
-                                        <span class="menu-bullet">
-                                            <span class="fa fa-file-text"></span>
-                                        </span>
-                                        <span class="menu-title">Pliegos de observación</span>
-                                    </a>
-                                </div>
+                                            <span class="menu-bullet">
+                                                <span class="fa fa-file-text"></span>
+                                            </span>
+                                            <span class="menu-title">Pliegos de observación</span>
+                                        </a>
+                                    </div>
                                 @endcan
                                 <div class="menu-item mb-1">
                                     <a href="{{ route('cedulainicial.index') }}"
@@ -299,28 +300,32 @@
                                         <span class="menu-title">Cédulas</span>
                                     </a>
                                 </div>
-                                <div class="menu-item mb-1">
-                                    <a href="{{ route('informeprimeraetapa.index') }}"
-                                        class="menu-link py-3 {{ str_contains(Route::current()->getName(), 'informeprimeraetapa') ? 'active' : '' }}">
+                                @can('informeprimeraetapa.index')
+                                    <div class="menu-item mb-1">
+                                        <a href="{{ route('informeprimeraetapa.index') }}"
+                                            class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'informeprimeraetapa')||
+                                                                  str_contains(Route::current()->getName(), 'informeacuses')
+                                                                  ) ? 'active' : '' }}">
 
 
 
-                                        @if(count($auditoria->informes) >0)
-                                            @if(count($auditoria->informesAutorizados) == count($auditoria->informes))
-                                            <span class="fa fa-circle" style="color: green"></span>
+                                            @if(count($auditoria->informes) >0)
+                                                @if(count($auditoria->informesAutorizados) == count($auditoria->informes))
+                                                <span class="fa fa-circle" style="color: green"></span>
+                                                @else
+                                                <span class="fa fa-circle" style="color: yellow"></span>
+                                                @endif
+
                                             @else
-                                             <span class="fa fa-circle" style="color: yellow"></span>
+                                                <span class="fa fa-circle" style="color: red"></span>
                                             @endif
-
-                                        @else
-                                            <span class="fa fa-circle" style="color: red"></span>
-                                        @endif
-                                        <span class="menu-bullet">
-                                            <span class="fa fa-file-text"></span>
-                                        </span>
-                                        <span class="menu-title">Informe</span>
-                                    </a>
-                                </div>
+                                            <span class="menu-bullet">
+                                                <span class="fa fa-file-text"></span>
+                                            </span>
+                                            <span class="menu-title">Informe</span>
+                                        </a>
+                                    </div>
+                                @endcan
                             </div>
                         </div>
                         <div class="menu-item menu-accordion" data-kt-menu-trigger="click">

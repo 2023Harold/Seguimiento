@@ -30,9 +30,14 @@ class InformePrimeraEtapa extends Model
         'nivel_autorizacion',
         'usuario_creacion_id',
         'usuario_modificacion_id',
-
-       
-
+        'periodo_gestion',
+        
+        'informe_acuse',
+        'fecha_informe_acuse',
+		'informe_comprobante',
+        'fecha_informe_comprobante',
+		'acuse_notificacion',
+		'fecha_acuse_notificacion',
     ];
     /**
      * The attributes that should be cast.
@@ -46,6 +51,9 @@ class InformePrimeraEtapa extends Model
         'updated_at'=>'datetime',
         'fecha_termino_recomendacion'=>'datetime',
 		'fecha_acuse_envio'=>'datetime',
+		'fecha_informe_acuse'=>'datetime',
+		'fecha_informe_comprobante'=>'datetime',
+		'fecha_acuse_notificacion'=>'datetime',
         
     ];
 

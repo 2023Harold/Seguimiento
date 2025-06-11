@@ -35,6 +35,7 @@ class InformePrimeraEtapaRequest extends FormRequest
 			'fecha_acuse_envio'=> 'required|date|max:10',
 			'acuse_notificacion'=> 'required|string|max:100',
 			'fecha_notificacion'=> 'required|date|max:10',
+            'periodo_gestion'=> 'required|string|max:500',
         ];
     }    
         public function attributes()
@@ -51,6 +52,7 @@ class InformePrimeraEtapaRequest extends FormRequest
 			'fecha_acuse_envio'=> 'fecha del envío a notificar',
 			'acuse_notificacion'=> 'acuse de notificación',
 			'fecha_notificacion'=> 'fecha de notificación',
+			'periodo_gestion'=> 'periodo de gestión',
         ];
     }
     public function messages()
