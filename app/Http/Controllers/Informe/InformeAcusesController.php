@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Informe;
 
+use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\InformePrimeraEtapa;
 use App\Models\Movimientos;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+
 
 class InformeAcusesController extends Controller
 {

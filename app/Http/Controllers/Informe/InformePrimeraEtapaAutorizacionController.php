@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Informe;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
@@ -9,7 +10,6 @@ use App\Models\InformePrimeraEtapa;
 use App\Models\Movimientos;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 
 class InformePrimeraEtapaAutorizacionController extends Controller
 {
@@ -78,28 +78,9 @@ class InformePrimeraEtapaAutorizacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(AprobarFlujoAutorizacionRequest $request, InformePrimeraEtapa $auditoria)
-    {
-        
-        
+    { 
         $this->normalizarDatos($request);
         $informeprimeraetapa=$auditoria;
-
-        
-            $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
-            $auditorias = Auditoria::find(getSession('auditoria_id'));
-
-            $titular=User::where('siglas_rol','TUS')->first();
-            $licMartha=User::where('siglas_rol','ATUS')->first();
-            
-            if(getSession('cp')==2022){
-                $director = $accion->auditoria->directorasignado;
-                $jefe=$accion->depaasignado;
-
-            }else{
-                
-                $director = $auditorias->directorasignado;
-                $jefe = $auditorias->jefedepartamentoencargado;
-            }
 
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
@@ -115,7 +96,7 @@ class InformePrimeraEtapaAutorizacionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del Informe Primera Etapa de'.$informeprimeraetapa->tipo .'de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '. auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto .':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; ha aprobado la autorización del Informe Primera Etapa de'.$informeprimeraetapa->tipo.' de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';

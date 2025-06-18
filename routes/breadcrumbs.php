@@ -1000,6 +1000,11 @@ Breadcrumbs::for('folioscrr.index', function (BreadcrumbTrail $trail,$auditoria)
     $trail->push('Folios', route('folioscrr.index',$auditoria));
 });
 
+Breadcrumbs::for('acuerdosanvav.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('folioscrr.index',$auditoria);
+    $trail->push('Acuerdo Anv y AV', route('acuerdosanvav.index',$auditoria));
+});
+
 Breadcrumbs::for('folioscrr.create', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('folioscrr.index',$auditoria);
     $trail->push('Folios', route('folioscrr.create',$auditoria));
@@ -1025,10 +1030,10 @@ Breadcrumbs::for('remitentes.edit', function (BreadcrumbTrail $trail,$auditoria)
     $trail->push('Folios Editar Remitentes', route('remitentes.edit', $auditoria));
 });
 
-Breadcrumbs::for('foliosanexos.edit', function (BreadcrumbTrail $trail,$auditoria) {
+Breadcrumbs::for('acuerdosanvav.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('folioscrr.index',$auditoria);
     //$trail->push('Acuses', route('foliosanexos.edit',$folio));
-    $trail->push('Acuses', route('foliosanexos.edit', $auditoria));
+    $trail->push('Acuses', route('acuerdosanvav.edit', $auditoria));
 
 });
 

@@ -6,6 +6,7 @@ use App\Models\Auditoria;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 
 class PacController extends Controller
@@ -106,9 +107,14 @@ class PacController extends Controller
             'numero_oficio'=>'XXX'
             ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Analista/mot', $params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Analista/mot', $params, 'docx');       
+        //return response()->download($preconstancia);
 
-        return response()->download($preconstancia);
+        $template=new TemplateProcessor('bases-word/GENERALES/5. ANALISTA/1. MOT.docx');
+        $nombreword='1. MOT';
+        $template->saveAs($nombreword.'.docx');
+        
+         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
 
@@ -128,15 +134,18 @@ class PacController extends Controller
             'cargo_jefe'=>'jefe_puesto',
             ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Analista/fc', $params, 'docx');       
-
-        return response()->download($preconstancia);
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Analista/fc', $params, 'docx');       
+        //return response()->download($preconstancia);
+        $template=new TemplateProcessor('bases-word/GENERALES/5. ANALISTA/2. FC.docx');
+        $nombreword='2. FC';
+        $template->saveAs($nombreword.'.docx');
+        
+         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     
     public function fccd()
     {
-
         $params = [
             'direccion'=>'director_unidadAdministrativa', 
             'departamento'=>'unidadAdministrativa_descripcion', 
@@ -152,10 +161,14 @@ class PacController extends Controller
             'nombre_jefe'=>'jefe->name',
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Analista/fccd', $params, 'docx');       
-
-        return response()->download($preconstancia);
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Analista/fccd', $params, 'docx');       
+        //return response()->download($preconstancia);
+        $template=new TemplateProcessor('bases-word/GENERALES/5. ANALISTA/3. FC CD.docx');
+        $nombreword='3. FC CD';
+        $template->saveAs($nombreword.'.docx');
         
+         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+
     }
 
     /**Lider */
@@ -193,23 +206,37 @@ class PacController extends Controller
 		$preconstancia="";
 		/*Cumplimiento Financero*/
 		if($auditoria->tipo_auditoria_id==1){
-			$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/1. AR.docx');
+            $nombreword='1. AR';
+            $template->saveAs($nombreword.'.docx');
+
 		}elseif($auditoria->tipo_auditoria_id==2){
 			/*Inversion Fisica*/
-			$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/1. AR.docx');
+            $nombreword='1. AR';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
 		}elseif($auditoria->tipo_auditoria_id==3){
 			/*Desempeño*/
-			$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/1. AR.docx');
+            $nombreword='1. AR';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
 		}elseif($auditoria->tipo_auditoria_id==4){
 			/*Legalidad*/
-			$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/1. AR.docx');
+            $nombreword='1. AR';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
 		}
               
 
-        return response()->download($preconstancia);
-        
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
     }
 
+    /**XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
     public function ofiaar()
     {
 
@@ -265,9 +292,38 @@ class PacController extends Controller
             'fojas_utiles_copia'=>'150',
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ofar_oics',$params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ofar_oics',$params, 'docx');       
 
-        return response()->download($preconstancia);
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		$preconstancia="";
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/3. Of. AR_OIC´s.docx');
+            $nombreword='3. Of. AR_OIC´s';
+            $template->saveAs($nombreword.'.docx');
+
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/3. Of. AR_OIC´s.docx');
+            $nombreword='3. Of. AR_OIC´s';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/3. Of. AR_OIC´s.docx');
+            $nombreword='3. Of. AR_OIC´s';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/3. Of. AR_OIC´s.docx');
+            $nombreword='3. Of. AR_OIC´s';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function ac()
@@ -344,9 +400,37 @@ class PacController extends Controller
             'firma_testigo4_n'=>'Nombre Testigo4',
             'firma_testigo5_n'=>'Nombre Testigo5',
         ];
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ac', [], 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ac', [], 'docx');       
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		$preconstancia="";
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/4. AC.docx');
+            $nombreword='4. AC';
+            $template->saveAs($nombreword.'.docx');
 
-        return response()->download($preconstancia);
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/4. AC.docx');
+            $nombreword='4. AC';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/4. AC.docx');
+            $nombreword='4. AC';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/4. AC.docx');
+            $nombreword='4. AC';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function ofai()
@@ -413,10 +497,38 @@ class PacController extends Controller
             'lisv'=>'XXX/XXXX/XXX/XXXX',
 
         ];
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ofr_oics', $params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ofr_oics', $params, 'docx');       
 
-        return response()->download($preconstancia);
-        
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		$preconstancia="";
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/12. Of. R_OIC´s.docx');
+            $nombreword='12. Of. R_OIC´s';
+            $template->saveAs($nombreword.'.docx');
+
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/12. Of. R_OIC´s.docx');
+            $nombreword='12. Of. R_OIC´s';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/12. Of. R_OIC´s.docx');
+            $nombreword='12. Of. R_OIC´s';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/12. Of. R_OIC´s.docx');
+            $nombreword='12. Of. R_OIC´s';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
     }
     public function ofprasoics()
     {
@@ -555,8 +667,6 @@ class PacController extends Controller
             'oficio_numero'=>'OSFEM/US/XXX/XXX/XXX/202X',
             'constante_a'=>'XXXX',
             'constante_b'=>'XXXX',
-            'plazo_a'=>'XXXX',
-            'plazo_b'=>'XXX',
             'fenecio'=>'xxx',
             'oficio_numero2'=>' OSFEM/US/XXX',                
             'fecha_2'=>'XX/XX/XXXX',
@@ -571,9 +681,38 @@ class PacController extends Controller
              'lisv'=>'XXXXX',            
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ac2', $params, 'docx');       
+       // $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ac2', $params, 'docx');       
 
-        return response()->download($preconstancia);
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		$preconstancia="";
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/5. AC.docx');
+            $nombreword='5. AC';
+            $template->saveAs($nombreword.'.docx');
+
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/5. AC.docx');
+            $nombreword='5. AC';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/5. AC PAR.docx');
+            $nombreword='5. AC PAR';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/6. AC PAR.docx');
+            $nombreword='6. AC PAR';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function acral()
@@ -635,9 +774,38 @@ class PacController extends Controller
             
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ofac', $params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ofac', $params, 'docx');       
 
-        return response()->download($preconstancia);
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		$preconstancia="";
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/6. OF. AC.docx');
+            $nombreword='6. OF. AC';
+            $template->saveAs($nombreword.'.docx');
+
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/6. OF. AC.docx');
+            $nombreword='6. OF. AC';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/6. OF. AC.docx');
+            $nombreword='6. OF. AC';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/7. OF. AC.docx');
+            $nombreword='7. OF. AC';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function anv()
@@ -703,9 +871,38 @@ class PacController extends Controller
            
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/anv', $params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/anv', $params, 'docx');       
 
-        return response()->download($preconstancia);
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		$preconstancia="";
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/7. AnV.docx');
+            $nombreword='7. AnV';
+            $template->saveAs($nombreword.'.docx');
+
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/7. AnV.docx');
+            $nombreword='7. AnV';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/7. AnV.docx');
+            $nombreword='7. AnV';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/8. AnV.docx');
+            $nombreword='8. AnV';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function ofanv()
@@ -730,9 +927,38 @@ class PacController extends Controller
         ];
 
         
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ofanv', $params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/ofanv', $params, 'docx');       
 
-        return response()->download($preconstancia);
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		$preconstancia="";
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/9. OF. AnV_AV.docx');
+            $nombreword='9. OF. AnV_AV';
+            $template->saveAs($nombreword.'.docx');
+
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/9. OF. AnV_AV.docx');
+            $nombreword='9. OF. AnV_AV';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/9. OF. AnV_AV.docx');
+            $nombreword='9. OF. AnV_AV';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/10. OF. AnV_AV.docx');
+            $nombreword='10. OF. AnV_AV';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function av()
@@ -787,9 +1013,37 @@ class PacController extends Controller
         'lisv'=>'livs XXX/XXXX/XXX/XXXX',
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/av', $params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Lider/av', $params, 'docx');       
 
-        return response()->download($preconstancia);
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/8. AV.docx');
+            $nombreword='8. AV';
+            $template->saveAs($nombreword.'.docx');
+
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/8. AV.docx');
+            $nombreword='8. AV';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/8. AV.docx');
+            $nombreword='8. AV';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/9. AV.docx');
+            $nombreword='9. AV';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function oi()
@@ -944,9 +1198,37 @@ class PacController extends Controller
 
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Jefe/ofis', $params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Jefe/ofis', $params, 'docx');       
 
-        return response()->download($preconstancia);
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/11. Of. IS.docx');
+            $nombreword='11. Of. IS';
+            $template->saveAs($nombreword.'.docx');
+
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/11. Of. IS.docx');
+            $nombreword='11. Of. IS';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/11. Of. IS PAR.docx');
+            $nombreword='11. Of. IS PAR';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/14. Of. IS.docx');
+            $nombreword='14. Of. IS';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function is()
@@ -1108,9 +1390,37 @@ class PacController extends Controller
         'firma_analista'=>'nombre y Firma del analista',
 
     ];
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Jefe/is',  $params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Jefe/is',  $params, 'docx');       
 
-        return response()->download($preconstancia);
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+		/*Cumplimiento Financero*/
+		if($auditoria->tipo_auditoria_id==1){
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/CUMPLIMIENTO_FINANCIERO/LIDER/1.AR', $params, 'docx');
+            $template=new TemplateProcessor('bases-word/1. CUMPLIMIENTO FINANCIERO/10. IS.docx');
+            $nombreword='10. IS';
+            $template->saveAs($nombreword.'.docx');
+
+		}elseif($auditoria->tipo_auditoria_id==2){
+			/*Inversion Fisica*/
+            $template=new TemplateProcessor('bases-word/3. INVERSIÓN FÍSICA/10. IS.docx');
+            $nombreword='10. IS';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/INVERSION_FISICA/LIDER/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==3){
+			/*Desempeño*/
+            $template=new TemplateProcessor('bases-word/2. DESEMPEÑO/10. IS PAR.docx');
+            $nombreword='10. IS PAR';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/DESEMPEÑO/LIDER/1.AR', $params, 'docx');
+		}elseif($auditoria->tipo_auditoria_id==4){
+			/*Legalidad*/
+            $template=new TemplateProcessor('bases-word/4. LEGALIDAD/13. IS EA Y PAR.docx');
+            $nombreword='13. IS EA Y PAR';
+            $template->saveAs($nombreword.'.docx');
+			//$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/LEGALIDAD/LIDER/1.AR', $params, 'docx');
+		}           
+        //return response()->download($preconstancia);
+        return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function is2()
@@ -1218,9 +1528,14 @@ class PacController extends Controller
         
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Direccion/mda', $params, 'docx');       
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Direccion/mda', $params, 'docx');       
+        //return response()->download($preconstancia);
 
-        return response()->download($preconstancia);
+        $template=new TemplateProcessor('bases-word/GENERALES/7. SECRETARIA DIRECCIÓN/2. MDA.docx');
+        $nombreword='2. MDA';
+        $template->saveAs($nombreword.'.docx');
+        
+         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
     public function mdi() // mdj
@@ -1249,9 +1564,13 @@ class PacController extends Controller
 
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Direccion/mdj', $params, 'docx');       
-
-        return response()->download($preconstancia);
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Direccion/mdj', $params, 'docx');       
+        //return response()->download($preconstancia);
+        $template=new TemplateProcessor('bases-word/GENERALES/7. SECRETARIA DIRECCIÓN/1. MDJ.docx');
+        $nombreword='2. MDJ';
+        $template->saveAs($nombreword.'.docx');
+        
+         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
         /**Titular */
@@ -1284,9 +1603,13 @@ class PacController extends Controller
           'archivo'=>'XXXXXX',
         ];
 
-        $preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Titular/aa', $params,'docx');       
-
-        return response()->download($preconstancia);
+        //$preconstancia = reporte(1, 'Fiscalizacion/Seguimiento/Pac/Titular/aa', $params,'docx');       
+        //return response()->download($preconstancia);
+        $template=new TemplateProcessor('bases-word/GENERALES/6. SECRETARIA TITULAR/1. MAA.docx');
+        $nombreword='1. MAA';
+        $template->saveAs($nombreword.'.docx');
+        
+         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
         
     }
 }

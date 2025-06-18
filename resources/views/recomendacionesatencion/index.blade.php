@@ -252,7 +252,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente')
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendaciones.edit',$comentario) }}">
+                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendacionesatencion.edit',$comentario) }}">
                                             Atender
                                         </a>
                                     @endif

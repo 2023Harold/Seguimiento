@@ -45,12 +45,12 @@
                         <div class="card-body ">                                              
                             <div class="row">
                                 <div class="col-md-4 ">
-                                    <a href="{{ route('pacauditoria.mot',1) }}" class="card card-a  text-gray-700 align-items-center Grupo">
+                                    <a href="{{ route('pac.mot',1) }}" class="card card-a  text-gray-700 align-items-center Grupo">
                                         <div class="card-body d-flex align-items-center pulses">
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span>                        
                                             <span class="ms-3 fs-6 fw-bold">
-                                                MOT
+                                                1. MOT
                                             </span>
                                         </div>
                                     </a>
@@ -62,7 +62,7 @@
                                             </span> 
                                     
                                             <span class="ms-3 fs-6 fw-bold">
-                                                FC
+                                               2. FC
                                             </span>
                                         </div>
                                     </a>
@@ -73,7 +73,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span> 
                                             <span class="ms-3 fs-6 fw-bold">
-                                                FC CD
+                                               3. FC CD
                                             </span>
                                         </div>
                                     </a>
@@ -97,7 +97,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span>                        
                                             <span class="ms-3 fs-6 fw-bold">
-                                                AR
+                                                1. AR
                                             </span>
                                         </div>
                                     </a>
@@ -120,7 +120,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span> 
                                             <span class="ms-3 fs-6 fw-bold">
-                                                Of. AR_OIC's
+                                                3. Of. AR_OIC's
                                             </span>
                                         </div>
                                     </a>
@@ -131,7 +131,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span>                        
                                             <span class="ms-3 fs-6 fw-bold">
-                                                4 AC
+                                                4. AC
                                             </span>
                                         </div>
                                     </a>
@@ -154,7 +154,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span> 
                                             <span class="ms-3 fs-6 fw-bold">
-                                                Of. R_OIC's
+                                                12. Of. R_OIC's
                                             </span>
                                         </div>
                                     </a>
@@ -201,7 +201,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span>                        
                                             <span class="ms-3 fs-6 fw-bold">
-                                                10 AC
+                                                5. AC
                                             </span>
                                         </div>
                                     </a>
@@ -224,7 +224,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span> 
                                             <span class="ms-3 fs-6 fw-bold">
-                                                Of. AC
+                                                6. Of. AC
                                             </span>
                                         </div>
                                     </a>
@@ -237,7 +237,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span>                        
                                             <span class="ms-3 fs-6 fw-bold">
-                                                AnV
+                                                7. AnV
                                             </span>
                                         </div>
                                     </a>
@@ -249,7 +249,7 @@
                                             </span> 
                                     
                                             <span class="ms-3 fs-6 fw-bold">
-                                                OF. AnV
+                                                9. OF. AnV
                                             </span>
                                         </div>
                                     </a>
@@ -260,7 +260,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span> 
                                             <span class="ms-3 fs-6 fw-bold">
-                                                A. V
+                                                8. A. V
                                             </span>
                                         </div>
                                     </a>
@@ -318,7 +318,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span>                        
                                             <span class="ms-3 fs-6 fw-bold">
-                                                Of. IS
+                                                11. Of. IS
                                             </span>
                                         </div>
                                     </a>
@@ -330,7 +330,7 @@
                                             </span> 
                                     
                                             <span class="ms-3 fs-6 fw-bold">
-                                                IS
+                                                10. IS
                                             </span>
                                         </div>
                                     </a>
@@ -366,7 +366,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span>                        
                                             <span class="ms-3 fs-6 fw-bold">
-                                                MDA
+                                                2. MDA
                                             </span>
                                         </div>
                                     </a>
@@ -378,7 +378,7 @@
                                             </span> 
                                     
                                             <span class="ms-3 fs-6 fw-bold">
-                                                MDJ
+                                                1. MDJ
                                             </span>
                                         </div>
                                     </a>
@@ -404,7 +404,7 @@
                                             <span class="bi bi-file-earmark-text fs-2x">                                    
                                             </span>                        
                                             <span class="ms-3 fs-6 fw-bold">
-                                                AA
+                                                1. MAA
                                             </span>
                                         </div>
                                     </a>

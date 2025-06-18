@@ -1,0 +1,54 @@
+@extends('layouts.appPopup')
+@section('content')
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">           
+            {{$accion}}
+        </h1>
+    </div>
+    {{--revisiones recomendaciones--}}
+    <div class="card-body">
+        
+        @include('flash::message')
+        {!!BootForm::open(['model' => $comentario, 'store' => 'revisionesrecomendaciones.store', 'update' => 'revisionesrecomendaciones.update', 'id' => 'form']) !!}
+            <div class="row">
+                {!!BootForm::hidden('tipo', $tipo) !!}
+                @if($tipo == "Analisis")
+                    <div class="col-md-12">
+                        {!!BootForm::textarea('muestra_rev','Analisis: *', old('muestra_rev', optional($acciones->recomendaciones)->analisis),['rows'=>'10']) !!}
+                    </div>
+                @endif
+                @if($tipo == "Conclusión")
+                    <div class="col-md-12">
+                        {!!BootForm::textarea('muestra_rev','Conclusión: *', old('muestra_rev', optional($acciones->recomendaciones)->conclusion),['rows'=>'10']) !!}
+                    </div>
+                @endif
+                @if($tipo == "Normatividad")
+                    <div class="col-md-12">
+                        {!!BootForm::textarea('muestra_rev','Normatividad Infringida: *', old('muestra_rev', $acciones->normativa_infringida),['rows'=>'10']) !!}
+                    </div>
+                @endif
+                @if($tipo == "Listado Documentos")
+                    <div class="col-md-12">
+                        {!!BootForm::textarea('muestra_rev','Listado de Documentos: *', old('muestra_rev', optional($acciones->recomendaciones)->listado_documentos),['rows'=>'10']) !!}
+                    </div>
+                @endif
+            </div>
+                
+            <div class="row">
+                <div class="col-md-12">
+                    {!!BootForm::textarea('comentario', 'Comentario: *', old("comentario", $comentario->comentario))!!}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @btnSubmit("Guardar")
+                </div>
+            </div>
+        {!!BootForm::close() !!}
+    </div>
+</div>
+@endsection
+@section('script')
+{!!JsValidator::formRequest('App\Http\Requests\RevisionRequest') !!}
+@endsection

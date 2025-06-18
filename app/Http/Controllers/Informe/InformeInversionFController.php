@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Informe;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\InformePrimeraEtapaRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
@@ -12,7 +13,6 @@ use App\Models\ListadoEntidades;
 use App\Models\Segpras;
 use App\Models\SolicitudesAclaracion;
 use App\Models\User;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Luecano\NumeroALetras\NumeroALetras;
 use Illuminate\Http\Request;

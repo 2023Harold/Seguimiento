@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Informe;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\InformePrimeraEtapaRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
@@ -12,7 +13,6 @@ use App\Models\ListadoEntidades;
 use App\Models\Segpras;
 use App\Models\SolicitudesAclaracion;
 use App\Models\User;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Luecano\NumeroALetras\NumeroALetras;
 use Illuminate\Http\Request;
@@ -412,9 +412,16 @@ class InformeLegalidadController extends Controller
         $tr01 = collect($segrecomendacion)->pluck('tr01')->filter()->implode(', ');
         $PlazoAcciones = AuditoriaAccion::where('segauditoria_id', $auditoria->id)
                 ->max('segauditoria_acciones.plazo_recomendacion');
-        //$PlazoAccionesLetras = $formatter->toString($PlazoAcciones);
-        //$PlazoAccionesLetrasMin =ucwords(strtolower($PlazoAccionesLetras));
-        $PlazoAccionesLetrasMin =$PlazoAcciones;
+        // Extraer el número al inicio 
+        preg_match('/^\d+/', $PlazoAcciones,$matches);
+        $numero = isset($matches[0]) ? (int) $matches[0] : 0;
+
+        // Extraer el resto del texto 
+        $resto = trim(substr($PlazoAcciones, strlen($matches[0])));
+
+        $numeroEnLetras = $formatter->toString($numero);
+        $PlazoAccionesLetras = $numeroEnLetras . '' . $resto; 
+        $PlazoAccionesLetrasMin =ucwords(strtolower($PlazoAccionesLetras));
 
         if ($auditoria) {
             $entidad = ListadoEntidades::where('no_auditoria', $auditoria->numero_auditoria)->where('cuenta_publica', $auditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();

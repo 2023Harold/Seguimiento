@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Informe;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\InformePrimeraEtapaRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
@@ -12,12 +13,11 @@ use App\Models\ListadoEntidades;
 use App\Models\Segpras;
 use App\Models\SolicitudesAclaracion;
 use App\Models\User;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Luecano\NumeroALetras\NumeroALetras;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\ToArray;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat\NumberFormatter;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\SimpleType\Jc;
@@ -346,9 +346,18 @@ class InformeDesempenoController extends Controller
         
         $PlazoAcciones = AuditoriaAccion::where('segauditoria_id', $auditoria->id)
                 ->max('segauditoria_acciones.plazo_recomendacion');
-        $PlazoAccionesLetras = $formatter->toString($PlazoAcciones);
+        
+        // Extraer el número al inicio 
+        preg_match('/^\d+/', $PlazoAcciones,$matches);
+        $numero = isset($matches[0]) ? (int) $matches[0] : 0;
+
+        // Extraer el resto del texto 
+        $resto = trim(substr($PlazoAcciones, strlen($matches[0])));
+
+        $numeroEnLetras = $formatter->toString($numero);
+        $PlazoAccionesLetras = $numeroEnLetras . '' . $resto; 
         $PlazoAccionesLetrasMin =ucwords(strtolower($PlazoAccionesLetras));
-        //dd($PlazoAcciones);
+
         $TSP=0;
         $TSPS=0;
         $TSPNS=0;
