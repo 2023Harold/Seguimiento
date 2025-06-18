@@ -123,7 +123,9 @@
                                 <thead>
                                     <tr>
                                         <th>Acta de comparecencia</th>
+                                        @if(!empty($auditoria->comparecencia->oficio_designacion))
                                         <th>Oficio de designación</th>
+                                        @endif
 										<th>Fase / Acción</th>
                                         @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
                                         <th>Enviar</th>
@@ -144,6 +146,7 @@
                                                 <small>{{ fecha($auditoria->comparecencia->fecha_cedula) }}</small>
                                                 @endif
                                             </td>
+                                             @if(!empty($auditoria->comparecencia->oficio_designacion))
                                             <td class="text-center">
                                                 @if (!empty($auditoria->comparecencia->oficio_designacion))
                                                 <a href="{{ asset($auditoria->comparecencia->oficio_designacion) }}"
@@ -153,6 +156,7 @@
                                                 <small>{{ fecha($auditoria->comparecencia->fecha_oficio_designacion) }}</small>
                                                 @endif
                                             </td>
+                                            @endif
                                             <td class="text-center">
                                                 @if (empty($auditoria->comparecencia->fase_autorizacion)||$auditoria->comparecencia->fase_autorizacion=='Rechazado')
                                                     <span class="badge badge-light-danger">{{ $auditoria->comparecencia->fase_autorizacion }} </span>

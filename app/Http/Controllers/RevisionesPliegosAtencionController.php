@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Revisiones;
 use Illuminate\Http\Request;
@@ -23,13 +23,16 @@ class RevisionesPliegosAtencionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $comentario = new Revisiones();
              
         $accion = 'Agregar';
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $acciones=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para 
 
-        return view('revisionespliegosatencion.form', compact('comentario', 'accion'));
+        return view('revisionespliegosatencion.form', compact('comentario', 'accion','auditoria','acciones','tipo'));
     }
 
     /**

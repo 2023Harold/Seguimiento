@@ -32,7 +32,7 @@ class RevisionesPliegosController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para 
-
+       
         return view('revisionespliegos.form', compact('comentario', 'accion', 'auditoria', 'acciones', 'tipo'));
     }
 
@@ -137,11 +137,21 @@ class RevisionesPliegosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Revisiones $comentario)
+    public function edit(Revisiones $comentario, Request $request)
     {
+
+        // dd($comentario);
+        // $comentario = new Revisiones();
+        $accion = 'Agregar';
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $acciones=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para 
+        // dd($tipo);
         setSession('comentario_id',$comentario->id);
 
-        return redirect()->route('revisionespliegosatencion.create');
+        return view('revisionespliegosatencion.form', compact('comentario','accion','tipo'));
+
+        // return redirect()->route('revisionespliegosatencion.form',compact('comentario'));
     }
 
     /**

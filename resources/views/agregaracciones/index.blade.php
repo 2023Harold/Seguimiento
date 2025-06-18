@@ -69,7 +69,21 @@
                 @endif      
                 <div class="table-responsive">
                     <table class="table">
-                        <thead>                        
+                        <colgroup span="numero-12" width="2"></colgroup>
+                        <thead> 
+                            <tr>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>        
+                                <td colspan="2"> Tipología</td>                               
+                            </tr>
                             <tr>
                                 <th> </th>
                                 <th>No. Consecutivo</th>
@@ -81,7 +95,8 @@
                                 <th>Estatus</th>                               
                                 <th>Editar</th>
                                 <th>Eliminar</th>
-                                <th>Tipología</th>
+                                <th>Fase</th>
+                                <th>Editar/Enviar</th>              
                             </tr>
                         </thead>
                         <tbody>
@@ -182,41 +197,47 @@
                                        @destroy(route('agregaracciones.destroy',$accion))
                                     @endcan
                                 @endif
-                                </td>
-                                {{-- <td class="text-center">
-                                    
-                                 {{-- @if (empty($auditoria->tipologiaacciones->fase_autorizacion)||$auditoria->tipologiaacciones->fase_autorizacion=='Rechazado')
-                                        <span class="badge badge-light-danger">{{ $auditoria->tipologiaacciones->fase_autorizacion }} </span>
-                                        @can('tipologiaacciones.edit')
-                                        <a href="{{ route('tipologiaacciones.edit',$auditoria->tipologiaacciones) }}" class="btn btn-primary">
-                                            <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
-                                        </a>
-                                        @endcan
-                                    @endif --}}
-                                    {{-- @if ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión01')
-                                    @can('turnoarchivorevision01.edit')
-                                        <a href="{{ route('turnoarchivorevision01.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
-                                            <li class="fa fa-gavel"></li>
-                                            Revisar
-                                        </a>
-                                    @else
-                                        <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
-                                    @endcan
-                                    @endif --}}
-                                
-                                    {{-- @if (empty($segcattipologia->tipologia)||$segcattipologia->tipologia=='Rechazado')
-                                        @can('tipologiaacciones.edit')
-                                            <a href="{{ route('tipologiaaccionesenvio.edit',$auditoria->segcattipologia->tipologia) }}" class="btn btn-primary">
-                                             Enviar
+                                </td>                               
+                                <td class="text-center">                                                              
+                                    @if (empty($accion->fase_autorizacion))
+                                            <span class="badge badge-light-danger">{{ $accion->fase_autorizacion }} </span>
+                                        {{-- {{ dd($auditoria); }} --}}
+                                        @if (empty($accion->tipologia_id))  
+                                            @can ('agregartipologiaaccion.edit')
+                                                <a href="{{ route('agregartipologiaaccion.edit',$accion) }}" class="btn btn-primary h6 text-hover-primary mb-5 float popupcomentario" target="_blank" >Agregar                                          
+                                                </a>
+                                            @endcan
+                                        @endif
+                                    @elseif(empty($accion->fase_autorizacion)||$accion->fase_autorizacion=='Rechazado')      
+                                        <span class="badge badge-light-danger">{{ $accion->fase_autorizacion }} </span>                                  
+                                                                                                                      
+                                    @endif                                                                
+                                            @if ($accion->fase_autorizacion == 'En revisión')
+                                                @can('tipologiaaccionrevision01.edit')
+                                                     <a href="{{ route('tipologiaaccionrevision01.edit',$accion) }}"class="btn btn-primary h6 text-hover-primary mb-5 float popupcomentario">
+                                                       <li class="fa fa-gavel"></li>
+                                                         Revisar
+                                                     </a>
+                                            @else
+                                                                        <span class="badge badge-light-warning">{{ $accion->fase_autorizacion }} </span>
+                                                @endcan
+                                            @endif                                 
+                                                    @if ($accion->fase_autorizacion=='Autorizado')
+                                                        <span class="badge badge-light-success">{{ $accion->fase_autorizacion }} </span>
+                                                    @endif                                                                                                                                                                                                 
+                                    </td><td class="text-center">
+                                         @if (!empty($accion->tipologia_id)&&(empty($accion->fase_autorizacion)||$accion->fase_autorizacion=='Rechazado'))                                
+                                         @can ('agregartipologiaaccion.edit')
+                                                <a href="{{ route('agregartipologiaaccion.edit',$accion) }}" class="text-primary h6 text-hover-primary mb-5 float popupcomentario" target="_blank" >                                                                                        
+                                                <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+                                                </a>
+                                         @endcan 
+                                            @can('tipologiaaccionenvio.edit')
+                                            <a href="{{ route('tipologiaaccionenvio.edit',$accion) }}" class="btn btn-primary ">
+                                            Enviar
                                             </a>
-                                        @endcan
-                                @endif 
-                                </td> --}}
-                                <td class="text-center">                                
-                                
-                                <a href="{{ route('tipologiaacciones.create',$auditoria) }}" class="btn btn-primary">Agregar
-                                </a>
-                               
+                                            @endcan                                                                                                               
+                                        @endif                            
                                 </td>
                             </tr>
                             {!! movimientosDesglose($accion->id, 10, $accion->movimientos) !!}
@@ -248,4 +269,24 @@
         </div>
     </div>
 </div>
+@endsection
+@section('script')
+<script>    
+        $(document).ready(function() {
+            $('.popupcomentario').colorbox({
+                width:"65%",
+                height:"650px",
+                maxWidth:400,
+                maxHeight:"650px",
+                iframe: true,
+                onClosed: function() {
+                    location.reload(true);
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"65%",maxWidth:400, height:"650px", maxHeight:"650px"});
+                 $(window).trigger("resize");
+                }
+            });
+        });
+</script>    
 @endsection

@@ -70,11 +70,11 @@ class TipologiaAccionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, AuditoriaAccion $accion)
+    public function edit(Auditoria $auditoria )
     {
         $tipologias = CatalogoTipologia::where('tipo_auditoria_id',$accion->acto_fiscalizacion_id)->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
       
-        return view('tipologiaaccion.form', compact('accion', 'request','tipologias'));
+        return view('tipologiaaccion.form', compact('accion', 'request','tipologias','auditoria'));
     }
 
     /**

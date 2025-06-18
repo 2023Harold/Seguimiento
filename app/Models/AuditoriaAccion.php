@@ -73,7 +73,9 @@ class AuditoriaAccion extends Model
         'aprobar_cedanades_lider',
         'aprobar_cedanades_jefe',
         'eliminado',
-        'tipologia_id'
+        'tipologia_id',
+        'fase_autorizacion',
+        'nivel_autorizacion'
     ];
 
 
@@ -164,8 +166,8 @@ class AuditoriaAccion extends Model
         return $this->belongsTo(User::class, 'usuario_actualizacion_id', 'id');
     }
     public function tipologiaacciones()
-            {
-                return $this->hasMany(CatalogoTipologia::class, 'id', 'tipo_accion_id')->first();
-            }
+     {
+        return $this->hasMany(CatalogoTipologia::class, 'id', 'tipo_accion_id')->first();
+     }
 
 }

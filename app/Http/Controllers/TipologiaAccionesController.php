@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\CatalogoTipologia;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\CatalogoTipoAccion;
+use Illuminate\Http\Request;
 
 
 
@@ -18,7 +19,7 @@ class TipologiaAccionesController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -80,9 +81,12 @@ class TipologiaAccionesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(AuditoriaAccion $accion, Request $request)
     {
-        //
+        // $auditoria = Auditoria::find(getSession('auditoria_acion_tipologia'));
+        $tipologias = CatalogoTipologia::where('tipo_auditoria_id',$accion->acto_fiscalizacion_id)->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
+      
+        return view('tipologiaaccion.form', compact('accion', 'request','tipologias'));
     }
 
     /**

@@ -109,9 +109,13 @@ Breadcrumbs::for('tipologiaaccion.index', function (BreadcrumbTrail $trail) {
     $trail->push('Acciones', route('tipologiaaccion.index'));
 });
 
-Breadcrumbs::for('tipologiaacciones.create', function (BreadcrumbTrail $trail,$auditoria) {
+// Breadcrumbs::for('tipologiaacciones.create', function (BreadcrumbTrail $trail,$auditoria) {
+//     $trail->parent('agregaracciones.index',$auditoria);
+//     $trail->push('Acciones', route('tipologiaacciones.create',$auditoria));
+// });
+Breadcrumbs::for('agregartipologiaaccion.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('agregaracciones.index',$auditoria);
-    $trail->push('Acciones', route('tipologiaacciones.create',$auditoria));
+    $trail->push('Tipología', route('agregartipologiaaccion.edit',$auditoria));
 });
 
 

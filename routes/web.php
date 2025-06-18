@@ -18,7 +18,7 @@ use App\Http\Controllers\AgregarAccionesController;
 use App\Http\Controllers\AgregarAccionesRevision01Controller;
 use App\Http\Controllers\AgregarAccionesRevisionController;
 use App\Http\Controllers\AgregarAccionesValidacionController;
-use App\Http\Controllers\AgregarCedulaInicialController;
+use App\Http\Controllers\AgregarTipologiaAccionController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\AsignacionAccionController;
@@ -188,6 +188,8 @@ use App\Http\Controllers\SolicitudesAclaracionRevisionController;
 use App\Http\Controllers\SolicitudesAclaracionValidacionController;
 use App\Http\Controllers\TipologiaAccionController;
 use App\Http\Controllers\TipologiaAccionesController;
+use App\Http\Controllers\TipologiaAccionEnvioController;
+use App\Http\Controllers\TipologiaAccionRevision01Controller;
 use App\Http\Controllers\TipologiaAuditoriasController;
 use App\Http\Controllers\TurnoArchivoAutortizacionController;
 use App\Http\Controllers\TurnoArchivoController;
@@ -358,8 +360,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
      Route::resource('agregaraccionesrevision', AgregarAccionesRevisionController::class, ['parameters' => ['agregaraccionesrevision' => 'accion']]);
      Route::resource('agregaraccionesvalidacion', AgregarAccionesValidacionController::class, ['parameters' => ['agregaraccionesvalidacion' => 'accion']]);
      Route::resource('agregaraccionesautorizacion', AgregarAccionesAutorizacionController::class, ['parameters' => ['agregaraccionesautorizacion' => 'accion']]);
-     Route::resource('tipologiaacciones', TipologiaAccionesController::class);
-     Route::get('/tipologiaacciones/create/{auditoria}', [TipologiaAccionesController::class,'create'])->name('tipologiaacciones.create') ;
+    //  Route::resource('tipologiaacciones', TipologiaAccionesController::class);
+    //  Route::get('/tipologiaacciones/create/{auditoria}', [TipologiaAccionesController::class,'create'])->name('tipologiaacciones.create') ;
+    Route::resource('agregartipologiaaccion', AgregarTipologiaAccionController::class, ['parameters' => ['agregartipologiaaccion' => 'accion']]);
+    Route::resource('tipologiaaccionenvio', TipologiaAccionEnvioController::class, ['parameters' => ['tipologiaaccionenvio' => 'accion']]);
+    Route::resource('tipologiaaccionrevision01', TipologiaAccionRevision01Controller::class, ['parameters' => ['tipologiaaccionrevision01' => 'accion']]);
+    
+
     //  Route::resource('revisionesrecomendaciones', RevisionesRecomendacionesController::class, ['parameters' => ['revisionesrecomendaciones' => 'comentario']]);
     /**Fin del apartado de Auditorias */
 
@@ -493,7 +500,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('pliegosobservacionautorizacion', PliegosObservacionAutorizacionController::class, ['parameters' => ['pliegosobservacionautorizacion' => 'pliegosobservacion']]);
     Route::get('pliegosobservacioncontestacionoficios/{pliegosobservacion}', [PliegosObservacionAtencionContestacionController::class, 'oficiospliegosobservacion'])->name('pliegosobservacioncontestacion.oficiospliegosobservacion');
     Route::resource('revisionespliegos', RevisionesPliegosController::class, ['parameters' => ['revisionespliegos' => 'comentario']]);
-    Route::resource('revisionespliegosatencion', RevisionesPliegosAtencionController::class, ['parameters' => ['revisionespliegosatencion' => 'comentario']]);
+    Route::resource('revisionespliegosatencion', RevisionesPliegosController::class, ['parameters' => ['revisionespliegosatencion' => 'comentario']]);
     /**Fin del apartado de Seguimiento - Auditorias - Pliegos*/
 
     /**Seguimiento - Auditorias - Cedulas*/
@@ -507,7 +514,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('cedulainicialprimeravalidacion', CedulaInicialValidacionController::class, ['parameters' => ['cedulainicialprimeravalidacion' => 'cedula']]);
     Route::resource('cedulainicialprimeraautorizacion', CedulaInicialAutorizacionController::class, ['parameters' => ['cedulainicialprimeraautorizacion' => 'cedula']]);
 
-    Route::resource('agregarcedulainicial', AgregarCedulaInicialController::class, ['parameters' => ['agregracedulainicial' => 'cedula']]);
+    //Route::resource('agregarcedulainicial', AgregarCedulaInicialController::class, ['parameters' => ['agregracedulainicial' => 'cedula']]);
     Route::resource('cedulasenvio', CedulasEnvioController::class, ['parameters' => ['cedulasenvio' => 'auditoria']]);
     Route::resource('cedulaanaliticadesempenorevision', CedulaAnaliticaDesempenoRevisionController::class, ['parameters' => ['cedulaanaliticadesempenorevision' => 'auditoria']]);
     
@@ -532,7 +539,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('cedulaanaliticaanalista', CedulaAnaliticaAnalistaController::class, ['parameters' => ['cedulaanaliticaanalista' => 'cedula']]);
     Route::resource('cedulaanaliticarevision01', CedulaAnaliticaRevision01Controller::class, ['parameters' => ['cedulaanaliticarevision01' => 'cedula']]);
     Route::resource('cedulaanaliticarevision', CedulaAnaliticaRevisionController::class, ['parameters' => ['cedulaanaliticarevision' => 'cedula']]);
-    Route::resource('cedulaanaliticavalidacion', CedulaAnaliticaValidacionController::class, ['parameters' => ['cedulaanaliticavalidacion' => 'cedula']]);
+   // Route::resource('cedulaanaliticavalidacion', CedulaAnaliticaValidacionController::class, ['parameters' => ['cedulaanaliticavalidacion' => 'cedula']]);
     Route::resource('cedulaanaliticaautorizacion', CedulaAnaliticaAutorizacionController::class, ['parameters' => ['cedulaanaliticaautorizacion' => 'cedula']]);
     /**     Cedula Analitica de Desempeño       */
     Route::resource('cedulaanaliticadesemp', CedulaAnaliticaDesempenoController::class, ['parameters' => ['cedulaanaliticadesemp' => 'auditoria']]);
