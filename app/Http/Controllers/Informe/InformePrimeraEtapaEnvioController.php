@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Informe;
 
 use App\Models\InformePrimeraEtapa;
 use App\Models\Movimientos;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class InformePrimeraEtapaEnvioController extends Controller
 {

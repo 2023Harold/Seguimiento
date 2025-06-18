@@ -77,6 +77,11 @@ class Auditoria extends Model
                 'updated_at'=>'datetime'
             ];
 
+            public function paa(){
+
+                return $this->hasOne(Paa::class,'ejercicio_fiscal','cuenta_publica');
+            }
+
             public function auditoriausuarios()
             {
                 return $this->hasMany(AuditoriaUsuarios::class, 'auditoria_id', 'id');
@@ -122,6 +127,11 @@ class Auditoria extends Model
                 ->whereHas('pras', function (Builder $query) {
                     $query->where('fase_autorizacion','Autorizado');
                 })->orderBy('consecutivo');
+            }
+
+            public function segpras(){
+
+                return $this->hasOne(Segpras::class,'auditoria_id','id');
             }
 
 			 public function accionespo()
@@ -511,6 +521,7 @@ class Auditoria extends Model
             // {
             //     return $this->hasOne(Cedulas::class, 'auditoria_id','id')->where('tipo','Cedula General Seguimiento');     
             // }
+    
 
 
 }

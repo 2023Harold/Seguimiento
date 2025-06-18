@@ -33,7 +33,9 @@
                                 <th>Remitentes</th>
                                 <th>Recepción en oficialía</th>
                                 <th>Fecha de recepción en la unidad de seguimiento</th>
-                                <th></th>
+                                @if(auth()->user()->siglas_rol=="ANA")
+                                    <th></th>
+                                @endif
                                 <th>Acuerdos</th>
                             </tr>
                         </thead>
@@ -61,17 +63,19 @@
                                 <td class="text-center">
                                     {{ fecha($folio->fecha_recepcion_us) }}
                                 </td>
-                                
-                                <td>
-                                    @if(empty($folio->usuario_modificacion_id))
-                                        <a href="{{ route('folioscrr.edit', $folio) }}"  class="btn btn-primary float-end">
-                                            <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
-                                        </a>
-                                    @endif
-								</td>
+
+                                @if(auth()->user()->siglas_rol=="ANA")
+                                    <td>
+                                        @if(empty($folio->usuario_modificacion_id))
+                                            <a href="{{ route('folioscrr.edit', $folio) }}"  class="btn btn-primary float-end">
+                                                <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
+                                            </a>
+                                        @endif
+                                    </td>
+                                @endif
                                 <td class="text-center">
-                                    <a href="{{ route('foliosanexos.edit', $folio) }}" class="btn btn-primary">
-                                        <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                    <a href="{{ route('foliosanexos.index', $folio) }}" class="btn btn-primary">
+                                        <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Ingresar
                                     </a>
                                     @can('foliosanexos.show')
                                         <a href="{{ route('comparecenciaacuse.show', $folio) }}" class="btn btn-secondary" >

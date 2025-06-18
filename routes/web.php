@@ -51,6 +51,7 @@ use App\Http\Controllers\CedulaAnaliticaRecomendacionRevisionController;
 use App\Http\Controllers\CedulaAnaliticaRecomendacionValidacionController;
 use App\Http\Controllers\CedulaAnaliticaRevision01Controller;
 use App\Http\Controllers\CedulaAnaliticaRevisionController;
+use App\Http\Controllers\CedulaAnaliticaValidacionController;
 use App\Http\Controllers\CedulasEnvioController;
 use App\Http\Controllers\CedulaGeneralPrasAnalistaController;
 use App\Http\Controllers\CedulaGeneralPRASAutorizacionController;
@@ -89,11 +90,16 @@ use App\Http\Controllers\FirmaController;
 use App\Http\Controllers\FolioAnexosController;
 use App\Http\Controllers\FolioRemitentesController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\InformeDocumentoController;
-use App\Http\Controllers\InformePrimeraEtapaAutorizacionController;
-use App\Http\Controllers\InformePrimeraEtapaController;
-use App\Http\Controllers\InformePrimeraEtapaEnvioController;
-use App\Http\Controllers\InformePrimeraEtapaValidacionController;
+use App\Http\Controllers\Informe\InformeAcusesController;
+use App\Http\Controllers\Informe\InformeCumplimientoFController;
+use App\Http\Controllers\Informe\InformeDesempenoController;
+use App\Http\Controllers\Informe\InformeDocumentoController;
+use App\Http\Controllers\Informe\InformeInversionFController;
+use App\Http\Controllers\Informe\InformeLegalidadController;
+use App\Http\Controllers\Informe\InformePrimeraEtapaAutorizacionController;
+use App\Http\Controllers\Informe\InformePrimeraEtapaController;
+use App\Http\Controllers\Informe\InformePrimeraEtapaEnvioController;
+use App\Http\Controllers\Informe\InformePrimeraEtapaValidacionController;
 use App\Http\Controllers\InicioArchivoTransferenciaController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PacController;
@@ -257,6 +263,49 @@ Route::get('/cotejamiento/{archivo}/{model}', [CotejamientoController::class, 'c
 Route::post('getTipologia', [SeguimientoAuditoriaController::class, 'getTipologia'])->name('getTipologia');
 Route::post('getCargosAsocia', [SeguimientoAuditoriaController::class, 'getCargosAsociados'])->name('getCargosAsociados');
 Route::post('archivo', [ArchivoController::class, 'upload']);
+
+/** Seguimiento - Auditorias - PAC */
+     Route::resource('pac', PacController::class);
+     Route::resource('pacauditoria', PacAuditoriaController::class);
+     /**    Analista        */
+     Route::get('/pac/mot/{id}', [PacController::class, 'mot'])->name('pac.mot');
+     Route::get('/pac/fc/{id}', [PacController::class, 'fc'])->name('pac.fc');
+     Route::get('/pac/fccd/{id}', [PacController::class, 'fccd'])->name('pac.fccd');
+     Route::get('/pacauditoria/mot/{id}', [PacAuditoriaController::class, 'mot'])->name('pacauditoria.mot');
+     Route::get('/pacauditoria/fc/{id}', [PacAuditoriaController::class, 'fc'])->name('pacauditoria.fc');
+     Route::get('/pacauditoria/fccd/{id}', [PacAuditoriaController::class, 'fccd'])->name('pacauditoria.fccd');
+     /**    Lider       */
+     Route::get('/pac/ar/{id}', [PacController::class, 'ar'])->name('pac.ar');
+     Route::get('/pac/ofiaar/{id}', [PacController::class, 'ofiaar'])->name('pac.ofiaar');
+     Route::get('/pac/ofaroics/{id}', [PacController::class, 'ofaroics'])->name('pac.ofaroics');
+     Route::get('/pac/ac/{id}', [PacController::class, 'ac'])->name('pac.ac');
+     Route::get('/pac/ofai/{id}', [PacController::class, 'ofai'])->name('pac.ofai');
+     Route::get('/pac/ofroics/{id}', [PacController::class, 'ofroics'])->name('pac.ofroics');
+     Route::get('/pac/ofprasoics/{id}', [PacController::class, 'ofprasoics'])->name('pac.ofprasoics');
+     Route::get('/pac/ofsc/{id}', [PacController::class, 'ofsc'])->name('pac.ofsc');
+     Route::get('/pac/ofuaj/{id}', [PacController::class, 'ofuaj'])->name('pac.ofuaj');
+     Route::get('/pac/ac10/{id}', [PacController::class, 'ac10'])->name('pac.ac10');
+     Route::get('/pac/acral/{id}', [PacController::class, 'acral'])->name('pac.acral');
+     Route::get('/pac/ofac/{id}', [PacController::class, 'ofac'])->name('pac.ofac');
+     Route::get('/pac/anv/{id}', [PacController::class, 'anv'])->name('pac.anv');
+     Route::get('/pac/ofanv/{id}', [PacController::class, 'ofanv'])->name('pac.ofanv');
+     Route::get('/pac/av/{id}', [PacController::class, 'av'])->name('pac.av');
+     Route::get('/pac/oi/{id}', [PacController::class, 'oi'])->name('pac.oi');
+     Route::get('/pac/ofriii/{id}', [PacController::class, 'ofriii'])->name('pac.ofriii');
+     Route::get('/pac/ai/{id}', [PacController::class, 'ai'])->name('pac.ai');
+     Route::get('/pacauditoria/ofiaar/{id}', [PacAuditoriaController::class, 'ofiaar'])->name('pacauditoria.ofiaar');
+     Route::get('/pacauditoria/ofaroics/{id}', [PacAuditoriaController::class, 'ofaroics'])->name('pacauditoria.ofaroics');
+     Route::get('/pacauditoria/ac/{id}', [PacAuditoriaController::class, 'ac'])->name('pacauditoria.ac');
+     /**    Jefe        */
+     Route::get('/pac/ofis/{id}', [PacController::class, 'ofis'])->name('pac.ofis');
+     Route::get('/pac/is/{id}', [PacController::class, 'is'])->name('pac.is');
+     Route::get('/pac/is2/{id}', [PacController::class, 'is2'])->name('pac.is2');
+     /**    Direccion       */
+     Route::get('/pac/mda/{id}', [PacController::class, 'mda'])->name('pac.mda');
+     Route::get('/pac/mdi/{id}', [PacController::class, 'mdi'])->name('pac.mdi');
+     /**    Titular         */
+     Route::get('/pac/aa/{id}', [PacController::class, 'aa'])->name('pac.aa');
+    /**Fin del apartado de Seguimiento - Auditorias - PAC*/
 
 
 Route::middleware(['auth', CheckPermission::class])->group(function () {
@@ -564,6 +613,26 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('informeprimeraetapaenvio', InformePrimeraEtapaEnvioController::class, ['parameters' => ['informeprimeraetapaenvio' => 'auditoria']]);
     Route::resource('informeprimeraetapavalidacion', InformePrimeraEtapaValidacionController::class, ['parameters' => ['informeprimeraetapavalidacion' => 'auditoria']]);
     Route::resource('informeprimeraetapaautorizacion', InformePrimeraEtapaAutorizacionController::class, ['parameters' => ['informeprimeraetapaautorizacion' => 'auditoria']]);
+    
+    Route::resource('informeacuses', InformeAcusesController::class, ['parameters' =>['informeacuses' => 'informe']]);
+    
+    /**Seguimiento Aditorias Informe Archivos Word  */
+    Route::get('/informelegalidad/exportar', [InformeLegalidadController::class, 'exportar'])->name('informelegalidad.exportar');
+    Route::get('/informelegalidad/export', [InformeLegalidadController::class, 'export'])->name('informelegalidad.export');
+    Route::get('/informelegalidad', [InformeLegalidadController::class, 'exportofis'])->name('informelegalidad.exportofis');
+    
+    Route::get('/informecumplimientoi/exportar', [InformeCumplimientoFController::class, 'exportar'])->name('informecumplimientoi.exportar');
+    Route::get('/informecumplimientoi/export', [InformeCumplimientoFController::class, 'export'])->name('informecumplimientoi.export');
+    Route::get('/informecumplimientoi', [InformeCumplimientoFController::class, 'exportofis'])->name('informecumplimientoi.exportofis');
+    
+    Route::get('/informedesempeno/exportar', [InformeDesempenoController::class, 'exportar'])->name('informedesempeno.exportar');
+    Route::get('/informedesempeno/export', [InformeDesempenoController::class, 'export'])->name('informedesempeno.export');
+    Route::get('/informedesempeno', [InformeDesempenoController::class, 'exportofis'])->name('informedesempeno.exportofis');
+    
+    Route::get('/informeinversionf/exportar', [InformeInversionFController::class, 'exportar'])->name('informeinversionf.exportar');
+    Route::get('/informeinversionf/export', [InformeInversionFController::class, 'export'])->name('informeinversionf.export');
+    Route::get('/informeinversionf', [InformeInversionFController::class, 'exportofis'])->name('informeinversionf.exportofis');
+
     /**Fin del apartado de Seguimiento - Auditorias - Informe*/
 
     /** Seguimiento - Auditorias - TurnoUI */
@@ -593,48 +662,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('turnoarchivoautorizacion', TurnoArchivoAutortizacionController::class, ['parameters' => ['turnoarchivoautorizacion' => 'auditoria']]);
     /**Fin del apartado de Seguimiento - Auditorias - TurnoArchivo*/
 
-    /** Seguimiento - Auditorias - PAC */
-     Route::resource('pac', PacController::class);
-     Route::resource('pacauditoria', PacAuditoriaController::class);
-     /**    Analista        */
-     Route::get('/pac/mot/{id}', [PacController::class, 'mot'])->name('pac.mot');
-     Route::get('/pac/fc/{id}', [PacController::class, 'fc'])->name('pac.fc');
-     Route::get('/pac/fccd/{id}', [PacController::class, 'fccd'])->name('pac.fccd');
-     Route::get('/pacauditoria/mot/{id}', [PacAuditoriaController::class, 'mot'])->name('pacauditoria.mot');
-     Route::get('/pacauditoria/fc/{id}', [PacAuditoriaController::class, 'fc'])->name('pacauditoria.fc');
-     Route::get('/pacauditoria/fccd/{id}', [PacAuditoriaController::class, 'fccd'])->name('pacauditoria.fccd');
-     /**    Lider       */
-     Route::get('/pac/ar/{id}', [PacController::class, 'ar'])->name('pac.ar');
-     Route::get('/pac/ofiaar/{id}', [PacController::class, 'ofiaar'])->name('pac.ofiaar');
-     Route::get('/pac/ofaroics/{id}', [PacController::class, 'ofaroics'])->name('pac.ofaroics');
-     Route::get('/pac/ac/{id}', [PacController::class, 'ac'])->name('pac.ac');
-     Route::get('/pac/ofai/{id}', [PacController::class, 'ofai'])->name('pac.ofai');
-     Route::get('/pac/ofroics/{id}', [PacController::class, 'ofroics'])->name('pac.ofroics');
-     Route::get('/pac/ofprasoics/{id}', [PacController::class, 'ofprasoics'])->name('pac.ofprasoics');
-     Route::get('/pac/ofsc/{id}', [PacController::class, 'ofsc'])->name('pac.ofsc');
-     Route::get('/pac/ofuaj/{id}', [PacController::class, 'ofuaj'])->name('pac.ofuaj');
-     Route::get('/pac/ac10/{id}', [PacController::class, 'ac10'])->name('pac.ac10');
-     Route::get('/pac/acral/{id}', [PacController::class, 'acral'])->name('pac.acral');
-     Route::get('/pac/ofac/{id}', [PacController::class, 'ofac'])->name('pac.ofac');
-     Route::get('/pac/anv/{id}', [PacController::class, 'anv'])->name('pac.anv');
-     Route::get('/pac/ofanv/{id}', [PacController::class, 'ofanv'])->name('pac.ofanv');
-     Route::get('/pac/av/{id}', [PacController::class, 'av'])->name('pac.av');
-     Route::get('/pac/oi/{id}', [PacController::class, 'oi'])->name('pac.oi');
-     Route::get('/pac/ofriii/{id}', [PacController::class, 'ofriii'])->name('pac.ofriii');
-     Route::get('/pac/ai/{id}', [PacController::class, 'ai'])->name('pac.ai');
-     Route::get('/pacauditoria/ofiaar/{id}', [PacAuditoriaController::class, 'ofiaar'])->name('pacauditoria.ofiaar');
-     Route::get('/pacauditoria/ofaroics/{id}', [PacAuditoriaController::class, 'ofaroics'])->name('pacauditoria.ofaroics');
-     Route::get('/pacauditoria/ac/{id}', [PacAuditoriaController::class, 'ac'])->name('pacauditoria.ac');
-     /**    Jefe        */
-     Route::get('/pac/ofis/{id}', [PacController::class, 'ofis'])->name('pac.ofis');
-     Route::get('/pac/is/{id}', [PacController::class, 'is'])->name('pac.is');
-     Route::get('/pac/is2/{id}', [PacController::class, 'is2'])->name('pac.is2');
-     /**    Direccion       */
-     Route::get('/pac/mda/{id}', [PacController::class, 'mda'])->name('pac.mda');
-     Route::get('/pac/mdi/{id}', [PacController::class, 'mdi'])->name('pac.mdi');
-     /**    Titular         */
-     Route::get('/pac/aa/{id}', [PacController::class, 'aa'])->name('pac.aa');
-    /**Fin del apartado de Seguimiento - Auditorias - PAC*/
+    
 
     /** Seguimiento - Auditorias - Reportes */
     Route::resource('reportesseg', ReportesSeguimientoController::class);
@@ -646,6 +674,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::resource('folioscrr', FolioCRRController::class);
     Route::resource('remitentes', FolioRemitentesController::class);
     Route::resource('foliosanexos', FolioAnexosController::class);
+    Route::get('/foliosanexos/exportar', [FolioAnexosController::class, 'exportar'])->name('foliosanexos.exportar');
     Route::get('foliosanexos/{folio}/edit', [FolioAnexosController::class, 'edit'])->name('foliosanexos.edit');
     Route::get('/remitentes/create/{folioscrr}', [FolioRemitentesController::class, 'create'])->name('remitentes.create');
     Route::get('/remitentes/edit/{remitente}', [FolioRemitentesController::class, 'edit'])->name('remitentes.edit');

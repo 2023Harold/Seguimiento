@@ -20,9 +20,12 @@ class FolioAnexosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-       //
+       $folios = $this->setQuery($request)->paginate(25);
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+
+        return view('foliosanexos.index', compact('auditoria','folios','request'));
     }
 
     /**
@@ -32,7 +35,7 @@ class FolioAnexosController extends Controller
      */
     public function create(FolioCrr $folio)
     {
-        dd($folio);
+        DD(2);
        
     }
 
@@ -109,5 +112,9 @@ class FolioAnexosController extends Controller
         $query = $query->orderBy('id','DESC');
 
         return $query;
+    }
+
+    public function exportar(){
+        dd("export");
     }
 }

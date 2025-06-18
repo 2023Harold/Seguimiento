@@ -10,7 +10,8 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('folioscrr.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                    Folios Remitentes show
+                    Folios Remitentes 
+					
                 </h1>
             </div>
             <div class="card-body">
