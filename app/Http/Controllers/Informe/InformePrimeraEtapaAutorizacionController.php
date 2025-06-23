@@ -97,7 +97,7 @@ class InformePrimeraEtapaAutorizacionController extends Controller
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del Informe Primera Etapa de'.$informeprimeraetapa->tipo .'de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '. auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto .':</strong><br>'
-                            .auth()->user()->name.', '.auth()->user()->puesto.
+                            .auth()->user()->titular->name.', '.auth()->user()->titular->puesto.
                             '; ha aprobado la autorización del Informe Primera Etapa de'.$informeprimeraetapa->tipo.' de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $informeprimeraetapa->usuarioCreacion->unidad_administrativa_id, $informeprimeraetapa->usuarioCreacion->id);

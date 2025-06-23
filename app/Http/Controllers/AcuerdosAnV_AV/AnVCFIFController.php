@@ -18,7 +18,7 @@ use PhpOffice\PhpWord\SimpleType\Jc;
 use PhpOffice\PhpWord\Style\Table;
 
 
-class AnVController extends Controller
+class AnVCFIFController extends Controller
 {
     /**
      * Display a listing of the resource.

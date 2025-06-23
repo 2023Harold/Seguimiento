@@ -83,7 +83,7 @@
                                     {{ fecha($turnoarchivo->fecha_turno_archivo) }}
                                 </td>
                                 <td class="text-center">
-                                @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
+                                    @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
                                         @can('turnoarchivo.edit')
                                         <a href="{{ route('turnoarchivo.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
@@ -91,15 +91,16 @@
                                         </a>
                                         @endcan
                                     @endif
+                                
                                     @if ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión01')
-                                    @can('turnoarchivorevision01.edit')
-                                        <a href="{{ route('turnoarchivorevision01.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
-                                            <li class="fa fa-gavel"></li>
-                                            Revisar
-                                        </a>
-                                    @else
-                                        <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
-                                    @endcan
+                                        @can('turnoarchivorevision01.edit')
+                                            <a href="{{ route('turnoarchivorevision01.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
+                                                <li class="fa fa-gavel"></li>
+                                                Revisar
+                                            </a>
+                                        @else
+                                            <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
+                                        @endcan
                                     @endif
                                     @if ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión')
                                     @can('turnoarchivorevision.edit')
@@ -136,7 +137,7 @@
                                     @endif
                                 <td class="text-center">
                                     @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
-                                        @can('turnoarchivo.edit')
+                                        @can('turnoarchivoenvio.edit')
                                             <a href="{{ route('turnoarchivoenvio.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
                                              Enviar
                                             </a>

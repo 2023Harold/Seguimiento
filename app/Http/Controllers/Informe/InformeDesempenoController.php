@@ -323,10 +323,11 @@ class InformeDesempenoController extends Controller
                                                 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar','segauditoria_acciones.normativa_infringida',
                                                 DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
     /*TABLA segrecomendaciones_contestaciones*/ 
-                                                'segrecomendaciones_contestaciones.numero_oficio', 
+                                                /*'segrecomendaciones_contestaciones.numero_oficio', 
                                                 DB::raw("TO_CHAR(segrecomendaciones_contestaciones.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
                                                 DB::raw("TO_CHAR(segrecomendaciones_contestaciones.fecha_recepcion_oficialia, 'DD/MM/YYYY') AS fecha_recepcion_oficialia"), 
                                                 'segrecomendaciones_contestaciones.folio_correspondencia', 'segrecomendaciones_contestaciones.nombre_remitente', 'segrecomendaciones_contestaciones.cargo_remitente', 
+                                                */
                                                 'segrecomendaciones.calificacion_sugerida',/*TABLA segrecomendaciones*/
                                                 DB::raw("UPPER(segrecomendaciones.calificacion_sugerida) AS calificacion_sugerida_mayus"),
                                                 'segrecomendaciones.analisis', 'segrecomendaciones.conclusion', 'segrecomendaciones.listado_documentos',

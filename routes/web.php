@@ -19,6 +19,7 @@ use App\Http\Controllers\AgregarAccionesController;
 use App\Http\Controllers\AgregarAccionesRevision01Controller;
 use App\Http\Controllers\AgregarAccionesRevisionController;
 use App\Http\Controllers\AgregarAccionesValidacionController;
+use App\Http\Controllers\AgregarCedulaInicialController;
 use App\Http\Controllers\AgregarTipologiaAccionController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
@@ -565,7 +566,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('cedulainicialprimeravalidacion', CedulaInicialValidacionController::class, ['parameters' => ['cedulainicialprimeravalidacion' => 'cedula']]);
     Route::resource('cedulainicialprimeraautorizacion', CedulaInicialAutorizacionController::class, ['parameters' => ['cedulainicialprimeraautorizacion' => 'cedula']]);
 
-    //Route::resource('agregarcedulainicial', AgregarCedulaInicialController::class, ['parameters' => ['agregracedulainicial' => 'cedula']]);
+    Route::resource('agregarcedulainicial', AgregarCedulaInicialController::class, ['parameters' => ['agregracedulainicial' => 'cedula']]);
     Route::resource('cedulasenvio', CedulasEnvioController::class, ['parameters' => ['cedulasenvio' => 'auditoria']]);
     Route::resource('cedulaanaliticadesempenorevision', CedulaAnaliticaDesempenoRevisionController::class, ['parameters' => ['cedulaanaliticadesempenorevision' => 'auditoria']]);
     
@@ -687,6 +688,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('acuerdosanvav', AnVController::class);
     Route::get('/acuerdosanvavarchivo/export', [AnVController::class, 'export'])->name('acuerdosanvav.export');
 
+    Route::get('/informeinversionf/exportar', [InformeInversionFController::class, 'exportar'])->name('informeinversionf.exportar');
+    Route::get('/informeinversionf/export', [InformeInversionFController::class, 'export'])->name('informeinversionf.export');
+    Route::get('/informeinversionf', [InformeInversionFController::class, 'exportofis'])->name('informeinversionf.exportofis');
     /**Fin del apartado de Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
 
 

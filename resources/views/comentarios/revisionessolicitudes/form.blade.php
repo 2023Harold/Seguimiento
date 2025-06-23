@@ -13,12 +13,12 @@
                 {!!BootForm::hidden('tipo', $tipo) !!}
                 @if($tipo == "Analisis")
                     <div class="col-md-12">
-                        {!!BootForm::textarea('muestra_rev','Analisis: *', old('muestra_rev', optional($acciones->recomendaciones)->analisis),['rows'=>'10']) !!}
+                        {!!BootForm::textarea('muestra_rev','Analisis: *', old('muestra_rev', optional($acciones->solicitudesaclaracion)->analisis),['rows'=>'10']) !!}
                     </div>
                 @endif
                 @if($tipo == "Conclusión")
                     <div class="col-md-12">
-                        {!!BootForm::textarea('muestra_rev','Conclusión: *', old('muestra_rev', optional($acciones->recomendaciones)->conclusion),['rows'=>'10']) !!}
+                        {!!BootForm::textarea('muestra_rev','Conclusión: *', old('muestra_rev', optional($acciones->solicitudesaclaracion)->conclusion),['rows'=>'10']) !!}
                     </div>
                 @endif
                 @if($tipo == "Normatividad")
@@ -28,7 +28,7 @@
                 @endif
                 @if($tipo == "Listado Documentos")
                     <div class="col-md-12">
-                        {!!BootForm::textarea('muestra_rev','Listado de Documentos: *', old('muestra_rev', optional($acciones->recomendaciones)->listado_documentos),['rows'=>'10']) !!}
+                        {!!BootForm::textarea('muestra_rev','Listado de Documentos: *', old('muestra_rev', optional($acciones->solicitudesaclaracion)->listado_documentos),['rows'=>'10']) !!}
                     </div>
                 @endif
             </div>
