@@ -43,4 +43,8 @@ class FolioCRR extends Model
     {
         return $this->hasMany(RemitentesFolio::class, 'folio_id');
     }
+
+    public function AnV_AV(){
+        return $this->hasOne(AcuerdosValoracion::class,'folio_id', 'id');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AcuerdosAnV_AV;
 
 use App\Http\Controllers\Controller;
 use App\Models\AcuerdosValoracion;
+use App\Models\AnexosAnV_AV;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\FolioCRR;
@@ -22,7 +23,7 @@ use PhpOffice\PhpWord\SimpleType\Jc;
 use PhpOffice\PhpWord\Style\Table;
 
 
-class AnVController extends Controller
+class AnexosAnVController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -39,22 +40,18 @@ class AnVController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(FolioCRR $folio)
+    public function create(Request $request)
     {  
-        $acuerdoaccion = "Agregar";
-        $acuerdoanvav = new AcuerdosValoracion();
+        $acuerdoanvav = AcuerdosValoracion::find(getSession('anvav_id_session'));
+        $folio = FolioCrr::where('id', $acuerdoanvav->folio_id)->first();
+        //dd("anexos anv av create :D",$acuerdoanvav);
+        $anexoacuerdoaccion = "Agregar";
+        $anexosacuerdoanvav = new AnexosAnV_AV();
         //DD($folio,$acuerdoaccion);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
-        //setSession('folio_id_session',$folio->id);
 
-        if(empty($folio->numero_oficio) || strtolower($folio->numero_oficio) == "s/n"){
-            $acuerdoanvav_tipo_of = "Escrito";
-        }
-        $acuerdoanvav_tipo_of = "Oficio";
-        //dd($folio->numero_oficio);
-
-        return view('folios.acuerdosanvav.form', compact('auditoria','acuerdoaccion','acuerdoanvav','folio','acuerdoanvav_tipo_of','remitentes'));
+        return view('folios.acuerdosanvav_anexos.form', compact('acuerdoanvav','auditoria','anexoacuerdoaccion','anexosacuerdoanvav','folio','remitentes'));
     }
 
     /**
@@ -85,15 +82,14 @@ class AnVController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(FolioCRR $folio)
+    public function show(AcuerdosValoracion $acuerdoanvav)
     {
+        dd("anexos anv av create :D",$acuerdoanvav);
         //dd($folio);
         $acuerdoaccion = "Consulta";
         //dd($request);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $acuerdoanvav = AcuerdosValoracion::where('folio_id',$folio->id)->get()->first();
-        $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
-        setSession('anvav_id_session',$acuerdoanvav->id);
+
         //dd($acuerdoanvav);
         return view('folios.acuerdosanvav.show', compact('auditoria','acuerdoanvav','folio','remitentes'));
     }
@@ -107,12 +103,10 @@ class AnVController extends Controller
      */
     public function edit(FolioCrr $folio)
     {
-        /*
         $acuerdoaccion = "Editar";
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         
         return view('folios.foliosanexos.form', compact('auditoria','folio'));
-        */
     }
 
     /**
@@ -124,7 +118,6 @@ class AnVController extends Controller
      */
     public function update(Request $request, RemitentesFolio $remitente)
     {
-        /*
         $folioscrr = FolioCrr::where('id', $remitente->folio_id)->first();
         $request['usuario_modificacion_id'] = auth()->id();
         $remitente->update($request->all());
@@ -132,7 +125,6 @@ class AnVController extends Controller
         setMessage('El Remitente del Folio:'.$folioscrr->folio.' ha sido actualizado');
 
         return redirect()->route('remitentes.index');
-        */
 		
     }
 

@@ -103,11 +103,11 @@ class TurnoUIAutorizacionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del Turno a la Unidad de Investigación de la auditoría No. '.$turnoui->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
-                            .auth()->user()->name.', '.auth()->user()->puesto.
+            $mensaje = '<strong>Estimado(a) '.$turnoui->usuarioCreacion->name.', '.$turnoui->usuarioCreacion->puesto. ':</strong><br>'
+                            .auth()->user()->titular->name.', '.auth()->user()->titular->puesto.
                             '; ha aprobado la autorización del Turno a la Unidad de Investigación de la auditoría No. '.$turnoui->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoui->usuarioCreacion->unidad_administrativa_id, $turnoui->usuarioCreacion->id);
         }else {
             
             $titulo = 'Rechazo del Turno a la Unidad de Investigación de la auditoría No. '.$turnoui->auditoria->numero_auditoria;

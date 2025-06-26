@@ -104,11 +104,11 @@ class TurnoOICAutorizacionController extends Controller
         $director=User::where('unidad_administrativa_id',substr($turnooic->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del Turno a la Unidad de Investigación de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
-                            .auth()->user()->name.', '.auth()->user()->puesto.
+            $mensaje = '<strong>Estimado(a) '.$turnooic->usuarioCreacion->name.', '.$turnooic->usuarioCreacion->puesto.':</strong><br>'
+                            .auth()->user()->titular->name.', '.auth()->user()->titular->puesto.
                             '; ha aprobado la autorización del Turno al Órgano Interno de Control de la auditoría No. '.$turnooic->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnooic->usuarioCreacion->unidad_administrativa_id, $turnooic->usuarioCreacion->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$turnooic->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
 
         }else {

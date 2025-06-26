@@ -78,11 +78,12 @@ class TipologiaAccionEnvioController extends Controller
             $tipologia->update(['fase_autorizacion' =>  'En revisión']);
     
             $titulo = 'Revisión de la tipología';
-            $mensaje = '<strong>Estimado (a) ' . auth()->user()->lider->name . ', ' . auth()->user()->lider->puesto . ':</strong><br>
+            $mensaje = '<strong>Estimado (a) ' . $tipologia->auditoria->lider->name . ', ' . $tipologia->auditoria->lider->puesto . ':</strong><br>
                         Ha sido registrada la tipologia de la accion No.'. $accion->numero .', de la auditoría No. ' . $tipologia->auditoria->numero_auditoria . ', por parte del ' .
                         auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
     
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->lider->unidad_administrativa_id,auth()->user()->lider->id);
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->lider->unidad_administrativa_id,auth()->user()->lider->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $tipologia->auditoria->lider->unidad_administrativa_id,$tipologia->auditoria->lider->id);
             setMessage('Se ha enviado el turno a la UI, a revisión');
     
         return redirect()->route('agregaracciones.index');

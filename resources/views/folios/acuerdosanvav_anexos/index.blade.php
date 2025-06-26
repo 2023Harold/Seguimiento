@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{Breadcrumbs::render('folioscrr.index',$auditoria) }}
+    {{Breadcrumbs::render('acuerdosanvav.index',$auditoria) }}
 @endsection
+
 @section('content')
 <div class="row">
     @include('layouts.partials._menu')
@@ -10,25 +11,25 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('folioscrr.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                    Acuses Acuerdo de Valoración y No Valoración
+                    Acuerdos de Valoración y No Valoración Anexos 
                 </h1>
                 <div class="float-end">    
                    {{-- <a href="{{ route('informelegalidad.exportar') }}" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;</span>INFORME </a>     --}}
                     {{--@can('informeprimeraetapa.exportar')    --}}        
                         @if($auditoria->acto_fiscalizacion=='Legalidad')
-                             <a href="{{route('foliosanexos.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV EA</a> 
-                             <a href="{{route('foliosanexos.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV PAR</a> 
+                             <a href="{{route('acuerdosanvav.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV EA</a> 
+                             <a href="{{route('acuerdosanvav.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV PAR</a> 
                         @endif
                             
                         @if($auditoria->acto_fiscalizacion=='Desempeño')
-                            <a href="{{route('foliosanexos.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AV</a>          
+                            <a href="{{route('acuerdosanvav.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AV</a>          
                         @endif
 
                         @if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
-                            <a href="{{route('foliosanexos.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV</a> 
+                            <a href="{{route('acuerdosanvavcfif.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV</a> 
                         @endif
                         @if($auditoria->acto_fiscalizacion=='Inversión Física')
-                            <a href="{{route('foliosanexos.exportar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV</a> 
+                            <a href="{{route('acuerdosanvavcfif.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV</a> 
                         @endif
                     {{--@endcan--}}
                 </div>

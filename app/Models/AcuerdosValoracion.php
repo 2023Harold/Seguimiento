@@ -11,18 +11,22 @@ class AcuerdosValoracion extends Model
     use HasFactory;
     use RoutesWithFakeIds;
 
-    protected $table = 'segacuerdosvaloracion';
+    protected $table = 'seganv_av';
 
     protected $fillable = [
         'id',
         'folio_id',
         'auditoria_id',
+        'numero_expediente',
         'tipo_doc',
-        'numero_oficio',
-        'fecha_oficio',
+        'numero_oficio_ent',
+        'fecha_oficio_ent',
         'nombre_firmante',
         'cargo_firmante',
-        'anexos',
+        'administracion_firmante',
+        'nombre_informe_au',
+        'cargo_informe_au',
+        'administracion_informe_au',
         'usuario_creacion_id',
         'usuario_modificacion_id',
     ];
@@ -30,6 +34,6 @@ class AcuerdosValoracion extends Model
 
 
     protected $cast = [
-        'fecha_oficio',
+        'fecha_oficio_ent',
     ];
 }

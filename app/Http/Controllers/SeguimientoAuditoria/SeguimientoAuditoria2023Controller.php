@@ -140,7 +140,6 @@ class SeguimientoAuditoria2023Controller extends Controller
         $entidad3 = null;
 
         $entidadFiscalizable = EntidadFiscalizableIntra::find($auditoria->entidad_fiscalizable_id);
-
         if(!empty($entidadFiscalizable)){
             if ($entidadFiscalizable->NivEntFis == 3) {
                 $entidad3 = $entidadFiscalizable->PkCveEntFis;

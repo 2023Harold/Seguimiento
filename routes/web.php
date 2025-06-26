@@ -12,6 +12,8 @@ use App\Http\Controllers\AcuerdoConclusion\AcuerdoConclusionRevisionController;
 use App\Http\Controllers\AcuerdoConclusion\AcuerdoConclusionValidacionController;
 use App\Http\Controllers\AcuerdoConclusion\AcuerdoConclusionAcuseController;
 use App\Http\Controllers\AcuerdoConclusion\AcuerdoConclusionAcuseCPController;
+use App\Http\Controllers\AcuerdosAnV_AV\AnexosAnVController;
+use App\Http\Controllers\AcuerdosAnV_AV\AnVCFIFController;
 use App\Http\Controllers\AcuerdosAnV_AV\AnVController;
 use App\Http\Controllers\AdministracionController;
 use App\Http\Controllers\AgregarAccionesAutorizacionController;
@@ -686,11 +688,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
 
     /**Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
     Route::resource('acuerdosanvav', AnVController::class);
+    Route::get('/acuerdosanvav/create/{folio}', [AnVController::class, 'create'])->name('acuerdosanvav.create');
+    Route::get('/acuerdosanvav/show/{folio}', [AnVController::class, 'show'])->name('acuerdosanvav.show');
+    Route::resource('anexosanvav', AnexosAnVController::class,['parameters' => ['anexosanvav' => 'auditoria']]);
+
     Route::get('/acuerdosanvavarchivo/export', [AnVController::class, 'export'])->name('acuerdosanvav.export');
 
-    Route::get('/informeinversionf/exportar', [InformeInversionFController::class, 'exportar'])->name('informeinversionf.exportar');
-    Route::get('/informeinversionf/export', [InformeInversionFController::class, 'export'])->name('informeinversionf.export');
-    Route::get('/informeinversionf', [InformeInversionFController::class, 'exportofis'])->name('informeinversionf.exportofis');
+    Route::get('/acuerdosanvavcfif/export', [AnVCFIFController::class, 'export'])->name('acuerdosanvavcfif.export');
     /**Fin del apartado de Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
 
 

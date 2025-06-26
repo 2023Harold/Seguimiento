@@ -40,7 +40,7 @@ class AnVCFIFController extends Controller
      */
     public function create(FolioCrr $folio)
     {
-        DD(2);
+        DD("Create");
        
     }
 

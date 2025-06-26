@@ -72,11 +72,13 @@ class TurnoArchivoEnvioController extends Controller
             $turnoarchivo->update(['fase_autorizacion' =>  'En revisión01']);
 
             $titulo = 'Revisión de los datos de turno archivo';
-            $mensaje = '<strong>Estimado (a) ' . auth()->user()->lider->name . ', ' . auth()->user()->lider->puesto . ':</strong><br>
+
+            $mensaje = '<strong>Estimado (a) ' . $turnoarchivo->auditoria->lider->name . ', ' . $turnoarchivo->auditoria->lider->puesto . ':</strong><br>
                         Ha sido registrada la turno archivo de la auditoría No. ' . $turnoarchivo->auditoria->numero_auditoria . ', por parte del ' .
                         auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
 
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->lider->unidad_administrativa_id,auth()->user()->lider->id);
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->lider->unidad_administrativa_id,auth()->user()->lider->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivo->auditoria->lider->unidad_administrativa_id,$turnoarchivo->auditoria->lider->id);
             setMessage('Se ha enviado el turno archivo a Revisión');
 
         return redirect()->route('turnoarchivo.index');

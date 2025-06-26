@@ -32,7 +32,7 @@
             </span>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-            <label>Fecha de notificación: </label>
+            <label>Fecha de notificación del informe de auditoría: </label>
             <span class="text-primary">
                 {{ fecha(optional($auditoria->radicacion)->fecha_oficio_informe)}}
             </span>
@@ -44,7 +44,7 @@
             </span>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-            <label>Fecha de oficio: </label>
+            <label>Fecha de oficio notificación de acuerdos: </label>
             <span class="text-primary">
                 {{ str_contains(optional($auditoria->radicacion)->oficio_acuerdo,'storage')?'': fecha(optional($auditoria->radicacion)->fecha_oficio_acuerdo) }}
             </span>
@@ -56,7 +56,7 @@
             </span>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-            <label>Fecha acta: </label>
+            <label>Fecha acta de reunión de resultados finales y cierre de auditoría: </label>
             <span class="text-primary">
                 {{-- Aqui va la fecha del  Acta de reunión de resultados finales y cierre de auditoría--}}
                 {{ fecha(optional($auditoria->radicacion)->fecha_acta)}}

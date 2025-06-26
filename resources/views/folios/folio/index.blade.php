@@ -73,11 +73,29 @@
                                         @endif
                                     </td>
                                 @endif
-                                <td class="text-center">
-                                    <a href="{{ route('acuerdosanvav.index') }}" class="btn btn-primary">
-                                        <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Ingresar
-                                    </a>
-                                </td>
+                                
+                                @if (empty($folio->AnV_AV))
+                                    @if(auth()->user()->siglas_rol=="LP")
+                                        <td class="text-center">
+                                            <a href="{{ route('acuerdosanvav.create', $folio) }}" class="btn btn-primary">
+                                                <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Agregar
+                                            </a>
+                                        </td>
+                                    @else
+                                        <td class="text-center">
+                                            <a href="{{ route('acuerdosanvav.show', $folio) }}" class="btn btn-primary">
+                                                <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Ingresar
+                                            </a>
+                                        </td>
+                                    @endif
+
+                                @else
+                                    <td class="text-center">
+                                        <a href="{{ route('acuerdosanvav.show', $folio) }}" class="btn btn-primary">
+                                            <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Ingresar
+                                        </a>
+                                    </td>
+                                @endif
                             </tr>
                             @empty
                             <tr>

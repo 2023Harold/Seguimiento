@@ -1000,11 +1000,6 @@ Breadcrumbs::for('folioscrr.index', function (BreadcrumbTrail $trail,$auditoria)
     $trail->push('Folios', route('folioscrr.index',$auditoria));
 });
 
-Breadcrumbs::for('acuerdosanvav.index', function (BreadcrumbTrail $trail,$auditoria) {
-    $trail->parent('folioscrr.index',$auditoria);
-    $trail->push('Acuerdo Anv y AV', route('acuerdosanvav.index',$auditoria));
-});
-
 Breadcrumbs::for('folioscrr.create', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('folioscrr.index',$auditoria);
     $trail->push('Folios', route('folioscrr.create',$auditoria));
@@ -1030,12 +1025,40 @@ Breadcrumbs::for('remitentes.edit', function (BreadcrumbTrail $trail,$auditoria)
     $trail->push('Folios Editar Remitentes', route('remitentes.edit', $auditoria));
 });
 
-Breadcrumbs::for('acuerdosanvav.edit', function (BreadcrumbTrail $trail,$auditoria) {
+
+
+/**Acueros de valoracion y  no valoracion */
+Breadcrumbs::for('acuerdosanvav.show', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('folioscrr.index',$auditoria);
+    $trail->push('Acuerdo Anv y AV', route('acuerdosanvav.show',$auditoria));
+});
+
+Breadcrumbs::for('acuerdosanvav.create', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('folioscrr.index',$auditoria);
     //$trail->push('Acuses', route('foliosanexos.edit',$folio));
-    $trail->push('Acuses', route('acuerdosanvav.edit', $auditoria));
+    $trail->push('Agregar Acuerdo Anv y AV ', route('acuerdosanvav.create', $auditoria));
 
 });
 
+Breadcrumbs::for('acuerdosanvav.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('folioscrr.index',$auditoria);
+    //$trail->push('Acuses', route('foliosanexos.edit',$folio));
+    $trail->push('Editar Acuerdo Anv y AV ', route('acuerdosanvav.edit', $auditoria));
 
+});
+
+Breadcrumbs::for('anexosanvav.create', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('acuerdosanvav.show',$auditoria);
+    //$trail->push('Acuses', route('foliosanexos.edit',$folio));
+    $trail->push('Agregar Anexos Anv y AV ', route('anexosanvav.create', $auditoria));
+
+});
+
+Breadcrumbs::for('anexosanvav.show', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('acuerdosanvav.show',$auditoria);
+    //$trail->push('Acuses', route('foliosanexos.edit',$folio));
+    $trail->push('Anexos Anv y AV ', route('anexosanvav.show', $auditoria));
+
+});
+/** Fin de Acueros de valoracion y  no valoracion  */
 

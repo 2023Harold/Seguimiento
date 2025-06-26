@@ -9,7 +9,7 @@
     <div class="col-lg-4 col-md-4 col-sm-12 col-12">
         <label>Entidad fiscalizable: </label>
         <span class="text-primary">
-            {{ mb_convert_encoding(mb_convert_case(strtolower($auditoria->entidad_fiscalizable), MB_CASE_TITLE), "UTF-8"); }}
+            {{ mb_convert_encoding(mb_convert_case(strtolower($auditoria->entidad_fiscalizable), MB_CASE_TITLE), "UTF-8") }}
         </span>
     </div>  
     <div class="col-lg-4 col-md-4 col-sm-12 col-12">

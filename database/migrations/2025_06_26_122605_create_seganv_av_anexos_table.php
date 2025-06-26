@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('segacuerdosvaloracion', function (Blueprint $table) {
+        Schema::create('seganv_av_anexos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('folio_id')->constrained('segfolios_correspondencia');
-            $table->foreignId('auditoria_id')->constrained('segauditorias');
-            $table->string('tipo_doc',30);
-            $table->string('numero_oficio',100)->nullable();
-            $table->date('fecha_oficio')->nullable();
-            $table->string('nombre_firmate',500);
-            $table->string('cargo_firmate',500);
-            $table->string('anexos',100)->nullable();
+            $table->integer('consecutivo');
+            $table->string('archivo',150);
+            $table->string('nombre_archivo',500);
+            $table->foreignId('anvav_id')->constrained('seganv_av');
             $table->foreignId('usuario_creacion_id')->constrained('segusers');
             $table->foreignId('usuario_modificacion_id')->nullable()->constrained('segusers');
             $table->timestamps();
@@ -36,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('segacuerdosvaloracion');
+        Schema::dropIfExists('seganv_av_anexos');
     }
 };
