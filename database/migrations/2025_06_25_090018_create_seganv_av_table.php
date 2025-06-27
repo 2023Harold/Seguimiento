@@ -21,9 +21,6 @@ return new class extends Migration
             $table->string('tipo_doc',30);
             $table->string('numero_oficio_ent',100)->nullable();
             $table->date('fecha_oficio_ent')->nullable();
-            $table->string('nombre_firmante',500);
-            $table->string('cargo_firmante',500);
-            $table->string('administracion_firmante',500);
             $table->string('nombre_informe_au',500);
             $table->string('cargo_informe_au',500);
             $table->string('administracion_informe_au',500);

@@ -30,6 +30,10 @@ class AnexosAnVController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $validationRules;
+    public $attributeNames;
+    public $errorMessages;
+    protected $model;
     public function index(Request $request)
     {
         //
@@ -40,6 +44,7 @@ class AnexosAnVController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function create(Request $request)
     {  
         $acuerdoanvav = AcuerdosValoracion::find(getSession('anvav_id_session'));
@@ -62,7 +67,7 @@ class AnexosAnVController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
+        dd($request);
 
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $folio = FolioCrr::where('id', $request->folio_id)->first();
@@ -84,7 +89,7 @@ class AnexosAnVController extends Controller
      */
     public function show(AcuerdosValoracion $acuerdoanvav)
     {
-        dd("anexos anv av create :D",$acuerdoanvav);
+        dd("anexos anv av show :D",$acuerdoanvav);
         //dd($folio);
         $acuerdoaccion = "Consulta";
         //dd($request);
@@ -138,5 +143,20 @@ class AnexosAnVController extends Controller
     {
         //
     }
+    /*
+    public function actualizaProgresivo()
+    {
+        $numeroSiguiente = 1;
+        $modelName = $this->model;
+
+        $er_records = $modelName::where('segauditoria_id', getSession('auditoriacp_id'))->whereNull('eliminado');
+
+        $er_records = $er_records->orderBy('consecutivo')->get();
+
+        foreach ($er_records as $er_record) {
+            $er_record->update(['consecutivo' => $numeroSiguiente]);
+            $numeroSiguiente++;
+        }
+    }*/
 
 }

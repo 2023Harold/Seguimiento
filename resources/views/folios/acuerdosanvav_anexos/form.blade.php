@@ -14,7 +14,7 @@
         <div class="card-header">
             <h1 class="card-title">
                 <a href="{{ route('acuerdosanvav.show',$folio) }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                  &nbsp;{{$anexoacuerdoaccion}} Anexos Acuerdos de Valoración y No Valoración       
+                  &nbsp;{{$anexoacuerdoaccion}} Anexos Acuerdos de Valoración y No Valoración
             </h1>
         </div>
         <div class="card-body">
@@ -25,12 +25,23 @@
             {!!BootForm::open(['model' => $anexosacuerdoanvav, 'store' => 'anexosanvav.store', 'update' => 'anexosanvav.update', 'id' => 'form']) !!}
                 <div class="row">
                     <div class="col-md-4">
-                        {!!archivo('oficio_contestacion_general', 'Anexos: ', old('oficio_contestacion_general', $acuerdoanvav->oficio_contestacion_general)) !!}
+                        {!!BootForm::text('nombre_firmante', 'Nombre de quien lo firma: *', old('administracion_firmante', $anexosacuerdoanvav->nombre_firmante)) !!}
+                    </div>
+                    <div class="col-md-4">
+                        {!!BootForm::text('cargo_firmante', 'cargo de quien lo firma: *', old('administracion_firmante', $anexosacuerdoanvav->cargo_firmante)) !!}
+                    </div>
+                    <div class="col-md-4">
+                        {!!BootForm::text('administracion_firmante', 'Administracion de quien lo firma: *', old('administracion_firmante', $anexosacuerdoanvav->administracion_firmante)) !!}
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-md-5">
+                        {!!archivo('archivo', 'Archivo: *', old('nombre_archivo', $anexosacuerdoanvav->archivo))!!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        {!!BootForm::text('numero_oficio', 'Número de oficio que presenta la entidad: ', old('numero_oficio', $acuerdoanvav->numero_oficio_ent)) !!}
+                        {!!BootForm::text('nombre_archivo', 'Nombre archivo: *', old('numero_oficio', $anexosacuerdoanvav->nombre_archivo)) !!}
                     </div>
                 </div>
                                              

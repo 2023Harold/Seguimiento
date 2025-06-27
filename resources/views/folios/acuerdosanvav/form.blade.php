@@ -43,18 +43,6 @@
                     <div class="col-md-3">
                         {!!BootForm::date('fecha_oficio', 'Fecha oficio que presenta la entidad: ', old('fecha_oficio',fecha($acuerdoanvav->fecha_oficio_ent, 'Y-m-d')),['onchange'=>'handler(event)']) !!}
                     </div>
-                </div>
-                <br>  
-                <div class="row">
-                    <div class="col-md-4">
-                        {!!BootForm::text('nombre_firmante', 'Nombre de quien lo firma: *', old('administracion_firmante', $acuerdoanvav->administracion_firmante)) !!}
-                    </div>
-                    <div class="col-md-4">
-                        {!!BootForm::text('cargo_firmante', 'cargo de quien lo firma: *', old('administracion_firmante', $acuerdoanvav->administracion_firmante)) !!}
-                    </div>
-                    <div class="col-md-4">
-                        {!!BootForm::text('administracion_firmante', 'Administracion de quien lo firma: *', old('administracion_firmante', $acuerdoanvav->administracion_firmante)) !!}
-                    </div>
                 </div> 
                 <br>
                 <div class="row">
