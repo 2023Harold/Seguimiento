@@ -18,7 +18,9 @@ return new class extends Migration
             $table->foreignId('folio_id')->constrained('segfolios_correspondencia');
             $table->foreignId('auditoria_id')->constrained('segauditorias');
             $table->string('numero_expediente',100);
+            $table->date('fecha_anvav');
             $table->string('tipo_doc',30);
+            $table->integer('num_fojas');
             $table->string('numero_oficio_ent',100)->nullable();
             $table->date('fecha_oficio_ent')->nullable();
             $table->string('nombre_informe_au',500);

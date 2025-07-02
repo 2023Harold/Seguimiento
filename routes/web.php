@@ -15,6 +15,8 @@ use App\Http\Controllers\AcuerdoConclusion\AcuerdoConclusionAcuseCPController;
 use App\Http\Controllers\AcuerdosAnV_AV\AnexosAnVController;
 use App\Http\Controllers\AcuerdosAnV_AV\AnVCFIFController;
 use App\Http\Controllers\AcuerdosAnV_AV\AnVController;
+use App\Http\Controllers\AcuerdosAnV_AV\AnVDesempenoController;
+use App\Http\Controllers\AcuerdosAnV_AV\AnVLegalidadController;
 use App\Http\Controllers\AdministracionController;
 use App\Http\Controllers\AgregarAccionesAutorizacionController;
 use App\Http\Controllers\AgregarAccionesController;
@@ -682,9 +684,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     /*** Seguimiento - Auditorias - folios */
     Route::resource('folioscrr', FolioCRRController::class);
     Route::resource('remitentes', FolioRemitentesController::class);
-    //Route::resource('foliosanexos', FolioAnexosController::class);
-    //Route::get('/foliosanexos/exportar', [FolioAnexosController::class, 'exportar'])->name('foliosanexos.exportar');
-    //Route::get('foliosanexos/{folio}/edit', [FolioAnexosController::class, 'edit'])->name('foliosanexos.edit');
     Route::get('/remitentes/create/{folioscrr}', [FolioRemitentesController::class, 'create'])->name('remitentes.create');
     Route::get('/remitentes/edit/{remitente}', [FolioRemitentesController::class, 'edit'])->name('remitentes.edit');
 
@@ -695,10 +694,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::get('/acuerdosanvav/create/{folio}', [AnVController::class, 'create'])->name('acuerdosanvav.create');
     Route::get('/acuerdosanvav/show/{folio}', [AnVController::class, 'show'])->name('acuerdosanvav.show');
     Route::resource('anexosanvav', AnexosAnVController::class,['parameters' => ['anexosanvav' => 'auditoria']]);
-
-    Route::get('/acuerdosanvavarchivo/export', [AnVController::class, 'export'])->name('acuerdosanvav.export');
-
     Route::get('/acuerdosanvavcfif/export', [AnVCFIFController::class, 'export'])->name('acuerdosanvavcfif.export');
+    Route::get('/anvavd/export', [AnVDesempenoController::class, 'export'])->name('anvavd.export');
+    Route::get('/anvavl/export', [AnVLegalidadController::class, 'export'])->name('anvavl.export');
     /**Fin del apartado de Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
 
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{Breadcrumbs::render('acuerdosanvav.index',$auditoria) }}
+    {{Breadcrumbs::render('anexosanvav.index',$auditoria) }}
 @endsection
 
 @section('content')
@@ -10,8 +10,8 @@
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">
-                    <a href="{{ route('folioscrr.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                    Acuerdos de Valoración y No Valoración Anexos 
+                    <a href="{{ route('acuerdosanvav.show', $folio) }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
+                    Anexos Acuerdos de Valoración y No Valoración 
                 </h1>
                 <div class="float-end">    
                    {{-- <a href="{{ route('informelegalidad.exportar') }}" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;</span>INFORME </a>     --}}
@@ -37,10 +37,10 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                        @can('folioscrr.create')
+                        @can('anexosanvav.create')
                             <div class="row">
                                 <div class="col-md-12">
-                                    <a href="{{ route('folioscrr.create') }}"  class="btn btn-primary float-end">
+                                    <a href="{{ route('anexosanvav.create') }}"  class="btn btn-primary float-end">
                                         <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
                                     </a>
                                 </div>
@@ -50,46 +50,56 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Oficio / Escrito</th>
-                                <th>Numero de oficio que presenta la Entidad</th>
-                                <th>Fecha Oficio</th>
+                                <th>Consecutivo</th>
+                                <th>Archivo</th>
+                                <th>Nombre Archivo</th>
                                 <th>Nombre Firmante</th>
                                 <th>Cargo Firmante</th>
-                                <th>Acuses</th>
-                                <th></th>
+                                <th>Administración Firmante</th>
+                                <th> </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="text-center">
-                                    1
-                                </td>
-                                <td class="text-center">
-                                    2
-                                </td>
-                                <td class="text-center">
-                                    3
-                                </td>
-                                <td class="text-center">
-                                    4
-                                </td>
+                            @forelse($anexosacuerdoanvav as $anexoanvav)
+                                <tr>
+                                    <td class="text-center">
+                                        {{$anexoanvav->consecutivo}}
+                                    </td>
+                                    <td class="text-center">
+                                        
+                                        @if (!empty($anexoanvav->archivo))
+                                            <a href="{{ asset($anexoanvav->archivo) }}"
+                                                target="_blank">
+                                                <?php echo htmlspecialchars_decode(iconoArchivo($anexoanvav->archivo)); ?>
+                                            </a><br>
+                                            <small>{{ fecha($anexoanvav->fecha_archivo) }}</small>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        {{$anexoanvav->nombre_archivo}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{$anexoanvav->nombre_firmante}}
+                                    </td>
 
-                                <td class="text-center">
-                                    5
-                                </td>
+                                    <td class="text-center">
+                                        {{$anexoanvav->cargo_firmante}}
+                                    </td>
 
-                                <td class="text-center">
-                                    6
-                                </td>
-                                <td class="text-center">
-                                    7
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center" colspan=5>
-                                    No se han registrado datos en este apartado
-                                </td>
-                            </tr>
+                                    <td class="text-center">
+                                        {{$anexoanvav->administracion_firmante}}
+                                    </td>
+                                    <td class="text-center">
+                                        editar
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td class="text-center" colspan=5>
+                                        No se han registrado datos en este apartado
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

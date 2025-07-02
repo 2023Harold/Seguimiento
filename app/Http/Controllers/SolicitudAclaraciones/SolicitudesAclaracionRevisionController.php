@@ -7,6 +7,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
 use App\Models\SolicitudesAclaracion;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SolicitudesAclaracionRevisionController extends Controller
@@ -78,6 +79,7 @@ class SolicitudesAclaracionRevisionController extends Controller
     public function update(Request $request, SolicitudesAclaracion $solicitud)
     {
         $director=auth()->user()->director;
+        $licMartha=User::where('siglas_rol','ATUS')->first();
 
         $this->normalizarDatos($request);
 
@@ -115,6 +117,8 @@ class SolicitudesAclaracionRevisionController extends Controller
                             '; se ha aprobado el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($licMartha->name,$licMartha->puesto, $solicitud), now(), $licMartha->unidad_administrativa_id, $licMartha->id); 
+
         } else {
             $titulo = 'Rechazo del registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$solicitud->userCreacion->name.', '.$solicitud->userCreacion->puesto.':</strong><br>'

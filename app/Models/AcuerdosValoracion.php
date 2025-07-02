@@ -29,6 +29,7 @@ class AcuerdosValoracion extends Model
         'administracion_informe_au',
         'usuario_creacion_id',
         'usuario_modificacion_id',
+        'num_fojas'
     ];
 
 
@@ -36,4 +37,9 @@ class AcuerdosValoracion extends Model
     protected $cast = [
         'fecha_oficio_ent',
     ];
+
+    public function anexoanvav()
+    {
+        return $this->hasMany(AnexosAnV_AV::class, 'anvav_id', 'id');
+    }
 }

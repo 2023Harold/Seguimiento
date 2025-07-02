@@ -31,6 +31,7 @@
                 {{ optional($auditoria->radicacion)->numero_acuerdo }}
             </span>
         </div>
+        
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
             <label>Fecha de notificación del informe de auditoría: </label>
             <span class="text-primary">

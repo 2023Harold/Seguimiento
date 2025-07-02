@@ -81,17 +81,10 @@
                                                 <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Agregar
                                             </a>
                                         </td>
-                                    @else
-                                        <td class="text-center">
-                                            <a href="{{ route('acuerdosanvav.show', $folio) }}" class="btn btn-primary">
-                                                <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Ingresar
-                                            </a>
-                                        </td>
                                     @endif
-
                                 @else
                                     <td class="text-center">
-                                        <a href="{{ route('acuerdosanvav.show', $folio) }}" class="btn btn-primary">
+                                        <a href="{{ route('acuerdosanvav.show', $folio) }}" class="btn btn-secondary">
                                             <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Ingresar
                                         </a>
                                     </td>

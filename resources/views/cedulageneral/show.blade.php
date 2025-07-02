@@ -333,19 +333,19 @@
             <td colspan="8" style="text-align: center; width: 100%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acción Promovida</strong></span></td>
         </tr>
         <tr>
-            <td style="text-align: justify;; width: 100%; border: 1px solid; border-color: #424242;" colspan="8"><span style="font-size: .6rem;"><strong><p><?php echo nl2br(htmlspecialchars($solacl->accion)); ?></p></strong></span></td>
+            <td style="padding: 5px 20px 0 15px; text-align: justify; width: 97%; border: 1px solid; border-color: #424242;" colspan="8"><span style="font-size: .6rem;"><strong><p><?php echo nl2br(htmlspecialchars($solacl->accion)); ?></p></strong></span></td>
         </tr>
         @endforeach
     </table>
 	@endif
-
+	
 	    <table  width="100%" style="clear: both; border: 1px solid; border-collapse:collapse; border-color: #424242; ">
         <tr>
             <td colspan="8" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Pliegos de Observación</strong></span></td>
         </tr>
 		</table>
         @foreach ($auditoria->totalpliegos as $pliegos)
-		<div style="page-break-inside: avoid">
+		<div style="page-break-inside: avoid"> 
 		<table width="100%" style="clear: both; border: 1px solid; border-collapse:collapse; border-color: #424242; ">
         <tr>
             <td colspan="1" style="text-align: center; width: 5%;"> <span style="font-size: .6rem;"></span></td>
@@ -366,13 +366,13 @@
         <tr>
             <td colspan="8" style="text-align: center; width: 50%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acción Promovida</strong></span></td>
         </tr>
-		</table>
-
-            <div style="text-align: justify; width: 100%; border: 1px solid; border-color: #424242;" ><span style="font-size: .6rem; " ><strong><p><?php echo nl2br(htmlspecialchars($pliegos->accion)); ?></p></strong></span></div>
+		</table>           
+		       
+            <div style="padding: 5px 20px 0 15px; text-align: justify; width: 97%; border: 1px solid; border-color: #424242;" ><span style="font-size: .6rem; " ><strong><p><?php echo nl2br(htmlspecialchars($pliegos->accion)); ?></p></strong></span></div>
        	</div>
         @endforeach
-
-
+  
+	
 
 	{{--@if (count($auditoria->cedulageneralseguimiento)>0 && $auditoria->cedulageneralseguimiento[0]->fase_autorizacion=='Autorizado')--}}
 	<table style="border-collapse:collapse;" width="100%">

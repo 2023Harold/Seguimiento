@@ -452,7 +452,7 @@
                                 <div class="menu-item mb-1">
                                     <a href="{{route('turnoarchivo.index')}}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'turnoarchivo')
                                                                                                          ) ? 'active' : '' }}">
-                                    @if (empty($auditoria->turnooic) && empty($auditoria->turnoui))
+                                    {{-- @if (empty($auditoria->turnooic) && empty($auditoria->turnoui))--}}
                                         @if (!empty($auditoria->turnoarchivo->no_aplica) && $auditoria->turnoarchivo->no_aplica=="X")                
                                             
                                         @else
@@ -467,7 +467,7 @@
                                                 @endif
                                             @endif
                                         @endif
-                                    @endif
+                                    {{--@endif--}}
                                         <span class="menu-bullet">
                                             <span class="fa fa-file-text"></span>
                                         </span>

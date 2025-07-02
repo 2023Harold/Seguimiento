@@ -21,6 +21,7 @@ use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\Style\Language;
 use PhpOffice\PhpWord\SimpleType\Jc;
 use PhpOffice\PhpWord\Style\Table;
+use PhpParser\Node\Stmt\Else_;
 
 
 class AnexosAnVController extends Controller
@@ -34,9 +35,20 @@ class AnexosAnVController extends Controller
     public $attributeNames;
     public $errorMessages;
     protected $model;
-    public function index(Request $request)
+    public function index()
     {
-        //
+        //dd("index");
+        $acuerdoanvav = AcuerdosValoracion::find(getSession('anvav_id_session'));
+        $folio = FolioCRR::find(getSession('folio_id_session'));  
+        $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
+        //dd("anexos anv av show :D",$acuerdoanvav,$folio,$remitentes);
+        $acuerdoaccion = "Consulta";
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+
+        $anexosacuerdoanvav = AnexosAnV_AV::where('anvav_id',$acuerdoanvav->id)->get();
+
+        //dd($acuerdoanvav);
+        return view('folios.acuerdosanvav_anexos.index', compact('auditoria','acuerdoanvav','folio','remitentes','anexosacuerdoanvav'));
     }
 
     /**
@@ -48,13 +60,14 @@ class AnexosAnVController extends Controller
     public function create(Request $request)
     {  
         $acuerdoanvav = AcuerdosValoracion::find(getSession('anvav_id_session'));
-        $folio = FolioCrr::where('id', $acuerdoanvav->folio_id)->first();
+        $folio = FolioCRR::find(getSession('folio_id_session'));  
         //dd("anexos anv av create :D",$acuerdoanvav);
         $anexoacuerdoaccion = "Agregar";
         $anexosacuerdoanvav = new AnexosAnV_AV();
         //DD($folio,$acuerdoaccion);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
+        
 
         return view('folios.acuerdosanvav_anexos.form', compact('acuerdoanvav','auditoria','anexoacuerdoaccion','anexosacuerdoanvav','folio','remitentes'));
     }
@@ -67,17 +80,24 @@ class AnexosAnVController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-
+        //dd($request);
+        $acuerdoanvav = AcuerdosValoracion::find(getSession('anvav_id_session'));
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $folio = FolioCrr::where('id', $request->folio_id)->first();
+        $folio = FolioCRR::find(getSession('folio_id_session'));  
         $request['usuario_creacion_id'] = auth()->id();
         $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
-        
-        $folio  = AcuerdosValoracion::create($request->all());
+        $request['anvav_id'] = $acuerdoanvav->id;
+        mover_archivos($request, ['archivo'], null);
+        if(count($acuerdoanvav->anexoanvav)==0){
+            $request['consecutivo'] = 1;
+        }else{
+            $request['consecutivo'] = count($acuerdoanvav->anexoanvav) + 1;
+        }
+        //dd(count($acuerdoanvav->anexoanvav));
+        $Anexoacuerdo  = AnexosAnV_AV::create($request->all());
 
         setMessage('Se registro el acuerdo correctamente');
-        return redirect()->route('acuerdosanvav.show');
+        return redirect()->route('anexosanvav.index');
         
     }
 
@@ -87,12 +107,13 @@ class AnexosAnVController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(AcuerdosValoracion $acuerdoanvav)
+    public function show()
     {
-        dd("anexos anv av show :D",$acuerdoanvav);
-        //dd($folio);
+        $acuerdoanvav = AcuerdosValoracion::find(getSession('anvav_id_session'));
+        $folio = FolioCRR::find(getSession('folio_id_session'));  
+        $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
+        //dd("anexos anv av show :D",$acuerdoanvav,$folio,$remitentes);
         $acuerdoaccion = "Consulta";
-        //dd($request);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
 
         //dd($acuerdoanvav);
@@ -143,13 +164,13 @@ class AnexosAnVController extends Controller
     {
         //
     }
-    /*
+    
     public function actualizaProgresivo()
     {
         $numeroSiguiente = 1;
         $modelName = $this->model;
 
-        $er_records = $modelName::where('segauditoria_id', getSession('auditoriacp_id'))->whereNull('eliminado');
+        $er_records = $modelName::where('seganv_av_anexos', getSession('anvav_id_session'));
 
         $er_records = $er_records->orderBy('consecutivo')->get();
 
@@ -157,6 +178,6 @@ class AnexosAnVController extends Controller
             $er_record->update(['consecutivo' => $numeroSiguiente]);
             $numeroSiguiente++;
         }
-    }*/
+    }
 
 }

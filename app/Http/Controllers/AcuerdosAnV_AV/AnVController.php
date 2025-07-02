@@ -40,13 +40,14 @@ class AnVController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(FolioCRR $folio)
-    {  
+    {
+        //$folio = FolioCRR::find(getSession('folio_id_session'));  
         $acuerdoaccion = "Agregar";
         $acuerdoanvav = new AcuerdosValoracion();
         //DD($folio,$acuerdoaccion);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
-        //setSession('folio_id_session',$folio->id);
+        setSession('folio_id_session',$folio->id);
 
         if(empty($folio->numero_oficio) || strtolower($folio->numero_oficio) == "s/n"){
             $acuerdoanvav_tipo_of = "Escrito";
@@ -66,16 +67,18 @@ class AnVController extends Controller
     public function store(Request $request)
     {
         //dd($request);
-
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $folio = FolioCrr::where('id', $request->folio_id)->first();
+        //$folio = FolioCrr::where('id', $request->folio_id)->first();
+        $folio = FolioCRR::find(getSession('folio_id_session'));  
         $request['usuario_creacion_id'] = auth()->id();
         $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
         
-        $folio  = AcuerdosValoracion::create($request->all());
+        $anvav  = AcuerdosValoracion::create($request->all());
+        //$this->actualizaProgresivo();
 
         setMessage('Se registro el acuerdo correctamente');
-        return redirect()->route('acuerdosanvav.show');
+        return redirect()->route('acuerdosanvav.show', $folio);
+        
         
     }
 
@@ -94,6 +97,7 @@ class AnVController extends Controller
         $acuerdoanvav = AcuerdosValoracion::where('folio_id',$folio->id)->get()->first();
         $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
         setSession('anvav_id_session',$acuerdoanvav->id);
+        setSession('folio_id_session',$folio->id);
         //dd($acuerdoanvav);
         return view('folios.acuerdosanvav.show', compact('auditoria','acuerdoanvav','folio','remitentes'));
     }
@@ -128,7 +132,7 @@ class AnVController extends Controller
         $folioscrr = FolioCrr::where('id', $remitente->folio_id)->first();
         $request['usuario_modificacion_id'] = auth()->id();
         $remitente->update($request->all());
-
+        $this->actualizaProgresivo();
         setMessage('El Remitente del Folio:'.$folioscrr->folio.' ha sido actualizado');
 
         return redirect()->route('remitentes.index');

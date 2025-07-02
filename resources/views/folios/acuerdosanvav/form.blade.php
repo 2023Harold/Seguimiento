@@ -34,14 +34,17 @@
                     <div class="col-md-2">
                         {!!BootForm::text('tipo_doc', 'Tipo de documento: *', old('tipo_doc', $acuerdoanvav_tipo_of)) !!}
                     </div>
+                    <div class="col-md-2">
+                        {!!BootForm::text('num_fojas', 'Número de fojas: *', old('num_fojas', $acuerdoanvav->num_fojas)) !!}
+                    </div>
                 </div>
                 <br>    
                 <div class="row">
                     <div class="col-md-4">
-                        {!!BootForm::text('numero_oficio', 'Número de oficio que presenta la entidad: ', old('numero_oficio', $acuerdoanvav->numero_oficio_ent)) !!}
+                        {!!BootForm::text('numero_oficio_ent', 'Número de oficio que presenta la entidad: ', old('numero_oficio_ent', $acuerdoanvav->numero_oficio_ent)) !!}
                     </div>
                     <div class="col-md-3">
-                        {!!BootForm::date('fecha_oficio', 'Fecha oficio que presenta la entidad: ', old('fecha_oficio',fecha($acuerdoanvav->fecha_oficio_ent, 'Y-m-d')),['onchange'=>'handler(event)']) !!}
+                        {!!BootForm::date('fecha_oficio_ent', 'Fecha oficio que presenta la entidad: ', old('fecha_oficio_ent',fecha($acuerdoanvav->fecha_oficio_ent, 'Y-m-d')),['onchange'=>'handler(event)']) !!}
                     </div>
                 </div> 
                 <br>
