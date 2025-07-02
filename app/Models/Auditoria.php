@@ -337,11 +337,11 @@ class Auditoria extends Model
 
     public function cedulageneralseguimiento()
     {
-        return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cedula General Seguimiento');
+        return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Cédula General Seguimiento');
     }
     public function cedulageneralseguimientoarchivo()
     {
-        return $this->hasMany(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','Seguimiento');
+        return $this->hasOne(Cedula::class, 'auditoria_id', 'id')->where('cedula_tipo','General Seguimiento');
     }
 
     public function cedulageneralrecomendaciones()

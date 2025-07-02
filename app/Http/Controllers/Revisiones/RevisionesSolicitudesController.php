@@ -30,9 +30,9 @@ class RevisionesSolicitudesController extends Controller
     {
         $comentario = new Revisiones();
         $accion = 'Agregar';
-        $acciones=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para 
         $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $acciones=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
+        $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para     
 
         return view('comentarios.revisionessolicitudes.form', compact('comentario', 'accion','auditoria', 'acciones', 'tipo'));
     }

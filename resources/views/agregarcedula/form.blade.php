@@ -10,16 +10,18 @@
         @include('flash::message')
         {!!BootForm::open(['model' => $cedula, 'store' => 'agregarcedulainicial.store', 'update' => 'agregarcedulainicial.update', 'id' => 'form']) !!}
             <div class="row">
-                {!!BootForm::hidden('tipo', $tipo) !!}
-            
-                {!! archivo('cedula_cargada', ' '.$tipo,  old('cedula_cargada', $auditoria->cedula)) !!}
+                <div class="col-md-12">
+                    {!!BootForm::hidden('tipo', $tipo) !!}
+                                            {{-- {{ dd($cedulac); }} --}}
+                    {!! archivo('cedula_cargada', ' ',  old('cedula_cargada', $cedula)) !!}
+                </div>
+                <div class="col-md-6">
+                    @canany(['agregarcedulainicial.store','agregarcedulainicial.update'])
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    @endcanany
+                    <a href="{{ route('cedulainicial.index') }}" class="btn btn-secondary me-2">Cancelar</a>
+                </div>
             </div>
-          <div class="col-md-6">
-                        @canany(['agregarcedulainicial.store','agregarcedulainicial.update'])
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                        @endcanany
-                        <a href="{{ route('cedulainicial.index') }}" class="btn btn-secondary me-2">Cancelar</a>
-                    </div>
         {!!BootForm::close() !!}
     </div> 
 </div>

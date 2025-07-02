@@ -167,7 +167,15 @@ class AuditoriaAccion extends Model
     }
     public function tipologiaacciones()
      {
-        return $this->hasMany(CatalogoTipologia::class, 'id', 'tipo_accion_id')->first();
+        return $this->hasMany(CatalogoTipologia::class, 'id', 'tipo_accion_id');
      }
-
+     public function tipologiasporaccion()
+    {
+       return $this->hasMany(AuditoriaAccion::class, 'accion_id', 'id')->whereNull('eliminado')->orderBy('consecutivo');
+    }
+    
+    public function tipologiaall()
+    {
+       return $this->belongsTo(CatalogoTipologia::class, 'accion_id','segauditoria_id');
+    }
 }

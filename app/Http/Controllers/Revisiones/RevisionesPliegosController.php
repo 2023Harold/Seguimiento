@@ -84,6 +84,9 @@ class RevisionesPliegosController extends Controller
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id);
         }
+        if(auth()->user()->siglas_rol=='ATUS'){
+           auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($jefe->name,$jefe->puesto), now(), $jefe->unidad_administrativa_id, $jefe->id); 
+        }
         if(auth()->user()->siglas_rol=='TUS'){
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($director->name,$director->puesto), now(), $director->unidad_administrativa_id, $director->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($jefe->name,$jefe->puesto), now(), $jefe->unidad_administrativa_id, $jefe->id);
@@ -110,7 +113,7 @@ class RevisionesPliegosController extends Controller
        }elseif(auth()->user()->siglas_rol=='STAFF'){
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id);
        }
-        
+    
         
         setMessage('se ha agregado el comentario correctamente.');
 
@@ -146,7 +149,7 @@ class RevisionesPliegosController extends Controller
         // dd($tipo);
         setSession('comentario_id',$comentario->id);
 
-        return view('revisionespliegosatencion.form', compact('comentario','accion','tipo'));
+        return view('comentarios.revisionespliegosatencion.form', compact('comentario','accion','tipo'));
 
         // return redirect()->route('revisionespliegosatencion.form',compact('comentario'));
     }
@@ -176,6 +179,7 @@ class RevisionesPliegosController extends Controller
 
     private function mensajeComentario(String $nombre, String $puesto)
     {
+        // dd($nombre);
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
                     .'Se registro un comentario por parte del '.auth()->user()->puesto.'; '.auth()->user()->name.', por lo que se debe atender.';    
         return $mensaje;

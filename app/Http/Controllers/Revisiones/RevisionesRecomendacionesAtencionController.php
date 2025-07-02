@@ -66,6 +66,7 @@ class RevisionesRecomendacionesAtencionController extends Controller
         $tipo = $comentario->tipo; // tipo para identificar el archivo solo aplica para 
         $auditoria = Auditoria::find(getSession('auditoria_id'));
 
+
         return view('comentarios.revisionesatencion.form', compact('comentario', 'accion','tipo','auditoria','acciones'));
     }
 

@@ -560,7 +560,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     /**Seguimiento - Auditorias - Cedulas*/
     /**     Cedula Inicial          */
     Route::resource('cedulainicial', CedulaInicialController::class, ['parameters' => ['cedulainicial' => 'auditoria']]);
-    /**Cedula General Seguimiento       */
+    /**Cedula General Primera       */
     Route::resource('cedulainicialprimera', CedulaInicialPrimeraEtapaController::class, ['parameters' => ['cedulainicialprimera' => 'auditoria']]);
     Route::resource('cedulainicialprimeraanalista', CedulaInicialAprobarAnalistaController::class, ['parameters' => ['cedulainicialprimeraanalista' => 'cedula']]);
     Route::resource('cedulainicialprimerarevision01', CedulaInicialRevision01Controller::class, ['parameters' => ['cedulainicialprimerarevision01' => 'cedula']]);
@@ -568,10 +568,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('cedulainicialprimeravalidacion', CedulaInicialValidacionController::class, ['parameters' => ['cedulainicialprimeravalidacion' => 'cedula']]);
     Route::resource('cedulainicialprimeraautorizacion', CedulaInicialAutorizacionController::class, ['parameters' => ['cedulainicialprimeraautorizacion' => 'cedula']]);
 
-    Route::resource('agregarcedulainicial', AgregarCedulaInicialController::class, ['parameters' => ['agregracedulainicial' => 'cedula']]);
-    Route::resource('cedulasenvio', CedulasEnvioController::class, ['parameters' => ['cedulasenvio' => 'auditoria']]);
-    Route::resource('cedulaanaliticadesempenorevision', CedulaAnaliticaDesempenoRevisionController::class, ['parameters' => ['cedulaanaliticadesempenorevision' => 'auditoria']]);
+    Route::resource('agregarcedulainicial', AgregarCedulaInicialController::class, ['parameters' => ['agregarcedulainicial' => 'cedula']]);
+    Route::resource('cedulasenvio', CedulasEnvioController::class, ['parameters' => ['cedulasenvio' => 'cedula']]);
+    Route::resource('cedulaanaliticadesempenorevision', CedulaAnaliticaDesempenoRevisionController::class, ['parameters' => ['cedulaanaliticadesempenorevision' => 'cedula']]);
     
+// /**     Cedula General Seguimiento      */
+//     Route::resource('cedulageneralseguimiento', CedulaInicialPrimeraEtapaController::class, ['parameters' => ['cedulacedulageneralseguimientogeneralrecomendacion' => 'auditoria']]);
+//     // Route::resource('cedgralrecomendacionanalista', CedulaGeneralRecomendacionesAnalistaController::class, ['parameters' => ['cedgralrecomendacionanalista' => 'cedula']]);
+
 
     /**     Cedula General Recomendaciones      */
     Route::resource('cedulageneralrecomendacion', CedulaGeneralRecomendacionesController::class, ['parameters' => ['cedulageneralrecomendacion' => 'auditoria']]);

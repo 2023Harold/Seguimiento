@@ -276,57 +276,36 @@
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                    @if ($comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101')                                    
+                                    {{-- @if ($comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101')                                    
                                     1
                                         @if ($comentario->estatus=='Pendiente')
                                             <span class="badge badge-light-primary"> {{ $comentario->estatus }}</span>
                                         @else
                                             <span class="badge badge-light-success">{{ $comentario->estatus }}</span>
                                         @endif
-                                    @else
-                                    2
+                                    @else --}}
+                                    
                                         @if ($comentario->estatus=='Pendiente')
                                             <span class="badge badge-light-primary"> {{ $comentario->estatus }}</span>
                                         @else
                                             <span class="badge badge-light-success">{{ $comentario->estatus }}</span>
                                         @endif
 
-                                    @endif
+                                    {{-- @endif --}}
                                     </td>
                                     <td class="text-center">
-                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101' && ($comentario->tipo=="Analisis" ))
-                                    1M
+                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101' && ($comentario->tipo=="Analisis" || $comentario->tipo=="Conclusión" ))                                    
                                         <a class="btn btn-primary text-center" href="{{ route('pliegosobservacionanalisis.edit',$pliegos) }}">
-                                               <small> Atender </small>
-                                        </a>   
-                                        
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101'&& $comentario->tipo=="Conclusión") 
-                                     2m
-
-
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('pliegosobservacionanalisis.edit',$comentario) }}">
-                                                    Atender
+                                                Atender 
+                                        </a>                                                                                                          
+                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101'&& $comentario->tipo=="Documentos")                                     
+                                            <a class="btn btn-primary text-center" href="{{ route('pliegosobservaciondocumentos.edit',$pliegos) }}">
+                                                 Atender
                                             </a>
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101'&& $comentario->tipo=="NORMATIVIDAD") 
-                                     3m
-                                            PENDIENTE SI SE VA EDITAR
-                                            {{-- <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegos.edit',$comentario) }}">
-                                                    Atender
-                                            </a> --}}
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101'&& $comentario->tipo=="Conclusión") 
-                                     4m
-
-
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('pliegosobservaciondocumentos.edit',$comentario) }}">
-                                                    pliegosobservaciondocumentos
-                                            </a>
-
                                     @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='101')))
-                                    1A
                                             <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegos.edit',$comentario) }}">
                                                 Atender
-                                            </a>
-                                        
+                                            </a>                                        
                                     @endif   
                                     </td>
                                     

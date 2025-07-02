@@ -57,10 +57,10 @@ class CedulasEnvioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cedula $auditoria)
+    public function edit(Cedula $cedula)
     {
     //    dd($agregarcedula);
-        $cedula=$auditoria;
+        // $cedula=$auditoria;
         Movimientos::create([
             'tipo_movimiento' => 'Envío de la Cédula',
                 'accion' => 'Cedula',
@@ -78,7 +78,7 @@ class CedulasEnvioController extends Controller
                         auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
     
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
-            setMessage('Se ha enviado la comparecencia a revisión');
+            setMessage('Se ha enviado la cédula a revisión');
     
         return redirect()->route('cedulainicial.index');
     }

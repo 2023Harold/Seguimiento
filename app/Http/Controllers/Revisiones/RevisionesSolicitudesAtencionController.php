@@ -81,7 +81,7 @@ class RevisionesSolicitudesAtencionController extends Controller
     public function edit(Revisiones $comentario, Request $request)
     {
         $accion = 'Atender';
-        $acciones=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $acciones=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $tipo = $comentario->tipo; // tipo para identificar el archivo solo aplica para 
         $auditoria = Auditoria::find(getSession('auditoria_id'));
 
@@ -124,5 +124,11 @@ class RevisionesSolicitudesAtencionController extends Controller
     public function destroy($id)
     {
         //
+    }
+    private function mensajeComentario(String $nombre, String $puesto)
+    {
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .'Se ha dado atención al comentario, realizando las modificaciones pertinentes según lo indicado.';    
+        return $mensaje;
     }
 }

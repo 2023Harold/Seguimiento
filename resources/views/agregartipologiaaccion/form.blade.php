@@ -16,7 +16,7 @@
         
 
             <div class="row">                
-                <div class="col-md-3">                    
+                <div class="col-md-12">                    
                     {!!BootForm::text('tipologia', 'Tipología: *', old("tipologia", $accion->tipologia))!!}
                 </div>
             </div>

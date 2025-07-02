@@ -251,11 +251,37 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente')
+                                    {{-- @if(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente')
                                         <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendacionesatencion.edit',$comentario) }}">
                                             Atender
                                         </a>
-                                    @endif
+                                    @endif --}}
+                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101' && ($comentario->tipo=="Analisis" ))
+                                    
+                                        <a class="btn btn-primary text-center" href="{{ route('recomendacionesanalisis.edit',$recomendaciones) }}">
+                                                Atender 
+                                        </a>   
+                                        
+                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101'&& $comentario->tipo=="Conclusión") 
+                                    
+                                            <a class="btn btn-primary popupcomentario" href="{{ route('recomendacionesanalisis.edit',$comentario) }}">
+                                                  Atender
+                                            </a>
+                                    
+                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101'&& $comentario->tipo=="Conclusión") 
+                                    
+
+                                            <a class="btn btn-primary popupcomentario" href="{{ route('recomendacionesdocumentos.edit',$comentario) }}">
+                                                    recomendaciondocumentos
+                                            </a>
+
+                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='101')))
+                                
+                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegos.edit',$comentario) }}">
+                                                Atender
+                                            </a>
+                                        
+                                    @endif   
                                 </td>
                            </tr>
                            @if (count($comentario->respuestas)>0)

@@ -98,12 +98,12 @@ class RevisionesPliegosAtencionController extends Controller
     public function update(Request $request, Revisiones $comentario,)
     { 
         $comentario->update(['estatus'=>'Atendido']);
-        $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $request->merge([
             'id_revision'=>$comentario->id,
             'de_usuario_id'=>auth()->user()->id,
             'para_usuario_id'=>intval($accion->analista_asignado_id),
-            'accion'=>'Pliego de Observación',
+            'accion'=>'Recomendación',
             'accion_id'=>$accion->id,            
             'usuario_creacion_id'=>auth()->user()->id,
         ]);        

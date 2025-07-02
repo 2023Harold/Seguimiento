@@ -60,13 +60,11 @@ class CedulaAnaliticaDesempenoRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cedula $auditoria)
+    public function edit(Cedula $cedula)
     {     
-        $cedula=$auditoria;
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
         
-        // dd($cedula);
-        // $nombre=$cedula->cedula;
+        // $cedula=$auditoria;
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         
         return view('cedulaanaliticadesempenorevision.form',compact('auditoria','cedula'));
     }
@@ -78,11 +76,11 @@ class CedulaAnaliticaDesempenoRevisionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AprobarFlujoAutorizacionRequest $request, Cedula $auditoria)
+    public function update(AprobarFlujoAutorizacionRequest $request, Cedula $cedula)
     {
         // dd(1);
         $this->normalizarDatos($request);
-        $cedula=$auditoria;
+        // $cedula=$auditoria;
         $mensaje = "";
  
         Movimientos::create([
@@ -103,20 +101,20 @@ class CedulaAnaliticaDesempenoRevisionController extends Controller
 
         $cedula->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
         setMessage($request->estatus == 'Aprobado' ?
-            'Se ha autorizado el Acuerdo de Conclusión de la auditoría con exito.' :
+            'Se ha autorizado la cédula de la auditoría con exito.' :
             'El rechazo ha sido registrado.'
         );
 
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del Acuerdo de conclusión de la auditoría No. '.$cedula->auditoria->numero_auditoria;
+            $titulo = 'Autorización de la cédula de la auditoría No. '.$cedula->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$cedula->usuarioCreacion->name.', '.$cedula->usuarioCreacion->puesto.':</strong><br>'
-                            .'Se ha aprobado la autorización del Acuerdo de Conclusión de la auditoría No. '.$cedula->auditoria->numero_auditoria;                          
+                            .'Se ha aprobado la autorización de la cedula de la auditoría No. '.$cedula->auditoria->numero_auditoria;                          
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $cedula->usuarioCreacion->unidad_administrativa_id, $cedula->usuarioCreacion->id);
         }else {
             
-            $titulo = 'Rechazo Acuerdo de Conclusión de la auditoría No. '.$cedula->auditoria->numero_auditoria;
+            $titulo = 'Rechazo de la cédula de la auditoría No. '.$cedula->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$cedula->usuarioCreacion->name.', '.$cedula->usuarioCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el Acuerdo de Conclusión de la auditoría No. '.$cedula->auditoria->numero_auditoria.
+                            .'Ha sido rechazada la cédula de la auditoría No. '.$cedula->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
             
                             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $cedula->usuarioCreacion->unidad_administrativa_id, $cedula->usuarioCreacion->id);
@@ -147,7 +145,7 @@ class CedulaAnaliticaDesempenoRevisionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro de la radicación de auditoría No. '.$numeroauditoria.'.';       
+                    .'Ha sido rechazado el registro de la cedula de auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }
@@ -155,7 +153,7 @@ class CedulaAnaliticaDesempenoRevisionController extends Controller
     private function mensajeAprobado(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .' Ha sido autorizado el registro de radicación de la auditoría No. '.$numeroauditoria.
+                    .' Ha sido autorizado el registro de la cedula de la auditoría No. '.$numeroauditoria.
                     ', por parte del Titular.';       
 
         return $mensaje;
