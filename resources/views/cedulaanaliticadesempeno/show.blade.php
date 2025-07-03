@@ -66,6 +66,7 @@
             </td>             
         </tr>              
         <tr>
+
             <td colspan="4">
                 <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
                     <tr>
@@ -101,7 +102,7 @@
                         <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>OBSERVACIÓN PROMOVIDA:</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
+                        <td style="padding: 5px 20px 10px 15px; width:60%; text-align: justify; border: .5 solid black;  color: #960048; vertical-align:middle; font-size: 0.6rem;">
                             <span>
 								<strong>
 									@php
@@ -123,7 +124,7 @@
                         <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ORDENAMIENTOS LEGALES Y DISPOSICIONES JURÍDICAS APLICABLES:</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
+                        <td style="padding: 5px 20px 10px 15px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
                             <span>
 								<strong>									
 									@php
@@ -145,26 +146,22 @@
         </tr>
         <tr>
             <td colspan="8">
-                @if (!empty($accion->evidencia_resumen))
-                    <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                        <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL PARA LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                                <span>
-                                    <strong>
-                                        @php
-                                            echo nl2br(htmlentities($accion->evidencia_resumen));									
-                                        @endphp                                    
-                                    </strong>
-                                </span> 
-                            </td>
-                        </tr>
-                    </table>    
-                @else
-                    
-                @endif                
+                <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
+                    <tr>
+                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL PARA LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px 20px 10px 15px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
+                            <span>
+                                <strong>
+									@php
+										 echo nl2br(htmlentities($accion->evidencia_resumen));									
+									@endphp                                    
+                                </strong>
+                            </span> 
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
         <tr>
@@ -174,7 +171,7 @@
                         <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DOCUMENTACIÓN PRESENTADA:</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; margin:45px; font-size: 0.6rem;">
+                        <td style="padding: 5px 20px 10px 15px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; margin:45px; font-size: 0.6rem;">
 							<strong>
 								<span>								   
 										@php
@@ -196,7 +193,7 @@
                         <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ANALISIS DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
                     </tr>
                     <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
+                        <td style="padding: 5px 20px 10px 15px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
                             <span>
                                 <strong>
 									@php

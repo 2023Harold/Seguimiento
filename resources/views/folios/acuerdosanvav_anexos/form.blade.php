@@ -21,8 +21,9 @@
             @include('flash::message')
             {{--@include('layouts.contextos._radicacion')--}}
             @include('layouts.contextos._folio')
-
+            
             {!!BootForm::open(['model' => $anexosacuerdoanvav, 'store' => 'anexosanvav.store', 'update' => 'anexosanvav.update', 'id' => 'form']) !!}
+            {!!BootForm::hidden('consecutivo',$acuerdoanvav->consecutivo) !!}
                 <div class="row">
                     <div class="col-md-4">
                         {!!BootForm::text('nombre_firmante', 'Nombre de quien lo firma: *', old('administracion_firmante', $anexosacuerdoanvav->nombre_firmante)) !!}

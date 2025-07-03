@@ -50,9 +50,6 @@
                                 @if(!empty($acuerdoanvav->fecha_oficio_ent))
                                     <th>Fecha oficio que presenta la Entidad</th>
                                 @endif
-                                <th>Nombre Firmante</th>
-                                <th>Cargo Firmante</th>
-                                <th>Administración Firmante</th>
                                 <th>Nombre de notificación del informe de auditoría</th>
                                 <th>Cargo de notificación del informe de auditoría</th>
                                 <th>Administración de notificación del informe de auditoría</th>
@@ -79,15 +76,6 @@
                                         </td>
                                     @endif
                                     <td class="text-center">
-                                        {{$acuerdoanvav->nombre_firmante}}
-                                    </td>
-                                    <td class="text-center">
-                                        {{$acuerdoanvav->cargo_firmante}}
-                                    </td>
-                                    <td class="text-center">
-                                        {{$acuerdoanvav->administracion_firmante}}
-                                    </td>
-                                    <td class="text-center">
                                         {{$acuerdoanvav->nombre_informe_au}}
                                     </td>
                                     <td class="text-center">
@@ -110,7 +98,7 @@
                         </tbody>
                     </table>
                     <div class="float-end">
-                        <a href="{{ route('anexosanvav.create') }}" class="btn btn-primary">
+                        <a href="{{ route('anexosanvav.index') }}" class="btn btn-primary">
                             <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Anexos
                         </a>
                     </div>

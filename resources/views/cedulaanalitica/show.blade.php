@@ -39,7 +39,7 @@
                         </tr> 
                         <tr>
                             <td colspan="3" style="text-align: center; align-content: center; align-items: center;">
-                                <span style="color: #960048; font-size: .6rem;"><strong>CÉDULA GENERAL DE SEGUIMIENTO</strong></span>
+                                <span style="color: #960048; font-size: .6rem;"><strong>CÉDULA ANALITICA DE SEGUIMIENTO</strong></span>
                             </td>
                         </tr>                   
                     </table>
@@ -136,7 +136,7 @@
                             <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>OBSERVACIÓN PROMOVIDA:</strong></span></td>
                         </tr>
                         <tr>
-                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
+                            <td style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
                                 <span>
 									<strong>
 										@php
@@ -157,7 +157,7 @@
                             <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>NORMATIVIDAD INFRINGIDA:</strong></span></td>
                         </tr>
                         <tr>
-                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
+                            <td style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
                                 <span>
 									<strong>
 										@php
@@ -194,7 +194,7 @@
                             <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DOCUMENTACIÓN PRESENTADA:</strong></span></td>
                         </tr>
                         <tr>
-                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;font-size: 0.6rem;">
+                            <td style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;font-size: 0.6rem;">
                                 <span>
                                     <strong>
 										@php											 	
@@ -234,7 +234,7 @@
                 </td>
             </tr>         
         </table>
-		<div style="text-align: justify; border: .5 solid black; width:100%; color: #960048; vertical-align:middle;font-size: 0.6rem; page-break-after:auto;">
+		<div style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:96%; color: #960048; vertical-align:middle;font-size: 0.6rem; page-break-after:auto;">
 		<span style="font-size: 0.6rem">
                                     <strong>
 										@php

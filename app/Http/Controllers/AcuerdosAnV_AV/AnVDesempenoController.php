@@ -22,7 +22,7 @@ use PhpOffice\PhpWord\SimpleType\Jc;
 use PhpOffice\PhpWord\Style\Table;
 
 
-class AnVCFIFController extends Controller
+class AnVDesempenoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,7 @@ class AnVCFIFController extends Controller
      */
     public function index(Request $request)
     {
-        //dd("index acuerdos");
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-
-        return view('folios.acuerdosanvav.index', compact('auditoria'));
+        //
     }
 
     /**
@@ -44,8 +41,7 @@ class AnVCFIFController extends Controller
      */
     public function create(FolioCrr $folio)
     {
-        DD("Create");
-       
+        //       
     }
 
     /**
@@ -79,9 +75,7 @@ class AnVCFIFController extends Controller
      */
     public function edit(FolioCrr $folio)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        
-        return view('folios.foliosanexos.form', compact('auditoria','folio'));
+        /** */
     }
 
     /**
@@ -91,16 +85,9 @@ class AnVCFIFController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RemitentesFolio $remitente)
+    public function update()
     {
-        $folioscrr = FolioCrr::where('id', $remitente->folio_id)->first();
-        $request['usuario_modificacion_id'] = auth()->id();
-        $remitente->update($request->all());
-
-        setMessage('El Remitente del Folio:'.$folioscrr->folio.' ha sido actualizado');
-
-        return redirect()->route('remitentes.index');
-		
+        //
     }
 
     /**

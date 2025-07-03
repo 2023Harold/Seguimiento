@@ -37,7 +37,7 @@
                         </tr>
                         <tr>
                             <td colspan="3" style="text-align: center; align-content: center; align-items: center;">
-                                <span style="color: #960048; font-size: .6rem;"><strong>CÉDULA GENERAL DE SEGUIMIENTO</strong></span>
+                                <span style="color: #960048; font-size: .6rem;"><strong>CÉDULA GENERAL DE SEGUIMIENTO RECOMENDACIONES</strong></span>
                             </td>
                         </tr>
                     </table>
@@ -166,7 +166,7 @@
                             <td colspan="4" style="text-align: center; width: 90%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Recomendación Determinada</strong></span></td>
                         </tr>
                         <tr>
-                            <td style="text-align: justify; width: 90%; border: 1px solid; border-color: #424242;" colspan="4"><span style="font-size: .6rem;"><strong><?php echo nl2br(htmlspecialchars($recomendacion->accion)); ?></strong></span></td>
+                            <td style="padding: 10px 20px 10px 20px; text-align: justify; width: 90%; border: 1px solid; border-color: #424242;" colspan="4"><span style="font-size: .6rem;"><strong><?php echo nl2br(htmlspecialchars($recomendacion->accion)); ?></strong></span></td>
                         </tr>
                     @endforeach
                 </table>

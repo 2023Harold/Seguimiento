@@ -21,6 +21,10 @@ class AnexosAnV_AV extends Model
         'anvav_id',
         'usuario_creacion_id',
         'usuario_modificacion_id',
+        'nombre_firmante',
+        'cargo_firmante',
+        'administracion_firmante',
+
     ];
 
 
@@ -28,4 +32,7 @@ class AnexosAnV_AV extends Model
     protected $cast = [
         
     ];
+
+    
+
 }

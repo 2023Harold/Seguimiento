@@ -7,6 +7,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
 use App\Models\PliegosObservacion;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PliegosObservacionRevisionController extends Controller
@@ -78,6 +79,7 @@ class PliegosObservacionRevisionController extends Controller
     public function update(Request $request, PliegosObservacion $pliegosobservacion)
     {
         $director=auth()->user()->director;
+        $licMartha=User::where('siglas_rol','ATUS')->first();
 
         $this->normalizarDatos($request);
 
@@ -115,6 +117,7 @@ class PliegosObservacionRevisionController extends Controller
                             '; se ha aprobado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($licMartha->name,$licMartha->puesto, $pliegosobservacion), now(), $licMartha->unidad_administrativa_id, $licMartha->id); 
         } else {
             $titulo = 'Rechazo del registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->userCreacion->name.', '.$pliegosobservacion->userCreacion->puesto.':</strong><br>'
