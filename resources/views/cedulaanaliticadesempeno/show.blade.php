@@ -116,7 +116,9 @@
         </tr>       
         <tr>
             <td colspan="8">
-                <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
+             
+                @if(!empty($accion->normativa_infringida))
+                 <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                     <tr>
                         <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ORDENAMIENTOS LEGALES Y DISPOSICIONES JURÍDICAS APLICABLES:</strong></span></td>
                     </tr>
@@ -131,34 +133,45 @@
 							</span> 
                         </td>
                     </tr>
-                </table>
+                </table>                                             
+                @else
+
+
+                    
+                @endif
+                                    
+
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8">
+                @if (!empty($accion->evidencia_resumen))
+                    <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
+                        <tr>
+                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL PARA LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
+                                <span>
+                                    <strong>
+                                        @php
+                                            echo nl2br(htmlentities($accion->evidencia_resumen));									
+                                        @endphp                                    
+                                    </strong>
+                                </span> 
+                            </td>
+                        </tr>
+                    </table>    
+                @else
+                    
+                @endif                
             </td>
         </tr>
         <tr>
             <td colspan="8">
                 <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                     <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL PARA LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                            <span>
-                                <strong>
-									@php
-										 echo nl2br(htmlentities($accion->evidencia_resumen));									
-									@endphp                                    
-                                </strong>
-                            </span> 
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="8">
-                <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DESCRIPCIÓN DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
+                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DOCUMENTACIÓN PRESENTADA:</strong></span></td>
                     </tr>
                     <tr>
                         <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; margin:45px; font-size: 0.6rem;">

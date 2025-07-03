@@ -191,7 +191,7 @@
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                         <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DESCRIPCIÓN DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
+                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DOCUMENTACIÓN PRESENTADA:</strong></span></td>
                         </tr>
                         <tr>
                             <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;font-size: 0.6rem;">
