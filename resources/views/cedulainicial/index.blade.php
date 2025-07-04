@@ -46,7 +46,7 @@
                                                                 Seguimiento &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                             </a> 
                                                         </div>                                  
-                                                            @if((getSession('cp')==2022) )        
+                                                            @if((getSession('cp')==2022) || (getSession('cp')==2023))
                                                                     @if (empty($auditoria->cedulageneralseguimientoarchivo->cedula_cargada) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
                                                                     @can('agregarcedulainicial.create')
                                                                     <div class="row">
@@ -78,7 +78,7 @@
                                                                                 </a>
                                                                                 @endcan
                                                                             @endif
-                                                                        @if(getSession('cp')!=2023)
+                                                                        @if(getSession('cp')!=2023 || (getSession('cp')!=2022))
                                                                             @if ($auditoria->cedulageneralseguimientoarchivo->fase_autorizacion == 'En revisión')
                                                                                 @can('cedulaanaliticadesempenorevision.edit')
                                                                                     <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulageneralseguimientoarchivo) }}"class=" btn btn-primary h6 text-hover-primary mb-5 float popupcomentario">
@@ -95,7 +95,7 @@
                                                                         @endif
                                                                     @endif   
                                                                     @if (!empty($auditoria->cedulageneralseguimientoarchivo)&&(empty($auditoria->cedulageneralseguimientoarchivo->fase_autorizacion)||$auditoria->cedulageneralseguimientoarchivo->fase_autorizacion=='Rechazado'))
-                                                                        @if (getSession('cp')==2022 )
+                                                                        @if (getSession('cp')==2022 || (getSession('cp')==2023) )
                                                                             @can('agregarcedulainicial.edit')
                                                                              <a href="{{ route('cedulasenvio.edit',$auditoria->cedulageneralseguimientoarchivo) }}" class="btn btn-primary">
                                                                               Enviar
@@ -122,7 +122,7 @@
                                                                  Recomendaciones  &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                               </a>    
                                                              </div> 
-                                                                @if((getSession('cp')==2022) )        
+                                                                @if((getSession('cp')==2022) || (getSession('cp')==2023)  )        
                                                                     @if (empty($auditoria->cedulageneralrecomendacionesarchivo->cedula_cargada) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
                                                                     @can('agregarcedulainicial.create')
                                                                     <div class="row">
@@ -154,7 +154,7 @@
                                                                                 </a>
                                                                                 @endcan
                                                                             @endif
-                                                                        @if(getSession('cp')!=2023)
+                                                                        @if((getSession('cp')!=2023) || (getSession('cp')!=2022) )
                                                                             @if ($auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion == 'En revisión')
                                                                                 @can('cedulaanaliticadesempenorevision.edit')
                                                                                     <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulageneralrecomendacionesarchivo) }}"class=" btn btn-primary h6 text-hover-primary mb-5 float popupcomentario">
@@ -171,7 +171,7 @@
                                                                         @endif
                                                                     @endif   
                                                                     @if (!empty($auditoria->cedulageneralrecomendacionesarchivo)&&(empty($auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion)||$auditoria->cedulageneralrecomendacionesarchivo->fase_autorizacion=='Rechazado'))
-                                                                        @if (getSession('cp')==2022 )
+                                                                        @if ((getSession('cp')==2022) || (getSession('cp')==2023) )
                                                                             @can('agregarcedulainicial.edit')
                                                                              <a href="{{ route('cedulasenvio.edit',$auditoria->cedulageneralrecomendacionesarchivo) }}" class="btn btn-primary">
                                                                               Enviar
@@ -198,7 +198,7 @@
                                                                         PRAS &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span> 
                                                                     </a>  
                                                                 </div>  
-                                                                @if((getSession('cp')==2022) )
+                                                                @if((getSession('cp')==2022) || (getSession('cp')==2023) )
                                                                     @if (empty($auditoria->cedulageneralprasarchivo->cedula_cargada) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
                                                                         @can('agregarcedulainicial.create')
                                                                             <div class="row">
@@ -230,7 +230,7 @@
                                                                         </a>
                                                                         @endcan
                                                                     @endif
-                                                                    @if(getSession('cp')!=2023)
+                                                                    @if((getSession('cp')!=2023) || (getSession('cp')!=2022))
                                                                         @if ($auditoria->cedulageneralprasarchivo->fase_autorizacion == 'En revisión')
                                                                             @can('cedulaanaliticadesempenorevision.edit')
                                                                             <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulageneralprasarchivo) }}"class=" btn btn-primary h6 text-hover-primary mb-5 float popupcomentario">
@@ -247,7 +247,7 @@
                                                                     @endif
                                                                 @endif   
                                                                     @if (!empty($auditoria->cedulageneralprasarchivo)&&(empty($auditoria->cedulageneralprasarchivo->fase_autorizacion)||$auditoria->cedulageneralprasarchivo->fase_autorizacion=='Rechazado'))
-                                                                        @if (getSession('cp')==2022 )
+                                                                        @if ((getSession('cp')==2022 ) || (getSession('cp')==2023))
                                                                             @can('agregarcedulainicial.edit')
                                                                                 <a href="{{ route('cedulasenvio.edit',$auditoria->cedulageneralprasarchivo) }}" class="btn btn-primary">
                                                                                   Enviar
@@ -287,7 +287,7 @@
                                                         Seguimiento  &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                     </a>
                                                 </div>     
-                                                 @if((getSession('cp')==2022) )        
+                                                 @if((getSession('cp')==2022) || (getSession('cp')==2023) )        
                                                     @if (empty($auditoria->cedulaanaliticaarchivo->cedula_cargada) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
                                                         @can('agregarcedulainicial.create')
                                                             <div class="row">
@@ -323,7 +323,7 @@
                                                                 @endcan
                                                         @endif
                                                      @endif    
-                                                 @if(getSession('cp')!=2023)
+                                                 @if((getSession('cp')!=2023) || (getSession('cp')!=2022))
                                                          @if (!empty($auditoria->cedulaanaliticaarchivo) && ($auditoria->cedulaanaliticaarchivo->fase_autorizacion == 'En revisión'))
                                                             @can('cedulaanaliticadesempenorevision.edit')
                                                                 <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulaanaliticaarchivo) }}"class="btn btn-primary h6 text-hover-primary mb-5 float popupcomentario">
@@ -339,7 +339,7 @@
                                                     <span class="badge badge-light-success">{{ $auditoria->cedulaanaliticaarchivo->fase_autorizacion }} </span>
                                                 @endif                                               
                                                 @if (!empty($auditoria->cedulaanaliticaarchivo)&&(empty($auditoria->cedulaanaliticaarchivo->fase_autorizacion)||$auditoria->cedulaanaliticaarchivo->fase_autorizacion=='Rechazado'))
-                                                    @if (getSession('cp')==2022 )
+                                                    @if ((getSession('cp')==2022) || (getSession('cp')==2023))
                                                         @can('agregarcedulainicial.edit')
                                                             <a href="{{ route('cedulasenvio.edit',$auditoria->cedulaanaliticaarchivo) }}" class="btn btn-primary">
                                                                 Enviar
@@ -366,7 +366,7 @@
                                                                     Desempeño &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"></span>
                                                                 </a>
                                                             </div>    
-                                                             @if((getSession('cp')==2022) )        
+                                                             @if((getSession('cp')==2022)|| (getSession('cp')==2023))        
                                                                 @if (empty($auditoria->cedulaanaliticadesemparchivo->cedula_cargada) && $auditoria->departamento_encargado_id==auth()->user()->unidad_administrativa_id)
                                                                     @can('agregarcedulainicial.create')
                                                                         <div class="row">
@@ -398,7 +398,7 @@
                                                                         </a>
                                                                         @endcan
                                                                     @endif
-                                                                    @if(getSession('cp')!=2023)
+                                                                    @if((getSession('cp')!=2023) || (getSession('cp')!=2022))
                                                                         @if ($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion == 'En revisión')
                                                                             @can('cedulaanaliticadesempenorevision.edit')
                                                                             <a href="{{ route('cedulaanaliticadesempenorevision.edit',$auditoria->cedulaanaliticadesemparchivo ) }} "class=" btn btn-primary h6 text-hover-primary mb-5 float popupcomentario" >
@@ -415,7 +415,7 @@
                                                                     @endif
                                                                 @endif   
                                                                     @if (!empty($auditoria->cedulaanaliticadesemparchivo)&&(empty($auditoria->cedulaanaliticadesemparchivo->fase_autorizacion)||$auditoria->cedulaanaliticadesemparchivo->fase_autorizacion=='Rechazado'))
-                                                                        @if (getSession('cp')==2022 )
+                                                                        @if ((getSession('cp')==2022 )|| (getSession('cp')==2023))
                                                                             @can('agregarcedulainicial.edit')
                                                                                 <a href="{{ route('cedulasenvio.edit',$auditoria->cedulaanaliticadesemparchivo) }}" class="btn btn-primary">
                                                                                   Enviar
