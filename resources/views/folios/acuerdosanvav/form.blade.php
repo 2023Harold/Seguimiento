@@ -31,14 +31,8 @@
                     <div class="col-md-4">
                         {!!BootForm::text('numero_expediente', 'Número de expediente: *', old('numero_expediente', $acuerdoanvav->numero_expediente)) !!}
                     </div>
-                    <div class="col-md-2">
-                        {!!BootForm::text('tipo_doc', 'Tipo de documento: *', old('tipo_doc', $acuerdoanvav_tipo_of)) !!}
-                    </div>
-                    <div class="col-md-2">
-                        {!!BootForm::text('num_fojas', 'Número de fojas: *', old('num_fojas', $acuerdoanvav->num_fojas)) !!}
-                    </div>
-                </div>
-                <br>    
+                    
+                </div><br>    
                 <div class="row">
                     <div class="col-md-4">
                         {!!BootForm::text('numero_oficio_ent', 'Número de oficio que presenta la entidad: ', old('numero_oficio_ent', $acuerdoanvav->numero_oficio_ent)) !!}
@@ -46,18 +40,32 @@
                     <div class="col-md-3">
                         {!!BootForm::date('fecha_oficio_ent', 'Fecha oficio que presenta la entidad: ', old('fecha_oficio_ent',fecha($acuerdoanvav->fecha_oficio_ent, 'Y-m-d')),['onchange'=>'handler(event)']) !!}
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        {!!BootForm::text('tipo_doc', 'Tipo de documento: *', old('tipo_doc', $acuerdoanvav_tipo_of)) !!}
+                    </div>
+                    <div class="col-md-2">
+                        {!!BootForm::text('num_fojas', 'Número de fojas: *', old('num_fojas', $acuerdoanvav->num_fojas)) !!}
+                    </div>
+                    <div class="col-md-4">
+                        {!!BootForm::text('anexos', 'Anexos: ', old('anexos', $acuerdoanvav->anexos)) !!}
+                    </div>
                 </div> 
                 <br>
+                <hr>
                 <div class="row">
+                    <h5><label>Datos del servidor publico al que se le notifico al que se le notifico el informe de auditoría:</label></h5>
                     <div class="col-md-4">
-                        {!!BootForm::text('nombre_informe_au', 'Nombre del informe de auditoria: *', old('nombre_informe_au', $acuerdoanvav->nombre_informe_au)) !!}
+                        {!!BootForm::text('nombre_informe_au', 'Nombre: *', old('nombre_informe_au', $acuerdoanvav->nombre_informe_au)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!!BootForm::text('cargo_informe_au', 'Cargo del informe de auditoria: *', old('cargo_informe_au', $acuerdoanvav->cargo_informe_au)) !!}
+                        {!!BootForm::text('cargo_informe_au', 'Cargo : *', old('cargo_informe_au', $acuerdoanvav->cargo_informe_au)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!!BootForm::text('administracion_informe_au', 'Administracion del informe de auditoria: *', old('administracion_informe_au', $acuerdoanvav->administracion_informe_au)) !!}
+                        {!!BootForm::text('administracion_informe_au', 'Administracion: *', old('administracion_informe_au', $acuerdoanvav->administracion_informe_au)) !!}
                     </div>
+                    
                 </div> 
                 <br>             
                 <div class="row">

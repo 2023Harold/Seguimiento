@@ -122,10 +122,19 @@ class AnVCFIFController extends Controller
         $auditoria=Auditoria::find(getSession('auditoria_id'));
         $fechaactual=fechaaletra(now());
         $fechaactual = strtolower($fechaactual);
+
         $nATUS = User::select('segusers.name', 'segusers.puesto')->where('siglas_rol','ATUS')->get()->first();
+
         //$nombre=auth()->user()->name;
         $StaffAsignadoId = optional($auditoria->Staff)->first()->staff_id;
+
+
         $StaffAsignado = User::where('id', $StaffAsignadoId)->first();
+
+        $licMartha = User::where('siglas_rol','ATUS')->first();
+        //DD($licMartha);
+
+
         $nS = $StaffAsignado->name;
         $nD = $auditoria->directorasignado->name;
         $nJD = $auditoria->jefedepartamentoencargado->name;
@@ -239,9 +248,11 @@ class AnVCFIFController extends Controller
             $cell = $table->addCell(11200, ['gridSpan' => 3, 'valign' => 'center','bgColor' => '96134b','borderColor' => '96134b','borderTopSize' => 0,'borderBottomSize' => 0]);
             $text = $cell->addTextRun(['alignment' => Jc::CENTER, 'indentation' => ['left' => 500, 'right' => 500]]);
             $text->addText("Este documento y anexos, en su caso, serán tratados conforme a lo previsto en la Ley de Protección de Datos Personales en Posesión de Sujetos Obligados del Estado de México y Municipios.</w:t><w:br/><w:t>Para mayor información, visite el aviso de privacidad en www.osfem.gob.mx.",['size' => 7,'color' => 'FFFFFF']);
+            
             $table->addRow();
             $cell->addPreserveText('Página {PAGE} de {NUMPAGES}', array('color' => 'white','size' => 8,),array('align' => 'center',));
-        // === FIN PIE DE PAGINA === ///
+        
+            // === FIN PIE DE PAGINA === ///
 
         ///=== BODY ===///
         if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero' || $auditoria->acto_fiscalizacion=='Inversión Física'){
@@ -249,12 +260,13 @@ class AnVCFIFController extends Controller
             $phpWord->addTitleStyle(1, ['bold' => true, 'size' => 10, 'name' => 'Regesto Grotesk']);
             $phpWord->addParagraphStyle('justificado', ['alignment' => Jc::BOTH, 'spacing' => 120]);
 
+            //dd();
             $textRun = $section->addTextRun('justificado');
             $textRun->addText("V I S T O ", ['bold' => true]);
             if($acuerdoanvav->tipo_doc == 'Oficio'){
                 $siOf_Esc01 = $acuerdoanvav->tipo_doc." número ".$acuerdoanvav->numero_oficio_ent.", de fecha ".fechaaletra($acuerdoanvav->fecha_oficio_ent);
             }else{$siOf_Esc01 = $acuerdoanvav->tipo_doc; }
-            $textRun->addText(" el ". $siOf_Esc01 ." asignado por XXX, XXXX, durante la administración XXX", ['bgColor' => 'FFFF00'],[]); 
+            $textRun->addText(" el ". $siOf_Esc01 ." asignado por {$folio->remitentes->pluck('nombre_remitente')->filter()->first()}, {$folio->remitentes->pluck('cargo_remitente')->filter()->first()}, {$folio->remitentes->pluck('administracion_remitente')->filter()->first()}", [],[]); 
             if(count($acuerdoanvav->anexoanvav)>0){
                 $textRun->addText(" y documentación adjunta", []);
             }

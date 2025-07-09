@@ -353,8 +353,7 @@
                                 </div>
                              @endif                                      
                                    <!--------------------------------------Cedula Análitica Desempeño MOD -------------------------------------------------------------------------------------------------------------------------------------> 
-                                @if (count($auditoria->totalrecomendacion)>0 && (str_contains($auditoria->acto_fiscalizacion, 'Desempeño')||str_contains($auditoria->acto_fiscalizacion, 'Legalidad')))
-                                        @php
+                                @if (count($auditoria->totalrecomendacion)>0 && (str_contains($auditoria->acto_fiscalizacion, 'Desempeño')||str_contains($auditoria->acto_fiscalizacion, 'Legalidad')||str_contains($auditoria->acto_fiscalizacion, 'Inversión Física')||str_contains($auditoria->acto_fiscalizacion, 'Cumplimiento Financiero')))                                        @php
                                             $ca_desempenio=$resultado['ca_desempeno'];
                                         @endphp
                                            <div class="col-md-4">

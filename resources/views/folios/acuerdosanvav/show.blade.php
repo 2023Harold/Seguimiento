@@ -44,7 +44,7 @@
                             <tr>
                                 <th>Número expediente</th>
                                 <th>Tipo de documento</th>
-                                @if(!empty($acuerdoanvav->num_oficio_ent))
+                                @if(!empty($acuerdoanvav->numero_oficio_ent))
                                     <th>Numero de oficio que presenta la Entidad</th>
                                 @endif
                                 @if(!empty($acuerdoanvav->fecha_oficio_ent))
@@ -63,11 +63,9 @@
                                         {{$acuerdoanvav->numero_expediente}}
                                     </td>
                                     <td class="text-center">
-                                        {{$acuerdoanvav->tipo_doc}}
-                                    </td>
-                                    @if(!empty($acuerdoanvav->num_oficio_ent))
+                                    @if(!empty($acuerdoanvav->numero_oficio_ent))
                                         <td class="text-center">
-                                            {{$acuerdoanvav->num_oficio_ent}}
+                                            {{$acuerdoanvav->numero_oficio_ent}}
                                         </td>
                                     @endif
                                     @if(!empty($acuerdoanvav->fecha_oficio_ent))
@@ -75,6 +73,9 @@
                                             {{fecha($acuerdoanvav->fecha_oficio_ent)}}
                                         </td>
                                     @endif
+                                    <td class="text-center">
+                                        {{$acuerdoanvav->tipo_doc}}
+                                    </td>
                                     <td class="text-center">
                                         {{$acuerdoanvav->nombre_informe_au}}
                                     </td>

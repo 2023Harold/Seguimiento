@@ -77,6 +77,7 @@ class RecomendacionesValidacionController extends Controller
      */
     public function update(Request $request, Recomendaciones $recomendacion)
     {
+		$auditoria=Auditoria::find(getSession('auditoria_id'));
         $titular=auth()->user()->titular;
         
         $this->normalizarDatos($request);
@@ -96,9 +97,9 @@ class RecomendacionesValidacionController extends Controller
             $lider=$recomendacion->accion->lider;
             $analista=$recomendacion->accion->analista;
         }else{
-            $jefe = $recomendacion->jefedepartamentoencargado;
-            $analista = $recomendacion->analistacp;
-            $lider = $recomendacion->lidercp; 
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
         }
 
         if ($request->estatus == 'Aprobado') {
@@ -106,12 +107,6 @@ class RecomendacionesValidacionController extends Controller
         } else {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
-
-        $recomendacion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
-        setMessage($request->estatus == 'Aprobado' ?
-            'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
-            'El rechazo ha sido registrado.'
-        );
 
         if ($request->estatus == 'Aprobado') {
             $recomendacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
@@ -132,7 +127,11 @@ class RecomendacionesValidacionController extends Controller
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$recomendacion), now(), $lider->unidad_administrativa_id, $lider->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$recomendacion), now(), $jefe->unidad_administrativa_id, $jefe->id);
         }
-
+        $recomendacion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+			setMessage($request->estatus == 'Aprobado' ?
+            'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
+            'El rechazo ha sido registrado.'
+        );
         return redirect()->route('recomendacionesatencion.index');
     }
 

@@ -294,19 +294,25 @@
                                     {{-- @endif --}}
                                     </td>
                                     <td class="text-center">
-                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101' && ($comentario->tipo=="Analisis" || $comentario->tipo=="Conclusión" ))                                    
+                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='121' && ($comentario->tipo=="Analisis" || $comentario->tipo=="Conclusión" ))                                    
                                         <a class="btn btn-primary text-center" href="{{ route('pliegosobservacionanalisis.edit',$pliegos) }}">
-                                                Atender 
-                                        </a>                                                                                                          
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101'&& $comentario->tipo=="Documentos")                                     
+                                                Modificar 
+                                        </a>      
+										<a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.create',$comentario) }}">
+                                                Atender
+                                         </a>										
+                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='121'&& $comentario->tipo=="Documentos")                                     
                                             <a class="btn btn-primary text-center" href="{{ route('pliegosobservaciondocumentos.edit',$pliegos) }}">
-                                                 Atender
+                                                 Modificar
                                             </a>
-                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='101')))
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegos.edit',$comentario) }}">
+											<a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.create',$comentario) }}">
+                                                Atender
+                                            </a>
+                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='121')))
+                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.create',$comentario) }}">
                                                 Atender
                                             </a>                                        
-                                    @endif   
+                                    @endif  
                                     </td>
                                     
                             </tr>

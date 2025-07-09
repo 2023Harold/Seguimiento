@@ -29,7 +29,8 @@ class AcuerdosValoracion extends Model
         'administracion_informe_au',
         'usuario_creacion_id',
         'usuario_modificacion_id',
-        'num_fojas'
+        'num_fojas',
+        'anexos',
     ];
 
 

@@ -55,6 +55,8 @@ class RevisionesPliegosController extends Controller
             'accion_id'=>$accion->id,
             'estatus'=>'Pendiente',
             'usuario_creacion_id'=>auth()->user()->id,
+            'siglas_rol_user_creacion'=>auth()->user()->siglas_rol,
+
         ]);
 
         Revisiones::create($request->all());      
@@ -163,7 +165,7 @@ class RevisionesPliegosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd(2);
     }
 
     /**

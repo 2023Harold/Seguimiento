@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AcuerdoConclusion;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\AcuerdoConclusion;
@@ -80,18 +81,9 @@ class AcuerdoConclusionRevisionController extends Controller
     {
         $this->normalizarDatos($request);
         ##dd($auditoria->acuerdoconclusionpliegos->tipo);
+		$licMartha=User::where('siglas_rol','ATUS')->first();
+		
         $acuerdoconclusion=$auditoria;
-
-        Movimientos::create(attributes: [
-           'tipo_movimiento' => 'Revisión del acuerdo de conclusión',
-           'accion' => 'AcuerdoConclusion',
-           'accion_id' => $acuerdoconclusion->id,
-           'estatus' => $request->estatus,
-           'usuario_creacion_id' => auth()->id(),
-           'usuario_asignado_id' => auth()->id(),
-           'motivo_rechazo' => $request->motivo_rechazo,
-       ]);
-
        if ($request->estatus == 'Aprobado') {
            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
        } else {
@@ -104,6 +96,15 @@ class AcuerdoConclusionRevisionController extends Controller
            'La aprobación ha sido registrada y se ha enviado a validación del superior.' :
            'El rechazo ha sido registrado.'
        );
+		Movimientos::create(attributes: [
+           'tipo_movimiento' => 'Revisión del acuerdo de conclusión',
+           'accion' => 'AcuerdoConclusion',
+           'accion_id' => $acuerdoconclusion->id,
+           'estatus' => $request->estatus,
+           'usuario_creacion_id' => auth()->id(),
+           'usuario_asignado_id' => auth()->id(),
+           'motivo_rechazo' => $request->motivo_rechazo,
+       ]);
 
        $auditoria = $acuerdoconclusion->auditoria;
 
@@ -115,6 +116,7 @@ class AcuerdoConclusionRevisionController extends Controller
                         '; ha aprobado la revisión del acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria.
                         ', por lo que se requiere realice la validación oportuna de la misma.';
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
+		auth()->user()->insertNotificacion($titulo, $this->mensajeNotificacion($licMartha->name,$licMartha->puesto,$auditoria), now(), $licMartha->unidad_administrativa_id, $licMartha->id); 
     }else {
         
         $titulo = 'Rechazo el acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria;
@@ -152,6 +154,14 @@ class AcuerdoConclusionRevisionController extends Controller
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
                     .'Ha sido rechazado el registro del Acuerdo de Conclusión de las auditoría No. '.$numeroauditoria.'.';       
+
+        return $mensaje;
+    }
+	
+	private function mensajeNotificacion(String $nombre, String $puesto,$auditoria)
+    {
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .'ha aprobado la revisión del acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria.', por lo que se debe revisar.';    
 
         return $mensaje;
     }

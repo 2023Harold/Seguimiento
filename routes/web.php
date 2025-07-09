@@ -556,7 +556,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('pliegosobservacionautorizacion', PliegosObservacionAutorizacionController::class, ['parameters' => ['pliegosobservacionautorizacion' => 'pliegosobservacion']]);
     Route::get('pliegosobservacioncontestacionoficios/{pliegosobservacion}', [PliegosObservacionAtencionContestacionController::class, 'oficiospliegosobservacion'])->name('pliegosobservacioncontestacion.oficiospliegosobservacion');
     Route::resource('revisionespliegos', RevisionesPliegosController::class, ['parameters' => ['revisionespliegos' => 'comentario']]);
-    Route::resource('revisionespliegosatencion', RevisionesPliegosController::class, ['parameters' => ['revisionespliegosatencion' => 'comentario']]);
+    Route::resource('revisionespliegosatencion', RevisionesPliegosAtencionController::class, ['parameters' => ['revisionespliegosatencion' => 'comentario']]);
     /**Fin del apartado de Seguimiento - Auditorias - Pliegos*/
 
     /**Seguimiento - Auditorias - Cedulas*/

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Comparecencia;
 
+use App\Models\Auditoria;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\Comparecencia;
@@ -75,18 +77,11 @@ class ComparecenciaRevisionController extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, Comparecencia $comparecencia)
     {
+        $auditoria=Auditoria::find(getSession('auditoria_id')); 
         $this->normalizarDatos($request);
-
-        Movimientos::create([
-            'tipo_movimiento' => 'Revisión de la comparecencia',
-            'accion' => 'Comparecencia',
-            'accion_id' => $comparecencia->id,
-            'estatus' => $request->estatus,
-            'usuario_creacion_id' => auth()->id(),
-            'usuario_asignado_id' => auth()->id(),
-            'motivo_rechazo' => $request->motivo_rechazo,
-        ]);
-
+		$licMartha=User::where('siglas_rol','ATUS')->first();
+	
+        
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
         } else {
@@ -106,6 +101,8 @@ class ComparecenciaRevisionController extends Controller
                             '; ha aprobado la validación de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
+			auth()->user()->insertNotificacion($titulo, $this->mensajeNotificacion($licMartha->name,$licMartha->puesto,$auditoria), now(), $licMartha->unidad_administrativa_id, $licMartha->id); 
+
         }else {
             
             $titulo = 'Rechazo de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria;
@@ -115,6 +112,17 @@ class ComparecenciaRevisionController extends Controller
             
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id);
         }
+		
+		Movimientos::create([
+            'tipo_movimiento' => 'Revisión de la comparecencia',
+            'accion' => 'Comparecencia',
+            'accion_id' => $comparecencia->id,
+            'estatus' => $request->estatus,
+            'usuario_creacion_id' => auth()->id(),
+            'usuario_asignado_id' => auth()->id(),
+            'motivo_rechazo' => $request->motivo_rechazo,
+        ]);
+
 
          return redirect()->route('comparecenciaacta.index');
     }
@@ -150,6 +158,13 @@ class ComparecenciaRevisionController extends Controller
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
                     .' Ha sido autorizado el registro de radicación de la auditoría No. '.$numeroauditoria.
                     ', por parte del Titular.';       
+
+        return $mensaje;
+    }
+	private function mensajeNotificacion(String $nombre, String $puesto, $auditoria)
+    {
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .'ha aprobado la validación de la comparecencia de la auditoría No. '.$auditoria->numero_auditoria.', por lo que se debe revisar.';    
 
         return $mensaje;
     }

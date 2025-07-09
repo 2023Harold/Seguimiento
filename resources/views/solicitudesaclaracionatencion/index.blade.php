@@ -273,19 +273,19 @@
                                 </td>
                                 <td class="text-center">                                   
                                       @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101' && ($comentario->tipo=="Analisis" ))
-                                    1M
+                                    
                                         <a class="btn btn-primary text-center" href="{{ route('solicitudesaclaracionanalisis.edit',$comentario) }}">
                                                 Atender 
                                         </a>   
                                         
                                     @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101'&& $comentario->tipo=="Conclusión") 
-                                     2M
+                                     
                                             <a class="btn btn-primary popupcomentario" href="{{ route('solicitudesaclaracionanalisis.edit',$comentario) }}">
                                                   Atender
                                             </a>
                                     
                                     @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='101'&& $comentario->tipo=="Conclusión") 
-                                     3M
+                                     
 
 
                                             <a class="btn btn-primary popupcomentario" href="{{ route('solicitudesaclaraciondocumentos.edit',$comentario) }}">
@@ -293,8 +293,8 @@
                                             </a>
 
                                     @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='101')))
-                                    1A
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegos.edit',$comentario) }}">
+                                    
+                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionessolicitudesatencion.edit',$comentario) }}">
                                                 Atender
                                             </a>
                                         

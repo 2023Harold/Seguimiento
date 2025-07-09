@@ -213,18 +213,18 @@ class Auditoria extends Model
     }
     public function getDirectorasignadoAttribute()
     {
-        return User::where('unidad_administrativa_id',$this->direccion_asignada_id)->where('siglas_rol','DS')->first();
+        return User::where('unidad_administrativa_id',$this->direccion_asignada_id)->where('siglas_rol','DS')->where('estatus','Activo')->first();
     }
 
     public function getJefedepartamentoencargadoAttribute()
     {
-        return User::where('unidad_administrativa_id',$this->departamento_encargado_id)->where('siglas_rol','JD')->first();
+        return User::where('unidad_administrativa_id',$this->departamento_encargado_id)->where('siglas_rol','JD')->where('estatus','Activo')->first();
     }
 
     //STAFF JURIDICO
     public function getStaffasignadoAttribute()
     {
-        return User::where('unidad_administrativa_id',$this->staff_juridico_id)->where('siglas_rol','STAFF')->first();
+        return User::where('unidad_administrativa_id',$this->staff_juridico_id)->where('siglas_rol','STAFF')->where('estatus','Activo')->first();
     }
     public function Staff()
     {

@@ -44,7 +44,7 @@ protected $cast = [
 	'fecha_oficio'=> 'date',
 	'fecha_acuerdo_conclusion'=> 'date',
 ];
-public function getDepaasignadoAttribute()
+    public function getDepaasignadoAttribute()
     {
         return User::where('unidad_administrativa_id',$this->departamento_asignado_id)->first();
     }
