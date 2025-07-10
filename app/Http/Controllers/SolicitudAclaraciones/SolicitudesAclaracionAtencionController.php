@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\SolicitudesAclaracion;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SolicitudesAclaracionAtencionController extends Controller
@@ -20,8 +21,9 @@ class SolicitudesAclaracionAtencionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
+        $asistente_titular= user:: where ('siglas_rol', 'ATUS')->first();
 
-        return view('solicitudesaclaracionatencion.index',compact('solicitudesaclaracion','auditoria','accion','request'));
+        return view('solicitudesaclaracionatencion.index',compact('solicitudesaclaracion','auditoria','accion','request','asistente_titular'));
     }
 
     /**

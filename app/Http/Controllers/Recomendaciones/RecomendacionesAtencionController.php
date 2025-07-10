@@ -23,9 +23,10 @@ class RecomendacionesAtencionController extends Controller
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
-        $recomendaciones = Recomendaciones::where('accion_id',getSession('recomendacionesauditoriaaccion_id'))->get();
-           
-        return view('recomendacionesatencion.index',compact('recomendaciones','auditoria','accion','request'));
+        $recomendaciones = Recomendaciones::where('accion_id',getSession('recomendacionesauditoriaaccion_id'))->get();        
+        $asistente_titular= user:: where ('siglas_rol', 'ATUS')->first();
+        //  dd($asistente_titular);  
+        return view('recomendacionesatencion.index',compact('recomendaciones','auditoria','accion','request','asistente_titular'));
     }
 
     /**

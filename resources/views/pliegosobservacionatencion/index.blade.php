@@ -294,22 +294,22 @@
                                     {{-- @endif --}}
                                     </td>
                                     <td class="text-center">
-                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='121' && ($comentario->tipo=="Analisis" || $comentario->tipo=="Conclusión" ))                                    
+                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente' && $comentario->de_usuario_id==$asistente_titular->id && ($comentario->tipo=="Analisis" || $comentario->tipo=="Conclusión" ))                                    
                                         <a class="btn btn-primary text-center" href="{{ route('pliegosobservacionanalisis.edit',$pliegos) }}">
                                                 Modificar 
                                         </a>      
-										<a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.create',$comentario) }}">
+										<a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.edit',$comentario) }}">
                                                 Atender
                                          </a>										
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='121'&& $comentario->tipo=="Documentos")                                     
+                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Documentos")                                     
                                             <a class="btn btn-primary text-center" href="{{ route('pliegosobservaciondocumentos.edit',$pliegos) }}">
                                                  Modificar
                                             </a>
 											<a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.create',$comentario) }}">
                                                 Atender
                                             </a>
-                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='121')))
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.create',$comentario) }}">
+                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id==$asistente_titular->id)))
+                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.edit',$comentario) }}">
                                                 Atender
                                             </a>                                        
                                     @endif  

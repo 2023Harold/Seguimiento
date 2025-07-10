@@ -256,26 +256,22 @@
                                             Atender
                                         </a>
                                     @endif --}}
-                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='121' && ($comentario->tipo=="Analisis" ))
+                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && (($comentario->tipo=="Analisis" ) || ($comentario->de_usuario_id=='101'&& $comentario->tipo=="Conclusión")))
                                     
-                                        <a class="btn btn-primary text-center" href="{{ route('recomendacionesanalisis.edit',$recomendaciones) }}">
-                                                Atender 
+                                        <a class="btn btn-primary text-center" href="{{ route('recomendacionesanalisis.edit',$recomendacion) }}">
+                                                Modificar 
                                         </a>   
-                                        
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='121'&& $comentario->tipo=="Conclusión") 
-                                    
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('recomendacionesanalisis.edit',$comentario) }}">
-                                                  Atender
-                                            </a>
-                                    
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id=='121'&& $comentario->tipo=="Listado Documentos") 
-                                    
+                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendacionesatencion.edit',$comentario) }}">
+                                                Atender
+                                        </a>                                      
+                                                                           
+                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Listado Documentos")                                     
 
                                             <a class="btn btn-primary popupcomentario" href="{{ route('recomendacionesdocumentos.edit',$comentario) }}">
-                                                    Atender
+                                                Atender
                                             </a>
 
-                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='121')))
+                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='101')))
                                 
                                             <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendacionesatencion.edit',$comentario) }}">
                                                 Atender
@@ -309,7 +305,7 @@
                                                         <td class="text-center">{{ fecha($respuesta->created_at,'d/m/Y H:m:s') }}</td>
                                                         <td>{{ $respuesta->deusuario->name }}
                                                             <br>
-                                                            <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
+                                                            <small class="text-muted">{{ $respuesta->deusuario->puesto }}</small>
                                                         </td>
                                                         <td class="text-center">
                                                             <a href="{{ route('revisionesrecomendaciones.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">

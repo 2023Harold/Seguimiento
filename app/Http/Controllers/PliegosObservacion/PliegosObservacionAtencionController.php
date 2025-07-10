@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\PliegosObservacion;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PliegosObservacionAtencionController extends Controller
@@ -20,8 +21,9 @@ class PliegosObservacionAtencionController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::where('accion_id',getSession('pliegosobservacionauditoriaaccion_id'))->get();
+        $asistente_titular= user:: where ('siglas_rol', 'ATUS')->first();
 
-        return view('pliegosobservacionatencion.index',compact('pliegosobservacion','auditoria','accion','request'));
+        return view('pliegosobservacionatencion.index',compact('pliegosobservacion','auditoria','accion','request','asistente_titular'));
     }
 
     /**
@@ -92,5 +94,7 @@ class PliegosObservacionAtencionController extends Controller
     public function destroy($id)
     {
         //
-    }
+    }    
+   
 }
+
