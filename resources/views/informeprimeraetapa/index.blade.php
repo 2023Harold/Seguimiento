@@ -82,9 +82,13 @@
                                                 @if (empty($auditoria->informeprimeraetapa->fase_autorizacion)||$auditoria->informeprimeraetapa->fase_autorizacion=='Rechazado')                                                                                                                              
                                                     <th>Envío</th>
                                                 @endif
-                                                @if ($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado')
-                                                    <th>Acuses</th>
-                                                @endif
+                                                @if(empty($auditoria->informeprimeraetapa))
+													<th></th>
+												@else
+													@if ($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado')
+														<th>Acuses</th>
+													@endif
+												@endif
                 
                                             </tr>
                                         </thead>

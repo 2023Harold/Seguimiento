@@ -1057,7 +1057,7 @@ Breadcrumbs::for('anexosanvav.create', function (BreadcrumbTrail $trail,$auditor
 Breadcrumbs::for('anexosanvav.index', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('acuerdosanvav.show',$auditoria);
     //$trail->push('Acuses', route('foliosanexos.edit',$folio));
-    $trail->push('Anexos Anv y AV ', route('anexosanvav.index', $auditoria));
+    $trail->push('Acuses Anv y AV ', route('anexosanvav.index', $auditoria));
 
 });
 /** Fin de Acueros de valoracion y  no valoracion  */

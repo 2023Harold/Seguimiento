@@ -50,6 +50,9 @@
                                 @if(!empty($acuerdoanvav->fecha_oficio_ent))
                                     <th>Fecha oficio que presenta la Entidad</th>
                                 @endif
+                                @if(!empty($acuerdoanvav->anexos))
+                                    <th>Anexos</th>
+                                @endif
                                 <th>Nombre de notificación del informe de auditoría</th>
                                 <th>Cargo de notificación del informe de auditoría</th>
                                 <th>Administración de notificación del informe de auditoría</th>
@@ -63,6 +66,8 @@
                                         {{$acuerdoanvav->numero_expediente}}
                                     </td>
                                     <td class="text-center">
+                                        {{$acuerdoanvav->tipo_doc}}
+                                    </td>
                                     @if(!empty($acuerdoanvav->numero_oficio_ent))
                                         <td class="text-center">
                                             {{$acuerdoanvav->numero_oficio_ent}}
@@ -73,9 +78,11 @@
                                             {{fecha($acuerdoanvav->fecha_oficio_ent)}}
                                         </td>
                                     @endif
-                                    <td class="text-center">
-                                        {{$acuerdoanvav->tipo_doc}}
-                                    </td>
+                                    @if(!empty($acuerdoanvav->anexos))
+                                        <td class="text-center">
+                                            {{$acuerdoanvav->anexos}}
+                                        </td>
+                                    @endif
                                     <td class="text-center">
                                         {{$acuerdoanvav->nombre_informe_au}}
                                     </td>
@@ -98,11 +105,13 @@
                             @endif
                         </tbody>
                     </table>
-                    <div class="float-end">
-                        <a href="{{ route('anexosanvav.index') }}" class="btn btn-primary">
-                            <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Anexos
-                        </a>
-                    </div>
+                    @can('anexosanvav.index')
+                        <div class="float-end">
+                            <a href="{{ route('anexosanvav.index') }}" class="btn btn-primary">
+                                <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Acuses
+                            </a>
+                        </div>
+                    @endcan
                 </div>
             </div>
         </div>

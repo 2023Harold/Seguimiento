@@ -267,7 +267,7 @@ class AnVCFIFController extends Controller
                 $siOf_Esc01 = $acuerdoanvav->tipo_doc." número ".$acuerdoanvav->numero_oficio_ent.", de fecha ".fechaaletra($acuerdoanvav->fecha_oficio_ent);
             }else{$siOf_Esc01 = $acuerdoanvav->tipo_doc; }
             $textRun->addText(" el ". $siOf_Esc01 ." asignado por {$folio->remitentes->pluck('nombre_remitente')->filter()->first()}, {$folio->remitentes->pluck('cargo_remitente')->filter()->first()}, {$folio->remitentes->pluck('administracion_remitente')->filter()->first()}", [],[]); 
-            if(count($acuerdoanvav->anexoanvav)>0){
+            if(!empty($acuerdoanvav->anexos)){
                 $textRun->addText(" y documentación adjunta", []);
             }
             $textRun->addText(", vinculado con los autos del expediente al rubro señalado y que fue presentado ".
@@ -312,7 +312,7 @@ class AnVCFIFController extends Controller
                 $textRun->addText($acuerdoanvav->numero_oficio_ent,['bold' => true]); 
             }
             $textRun->addText(" constante de {$acuerdoanvav->num_fojas} fojas útiles,");
-            if(count($acuerdoanvav->anexoanvav)>0){
+            if(!empty($acuerdoanvav->anexos)){
                 $textRun->addText(" así como la documentación adjunta;");
             }
             //dd(optional($folio->remitentes[0])->nombre_remitente);
@@ -328,7 +328,7 @@ class AnVCFIFController extends Controller
             $textRun->addText("presentado ", ['bold' => true], 'justificado');
             $textRun->addText("a ".$folio->remitentes->pluck('nombre_remitente')->filter()->implode(', ') .","); //nombre quien ingresa los oficios u escritos
             $textRun->addText($folio->remitentes->pluck('cargo_remitente')->filter()->implode(', ')." {$mun01}, durante la administración ".$folio->remitentes->pluck('administracion_remitente')->filter()->implode(', ')." con el {$acuerdoanvav->tipo_doc} de cuenta"); 
-            if(count($acuerdoanvav->anexoanvav)>0){
+            if(!empty($acuerdoanvav->anexos)){
                 $textRun->addText("y la documentación adjunta."); 
             }
             $textRun->addText("."); 
@@ -339,11 +339,11 @@ class AnVCFIFController extends Controller
             if(count($auditoria->accionesrecomendaciones)>0){ 
                 $textRun->addText("y; a precisar las mejoras realizadas y las acciones emprendidas de las recomendaciones que le fueron determinadas, o en su caso, justificar su improcedencia ; ha quedado fenecido; por lo que el {$acuerdoanvav->tipo_doc} del que se da cuenta ");
             }
-            if(count($acuerdoanvav->anexoanvav)>0){
+            if(!empty($acuerdoanvav->anexos)){
                 $textRun->addText("y la documentación adjunta, ");
             }
             $textRun->addText("no " ); 
-            if(count($acuerdoanvav->anexoanvav)>0){
+            if(!empty($acuerdoanvav->anexos)){
                 $textRun->addText("serán considerados para su análisis por ser presentados ",['bgColor' => 'FFFF00']);
             }
             $textRun->addText( "de forma extemporánea, sin que ello pudiera considerarse que se deje en estado de indefensión a la entidad, porque habiendo tenido la oportunidad de hacer uso de su derecho, no lo ejerció en tiempo y forma, operando la preclusión en su perjuicio.");
@@ -352,7 +352,7 @@ class AnVCFIFController extends Controller
                 $textRun = $section->addTextRun('justificado');
                 $textRun->addText("TERCERO. Glósese ", ['bold' => true], 'justificado');
                 $textRun->addText("el {$acuerdoanvav->tipo_doc} de cuenta ");
-                if(count($acuerdoanvav->anexoanvav)>0){
+                if(!empty($acuerdoanvav->anexos)){
                     $textRun->addText("y la documentación adjunta"); 
                 }
                 $textRun->addText("a los autos del Expediente número {$acuerdoanvav->numero_expediente}. ",);
@@ -360,7 +360,7 @@ class AnVCFIFController extends Controller
                 $textRun = $section->addTextRun('justificado');
                 $textRun->addText("TERCERO. Remítase ", ['bold' => true], 'justificado');
                 $textRun->addText("el {$acuerdoanvav->tipo_doc} de cuenta ");
-                if(count($acuerdoanvav->anexoanvav)>0){
+                if(!empty($acuerdoanvav->anexos)){
                     $textRun->addText("y la documentación adjunta "); 
                 }
                 $textRun->addText("a la Unidad de Investigación de este Órgano Superior de Fiscalización del Estado de México, para que en el ámbito de su competencia, determine lo conducente en términos de la Ley General de Responsabilidades Administrativas, la Ley de Responsabilidades Administrativas del Estado de México y Municipios, la Ley de Fiscalización Superior del Estado de México y demás disposiciones jurídicas aplicables.");

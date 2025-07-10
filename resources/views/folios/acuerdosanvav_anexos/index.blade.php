@@ -11,7 +11,7 @@
             <div class="card-header">
                 <h1 class="card-title">
                     <a href="{{ route('acuerdosanvav.show', $folio) }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                    Anexos Acuerdos de Valoración y No Valoración 
+                    Acuses Acuerdos de Valoración y No Valoración 
                 </h1>
                 <div class="float-end">    
                    {{-- <a href="{{ route('informelegalidad.exportar') }}" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;</span>INFORME </a>     --}}
@@ -53,9 +53,9 @@
                                 <th>Consecutivo</th>
                                 <th>Archivo</th>
                                 <th>Nombre Archivo</th>
-                                <th>Nombre Firmante</th>
-                                <th>Cargo Firmante</th>
-                                <th>Administración Firmante</th>
+                                <th>Nombre Remitente</th>
+                                <th>Cargo Remitente</th>
+                                <th>Administración Remitente</th>
                                 <th> </th>
                             </tr>
                         </thead>
