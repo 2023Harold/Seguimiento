@@ -48,14 +48,11 @@ class AnVController extends Controller
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
         setSession('folio_id_session',$folio->id);
-
-        if(empty($folio->numero_oficio) || strtolower($folio->numero_oficio) == "s/n"){
-            $acuerdoanvav_tipo_of = "Escrito";
-        }
-        $acuerdoanvav_tipo_of = "Oficio";
+        $acuerdoanvav_tipo_of = "";
         //dd($folio->numero_oficio);
 
         return view('folios.acuerdosanvav.form', compact('auditoria','acuerdoaccion','acuerdoanvav','folio','acuerdoanvav_tipo_of','remitentes'));
+    
     }
 
     /**
@@ -109,14 +106,19 @@ class AnVController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(FolioCrr $folio)
+    public function edit(AcuerdosValoracion $acuerdoanvav)
     {
-        /*
+        //dd($acuerdoanvav);
+        $acuerdoanvav_tipo_of = $acuerdoanvav->tipo_doc;
+        $folio = FolioCRR::find(getSession('folio_id_session'));  
         $acuerdoaccion = "Editar";
+        //DD($folio,$acuerdoaccion);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        
-        return view('folios.foliosanexos.form', compact('auditoria','folio'));
-        */
+        $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
+        setSession('folio_id_session',$folio->id);
+
+        return view('folios.acuerdosanvav.form', compact('auditoria','acuerdoaccion','acuerdoanvav','folio','acuerdoanvav_tipo_of','remitentes'));
+    
     }
 
     /**
@@ -126,18 +128,17 @@ class AnVController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RemitentesFolio $remitente)
+    public function update(Request $request, AcuerdosValoracion $acuerdoanvav)
     {
-        /*
-        $folioscrr = FolioCrr::where('id', $remitente->folio_id)->first();
+          
+        $folio = FolioCRR::find(getSession('folio_id_session'));  
         $request['usuario_modificacion_id'] = auth()->id();
-        $remitente->update($request->all());
-        $this->actualizaProgresivo();
-        setMessage('El Remitente del Folio:'.$folioscrr->folio.' ha sido actualizado');
+        //dd($request); 
+        $acuerdoanvav->update($request->all());
+        setMessage('El acuerdo ha sido actualizado');
 
-        return redirect()->route('remitentes.index');
-        */
-		
+        return redirect()->route('acuerdosanvav.show', $folio);
+        
     }
 
     /**

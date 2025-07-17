@@ -26,23 +26,26 @@
             {!!BootForm::hidden('consecutivo',$acuerdoanvav->consecutivo) !!}
                 <div class="row">
                     <div class="col-md-4">
-                        {!!BootForm::text('nombre_firmante', 'Nombre del Remitente: *', old('administracion_firmante', $anexosacuerdoanvav->nombre_firmante)) !!}
+                        {!!BootForm::text('nombre_firmante', 'Nombre del remitente: *', old('administracion_firmante', $anexosacuerdoanvav->nombre_firmante)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!!BootForm::text('cargo_firmante', 'cargo del Remitente: *', old('administracion_firmante', $anexosacuerdoanvav->cargo_firmante)) !!}
+                        {!!BootForm::text('cargo_firmante', 'Cargo del remitente: *', old('administracion_firmante', $anexosacuerdoanvav->cargo_firmante)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!!BootForm::text('administracion_firmante', 'Administracion del Remitente: *', old('administracion_firmante', $anexosacuerdoanvav->administracion_firmante)) !!}
+                        {!!BootForm::text('administracion_firmante', 'Administración del remitente: *', old('administracion_firmante', $anexosacuerdoanvav->administracion_firmante)) !!}
                     </div>
                 </div> 
                 <div class="row">
                     <div class="col-md-5">
-                        {!!archivo('archivo', 'Archivo: *', old('nombre_archivo', $anexosacuerdoanvav->archivo))!!}
+                        {!! archivo('archivo', 'Acuerdo firmado: *', old('archivo', $anexosacuerdoanvav->archivo))!!}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
-                        {!!BootForm::text('nombre_archivo', 'Nombre archivo: *', old('numero_oficio', $anexosacuerdoanvav->nombre_archivo)) !!}
+                    <div class="col-md-5">
+                        {!! archivo('of_notificacion', 'Oficio Notificación: ', old('of_notificacion', $anexosacuerdoanvav->of_notificacion)) !!}
+                    </div>
+                    <div class="col-md-5">
+                        {!!BootForm::date('fecha_notificacion', 'Fecha de notificación: ', old('fecha_notificacion', fecha($anexosacuerdoanvav->fecha_notificacion, 'Y-m-d'))) !!}
                     </div>
                 </div>
                                              

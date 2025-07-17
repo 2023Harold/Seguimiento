@@ -55,7 +55,7 @@
                 <br>
                 <hr>
                 <div class="row">
-                    <h5><label>Datos del servidor publico al que se le notifico al que se le notifico el informe de auditoría:</label></h5>
+                    <h5><label>Datos del servidor público al que se le notificó el informe de auditoría:</label></h5>
                     <div class="col-md-4">
                         {!!BootForm::text('nombre_informe_au', 'Nombre: *', old('nombre_informe_au', $acuerdoanvav->nombre_informe_au)) !!}
                     </div>
@@ -63,7 +63,7 @@
                         {!!BootForm::text('cargo_informe_au', 'Cargo : *', old('cargo_informe_au', $acuerdoanvav->cargo_informe_au)) !!}
                     </div>
                     <div class="col-md-4">
-                        {!!BootForm::text('administracion_informe_au', 'Administracion: *', old('administracion_informe_au', $acuerdoanvav->administracion_informe_au)) !!}
+                        {!!BootForm::text('administracion_informe_au', 'Administración: *', old('administracion_informe_au', $acuerdoanvav->administracion_informe_au)) !!}
                     </div>
                     
                 </div> 

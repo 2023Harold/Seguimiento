@@ -690,13 +690,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     /**Fin del apartado de Seguimiento - Auditorias - folios*/
 
     /**Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
-    Route::resource('acuerdosanvav', AnVController::class);
+    Route::resource('acuerdosanvav', AnVController::class,['parameters' => ['acuerdosanvav' => 'acuerdoanvav']]);
     Route::get('/acuerdosanvav/create/{folio}', [AnVController::class, 'create'])->name('acuerdosanvav.create');
     Route::get('/acuerdosanvav/show/{folio}', [AnVController::class, 'show'])->name('acuerdosanvav.show');
     Route::resource('anexosanvav', AnexosAnVController::class,['parameters' => ['anexosanvav' => 'auditoria']]);
     Route::get('/acuerdosanvavcfif/export', [AnVCFIFController::class, 'export'])->name('acuerdosanvavcfif.export');
     Route::get('/anvavd/export', [AnVDesempenoController::class, 'export'])->name('anvavd.export');
-    Route::get('/anvavl/export', [AnVLegalidadController::class, 'export'])->name('anvavl.export');
+    Route::get('/anvavl/exportea', [AnVLegalidadController::class, 'exportea'])->name('anvavl.exportea');
+    Route::get('/anvavl/exportpar', [AnVLegalidadController::class, 'exportpar'])->name('anvavl.exportpar');
     /**Fin del apartado de Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
 
 

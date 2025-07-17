@@ -61,20 +61,19 @@ class InformePrimeraEtapaEnvioController extends Controller
      */
     public function edit(InformePrimeraEtapa $auditoria)
     {
-        $auditoria=Auditoria::find(getSession('auditoria_id')); 
-		$licMartha=User::where('siglas_rol','ATUS')->first();
+		$asistenteATUS=User::where('siglas_rol','ATUS')->first();
         $informeprimeraetapa=$auditoria;
-        
+        $auditoria=Auditoria::find(getSession('auditoria_id')); 
     
         $informeprimeraetapa->update(['fase_autorizacion' =>  'En validación']);
     
         $titulo = 'Validación de los datos del Informe Primera Etapa';
         $mensaje = '<strong>Estimado (a) ' . auth()->user()->director->name . ', ' . auth()->user()->director->puesto . ':</strong><br>
-                    Ha sido registrado el Informe Primera Etapa  de la auditoría No. ' . $informeprimeraetapa->auditoria->numero_auditoria . ', por parte del ' .
+                    Ha sido registrado el Informe Primera Etapa  de la auditoría No. ' . $auditoria->numero_auditoria . ', por parte del ' .
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
     
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
-		auth()->user()->insertNotificacion($titulo, $this->mensajeNotificacion($licMartha->name,$licMartha->puesto,$auditoria), now(), $licMartha->unidad_administrativa_id, $licMartha->id); 
+		auth()->user()->insertNotificacion($titulo, $this->mensajeNotificacion($asistenteATUS->name,$asistenteATUS->puesto,$auditoria), now(), $asistenteATUS->unidad_administrativa_id, $asistenteATUS->id); 
 
 		Movimientos::create([
         'tipo_movimiento' => 'Registro del Informe Primera Etapa',

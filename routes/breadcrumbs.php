@@ -1050,7 +1050,7 @@ Breadcrumbs::for('acuerdosanvav.edit', function (BreadcrumbTrail $trail,$auditor
 Breadcrumbs::for('anexosanvav.create', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('acuerdosanvav.show',$auditoria);
     //$trail->push('Acuses', route('foliosanexos.edit',$folio));
-    $trail->push('Agregar Anexos Anv y AV ', route('anexosanvav.create', $auditoria));
+    $trail->push('Agregar Acuses Anv y AV ', route('anexosanvav.create', $auditoria));
 
 });
 

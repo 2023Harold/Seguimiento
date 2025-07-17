@@ -45,8 +45,8 @@ class InformePrimeraEtapa extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fecha_informe'=>'date',
-        'fecha_notificacion'=>'date',
+        'fecha_informe'=>'datetime',
+        'fecha_notificacion'=>'datetime',
         'created_at'=>'datetime',
         'updated_at'=>'datetime',
         'fecha_termino_recomendacion'=>'datetime',

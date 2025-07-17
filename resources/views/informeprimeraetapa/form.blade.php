@@ -59,13 +59,7 @@
                     <div class="col-md-4">
                         {!!BootForm::text('numero_fojas', 'Número de fojas: *', old('numero_fojas', $informeprimeraetapa->numero_fojas)) !!}
                     </div>
-                </div>
-				
-				<div class="row">
-                    <div class="col-md-6">
-                        {!! archivo('informe', 'Informe de seguimiento: *', old('informe', $informeprimeraetapa->informe)) !!}
-                    </div>
-                </div>		
+                </div>	
                 <div class="row">
                     <div class="col-md-6"> 
                         @canany(['informeprimeraetapa.store','informeprimeraetapa.update'])

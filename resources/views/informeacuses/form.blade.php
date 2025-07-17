@@ -23,6 +23,11 @@
                 {!!BootForm::hidden('tipo',$tipo) !!}	
                 <div class="row">
                     <div class="col-md-6">
+                        {!! archivo('informe', 'Informe de seguimiento: *', old('informe', $informe->informe)) !!}
+                    </div>
+                </div>	
+                <div class="row">
+                    <div class="col-md-6">
                         {!! archivo('acuse_envio', 'Acuse envío a notificar: *', old('acuse_envio', $informe->acuse_envio)) !!}
                     </div>
                     <div class="col-md-5">
