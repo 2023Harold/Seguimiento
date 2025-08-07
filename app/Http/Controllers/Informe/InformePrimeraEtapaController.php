@@ -73,7 +73,7 @@ class InformePrimeraEtapaController extends Controller
      */
     public function store(Request $request)
     {
-        mover_archivos($request, ['informe','acuse_envio','acuse_notificacion']);
+        //mover_archivos($request, ['informe','acuse_envio','acuse_notificacion']);
         $request['usuario_creacion_id'] = auth()->user()->id;
         $request['auditoria_id']=getSession('auditoria_id');            
         InformePrimeraEtapa::create($request->all());

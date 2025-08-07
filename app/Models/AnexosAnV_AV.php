@@ -24,13 +24,15 @@ class AnexosAnV_AV extends Model
         'nombre_firmante',
         'cargo_firmante',
         'administracion_firmante',
+        'of_notificacion',
+        'fecha_notificacion',
 
     ];
 
 
 
     protected $cast = [
-        
+        'fecha_notificacion',
     ];
 
     

@@ -17,8 +17,8 @@
                    {{-- <a href="{{ route('informelegalidad.exportar') }}" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;</span>INFORME </a>     --}}
                     {{--@can('informeprimeraetapa.exportar')    --}}        
                         @if($auditoria->acto_fiscalizacion=='Legalidad')
-                             <a href="{{route('acuerdosanvav.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV EA</a> 
-                             <a href="{{route('acuerdosanvav.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV PAR</a> 
+                             <a href="{{route('anvavl.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV EA</a> 
+                             <a href="{{route('anvavl.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV PAR</a> 
                         @endif
                             
                         @if($auditoria->acto_fiscalizacion=='Desempeño')
@@ -38,45 +38,43 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
                         @can('anexosanvav.create')
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <a href="{{ route('anexosanvav.create') }}"  class="btn btn-primary float-end">
-                                        <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
-                                    </a>
+                            @if (count($anexosacuerdoanvav)<0)
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a href="{{ route('anexosanvav.create') }}"  class="btn btn-primary float-end">
+                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         @endcan
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Consecutivo</th>
-                                <th>Archivo</th>
-                                <th>Nombre Archivo</th>
+                                <th>Acuerdo firmado</th>
+                                <th>Oficio Notificación</th>
                                 <th>Nombre Remitente</th>
                                 <th>Cargo Remitente</th>
                                 <th>Administración Remitente</th>
-                                <th> </th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($anexosacuerdoanvav as $anexoanvav)
                                 <tr>
                                     <td class="text-center">
-                                        {{$anexoanvav->consecutivo}}
-                                    </td>
-                                    <td class="text-center">
-                                        
                                         @if (!empty($anexoanvav->archivo))
-                                            <a href="{{ asset($anexoanvav->archivo) }}"
-                                                target="_blank">
+                                            <a href="{{ asset($anexoanvav->archivo) }}" target="_blank">
                                                 <?php echo htmlspecialchars_decode(iconoArchivo($anexoanvav->archivo)); ?>
                                             </a><br>
                                             <small>{{ fecha($anexoanvav->fecha_archivo) }}</small>
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        {{$anexoanvav->nombre_archivo}}
+                                        <a href="{{ asset($anexoanvav->of_notificacion) }}" target="_blank">
+                                            <?php echo htmlspecialchars_decode(iconoArchivo($anexoanvav->of_notificacion)); ?>
+                                        </a><br>
+                                        <small>{{ fecha($anexoanvav->fecha_notificacion) }}</small>
                                     </td>
                                     <td class="text-center">
                                         {{$anexoanvav->nombre_firmante}}
@@ -88,9 +86,6 @@
 
                                     <td class="text-center">
                                         {{$anexoanvav->administracion_firmante}}
-                                    </td>
-                                    <td class="text-center">
-                                        editar
                                     </td>
                                 </tr>
                             @empty

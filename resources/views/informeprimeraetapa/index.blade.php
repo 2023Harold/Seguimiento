@@ -77,17 +77,15 @@
                                                 <th>Fecha</th>
                                                 <th>Número de oficio</th>
                                                 <th>Nombre del titular</th>
-                                                <th>Informe</th>
+                                                @if (!empty($auditoria->informeprimeraetapa)&&(optional($auditoria->informeprimeraetapa)->informe))
+                                                    <th>Informe</th>
+                                                @endif
                                                 <th>Fase / Acción </th>
                                                 @if (empty($auditoria->informeprimeraetapa->fase_autorizacion)||$auditoria->informeprimeraetapa->fase_autorizacion=='Rechazado')                                                                                                                              
                                                     <th>Envío</th>
                                                 @endif
-                                                @if(empty($auditoria->informeprimeraetapa))
-													<th></th>
-												@else
-													@if ($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado')
-														<th>Acuses</th>
-													@endif
+												@if (!empty($auditoria->informeprimeraetapa)&&($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado'))
+													<th>Acuses</th>
 												@endif
                 
                                             </tr>
@@ -107,9 +105,11 @@
                                                     <span class="badge-light-dark text-gray-500">{{ $auditoria->informeprimeraetapa->periodo_gestion}}</span> <br>
                                                     <span class="badge-light-dark text-gray-700">{{ $auditoria->informeprimeraetapa->domicilio_informe}}</span> <br><br>
                                                 </td>
-                                                <td class="text-center">
-                                                    @btnFile(asset(optional($auditoria->informeprimeraetapa)->informe))
-                                                </td>
+                                                @if (!empty($auditoria->informeprimeraetapa)&&(optional($auditoria->informeprimeraetapa)->informe))
+                                                    <td class="text-center">
+                                                        @btnFile(asset(optional($auditoria->informeprimeraetapa)->informe))
+                                                    </td>
+                                                @endif
                                                 <td class="text-center">                                                                                                                                                                                                                                                                                       
                                                     @if (empty($auditoria->informeprimeraetapa->fase_autorizacion)||$auditoria->informeprimeraetapa->fase_autorizacion=='Rechazado')
                                                         <span class="badge badge-light-danger">{{ $auditoria->informeprimeraetapa->fase_autorizacion }} </span>
@@ -212,12 +212,14 @@
                                                 <th>Fecha</th>
                                                 <th>Número de oficio</th>
                                                 <th>Nombre del titular</th>
-                                                <th>Informe</th>
+                                                @if(!empty($auditoria->informepliegos)&&(optional($auditoria->informepliegos)->informe))
+                                                    <th>Informe</th>
+                                                @endif    
                                                 <th>Fase / Acción </th>
                                                 @if (empty(optional($auditoria->informepliegos)->fase_autorizacion)||optional($auditoria->informepliegos)->fase_autorizacion=='Rechazado')                                                                                                                              
                                                     <th>Envío</th>
                                                 @endif
-                                                @if (optional($auditoria->informepliegos)->fase_autorizacion=='Autorizado')
+                                                @if (!empty($auditoria->informepliegos)&&(optional($auditoria->informepliegos)->fase_autorizacion=='Autorizado'))
                                                     <th>Acuses</th>
                                                 @endif
                                             </tr>
@@ -237,9 +239,11 @@
                                                     <span class="badge-light-dark text-gray-500">{{ $auditoria->informepliegos->periodo_gestion}}</span> <br>
                                                     <span class="badge-light-dark text-gray-700">{{ $auditoria->informepliegos->domicilio_informe}}</span> <br><br>
                                                 </td>
-                                                <td class="text-center">
-                                                    @btnFile(asset(optional($auditoria->informepliegos)->informe))
-                                                </td>
+                                                @if(!empty($auditoria->informepliegos)&&(optional($auditoria->informepliegos)->informe))
+                                                    <td class="text-center">
+                                                        @btnFile(asset(optional($auditoria->informepliegos)->informe))
+                                                    </td>
+                                                @endif
                                                 <td class="text-center">                                                                                                                                                                                                                                                                                       
                                                     @if (empty($auditoria->informepliegos->fase_autorizacion)||$auditoria->informepliegos->fase_autorizacion=='Rechazado')
                                                         <span class="badge badge-light-danger">{{ $auditoria->informepliegos->fase_autorizacion }} </span>

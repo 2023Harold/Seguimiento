@@ -87,7 +87,7 @@ class AnexosAnVController extends Controller
         $request['usuario_creacion_id'] = auth()->id();
         $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
         $request['anvav_id'] = $acuerdoanvav->id;
-        mover_archivos($request, ['archivo'], null);
+        mover_archivos($request, ['archivo','of_notificacion'], null);
         if(count($acuerdoanvav->anexoanvav)==0){
             $request['consecutivo'] = 1;
         }else{

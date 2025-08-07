@@ -79,7 +79,7 @@ class InformeAcusesController extends Controller
      */
     public function update(Request $request, InformePrimeraEtapa $informe)
     {
-        mover_archivos($request, ['acuse_envio','acuse_notificacion']);
+        mover_archivos($request, ['acuse_envio','acuse_notificacion','informe']);
         $request['usuario_modificacion_id'] = auth()->user()->id;        
         $request['auditoria_id']=getSession('auditoria_id');            
         $informe->update($request->all());

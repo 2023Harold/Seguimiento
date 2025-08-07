@@ -17,8 +17,8 @@
                    {{-- <a href="{{ route('informelegalidad.exportar') }}" class="btn btn-light-primary"><span class="fa fa-file-word">&nbsp;&nbsp;&nbsp;</span>INFORME </a>     --}}
                     {{--@can('informeprimeraetapa.exportar')    --}}        
                         @if($auditoria->acto_fiscalizacion=='Legalidad')
-                             <a href="{{route('acuerdosanvav.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV EA</a> 
-                             <a href="{{route('acuerdosanvav.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV PAR</a> 
+                             <a href="{{route('anvavl.exportea')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV EA</a> 
+                             <a href="{{route('anvavl.exportpar')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AnV PAR</a> 
                         @endif
                             
                         @if($auditoria->acto_fiscalizacion=='Desempeño')
@@ -93,7 +93,11 @@
                                         {{$acuerdoanvav->administracion_informe_au}}
                                     </td>
                                     <td class="text-center">
-
+                                        @can('acuerdosanvav.edit')
+                                        <a href="{{ route('acuerdosanvav.edit', $acuerdoanvav) }}" class="btn btn-primary"> 
+                                            <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
+                                        </a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @else

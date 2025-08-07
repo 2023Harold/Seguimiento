@@ -116,7 +116,7 @@ class AnVCFIFController extends Controller
 
 
     public function export(){
-        $inicialesSTAFF=""; $inicialesD=''; $inicialesJD=''; $inicialesLP = ''; $inicialesATUS = '';
+        $inicialesSTAFF=""; $inicialesD=''; $inicialesJD=''; $inicialesLP = ''; $inicialesATUS = ''; $siRecomendaciones01 ="";
         $acuerdoanvav = AcuerdosValoracion::find(getSession('anvav_id_session'));
         $folio = FolioCRR::find(getSession('folio_id_session'));  
         $auditoria=Auditoria::find(getSession('auditoria_id'));
