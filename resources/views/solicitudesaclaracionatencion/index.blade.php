@@ -272,24 +272,23 @@
                                     @endif
                                 </td>
                                 <td class="text-center">                                   
-                                      @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente' && $comentario->de_usuario_id==$asistente_titular->id && (($comentario->tipo=="Analisis" ) || ($comentario->tipo=="Conclusión")))                                    
-                                        <a class="btn btn-primary text-center" href="{{ route('solicitudesaclaracionanalisis.edit',$solicitud) }}">
-                                                Modificar
-                                        </a>                                           
-                                    {{-- @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente' && $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Conclusión")  --}}                                     
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionessolicitudesatencion.edit',$comentario) }}">
-                                                Atender
-                                        </a>                                    
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente' && $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Listado Documentos")                                     
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('solicitudesaclaraciondocumentos.edit',$comentario) }}">
-                                                Atender
-                                        </a>
-                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id==$asistente_titular->id))))                                    
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionessolicitudesatencion.edit',$comentario) }}">
-                                                Atender
-                                        </a>
-                                        
-                                    @endif   
+                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Analisis")
+										    <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariossolicitudes.edit',$comentario) }}">
+                                                Atender1
+                                            </a>										
+                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Conclusión")
+											<a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariossolicitudes.edit',$comentario) }}">
+                                                Atender2
+                                            </a>
+                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Listado Documentos")
+											<a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariossolicitudes.edit',$comentario) }}">
+                                                Atender3
+                                            </a>
+                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='101')))
+                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionessolicitudesatencion.edit',$comentario) }}">
+                                                Atender4
+                                            </a>                                        
+                                    @endif  
                                 </td>
                             </tr>
                             @if (count($comentario->respuestas)>0)

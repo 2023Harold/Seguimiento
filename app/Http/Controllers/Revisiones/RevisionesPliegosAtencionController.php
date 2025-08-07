@@ -27,11 +27,11 @@ class RevisionesPliegosAtencionController extends Controller
      */
     public function create()
     {
-        $comentario = new Revisiones();
+        // $comentario = new Revisiones();
              
-        $accion = 'Agregar';
+        // $accion = 'Agregar';
 
-        return view('comentarios.revisionespliegosatencion.form', compact('comentario', 'accion'));
+        // return view('comentarios.revisionespliegosatencion.form', compact('comentario', 'accion'));
     }
 
     /**

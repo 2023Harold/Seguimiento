@@ -60,7 +60,7 @@ class RevisionesRecomendacionesAtencionController extends Controller
      */
     public function edit(Revisiones $comentario, Request $request)
     {
-             
+        // dd($comentario);             
         $accion = 'Atender';
         $acciones=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $tipo = $comentario->tipo; // tipo para identificar el archivo solo aplica para 

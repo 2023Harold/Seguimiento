@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{Breadcrumbs::render('pliegosobservacionanalisis.edit',$pliegosobservacion,$auditoria) }}
+{{Breadcrumbs::render('pliegosobservacionanalisismodificacion.edit',$pliegosobservacionanalisismodificacion,$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -22,7 +22,7 @@
                         <h3 class="card-title text-primary">Análisis</h3>
                         <div class="card-body mt-2">
                             <div class="row">
-                        {!!BootForm::open(['model' => $pliegosobservacion,'update' =>'pliegosobservacionanalisis.update','id' =>'form',]) !!}
+                        {!!BootForm::open(['model' => $pliegosobservacion,'update' =>'pliegosobservacionanalisismodificacion.update','id' =>'form',]) !!}
                         <div class="row">
                             
                             <div class="col-md-12">
@@ -34,7 +34,7 @@
                                 {!!BootForm::textarea('conclusion', 'Conclusión *',old('conclusion', $pliegosobservacion->conclusion),['rows'=>'10']) !!}
                             </div>
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-md-6">
                                 {!!BootForm::radios("calificacion_sugerida", ' Calificación de la atención: *', ['Solventado'=>'Solventado', 'No Solventado'=>'No Solventado','Solventado Parcialmente'=>'Solventado Parcialmente'],old('calificacion_sugerida',$pliegosobservacion->calificacion_sugerida),false,['class'=>'i-checks']) !!}
                             </div>
@@ -63,11 +63,11 @@
                                 <div class="col-md-6">
                                 {!!BootForm::text('monto_promocion', 'Monto de la promoción: *', old('monto_promocion', '$'.number_format( $pliegosobservacion->monto_promocion, 2)),['disabled']) !!}
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                @btnSubmit('Guardar y continuar',route('pliegosobservacionanexos.index'))
+                                @btnSubmit('Guardar y continuar',route('pliegosobservacionatencion.index'))
                                 @btnCancelar('Cancelar', route('pliegosobservacionatencion.index'))
                             </div>
                         </div>

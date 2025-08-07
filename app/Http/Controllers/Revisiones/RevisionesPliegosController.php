@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Revisiones;
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\PliegosObservacion;
 use App\Models\Revisiones;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,10 +30,11 @@ class RevisionesPliegosController extends Controller
     public function create(Request $request)
     {
         $comentario = new Revisiones();
-        $accion = 'Agregar';
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion = 'Agregar';        
         $acciones=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para 
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        // dd($tipo);
 
         return view('comentarios.revisionespliegos.form', compact('comentario', 'accion', 'auditoria', 'acciones', 'tipo'));
     }
@@ -56,7 +58,7 @@ class RevisionesPliegosController extends Controller
             'estatus'=>'Pendiente',
             'usuario_creacion_id'=>auth()->user()->id,
         ]);
-
+        
         Revisiones::create($request->all());      
         $titulo='Se ha realizado un comentario en el pliego de observación de la Acción No. '.$accion->numero.' de la Auditoría No. '.$accion->auditoria->numero_auditoria;
         
@@ -140,16 +142,14 @@ class RevisionesPliegosController extends Controller
     public function edit(Revisiones $comentario, Request $request)
     {
 
-        // dd($comentario);
-        // $comentario = new Revisiones();
-        $accion = 'Agregar';
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $accion = 'Editar';        
         $acciones=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
-        $tipo = $request->query('tipo'); // tipo para identificar el archivo solo aplica para 
+        $tipo = $comentario->tipo;
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         // dd($tipo);
         setSession('comentario_id',$comentario->id);
 
-        return view('comentarios.revisionespliegosatencion.form', compact('comentario','accion','tipo'));
+        return view('comentarios.revisionespliegos.form', compact('comentario','accion','tipo'));
 
         // return redirect()->route('revisionespliegosatencion.form',compact('comentario'));
     }

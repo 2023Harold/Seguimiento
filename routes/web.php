@@ -164,6 +164,9 @@ use App\Http\Controllers\Recomendaciones\RecomendacionesValidacionController;
 use App\Http\Controllers\RemitentesController;
 use App\Http\Controllers\ReportesRegistrosAuditoriasController;
 use App\Http\Controllers\ReportesSeguimientoController;
+use App\Http\Controllers\RespuestaComentariosPliegosController;
+use App\Http\Controllers\RespuestaComentariosRecomendacionesController;
+use App\Http\Controllers\RespuestaComentariosSolicitudesController;
 use App\Http\Controllers\Revisiones\RevisionesPliegosAtencionController;
 use App\Http\Controllers\Revisiones\RevisionesPliegosController;
 use App\Http\Controllers\Revisiones\RevisionesRecomendacionesAtencionController;
@@ -518,7 +521,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
      Route::resource('recomendacionesautorizacion', RecomendacionesAutorizacionController::class, ['parameters' => ['recomendacionesautorizacion' => 'recomendacion']]);
      Route::resource('recomendacionesacuses', RecomendacionesAcusesController::class, ['parameters' => ['recomendacionesacuses' => 'recomendacion']]);
      Route::resource('revisionesrecomendaciones', RevisionesRecomendacionesController::class, ['parameters' => ['revisionesrecomendaciones' => 'comentario']]);
-     Route::resource('revisionesrecomendacionesatencion', RevisionesRecomendacionesAtencionController::class, ['parameters' => ['revisionesrecomendacionesatencion' => 'comentario']]);
+     Route::resource('revisionesrecomendacionesatencion', RevisionesRecomendacionesAtencionController::class, ['parameters' => ['revisionesrecomendacionesatencion' => 'comentario']]);     
+     Route::resource('respuestacomentariosrecomendaciones', RespuestaComentariosRecomendacionesController::class, ['parameters' => ['respuestacomentariosrecomendaciones' => 'comentario']]);          
     /**Fin del apartado de Seguimiento - Auditorias - Recomendaciones*/
 
      /**Seguimiento - Auditorias - Solicitudes  */
@@ -538,6 +542,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
      Route::resource('solicitudesaclaracionanexos', SolicitudesAclaracionAnexoController::class, ['parameters' => ['solicitudesaclaracionanexos' => 'anexo']]);
      Route::resource('revisionessolicitudes', RevisionesSolicitudesController::class, ['parameters' => ['revisionessolicitudes' => 'comentario']]);
      Route::resource('revisionessolicitudesatencion', RevisionesSolicitudesAtencionController::class, ['parameters' => ['revisionessolicitudesatencion' => 'comentario']]);
+     Route::resource('solicitudesaclaracionanalisis', SolicitudesAclaracionAnalisisController::class, ['parameters' => ['solicitudesaclaracionanalisis' => 'solicitud']]);
+     Route::resource('respuestacomentariossolicitudes',RespuestaComentariosSolicitudesController::class, ['parameters' => ['respuestacomentariossolicitudes' => 'comentario']]);
     /**Fin del apartado de Seguimiento - Auditorias - Solicitudes*/
 
     /**Seguimiento - Auditorias - Pliegos  */
@@ -557,6 +563,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::get('pliegosobservacioncontestacionoficios/{pliegosobservacion}', [PliegosObservacionAtencionContestacionController::class, 'oficiospliegosobservacion'])->name('pliegosobservacioncontestacion.oficiospliegosobservacion');
     Route::resource('revisionespliegos', RevisionesPliegosController::class, ['parameters' => ['revisionespliegos' => 'comentario']]);
     Route::resource('revisionespliegosatencion', RevisionesPliegosAtencionController::class, ['parameters' => ['revisionespliegosatencion' => 'comentario']]);
+    Route::resource('respuestacomentariospliegos', RespuestaComentariosPliegosController::class, ['parameters' => ['respuestacomentariospliegos' => 'comentario']]);     
     /**Fin del apartado de Seguimiento - Auditorias - Pliegos*/
 
     /**Seguimiento - Auditorias - Cedulas*/

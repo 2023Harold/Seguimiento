@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Recomendaciones;
 use App\Http\Controllers\Controller;
 use App\Models\Recomendaciones;
 use App\Models\RecomendacionesDocumento;
+use App\Models\Revisiones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -76,8 +77,11 @@ class RecomendacionesAtencionDocumentosController extends Controller
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
         $accion=$recomendacion->accion;
         $auditoria=$accion->auditoria;        
-        
+       
         return view('recomendacionesatenciondocumentos.show',compact('recomendacion','accion','auditoria'));
+
+      
+
     }
 
     /**
@@ -86,13 +90,19 @@ class RecomendacionesAtencionDocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Recomendaciones $documento)
+    public function edit(Recomendaciones $documento, Revisiones $comentario, Request $request)
     {
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
         $accion=$recomendacion->accion;
         $auditoria=$accion->auditoria;
+        setSession('comentario_id',$comentario->id);
 
-        return view('recomendacionesatenciondocumentos.form',compact('recomendacion','accion','auditoria'));
+        if(auth()->user()->siglas_rol=='ANA'){
+            return view('recomendacionesatenciondocumentos.form',compact('recomendacion','accion','auditoria'));
+        }elseif(auth()->user()->siglas_rol=='JD'){
+
+         return view('respuestacomentarios.form', compact('accion','auditoria','documento','recomendacion','comentario'));     
+        }
     }
 
     /**
