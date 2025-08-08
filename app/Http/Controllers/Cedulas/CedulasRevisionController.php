@@ -1,0 +1,138 @@
+<?php
+
+
+namespace App\Http\Controllers\Cedulas;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Cedula;
+use App\Models\Auditoria;
+use App\Models\Movimientos;
+use Illuminate\Http\Request;
+use App\Models\AuditoriaAccion;
+
+class CedulasRevisionController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    public function edit(Cedula $auditoria)
+    {
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $nombre=$auditoria->cedula;
+        
+        return view('cedulasrevision.form',compact('nombre','auditoria','cedula'));
+    }
+    
+    public function update(Request $request, $id)
+    {
+         $this->normalizarDatos($request);
+        ##dd($auditoria->acuerdoconclusionpliegos->tipo);
+        $acuerdoconclusion=$auditoria;
+
+        Movimientos::create(attributes: [
+           'tipo_movimiento' => 'Revisión del acuerdo de conclusión',
+           'accion' => 'AcuerdoConclusion',
+           'accion_id' => $acuerdoconclusion->id,
+           'estatus' => $request->estatus,
+           'usuario_creacion_id' => auth()->id(),
+           'usuario_asignado_id' => auth()->id(),
+           'motivo_rechazo' => $request->motivo_rechazo,
+       ]);
+
+       if ($request->estatus == 'Aprobado') {
+           $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
+       } else {
+           $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
+       }
+
+       //$acuerdoconclusion->update(['fase_autorizacion' =>  'En validación']);
+       $acuerdoconclusion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+       setMessage($request->estatus == 'Aprobado' ?
+           'La aprobación ha sido registrada y se ha enviado a validación del superior.' :
+           'El rechazo ha sido registrado.'
+       );
+
+       $auditoria = $acuerdoconclusion->auditoria;
+
+       if ($request->estatus == 'Aprobado') {
+        
+        $titulo = 'Validación del acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria;
+        $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
+                        .auth()->user()->name.', '.auth()->user()->puesto.
+                        '; ha aprobado la revisión del acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria.
+                        ', por lo que se requiere realice la validación oportuna de la misma.';
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
+    }else {
+        
+        $titulo = 'Rechazo el acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria;
+        $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
+                        .'Ha sido rechazado el acuerdo de conclusión de la auditoría No. '.$auditoria->numero_auditoria.
+                        ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
+        
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $auditoria->acuerdoconclusion->usuarioCreacion->id);
+
+    }
+
+        return redirect()->route('acuerdoconclusion.index');
+    
+    }    
+    public function destroy($id)
+    {
+        //
+    }
+     private function normalizarDatos(Request $request)
+    {
+         if ($request->estatus == 'Aprobado') {
+             $request['motivo_rechazo'] = null;
+         }
+
+         return $request;
+    }
+    private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
+    {
+        $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
+                    .'Ha sido rechazado el registro del Acuerdo de Conclusión de las auditoría No. '.$numeroauditoria.'.';       
+
+        return $mensaje;
+    }
+}
