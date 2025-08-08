@@ -57,18 +57,20 @@
                                         
                         @if ($auditoria->accionesrecomendaciones->count() > 0) 
                                    @if ($auditoria->accionesrecomendaciones->where('recomendaciones.fase_autorizacion', 'Autorizado')->count() === $auditoria->accionesrecomendaciones->count())
-                                   <h1 class="card-title">
-                                    <span class="text-primary"> 
-                                        Informe Recomendaciones
-                                        @if (empty($auditoria->informeprimeraetapa))
-                                            @can('informeprimeraetapa.create')
-                                                <a class="btn btn-primary float-end" href="{{ route('informeprimeraetapa.create') }}">
-                                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
-                                                </a> 
-                                            @endcan
-                                        @endif
-                                    </span>
-                                </h1>  
+                                   <div class="row">
+                                        <h1 class="card-title">
+                                            <span class="text-primary"> 
+                                                Informe Recomendaciones
+                                                @if (empty($auditoria->informeprimeraetapa))
+                                                    @can('informeprimeraetapa.create')
+                                                        <a class="btn btn-primary float-end" href="{{ route('informeprimeraetapa.create') }}">
+                                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar
+                                                        </a> 
+                                                    @endcan
+                                                @endif
+                                            </span>
+                                        </h1>  
+                                   </div>
                                 
                                    <div class="table-responsive">
                                     <table class="table">
@@ -193,6 +195,7 @@
                     <div class="col-md-12">                 
                         @if ($auditoria->accionespo->count() > 0) 
                             @if ($auditoria->accionespo->where('pliegosobservacion.fase_autorizacion', 'Autorizado')->count() === $auditoria->accionespo->count())
+                            <div class="row">
                                 <h1 class="card-title">
                                     <span class="text-primary"> 
                                         Informe Pliegos
@@ -204,7 +207,8 @@
                                             @endcan                 
                                         @endif  
                                     </span>
-                                </h1>     
+                                </h1>
+                            </div>     
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>

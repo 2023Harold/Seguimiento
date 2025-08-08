@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SolicitudAclaraciones;
 
 use App\Http\Controllers\Controller;
 use App\Models\Movimientos;
+use App\Models\Notificacion;
 use App\Models\Recomendaciones;
 use App\Models\SolicitudesAclaracion;
 use App\Models\SolicitudesAclaracionContestacion;
@@ -43,6 +44,14 @@ class SolicitudesAclaracionAnalisisEnvioController extends Controller
         } else {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
+		
+		$idUser = auth()->user()->id;   
+		$notificacion=auth()->user()->notificaciones()->where('llave',"AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$idUser}/Rechazo")->first();
+			if(!empty($notificacion)&& ($notificacion->llave == "AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$idUser}/Rechazo")&& ($notificacion->estatus == 'Pendiente')){
+                $notificacion = Notificacion::find($notificacion->id);
+                // Actualizar el estatus a 'Leído'
+                $notificacion->update(['estatus' => 'Leído']);
+            }
 
         $solicitud->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
 
@@ -50,8 +59,10 @@ class SolicitudesAclaracionAnalisisEnvioController extends Controller
         $mensaje = '<strong>Estimado (a) ' . $solicitud->accion->lider->name . ', ' . $solicitud->accion->lider->puesto . ':</strong><br>
                     Ha sido registrada la atención de la solicitud de acalaración de la acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria . ', por parte del ' .
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
-
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->accion->lider->unidad_administrativa_id,$solicitud->accion->lider->id);
+		//AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
+        $llave = "AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$solicitud->accion->lider->id}/RevL";
+        
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->accion->lider->unidad_administrativa_id,$solicitud->accion->lider->id, $llave);
 
         setMessage('Se han enviado la información de la atención de la solicitud de acalaración a revisión');
 

@@ -25,9 +25,6 @@
                         <div class="col-md-3">
                             {!!BootForm::date('updated_at', 'Fecha de lectura', old('updated_at', $request->updated_at)) !!}
                         </div>
-                        
-                       
-
                     </div>
                     <div class="row align-items-center">
                         <div class="col-md-3">
@@ -62,7 +59,17 @@
                                         <tr id="rownotificacion{{ $notificacion->id }}">
 											<td>{{ $notificacion->cp??'Sin registro'}}</td>
                                             <td>{{ $notificacion->titulo}}</td>
-                                            <td>{{ explode("<br>", $notificacion->mensaje)[1]}}</td>
+                                            <td>
+                                                @php
+                                                    $partes = explode('<br>', $notificacion->mensaje);
+                                                    $texto = $partes[1] ?? $notificacion->mensaje; // usa mensaje completo si no hay segunda parte
+                                                @endphp
+                                                @if(!empty($notificacion->auditoria_id)||!empty($notificacion->accion_id))
+                                                    @button($texto, route('notificacionaccion.edit', $notificacion), '')
+                                                @else
+                                                    {{explode("<br>", $notificacion->mensaje)[1]}}
+                                                @endif
+                                            </td>
                                             <td>{{ fecha($notificacion->created_at, 'd/m/Y H:i') }}</td>
                                             <td class="text-center">
                                                 @if( $notificacion->estatus == 'Pendiente' ) 

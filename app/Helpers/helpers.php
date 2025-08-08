@@ -671,6 +671,17 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         return $iniciales;
     }
 
+function llavepartes($llave){
+    
+    $partes = explode('/', $llave);
+    $ids = [];
+
+    foreach ($partes as $parte) {
+        list($etiqueta, $id) = explode('-', $parte);
+        $ids[$etiqueta] = $id;
+    }
+
+}
 
 
 

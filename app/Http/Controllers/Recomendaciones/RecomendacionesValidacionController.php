@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
+use App\Models\Notificacion;
 use App\Models\Recomendaciones;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -62,9 +63,8 @@ class RecomendacionesValidacionController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
-
+        $auditoria = Auditoria::find($recomendacion->auditoria_id);
+        $accion=AuditoriaAccion::find($recomendacion->accion_id);
         return view('recomendacionesatencionvalidacion.form', compact('recomendacion','auditoria','accion'));
     }
 
@@ -77,7 +77,7 @@ class RecomendacionesValidacionController extends Controller
      */
     public function update(Request $request, Recomendaciones $recomendacion)
     {
-		$auditoria=Auditoria::find(getSession('auditoria_id'));
+		$auditoria = Auditoria::find($recomendacion->auditoria_id);
         $titular=auth()->user()->titular;
         
         $this->normalizarDatos($request);
@@ -101,14 +101,14 @@ class RecomendacionesValidacionController extends Controller
             $analista = $auditoria->analistacp;
             $lider = $auditoria->lidercp; 
         }
-
+        $idUser = auth()->user()->id;
+        $notificacion=auth()->user()->notificaciones()->where('llave',"AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/ValD")->first();
+            if(!empty($notificacion)&& ($notificacion->llave == "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/ValD")&& ($notificacion->estatus == 'Pendiente')){
+                $notificacion = Notificacion::find($notificacion->id);
+                $notificacion->update(['estatus' => 'Leído']);
+            }
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
-        } else {
-            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
-        }
-
-        if ($request->estatus == 'Aprobado') {
             $recomendacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
 
             $titulo = 'Autorización del registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
@@ -117,13 +117,16 @@ class RecomendacionesValidacionController extends Controller
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; ha aprobado el registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $titular->unidad_administrativa_id, $titular->id);
+            $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$titular->id}/Aut";
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $titular->unidad_administrativa_id, $titular->id, $llave);
         } else {
+            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
             $titulo = 'Rechazo del registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
+            $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$recomendacion->userCreacion->id}/Rechazo";
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, $llave);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$recomendacion), now(), $lider->unidad_administrativa_id, $lider->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$recomendacion), now(), $jefe->unidad_administrativa_id, $jefe->id);
         }

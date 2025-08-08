@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Recomendaciones;
 
 use App\Http\Controllers\Controller;
 use App\Models\Movimientos;
+use App\Models\Notificacion;
 use App\Models\Recomendaciones;
 use App\Models\RecomendacionesContestacion;
 use Illuminate\Http\Request;
@@ -60,6 +61,7 @@ class RecomendacionesAnalisisEnvioController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
+        //dd($recomendacion);
         $request=new Request();
         if(empty($recomendacion->listado_documentos)){
             setMessage('No se ha capturado información en el apartado de listado de documentos.','error');
@@ -75,7 +77,7 @@ class RecomendacionesAnalisisEnvioController extends Controller
         $request['concluido']='Si';
         $recomendacion->update($request->all());
 
-         Movimientos::create([
+        $mov = Movimientos::create([
             'tipo_movimiento' => 'Registro de la atención de la recomendación',
             'accion' => 'Recomendación',
             'accion_id' => $recomendacion->id,
@@ -97,7 +99,10 @@ class RecomendacionesAnalisisEnvioController extends Controller
                     Ha sido registrada la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria . ', por parte del ' .
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
 
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->lider->unidad_administrativa_id,$recomendacion->accion->lider->id);
+        //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
+        $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$recomendacion->accion->lider->id}/RevL";
+        
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->lider->unidad_administrativa_id,$recomendacion->accion->lider->id, $llave);
 
         setMessage('Se han enviado la información de la recomendación a revisión');
         

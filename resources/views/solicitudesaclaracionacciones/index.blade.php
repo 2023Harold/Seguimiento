@@ -19,10 +19,10 @@
             <div class="card-body">
                 @include('layouts.contextos._auditoria')
                 @include('flash::message')
-                {!! BootForm::open(['route'=>'solicitudesaclaracionacciones.index','method'=>'GET']) !!}
+                {!!BootForm::open(['route'=>'solicitudesaclaracionacciones.index','method'=>'GET']) !!}
                 <div class="row">
                     <div class="col-md-2">
-                        {!! BootForm::text('numero_accion', "No. acción:", old('numero_accion',
+                        {!!BootForm::text('numero_accion', "No. acción:", old('numero_accion',
                         $request->numero_accion)) !!}
                     </div>
                     <div class="col-md-6 mt-8">
@@ -30,7 +30,7 @@
                                 aria-hidden="true"></i> Buscar</button>
                     </div>
                 </div>
-                {!! BootForm::close() !!}
+                {!!BootForm::close() !!}
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -70,7 +70,9 @@
                                     @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'En autorización')
 										<span class="badge badge-light-warning">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>
                                     @elseif ($accion->solicitudesaclaracion->fase_autorizacion=='Autorizado')
-										<span class="badge badge-light-success">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>                                         
+										<span class="badge badge-light-success">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>       
+                                    @elseif ($accion->solicitudesaclaracion->fase_autorizacion=='Rechazado')
+                                        <span class="badge badge-light-danger">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>                                  
                                     @endif 
 								</td>
                                 <td class="text-center">

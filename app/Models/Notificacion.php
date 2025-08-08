@@ -27,6 +27,7 @@ class Notificacion extends Model
         'created_at',
         'updated_at',
 		'cp',
+		'llave',
     ];
 
     protected $dates = [
@@ -48,6 +49,7 @@ class Notificacion extends Model
 
     public function auditoria()
     {
-        return $this->belongsTo(Auditoria::class, 'segauditoria_id','id');
+        return $this->belongsTo(Auditoria::class, 'auditoria_id','id');
     }
+
 }

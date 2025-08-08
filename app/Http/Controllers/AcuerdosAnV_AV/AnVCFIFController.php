@@ -249,9 +249,12 @@ class AnVCFIFController extends Controller
             $text = $cell->addTextRun(['alignment' => Jc::CENTER, 'indentation' => ['left' => 500, 'right' => 500]]);
             $text->addText("Este documento y anexos, en su caso, serán tratados conforme a lo previsto en la Ley de Protección de Datos Personales en Posesión de Sujetos Obligados del Estado de México y Municipios.</w:t><w:br/><w:t>Para mayor información, visite el aviso de privacidad en www.osfem.gob.mx.",['size' => 7,'color' => 'FFFFFF']);
             
+            //$footer->addPreserveText('Página {PAGE} de {NUMPAGES}', array('color' => 'black','size' => 8,),array('align' => 'center',));
+            
             $table->addRow();
-            $cell->addPreserveText('Página {PAGE} de {NUMPAGES}', array('color' => 'white','size' => 8,),array('align' => 'center',));
-        
+            $cell = $table->addCell(11200, ['gridSpan' => 3, 'valign' => 'center','bgColor' => '96134b','borderColor' => '96134b','borderTopSize' => 0,'borderBottomSize' => 0]);
+            $cell->addPreserveText('Página {PAGE} de {NUMPAGES}', ['size' => 8, 'color' => 'white'], ['alignment' => Jc::CENTER]);
+
             // === FIN PIE DE PAGINA === ///
 
         ///=== BODY ===///

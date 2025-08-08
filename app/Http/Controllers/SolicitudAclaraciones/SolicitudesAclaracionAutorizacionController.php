@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
+use App\Models\Notificacion;
 use App\Models\SolicitudesAclaracion;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -63,8 +64,8 @@ class SolicitudesAclaracionAutorizacionController extends Controller
      */
     public function edit(SolicitudesAclaracion $solicitud)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $accion=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
+        $auditoria = Auditoria::find($solicitud->auditoria_id);
+        $accion=AuditoriaAccion::find($solicitud->accion_id);
 
         // $datosConstancia = [           
         //     'nombrereporte' => 'atencionsolicitudesaclaracionconstancia',
@@ -100,6 +101,8 @@ class SolicitudesAclaracionAutorizacionController extends Controller
      */
     public function update(Request $request, SolicitudesAclaracion $solicitud)
     {
+		$auditoria = Auditoria::find($solicitud->auditoria_id);
+        $accion=AuditoriaAccion::find($solicitud->accion_id);
         $this->normalizarDatos($request);
         //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
         //$constancia = guardarConstanciasFirmadas($solicitud, 'constancia_atencion_solicitud', $request, 'constancia');
@@ -120,10 +123,24 @@ class SolicitudesAclaracionAutorizacionController extends Controller
         ]);
 
         $director=User::where('unidad_administrativa_id',substr($solicitud->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
-        $jefe=$solicitud->accion->depaasignado;
-        $lider=$solicitud->accion->lider;
-        $analista=$solicitud->accion->analista;
-
+        if(getSession('cp')==2022){
+            $jefe=User::where('unidad_administrativa_id', substr($solicitud->userCreacion->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','JD')->first();
+            $lider=$solicitud->accion->lider;
+            $analista=$solicitud->accion->analista;
+        }else{
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
+		/** Leer notifiacion si hay  **/
+        $idUser = auth()->user()->id;
+        $notificacion=auth()->user()->notificaciones()->where('llave',"AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$idUser}/Aut")->first();
+            if(!empty($notificacion)&&($notificacion->llave == "AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$idUser}/Aut")&& ($notificacion->estatus == 'Pendiente')){
+                $notificacion = Notificacion::find($notificacion->id);
+                $notificacion->update(['estatus' => 'Leído']);
+            }
+        /** fin Leer notifiacion si hay  **/
+		
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
 
@@ -135,14 +152,14 @@ class SolicitudesAclaracionAutorizacionController extends Controller
             setMessage('Se ha autorizado el registro de la atención de la solicitud de aclaración.');
         } else {
             $titulo = 'Rechazo del registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$solicitud->accion->depaasignado->name.', '.$solicitud->accion->depaasignado->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.$solicitud->userCreacion->name.', '.$solicitud->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$solicitud), now(), $director->unidad_administrativa_id, $director->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$solicitud), now(), $jefe->unidad_administrativa_id, $jefe->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$solicitud), now(), $lider->unidad_administrativa_id, $lider->id);
+			$llave = "AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$analista->id}/Rechazo";
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id,$llave);
+            //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$solicitud), now(), $director->unidad_administrativa_id, $director->id);
+            //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$solicitud), now(), $jefe->unidad_administrativa_id, $jefe->id);
+            //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$solicitud), now(), $lider->unidad_administrativa_id, $lider->id);
 
             setMessage('Se ha rechazado el registro de la calificación y conclusión de la atención de la solicitud de aclaración.');
         }

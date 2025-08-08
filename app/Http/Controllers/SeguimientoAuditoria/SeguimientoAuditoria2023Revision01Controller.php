@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SeguimientoAuditoria;
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\Movimientos;
+use App\Models\Notificacion;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -60,6 +61,8 @@ class SeguimientoAuditoria2023Revision01Controller extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
+        $notificacionEstatus = Notificacion::where('auditoria_id',$auditoria->id)->get();
+        dd($notificacionEstatus->MovRegistroAuditoria);
         return view('seguimientoauditoriacprevision01.form', compact('auditoria'));
     }
 
@@ -72,19 +75,11 @@ class SeguimientoAuditoria2023Revision01Controller extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
+        $notificacionEstatus = Notificacion::where('auditoria_id',$auditoria->id)->get()->first();
+        dd($notificacionEstatus);
         $jefe=User::where('unidad_administrativa_id', substr($auditoria->usuarioCreacion->cp_ua2023, 0, 5).'0')->first();
     
         $this->normalizarDatos($request);
-
-        Movimientos::create([
-            'tipo_movimiento' => 'Revisión del registro de la auditoría',
-            'accion' => 'Registro de la auditoría',
-            'accion_id' => $auditoria->id,
-            'estatus' => $request->estatus,
-            'usuario_creacion_id' => auth()->id(),
-            'usuario_asignado_id' => auth()->id(),
-            'motivo_rechazo' => $request->motivo_rechazo,
-        ]);
 
         if (strlen($auditoria->nivel_autorizacion) == 3 || strlen($auditoria->nivel_autorizacion) == 4) {
             $nivel_autorizacion = $auditoria->nivel_autorizacion;
@@ -115,6 +110,21 @@ class SeguimientoAuditoria2023Revision01Controller extends Controller
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->usuarioCreacion->unidad_administrativa_id, $auditoria->usuarioCreacion->id);
         }
+
+        $mov = Movimientos::create([
+            'tipo_movimiento' => 'Revisión del registro de la auditoría',
+            'accion' => 'Registro de la auditoría',
+            'accion_id' => $auditoria->id,
+            'estatus' => $request->estatus,
+            'usuario_creacion_id' => auth()->id(),
+            'usuario_asignado_id' => auth()->id(),
+            'motivo_rechazo' => $request->motivo_rechazo,
+        ]);
+
+        dd($mov);
+
+        $notificacionEstatus->update(['registro_concluido'=>'No']);
+
 
         return view('layouts.close');
     }

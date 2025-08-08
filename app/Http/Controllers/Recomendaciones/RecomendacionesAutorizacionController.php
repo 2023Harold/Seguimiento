@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
+use App\Models\Notificacion;
 use App\Models\Recomendaciones;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -63,8 +64,8 @@ class RecomendacionesAutorizacionController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $auditoria = Auditoria::find($recomendacion->auditoria_id);
+        $accion=AuditoriaAccion::find($recomendacion->accion_id);
 
         // $datosConstancia = [           
         //     'nombrereporte' => 'atencionrecomendacionconstancia',
@@ -100,6 +101,17 @@ class RecomendacionesAutorizacionController extends Controller
      */
     public function update(Request $request, Recomendaciones $recomendacion)
     {
+        $auditoria = Auditoria::find($recomendacion->auditoria_id);
+        if(getSession('cp')==2022){
+            $jefe=User::where('unidad_administrativa_id', substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 5).'0')->first();
+            $lider=$recomendacion->accion->lider;
+            $analista=$recomendacion->accion->analista;
+        }else{
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
+        $auditoria = Auditoria::find($recomendacion->auditoria_id);
         $this->normalizarDatos($request);
         //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
         //$constancia = guardarConstanciasFirmadas($recomendacion, 'constancia_atencion_recomendacion', $request, 'constancia');
@@ -121,22 +133,32 @@ class RecomendacionesAutorizacionController extends Controller
 
 
         $director=User::where('unidad_administrativa_id',substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+        /** Leer notifiacion si hay  **/
+        $idUser = auth()->user()->id;
+        $notificacion=auth()->user()->notificaciones()->where('llave',"AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/Aut")->first();
+            if(!empty($notificacion)&&($notificacion->llave == "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/Aut")&& ($notificacion->estatus == 'Pendiente')){
+                $notificacion = Notificacion::find($notificacion->id);
+                $notificacion->update(['estatus' => 'Leído']);
+            }
+        /** fin Leer notifiacion si hay  **/
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($recomendacion->accion->depaasignado->name,$recomendacion->accion->depaasignado->puesto,$recomendacion), now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);
+            //auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($recomendacion->accion->depaasignado->name,$recomendacion->accion->depaasignado->puesto,$recomendacion), now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id);
-
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name, $jefe->puesto, $recomendacion),now(), $jefe->unidad_administrativa_id, $jefe->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($recomendacion->userCreacion->name,$recomendacion->userCreacion->puesto,$recomendacion), now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
             setMessage('Se ha autorizado la atención de la recomendación con exito.');
         } else {
             $titulo = 'Rechazo del registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$recomendacion->accion->depaasignado->name.', '.$recomendacion->accion->depaasignado->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
 
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id);
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);
+            //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id);
 
+            $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$recomendacion->userCreacion->id}/Rechazo";
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, $llave);
             setMessage('Se ha rechazado el registro de la atencion con exito.');
         }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
+use App\Models\Notificacion;
 use App\Models\Recomendaciones;
 use App\Models\User;
 use App\Models\AuditoriaUsuarios;
@@ -65,9 +66,8 @@ class RecomendacionesRevision01Controller extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
-
+        $auditoria = Auditoria::find($recomendacion->auditoria_id);
+        $accion=AuditoriaAccion::find($recomendacion->accion_id);
 
         return view('recomendacionesatencionrevision01.form', compact('recomendacion','auditoria','accion'));
     }
@@ -81,27 +81,17 @@ class RecomendacionesRevision01Controller extends Controller
      */
     public function update(Request $request, Recomendaciones $recomendacion)
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));   
-        // $staffA = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->get();  -> esto es igual a $auditoria->Staff
+        $auditoria = Auditoria::find($recomendacion->auditoria_id); 
 
-        $staffA = AuditoriaUsuarios::select('segusers.id',
-                                            'segusers.name',
-                                                    'segusers.puesto',                                
-                                                    'segusers.unidad_administrativa_id',                                
-                                                    'segusers.siglas_rol',                                
-                                                    'segusers.estatus',   
-                                                    DB::raw("(case when(segusers.id = segauditoria_usuarios.staff_id) THEN segusers.name ELSE NULL END) AS staffAsignado01"),                             
+        $staffA = AuditoriaUsuarios::select('segusers.id','segusers.name','segusers.puesto', 'segusers.unidad_administrativa_id', 'segusers.siglas_rol', 'segusers.estatus',   
+                                            DB::raw("(case when(segusers.id = segauditoria_usuarios.staff_id) THEN segusers.name ELSE NULL END) AS staffAsignado01"),
+                                            )->join('segusers', 'segusers.id', '=', 'segauditoria_usuarios.staff_id')->where('auditoria_id', $auditoria->id)->get()->toArray();
+        if(getSession('cp')==2022){
+            $jefe=User::where('unidad_administrativa_id', substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 5).'0')->first();
+        }else{
+            $jefe = $auditoria->jefedepartamentoencargado;
 
-                                                    )
-                                            ->join('segusers', 'segusers.id', '=', 'segauditoria_usuarios.staff_id')
-                                            ->where('auditoria_id', $auditoria->id)
-                                            ->get()
-                                            ->toArray();
-
-        //dd($staffA);
-
-        $jefe=auth()->user()->jefe;
-      
+        }
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -125,24 +115,30 @@ class RecomendacionesRevision01Controller extends Controller
             'La aprobación ha sido registrada y se ha enviado a revisión del superior.' :
             'El rechazo ha sido registrado.'
         );
-        
-
+        $idUser = auth()->user()->id;
+        $notificacion=auth()->user()->notificaciones()->where('llave',"AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/RevL")->first();
+            if(!empty($notificacion)&& ($notificacion->llave == "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/RevL")&& ($notificacion->estatus == 'Pendiente')){
+                $notificacion = Notificacion::find($notificacion->id);
+                // Actualizar el estatus a 'Leído'
+                $notificacion->update(['estatus' => 'Leído']);
+            }
         if ($request->estatus == 'Aprobado') {
             $recomendacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
             
             $titulo = 'Revisión del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
-                   
             $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
+            $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$jefe->id}/RevJD";
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id, $llave);
         } else {           
             $titulo = 'Rechazo del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
+            $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$recomendacion->userCreacion->id}/Rechazo";
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, $llave);
         }
         foreach ($staffA as $staff) {
             if (!empty($staff['id'])) {

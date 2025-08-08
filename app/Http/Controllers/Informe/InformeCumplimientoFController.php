@@ -118,7 +118,7 @@ class InformeCumplimientoFController extends Controller
 
     public function exportar(){
         //$phpWord->addTitleStyle(1, ['bold' => true, 'size' => 10], ['alignment' => Jc::CENTER]); /**ESTO SIRVE PARA DAR ESTILOS GLOBALES A LOS TITULOS */
-        
+        dd(1);
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
         $phpWord = new PhpWord();
         $section = $phpWord->addSection();
@@ -372,8 +372,12 @@ class InformeCumplimientoFController extends Controller
                                                 
                                                 'segpliegos_observacion.calificacion_sugerida',/*TABLA segpliegos_observacion*/
                                                 DB::raw("UPPER(segpliegos_observacion.calificacion_sugerida) AS calificacion_sugerida_mayus"),
-                                                'segpliegos_observacion.analisis', 'segpliegos_observacion.conclusion','segpliegos_observacion.listado_documentos',
-                                                DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'No Solventado') THEN 'Por tanto, se tiene como no aclarado ni solventado para este Órgano Superior de Fiscalización del Estado de México, el Pliego de Observaciones con clave de acción '||segauditoria_acciones.numero||'; en consecuencia, con fundamento en el artículo 47 fracciones XII, XVIII y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; el Pliego de Observaciones será turnado a la autoridad investigadora de este Órgano Técnico, a efecto de que se inicie el procedimiento administrativo de investigación a que haya lugar, en términos de la Ley General de Responsabilidades Administrativas, la Ley de Responsabilidades Administrativas del Estado de México y Municipios y demás disposiciones jurídicas aplicables.' ELSE NULL END) AS sicalificacionsugerida01"),
+												
+                                                //'segpliegos_observacion.analisis', 
+												//'segpliegos_observacion.conclusion',
+												//'segpliegos_observacion.listado_documentos',
+												
+												DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'No Solventado') THEN 'Por tanto, se tiene como no aclarado ni solventado para este Órgano Superior de Fiscalización del Estado de México, el Pliego de Observaciones con clave de acción '||segauditoria_acciones.numero||'; en consecuencia, con fundamento en el artículo 47 fracciones XII, XVIII y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; el Pliego de Observaciones será turnado a la autoridad investigadora de este Órgano Técnico, a efecto de que se inicie el procedimiento administrativo de investigación a que haya lugar, en términos de la Ley General de Responsabilidades Administrativas, la Ley de Responsabilidades Administrativas del Estado de México y Municipios y demás disposiciones jurídicas aplicables.' ELSE NULL END) AS sicalificacionsugerida01"),
                                                 DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'Solventado') THEN 'En ese sentido, con fundamento en lo dispuesto por los artículos 54 fracción III de la Ley de Fiscalización Superior del Estado de México y; 23 fracciones XIX y XLIV y; 47 fracciones XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, se determina que el Pliego de Observaciones ha quedado aclarado y solventado.' ELSE NULL END) AS sicalificacionsugerida02"),
 
                                                 DB::raw("(case when(segpliegos_observacion.promocion = 4) THEN segauditoria_acciones.numero ELSE NULL END) AS numpopras"),
@@ -391,7 +395,13 @@ class InformeCumplimientoFController extends Controller
 
 
         $segpliego= array_map("unserialize", array_unique(array_map('serialize',$segpliego)));
-
+		
+		foreach ($segpliego as &$accion) {
+				$accion['analisis'] = $this->limpiarTextoWord($accion['analisis'] ?? '');
+				$accion['conclusion'] = $this->limpiarTextoWord($accion['conclusion'] ?? '');
+				$accion['listado_documentos'] = $this->limpiarTextoWord($accion['listado_documentos'] ?? '');
+			}
+			
         $accionesSolAcPo = array_merge($segsolac,$segpliego);
         
         
@@ -575,9 +585,11 @@ class InformeCumplimientoFController extends Controller
 
             $template->setValue('siRecomendaciones03', $siRecomendaciones03);
             $template->setValue('siRecomendaciones04', $siRecomendaciones04);
+
             $template->cloneBlock('block_solacpo', count($auditoria->accionessolaclpo), true, false, $accionesSolAcPo);
             $template->cloneBlock('block_recomendaciones', count($auditoria->accionesrecomendaciones), true, false, $accionesRecomendaciones);
-            $template->setValue('siPliegos01',$siPliegos01);
+            
+			$template->setValue('siPliegos01',$siPliegos01);
             $template->setValue('siPliegos02',$siPliegos02);
             $template->setValue('siPliegos03',$siPliegos03);
             $template->setValue('entidad01',$nombreEntidad);
@@ -761,5 +773,19 @@ class InformeCumplimientoFController extends Controller
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
      
      }
+	 
+	 private function limpiarTextoWord($texto) {
+		// Convertir caracteres especiales a entidades HTML
+		$texto = htmlspecialchars($texto, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+		// Reemplazar saltos de línea por etiquetas que Word entienda
+		$texto = nl2br($texto); // si usas HTML en el template
+
+		// Opcional: eliminar etiquetas HTML si no quieres formato
+		// $texto = strip_tags($texto);
+
+		return $texto;
+	}
+
 
 }

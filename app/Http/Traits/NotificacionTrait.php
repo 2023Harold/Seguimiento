@@ -6,7 +6,7 @@ use App\Models\Notificacion;
 
 trait NotificacionTrait
 {
-    public function insertNotificacion($titulo, $mensaje, $inicio, $unidad = null, $destinatario = null)
+    public function insertNotificacion($titulo, $mensaje, $inicio, $unidad = null, $destinatario = null, $llave = null, $url = null)
     {
         $params = [
             'titulo' => $titulo,
@@ -17,6 +17,8 @@ trait NotificacionTrait
             'destinatario_id' => $destinatario,
             'usuario_creacion_id' => (empty(auth()->user()->id) ? 1 : auth()->user()->id),
 			'cp'=> (empty(getSession('cp')) ? 1 : getSession('cp')),
+            'llave' => $llave,
+            'url' => $url,
         ];
 
         Notificacion::create($params);

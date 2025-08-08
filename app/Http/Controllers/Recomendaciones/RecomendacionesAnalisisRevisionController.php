@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Recomendaciones;
 use App\Http\Controllers\Controller;
 use App\Models\AuditoriaAccion;
 use App\Models\Movimientos;
+use App\Models\Notificacion;
 use App\Models\Recomendaciones;
 use Illuminate\Http\Request;
 
@@ -60,7 +61,7 @@ class RecomendacionesAnalisisRevisionController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-        $accion=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $accion=AuditoriaAccion::find($recomendacion->accion_id);
         $auditoria=$accion->auditoria;     
 
         return view('recomendacionesatencionanalisisrevision.form',compact('recomendacion','accion','auditoria'));
@@ -79,7 +80,7 @@ class RecomendacionesAnalisisRevisionController extends Controller
 
         $this->normalizarDatos($request);
 
-        Movimientos::create([
+        $mov = Movimientos::create([
             'tipo_movimiento' => 'Revisión de la actualización del análisis',
             'accion' => 'Recomendación',
             'accion_id' => $recomendacion->id,
@@ -95,8 +96,9 @@ class RecomendacionesAnalisisRevisionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
+        
 
-        if ($request->estatus == 'Aprobado') {           
+        if ($request->estatus == 'Aprobado') {     
             $titulo = 'Revisión del análisis de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
                    
             $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
@@ -104,6 +106,7 @@ class RecomendacionesAnalisisRevisionController extends Controller
                             '; se ha aprobado la actualización del análisis de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             '.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
+            
         } else {           
             $titulo = 'Rechazo del análisis de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
@@ -111,6 +114,9 @@ class RecomendacionesAnalisisRevisionController extends Controller
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
         }
+        
+        
+         //AUD-142/ACC-181/USER-65/MOV-1063/Revisar Autorizar Validar
 
         return redirect()->route('recomendacionesatencion.index');
     }

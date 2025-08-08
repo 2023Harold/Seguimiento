@@ -31,7 +31,7 @@
                         {!! archivo('acuse_envio', 'Acuse envío a notificar: *', old('acuse_envio', $informe->acuse_envio)) !!}
                     </div>
                     <div class="col-md-5">
-                        {!!BootForm::date('fecha_acuse_envio', 'Fecha del envío a notificar: *', old('fecha_acuse_envio', fecha($informe->fecha_acuse_envio, 'Y-m-d'))) !!}
+                        {!!BootForm::date('fecha_acuse_envio', 'Fecha Acuse envío a notificar: *', old('fecha_acuse_envio', fecha($informe->fecha_acuse_envio, 'Y-m-d'))) !!}
                     </div>
                 </div>  
 				<div class="row">

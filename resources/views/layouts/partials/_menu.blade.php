@@ -485,7 +485,10 @@
                             </a>
                         </div>
                         <div class="menu-item mb-1">
-                            <a href="{{ route('folioscrr.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'folioscrr')) ? 'active' : '' }}">
+                            <a href="{{ route('folioscrr.index') }}" class="menu-link py-3 {{ (str_contains(Route::current()->getName(), 'folioscrr'))||
+                                                                                                    (str_contains(Route::current()->getName(), 'acuerdosanvav'))||
+                                                                                                    (str_contains(Route::current()->getName(), 'remitentes'))
+                                                                                                     ? 'active' : '' }}">
                                 <span class="menu-bullet">
                                     <span class="bi bi-archive"></span>
                                 </span>
