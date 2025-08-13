@@ -108,8 +108,8 @@ use App\Http\Controllers\Informe\InformePrimeraEtapaController;
 use App\Http\Controllers\Informe\InformePrimeraEtapaEnvioController;
 use App\Http\Controllers\Informe\InformePrimeraEtapaValidacionController;
 use App\Http\Controllers\InicioArchivoTransferenciaController;
-use App\Http\Controllers\NotificacionAccionesController;
 use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\NotificacionUrlController;
 use App\Http\Controllers\PacController;
 use App\Http\Controllers\PacAuditoriaController;
 use App\Http\Controllers\PermisoController;
@@ -325,6 +325,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::get('notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
     Route::get('marcarleido', [NotificacionController::class, 'marcarleido'])->name('marcarleido');
     Route::get('/notificaciones/nuevas', [NotificacionController::class, 'nuevas'])->name('notificaciones.nuevas');
+    Route::resource('notificacionurl', NotificacionUrlController::class,['parameters' => ['notificacionurl' => 'notificacion']]);
+
     /**Firma electrónica */
     Route::post('firmar', [FirmaController::class, 'firmar'])->name('firmar');
     Route::post('finalizarfirma', [FirmaController::class, 'finalizarfirma'])->name('finalizarfirma');
@@ -708,7 +710,4 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::get('/anvavl/exportpar', [AnVLegalidadController::class, 'exportpar'])->name('anvavl.exportpar');
     /**Fin del apartado de Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
 
-    /** Seguimiento - notificaciones  */
-    Route::resource('notificacionaccion', NotificacionAccionesController::class,['parameters' => ['notificacionaccion' => 'notificacion']]);
-    /**Fin apartado Seguimiento - notificaciones  */
    });

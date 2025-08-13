@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('segnotificaciones', function (Blueprint $table) {
-            $table->string('llave',150)->nullable();
+            $table->string('url',250)->nullable();
         });
     }
 

@@ -66,6 +66,11 @@
                             <!--end::Symbol-->
                             <!--begin::Title-->
                             <div class="d-flex flex-column w-100">
+                                @if (!empty($notificacion->url))
+                                    <label class="fs-6 text-primary fw-bold">
+                                        <a href="{{ route('notificacionurl.edit', $notificacion) }}"><i class="bi bi-box-arrow-in-up-right fa-1x text-primary float-end"></i></a>
+                                    </label>
+                                @endif
                                 <label class="fs-6 text-primary fw-bold">
                                     {{ $notificacion->titulo }}
                                 </label>

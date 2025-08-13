@@ -63,7 +63,7 @@
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
                                        @if (empty($pliegos->fase_revision) || ($pliegos->fase_revision!='Pendiente' && $pliegos->fase_revision!='Revisión Jefe' ))
                                             @can('pliegosobservacionatencioncontestacion.index')
-                                                <a href="{{ route('pliegosobservacionatencioncontestacion.edit') }}"  class="btn btn-light-primary">
+                                                <a href="{{ route('pliegosobservacionatencioncontestacion.index') }}"  class="btn btn-light-primary">
                                                     <span class="fa fa-list" aria-hidden="true" ></span>
                                                 </a>
                                             @endcan

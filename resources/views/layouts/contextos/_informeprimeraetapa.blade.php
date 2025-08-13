@@ -39,6 +39,7 @@
             </span>
         </div>
     </div>
+    {{--
     <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-12 col-12">              
                 <label>Informe de seguimiento: </label>
@@ -49,6 +50,8 @@
                 </span>
         </div>
     </div>    
+    --}}
+    {{--
     <div class="row">
         <div class="col-lg-5 col-md-6 col-sm-12 col-12">              
              <label>Acuse envío a notificar: </label>
@@ -81,3 +84,4 @@
             </span>
         </div>        
     </div>             
+    --}}
