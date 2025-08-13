@@ -109,12 +109,12 @@ class SolicitudesAclaracionRevisionController extends Controller
             'La aprobación ha sido registrada y se ha enviado a validación del superior.' :
             'El rechazo ha sido registrado.'
         );
-		$idUser = auth()->user()->id;
-		$notificacion=auth()->user()->notificaciones()->where('llave',"AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$idUser}/RevJD")->first();
-			if(!empty($notificacion)&& ($notificacion->llave == "AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$idUser}/RevJD")&& ($notificacion->estatus == 'Pendiente')){
-                $notificacion = Notificacion::find($notificacion->id);
-                $notificacion->update(['estatus' => 'Leído']);
-            }
+		
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $solicitud).'/RevJD')->first();
+        $url = route('solicitudesaclaracionatencion.index');
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+		$notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($solicitud)."/Rechazo")->first();
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
         if ($request->estatus == 'Aprobado') {
             $solicitud->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
             $titulo = 'Validación del registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
@@ -122,18 +122,17 @@ class SolicitudesAclaracionRevisionController extends Controller
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
-			$llave = "AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$director->id}/ValD";
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id,$llave);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($asistenteATUS->name,$asistenteATUS->puesto, $solicitud), now(), $asistenteATUS->unidad_administrativa_id, $asistenteATUS->id); 
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id,GenerarLlave( $solicitud).'/ValD',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($asistenteATUS->name,$asistenteATUS->puesto, $solicitud), now(), $asistenteATUS->unidad_administrativa_id, $asistenteATUS->id,GenerarLlave( $solicitud).'/Consulta',$url); 
 
         } else {
             $titulo = 'Rechazo del registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$solicitud->userCreacion->name.', '.$solicitud->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-			$llave = "AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$solicitud->userCreacion->id}/Rechazo";
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->userCreacion->unidad_administrativa_id, $solicitud->userCreacion->id,$llave);
-            //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($solicitud->accion->lider->name,$solicitud->accion->lider->puesto,$solicitud), now(), $solicitud->accion->lider->unidad_administrativa_id, $solicitud->accion->lider->id);
+			
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->userCreacion->unidad_administrativa_id, $solicitud->userCreacion->id,GenerarLlave( $solicitud).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($solicitud->accion->lider->name,$solicitud->accion->lider->puesto,$solicitud), now(), $solicitud->accion->lider->unidad_administrativa_id, $solicitud->accion->lider->id, GenerarLlave( $solicitud).'/Rechazo',$url);
         }
 
         return redirect()->route('solicitudesaclaracionatencion.index');

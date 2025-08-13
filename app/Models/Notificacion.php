@@ -28,6 +28,7 @@ class Notificacion extends Model
         'updated_at',
 		'cp',
 		'llave',
+		'url',
     ];
 
     protected $dates = [

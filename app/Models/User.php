@@ -194,4 +194,11 @@ class User extends Authenticatable
 
         //return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','LP')->first();
     }
+
+    public function NotMarcarLeido($notificacion){
+        if(!empty($notificacion)&& ($notificacion->estatus == 'Pendiente')){
+            $notificacion = Notificacion::find($notificacion->id);
+			$notificacion->update(['estatus' => 'Leído']);
+        }
+    }
 }

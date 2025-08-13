@@ -3,6 +3,7 @@
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Constancia;
+use App\Models\Notificacion;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -671,17 +672,48 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         return $iniciales;
     }
 
-function llavepartes($llave){
-    
-    $partes = explode('/', $llave);
-    $ids = [];
-
-    foreach ($partes as $parte) {
-        list($etiqueta, $id) = explode('-', $parte);
-        $ids[$etiqueta] = $id;
+    function GenerarLlave($Accion){
+        if($Accion->accion->tipo=='Recomendación'){
+        //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
+        $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/REC-{$Accion->id}";
+       
+        }elseif($Accion->accion->tipo=='Pliego de observación'){
+            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
+            $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/PO-{$Accion->id}";
+        }elseif($Accion->accion->tipo=='Solicitud de aclaración'){
+            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
+            $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/SOL-{$Accion->id}";
+        }
+        return $llave;
     }
 
-}
+    function urlSession(Notificacion $notificacion){
+        setSession('cp',$notificacion->cp);
+        setSession('cp_ua',auth()->user()->unidad_administrativa_id);
+
+        $partes = explode('/', $notificacion->llave);
+        $clavesaud = explode('-', $partes[0]);
+        setSession('auditoria_id',$clavesaud[1]);
+        $clavesacn = explode('-', $partes[1]);
+        if(count($partes) > 2){
+            if(str_contains($partes[2],'SOL')){
+                $clavessol = explode('-', $partes[2]);
+                setSession('solicitudesauditoriaaccion_id',$clavesacn[1]);
+                setSession('solicitudesaclaracionatencion_id',$clavessol[1]);                
+            }
+            if(str_contains($partes[2],'REC')){
+                $clavesrec = explode('-', $partes[2]);
+                setSession('recomendacionesauditoriaaccion_id',$clavesacn[1]);
+                setSession('recomendacioncalificacion_id',$clavesrec[1]);                
+            }
+            if(str_contains($partes[2],'PO')){
+                $clavespo = explode('-', $partes[2]);
+                setSession('pliegosobservacionauditoriaaccion_id',$clavesacn[1]);
+                setSession('pliegosobservacionatencion_id',$clavespo[1]);                
+            }
+        }
+        //return redirect($notificacion->url);
+    }
 
 
 

@@ -8,6 +8,7 @@ use App\Models\Notificacion;
 use App\Models\Recomendaciones;
 use App\Models\RecomendacionesContestacion;
 use Illuminate\Http\Request;
+use URL;
 
 class RecomendacionesAnalisisEnvioController extends Controller
 {
@@ -61,7 +62,6 @@ class RecomendacionesAnalisisEnvioController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
-        //dd($recomendacion);
         $request=new Request();
         if(empty($recomendacion->listado_documentos)){
             setMessage('No se ha capturado información en el apartado de listado de documentos.','error');
@@ -92,18 +92,17 @@ class RecomendacionesAnalisisEnvioController extends Controller
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
 
+		$notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $recomendacion).'/Rechazo')->first();
+		$LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $url = route('recomendacionesatencion.index');
+        
         $recomendacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
-
         $titulo = 'Revisión del registro de la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado (a) ' . $recomendacion->accion->lider->name . ', ' . $recomendacion->accion->lider->puesto . ':</strong><br>
                     Ha sido registrada la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria . ', por parte del ' .
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
-
-        //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
-        $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$recomendacion->accion->lider->id}/RevL";
         
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->lider->unidad_administrativa_id,$recomendacion->accion->lider->id, $llave);
-
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->lider->unidad_administrativa_id,$recomendacion->accion->lider->id,  GenerarLlave( $recomendacion).'/RevL', $url);
         setMessage('Se han enviado la información de la recomendación a revisión');
         
         return redirect()->route('recomendacionesatencion.index');

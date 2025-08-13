@@ -46,23 +46,20 @@ class SolicitudesAclaracionAnalisisEnvioController extends Controller
         }
 		
 		$idUser = auth()->user()->id;   
-		$notificacion=auth()->user()->notificaciones()->where('llave',"AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$idUser}/Rechazo")->first();
-			if(!empty($notificacion)&& ($notificacion->llave == "AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$idUser}/Rechazo")&& ($notificacion->estatus == 'Pendiente')){
+		$notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $solicitud).'/Rechazo')->first();
+        if(!empty($notificacion)&& ($notificacion->estatus == 'Pendiente')){
                 $notificacion = Notificacion::find($notificacion->id);
                 // Actualizar el estatus a 'Leído'
                 $notificacion->update(['estatus' => 'Leído']);
             }
-
+        $url = route('solicitudesaclaracionatencion.index');
         $solicitud->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
 
         $titulo = 'Revisión del registro de la atención de la solicitud de acalaración de la acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
         $mensaje = '<strong>Estimado (a) ' . $solicitud->accion->lider->name . ', ' . $solicitud->accion->lider->puesto . ':</strong><br>
                     Ha sido registrada la atención de la solicitud de acalaración de la acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria . ', por parte del ' .
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
-		//AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
-        $llave = "AUD-{$solicitud->auditoria_id}/AudAc-{$solicitud->accion_id}/ACC{$solicitud->id}/USER-{$solicitud->accion->lider->id}/RevL";
-        
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->accion->lider->unidad_administrativa_id,$solicitud->accion->lider->id, $llave);
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->accion->lider->unidad_administrativa_id,$solicitud->accion->lider->id, GenerarLlave($solicitud).'/RevL', $url);
 
         setMessage('Se han enviado la información de la atención de la solicitud de acalaración a revisión');
 

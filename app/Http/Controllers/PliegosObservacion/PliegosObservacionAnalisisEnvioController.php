@@ -91,14 +91,17 @@ class PliegosObservacionAnalisisEnvioController extends Controller
          $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
      }
 
-     $pliegosobservacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
+     $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $pliegosobservacion).'/Rechazo')->first();
+	 $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+     $url = route('pliegosobservacionatencion.index');
 
+     $pliegosobservacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
      $titulo = 'Revisión del registro de la atención del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
      $mensaje = '<strong>Estimado (a) ' . $pliegosobservacion->accion->lider->name . ', ' . $pliegosobservacion->accion->lider->puesto . ':</strong><br>
                  Ha sido registrada la atención del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria . ', por parte del ' .
                  auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
 
-     auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->accion->lider->unidad_administrativa_id,$pliegosobservacion->accion->lider->id);
+     auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->accion->lider->unidad_administrativa_id,$pliegosobservacion->accion->lider->id,GenerarLlave( $pliegosobservacion).'/RevL', $url);
 
      setMessage('Se han enviado la información de la atención del pliego de observación a revisión');
 

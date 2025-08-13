@@ -649,6 +649,7 @@ class InformeCumplimientoFController extends Controller
         $plazomax=$formatter->toString($auditoria->radicacion->plazo_maximo);
         $plazomaxMax = ucwords($plazomax);
         $plazomaxMin = ucwords(strtolower($plazomaxMax));
+        $periodo_gestion ="";
         
         if ($auditoria) {
             $entidad = ListadoEntidades::where('no_auditoria', $auditoria->numero_auditoria)->where('cuenta_publica', $auditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();

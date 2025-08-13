@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CuentaPublica;
 use App\Models\Notificacion;
 use Illuminate\Http\Request;
 
-class NotificacionAccionesMovimientosController extends Controller
+class NotificacionUrlController extends Controller
 {
     public function index(Request $request){
-        dd('index');
+        /*
+        $notificaciones = $this->setQuery($request)->paginate(25);
+        
+        return view('notificaciones.index', compact('notificaciones','request'));*/
 		$notificaciones = $this->setQuery($request)->paginate(25);
 		
 
         return view('notificaciones.index', compact('notificaciones', 'request'));
     }
-    
     /**
      * Show the form for creating a new resource.
      *
@@ -45,7 +46,7 @@ class NotificacionAccionesMovimientosController extends Controller
      */
     public function show($id)
     {
-        //
+       // 
     }
 
     /**
@@ -57,28 +58,8 @@ class NotificacionAccionesMovimientosController extends Controller
     public function edit(Notificacion $notificacion)
     {
         
-        dd('edit');
-
-        $cp = CuentaPublica::where('cuenta_publica',$notificacion->cp)->get()->first();
-        $usuario=auth()->user();
-
-        if($cp->id==1){
-            setSession('cp',2021);
-            setSession('cp_ua',$usuario->cp_ua2021);
-        }
-        if($cp->id==2){
-            setSession('cp',2022);
-            setSession('cp_ua',$usuario->cp_ua2022);
-        }
-        if($cp->id==3){
-            setSession('cp',2023);
-            setSession('cp_ua',$usuario->cp_ua2023);
-        }
-        $envioNotificacion = $this->normalizarEnvio($notificacion);
-
-        if($envioNotificacion == "Registro de auditoría"){
-            return redirect()->route('seguimientoauditoriacp.index');
-        }
+        urlSession($notificacion);
+        return redirect($notificacion->url);
     }
 
     /**
@@ -90,7 +71,7 @@ class NotificacionAccionesMovimientosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd('update');
+        //
     }
 
     /**
@@ -104,6 +85,7 @@ class NotificacionAccionesMovimientosController extends Controller
         //
     }
 
+
     /** 
     public function marcarleido(Request $request)
     {
@@ -113,26 +95,6 @@ class NotificacionAccionesMovimientosController extends Controller
         return $request->id;
     }
         */
-
-    public function normalizarEnvio($notificacion01)
-    {
-        if($notificacion01->titulo=="Registro de auditoría"){
-            $notificacion01 = "Registro de auditoría";
-        }else{
-            $notificacion01 = 6;
-        }
-        
-        /*
-       $request['entidad_fiscalizable'] = $entidadCompleta;
-       $request['tipo_entidad']=(!empty($entidad->Ambito)?$entidad->Ambito:'');
-       $request['siglas_entidad']=(!empty($entidad->SigEntFis)?$entidad->SigEntFis:'');
-       $request['ejercicio']=0;
-       $request['acto_fiscalizacion']=$tipoauditoria->descripcion;
-       */
-
-       return  $notificacion01;
-    }
-
     public function marcarleido(Request $request)
     {
         $notificacion = Notificacion::find($request->id);
@@ -175,10 +137,9 @@ class NotificacionAccionesMovimientosController extends Controller
     }
 
     
-
-    
-    public function nuevas()
+    public function urlredireccionar()
     {
+        dd('Redireccionando a la URL de la notificación');
         $notificaciones = auth()->user()->notificaciones;
         $totalNotificaciones = $notificaciones->count();
 

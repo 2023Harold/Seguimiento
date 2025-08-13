@@ -78,9 +78,8 @@ class RecomendacionesRevisionController extends Controller
     public function update(Request $request, Recomendaciones $recomendacion)
     {
         $auditoria = Auditoria::find($recomendacion->auditoria_id); 
-        $director=auth()->user()->director;
+        $director=User::where('unidad_administrativa_id',substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
         $asistenteATUS=User::where('siglas_rol','ATUS')->first();
-        //dd($licMartha);
        
         $this->normalizarDatos($request);
 
@@ -108,13 +107,11 @@ class RecomendacionesRevisionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
-        $idUser = auth()->user()->id;
-        $notificacion=auth()->user()->notificaciones()->where('llave',"AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/RevJD")->first();
-            if(!empty($notificacion)&& ($notificacion->llave == "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/RevJD")&& ($notificacion->estatus == 'Pendiente')){
-                $notificacion = Notificacion::find($notificacion->id);
-                // Actualizar el estatus a 'Leído'
-                $notificacion->update(['estatus' => 'Leído']);
-            }
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $recomendacion).'/RevJD')->first();
+        $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($recomendacion)."/Rechazo")->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+        $url = route('recomendacionesatencion.index');
         if ($request->estatus == 'Aprobado') {
             $recomendacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
             
@@ -124,17 +121,15 @@ class RecomendacionesRevisionController extends Controller
                             '; se ha aprobado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
                         
-            $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$director->id}/ValD";
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id, $llave);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($asistenteATUS->name,$asistenteATUS->puesto, $recomendacion), now(), $asistenteATUS->unidad_administrativa_id, $asistenteATUS->id); 
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id, GenerarLlave( $recomendacion).'/ValD', $url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($asistenteATUS->name,$asistenteATUS->puesto, $recomendacion), now(), $asistenteATUS->unidad_administrativa_id, $asistenteATUS->id, GenerarLlave( $recomendacion).'/Consulta', $url); 
         } else {
             $titulo = 'Rechazo del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$recomendacion->userCreacion->id}/Rechazo";
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($recomendacion->accion->lider->name,$recomendacion->accion->lider->puesto,$recomendacion), now(), $recomendacion->accion->lider->unidad_administrativa_id, $recomendacion->accion->lider->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, GenerarLlave( $recomendacion).'/Rechazo', $url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($recomendacion->accion->lider->name,$recomendacion->accion->lider->puesto,$recomendacion), now(), $recomendacion->accion->lider->unidad_administrativa_id, $recomendacion->accion->lider->id, GenerarLlave( $recomendacion).'/Rechazo',$url);
         }
 
         return redirect()->route('recomendacionesatencion.index');
@@ -153,7 +148,6 @@ class RecomendacionesRevisionController extends Controller
 
     private function mensajeComentario(String $nombre, String $puesto, Recomendaciones $recomendacion)
     {
-
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;

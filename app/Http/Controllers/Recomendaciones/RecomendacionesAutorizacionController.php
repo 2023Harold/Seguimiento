@@ -134,19 +134,19 @@ class RecomendacionesAutorizacionController extends Controller
 
         $director=User::where('unidad_administrativa_id',substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
         /** Leer notifiacion si hay  **/
-        $idUser = auth()->user()->id;
-        $notificacion=auth()->user()->notificaciones()->where('llave',"AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/Aut")->first();
-            if(!empty($notificacion)&&($notificacion->llave == "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$idUser}/Aut")&& ($notificacion->estatus == 'Pendiente')){
-                $notificacion = Notificacion::find($notificacion->id);
-                $notificacion->update(['estatus' => 'Leído']);
-            }
+        $url = route('recomendacionesatencion.index');
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($recomendacion).'/Aut')->first();
+        $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($recomendacion)."/Rechazo")->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
         /** fin Leer notifiacion si hay  **/
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             //auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($recomendacion->accion->depaasignado->name,$recomendacion->accion->depaasignado->puesto,$recomendacion), now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name, $jefe->puesto, $recomendacion),now(), $jefe->unidad_administrativa_id, $jefe->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($recomendacion->userCreacion->name,$recomendacion->userCreacion->puesto,$recomendacion), now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id, GenerarLlave($recomendacion).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name, $jefe->puesto, $recomendacion),now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($recomendacion).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($lider->name, $lider->puesto, $recomendacion),now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($recomendacion).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($recomendacion->userCreacion->name,$recomendacion->userCreacion->puesto,$recomendacion), now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id,GenerarLlave($recomendacion).'/Consulta',$url);
             setMessage('Se ha autorizado la atención de la recomendación con exito.');
         } else {
             $titulo = 'Rechazo del registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
@@ -155,10 +155,10 @@ class RecomendacionesAutorizacionController extends Controller
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
 
             //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->depaasignado->unidad_administrativa_id, $recomendacion->accion->depaasignado->id);
-            //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id);
-
-            $llave = "AUD-{$recomendacion->auditoria_id}/AudAc-{$recomendacion->accion_id}/ACC{$recomendacion->id}/USER-{$recomendacion->userCreacion->id}/Rechazo";
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, $llave);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($recomendacion).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name, $jefe->puesto, $recomendacion),now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($recomendacion).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name, $lider->puesto, $recomendacion),now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($recomendacion).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, GenerarLlave($recomendacion).'/Rechazo',$url);
             setMessage('Se ha rechazado el registro de la atencion con exito.');
         }
 
