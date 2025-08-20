@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\TurnoArchivo;
 
 use App\Http\Controllers\Controller;
@@ -111,7 +110,7 @@ class TurnoArchivoController extends Controller
         $auditoria=$turnoarchivo->auditoria;
         setMessage("Los datos se han actualizado correctamente.");
 
-        return redirect() -> route('turnoarchivo.index',compact('auditoria','turnoarchvo'));
+        return redirect() -> route('turnoarchivo.index',compact('auditoria','turnoarchivo'));
 
     }
 

@@ -59,25 +59,27 @@ class AcuerdoConclusionEnvioController extends Controller
      */
     public function edit(AcuerdoConclusion $auditoria)
     {
-       $acuerdoconclusion=$auditoria;
+        
+        $acuerdoconclusion=$auditoria;
+        $acuerdoconclusion->update(['fase_autorizacion' =>  'En validación']);
         Movimientos::create([
-            'tipo_movimiento' => 'Registro del acuerdo de conclusión',
-                'accion' => 'AcuerdoConclusion',
-                'accion_id' => $acuerdoconclusion->id,
-                'estatus' => 'Aprobado',
-                'usuario_creacion_id' => auth()->id(),
-                'usuario_asignado_id' => auth()->id(),
-            ]);
+        'tipo_movimiento' => 'Registro del acuerdo de conclusión',
+            'accion' => 'AcuerdoConclusion',
+            'accion_id' => $acuerdoconclusion->id,
+            'estatus' => 'Aprobado',
+            'usuario_creacion_id' => auth()->id(),
+            'usuario_asignado_id' => auth()->id(),
+        ]);
+        // dd($acuerdoconclusion->auditoria);
+        
+        $titulo = 'Validación de los datos del acuerdo de conclusion';
+        $mensaje = '<strong>Estimado (a) ' . auth()->user()->director->name . ', ' . auth()->user()->director->puesto . ':</strong><br>
+                    Ha sido registrada el acuerdo de conclusión de la auditoría No. ' . $acuerdoconclusion->auditoria->numero_auditoria . ', por parte del ' .
+                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
     
-            $acuerdoconclusion->update(['fase_autorizacion' =>  'En validación']);
-            // dd($acuerdoconclusion->auditoria);
-            $titulo = 'Validación de los datos del acuerdo de conclusion';
-            $mensaje = '<strong>Estimado (a) ' . auth()->user()->director->name . ', ' . auth()->user()->director->puesto . ':</strong><br>
-                        Ha sido registrada el acuerdo de conclusión de la auditoría No. ' . $acuerdoconclusion->auditoria->numero_auditoria . ', por parte del ' .
-                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
-    
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
-            setMessage('Se ha enviado el acuerdo de conclusión a validación');
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
+        setMessage('Se ha enviado el acuerdo de conclusión a validación');
+            
     
         return redirect()->route('acuerdoconclusion.index');
     }

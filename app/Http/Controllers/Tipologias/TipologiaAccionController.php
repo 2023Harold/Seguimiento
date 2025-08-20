@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tipologias;
 
+use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\CatalogoTipoAccion;
@@ -72,7 +73,7 @@ class TipologiaAccionController extends Controller
      */
     public function edit(Auditoria $auditoria )
     {
-        $tipologias = CatalogoTipologia::where('tipo_auditoria_id',$accion->acto_fiscalizacion_id)->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
+        $tipologias = CatalogoTipologia::where('tipo_auditoria_id',$auditoria->acto_fiscalizacion_id)->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
       
         return view('tipologiaaccion.form', compact('accion', 'request','tipologias','auditoria'));
     }

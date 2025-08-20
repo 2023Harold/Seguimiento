@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AcuerdoConclusion;
 use App\Models\Auditoria;
 use App\Models\Movimientos;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AcuerdoConclusionCPEnvioController extends Controller
@@ -60,7 +61,31 @@ class AcuerdoConclusionCPEnvioController extends Controller
      */
     public function edit(AcuerdoConclusion $auditoria)
     {
-       $acuerdoconclusion=$auditoria;
+        
+        $url = route('acuerdoconclusion.index');   
+        $acuerdoconclusion=$auditoria;    
+
+        $auditoria = Auditoria::find($acuerdoconclusion->auditoria_id);
+        if(getSession('cp')==2022){
+            $jefe=User::where('unidad_administrativa_id', substr($auditoria->userCreacion->unidad_administrativa_id, 0, 5).'0')->first();
+            $lider=$auditoria->accion->lider;
+        }else{
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $lider = $auditoria->lidercp; 
+        }
+        
+        $acuerdoconclusion->update(['fase_autorizacion' =>  'En revisión']);
+        $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo')->first();
+        $LeerNotificacionRechazo = auth()->user()->NotMarcarLeido($NotificacionRechazo);
+
+        $titulo = 'Revisión del Acuerdo de Conclusión de '.$acuerdoconclusion->tipo;
+        $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
+                    Ha sido registrado el acuerdo de conclusión de '.$acuerdoconclusion->tipo.' de la auditoría No. ' . $acuerdoconclusion->auditoria->numero_auditoria . ', por parte del ' .
+                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id,$jefe->id,GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/RevJD',$url);
+        setMessage('Se ha enviado el acuerdo de conclusión a revisión');
+    
         Movimientos::create([
             'tipo_movimiento' => 'Registro del acuerdo de conclusión',
                 'accion' => 'AcuerdoConclusion',
@@ -69,18 +94,8 @@ class AcuerdoConclusionCPEnvioController extends Controller
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
                 'usuario_modificacion_id' => auth()->id(),
-            ]);
+        ]);
 
-            $acuerdoconclusion->update(['fase_autorizacion' =>  'En revisión']);
-            // dd($acuerdoconclusion->auditoria);
-
-            $titulo = 'Revisión de los datos del acuerdo de conclusión';
-            $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
-                        Ha sido registrada el acuerdo de conclusión de la auditoría No. ' . $acuerdoconclusion->auditoria->numero_auditoria . ', por parte del ' .
-                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
-
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
-            setMessage('Se ha enviado el acuerdo de conclusión a revisión');
         return redirect()->route('acuerdoconclusion.index');
 
 

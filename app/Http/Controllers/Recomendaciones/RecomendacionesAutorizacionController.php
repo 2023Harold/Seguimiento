@@ -158,7 +158,7 @@ class RecomendacionesAutorizacionController extends Controller
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$recomendacion), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($recomendacion).'/Rechazo',$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name, $jefe->puesto, $recomendacion),now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($recomendacion).'/Rechazo',$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name, $lider->puesto, $recomendacion),now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($recomendacion).'/Rechazo',$url);
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, GenerarLlave($recomendacion).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id, GenerarLlave($recomendacion).'/Rechazo',$url);
             setMessage('Se ha rechazado el registro de la atencion con exito.');
         }
 

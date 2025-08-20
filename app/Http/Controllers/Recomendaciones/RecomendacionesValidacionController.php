@@ -125,9 +125,9 @@ class RecomendacionesValidacionController extends Controller
                             .'Ha sido rechazado el registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
 
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, GenerarLlave($recomendacion).'Rechazo',$url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$recomendacion), now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($recomendacion).'Rechazo',$url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$recomendacion), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($recomendacion).'Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, GenerarLlave($recomendacion).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$recomendacion), now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($recomendacion).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$recomendacion), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($recomendacion).'/Rechazo',$url);
         }
         $recomendacion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
 			setMessage($request->estatus == 'Aprobado' ?

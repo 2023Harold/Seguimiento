@@ -61,8 +61,6 @@ class SeguimientoAuditoria2023Revision01Controller extends Controller
      */
     public function edit(Auditoria $auditoria)
     {
-        $notificacionEstatus = Notificacion::where('auditoria_id',$auditoria->id)->get();
-        dd($notificacionEstatus->MovRegistroAuditoria);
         return view('seguimientoauditoriacprevision01.form', compact('auditoria'));
     }
 
@@ -75,8 +73,6 @@ class SeguimientoAuditoria2023Revision01Controller extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        $notificacionEstatus = Notificacion::where('auditoria_id',$auditoria->id)->get()->first();
-        dd($notificacionEstatus);
         $jefe=User::where('unidad_administrativa_id', substr($auditoria->usuarioCreacion->cp_ua2023, 0, 5).'0')->first();
     
         $this->normalizarDatos($request);
@@ -111,7 +107,7 @@ class SeguimientoAuditoria2023Revision01Controller extends Controller
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->usuarioCreacion->unidad_administrativa_id, $auditoria->usuarioCreacion->id);
         }
 
-        $mov = Movimientos::create([
+        Movimientos::create([
             'tipo_movimiento' => 'Revisión del registro de la auditoría',
             'accion' => 'Registro de la auditoría',
             'accion_id' => $auditoria->id,
@@ -120,10 +116,6 @@ class SeguimientoAuditoria2023Revision01Controller extends Controller
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);
-
-        dd($mov);
-
-        $notificacionEstatus->update(['registro_concluido'=>'No']);
 
 
         return view('layouts.close');

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\AcuerdoConclusion;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\AcuerdoConclusion;
+use App\Models\Auditoria;
 use App\Models\Movimientos;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AcuerdoConclusionValidacionController extends Controller
@@ -76,17 +78,18 @@ class AcuerdoConclusionValidacionController extends Controller
     public function update(AprobarFlujoAutorizacionRequest $request, AcuerdoConclusion $auditoria)
     {
         $mensaje = "";
+        $url = route('acuerdoconclusion.index');
         $this->normalizarDatos($request);
         $acuerdoconclusion=$auditoria;
-        Movimientos::create([
-           'tipo_movimiento' => 'Validación del acuerdo de conclusión',
-           'accion' => 'AcuerdoConclusion',
-           'accion_id' => $acuerdoconclusion->id,
-           'estatus' => $request->estatus,
-           'usuario_creacion_id' => auth()->id(),
-           'usuario_asignado_id' => auth()->id(),
-           'motivo_rechazo' => $request->motivo_rechazo,
-       ]);
+        
+        $auditoria = Auditoria::find($acuerdoconclusion->auditoria_id);
+        if(getSession('cp')==2022){
+            $jefe=User::where('unidad_administrativa_id', substr($auditoria->userCreacion->unidad_administrativa_id, 0, 5).'0')->first();
+            $lider=$auditoria->accion->lider;
+        }else{
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $lider = $auditoria->lidercp; 
+        }
 
        if ($request->estatus == 'Aprobado') {
            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
@@ -99,23 +102,36 @@ class AcuerdoConclusionValidacionController extends Controller
            'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
            'El rechazo ha sido registrado.'
        );
-
        if ($request->estatus == 'Aprobado') {
-        $titulo = 'Autorización del acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
+        $titulo = 'Autorización del acuerdo de conclusión de '.$acuerdoconclusion->tipo;
         $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
                         .auth()->user()->name.', '.auth()->user()->puesto.
                         '; ha aprobado la validación del acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
                         ', por lo que se requiere realice la autorización oportuna de la misma.';
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
-    }else {
-        
-        $titulo = 'Rechazo de la radicación de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria;
-        $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
-                        .'Ha sido rechazado el acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
-                        ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
-        
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $acuerdoconclusion->usuarioCreacion->unidad_administrativa_id, $acuerdoconclusion->usuarioCreacion->id);
-    }
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id,GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Aut',$url);
+        }else {
+            
+            $titulo = 'Acuerdo de conclusión de '.$acuerdoconclusion->tipo.' Rechazado';
+            $mensaje = '<strong>Estimado(a) '.$acuerdoconclusion->usuarioCreacion->name.', '.$acuerdoconclusion->usuarioCreacion->puesto.':</strong><br>'
+                            .'Ha sido rechazado el acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
+                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente.';
+            
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$acuerdoconclusion->auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo',$url);
+        }
+        Movimientos::create([
+           'tipo_movimiento' => 'Validación del acuerdo de conclusión',
+           'accion' => 'AcuerdoConclusion',
+           'accion_id' => $acuerdoconclusion->id,
+           'estatus' => $request->estatus,
+           'usuario_creacion_id' => auth()->id(),
+           'usuario_asignado_id' => auth()->id(),
+           'motivo_rechazo' => $request->motivo_rechazo,
+       ]);
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/ValD')->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo')->first();
+        $LeerNotificacionRechazo = auth()->user()->NotMarcarLeido($NotificacionRechazo);
 
         return redirect()->route('acuerdoconclusion.index');
     }
@@ -141,7 +157,7 @@ class AcuerdoConclusionValidacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro del Acuerdo de Conclusión de las auditoría No. '.$numeroauditoria.'.';       
+                    .'Ha sido rechazado el registro del Acuerdo de Conclusión de las auditoría No. '.$numeroauditoria.', por lo que se debe atender y enviar la información corregida nuevamente.';;       
 
         return $mensaje;
     }

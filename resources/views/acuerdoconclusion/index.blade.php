@@ -76,12 +76,14 @@
                                 <th>Domicilio</th>
                                 <th>Acuerdo de conclusión</th>
                                 <th>Fase / Acción</th>
-                            @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
-                                <th>Enviar</th>
-                            @elseif(getSession('cp')==2023 && auth()->user()->siglas_rol=='LP')
-                                <th>Enviar</th>
-                            @endif
-                                <th>Acuses</th>
+                                @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
+                                    <th>Enviar</th>
+                                @elseif(getSession('cp')==2023 && auth()->user()->siglas_rol=='LP' && (empty($auditoria->acuerdoconclusion->fase_autorizacion) || $auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado'))
+                                    <th>Enviar</th>
+                                @endif
+                                @if (!empty($auditoria->acuerdoconclusion->fase_autorizacion) && $auditoria->acuerdoconclusion->fase_autorizacion=='Autorizado')
+                                    <th>Acuses</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -115,19 +117,19 @@
 
                                 <td class="text-center">
                                 @if( (getSession('cp')==2022) && ($auditoria->acuerdoconclusion->no_aplica=='X') || (getSession('cp')==2023) && ($auditoria->acuerdoconclusion->no_aplica=='X'))                        
-                                <tr>
-                                <td class="text-center" colspan="5">
-                                    No aplica.
-                                </td>                                
-                                </tr>
-                                @elseif ( (getSession('cp')==2022)&& empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado' && ($auditoria->acuerdoconclusion->no_aplica==' '))
+                                    <tr>
+                                        <td class="text-center" colspan="5">
+                                            No aplica.
+                                        </td>                                
+                                    </tr>
+                                @elseif ( (getSession('cp')==2022)&& empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazadoc ' && ($auditoria->acuerdoconclusion->no_aplica==' '))
                                         <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
                                         @can('acuerdoconclusion.edit')
                                             <a href="{{ route('acuerdoconclusion.edit',$auditoria->acuerdoconclusion) }}" class="text-primary">
                                             <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
                                             </a>
                                         @endcan                                            
-                                    @elseif( (getSession('cp')==2023) && empty($auditoria->acuerdoconclusion->fase_autorizacion)||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado'&& ($auditoria->acuerdoconclusion->no_aplica==' ') )
+                                    @elseif( (getSession('cp')==2023) && (empty($auditoria->acuerdoconclusion->fase_autorizacion)|| ($auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado'|| ($auditoria->acuerdoconclusion->no_aplica==' '))) )
                                         <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
                                         @can('acuerdoconclusioncp.edit')
                                             <a href="{{ route('acuerdoconclusioncp.edit',$auditoria->acuerdoconclusion) }}" class="text-primary">
@@ -191,57 +193,64 @@
                                         <span class="badge badge-light-success"> {{ $auditoria->acuerdoconclusion->fase_autorizacion }} </span>
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                @if (empty($auditoria->acuerdoconclusion->fase_autorizacion) && empty($auditoria->acuerdoconclusion->no_aplica=='X')  ||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')
+                                @if (empty($auditoria->acuerdoconclusion->fase_autorizacion) && empty($auditoria->acuerdoconclusion->no_aplica=='X')  ||$auditoria->acuerdoconclusion->fase_autorizacion=='Rechazado')                                    
                                         @if (getSession('cp')==2022 )
                                             @can('acuerdoconclusionenvio.edit')
-                                                <a href="{{ route('acuerdoconclusionenvio.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                Enviar
-                                                </a>
+                                                <td class="text-center">
+                                                    <a href="{{ route('acuerdoconclusionenvio.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                    Enviar
+                                                    </a>
+                                                </td>
                                             @endcan
                                         @else
                                             @can('acuerdoconclusionenviocp.edit')
-                                                <a href="{{ route('acuerdoconclusionenviocp.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                Enviar
-                                                </a>
+                                                <td class="text-center">
+                                                    <a href="{{ route('acuerdoconclusionenviocp.edit',$auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                    Enviar
+                                                    </a>
+                                                </td>
                                             @endcan
                                         @endif
+                                    
+                                    </td>
                                 @endif
-                                </td>
-                                  <td class="text-center">                                                                            
-                                        @if (!empty($auditoria->acuerdoconclusion->fase_autorizacion) && $auditoria->acuerdoconclusion->fase_autorizacion=='Autorizado')                                            
-                                            @if(getSession('cp')==2023)                  
-
-                                                @if($auditoria->acuerdoconclusion->oficio_recepcion)                                                                                                                  
-                                                  @can('acuerdoconclusionacusecp.show')
-                                                    <a href="{{ route('acuerdoconclusionacusecp.show', $auditoria->acuerdoconclusion) }}" class="btn btn-secondary" >
-                                                        <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
-                                                    </a>
-                                                @endcan
-                                                @else
-                                                    @can('acuerdoconclusionacusecp.edit')
-                                                        <a href="{{ route('acuerdoconclusionacusecp.edit', $auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                            <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
-                                                        </a>
-                                                    @endcan
-                                                   
-                                                @endif                                              
-                                            @else
-                                                    @can('acuerdoconclusionacuse.edit')
-                                                        <a href="{{ route('acuerdoconclusionacuse.edit', $auditoria->acuerdoconclusion) }}" class="btn btn-primary">
-                                                            <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
-                                                        </a>
-                                                    @endcan
-                                             @endif
-                                             @else                                          
+                                @if (!empty($auditoria->acuerdoconclusion->fase_autorizacion) && $auditoria->acuerdoconclusion->fase_autorizacion=='Autorizado')
+                                    <td class="text-center">                                                                                                                     
+                                        @if(getSession('cp')==2023)                  
+                                            @if($auditoria->acuerdoconclusion->oficio_recepcion) 
+                                                                                                                                                             
                                                 @can('acuerdoconclusionacusecp.show')
                                                     <a href="{{ route('acuerdoconclusionacusecp.show', $auditoria->acuerdoconclusion) }}" class="btn btn-secondary" >
                                                         <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
                                                     </a>
                                                 @endcan
-                                        @endif                                        
-                                    </td>
-                            </tr>
+                                            @else
+                                                @can('acuerdoconclusionacusecp.edit')
+                                                    <a href="{{ route('acuerdoconclusionacusecp.edit', $auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                        <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('acuerdoconclusionacusecp.show', $auditoria->acuerdoconclusion) }}" class="btn btn-secondary" >
+                                                        <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                                    </a>
+                                                @endcan
+                                            @endif                                              
+                                        @else
+                                            @can('acuerdoconclusionacuse.edit')
+                                                <a href="{{ route('acuerdoconclusionacuse.edit', $auditoria->acuerdoconclusion) }}" class="btn btn-primary">
+                                                    <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                                </a>
+                                            @endcan
+                                        @endif
+                                    @else                                          
+                                        @can('acuerdoconclusionacusecp.show')
+                                            <a href="{{ route('acuerdoconclusionacusecp.show', $auditoria->acuerdoconclusion) }}" class="btn btn-secondary" >
+                                                <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                            </a>
+                                        @endcan                                   
+                                        </td>
+                                    @endif 
+                                </tr>
                            {{-- {{ dd($auditoria->acuerdoconclusion->movimientos); }}} --}}
                             @if (!empty($auditoria->acuerdoconclusion)&&!empty($auditoria->acuerdoconclusion->movimientos))
                                 {!! movimientosDesglose($auditoria->acuerdoconclusion->id, 10, $auditoria->acuerdoconclusion->movimientos) !!}
@@ -298,12 +307,14 @@
                             <th>Domicilio</th>
                             <th>Acuerdo de conclusión</th>
                             <th>Fase / Acción</th>
-                        @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
-                            <th>Enviar</th>
-                        @elseif(getSession('cp')==2023 && auth()->user()->siglas_rol=='LP')
-                            <th>Enviar</th>
-                        @endif
-                            <th>Acuses</th>
+                            @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
+                                <th>Enviar</th>
+                            @elseif(getSession('cp')==2023 && auth()->user()->siglas_rol=='LP' && (empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion) || $auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado'))
+                                <th>Enviar</th>
+                            @endif
+                            @if (!empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion) && $auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Autorizado')
+                                <th>Acuses</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -344,10 +355,10 @@
                             @elseif ((getSession('cp')==2022) && empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion)||$auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado'&& ($auditoria->acuerdoconclusionpliegos->no_aplica==' ') )
                                     <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusionpliegos->fase_autorizacion }} </span>
                                     @can('acuerdoconclusion.edit')
-                                            <a href="{{ route('acuerdoconclusion.edit',$auditoria->acuerdoconclusionpliegos) }}" class="text-primary">
+                                        <a href="{{ route('acuerdoconclusion.edit',$auditoria->acuerdoconclusionpliegos) }}" class="text-primary">
                                             <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
-                                            </a>
-                                        @endcan      
+                                        </a>
+                                    @endcan      
                                                           
                                 @elseif( (getSession('cp')==2023) && empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion)||$auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado'&& ($auditoria->acuerdoconclusionpliegos->no_aplica==' '))
                                     <span class="badge badge-light-danger">{{ $auditoria->acuerdoconclusionpliegos->fase_autorizacion }} </span>
@@ -422,26 +433,27 @@
                                 <span class="badge badge-light-success"> {{ $auditoria->acuerdoconclusionpliegos->fase_autorizacion }} </span>
                                 @endif
                             </td>
-                            <td class="text-center">
-                                @if (empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion) && empty($auditoria->acuerdoconclusionpliegos->no_aplica=='X') ||$auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado')
-                                    @if (getSession('cp')==2022 )
-                                        @can('acuerdoconclusionenvio.edit')
+                            @if (empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion) && empty($auditoria->acuerdoconclusionpliegos->no_aplica=='X') ||$auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Rechazado')
+                                @if (getSession('cp')==2022 )
+                                    @can('acuerdoconclusionenvio.edit')
+                                        <td class="text-center">
                                             <a href="{{ route('acuerdoconclusionenvio.edit',$auditoria->acuerdoconclusionpliegos) }}" class="btn btn-primary">
                                             Enviar
                                             </a>
-                                        @endcan
-                                    @else
-                                    
-                                        @can('acuerdoconclusionenviocppliegos.edit')
+                                        </td>
+                                    @endcan
+                                @else
+                                    @can('acuerdoconclusionenviocppliegos.edit')
+                                        <td class="text-center">
                                             <a href="{{ route('acuerdoconclusionenviocppliegos.edit',$auditoria->acuerdoconclusionpliegos) }}" class="btn btn-primary">
                                             Enviar
                                             </a>
-                                        @endcan
-                                    @endif
+                                        </td>
+                                    @endcan
                                 @endif
-                            </td>
-                        <td class="text-center">                                                                            
-                                 @if (!empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion) && $auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Autorizado')                                            
+                            @endif                                                                          
+                            @if (!empty($auditoria->acuerdoconclusionpliegos->fase_autorizacion) && $auditoria->acuerdoconclusionpliegos->fase_autorizacion=='Autorizado')                                            
+                                <td class="text-center">
                                     @if(getSession('cp')==2023)                                                  
                                         @if($auditoria->acuerdoconclusionpliegos->oficio_recepcion)                                                                                                                  
                                             @can('acuerdoconclusionacusecp.show')
@@ -456,23 +468,21 @@
                                             </a>
                                             @endcan
                                         @endif    
-                                                @else
-                                                    @can('acuerdoconclusionacuse.edit')
-                                                        <a href="{{ route('acuerdoconclusionacuse.edit', $auditoria->acuerdoconclusionpliegos) }}" class="btn btn-primary">
-                                                            <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
-                                                        </a>
-                                                    @endcan
-                                             @endif
-                                    @else                                          
-                                        @can('acuerdoconclusionacuse.show')
-                                        <a href="{{ route('acuerdoconclusionacuse.show', $auditoria->acuerdoconclusionpliegos) }}" class="btn btn-secondary" >
-                                                <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
-                                        </a>
+                                    @else
+                                        @can('acuerdoconclusionacuse.edit')
+                                            <a href="{{ route('acuerdoconclusionacuse.edit', $auditoria->acuerdoconclusionpliegos) }}" class="btn btn-primary">
+                                                <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+                                            </a>
                                         @endcan
-                                    @endif       
-									
-                                    </td>
-                           
+                                    @endif
+                            @else                                          
+                                @can('acuerdoconclusionacuse.show')
+                                    <a href="{{ route('acuerdoconclusionacuse.show', $auditoria->acuerdoconclusionpliegos) }}" class="btn btn-secondary" >
+                                            <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                    </a>
+                                @endcan
+                                </td>
+                            @endif       
                         </tr>
                        {{-- {{ dd($auditoria->acuerdoconclusion->movimientos); }}} --}}
                         @if (!empty($auditoria->acuerdoconclusionpliegos)&&!empty($auditoria->acuerdoconclusionpliegos->movimientos))

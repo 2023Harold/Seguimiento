@@ -42,7 +42,7 @@ class AcuerdoConclusionRequest extends FormRequest
 		   'numero_oficio'=>'número del oficio',
            'fecha_oficio'=>'fecha del oficio',
            'fecha_acuerdo_conclusion' => 'fecha del acuerdo de conclusion',
-           'informe' => 'acuerdo de conclusión',
+           'acuerdo_conclusion' => 'acuerdo de conclusión',
         ];
     }
     public function messages()

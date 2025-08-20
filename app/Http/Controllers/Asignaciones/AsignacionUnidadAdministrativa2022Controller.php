@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Asignaciones;
 
+use App\Http\Controllers\Controller;
 use App\Models\CatalogoUnidadesAdministrativas;
 use App\Models\User;
 use Illuminate\Http\Request;

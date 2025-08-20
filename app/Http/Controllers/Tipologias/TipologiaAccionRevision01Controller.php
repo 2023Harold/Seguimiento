@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tipologias;
 
+use App\Http\Controllers\Controller;
 use App\Models\CatalogoTipologia;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;

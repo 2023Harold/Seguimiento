@@ -125,8 +125,8 @@ class SolicitudesAclaracionValidacionController extends Controller
                             .'Ha sido rechazado el registro de atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $solicitud->userCreacion->unidad_administrativa_id, $solicitud->userCreacion->id,GenerarLlave($solicitud)."/Rechazo",$url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($solicitud->accion->lider->name,$solicitud->accion->lider->puesto,$solicitud), now(), $solicitud->accion->lider->unidad_administrativa_id, $solicitud->accion->lider->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$solicitud), now(), $jefe->unidad_administrativa_id, $jefe->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($solicitud->accion->lider->name,$solicitud->accion->lider->puesto,$solicitud), now(), $solicitud->accion->lider->unidad_administrativa_id, $solicitud->accion->lider->id,GenerarLlave($solicitud)."/Rechazo",$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$solicitud), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($solicitud)."/Rechazo",$url);
         }
 
         return redirect()->route('solicitudesaclaracionatencion.index');

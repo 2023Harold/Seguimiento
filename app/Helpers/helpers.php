@@ -673,16 +673,20 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
     }
 
     function GenerarLlave($Accion){
-        if($Accion->accion->tipo=='Recomendación'){
-        //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
+        //dd($Accion);
+        if(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Recomendación')){
+        //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
         $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/REC-{$Accion->id}";
        
-        }elseif($Accion->accion->tipo=='Pliego de observación'){
-            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
+        }elseif(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Pliego de observación')){
+            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
             $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/PO-{$Accion->id}";
-        }elseif($Accion->accion->tipo=='Solicitud de aclaración'){
-            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA - USUARIO DESTINATARIO - TIPO (REVISION01 REVISION VALIDACION AUTORIZACION)
+        }elseif(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Solicitud de aclaración')){
+            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
             $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/SOL-{$Accion->id}";
+        }elseif(!empty($Accion->acuerdo_conclusion)){
+            //AUDITORIA - Acuero Conclusion 
+            $llave = "AUD-{$Accion->auditoria_id}/AcuerdoCon-{$Accion->id}";
         }
         return $llave;
     }

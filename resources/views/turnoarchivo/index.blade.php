@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('turnoarchivo.index',$auditoria) }}
+{{Breadcrumbs::render('turnoarchivo.index',$auditoria) }}
 @endsection
 @section('content')
 <div class="row">
@@ -12,7 +12,7 @@
                     <a href="{{ route('auditoriaseguimiento.index') }}"><i
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp;
-                    Turno acuse envío archivo
+                    Turno acuse envío archivo 
                 </h1>
             </div>
             <div class="card-body">
@@ -83,6 +83,7 @@
                                     {{ fecha($turnoarchivo->fecha_turno_archivo) }}
                                 </td>
                                 <td class="text-center">
+								
                                     @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
                                         @can('turnoarchivo.edit')
@@ -99,7 +100,7 @@
                                                 Revisar
                                             </a>
                                         @else
-                                            <span class="badge badge-light-warning">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
+                                            <span class="badge badge-light-warning">En revisión</span>
                                         @endcan
                                     @endif
                                     @if ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión')
@@ -135,8 +136,10 @@
                                     @if ($auditoria->turnoarchivo->fase_autorizacion=='Autorizado')
                                         <span class="badge badge-light-success">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
                                     @endif
-                                <td class="text-center">
-                                    @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
+             
+                            </td>
+							<td class="text-center">
+                                    @if(empty($auditoria->turnoarchivo->fase_autorizacion)||($auditoria->turnoarchivo->fase_autorizacion=='Rechazado'))
                                         @can('turnoarchivoenvio.edit')
                                             <a href="{{ route('turnoarchivoenvio.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
                                              Enviar
@@ -144,7 +147,6 @@
                                         @endcan
                                     @endif
                                 </td>
-                            </td>
                             </tr>
                             @if (!empty($auditoria->turnoarchivo))
                                     {!! movimientosDesglose($auditoria->turnoarchivo->id, 10, $auditoria->turnoarchivo->movimientos) !!}
@@ -251,6 +253,7 @@
                                                 <span class="badge badge-light-success">{{ $auditoria->turnoarchivotransferencia->fase_autorizacion }} </span>
                                             @endif
                                         <td class="text-center">
+										
                                             @if (empty($auditoria->turnoarchivotransferencia->fase_autorizacion)||$auditoria->turnoarchivotransferencia->fase_autorizacion=='Rechazado')
                                                 @can('turnoarchivotransferencia.edit')
                                                     <a href="{{ route('turnoarchivotransferenciaenvio.edit',$auditoria->turnoarchivotransferencia) }}" class="btn btn-primary">
