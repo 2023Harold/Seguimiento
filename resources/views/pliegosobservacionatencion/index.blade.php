@@ -285,19 +285,19 @@
                                     <td class="text-center">
                                     @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Analisis")
 										<a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
-                                                Atender1
+                                                Atender
                                          </a>										
                                     @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Conclusión")
 											<a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
-                                                Atender2
+                                                Atender
                                             </a>
                                     @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Listado Documentos")
 											<a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
-                                                Atender3
+                                                Atender
                                             </a>
                                     @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='101')))
                                             <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.edit',$comentario) }}">
-                                                Atender4
+                                                Atender
                                             </a>                                        
                                     @endif  
                                     </td>                                    

@@ -96,7 +96,7 @@ class SolicitudesAclaracionContestacionController extends Controller
         $solicitud = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
         
         $sol_contestacion = SolicitudesAclaracion::with(['contestaciones.remitentes'])->where('accion_id', getSession('solicitudesauditoriaaccion_id'))->get();
-        dd($sol_contestacion);
+        // dd($sol_contestacion);
 
         return view('solicitudesaclaracioncontestacion.show', compact('contestaciones','auditoria','accion','solicitud', 'sol_contestacion'));
     }

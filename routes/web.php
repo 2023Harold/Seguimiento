@@ -693,15 +693,15 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     /*** Seguimiento - Auditorias - folios */
     Route::resource('folioscrr', FolioCRRController::class);
     Route::resource('remitentes', FolioRemitentesController::class);
-    Route::get('/remitentes/create/{folioscrr}', [FolioRemitentesController::class, 'create'])->name('remitentes.create');
-    Route::get('/remitentes/edit/{remitente}', [FolioRemitentesController::class, 'edit'])->name('remitentes.edit');
+    Route::get('/remitentes/create/{folioscrr}', [FolioRemitentesController::class, 'create'])->name('remitentes.creacion');
+    Route::get('/remitentes/edit/{remitente}', [FolioRemitentesController::class, 'edit'])->name('remitentes.editar');
 
     /**Fin del apartado de Seguimiento - Auditorias - folios*/
 
     /**Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
     Route::resource('acuerdosanvav', AnVController::class,['parameters' => ['acuerdosanvav' => 'acuerdoanvav']]);
-    Route::get('/acuerdosanvav/create/{folio}', [AnVController::class, 'create'])->name('acuerdosanvav.create');
-    Route::get('/acuerdosanvav/show/{folio}', [AnVController::class, 'show'])->name('acuerdosanvav.show');
+    Route::get('/acuerdosanvav/create/{folio}', [AnVController::class, 'create'])->name('acuerdosanvav2.create');
+    Route::get('/acuerdosanvav/show/{folio}', [AnVController::class, 'show'])->name('acuerdosanvav2.show');
     Route::resource('anexosanvav', AnexosAnVController::class,['parameters' => ['anexosanvav' => 'auditoria']]);
     Route::get('/acuerdosanvavcfif/export', [AnVCFIFController::class, 'export'])->name('acuerdosanvavcfif.export');
     Route::get('/anvavd/export', [AnVDesempenoController::class, 'export'])->name('anvavd.export');

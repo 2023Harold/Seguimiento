@@ -88,6 +88,7 @@ class RevisionesPliegosController extends Controller
         }
         if(auth()->user()->siglas_rol=='ATUS'){
            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($jefe->name,$jefe->puesto), now(), $jefe->unidad_administrativa_id, $jefe->id); 
+           auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($director->name,$director->puesto), now(), $director->unidad_administrativa_id, $director->id); 
         }
         if(auth()->user()->siglas_rol=='TUS'){
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($director->name,$director->puesto), now(), $director->unidad_administrativa_id, $director->id);

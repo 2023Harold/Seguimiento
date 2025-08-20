@@ -43,10 +43,10 @@ class PrasTurnoController extends Controller
         
 
         if(!empty($auditoria->entidad_fiscalizable_id)){
-            $usuariodirectorio=UserDirectorio::where('entidad_fiscalizable_id',$auditoria->entidad_fiscalizable_id)
-            ->where('cargo_asociado', 'Contralor Interno')
-            ->where('siglas_cargo_asociado', 'OIC')
-            ->where('estatus', 'Activo')->first();
+            // $usuariodirectorio=UserDirectorio::where('entidad_fiscalizable_id',$auditoria->entidad_fiscalizable_id)
+            // ->where('cargo_asociado', 'Contralor Interno')
+            // ->where('siglas_cargo_asociado', 'OIC')
+            // ->where('estatus', 'Activo')->first();
         }
        
         $nombreuseroic=null;
