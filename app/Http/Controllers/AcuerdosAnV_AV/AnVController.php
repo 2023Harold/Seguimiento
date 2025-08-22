@@ -29,9 +29,9 @@ class AnVController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(FolioCRR $folio)
     {
-        //
+        dd($folio);
     }
 
     /**
@@ -41,6 +41,7 @@ class AnVController extends Controller
      */
     public function create(FolioCRR $folio)
     {
+        //dd($folio);
         //$folio = FolioCRR::find(getSession('folio_id_session'));  
         $acuerdoaccion = "Agregar";
         $acuerdoanvav = new AcuerdosValoracion();
@@ -106,9 +107,10 @@ class AnVController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(AcuerdosValoracion $acuerdoanvav)
+    public function edit(AcuerdosValoracion $folio)
     {
-        //dd($acuerdoanvav);
+        $acuerdoanvav = $folio;   
+        
         $acuerdoanvav_tipo_of = $acuerdoanvav->tipo_doc;
         $folio = FolioCRR::find(getSession('folio_id_session'));  
         $acuerdoaccion = "Editar";
@@ -128,9 +130,9 @@ class AnVController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AcuerdosValoracion $acuerdoanvav)
+    public function update(Request $request, AcuerdosValoracion $folio)
     {
-          
+        $acuerdoanvav = $folio;
         $folio = FolioCRR::find(getSession('folio_id_session'));  
         $request['usuario_modificacion_id'] = auth()->id();
         //dd($request); 
@@ -152,4 +154,21 @@ class AnVController extends Controller
         //
     }
 
+
+    public function anvcrear(FolioCRR $folio)
+    {
+        //dd($folio);
+        //$folio = FolioCRR::find(getSession('folio_id_session'));  
+        $acuerdoaccion = "Agregar";
+        $acuerdoanvav = new AcuerdosValoracion();
+        //DD($folio,$acuerdoaccion);
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
+        setSession('folio_id_session',$folio->id);
+        $acuerdoanvav_tipo_of = "";
+        //dd($folio->numero_oficio);
+
+        return view('folios.acuerdosanvav.form', compact('auditoria','acuerdoaccion','acuerdoanvav','folio','acuerdoanvav_tipo_of','remitentes'));
+    
+    }
 }

@@ -2,7 +2,7 @@
 
 @section('breadcrums')
     @if (empty($remitente->nombre_remitente))
-        {{Breadcrumbs::render('remitentes.create', $folioscrr) }}
+        {{Breadcrumbs::render('remitentes.remitentecrear', $folioscrr) }}
     @else
         {{Breadcrumbs::render('remitentes.edit', $remitente) }}
     @endif

@@ -240,16 +240,17 @@
                                                 <a href="{{ route('acuerdoconclusionacuse.edit', $auditoria->acuerdoconclusion) }}" class="btn btn-primary">
                                                     <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
                                                 </a>
+											@else	
+												@can('acuerdoconclusionacusecp.show')
+													<a href="{{ route('acuerdoconclusionacusecp.show', $auditoria->acuerdoconclusion) }}" class="btn btn-secondary" >
+														<img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+													</a>
+												@endcan
+											
                                             @endcan
-                                        @endif
-                                    @else                                          
-                                        @can('acuerdoconclusionacusecp.show')
-                                            <a href="{{ route('acuerdoconclusionacusecp.show', $auditoria->acuerdoconclusion) }}" class="btn btn-secondary" >
-                                                <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
-                                            </a>
-                                        @endcan                                   
-                                        </td>
-                                    @endif 
+                                        @endif                                
+									</td>
+                                @endif 
                                 </tr>
                            {{-- {{ dd($auditoria->acuerdoconclusion->movimientos); }}} --}}
                             @if (!empty($auditoria->acuerdoconclusion)&&!empty($auditoria->acuerdoconclusion->movimientos))
@@ -473,14 +474,14 @@
                                             <a href="{{ route('acuerdoconclusionacuse.edit', $auditoria->acuerdoconclusionpliegos) }}" class="btn btn-primary">
                                                 <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
                                             </a>
+                                        @else
+                                            @can('acuerdoconclusionacuse.show')
+                                                <a href="{{ route('acuerdoconclusionacuse.show', $auditoria->acuerdoconclusionpliegos) }}" class="btn btn-secondary" >
+                                                        <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+                                                </a>
+                                            @endcan
                                         @endcan
                                     @endif
-                            @else                                          
-                                @can('acuerdoconclusionacuse.show')
-                                    <a href="{{ route('acuerdoconclusionacuse.show', $auditoria->acuerdoconclusionpliegos) }}" class="btn btn-secondary" >
-                                            <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
-                                    </a>
-                                @endcan
                                 </td>
                             @endif       
                         </tr>

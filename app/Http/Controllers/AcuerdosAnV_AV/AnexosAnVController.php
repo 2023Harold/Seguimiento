@@ -59,6 +59,7 @@ class AnexosAnVController extends Controller
     
     public function create(Request $request)
     {  
+        
         $acuerdoanvav = AcuerdosValoracion::find(getSession('anvav_id_session'));
         $folio = FolioCRR::find(getSession('folio_id_session'));  
         //dd("anexos anv av create :D",$acuerdoanvav);

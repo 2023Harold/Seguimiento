@@ -18,10 +18,10 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
 
-                 @can('remitentes.create') 
+                 @can('remitentes.remitentecrear') 
                     <div class="d-flex justify-content-end">
                         {{--<a class="btn btn-icon bi bi-person-plus-fill text-sistema fs-1" href="#"></a>--}}
-                        <a href="{{ route('remitentes.create', $folioscrr) }}" class="btn btn-primary"> 
+                        <a href="{{ route('remitentes.remitentecrear', $folioscrr) }}" class="btn btn-primary"> 
                             <i class="bi bi-person-plus-fill fs-1"></i> Agregar Remitente 
                         </a>
                     </div>

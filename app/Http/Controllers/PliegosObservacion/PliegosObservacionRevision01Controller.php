@@ -100,7 +100,7 @@ class PliegosObservacionRevision01Controller extends Controller
             'La aprobación ha sido registrada y se ha enviado a revisión del superior.' :
             'El rechazo ha sido registrado.'
         );
-        $url = route('recomendacionesatencion.index');
+        $url = route('pliegosobservacionatencion.index');
         $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $pliegosobservacion).'/RevL')->first();
         $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($pliegosobservacion)."/Rechazo")->first();
         $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);

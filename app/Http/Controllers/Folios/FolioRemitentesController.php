@@ -38,10 +38,7 @@ class FolioRemitentesController extends Controller
      */
     public function create(FolioCrr $folioscrr)
     {
-        $folioremitente = new RemitentesFolio();
-        $auditoria = Auditoria::find(getSession('auditoria_id'));
-
-        return view('folios.remitentes.form', compact('auditoria','folioscrr', 'folioremitente'));
+        
     }
 
     /**
@@ -81,8 +78,9 @@ class FolioRemitentesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, RemitentesFolio $remitente)
-    {
+    public function edit(Request $request, RemitentesFolio $folioscrr)
+    {   
+        $remitente = $folioscrr;
         $folioscrr = FolioCrr::where('id', $remitente->folio_id)->first();
         $folioremitente = $remitente;
         $auditoria = Auditoria::find(getSession('auditoria_id'));
@@ -97,13 +95,15 @@ class FolioRemitentesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RemitentesFolio $remitente)
+    public function update(Request $request, RemitentesFolio $folioscrr)
     {
-        $folioscrr = FolioCrr::where('id', $remitente->folio_id)->first();
+        $remitente = $folioscrr;
+        $folioscrr = FolioCrr::where('id', $request->folio_id)->first();
+        //dd($folioscrr);
         $request['usuario_modificacion_id'] = auth()->id();
         $remitente->update($request->all());
 
-        setMessage('El Remitente del Folio:'.$folioscrr->folio.' ha sido actualizado');
+        setMessage('El Remitente del Folio: '.$folioscrr->folio.' ha sido actualizado');
 
         return redirect()->route('remitentes.index');
 		
@@ -118,6 +118,15 @@ class FolioRemitentesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function remitentecrear(FolioCrr $folioscrr)
+    {
+        //dd($folioscrr);
+        $folioremitente = new RemitentesFolio();
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+
+        return view('folios.remitentes.form', compact('auditoria','folioscrr', 'folioremitente'));
     }
 
     private function setQuery($request)

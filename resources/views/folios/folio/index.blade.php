@@ -77,7 +77,7 @@
                                 @if (empty($folio->AnV_AV))
                                     @if(auth()->user()->siglas_rol=="LP")
                                         <td class="text-center">
-                                            <a href="{{ route('acuerdosanvav.create', $folio) }}" class="btn btn-primary">
+                                            <a href="{{ route('acuerdosanvav.anvcrear', $folio) }}" class="btn btn-primary">
                                                 <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Agregar
                                             </a>
                                         </td>

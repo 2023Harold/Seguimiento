@@ -172,7 +172,7 @@ class AnVCFIFController extends Controller
         }
         $mun01 = "";
         //}else
-        if($auditoria->entidadFiscalizable->Ambito == "Municipal"){
+        if(optional($auditoria->entidadFiscalizable)->Ambito == "Municipal"){
             $mun01 = "México";
             $ambito01 = "115 fracción IV penúltimo párrafo,";
         }

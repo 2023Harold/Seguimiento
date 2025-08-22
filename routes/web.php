@@ -24,7 +24,7 @@ use App\Http\Controllers\AgregarAccionesRevision01Controller;
 use App\Http\Controllers\AgregarAccionesRevisionController;
 use App\Http\Controllers\AgregarAccionesValidacionController;
 use App\Http\Controllers\Cedulas\AgregarCedulaInicialController;
-use App\Http\Controllers\AgregarTipologiaAccionController;
+//use App\Http\Controllers\AgregarTipologiaAccionController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\Asignaciones\AsignacionAccionController;
@@ -423,7 +423,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
      Route::resource('agregaraccionesautorizacion', AgregarAccionesAutorizacionController::class, ['parameters' => ['agregaraccionesautorizacion' => 'accion']]);
     //  Route::resource('tipologiaacciones', TipologiaAccionesController::class);
     //  Route::get('/tipologiaacciones/create/{auditoria}', [TipologiaAccionesController::class,'create'])->name('tipologiaacciones.create') ;
-    Route::resource('agregartipologiaaccion', AgregarTipologiaAccionController::class, ['parameters' => ['agregartipologiaaccion' => 'accion']]);
+    //Route::resource('agregartipologiaaccion', AgregarTipologiaAccionController::class, ['parameters' => ['agregartipologiaaccion' => 'accion']]);
     Route::resource('tipologiaaccionenvio', TipologiaAccionEnvioController::class, ['parameters' => ['tipologiaaccionenvio' => 'accion']]);
     Route::resource('tipologiaaccionrevision01', TipologiaAccionRevision01Controller::class, ['parameters' => ['tipologiaaccionrevision01' => 'accion']]);
     
@@ -692,17 +692,15 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
 
     /*** Seguimiento - Auditorias - folios */
     Route::resource('folioscrr', FolioCRRController::class);
-    Route::resource('remitentes', FolioRemitentesController::class);
-    Route::get('/remitentes/create/{folioscrr}', [FolioRemitentesController::class, 'create'])->name('remitentes.creacion');
-    Route::get('/remitentes/edit/{remitente}', [FolioRemitentesController::class, 'edit'])->name('remitentes.editar');
+    Route::resource('remitentes', FolioRemitentesController::class,['parameters' => ['remitentes' => 'folioscrr']]);
+    Route::get('/remitentes/crear/{folioscrr}', [FolioRemitentesController::class, 'remitentecrear'])->name('remitentes.remitentecrear');
 
     /**Fin del apartado de Seguimiento - Auditorias - folios*/
-
+    
     /**Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
-    Route::resource('acuerdosanvav', AnVController::class,['parameters' => ['acuerdosanvav' => 'acuerdoanvav']]);
-    Route::get('/acuerdosanvav/create/{folio}', [AnVController::class, 'create'])->name('acuerdosanvav2.create');
-    Route::get('/acuerdosanvav/show/{folio}', [AnVController::class, 'show'])->name('acuerdosanvav2.show');
-    Route::resource('anexosanvav', AnexosAnVController::class,['parameters' => ['anexosanvav' => 'auditoria']]);
+    Route::resource('acuerdosanvav', AnVController::class,['parameters' => ['acuerdosanvav' => 'folio']]);
+    Route::get('/anvavd/crear/{folio}', [AnVController::class, 'anvcrear'])->name('acuerdosanvav.anvcrear');
+    
     Route::get('/acuerdosanvavcfif/export', [AnVCFIFController::class, 'export'])->name('acuerdosanvavcfif.export');
     Route::get('/anvavd/export', [AnVDesempenoController::class, 'export'])->name('anvavd.export');
     Route::get('/anvavl/exportea', [AnVLegalidadController::class, 'exportea'])->name('anvavl.exportea');

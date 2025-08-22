@@ -1016,9 +1016,9 @@ Breadcrumbs::for('remitentes.index', function (BreadcrumbTrail $trail, $auditori
 
 });
 
-Breadcrumbs::for('remitentes.create', function (BreadcrumbTrail $trail,$auditoria) {
+Breadcrumbs::for('remitentes.remitentecrear', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('remitentes.show',$auditoria);
-    $trail->push('Folios Remitentes', route('remitentes.create', $auditoria));
+    $trail->push('Folios Remitentes', route('remitentes.remitentecrear', $auditoria));
 });
 Breadcrumbs::for('remitentes.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('remitentes.show',$auditoria);

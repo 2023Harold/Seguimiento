@@ -109,9 +109,9 @@
                             @endif
                         </tbody>
                     </table>
-                    @can('anexosanvav.index')
+                    @can('anexosanvav.show')
                         <div class="float-end">
-                            <a href="{{ route('anexosanvav.index') }}" class="btn btn-primary">
+                            <a href="#" class="btn btn-primary">
                                 <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Acuses
                             </a>
                         </div>
