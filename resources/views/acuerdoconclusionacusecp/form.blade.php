@@ -22,7 +22,7 @@
                 @include('layouts.contextos._auditoria')
                 @include('layouts.contextos._acuerdoconclusion')
                 
-                {!! BootForm::open(['model' => $acuerdoconclusion,'update' => 'acuerdoconclusionacusecp.update','id' => 'form',]) !!}               
+               {!! BootForm::open(['model' => $acuerdoconclusion,'store' => 'acuerdoconclusionacuse.store','update' => 'acuerdoconclusionacuse.update','id' => 'form']) !!}
                 <div class="row">
                         <div class="col-md-6">
                             {!! archivo('oficio_recepcion', 'Comprobante de recepción depto. de notificaciones: *', old('oficio_recepcion', $acuerdoconclusion->oficio_recepcion)) !!}
@@ -41,10 +41,10 @@
                     </div>                
                     <div class="row">
                         <div class="col-md-12">
-                            @can('acuerdoconclusionacusecp.update') 
-                                @btnSubmit("Guardar")
+                            @can(['acuerdoconclusionacuse.store','acuerdoconclusionacuse.update']) 
+                              <button type="submit" class="btn btn-primary">Guardar</button>
                             @endcan
-                            @btnCancelar('Cancelar', route('acuerdoconclusion.index'))
+                            <a href="{{ route('acuerdoconclusion.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                         </div>
                     </div>
                 {!! BootForm::close() !!}

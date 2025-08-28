@@ -489,6 +489,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('acuerdoconclusionvalidacion', AcuerdoConclusionValidacionController::class, ['parameters' => ['acuerdoconclusionvalidacion' => 'auditoria']]);
     Route::resource('acuerdoconclusionautorizacion', AcuerdoConclusionAutorizacionController::class, ['parameters' => ['acuerdoconclusionautorizacion' => 'auditoria']]);
     Route::resource('acuerdoconclusionacuse', AcuerdoConclusionAcuseController::class, ['parameters' => ['acuerdoconclusionacuse' => 'acuerdoconclusion']]);
+    Route::resource('acuerdoconclusionacuseenvio', AcuerdoConclusionAcuseEnvioController::class, ['parameters' => ['acuerdoconclusionacuseenvio' => 'accion']]);
+    Route::resource('acuerdoconclusionrevision', AcuerdoConclusionAcuseRevisionController::class, ['parameters' => ['acuerdoconclusionrevision' => 'accion']]);
+
     // Route::resource('acuerdoconclusionacuse', AcuerdoConclusionAcuseController::class, ['parameters' => ['acuerdoconclusionacuse' => 'acuerdoconclusion']]);
     Route::resource('acuerdoconclusionacusecp', AcuerdoConclusionAcuseCPController::class, ['parameters' => ['acuerdoconclusionacusecp' => 'acuerdoconclusion']]);
     /**Fin del apartado de Seguimiento - Auditorias - Acuerdo de conclusion*/
