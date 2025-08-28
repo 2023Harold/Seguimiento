@@ -36,10 +36,11 @@ class AcuerdoConclusionAcuseController extends Controller
      */
     public function store(Request $request)
     {
-        mover_archivos($request, ['oficio_acuerdo'], null);
-        $request['usuario_creacion_id'] = auth()->user()->id;
+        mover_archivos($request, ['oficio_recepcion','oficio_acuerdo','oficio_acuse'], null);
+        $request['acuse_usuario_creacion_id'] = auth()->user()->id;
+
         $request['auditoria_id']=getSession('acuerdoconclusion_auditoria_id');     
-        $comparecencia = AcuerdoConclusion::create($request->all());
+        $acuerdoconclusion = AcuerdoConclusion::create($request->all());
     }
 
     /**
@@ -52,7 +53,7 @@ class AcuerdoConclusionAcuseController extends Controller
     {
          $auditoria = $acuerdoconclusion->auditoria; 
 
-        return view('acuerdoconclusionacusecp.show', compact('auditoria', 'acuerdoconclusion'));
+        return view('acuerdoconclusionacuse.show', compact('auditoria', 'acuerdoconclusion'));
     }
 
     /**
@@ -63,7 +64,8 @@ class AcuerdoConclusionAcuseController extends Controller
      */
     public function edit(AcuerdoConclusion $acuerdoconclusion)
     {
-     $auditoria=$acuerdoconclusion->auditoria;
+        $auditoria=$acuerdoconclusion->auditoria;
+        $request['acuse_usuario_creacion_id'] = auth()->user()->id;
 
         return view('acuerdoconclusionacusecp.form', compact('acuerdoconclusion', 'auditoria'));   
     }
@@ -77,7 +79,7 @@ class AcuerdoConclusionAcuseController extends Controller
      */
     public function update(Request $request, AcuerdoConclusion $acuerdoconclusion)
     {
-        $request['usuario_modificacion_id'] = auth()->id();
+        $request['acuse_usuario_modificacion_id'] = auth()->id();
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($comparecencia->auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_recepcion', 'oficio_acuse'], null, $ruta);
         mover_archivos($request, ['oficio_recepcion','oficio_acuerdo','oficio_acuse']);
