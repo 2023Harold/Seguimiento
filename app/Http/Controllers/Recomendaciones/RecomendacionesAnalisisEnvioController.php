@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Recomendaciones;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\Notificacion;
 use App\Models\Recomendaciones;
 use App\Models\RecomendacionesContestacion;
+use DB;
 use Illuminate\Http\Request;
 use URL;
 
@@ -62,6 +65,7 @@ class RecomendacionesAnalisisEnvioController extends Controller
      */
     public function edit(Recomendaciones $recomendacion)
     {
+        $auditoria = Auditoria::find($recomendacion->auditoria_id); 
         $request=new Request();
         if(empty($recomendacion->listado_documentos)){
             setMessage('No se ha capturado información en el apartado de listado de documentos.','error');
@@ -104,6 +108,22 @@ class RecomendacionesAnalisisEnvioController extends Controller
         
         auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->lider->unidad_administrativa_id,$recomendacion->accion->lider->id,  GenerarLlave( $recomendacion).'/RevL', $url);
         setMessage('Se han enviado la información de la recomendación a revisión');
+
+        $staffA = AuditoriaUsuarios::select('segusers.id','segusers.name','segusers.puesto', 'segusers.unidad_administrativa_id', 'segusers.siglas_rol', 'segusers.estatus',   
+                                            DB::raw("(case when(segusers.id = segauditoria_usuarios.staff_id) THEN segusers.name ELSE NULL END) AS staffAsignado01"),
+                                            )->join('segusers', 'segusers.id', '=', 'segauditoria_usuarios.staff_id')->where('auditoria_id', $auditoria->id)->get()->toArray();
+        foreach ($staffA as $staff) {
+            if (!empty($staff['id'])) {
+                $tituloStaff = 'Revisión del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
+
+                $mensajeStaff = '<strong>Estimado(a) '.$staff['name'].', '.$staff['puesto'].':</strong><br>'
+                                .auth()->user()->name.', '.auth()->user()->puesto.
+                                '; ha aprobado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
+                                ', por lo que se le notifica para su conocimiento.';
+
+                auth()->user()->insertNotificacion($tituloStaff, $mensajeStaff, now(), $staff['unidad_administrativa_id'], $staff['id'], GenerarLlave( $recomendacion).'/Consulta', $url);
+            }
+        }
         
         return redirect()->route('recomendacionesatencion.index');
     }

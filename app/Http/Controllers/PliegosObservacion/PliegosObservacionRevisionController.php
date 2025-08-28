@@ -115,7 +115,7 @@ class PliegosObservacionRevisionController extends Controller
         if ($request->estatus == 'Aprobado') {
             $pliegosobservacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
 
-            $titulo = 'Validación del registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
+            $titulo = ' del registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
 
             $mensaje = '<strong>Estimado(a) '.$director->name.', '.$director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
@@ -128,8 +128,8 @@ class PliegosObservacionRevisionController extends Controller
             $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->userCreacion->name.', '.$pliegosobservacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->userCreacion->unidad_administrativa_id, $pliegosobservacion->userCreacion->id, GenerarLlave($pliegosobservacion).'/Rechazo', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($pliegosobservacion->accion->lider->name,$pliegosobservacion->accion->lider->puesto,$pliegosobservacion), now(), $pliegosobservacion->accion->lider->unidad_administrativa_id, $pliegosobservacion->accion->lider->id, GenerarLlave($pliegosobservacion).'/Rechazo', $url);
+            auth()->user()->insertNotificacion('Validación'.$titulo, $mensaje, now(), $pliegosobservacion->userCreacion->unidad_administrativa_id, $pliegosobservacion->userCreacion->id, GenerarLlave($pliegosobservacion).'/Rechazo', $url);
+            auth()->user()->insertNotificacion('Revisión'.$titulo, $this->mensajeRechazo($pliegosobservacion->accion->lider->name,$pliegosobservacion->accion->lider->puesto,$pliegosobservacion), now(), $pliegosobservacion->accion->lider->unidad_administrativa_id, $pliegosobservacion->accion->lider->id, GenerarLlave($pliegosobservacion).'/Rechazo', $url);
         }
 
         return redirect()->route('pliegosobservacionatencion.index');

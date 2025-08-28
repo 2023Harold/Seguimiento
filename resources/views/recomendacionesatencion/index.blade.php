@@ -251,29 +251,17 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    {{-- @if(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente')
+                                    @can( 'respuestacomentariosrecomendaciones.edit')
+                                        @if (($comentario->estatus=='Pendiente' && $comentario->de_usuario_id==$asistente_titular->id))
+                                            <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariosrecomendaciones.edit',$comentario) }}">
+                                                Atender 
+                                            </a>										                                       										                                       
+                                        @endif 
+                                    @endcan
+                                    @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id!=$asistente_titular->id))
                                         <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendacionesatencion.edit',$comentario) }}">
                                             Atender
-                                        </a>
-                                    @endif --}}
-                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Analisis")                                    
-                                         <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariosrecomendaciones.edit',$comentario) }}">
-                                                Atender
-                                        </a>                                      
-                                                                           
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Conclusión")
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariosrecomendaciones.edit',$comentario ) }}">
-                                                Atender
-                                        </a>
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Listado Documentos")                                     
-                                            {{-- {{ dd($comentario); }} --}}
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariosrecomendaciones.edit',$comentario) }}">
-                                                Atender
-                                            </a>
-                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='101')))
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendacionesatencion.edit',$comentario) }}">
-                                                Atender
-                                            </a>                                        
+                                        </a>                                                                                
                                     @endif   
                                 </td>
                            </tr>
@@ -336,16 +324,16 @@
     <script>
         $(document).ready(function() {
             $('.popupcomentario').colorbox({
-                width:"80%",
-                height:"1050px",
-                maxWidth:700,
-                maxHeight:"1050px",
+                width:"25%",
+                height:"250px",
+                maxWidth:800,
+                maxHeight:"250px",
                 iframe: true,
                 onClosed: function() {
                     location.reload(true);
                 },
                 onComplete: function () {
-                 $(this).colorbox.resize({width:"80%",maxWidth:600, height:"800px", maxHeight:"800px"});
+                 $(this).colorbox.resize({width:"85%",maxWidth:800, height:"950px", maxHeight:"950px"});
                  $(window).trigger("resize");
                 }
             });

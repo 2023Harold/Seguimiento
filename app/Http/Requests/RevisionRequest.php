@@ -24,14 +24,14 @@ class RevisionRequest extends FormRequest
     public function rules()
     {
         return [
-            'comentario' => 'required|string',           
+            //'comentario' => 'required|string',           
         ];
     }
 
     public function attributes()
     {
         return [
-            'comentario' => 'comentario',
+            //'comentario' => 'respuesta',
         ];
     }
 

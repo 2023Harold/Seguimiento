@@ -675,18 +675,31 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
     function GenerarLlave($Accion){
         //dd($Accion);
         if(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Recomendación')){
-        //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
-        $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/REC-{$Accion->id}";
+            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
+            $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/REC-{$Accion->id}";
        
         }elseif(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Pliego de observación')){
             //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
             $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/PO-{$Accion->id}";
+
         }elseif(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Solicitud de aclaración')){
             //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
             $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/SOL-{$Accion->id}";
+
         }elseif(!empty($Accion->acuerdo_conclusion)){
-            //AUDITORIA - Acuero Conclusion 
+            //AUDITORIA - Acuerdo Conclusion 
             $llave = "AUD-{$Accion->auditoria_id}/AcuerdoCon-{$Accion->id}";
+
+        }elseif((!empty($Accion->tipo) && ($Accion->tipo=='Recomendación'))){
+            //COMENTARIOS
+            $llave = "AUD-{$Accion->segauditoria_id}/AudAc-{$Accion->id}/REC-{$Accion->recomendaciones->id}";
+
+        }elseif(!empty($Accion->tipo) && ($Accion->tipo=='Pliego de observación')){
+            //COMENTARIOS
+            $llave = "AUD-{$Accion->segauditoria_id}/AudAc-{$Accion->id}/PO-{$Accion->pliegosobservacion->id}";
+        }elseif(!empty($Accion->tipo) && ($Accion->tipo=='Solicitud de aclaración')){
+            //comentarios
+            $llave = "AUD-{$Accion->segauditoria_id}/AudAc-{$Accion->id}/SOL-{$Accion->solicitudesaclaracion->id}";
         }
         return $llave;
     }

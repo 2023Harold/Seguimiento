@@ -31,7 +31,8 @@ class Revisiones extends Model
         'created_at',
         'updated_at', 
         'muestra_rev',           
-        'tipo',           
+        'tipo',          
+        'universo_rev',
     ];
 
     protected $dates = [
@@ -47,6 +48,11 @@ class Revisiones extends Model
     public function deusuario()
     {
         return $this->belongsTo(User::class, 'de_usuario_id');
+    }
+
+    public function usuarioCreacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_creacion_id', 'de_usuario_id');
     }
 
     public function respuestas()

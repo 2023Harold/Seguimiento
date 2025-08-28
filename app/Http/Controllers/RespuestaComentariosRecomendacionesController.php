@@ -35,7 +35,18 @@ class RespuestaComentariosRecomendacionesController extends Controller
      */
     public function create()
     {
-        //
+        $comentario = Revisiones::find(getSession('comentarioAsis_id'));        
+        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
+        $acciones=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        $AtenderComentario = new Revisiones();
+        $accion=$recomendacion->accion;
+        $accion2 = 'Atender';
+        $accion3 = "crear";
+
+        $tipo = $comentario->tipo; // tipo para identificar el ar
+
+        return view('respuestacomentarios.form',compact('recomendacion','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
+    
     }
 
     /**
@@ -76,10 +87,16 @@ class RespuestaComentariosRecomendacionesController extends Controller
         // dd($accion);
         $acciones=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
         $tipo = $comentario->tipo; // tipo para identificar el ar
-        // $auditoria=$accion2->auditoria;
+        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
+        $accion3 = "Editar";
+        $AtenderComentario = $respuesta;
 
+        if(empty($respuesta)){
+            return redirect()->route('respuestacomentariosrecomendaciones.create');
+        }else{
+            return view('respuestacomentarios.form',compact('recomendacion','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
+        }
 
-        return view('respuestacomentarios.form',compact('recomendacion','accion','accion2','comentario','tipo'));
     }
 
     /**

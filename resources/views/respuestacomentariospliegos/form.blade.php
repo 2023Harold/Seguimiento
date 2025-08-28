@@ -9,42 +9,105 @@
     <div class="card-body">
         
         @include('flash::message')
-        {!!BootForm::open(['model' => $pliegos, 'store' => 'respuestacomentariospliegos.store', 'update' => 'respuestacomentariospliegos.update', 'id' => 'form']) !!}
+        {!!BootForm::open(['model' => $AtenderComentario, 'store' => 'respuestacomentariospliegos.store', 'update' => 'respuestacomentariospliegos.update', 'id' => 'form']) !!}
         {{-- {!!BootForm::open(['model' => $comentario, 'store' => 'respuestacomentariosrecomendaciones.store', 'update' => 'respuestacomentariosrecomendaciones.update', 'id' => 'form']) !!} --}}
             <div class="row">
-                {{-- {{ dd($recomendacion); }} --}}
-                {{-- {!!BootForm::hidden('tipo', $tipo) !!} --}}                
-                @if($tipo == "Analisis")
-                    <div class="col-md-12">
-                        {!!BootForm::textarea('analisis','Análisis: *', old('analisis',$pliegos->analisis),['rows'=>'10']) !!}
-                    </div>
-                @endif
-                @if($tipo == "Conclusión")
-                    <div class="col-md-12">
-                        {!!BootForm::textarea('conclusion','Conclusión: *', old('conclusion',$pliegos->conclusion),['rows'=>'10']) !!}
-                    </div>
-                @endif  
-                @if($tipo =="Listado Documentos" )
-                    <div class="col-md-12">
-                        {!!BootForm::textarea('listado_documentos','Listado de Documentos: *', old('listado_documentos', $pliegos->listado_documentos),['rows'=>'10']) !!}
-                    </div>
-                @endif
-            </div>                
-            <div class="row">                
-                 <div class="col-md-12">
-                    
-                    {!!BootForm::textarea('comentario', 'Comentario:  *', old("comentario", ""))!!}
+                
+                <div class="col-md-6">
+                        {!!BootForm::textarea('muestra_rev','Comentario que se esta atendiendo: ', old('analisis',$comentario->muestra_rev),['rows'=>'10', 'disabled']) !!}
+                </div>
+                <div class="col-md-6">
+                        {!!BootForm::textarea('comentario_rev','.', old('analisis',$comentario->comentario),['rows'=>'10', 'disabled']) !!}
                 </div>
             </div>
             <div class="row">
+                {{-- {{ dd($recomendacion); }} --}}
+                {{-- {!!BootForm::hidden('tipo', $tipo) !!} --}}    
+                @if ($accion3 == "crear")    
+                    @if($tipo == "Analisis")
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('analisis','Análisis: *', old('analisis',$comentario->universo_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif
+                    @if($tipo == "Conclusión")
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('conclusion','Conclusión: *', old('conclusion',$comentario->universo_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif  
+                    @if($tipo =="Listado Documentos" )
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('listado_documentos','Listado de Documentos: *', old('listado_documentos', $comentario->universo_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif
+                @else
+                    @if($tipo == "Analisis")
+                    
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('analisis','Análisis: *', old('analisis',$AtenderComentario->muestra_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif
+                    @if($tipo == "Conclusión")
+                    
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('conclusion','Conclusión: *', old('conclusion',$AtenderComentario->muestra_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif  
+                    @if($tipo =="Listado Documentos" )
+                    
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('listado_documentos','Listado de Documentos: *', old('listado_documentos', $AtenderComentario->muestra_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif
+                @endif  
+            </div>  
+            <div class="row" style="padding-left: 2rem;">
+                <div class="col-md-6">
+                    {!!BootForm::radios("estatus", ' ', [ 'Guardar' => 'Guardar', 'Enviar' => 'Enviar'], 'Guardar', false, ['class' => 'i-checks enviar', 'id' => 'estatus']) !!}
+                </div>
+            </div>      
+            <div class="row" id="comentario-row" style="display: none;">               
+                 <div class="col-md-12">
+                    {!!BootForm::textarea('comentario', 'Respuesta: *', old("comentario", ))!!}
+                </div>
+            </div>
+            
+            <div class="row" id="btn-guardar">
                 <div class="col-md-12">
                     @btnSubmit("Guardar")
                 </div>
             </div>
+
+            <div class="row" id="btn-enviar" style="display: none;">
+                <div class="col-md-12">
+                    @btnSubmit("Enviar")
+                </div>
+            </div>
+
         {!!BootForm::close() !!}
     </div>
 </div>
 @endsection
 @section('script')
-{!!JsValidator::formRequest('App\Http\Requests\RevisionRequest') !!}
+    {!!JsValidator::formRequest('App\Http\Requests\RevisionRequest') !!}
+    <script>
+        $(document).ready(function () {
+            function toggleElements() {
+                const selected = $('input[name="estatus"]:checked').val();
+                if (selected === 'Guardar') {
+                    $('#comentario-row').hide();
+                    $('#btn-enviar').hide();
+                    $('#btn-guardar').show();
+                    $('#comentario').val(null);
+                } else if (selected === 'Enviar') {
+                    $('#comentario-row').show();
+                    $('#btn-enviar').show();
+                    $('#btn-guardar').hide();
+                }
+            }
+
+            toggleElements();
+            $('input[name="estatus"]').on('change', toggleElements);
+        });
+    </script>
+
 @endsection

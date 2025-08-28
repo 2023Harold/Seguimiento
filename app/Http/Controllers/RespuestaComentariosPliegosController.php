@@ -31,9 +31,20 @@ class RespuestaComentariosPliegosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $comentario = Revisiones::find(getSession('comentarioAsis_id'));        
+        $pliegos = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
+        $acciones=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $AtenderComentario = new Revisiones();
+        $accion=$pliegos->accion;
+        $accion2 = 'Atender';
+        $accion3 = "crear";
+
+        $tipo = $comentario->tipo; // tipo para identificar el ar
+
+        return view('respuestacomentariospliegos.form',compact('pliegos','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
+    
     }
 
     /**
@@ -44,7 +55,39 @@ class RespuestaComentariosPliegosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $comentario = Revisiones::find(getSession('comentarioAsis_id'));        
+        $pliegos = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
+
+        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
+        $accion2 = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        $request->merge([
+                'id_revision'=>$comentario->id,
+                'de_usuario_id'=>auth()->user()->id,
+                'para_usuario_id'=>intval($accion2->analista_asignado_id),
+                'accion'=>'Pliego de Observación',
+                'accion_id'=>$accion2->id,            
+                'usuario_creacion_id'=>auth()->user()->id,
+            ]);
+        if($comentario->tipo == "Analisis"){
+            $request->merge(['muestra_rev'=> $request->analisis]);     
+        }elseif($comentario->tipo == "Conclusión"){
+            $request->merge(['muestra_rev'=> $request->conclusion]);
+
+        }elseif($comentario->tipo == "Listado Documentos"){
+            $request->merge(['muestra_rev'=> $request->listado_documentos]);
+        }  
+
+        if($request->estatus=="Enviar"){
+            $pliegos->update($request->all());  
+            $comentario->update(['estatus'=>'Atendido']);  
+            setMessage('se atendio el comentario correctamente.');        
+        }else{
+            $request->merge(['comentario'=> " "]);
+            setMessage('se guardo el comentario correctamente.');      
+        }
+        Revisiones::create($request->all());  
+
+        return view('layouts.close');
     }
 
     /**
@@ -66,16 +109,21 @@ class RespuestaComentariosPliegosController extends Controller
      */
     public function edit(Revisiones $comentario,Request $request)
     {
-    //    dd($documento);
         setSession('comentarioAsis_id',$comentario->id);
-        // dd($comentario);
         $pliegos= PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));        
         $accion=$pliegos->accion;
         $accion2 = 'Atender';
         $acciones=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $tipo = $comentario->tipo; // tipo para identificar el ar
-
-        return view('respuestacomentariospliegos.form',compact('pliegos','accion','accion2','comentario','tipo'));
+        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
+        $accion3 = "Editar";
+        $AtenderComentario = $respuesta;
+       // dd($AtenderComentario);
+        if(empty($respuesta)){
+            return redirect()->route('respuestacomentariospliegos.create');
+        }else{
+            return view('respuestacomentariospliegos.form',compact('pliegos','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
+        }
     }
 
     /**
@@ -87,23 +135,28 @@ class RespuestaComentariosPliegosController extends Controller
      */
     public function update(Request $request)
     {
+       // dd($request);
         $comentario = Revisiones::find(getSession('comentarioAsis_id'));        
         $pliegos = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
-        $pliegos->update($request->all());        
-        $comentario->update(['estatus'=>'Atendido']);        
-        $accion2 = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
-        
-        $request->merge([
-            'id_revision'=>$comentario->id,
-            'de_usuario_id'=>auth()->user()->id,
-            'para_usuario_id'=>intval($accion2->analista_asignado_id),
-            'accion'=>'Pliego de Observación',
-            'accion_id'=>$accion2->id,            
-            'usuario_creacion_id'=>auth()->user()->id,
-        ]);                  
-        Revisiones::create($request->all());        
-        setMessage('se atendio el comentario correctamente.');        
-        
+        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
+
+        if($request->estatus=="Enviar"){
+            $pliegos->update($request->all());  
+            $comentario->update(['estatus'=>'Atendido']);     
+            setMessage('se atendio el comentario correctamente.');      
+
+        }else{
+            setMessage('se guardo el comentario correctamente.');      
+        }
+        if($comentario->tipo == "Analisis"){
+           $respuesta->update(['muestra_rev'=> $request->analisis]);     
+        }elseif($comentario->tipo == "Conclusión"){
+            $respuesta->update(['muestra_rev'=> $request->conclusion]);
+
+        }elseif($comentario->tipo == "Listado Documentos"){
+            $respuesta->update(['muestra_rev'=> $request->listado_documentos]);
+        }
+        $respuesta->update(['comentario'=> $request->comentario]);
         return view('layouts.close');
     }
 
@@ -117,4 +170,5 @@ class RespuestaComentariosPliegosController extends Controller
     {
         //
     }
+
 }

@@ -569,6 +569,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('revisionespliegos', RevisionesPliegosController::class, ['parameters' => ['revisionespliegos' => 'comentario']]);
     Route::resource('revisionespliegosatencion', RevisionesPliegosAtencionController::class, ['parameters' => ['revisionespliegosatencion' => 'comentario']]);
     Route::resource('respuestacomentariospliegos', RespuestaComentariosPliegosController::class, ['parameters' => ['respuestacomentariospliegos' => 'comentario']]);     
+    Route::get('/respuestacomentariospliegos/enviar/{comentario}', [RespuestaComentariosPliegosController::class, 'enviarcomentario'])->name('respuestacomentariospliegos.enviarcomentario');
     /**Fin del apartado de Seguimiento - Auditorias - Pliegos*/
 
     /**Seguimiento - Auditorias - Cedulas*/

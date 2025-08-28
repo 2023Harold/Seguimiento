@@ -129,26 +129,24 @@
                     </table>
                 </td>                  
             </tr>
-            <tr>
-                <td colspan="8">
-                    <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                        <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>OBSERVACIÓN PROMOVIDA:</strong></span></td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                                <span>
-									<strong>
-										@php
-											 echo nl2br(htmlentities($accion->accion));									
-										@endphp  
-									</strong>
-								</span> 
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr> 
+			</table>
+			
+            <div width="100%" >
+				<div style="width: 100%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;">
+					<span style="font-size: 0.6rem"><strong>OBSERVACIÓN PROMOVIDA:</strong></span>
+				</div>
+				<div style="padding: 10px 40px 10px 20px; text-align: justify; border: .5 solid black; width:96%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
+					<span>
+						<strong>
+							@php
+								echo nl2br(htmlentities($accion->accion));									
+							@endphp  
+						</strong>
+					</span> 
+				</div>
+                      
+            </div> 
+			<table >
             @if ($accion->tipo!='Recomendación')
             <tr>
                 <td colspan="8">
@@ -234,7 +232,7 @@
                 </td>
             </tr>         
         </table>
-		<div style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:96%; color: #960048; vertical-align:middle;font-size: 0.6rem; page-break-after:auto;">
+		<div style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:96%; color: #960048; vertical-align:middle;font-size: 0.6rem; ">
 		<span style="font-size: 0.6rem">
                                     <strong>
 										@php
@@ -298,7 +296,7 @@
                     </tr>
                     <tr>
                         
-                        <td colspan="6" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe->name }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
+                        <td colspan="6" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe->name }} <br> <span style="text-transform: uppercase">{{$jefe->puesto }}</span></strong></span></td>
 
                     </tr>
                     <tr>

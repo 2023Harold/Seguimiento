@@ -283,22 +283,17 @@
                                         @endif                                    
                                     </td>
                                     <td class="text-center">
-                                    @if (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Analisis")
-										<a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
-                                                Atender
-                                         </a>										
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Conclusión")
-											<a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
-                                                Atender
-                                            </a>
-                                    @elseif (auth()->user()->siglas_rol=='JD'&& $comentario->estatus=='Pendiente'&& $comentario->de_usuario_id==$asistente_titular->id && $comentario->tipo=="Listado Documentos")
-											<a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
-                                                Atender
-                                            </a>
-                                    @elseif(auth()->user()->siglas_rol=='ANA'&& $comentario->estatus=='Pendiente' && (empty($comentario->de_usuario_id=='101')))
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.edit',$comentario) }}">
-                                                Atender
-                                            </a>                                        
+                                    @can( 'respuestacomentariospliegos.edit')
+                                        @if (($comentario->estatus=='Pendiente' && $comentario->de_usuario_id==$asistente_titular->id))
+                                            <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
+                                                Atender 
+                                            </a>										                                       										                                       
+                                        @endif 
+                                    @endcan
+                                    @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id!=$asistente_titular->id))
+                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.edit',$comentario) }}">
+                                            Atender
+                                        </a>                                        
                                     @endif  
                                     </td>                                    
                             </tr>
@@ -327,7 +322,7 @@
                                                         <td class="text-center">{{ fecha($respuesta->created_at,'d/m/Y H:m:s') }}</td>
                                                         <td>
                                                             {{ $respuesta->deusuario->name }} <br>
-                                                            <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
+                                                            <small class="text-muted">{{ $respuesta->deusuario->puesto }}</small>
                                                         </td>
                                                         <td class="text-center">
                                                             <a href="{{ route('revisionespliegos.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
@@ -361,16 +356,16 @@
     <script>
         $(document).ready(function() {
             $('.popupcomentario').colorbox({
-                width:"65%",
-                height:"650px",
-                maxWidth:400,
-                maxHeight:"650px",
+                width:"25%",
+                height:"250px",
+                maxWidth:800,
+                maxHeight:"250px",
                 iframe: true,
                 onClosed: function() {
                     location.reload(true);
                 },
                 onComplete: function () {
-                 $(this).colorbox.resize({width:"65%",maxWidth:400, height:"650px", maxHeight:"650px"});
+                 $(this).colorbox.resize({width:"85%",maxWidth:800, height:"950px", maxHeight:"950px"});
                  $(window).trigger("resize");
                 }
             });
