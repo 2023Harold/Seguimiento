@@ -24,9 +24,14 @@ class RecomendacionesAccionesController extends Controller
     public function index(Request $request)
     {
         $auditoria = Auditoria::find(getSession('auditoria_id'));
-        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);       
+        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30); 
         
-        return view('recomendacionesacciones.index', compact('request','acciones', 'auditoria'));
+        $LayoutMonto = Recomendaciones::where('auditoria_id',$auditoria->id)->get();
+        $sumaMontoSolventadoRec = $LayoutMonto->sum('monto_solventado');
+        $restaMontoRec = $auditoria->total() - $sumaMontoSolventadoRec;
+        //dd(1);
+        
+        return view('recomendacionesacciones.index', compact('request','acciones', 'auditoria','sumaMontoSolventadoRec','restaMontoRec'));
     }
 
     /**

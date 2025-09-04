@@ -31,7 +31,11 @@ class PliegosObservacionAtencionContestacionController extends Controller
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion= PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
 
-        return view('pliegosatencioncontestacion.index', compact('contestaciones','auditoria','accion','pliegosobservacion','request'));
+        $LayoutMonto = PliegosObservacion::where('auditoria_id',$auditoria->id)->get();
+        $sumaMontoSolventadoPo = $LayoutMonto->sum('monto_solventado');
+        $restaMontoPo = $auditoria->total() - $sumaMontoSolventadoPo;
+
+        return view('pliegosatencioncontestacion.index', compact('contestaciones','auditoria','accion','pliegosobservacion','request','sumaMontoSolventadoPo','restaMontoPo'));
     }
 
     /**
@@ -93,7 +97,11 @@ class PliegosObservacionAtencionContestacionController extends Controller
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::find(getSession('pliegosobservacionatencion_id'));
 
-        return view('pliegosatencioncontestacion.show', compact('contestaciones','auditoria','accion','pliegosobservacion'));
+        $LayoutMonto = PliegosObservacion::where('auditoria_id',$auditoria->id)->get();
+        $sumaMontoSolventadoPo = $LayoutMonto->sum('monto_solventado');
+        $restaMontoPo = $auditoria->total() - $sumaMontoSolventadoPo;
+
+        return view('pliegosatencioncontestacion.show', compact('contestaciones','auditoria','accion','pliegosobservacion','sumaMontoSolventadoPo','restaMontoPo'));
     }
 
     /**

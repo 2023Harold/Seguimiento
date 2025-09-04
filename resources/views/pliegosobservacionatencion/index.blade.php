@@ -284,12 +284,13 @@
                                     </td>
                                     <td class="text-center">
                                     @can( 'respuestacomentariospliegos.edit')
-                                        @if (($comentario->estatus=='Pendiente' && $comentario->de_usuario_id==$asistente_titular->id))
+                                        @if (($comentario->estatus=='Pendiente' && ($comentario->de_usuario_id==$asistente_titular->id ||$comentario->de_usuario_id == $director->id )))
                                             <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
                                                 Atender 
                                             </a>										                                       										                                       
                                         @endif 
                                     @endcan
+                                    
                                     @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id!=$asistente_titular->id))
                                         <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.edit',$comentario) }}">
                                             Atender

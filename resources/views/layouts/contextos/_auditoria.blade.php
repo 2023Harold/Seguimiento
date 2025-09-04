@@ -29,7 +29,31 @@
         <span class="text-primary">
             {{ '$'.number_format( $auditoria->total(), 2) }}
         </span>
-    </div>    
+        @if (!empty($sumaMontoSolventadoPo))
+            <br>
+            <label>Monto aclarado:</label>
+            <span class="text-primary" >{{'$'.number_format($sumaMontoSolventadoPo, 2) }}</span>
+            <br>
+            <label>Monto no aclarado:</label>
+            <span class="text-primary" >{{'$'.number_format($restaMontoPo, 2) }}</span>
+        @elseif (!empty($sumaMontoSolventadoRec))
+            <br>
+            <label>Monto aclarado:</label>
+            <span class="text-primary" >{{'$'.number_format($sumaMontoSolventadoRec, 2) }}</span>
+            <br>
+            <label>Monto no aclarado:</label>
+            <span class="text-primary" >{{'$'.number_format($restaMontoRec, 2) }}</span>
+        @elseif (!empty($sumaMontoSolventadoSolAc))
+            <br>
+            <label>Monto aclarado:</label>
+            <span class="text-primary" >{{'$'.number_format($sumaMontoSolventadoSolAc, 2) }}</span>
+            <br>
+            <label>Monto no aclarado:</label>
+            <span class="text-primary" >{{'$'.number_format($restaMontoSolAc, 2) }}</span>
+        @endif
+
+    </div> 
+       
 </div>
 <div class="row">
     <div class="col-md-12"><hr></div>

@@ -23,7 +23,22 @@ class SolicitudesAclaracionAtencionController extends Controller
         $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
         $asistente_titular= user:: where ('siglas_rol', 'ATUS')->first();
 
-        return view('solicitudesaclaracionatencion.index',compact('solicitudesaclaracion','auditoria','accion','request','asistente_titular'));
+        if(getSession('cp')==2022){
+            $director=User::where('unidad_administrativa_id',substr($solicitudesaclaracion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $jefe=$solicitudesaclaracion->accion->depaasignado;
+            $lider=$solicitudesaclaracion->accion->lider;
+            $analista=$solicitudesaclaracion->accion->analista;
+        }else{
+            $director = $auditoria->directorasignado;
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
+        $LayoutMonto = SolicitudesAclaracion::where('auditoria_id',$auditoria->id)->get();
+        $sumaMontoSolventadoPo = $LayoutMonto->sum('monto_solventado');
+        $restaMontoPo = $auditoria->total() - $sumaMontoSolventadoPo;
+
+        return view('solicitudesaclaracionatencion.index',compact('solicitudesaclaracion','auditoria','accion','request','asistente_titular','restaMontoPo','sumaMontoSolventadoPo','director'));
     }
 
     /**

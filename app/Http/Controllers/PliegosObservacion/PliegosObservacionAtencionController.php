@@ -18,12 +18,28 @@ class PliegosObservacionAtencionController extends Controller
      */
     public function index(Request $request)
     {
+        
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
         $pliegosobservacion = PliegosObservacion::where('accion_id',getSession('pliegosobservacionauditoriaaccion_id'))->get();
         $asistente_titular= user:: where ('siglas_rol', 'ATUS')->first();
 
-        return view('pliegosobservacionatencion.index',compact('pliegosobservacion','auditoria','accion','request','asistente_titular'));
+        if(getSession('cp')==2022){
+            $director=User::where('unidad_administrativa_id',substr($pliegosobservacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $jefe=$pliegosobservacion->accion->depaasignado;
+            $lider=$pliegosobservacion->accion->lider;
+            $analista=$pliegosobservacion->accion->analista;
+        }else{
+            $director = $auditoria->directorasignado;
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
+        $LayoutMonto = PliegosObservacion::where('auditoria_id',$auditoria->id)->get();
+        $sumaMontoSolventadoPo = $LayoutMonto->sum('monto_solventado');
+        $restaMontoPo = $auditoria->total() - $sumaMontoSolventadoPo;
+
+        return view('pliegosobservacionatencion.index',compact('pliegosobservacion','auditoria','accion','request','asistente_titular', 'director','sumaMontoSolventadoPo','restaMontoPo'));
     }
 
     /**

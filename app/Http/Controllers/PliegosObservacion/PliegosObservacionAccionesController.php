@@ -32,6 +32,12 @@ class PliegosObservacionAccionesController extends Controller
        
         $auditoria = Auditoria::find(getSession('auditoria_id'));  
 
+        $LayoutMonto = PliegosObservacion::where('auditoria_id',$auditoria->id)->get();
+        $sumaMontoSolventadoPo = $LayoutMonto->sum('monto_solventado');
+        $restaMontoPo = $auditoria->total() - $sumaMontoSolventadoPo;
+
+        //dd($auditoria->total(),$sumaMontoSolventadoPo,$restaMontoPo);
+
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
        
         //$acciones->setPage(getSession('numpaginapo'));
@@ -41,7 +47,7 @@ class PliegosObservacionAccionesController extends Controller
 
        
 
-        return view('pliegosobservacionacciones.index', compact('request','acciones', 'auditoria'));
+        return view('pliegosobservacionacciones.index', compact('request','acciones', 'auditoria','sumaMontoSolventadoPo','restaMontoPo'));
     }
 
     /**

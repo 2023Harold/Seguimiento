@@ -26,7 +26,7 @@ class RecomendacionesCalificacionRequest extends FormRequest
     public function rules()
     {
         return [                 
-            'conclusion' => 'required|string|max:8000', 
+            'conclusion' => 'required|string', 
             'calificacion_atencion' => 'required|string|max:30|in:Atendida,No Atendida,Parcialmente Atendida'                             
             ];
     }

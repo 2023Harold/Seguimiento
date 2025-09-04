@@ -26,7 +26,7 @@ class PliegosObservacionCalificacionRequest extends FormRequest
     public function rules()
     {
         return [
-            'conclusion' => 'required|string|max:8000',
+            'conclusion' => 'required|string',
             'calificacion_atencion' => 'required|string|max:30|in:Solventado,No Solventado,Solventado Parcialmente',
             'monto_solventado' => 'sometimes|nullable|required_if:calificacion_atencion,Solventado Parcialmente'   
             ];

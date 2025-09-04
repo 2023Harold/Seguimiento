@@ -21,33 +21,63 @@
                 </div>
             </div>
             <div class="row">
-                {{-- {{ dd($recomendacion); }} --}}
-                {{-- {!!BootForm::hidden('tipo', $tipo) !!} --}}                
-                @if($tipo == "Analisis")
-                    <div class="col-md-12">
-                        {!!BootForm::textarea('analisis','Análisis: *', old('analisis',$recomendacion->analisis),['rows'=>'10']) !!}
-                    </div>
-                @endif
-                @if($tipo == "Conclusión")
-                    <div class="col-md-12">
-                        {!!BootForm::textarea('conclusion','Conclusión: *', old('conclusion',$recomendacion->conclusion),['rows'=>'10']) !!}
-                    </div>
-                @endif  
-                @if($tipo =="Listado Documentos" )
-                    <div class="col-md-12">
-                        {!!BootForm::textarea('listado_documentos','Listado de Documentos: *', old('listado_documentos', $recomendacion->listado_documentos),['rows'=>'10']) !!}
-                    </div>
-                @endif
-            </div>                
-            <div class="row">                
-                 <div class="col-md-12">
+                @if ($accion3 == "crear")    
+                    @if($tipo == "Analisis")
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('analisis','Análisis: *', old('analisis',$comentario->universo_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif
+                    @if($tipo == "Conclusión")
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('conclusion','Conclusión: *', old('conclusion',$comentario->universo_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif  
+                    @if($tipo =="Listado Documentos" )
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('listado_documentos','Listado de Documentos: *', old('listado_documentos', $comentario->universo_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif
+                @else
+                    @if($tipo == "Analisis")
                     
-                    {!!BootForm::textarea('comentario', 'Comentario:  *', old("comentario", ""))!!}
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('analisis','Análisis: *', old('analisis',$AtenderComentario->muestra_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif
+                    @if($tipo == "Conclusión")
+                    
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('conclusion','Conclusión: *', old('conclusion',$AtenderComentario->muestra_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif  
+                    @if($tipo =="Listado Documentos" )
+                    
+                        <div class="col-md-12">
+                            {!!BootForm::textarea('listado_documentos','Listado de Documentos: *', old('listado_documentos', $AtenderComentario->muestra_rev),['rows'=>'10']) !!}
+                        </div>
+                    @endif
+                @endif  
+            </div>                
+            <div class="row" style="padding-left: 2rem;">
+                <div class="col-md-6">
+                    {!!BootForm::radios("estatus", ' ', [ 'Guardar' => 'Guardar', 'Enviar' => 'Enviar'], 'Guardar', false, ['class' => 'i-checks enviar', 'id' => 'estatus']) !!}
+                </div>
+            </div>      
+            <div class="row" id="comentario-row" style="display: none;">               
+                 <div class="col-md-12">
+                    {!!BootForm::textarea('comentario', 'Respuesta: *', old("comentario", ))!!}
                 </div>
             </div>
-            <div class="row">
+            
+            <div class="row" id="btn-guardar">
                 <div class="col-md-12">
                     @btnSubmit("Guardar")
+                </div>
+            </div>
+
+            <div class="row" id="btn-enviar" style="display: none;">
+                <div class="col-md-12">
+                    @btnSubmit("Enviar")
                 </div>
             </div>
         {!!BootForm::close() !!}
@@ -56,7 +86,7 @@
 @endsection
 @section('script')
 {!!JsValidator::formRequest('App\Http\Requests\RevisionRequest') !!}
-<script>
+    <script>
         $(document).ready(function () {
             function toggleElements() {
                 const selected = $('input[name="estatus"]:checked').val();

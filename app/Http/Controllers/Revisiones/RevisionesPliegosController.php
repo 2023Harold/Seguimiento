@@ -50,12 +50,12 @@ class RevisionesPliegosController extends Controller
     public function store(Request $request)
     {
         $accion = AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
-       // dd($accion);
+
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $staffA = AuditoriaUsuarios::select('segusers.id','segusers.name','segusers.puesto', 'segusers.unidad_administrativa_id', 'segusers.siglas_rol', 'segusers.estatus',   
                                             DB::raw("(case when(segusers.id = segauditoria_usuarios.staff_id) THEN segusers.name ELSE NULL END) AS staffAsignado01"),
                                             )->join('segusers', 'segusers.id', '=', 'segauditoria_usuarios.staff_id')->where('auditoria_id', $auditoria->id)->get()->toArray();   
-        //dd($request,$accion->pliegosobservacion);
+        
         $request->merge([
             'de_usuario_id'=>auth()->user()->id,
             'para_usuario_id'=>intval($accion->analista_asignado_id),
@@ -64,7 +64,7 @@ class RevisionesPliegosController extends Controller
             'estatus'=>'Pendiente',
             'usuario_creacion_id'=>auth()->user()->id,
         ]);
-        if(auth()->user()->siglas_rol=='ATUS' || auth()->user()->siglas_rol=='STAFF'){
+        if(auth()->user()->siglas_rol=='ATUS' || auth()->user()->siglas_rol=='DS'){
             if($request->tipo == 'Analisis'){
                 $request->merge([
                     'universo_rev'=> optional($accion->pliegosobservacion)->analisis,

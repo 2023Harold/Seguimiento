@@ -700,7 +700,10 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         }elseif(!empty($Accion->tipo) && ($Accion->tipo=='Solicitud de aclaración')){
             //comentarios
             $llave = "AUD-{$Accion->segauditoria_id}/AudAc-{$Accion->id}/SOL-{$Accion->solicitudesaclaracion->id}";
+        }elseif(!empty($Accion->numero_informe)){
+            $llave = "AUD-{$Accion->auditoria_id}/IS-{$Accion->id}/informe{$Accion->tipo}";
         }
+
         return $llave;
     }
 

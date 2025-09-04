@@ -13,8 +13,11 @@
                             class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
                     &nbsp; Análisis de la atención
                 </h1>
+                
             </div>
+            
             <div class="card-body">
+                @include('flash::message')
                 <h3 class="card-title text-primary">Análisis</h3>
                 <div class="card-body mt-2">
                     <div class="row">

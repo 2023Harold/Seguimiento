@@ -22,8 +22,11 @@ class SolicitudesAclaracionAccionesController extends Controller
         // dd(getSession('solicitudesaclaracionauditoria_id'));
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
+        $LayoutMonto = SolicitudesAclaracion::where('auditoria_id',$auditoria->id)->get();
+        $sumaMontoSolventadoSolAc = $LayoutMonto->sum('monto_solventado');
+        $restaMontoSolAc = $auditoria->total() - $sumaMontoSolventadoSolAc;
 
-        return view('solicitudesaclaracionacciones.index', compact('request','acciones', 'auditoria'));
+        return view('solicitudesaclaracionacciones.index', compact('request','acciones', 'auditoria','sumaMontoSolventadoSolAc','restaMontoSolAc'));
     }
 
     /**

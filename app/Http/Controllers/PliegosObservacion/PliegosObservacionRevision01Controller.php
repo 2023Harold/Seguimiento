@@ -76,7 +76,16 @@ class PliegosObservacionRevision01Controller extends Controller
      */
     public function update(Request $request,PliegosObservacion $pliegosobservacion)
     {
-        $jefe=auth()->user()->jefe;
+        $auditoria = Auditoria::find($pliegosobservacion->auditoria_id);
+        if(getSession('cp')==2022){
+            $jefe=$pliegosobservacion->accion->depaasignado;
+
+            $analista=$pliegosobservacion->accion->analista;
+        }else{
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+        }
+        //$jefe=auth()->user()->jefe;
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -119,7 +128,7 @@ class PliegosObservacionRevision01Controller extends Controller
             $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->userCreacion->name.', '.$pliegosobservacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->userCreacion->unidad_administrativa_id, $pliegosobservacion->userCreacion->id, GenerarLlave( $pliegosobservacion).'/Rechazo', $url);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id, GenerarLlave( $pliegosobservacion).'/Rechazo', $url);
         }
 
         return redirect()->route('pliegosobservacionatencion.index');

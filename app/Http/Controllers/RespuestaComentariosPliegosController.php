@@ -78,7 +78,14 @@ class RespuestaComentariosPliegosController extends Controller
         }  
 
         if($request->estatus=="Enviar"){
-            $pliegos->update($request->all());  
+            if($comentario->tipo == "Analisis"){
+                $pliegos->update(['analisis'=> $request->analisis]);     
+            }elseif($comentario->tipo == "Conclusión"){
+                $pliegos->update(['conclusion'=> $request->conclusion]);
+
+            }elseif($comentario->tipo == "Listado Documentos"){
+                $pliegos->update(['listado_documentos'=> $request->listado_documentos]);
+            } 
             $comentario->update(['estatus'=>'Atendido']);  
             setMessage('se atendio el comentario correctamente.');        
         }else{

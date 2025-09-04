@@ -79,9 +79,13 @@ class InformePrimeraEtapaAutorizacionController extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, InformePrimeraEtapa $auditoria)
     { 
+        $url =  route("informeprimeraetapa.index");
         $this->normalizarDatos($request);
         $informeprimeraetapa=$auditoria;
-
+        $auditoria = Auditoria::find($informeprimeraetapa->auditoria_id);
+        $titular=auth()->user()->titular;
+        $director = $auditoria->directorasignado;
+        $jefe = $auditoria->jefedepartamentoencargado;
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
         } else {
@@ -94,22 +98,27 @@ class InformePrimeraEtapaAutorizacionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($informeprimeraetapa).'/Aut')->first();
+        $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($informeprimeraetapa).'/Rechazo')->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del Informe Primera Etapa de'.$informeprimeraetapa->tipo .'de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '. auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto .':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '. $jefe->name . ', ' . $jefe->puesto .':</strong><br>'
                             .auth()->user()->titular->name.', '.auth()->user()->titular->puesto.
                             '; ha aprobado la autorización del Informe Primera Etapa de'.$informeprimeraetapa->tipo.' de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $informeprimeraetapa->usuarioCreacion->unidad_administrativa_id, $informeprimeraetapa->usuarioCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($informeprimeraetapa).'/Aut',$url);
             
         }else {
             
             $titulo = 'Rechazo del Informe Primera Etapa de'.$informeprimeraetapa->tipo.' de la auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$informeprimeraetapa->usuarioCreacion->name.', '.$informeprimeraetapa->usuarioCreacion->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
                             .'Ha sido rechazado el Informe Primera Etapa de auditoría No. '.$informeprimeraetapa->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
             
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $informeprimeraetapa->usuarioCreacion->unidad_administrativa_id, $informeprimeraetapa->usuarioCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($informeprimeraetapa).'/Aut',$url);
                             
     }
     Movimientos::create([

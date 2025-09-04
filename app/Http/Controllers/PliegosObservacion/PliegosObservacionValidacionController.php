@@ -62,8 +62,10 @@ class PliegosObservacionValidacionController extends Controller
      */
     public function edit(PliegosObservacion $pliegosobservacion)
     {
-        $accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
-        $auditoria = $accion->auditoria;
+        //$accion=AuditoriaAccion::find(getSession('pliegosobservacionauditoriaaccion_id'));
+        //$auditoria = $accion->auditoria;
+        $auditoria = Auditoria::find($pliegosobservacion->auditoria_id);
+        $accion=AuditoriaAccion::find($pliegosobservacion->accion_id);
 
         return view('pliegosobservacionvalidacion.form', compact('pliegosobservacion','auditoria','accion'));
     }
@@ -77,9 +79,20 @@ class PliegosObservacionValidacionController extends Controller
      */
     public function update(Request $request, PliegosObservacion $pliegosobservacion)
     {
+        $auditoria = Auditoria::find($pliegosobservacion->auditoria_id);
+        $accion=AuditoriaAccion::find($pliegosobservacion->accion_id);
         $titular=auth()->user()->titular;
-        $jefe=User::where('unidad_administrativa_id', substr($pliegosobservacion->userCreacion->unidad_administrativa_id, 0, 5).'0')->first();
-
+        if(getSession('cp')==2022){
+            $director=User::where('unidad_administrativa_id',substr($pliegosobservacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $jefe=$pliegosobservacion->accion->depaasignado;
+            $lider=$pliegosobservacion->accion->lider;
+            $analista=$pliegosobservacion->accion->analista;
+        }else{
+            $director = $auditoria->directorasignado;
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -125,8 +138,8 @@ class PliegosObservacionValidacionController extends Controller
             $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->userCreacion->name.', '.$pliegosobservacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->userCreacion->unidad_administrativa_id, $pliegosobservacion->userCreacion->id,GenerarLlave($pliegosobservacion).'/Rechazo',$url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($pliegosobservacion->accion->lider->name,$pliegosobservacion->accion->lider->puesto,$pliegosobservacion), now(), $pliegosobservacion->accion->lider->unidad_administrativa_id, $pliegosobservacion->accion->lider->id, GenerarLlave($pliegosobservacion).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($pliegosobservacion).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$pliegosobservacion), now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($pliegosobservacion).'/Rechazo',$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$pliegosobservacion), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($pliegosobservacion).'/Rechazo',$url);
         }
 

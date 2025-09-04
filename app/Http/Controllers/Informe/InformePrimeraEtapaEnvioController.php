@@ -61,22 +61,28 @@ class InformePrimeraEtapaEnvioController extends Controller
      */
     public function edit(InformePrimeraEtapa $auditoria)
     {
+        $url =  route("informeprimeraetapa.index");
 		$asistenteATUS=User::where('siglas_rol','ATUS')->first();
         $informeprimeraetapa=$auditoria;
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
-    
+        
+        $notificacion=auth()->user()->notificaciones()->where('llave', GenerarLlave($informeprimeraetapa).'/ValD')->first();
+        $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($informeprimeraetapa).'/Rechazo')->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+
         $informeprimeraetapa->update(['fase_autorizacion' =>  'En validación']);
-    
-        $titulo = 'Validación de los datos del Informe Primera Etapa';
+        $url =  route("informeprimeraetapa.index");
+        $titulo = 'de los datos del Informe Primera Etapa de '.$informeprimeraetapa->tipo ;
         $mensaje = '<strong>Estimado (a) ' . auth()->user()->director->name . ', ' . auth()->user()->director->puesto . ':</strong><br>
                     Ha sido registrado el Informe Primera Etapa  de la auditoría No. ' . $auditoria->numero_auditoria . ', por parte del ' .
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
     
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id);
-		auth()->user()->insertNotificacion($titulo, $this->mensajeNotificacion($asistenteATUS->name,$asistenteATUS->puesto,$auditoria), now(), $asistenteATUS->unidad_administrativa_id, $asistenteATUS->id); 
+        auth()->user()->insertNotificacion("Validación ".$titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id, GenerarLlave($informeprimeraetapa).'/ValD', $url);
+		auth()->user()->insertNotificacion("Revisión ".$titulo, $this->mensajeNotificacion($asistenteATUS->name,$asistenteATUS->puesto,$auditoria), now(), $asistenteATUS->unidad_administrativa_id,$asistenteATUS->id, GenerarLlave($informeprimeraetapa).'/Consulta', $url); 
 
 		Movimientos::create([
-        'tipo_movimiento' => 'Registro del Informe Primera Etapa',
+            'tipo_movimiento' => 'Registro del Informe Primera Etapa',
             'accion' => 'InformePrimeraEtapa',
             'accion_id' => $informeprimeraetapa->id,
             'estatus' => 'Aprobado',

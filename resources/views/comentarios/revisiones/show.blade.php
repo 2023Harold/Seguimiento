@@ -7,7 +7,7 @@
         </h1>
     </div>
     <div class="card-body"> 
-        @if(!empty($comentario->muestra_rev))   
+        @if(!empty($comentario->muestra_rev) && ($comentario->estatus !='Enviar' && $comentario->estatus !='Guardar'))     
             <div class="row">
                 <div class="col-md-12">
                     {{$comentario->tipo}}

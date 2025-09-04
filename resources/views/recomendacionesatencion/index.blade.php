@@ -252,7 +252,7 @@
                                 </td>
                                 <td class="text-center">
                                     @can( 'respuestacomentariosrecomendaciones.edit')
-                                        @if (($comentario->estatus=='Pendiente' && $comentario->de_usuario_id==$asistente_titular->id))
+                                        @if (($comentario->estatus=='Pendiente' && ($comentario->de_usuario_id==$asistente_titular->id ||$comentario->de_usuario_id == $director->id)))
                                             <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariosrecomendaciones.edit',$comentario) }}">
                                                 Atender 
                                             </a>										                                       										                                       
