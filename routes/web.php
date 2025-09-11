@@ -528,7 +528,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
      Route::resource('revisionesrecomendaciones', RevisionesRecomendacionesController::class, ['parameters' => ['revisionesrecomendaciones' => 'comentario']]);
      Route::resource('revisionesrecomendacionesatencion', RevisionesRecomendacionesAtencionController::class, ['parameters' => ['revisionesrecomendacionesatencion' => 'comentario']]);     
      Route::resource('respuestacomentariosrecomendaciones', RespuestaComentariosRecomendacionesController::class, ['parameters' => ['respuestacomentariosrecomendaciones' => 'comentario']]);          
-    /**Fin del apartado de Seguimiento - Auditorias - Recomendaciones*/
+    Route::get('/rescomrec/enviar/{respuesta}', [RespuestaComentariosRecomendacionesController::class, 'enviarcomentario'])->name('rescomrec.enviarcomentario');
+     /**Fin del apartado de Seguimiento - Auditorias - Recomendaciones*/
 
      /**Seguimiento - Auditorias - Solicitudes  */
      Route::resource('solicitudesaclaracion', SolicitudesAclaracionController::class, ['parameters' => ['solicitudesaclaracion' => 'auditoria']]);
@@ -549,7 +550,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
      Route::resource('revisionessolicitudesatencion', RevisionesSolicitudesAtencionController::class, ['parameters' => ['revisionessolicitudesatencion' => 'comentario']]);
      Route::resource('solicitudesaclaracionanalisis', SolicitudesAclaracionAnalisisController::class, ['parameters' => ['solicitudesaclaracionanalisis' => 'solicitud']]);
      Route::resource('respuestacomentariossolicitudes',RespuestaComentariosSolicitudesController::class, ['parameters' => ['respuestacomentariossolicitudes' => 'comentario']]);
-    /**Fin del apartado de Seguimiento - Auditorias - Solicitudes*/
+     Route::get('/respuestacomentariossolicitudes/enviar/{respuesta}', [RespuestaComentariosSolicitudesController::class, 'enviarcomentario'])->name('respuestacomentariossolicitudes.enviarcomentario');
+     /**Fin del apartado de Seguimiento - Auditorias - Solicitudes*/
 
     /**Seguimiento - Auditorias - Pliegos  */
     Route::resource('pliegosobservacion', PliegosObservacionController::class, ['parameters' => ['pliegosobservacion' => 'auditoria']]);
@@ -569,7 +571,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('revisionespliegos', RevisionesPliegosController::class, ['parameters' => ['revisionespliegos' => 'comentario']]);
     Route::resource('revisionespliegosatencion', RevisionesPliegosAtencionController::class, ['parameters' => ['revisionespliegosatencion' => 'comentario']]);
     Route::resource('respuestacomentariospliegos', RespuestaComentariosPliegosController::class, ['parameters' => ['respuestacomentariospliegos' => 'comentario']]);     
-    Route::get('/respuestacomentariospliegos/enviar/{comentario}', [RespuestaComentariosPliegosController::class, 'enviarcomentario'])->name('respuestacomentariospliegos.enviarcomentario');
+    Route::get('/respuestacomentariospliegos/enviar/{respuesta}', [RespuestaComentariosPliegosController::class, 'enviarcomentario'])->name('respuestacomentariospliegos.enviarcomentario');
     /**Fin del apartado de Seguimiento - Auditorias - Pliegos*/
 
     /**Seguimiento - Auditorias - Cedulas*/

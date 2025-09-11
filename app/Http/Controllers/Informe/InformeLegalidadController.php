@@ -138,7 +138,7 @@ class InformeLegalidadController extends Controller
             'segauditoria_acciones.plazo_recomendacion',
             'segauditoria_acciones.monto_aclarar',
             'segauditoria_acciones.normativa_infringida',
-            DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"),
+            DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"),
             DB::raw("(CASE WHEN segrecomendaciones_contestaciones.oficio_contestacion IS NULL THEN 'En ese orden de ideas...' ELSE NULL END) AS sicontestacion01"),
             'segrecomendaciones_contestaciones.numero_oficio',
             DB::raw("TO_CHAR(segrecomendaciones_contestaciones.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
@@ -161,7 +161,7 @@ class InformeLegalidadController extends Controller
 
         $segpliego = AuditoriaAccion::select('segauditoria_acciones.tipo',/*TABLA segauditoria_acciones*/
                                                 'segauditoria_acciones.accion', 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar', 'segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
+                                                DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
    /*TABLA segpliegos_observacion_contestacion*/DB::raw("(case when(segpliegos_observacion_contestacion.oficio_contestacion IS NULL) THEN 'En ese orden de ideas, esta Unidad de Seguimiento hace constar que durante el plazo concedido para el desahogo de la Etapa de Aclaración, la entidad fiscalizada no presentó información, documentación o consideraciones relacionadas con la observación de mérito.' ELSE null END) AS sicontestacion01"),
                                                 'segpliegos_observacion_contestacion.numero_oficio', 
                                                 DB::raw("TO_CHAR(segpliegos_observacion_contestacion.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
@@ -181,8 +181,9 @@ class InformeLegalidadController extends Controller
                                 ->join('segpliegos_observacion', 'segpliegos_observacion.accion_id', '=', 'segauditoria_acciones.id')
                                 ->leftJoin('segpliegos_observacion_contestacion', 'segpliegos_observacion_contestacion.pliegosobservacion_id',"=",'segpliegos_observacion.id')
                                 ->where('auditoria_id', $auditoria->id)
-                                ->get();
-
+                                ->toSql();
+		dd($segpliego);
+		
         $table = $section->addTable([
             'borderSize' => 0,
             'borderColor' => 'FFFF',
@@ -318,7 +319,7 @@ class InformeLegalidadController extends Controller
         $segsolac = AuditoriaAccion::select('segauditoria_acciones.consecutivo',/*TABLA segauditoria_acciones*/
                     DB::raw("UPPER(segauditoria_acciones.tipo) AS tipo_mayus"),
                                                 'segauditoria_acciones.tipo', 'segauditoria_acciones.accion', 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar', 'segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
+                                                DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
     /*TABLA segsolicitudes_acl_contestaciones*/ /*DB::raw("(case when(segsolicitudes_acl_contestaciones.oficio_contestacion IS NULL) THEN 'En ese orden de ideas, esta Unidad de Seguimiento hace constar que durante el plazo concedido para el desahogo de la Etapa de Aclaración, la entidad fiscalizada no presentó información, documentación o consideraciones relacionadas con la observación de mérito.' ELSE null END) AS sicontestacion01"),
                                                 'segsolicitudes_acl_contestaciones.numero_oficio', 
                                                 //'segsolicitudes_acl_contestaciones.fecha_oficio_contestacion', 
@@ -355,7 +356,7 @@ class InformeLegalidadController extends Controller
         $segpliego = AuditoriaAccion::select('segauditoria_acciones.tipo',/*TABLA segauditoria_acciones*/
                                                 DB::raw("UPPER(segauditoria_acciones.tipo) AS tipo_mayus"),
                                                 'segauditoria_acciones.accion', 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar', 'segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
+                                                DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
    /*TABLA segpliegos_observacion_contestacion*//*DB::raw("(case when(segpliegos_observacion_contestacion.oficio_contestacion IS NULL) THEN 'En ese orden de ideas, esta Unidad de Seguimiento hace constar que durante el plazo concedido para el desahogo de la Etapa de Aclaración, la entidad fiscalizada no presentó información, documentación o consideraciones relacionadas con la observación de mérito.' ELSE null END) AS sicontestacion01"),
                                                 'segpliegos_observacion_contestacion.numero_oficio', 
                                                 DB::raw("TO_CHAR(segpliegos_observacion_contestacion.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
@@ -378,6 +379,7 @@ class InformeLegalidadController extends Controller
                                 ->leftJoin('segpliegos_observacion_contestacion', 'segpliegos_observacion_contestacion.pliegosobservacion_id',"=",'segpliegos_observacion.id')
                                 ->where('auditoria_id', $auditoria->id)->orderBy('segauditoria_acciones.consecutivo')
                                 ->get()->toArray();
+		//dd($segpliego);
         $segpliego= array_map("unserialize", array_unique(array_map('serialize',$segpliego)));
 
         $accionesSolAcPo = array_merge($segsolac,$segpliego);
@@ -390,7 +392,7 @@ class InformeLegalidadController extends Controller
 
         $segrecomendacion = AuditoriaAccion::select('segauditoria_acciones.accion',/*TABLA segauditoria_acciones*/
                                                 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar','segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
+                                                DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
     /*TABLA segrecomendaciones_contestaciones*/ /*DB::raw("(case when(segrecomendaciones_contestaciones.oficio_contestacion IS NULL) THEN 'En ese orden de ideas, esta Unidad de Seguimiento hace constar que durante el plazo concedido para el desahogo del Proceso de Atención a Recomendaciones, la entidad fiscalizada no presentó información, documentación o consideraciones relacionadas con la Recomendación de mérito.' ELSE null END) AS sicontestacion01"),
                                                 'segrecomendaciones_contestaciones.numero_oficio', 
                                                 DB::raw("TO_CHAR(segrecomendaciones_contestaciones.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
@@ -459,8 +461,8 @@ class InformeLegalidadController extends Controller
         $TAPS=$TSPS+$TPPS;
         $TAPNS=$TSPNS+$TPPNS;
 
-        $TPPNSLetras=$formatter->toString($TPPNS);
-
+        $TPPNSLetras=$formatter->toInvoice($TPPNS);
+		//dd($TPPNSLetras,4);
         $PAAnum = getSession('cp')+1;
             $ncT = User::select('segusers.name', 'segusers.puesto')->where('siglas_rol','TUS')->get();
             $nT = $ncT->pluck('name')->toArray();     
@@ -473,8 +475,9 @@ class InformeLegalidadController extends Controller
                  if(count($auditoria->totalNOsolventadopliegos)>0){
                     $CantpoNoSol = count($auditoria->totalNOsolventadopliegos);
                     $CantpoLetras= $formatter->toString($CantpoNoSol);
+					//dd($CantpoLetras);
                     $siPliegos03 = "DE LOS PLIEGOS DE OBSERVACIONES QUE NO FUERON SOLVENTADOS Y EL MONTO NO ACLARADO";
-                    $siPliegos04 = "Derivado de lo descrito en el numeral I del apartado que nos antecede de los Resultados Finales del Seguimiento a la Etapa de Aclaración, se determinaron {$CantpoNoSol} "."(".ucwords(strtolower($CantpoLetras)).")"." Pliegos de Observaciones no aclarados ni solventados, mismos que ascienden a la cantidad total de $".number_format( $TPPNS, 2). "(". ucwords(strtolower($TPPNSLetras))." M.N).";
+                    $siPliegos04 = "Derivado de lo descrito en el numeral I del apartado que nos antecede de los Resultados Finales del Seguimiento a la Etapa de Aclaración, se determinaron {$CantpoNoSol} "."(".ucwords(strtolower($CantpoLetras)).")"." Pliegos de Observaciones no aclarados ni solventados, mismos que ascienden a la cantidad total de $".number_format( $TPPNS, 2). " ( ". $TPPNSLetras." ).";
                     $siPliegos05 = "En ese orden de ideas el Expediente Técnico de Auditoría y el de la Etapa de Aclaración, se remitirán a la Unidad de Investigación del Órgano Superior de Fiscalización del Estado de México, para que se inicie el procedimiento de investigación correspondiente, en términos de la Ley General de Responsabilidades Administrativas, la Ley de Responsabilidades Administrativas del Estado de México y Municipios y demás disposiciones jurídicas aplicables.";
                 }
                 
@@ -557,7 +560,7 @@ class InformeLegalidadController extends Controller
                 $template->setValue('nD', $auditoria->directorasignado->name);
                 $template->setValue('cD',$cD);
                 $template->setValue('nJD', $auditoria->jefedepartamentoencargado->name);
-                $template->setValue('cJD',  'Jefe de '.$auditoria->departamento_encargado);
+                $template->setValue('cJD',  $auditoria->jefedepartamentoencargado->puesto);
                 $template->setValue('nLP', $auditoria->lidercp->name);
                 $template->setValue('nA', $auditoria->analistacp->name);
 
@@ -577,7 +580,7 @@ class InformeLegalidadController extends Controller
                 $template->setValue('nD', $auditoria->directorasignado->name);
                 $template->setValue('cD',$cD);
                 $template->setValue('nJD', $auditoria->jefedepartamentoencargado->name);
-                $template->setValue('cJD',  'Jefe de '.$auditoria->departamento_encargado);
+                $template->setValue('cJD',  $auditoria->jefedepartamentoencargado->puesto);
                 $template->setValue('nLP', $auditoria->lidercp->name);
                 $template->setValue('nA', $auditoria->analistacp->name);
 
@@ -598,7 +601,7 @@ class InformeLegalidadController extends Controller
                 $template->setValue('nD', $auditoria->directorasignado->name);
                 $template->setValue('cD',$cD);
                 $template->setValue('nJD', $auditoria->jefedepartamentoencargado->name);
-                $template->setValue('cJD',  'Jefe de '.$auditoria->departamento_encargado);
+                $template->setValue('cJD',  $auditoria->jefedepartamentoencargado->puesto);
                 $template->setValue('nLP', $auditoria->lidercp->name);
                 $template->setValue('nA', $auditoria->analistacp->name);
 

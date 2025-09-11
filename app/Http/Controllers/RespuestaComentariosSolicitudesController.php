@@ -33,19 +33,18 @@ class RespuestaComentariosSolicitudesController extends Controller
      */
     public function create()
     {
-        $comentario = Revisiones::find(getSession('comentarioAsis_id'));  
-        //dd($comentario);      
+        $comentario = Revisiones::find(getSession('comentarioAsis_id'));        
         $solicitudes= SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
         $acciones=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $AtenderComentario = new Revisiones();
         $accion=$solicitudes->accion;
         $accion2 = 'Atender';
         $accion3 = "crear";
-
+        
         $tipo = $comentario->tipo; // tipo para identificar el ar
 
-        return view('respuestacomentariossolicitudes.form',compact('solicitudes','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
-    
+        return view('respuestacomentarios.form',compact('solicitudes','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
+        
     }
 
     /**
@@ -56,21 +55,19 @@ class RespuestaComentariosSolicitudesController extends Controller
      */
     public function store(Request $request)
     {
+        /******************************************************************************************************************************/
         $comentario = Revisiones::find(getSession('comentarioAsis_id'));        
         $solicitudes= SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
-
-        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
         $accion2 = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-
         $request->merge([
-            'id_revision'=>$comentario->id,
-            'de_usuario_id'=>auth()->user()->id,
-            'para_usuario_id'=>intval($accion2->analista_asignado_id),
-            'accion'=>'Solicitud de Aclaración',
-            'accion_id'=>$accion2->id,            
-            'usuario_creacion_id'=>auth()->user()->id,
-        ]);        
-
+                'id_revision'=>$comentario->id,
+                'de_usuario_id'=>auth()->user()->id,
+                'para_usuario_id'=>intval($accion2->analista_asignado_id),
+                'accion'=>'Solicitud de Aclaración',
+                'accion_id'=>$accion2->id,            
+                'usuario_creacion_id'=>auth()->user()->id,
+                'tipo'=>$comentario->tipo,
+            ]);
         if($comentario->tipo == "Analisis"){
             $request->merge(['muestra_rev'=> $request->analisis]);     
         }elseif($comentario->tipo == "Conclusión"){
@@ -80,22 +77,9 @@ class RespuestaComentariosSolicitudesController extends Controller
             $request->merge(['muestra_rev'=> $request->listado_documentos]);
         }  
 
-        if($request->estatus=="Enviar"){
-            if($comentario->tipo == "Analisis"){
-                $solicitudes->update(['analisis'=> $request->analisis]);     
-            }elseif($comentario->tipo == "Conclusión"){
-                $solicitudes->update(['conclusion'=> $request->conclusion]);
-
-            }elseif($comentario->tipo == "Listado Documentos"){
-                $solicitudes->update(['listado_documentos'=> $request->listado_documentos]);
-            } 
-
-            $comentario->update(['estatus'=>'Atendido']);  
-            setMessage('se atendio el comentario correctamente.');        
-        }else{
-            $request->merge(['comentario'=> " "]);
-            setMessage('se guardo el comentario correctamente.');      
-        }
+        $request->merge(['comentario'=> $request->respuesta]);
+        setMessage('se guardo el comentario correctamente.');      
+        
         Revisiones::create($request->all());  
 
         return view('layouts.close');
@@ -120,24 +104,29 @@ class RespuestaComentariosSolicitudesController extends Controller
      */
     public function edit(Revisiones $comentario,Request $request)
     {
-        // dd($request);
-        setSession('comentarioAsis_id',$comentario->id);
+        /***************************************************************************************************************************** */
         $solicitudes= SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
-        // dd($pliegos);
         $accion=$solicitudes->accion;
         $accion2 = 'Atender';
         $acciones=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $tipo = $comentario->tipo; // tipo para identificar el ar
-        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
-        $accion3 = "Editar";
-        $AtenderComentario = $respuesta;
 
-        //return view('respuestacomentariossolicitudes.form',compact('solicitudes','accion','accion2','comentario','tipo'));
-        
-        if(empty($respuesta)){
+        if(empty($comentario->id_revision)){
+            
+            setSession('comentarioAsis_id',$comentario->id);
             return redirect()->route('respuestacomentariossolicitudes.create');
         }else{
-             return view('respuestacomentariossolicitudes.form',compact('solicitudes','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
+            $respuesta = $comentario;
+            //dd($respuesta);
+            if(empty($respuesta->tipo)){
+                $tipo = $comentario->tipo; // tipo para identificar el ar
+            }else{
+                $tipo = $respuesta->tipo; // tipo para identificar el ar
+            }
+            //dd($comentario);
+            $comentario = Revisiones::where('id',$comentario->id_revision)->first();
+            $AtenderComentario = $respuesta;
+            $accion3 = "Editar";
+            return view('respuestacomentariossolicitudes.form',compact('solicitudes','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
         }
     }
 
@@ -148,20 +137,17 @@ class RespuestaComentariosSolicitudesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Revisiones $comentario, Request $request)
     {
-        $comentario = Revisiones::find(getSession('comentarioAsis_id'));
+        /************************************************************************* */
+
+        //dd($request,$comentario);
+        $AtenderComentario = $comentario;
+        $respuesta = $comentario;
         $solicitudes = SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
-        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
-
-        if($request->estatus=="Enviar"){
-            $solicitudes->update($request->all());  
-            $comentario->update(['estatus'=>'Atendido']);     
-            setMessage('se atendio el comentario correctamente.');      
-
-        }else{
-            setMessage('se guardo el comentario correctamente.');      
-        }
+        $comentario = Revisiones::where('id',$comentario->id_revision)->first();
+        
+        //$comentario = Revisiones::find(getSession('comentarioAsis_id'));        
         if($comentario->tipo == "Analisis"){
            $respuesta->update(['muestra_rev'=> $request->analisis]);     
         }elseif($comentario->tipo == "Conclusión"){
@@ -170,9 +156,8 @@ class RespuestaComentariosSolicitudesController extends Controller
         }elseif($comentario->tipo == "Listado Documentos"){
             $respuesta->update(['muestra_rev'=> $request->listado_documentos]);
         }
-        $respuesta->update(['comentario'=> $request->comentario]);
-        setMessage('se atendio el comentario correctamente.');        
-        
+        $respuesta->update(['comentario'=> $request->respuesta]);
+        setMessage('se guardo el comentario correctamente.');      
         return view('layouts.close');
     }
 
@@ -186,4 +171,22 @@ class RespuestaComentariosSolicitudesController extends Controller
     {
         //
     }
+
+    public function enviarcomentario(Revisiones $respuesta){
+        $comentario = Revisiones::where('id',$respuesta->id_revision)->first();
+        $solicitudes= SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
+ 
+        if($comentario->tipo == "Analisis"){
+           $solicitudes->update(['analisis'=> $respuesta->muestra_rev]);     
+        }elseif($comentario->tipo == "Conclusión"){
+            $solicitudes->update(['conclusion'=> $respuesta->muestra_rev]);
+        }elseif($comentario->tipo == "Listado Documentos"){
+            $solicitudes->update(['listado_documentos'=> $respuesta->muestra_rev]);
+        }
+        $comentario->update(['estatus'=>'Atendido']);     
+        $respuesta->update(['estatus'=>'Atendido']);     
+        setMessage('se atendio el comentario correctamente.');      
+        return view('layouts.close');
+    }
+    
 }

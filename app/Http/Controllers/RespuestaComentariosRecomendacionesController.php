@@ -42,11 +42,11 @@ class RespuestaComentariosRecomendacionesController extends Controller
         $accion=$recomendacion->accion;
         $accion2 = 'Atender';
         $accion3 = "crear";
-
+        
         $tipo = $comentario->tipo; // tipo para identificar el ar
 
         return view('respuestacomentarios.form',compact('recomendacion','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
-    
+        
     }
 
     /**
@@ -59,19 +59,16 @@ class RespuestaComentariosRecomendacionesController extends Controller
     {
         $comentario = Revisiones::find(getSession('comentarioAsis_id'));        
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
-
-        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
         $accion2 = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
-
-        //dd($request,$recomendacion);
         $request->merge([
-            'id_revision'=>$comentario->id,
-            'de_usuario_id'=>auth()->user()->id,
-            'para_usuario_id'=>intval($accion2->analista_asignado_id),
-            'accion'=>'Recomendación',
-            'accion_id'=>$accion2->id,            
-            'usuario_creacion_id'=>auth()->user()->id,
-        ]); 
+                'id_revision'=>$comentario->id,
+                'de_usuario_id'=>auth()->user()->id,
+                'para_usuario_id'=>intval($accion2->analista_asignado_id),
+                'accion'=>'Recomendación',
+                'accion_id'=>$accion2->id,            
+                'usuario_creacion_id'=>auth()->user()->id,
+                'tipo'=>$comentario->tipo,
+            ]);
         if($comentario->tipo == "Analisis"){
             $request->merge(['muestra_rev'=> $request->analisis]);     
         }elseif($comentario->tipo == "Conclusión"){
@@ -81,22 +78,9 @@ class RespuestaComentariosRecomendacionesController extends Controller
             $request->merge(['muestra_rev'=> $request->listado_documentos]);
         }  
 
-        if($request->estatus=="Enviar"){
-            if($comentario->tipo == "Analisis"){
-                $recomendacion->update(['analisis'=> $request->analisis]);     
-            }elseif($comentario->tipo == "Conclusión"){
-                $recomendacion->update(['conclusion'=> $request->conclusion]);
-
-            }elseif($comentario->tipo == "Listado Documentos"){
-                $recomendacion->update(['listado_documentos'=> $request->listado_documentos]);
-            } 
-
-            $comentario->update(['estatus'=>'Atendido']);  
-            setMessage('se atendio el comentario correctamente.');        
-        }else{
-            $request->merge(['comentario'=> " "]);
-            setMessage('se guardo el comentario correctamente.');      
-        }
+        $request->merge(['comentario'=> $request->respuesta]);
+        setMessage('se guardo el comentario correctamente.');      
+        
         Revisiones::create($request->all());  
 
         return view('layouts.close');
@@ -121,21 +105,28 @@ class RespuestaComentariosRecomendacionesController extends Controller
      */
     public function edit(Recomendaciones $documento,Revisiones $comentario,Request $request)
     {
-        // dd($comentario);
-        setSession('comentarioAsis_id',$comentario->id);
+        /***************************************************************************************************************************** */
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
         $accion=$recomendacion->accion;
         $accion2 = 'Atender';
-        // dd($accion);
         $acciones=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
-        $tipo = $comentario->tipo; // tipo para identificar el ar
-        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
-        $accion3 = "Editar";
-        $AtenderComentario = $respuesta;
 
-        if(empty($respuesta)){
+        if(empty($comentario->id_revision)){
+            
+            setSession('comentarioAsis_id',$comentario->id);
             return redirect()->route('respuestacomentariosrecomendaciones.create');
         }else{
+            $respuesta = $comentario;
+            //dd($respuesta);
+            if(empty($respuesta->tipo)){
+                $tipo = $comentario->tipo; // tipo para identificar el ar
+            }else{
+                $tipo = $respuesta->tipo; // tipo para identificar el ar
+            }
+            //dd($comentario);
+            $comentario = Revisiones::where('id',$comentario->id_revision)->first();
+            $AtenderComentario = $respuesta;
+            $accion3 = "Editar";
             return view('respuestacomentarios.form',compact('recomendacion','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
         }
 
@@ -148,20 +139,16 @@ class RespuestaComentariosRecomendacionesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Revisiones $comentario, Request $request)
     {    
-        $comentario = Revisiones::find(getSession('comentarioAsis_id'));
+        /************************************************************************************************** */
+        //dd($request,$comentario);
+        $AtenderComentario = $comentario;
+        $respuesta = $comentario;
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
-        $respuesta = Revisiones::where('id_revision',$comentario->id)->first();
-
-        if($request->estatus=="Enviar"){
-            $recomendacion->update($request->all());  
-            $comentario->update(['estatus'=>'Atendido']);     
-            setMessage('se atendio el comentario correctamente.');      
-
-        }else{
-            setMessage('se guardo el comentario correctamente.');      
-        }
+        $comentario = Revisiones::where('id',$comentario->id_revision)->first();
+        
+        //$comentario = Revisiones::find(getSession('comentarioAsis_id'));        
         if($comentario->tipo == "Analisis"){
            $respuesta->update(['muestra_rev'=> $request->analisis]);     
         }elseif($comentario->tipo == "Conclusión"){
@@ -170,10 +157,10 @@ class RespuestaComentariosRecomendacionesController extends Controller
         }elseif($comentario->tipo == "Listado Documentos"){
             $respuesta->update(['muestra_rev'=> $request->listado_documentos]);
         }
-        $respuesta->update(['comentario'=> $request->comentario]);
-        setMessage('se atendio el comentario correctamente.');        
-        
+        $respuesta->update(['comentario'=> $request->respuesta]);
+        setMessage('se guardo el comentario correctamente.');      
         return view('layouts.close');
+
     }
 
     /**
@@ -185,5 +172,22 @@ class RespuestaComentariosRecomendacionesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function enviarcomentario(Revisiones $respuesta){
+        $comentario = Revisiones::where('id',$respuesta->id_revision)->first();
+        $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
+ 
+        if($comentario->tipo == "Analisis"){
+           $recomendacion->update(['analisis'=> $respuesta->muestra_rev]);     
+        }elseif($comentario->tipo == "Conclusión"){
+            $recomendacion->update(['conclusion'=> $respuesta->muestra_rev]);
+        }elseif($comentario->tipo == "Listado Documentos"){
+            $recomendacion->update(['listado_documentos'=> $respuesta->muestra_rev]);
+        }
+        $comentario->update(['estatus'=>'Atendido']);     
+        $respuesta->update(['estatus'=>'Atendido']);     
+        setMessage('se atendio el comentario correctamente.');      
+        return view('layouts.close');
     }
 }

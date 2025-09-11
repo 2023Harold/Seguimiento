@@ -251,16 +251,19 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @can( 'respuestacomentariosrecomendaciones.edit')
-                                        @if (($comentario->estatus=='Pendiente' && ($comentario->de_usuario_id==$asistente_titular->id ||$comentario->de_usuario_id == $director->id)))
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariosrecomendaciones.edit',$comentario) }}">
-                                                Atender 
-                                            </a>										                                       										                                       
-                                        @endif 
-                                    @endcan
-                                    @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id!=$asistente_titular->id))
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionesrecomendacionesatencion.edit',$comentario) }}">
-                                            Atender
+                                    @if(count($comentario->respuestas)<=0)
+                                        @can( 'respuestacomentariosrecomendaciones.edit')
+                                            @if (($comentario->estatus=='Pendiente' && ($comentario->de_usuario_id==$asistente_titular->id ||$comentario->de_usuario_id == $director->id)))
+                                                <a class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario" href="{{ route('respuestacomentariosrecomendaciones.edit',$comentario) }}">
+                                                   <span class="bi bi-chat-quote-fill fa-lg">Atender </span>{{--- Crear comentario  ---}}
+                                                </a>										                                       										                                       
+                                            @endif 
+                                            
+                                        @endcan
+                                    @endif
+                                    @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id != $asistente_titular->id) && ($comentario->de_usuario_id != $director->id))
+                                        <a class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario" href="{{ route('revisionesrecomendacionesatencion.edit',$comentario) }}">
+                                            <span class="bi bi-chat-quote-fill fa-lg">Atender </span>{{--- Crear comentario  ---}}
                                         </a>                                                                                
                                     @endif   
                                 </td>
@@ -296,6 +299,15 @@
                                                             <a href="{{ route('revisionesrecomendaciones.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                                                 <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
                                                             </a>
+                                                            @if($respuesta->estatus == null || ($respuesta->estatus == 'Guardar'))
+                                                                <a href="{{ route('respuestacomentariosrecomendaciones.edit',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
+                                                                    <span class="bi bi-pencil-square fa-lg" aria-hidden="true"></span>{{--- Editar comentario  ---}}
+                                                                </a>
+                                                                <a href="{{ route('rescomrec.enviarcomentario',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
+                                                                    <span class="bi bi-send-fill fa-lg" aria-hidden="true"></span> {{--- Enviar comentario  ---}}
+                                                                </a>
+                                                            @endif
+                                                        
                                                         </td>
                                                     </tr>
                                                 @endforeach

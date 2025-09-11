@@ -272,17 +272,19 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                     @can( 'respuestacomentariossolicitudes.edit')
-                                        @if (($comentario->estatus=='Pendiente' && ($comentario->de_usuario_id==$asistente_titular->id || $comentario->de_usuario_id == $director->id )))
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariossolicitudes.edit',$comentario) }}">
-                                                Atender 
-                                            </a>										                                       										                                       
-                                        @endif 
-                                    @endcan
+                                    @if(count($comentario->respuestas)<=0)
+                                        @can( 'respuestacomentariossolicitudes.edit')
+                                            @if (($comentario->estatus=='Pendiente' && ($comentario->de_usuario_id==$asistente_titular->id || $comentario->de_usuario_id == $director->id )))
+                                                <a class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario" href="{{ route('respuestacomentariossolicitudes.edit',$comentario) }}">
+                                                    <span class="bi bi-chat-quote-fill fa-lg">Atender </span>{{--- Crear comentario  ---}}
+                                                </a>										                                       										                                       
+                                            @endif 
+                                        @endcan
+                                    @endif
                                     
-                                    @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id!=$asistente_titular->id))
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionessolicitudesatencion.edit',$comentario) }}">
-                                            Atender
+                                    @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id != $asistente_titular->id) && ($comentario->de_usuario_id != $director->id))
+                                        <a class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario" href="{{ route('revisionessolicitudesatencion.edit',$comentario) }}">
+                                           <span class="bi bi-chat-quote-fill fa-lg">Atender </span>{{--- Crear comentario  ---}}
                                         </a>                                        
                                     @endif 
                                 </td>
@@ -318,6 +320,14 @@
                                                             <a href="{{ route('revisionessolicitudes.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                                                 <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
                                                             </a>
+                                                            @if($respuesta->estatus == null || ($respuesta->estatus == 'Guardar'))
+                                                                <a href="{{ route('respuestacomentariossolicitudes.edit',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
+                                                                    <span class="bi bi-pencil-square fa-lg" aria-hidden="true"></span>{{--- Editar comentario  ---}}
+                                                                </a>
+                                                                <a href="{{ route('respuestacomentariossolicitudes.enviarcomentario',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
+                                                                    <span class="bi bi-send-fill fa-lg" aria-hidden="true"></span> {{--- Enviar comentario  ---}}
+                                                                </a>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach

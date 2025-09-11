@@ -427,7 +427,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
 
     function fechaactualreporte()
     {
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");
                     $fecha = Carbon::parse(now());
 
                     $formatterD = new NumeroALetras();
@@ -553,27 +553,29 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
 
     function fechaaletra($fecha){
        
-        $diacomparecencia=explode('/',fecha($fecha));
+        if(!empty($fecha)){
+            $diacomparecencia=explode('/',fecha($fecha));
+            $dia=$diacomparecencia[0];
+            $anio=$diacomparecencia[2];
 
-        $dia=$diacomparecencia[0];
-        $anio=$diacomparecencia[2];
+            $formatterD = new NumeroALetras();
+            $formatterD->apocope = true;
+            $diaD = $formatterD->toString($dia);    
+            $anioD = $formatterD->toString($anio);
+        
+            $diaMax = $diaD;            
+            $diaMin = mb_convert_encoding(mb_convert_case(strtolower($diaMax), MB_CASE_TITLE), "UTF-8") ;       
 
-        $formatterD = new NumeroALetras();
-        $formatterD->apocope = true;
-        $diaD = $formatterD->toString($dia);    
-        $anioD = $formatterD->toString($anio);
-      
-        $diaMax = ucwords($diaD);            
-        $diaMin = mb_convert_encoding(mb_convert_case(ucwords(strtolower($diaMax)), MB_CASE_TITLE), "UTF-8") ;       
+            $anioMax = $anioD;            
+            $anioMin = strtolower($anioMax);
 
-        $anioMax = ucwords($anioD);            
-        $anioMin = ucwords(strtolower($anioMax));
-
-        $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");
-                    $fecha = Carbon::parse($fecha);
-                    $mes = $meses[($fecha->format('n')) - 1];
-                    $fechaactual = $diaMin. 'dias de ' . $mes . ' del ' .  $anioMin;
-
+            $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");
+                        $fecha = Carbon::parse($fecha);
+                        $mes = $meses[($fecha->format('n')) - 1];
+                        $fechaactual = $diaMax. 'dias de ' . $mes . ' del ' .  $anioMin;
+        }else{
+            $fechaactual = "sin fecha cargada";
+        }
 
         return $fechaactual;
     }

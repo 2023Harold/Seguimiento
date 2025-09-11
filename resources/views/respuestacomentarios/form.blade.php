@@ -14,10 +14,10 @@
             <div class="row">
                 
                 <div class="col-md-6">
-                        {!!BootForm::textarea('muestra_rev','Comentario que se esta atendiendo: ', old('analisis',$comentario->muestra_rev),['rows'=>'10', 'disabled']) !!}
+                        {!!BootForm::textarea('muestra_rev','Comentario que se esta atendiendo: ', old('muestra_rev',$comentario->muestra_rev),['rows'=>'10', 'disabled']) !!}
                 </div>
                 <div class="col-md-6">
-                        {!!BootForm::textarea('comentario_rev','.', old('analisis',$comentario->comentario),['rows'=>'10', 'disabled']) !!}
+                        {!!BootForm::textarea('comentario_rev','Observación: ', old('comentario_rev',$comentario->comentario),['rows'=>'10', 'disabled']) !!}
                 </div>
             </div>
             <div class="row">
@@ -58,26 +58,15 @@
                     @endif
                 @endif  
             </div>                
-            <div class="row" style="padding-left: 2rem;">
-                <div class="col-md-6">
-                    {!!BootForm::radios("estatus", ' ', [ 'Guardar' => 'Guardar', 'Enviar' => 'Enviar'], 'Guardar', false, ['class' => 'i-checks enviar', 'id' => 'estatus']) !!}
-                </div>
-            </div>      
-            <div class="row" id="comentario-row" style="display: none;">               
+            <div class="row">               
                  <div class="col-md-12">
-                    {!!BootForm::textarea('comentario', 'Respuesta: *', old("comentario", ))!!}
+                    {!!BootForm::textarea('respuesta', 'Respuesta: *', old("respuesta", $AtenderComentario->comentario),['rows'=>'10'])!!}
                 </div>
             </div>
             
             <div class="row" id="btn-guardar">
                 <div class="col-md-12">
-                    @btnSubmit("Guardar")
-                </div>
-            </div>
-
-            <div class="row" id="btn-enviar" style="display: none;">
-                <div class="col-md-12">
-                    @btnSubmit("Enviar")
+                    @btnSubmit("Guardar",$comentario)
                 </div>
             </div>
         {!!BootForm::close() !!}
@@ -86,7 +75,7 @@
 @endsection
 @section('script')
 {!!JsValidator::formRequest('App\Http\Requests\RevisionRequest') !!}
-    <script>
+{{--    <script>
         $(document).ready(function () {
             function toggleElements() {
                 const selected = $('input[name="estatus"]:checked').val();
@@ -106,4 +95,5 @@
             $('input[name="estatus"]').on('change', toggleElements);
         });
     </script>
+    --}}
 @endsection

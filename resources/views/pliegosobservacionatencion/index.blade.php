@@ -263,43 +263,46 @@
                             {{-- {{ dd($accion,$accion->comentariossolicitudes) }} --}}
                             @forelse ($accion->comentariospliegos as $comentario)
                              <tr>
-                                    <td>
-                                        {{ fecha($comentario->created_at,'d/m/Y H:m:s') }}
-                                    </td>
-                                    <td>
-                                        {{ $comentario->deusuario->name }} <br>
-                                        <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('revisionespliegos.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
-                                            <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
-                                        </a>
-                                    </td>
-                                    <td class="text-center">                                                                      
-                                        @if ($comentario->estatus=='Pendiente')
-                                            <span class="badge badge-light-primary"> {{ $comentario->estatus }}</span>
-                                        @else
-                                            <span class="badge badge-light-success">{{ $comentario->estatus }}</span>
-                                        @endif                                    
-                                    </td>
-                                    <td class="text-center">
-                                    @can( 'respuestacomentariospliegos.edit')
-                                        @if (($comentario->estatus=='Pendiente' && ($comentario->de_usuario_id==$asistente_titular->id ||$comentario->de_usuario_id == $director->id )))
-                                            <a class="btn btn-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
-                                                Atender 
-                                            </a>										                                       										                                       
-                                        @endif 
-                                    @endcan
+                                <td>
+                                    {{ fecha($comentario->created_at,'d/m/Y H:m:s') }}
+                                </td>
+                                <td>
+                                    {{ $comentario->deusuario->name }} <br>
+                                    <small class="text-muted">{{ $comentario->deusuario->puesto }}</small>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('revisionespliegos.show',$comentario) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
+                                        <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
+                                    </a>
+                                </td>
+                                <td class="text-center">                                                                      
+                                    @if ($comentario->estatus=='Pendiente')
+                                        <span class="badge badge-light-primary"> {{ $comentario->estatus }}</span>
+                                    @else
+                                        <span class="badge badge-light-success">{{ $comentario->estatus }}</span>
+                                    @endif                                    
+                                </td>
+                                <td class="text-center">
+                                    @if(count($comentario->respuestas)<=0)
+                                        @can( 'respuestacomentariospliegos.create')
+                                            @if (($comentario->estatus=='Pendiente' && ($comentario->de_usuario_id==$asistente_titular->id ||$comentario->de_usuario_id == $director->id )))
+                                                <a class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario" href="{{ route('respuestacomentariospliegos.edit',$comentario) }}">
+                                                    <span class="bi bi-chat-quote-fill fa-lg">Atender </span>{{--- Crear comentario  ---}}
+                                                </a>								                                       										                                       
+                                            @endif 
+                                        @endcan
+                                    @endif
                                     
-                                    @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id!=$asistente_titular->id))
-                                        <a class="btn btn-primary popupcomentario" href="{{ route('revisionespliegosatencion.edit',$comentario) }}">
-                                            Atender
-                                        </a>                                        
+                                    @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id != $asistente_titular->id) && ($comentario->de_usuario_id != $director->id) )
+                                        <a class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario" href="{{ route('revisionespliegosatencion.edit',$comentario) }}">
+                                            <span class="bi bi-chat-quote-fill fa-lg">Atender </span>{{--- Crear comentario  ---}}
+                                        </a>  
+                                
                                     @endif  
-                                    </td>                                    
+                                </td>                                    
                             </tr>
                             @if (count($comentario->respuestas)>0)
-                           <tr>
+                            <tr>
                                 <td colspan="5">
                                     <div class="row mb-1">
                                         <div class="col-md-12 list-desglose">
@@ -326,9 +329,17 @@
                                                             <small class="text-muted">{{ $respuesta->deusuario->puesto }}</small>
                                                         </td>
                                                         <td class="text-center">
-                                                            <a href="{{ route('revisionespliegos.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
-                                                                <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
+                                                            <a href="{{ route('revisionespliegos.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
+                                                                <span class="fa fa-comment fa-lg" aria-hidden="true"></span>{{--- Solo respuesta Visualizacion ---}}
                                                             </a>
+                                                            @if($respuesta->estatus == null || ($respuesta->estatus == 'Guardar'))
+                                                                <a href="{{ route('respuestacomentariospliegos.edit',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
+                                                                    <span class="bi bi-pencil-square fa-lg" aria-hidden="true"></span>{{--- Editar comentario  ---}}
+                                                                </a>
+                                                                <a href="{{ route('respuestacomentariospliegos.enviarcomentario',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
+                                                                    <span class="bi bi-send-fill fa-lg" aria-hidden="true"></span> {{--- Enviar comentario  ---}}
+                                                                </a>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
