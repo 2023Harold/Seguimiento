@@ -18,13 +18,7 @@
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
 				@include('layouts.contextos._acuerdoconclusion')
-                <div class="row">                  
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                        <label>Fecha del acuerdo de conclusión: </label>
-                        <span class="text-primary">
-                            {{  fecha($auditoria->acuerdoconclusion->fecha_oficio_acuerdo)  }}
-                        </span>
-                    </div>                    
+                <div class="row">                                
                 </div>                
                 <h4 class="text-primary">Acuses</h3>
                     <div class="table-responsive">

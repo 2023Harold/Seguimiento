@@ -342,6 +342,12 @@ class InformeDesempenoController extends Controller
                                 ->where('segauditoria_id', $auditoria->id)->orderBy('segauditoria_acciones.consecutivo')
                                 ->get()->toArray();
         $segrecomendacion= array_map("unserialize", array_unique(array_map('serialize',$segrecomendacion)));
+        foreach ($segrecomendacion as &$accion) {
+				$accion['analisis'] = $this->limpiarTextoWord($accion['analisis'] ?? '');
+				$accion['conclusion'] = $this->limpiarTextoWord($accion['conclusion'] ?? '');
+				$accion['listado_documentos'] = $this->limpiarTextoWord($accion['listado_documentos'] ?? '');
+                $accion['accion'] = $this->limpiarTextoWord($accion['accion'] ?? '');
+			}
         $accionesRecomendaciones = array_merge($segrecomendacion);
         $tr01 = collect($segrecomendacion)->pluck('tr01')->filter()->implode(', ');
         
@@ -579,4 +585,21 @@ class InformeDesempenoController extends Controller
         }
             return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
     }
+
+    private function limpiarTextoWord($texto) {
+		// Convertir caracteres especiales a entidades HTML
+		$texto = htmlspecialchars($texto, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+		// Reemplazar saltos de línea por etiquetas que Word entienda
+		$texto = nl2br($texto); // si usas HTML en el template
+        // eliminar etiquetas HTML si no quieres formato
+		//$texto = strip_tags($texto);
+		
+		// Eliminar etiquetas HTML excepto <br> si quieres conservarlas
+		$texto = strip_tags($texto, '<br>');
+
+		// Reemplazar <br> por saltos de línea reales
+		$texto = str_replace(['<br>', '<br/>', '<br />'], "<w:br/><w:br/>", $texto);
+		return $texto;
+	}
 }

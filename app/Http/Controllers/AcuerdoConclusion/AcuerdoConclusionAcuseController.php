@@ -36,11 +36,11 @@ class AcuerdoConclusionAcuseController extends Controller
      */
     public function store(Request $request)
     {
-        mover_archivos($request, ['oficio_recepcion','oficio_acuerdo','oficio_acuse'], null);
-        $request['acuse_usuario_creacion_id'] = auth()->user()->id;
-
+        dd("store acuse");
+        mover_archivos($request, ['oficio_acuerdo'], null);
+        $request['usuario_creacion_id'] = auth()->user()->id;
         $request['auditoria_id']=getSession('acuerdoconclusion_auditoria_id');     
-        $acuerdoconclusion = AcuerdoConclusion::create($request->all());
+        $comparecencia = AcuerdoConclusion::create($request->all());
     }
 
     /**
@@ -52,8 +52,7 @@ class AcuerdoConclusionAcuseController extends Controller
     public function show(AcuerdoConclusion $acuerdoconclusion)
     {
          $auditoria = $acuerdoconclusion->auditoria; 
-
-        return view('acuerdoconclusionacuse.show', compact('auditoria', 'acuerdoconclusion'));
+        return view('acuerdoconclusionacusecp.show', compact('auditoria', 'acuerdoconclusion'));
     }
 
     /**
@@ -64,12 +63,9 @@ class AcuerdoConclusionAcuseController extends Controller
      */
     public function edit(AcuerdoConclusion $acuerdoconclusion)
     {
-        $auditoria=$acuerdoconclusion->auditoria;
-        $request['acuse_usuario_creacion_id'] = auth()->user()->id;
-
+     $auditoria=$acuerdoconclusion->auditoria;
         return view('acuerdoconclusionacusecp.form', compact('acuerdoconclusion', 'auditoria'));   
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -79,15 +75,15 @@ class AcuerdoConclusionAcuseController extends Controller
      */
     public function update(Request $request, AcuerdoConclusion $acuerdoconclusion)
     {
-        $request['acuse_usuario_modificacion_id'] = auth()->id();
+        $request['usuario_modificacion_id'] = auth()->id();
         //$ruta = env('APP_RUTA_MINIO').'Auditorias/' . strtoupper(Str::slug($comparecencia->auditoria->numero_auditoria)).'/Documentos';
         //mover_archivos_minio($request, ['oficio_recepcion', 'oficio_acuse'], null, $ruta);
         mover_archivos($request, ['oficio_recepcion','oficio_acuerdo','oficio_acuse']);
         $acuerdoconclusion->update($request->all());
         setMessage('Los acuses se han guardado correctamente');
-
         return redirect()->route('acuerdoconclusion.index');
     }
+
 
     /**
      * Remove the specified resource from storage.

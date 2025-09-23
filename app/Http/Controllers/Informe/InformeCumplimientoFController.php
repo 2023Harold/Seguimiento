@@ -348,6 +348,13 @@ class InformeCumplimientoFController extends Controller
                             ->get()
                             ->toArray();
         $segsolac= array_map("unserialize", array_unique(array_map('serialize',$segsolac)));
+        foreach ($segsolac as &$accion) {
+				$accion['analisis'] = $this->limpiarTextoWord($accion['analisis'] ?? '');
+				$accion['conclusion'] = $this->limpiarTextoWord($accion['conclusion'] ?? '');
+				$accion['listado_documentos'] = $this->limpiarTextoWord($accion['listado_documentos'] ?? '');
+                $accion['accion'] = $this->limpiarTextoWord($accion['accion'] ?? '');
+			}
+
         $NumSolacPromPo = collect($segsolac)->pluck('numsolacpo')->filter()->implode(', ');
         $CantSolacPromPo = count(collect($segsolac)->pluck('numsolacpo')->filter());
         $NumSolacPromRecomendaciones = collect($segsolac)->pluck('numporecomen')->filter()->implode(', ');
@@ -400,28 +407,14 @@ class InformeCumplimientoFController extends Controller
 				$accion['analisis'] = $this->limpiarTextoWord($accion['analisis'] ?? '');
 				$accion['conclusion'] = $this->limpiarTextoWord($accion['conclusion'] ?? '');
 				$accion['listado_documentos'] = $this->limpiarTextoWord($accion['listado_documentos'] ?? '');
+                $accion['accion'] = $this->limpiarTextoWord($accion['accion'] ?? '');
 			}
 			
         $accionesSolAcPo = array_merge($segsolac,$segpliego);
-        
-        
-       // dd($accionesSolAcPo);
+
         $NumPoPromPRAS = collect($segpliego)->pluck('numpopras')->filter()->implode(', ');
         $NumPoPromRecomendaciones = collect($segpliego)->pluck('numporecomen')->filter()->implode(', ');
         $tpo01 = collect($segpliego)->pluck('tpo01')->filter()->implode(', ');
-        /*$i=0;
-        foreach ($segpliego as $item) {
-           
-            $xe=explode("\n",$item['listado_documentos']);
-            $xa = null;
-            //dd($xe);
-            foreach($xe as $ex){
-                $xa = $xa.'</w:t><w:br/><w:t>'.$ex. '</w:t><w:br/><w:t>';
-            }
-
-            $segpliego[$i]['listado_documentos'] = $xa;
-            $i++;
-        }*/
 
         $segrecomendacion = AuditoriaAccion::select('segauditoria_acciones.accion',/*TABLA segauditoria_acciones*/
                                                 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar','segauditoria_acciones.normativa_infringida',
@@ -445,6 +438,13 @@ class InformeCumplimientoFController extends Controller
                                 ->where('auditoria_id', $auditoria->id)->orderBy('segauditoria_acciones.consecutivo')
                                 ->get()->toArray();
         $segrecomendacion= array_map("unserialize", array_unique(array_map('serialize',$segrecomendacion)));
+
+        foreach ($segrecomendacion as &$accion) {
+				$accion['analisis'] = $this->limpiarTextoWord($accion['analisis'] ?? '');
+				$accion['conclusion'] = $this->limpiarTextoWord($accion['conclusion'] ?? '');
+				$accion['listado_documentos'] = $this->limpiarTextoWord($accion['listado_documentos'] ?? '');
+                $accion['accion'] = $this->limpiarTextoWord($accion['accion'] ?? '');
+			}
         $accionesRecomendaciones = array_merge($segrecomendacion);
         $tr01 = collect($segrecomendacion)->pluck('tr01')->filter()->implode(', ');
 
@@ -781,10 +781,14 @@ class InformeCumplimientoFController extends Controller
 
 		// Reemplazar saltos de línea por etiquetas que Word entienda
 		$texto = nl2br($texto); // si usas HTML en el template
+        // eliminar etiquetas HTML si no quieres formato
+		//$texto = strip_tags($texto);
+		
+		// Eliminar etiquetas HTML excepto <br> si quieres conservarlas
+		$texto = strip_tags($texto, '<br>');
 
-		// Opcional: eliminar etiquetas HTML si no quieres formato
-		// $texto = strip_tags($texto);
-
+		// Reemplazar <br> por saltos de línea reales
+		$texto = str_replace(['<br>', '<br/>', '<br />'], "<w:br/><w:br/>", $texto);
 		return $texto;
 	}
 
