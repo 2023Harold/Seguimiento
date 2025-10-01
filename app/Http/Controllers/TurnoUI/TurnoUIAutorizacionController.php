@@ -4,8 +4,10 @@ namespace App\Http\Controllers\TurnoUI;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
+use App\Models\Auditoria;
 use App\Models\Movimientos;
 use App\Models\TurnoUI;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TurnoUIAutorizacionController extends Controller
@@ -88,6 +90,20 @@ class TurnoUIAutorizacionController extends Controller
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);
+        $auditoria = Auditoria::find($turnoui->auditoria_id);
+        if(getSession('cp')==2022){
+            //$director=User::where('unidad_administrativa_id',substr($auditoria->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $analista=$auditoria->accion->analista;
+            $lider=$auditoria->accion->lider;
+            $jefe=$auditoria->accion->depaasignado;
+            $director=User::where('unidad_administrativa_id', substr($analista->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+
+        }else{
+            $director = $auditoria->directorasignado;
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
 
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
@@ -100,22 +116,30 @@ class TurnoUIAutorizacionController extends Controller
             'Se ha autorizado el Turno a la Unidad de Investigación de la auditoría con exito.' :
             'El rechazo ha sido registrado.'
         );
+        $url = route('turnoui.index');
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnoui).'/Aut')->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion); 
 
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del Turno a la Unidad de Investigación de la auditoría No. '.$turnoui->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$turnoui->usuarioCreacion->name.', '.$turnoui->usuarioCreacion->puesto. ':</strong><br>'
+            $titulo = ' Turno a la Unidad de Investigación de la auditoría No. '.$auditoria->numero_auditoria. ' Autorizado';
+            $mensaje = '<strong>Estimado(a) '.$lider->name.', '.$lider->puesto. ':</strong><br>'
                             .auth()->user()->titular->name.', '.auth()->user()->titular->puesto.
-                            '; ha aprobado la autorización del Turno a la Unidad de Investigación de la auditoría No. '.$turnoui->auditoria->numero_auditoria.
-                            ', por lo que se requiere realice la autorización oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoui->usuarioCreacion->unidad_administrativa_id, $turnoui->usuarioCreacion->id);
+                            '; ha aprobado la autorización del Turno a la Unidad de Investigación de la auditoría No. '.$auditoria->numero_auditoria;
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoui->usuarioCreacion->unidad_administrativa_id, $turnoui->usuarioCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id, GenerarLlave($turnoui).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name,$jefe->puesto,$auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($turnoui).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($turnoui).'/Consulta',$url);
+
         }else {
-            
             $titulo = 'Rechazo del Turno a la Unidad de Investigación de la auditoría No. '.$turnoui->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$turnoui->usuarioCreacion->name.', '.$turnoui->usuarioCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el Turno a la Unidad de Investigación de auditoría No. '.$turnoui->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
-            
-                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoui->usuarioCreacion->unidad_administrativa_id, $turnoui->usuarioCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($turnoui).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id, GenerarLlave($turnoui).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($turnoui).'/Rechazo',$url);
+
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoui->usuarioCreacion->unidad_administrativa_id, $turnoui->usuarioCreacion->id);
                             
     }
     return redirect()->route('turnoui.index');

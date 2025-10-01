@@ -4,6 +4,7 @@ namespace App\Http\Controllers\TurnoArchivo;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
+use App\Models\Auditoria;
 use App\Models\Movimientos;
 use App\Models\TurnoAcuseArchivo;
 use App\Models\User;
@@ -101,29 +102,48 @@ class TurnoArchivoAutortizacionController extends Controller
             'Se ha autorizado el Turno acuse envío archivo de la auditoría con éxito.' :
             'El rechazo ha sido registrado.'
         );
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+        if(getSession('cp')==2022){
+            $lider=$auditoria->accion->lider;
+            $analista=$auditoria->accion->analista;
+            $director=User::where('unidad_administrativa_id',substr($analista->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $jefe=$auditoria->accion->depaasignado;
+            
+        }else{
+            $director = $auditoria->directorasignado;
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
+        $url = route('turnoarchivo.index');
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($turnoarchivo).'/Aut')->first();
+        $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($turnoarchivo)."/Rechazo")->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+
 
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.auth()->user()->titular->name.', '.auth()->user()->titular->puesto.':</strong><br>'
-                            .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; ha aprobado la autorización del  Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria.
-                            ', por lo que se requiere realice la autorización oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
-            // auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($titular->name,$titular->puesto,$turnoarchivo->auditoria->numero_auditoria), now(), $titular->unidad_administrativa_id, $director->id);
-
+            $titulo = 'Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria .' Autorizado';
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($analista->name,$analista->puesto,$auditoria->numero_auditoria), now(), $analista->unidad_administrativa_id, $analista->id, GenerarLlave($turnoarchivo).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id, GenerarLlave($turnoarchivo).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name,$jefe->puesto,$auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($turnoarchivo).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($lider->name,$lider->puesto,$auditoria->numero_auditoria), now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($turnoarchivo).'/Consulta',$url);
 
         }else {
             
-            $titulo = 'Rechazo del  Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$turnoarchivo->usuarioCreacion->name.', '.$turnoarchivo->usuarioCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el  Turno acuse envío archivo de la auditoría No. '.$turnoarchivo->auditoria->numero_auditoria.
-                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
+            $titulo = 'Rechazo del Turno acuse envío archivo de la auditoría No. '.$auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
+                            .'Se rechazo el Turno acuse envío archivo, por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
             
-                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivo->usuarioCreacion->unidad_administrativa_id, $turnoarchivo->usuarioCreacion->id);
-                            //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$turnoarchivo->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
-                            
-    }
-    return redirect()->route('turnoarchivo.index');
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivo->usuarioCreacion->unidad_administrativa_id, $turnoarchivo->usuarioCreacion->id);
+            //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$turnoarchivo->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id, GenerarLlave($turnoarchivo).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id, GenerarLlave($turnoarchivo).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($turnoarchivo).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$auditoria->numero_auditoria), now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($turnoarchivo).'/Rechazo',$url);
+          
+        }
+        return redirect()->route('turnoarchivo.index');
     }
 
     /**
@@ -147,14 +167,14 @@ class TurnoArchivoAutortizacionController extends Controller
     private function mensajeRechazo(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Ha sido rechazado el registro del Turno acuse envío archivo de la auditoría No. '.$numeroauditoria.'.';       
+                    .'Se rechazo el registro del Turno acuse envío archivo de la auditoría No. '.$numeroauditoria.'.';       
 
         return $mensaje;
     }
     private function mensajeAprobado(String $nombre, String $puesto, String $numeroauditoria)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .' Ha sido autorizado el registro de radicación de la auditoría No. '.$numeroauditoria.
+                    .' Se autorizo el registro del Turno acuse envío archivo de la auditoría No. '.$numeroauditoria.
                     ', por parte del Titular.';       
 
         return $mensaje;

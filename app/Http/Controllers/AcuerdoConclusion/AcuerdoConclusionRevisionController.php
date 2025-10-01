@@ -135,7 +135,6 @@ class AcuerdoConclusionRevisionController extends Controller
            'motivo_rechazo' => $request->motivo_rechazo,
        ]);
         $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/RevJD')->first();
-        
         $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
         $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo')->first();
         $LeerNotificacionRechazo = auth()->user()->NotMarcarLeido($NotificacionRechazo);

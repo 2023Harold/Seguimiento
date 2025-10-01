@@ -158,7 +158,6 @@ class PliegosObservacionAutorizacionController extends Controller
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$pliegosobservacion), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($pliegosobservacion).'/Rechazo',$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$pliegosobservacion), now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($pliegosobservacion).'/Rechazo',$url);
 
-
             setMessage('Se ha rechazado el registro de la calificación y conclusión del pliego de observación.');
         }
 

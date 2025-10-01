@@ -78,9 +78,21 @@ class PliegosObservacionRevisionController extends Controller
      */
     public function update(Request $request, PliegosObservacion $pliegosobservacion)
     {
-        $director=auth()->user()->director;
+        //$director=auth()->user()->director;
         $asistenteATUS=User::where('siglas_rol','ATUS')->first();
-
+        $auditoria = Auditoria::find($pliegosobservacion->auditoria_id);
+        $accion=AuditoriaAccion::find($pliegosobservacion->accion_id);
+        if(getSession('cp')==2022){
+            $lider=$pliegosobservacion->accion->lider;
+            $analista=$pliegosobservacion->accion->analista;
+            $director=User::where('unidad_administrativa_id',substr($analista->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $jefe=$pliegosobservacion->accion->depaasignado;
+        }else{
+            $director = $auditoria->directorasignado;
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -115,21 +127,21 @@ class PliegosObservacionRevisionController extends Controller
         if ($request->estatus == 'Aprobado') {
             $pliegosobservacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
 
-            $titulo = ' del registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
+            $titulo = ' del registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$auditoria->numero_auditoria;
 
             $mensaje = '<strong>Estimado(a) '.$director->name.', '.$director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
-                            ', por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id, GenerarLlave($pliegosobservacion).'/ValD', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeNotificacion($asistenteATUS->name,$asistenteATUS->puesto, $pliegosobservacion), now(), $asistenteATUS->unidad_administrativa_id, $asistenteATUS->id,GenerarLlave($pliegosobservacion).'/Consulta', $url); 
-        } else {
-            $titulo = 'Rechazo del registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$pliegosobservacion->userCreacion->name.', '.$pliegosobservacion->userCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
-                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion('Validación'.$titulo, $mensaje, now(), $pliegosobservacion->userCreacion->unidad_administrativa_id, $pliegosobservacion->userCreacion->id, GenerarLlave($pliegosobservacion).'/Rechazo', $url);
-            auth()->user()->insertNotificacion('Revisión'.$titulo, $this->mensajeRechazo($pliegosobservacion->accion->lider->name,$pliegosobservacion->accion->lider->puesto,$pliegosobservacion), now(), $pliegosobservacion->accion->lider->unidad_administrativa_id, $pliegosobservacion->accion->lider->id, GenerarLlave($pliegosobservacion).'/Rechazo', $url);
+                            '; se ha aprobado el registro de atención del pliego de observación, por lo que se requiere realice la validación oportuna en el módulo Seguimiento.';
+            auth()->user()->insertNotificacion('Validación'.$titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id, GenerarLlave($pliegosobservacion).'/ValD', $url);
+            auth()->user()->insertNotificacion('Revisión'.$titulo, $this->mensajeNotificacion($asistenteATUS->name,$asistenteATUS->puesto, $pliegosobservacion), now(), $asistenteATUS->unidad_administrativa_id, $asistenteATUS->id,GenerarLlave($pliegosobservacion).'/Consulta', $url); 
+            
+        }else {
+            $titulo = 'Rechazo del registro de atención del pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
+                            .'Ha sido rechazado el registro de atención del pliego de observación, por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id, GenerarLlave($pliegosobservacion).'/Rechazo', $url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$pliegosobservacion), now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($pliegosobservacion).'/Rechazo', $url);
+            
         }
 
         return redirect()->route('pliegosobservacionatencion.index');

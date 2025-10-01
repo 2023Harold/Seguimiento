@@ -30,30 +30,32 @@
                     <div class="col-md-12" style="display: none;" id="no_aplica"> 
                     <div class="row">
                         <div class="col-md-3">
-                            {!! BootForm::date('fecha_turno_archivo', 'Fecha de entrega *', old('fecha_turno_archivo', fecha($turnoarchivo->fecha_turno_archivo, 'Y-m-d'))); !!}
+                            {!! BootForm::date('fecha_turno_archivo', 'Fecha de entrega *', old('fecha_turno_archivo', fecha($turnoarchivo->fecha_turno_archivo, 'Y-m-d'))) !!}
                         </div>
-                        {{-- <div class="col-md-4">
+                        {{--    ¿PORQUE SE QUITO? 
+                        <div class="col-md-4">
                             {!! BootForm::text('numero_turno_archivo', 'Número de oficio: *', old('numero_turno_archivo', $turnoarchivo->numero_turno_archivo)) !!}
-                        </div> --}}
+                        </div> 
+                        --}}
                     </div>
                 
                     <div class="row"> Expediente Técnico de la Auditoría:
                         <div class="row">
                             <div class="col-md-2">
-                                {!! BootForm::text('legajos_tecnico_archivo', 'Número de legajos:  ', old('legajos_tecnico_archivo', ($turnoarchivo->legajos_tecnico_archivo))); !!}
+                                {!!BootForm::text('legajos_tecnico_archivo', 'Número de legajos:  ', old('legajos_tecnico_archivo', ($turnoarchivo->legajos_tecnico_archivo))) !!}
                             </div>
                             <div class="col-md-4">
-                                {!! BootForm::text('fojas_tecnico_archivo', 'Número de fojas:  ', old('fojas_tecnico_archivo', ($turnoarchivo->fojas_tecnico_archivo))); !!}
+                                {!!BootForm::text('fojas_tecnico_archivo', 'Número de fojas:  ', old('fojas_tecnico_archivo', ($turnoarchivo->fojas_tecnico_archivo))) !!}
                             </div>
                         </div>
                     </div>
                     <div class="row"> Expediente de Seguimiento:
                         <div class="row">
                             <div class="col-md-2">
-                                {!! BootForm::text('legajos_seg_archivo', 'Número de legajos:  ', old('legajos_seg_archivo', ($turnoarchivo->legajos_seg_archivo))); !!}
+                                {!!BootForm::text('legajos_seg_archivo', 'Número de legajos:  ', old('legajos_seg_archivo', ($turnoarchivo->legajos_seg_archivo))) !!}
                             </div>
                             <div class="col-md-4">
-                                {!! BootForm::text('fojas_seg_archivo', 'Número de fojas:  ', old('fojas_seg', ($turnoarchivo->fojas_seg_archivo))); !!}
+                                {!!BootForm::text('fojas_seg_archivo', 'Número de fojas:  ', old('fojas_seg', ($turnoarchivo->fojas_seg_archivo))) !!}
                             </div>
                         </div>
                     </div>
@@ -62,7 +64,7 @@
                             {!! archivo('turno_archivo', 'Relación de expedientes al archivo: *', old('turno_archivo', $turnoarchivo->turno_archivo)) !!}
                         </div>
                         <div class="col-md-3">
-                            {!! BootForm::date('fecha_notificacion_archivo', 'Fecha: *', old('fecha_notificacion_archivo', fecha($turnoarchivo->fecha_notificacion_archivo, 'Y-m-d'))); !!}
+                            {!!BootForm::date('fecha_notificacion_archivo', 'Fecha: *', old('fecha_notificacion_archivo', fecha($turnoarchivo->fecha_notificacion_archivo, 'Y-m-d')))!!}
                         </div>
                     </div>
                 </div>    
@@ -74,7 +76,7 @@
                         <a href="{{ route('turnoarchivo.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                     </div>
                 </div>
-                {!! BootForm::close() !!}
+                {!!BootForm::close() !!}
             </div>
         </div>
     </div>

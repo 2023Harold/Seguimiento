@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\TurnoOIC;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auditoria;
 use App\Models\Movimientos;
 use App\Models\TurnoOIC;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TurnoOICEnvioController extends Controller
@@ -60,6 +62,14 @@ class TurnoOICEnvioController extends Controller
     public function edit(TurnoOIC $auditoria)
     {
         $turnooic=$auditoria;
+        $auditoria = Auditoria::find($turnooic->auditoria_id);
+        if(getSession('cp')==2022){
+            $jefe=User::where('unidad_administrativa_id', substr($auditoria->userCreacion->unidad_administrativa_id, 0, 5).'0')->first();
+            $lider=$auditoria->accion->lider;
+        }else{
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $lider = $auditoria->lidercp; 
+        }
         Movimientos::create([
             'tipo_movimiento' => 'Registro del Turno al Órgano Interno de Control',
                 'accion' => 'TurnoOIC',
@@ -70,16 +80,22 @@ class TurnoOICEnvioController extends Controller
             ]);
     
             $turnooic->update(['fase_autorizacion' =>  'En revisión']);
-    
-            $titulo = 'Revisión de los datos del turno a la OIC';
-            $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
-                        Ha sido registrada el turno a la OIC de la auditoría No. ' . $turnooic->auditoria->numero_auditoria . ', por parte del ' .
+            $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnooic).'/Rechazo')->first();
+            $LeerNotificacionRechazo = auth()->user()->NotMarcarLeido($NotificacionRechazo);
+            $url = route('turnooic.index');
+
+            $titulo = 'Revisión de los datos del Turno al OIC de la auditoría No. '.$auditoria->numero_auditoria;
+            $mensaje = '<strong>Estimado (a) ' . $jefe->name . ', ' . $jefe->puesto . ':</strong><br>
+                        Se realizó el registro el turno a la OIC de la auditoría No. ' . $auditoria->numero_auditoria . ', por parte del ' .
                         auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
     
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
-            setMessage('Se ha enviado el turno a la UI, a revisión');
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id,$jefe->id,GenerarLlave($turnooic).'/RevJD',$url);
+
+            setMessage('Se ha enviado el turno a la OIC, a revisión');
     
         return redirect()->route('turnooic.index');
+
     }
 
     /**

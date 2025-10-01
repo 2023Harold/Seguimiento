@@ -704,6 +704,12 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             $llave = "AUD-{$Accion->segauditoria_id}/AudAc-{$Accion->id}/SOL-{$Accion->solicitudesaclaracion->id}";
         }elseif(!empty($Accion->numero_informe)){
             $llave = "AUD-{$Accion->auditoria_id}/IS-{$Accion->id}/informe{$Accion->tipo}";
+        }elseif(!empty($Accion->numero_turno_ui)){
+            $llave = "AUD-{$Accion->auditoria_id}/TurnoUI-{$Accion->id}";
+        }elseif(!empty($Accion->numero_turno_oic)){
+            $llave = "AUD-{$Accion->auditoria_id}/TurnoOIC-{$Accion->id}";
+        }elseif(!empty($Accion->turno_archivo)){
+            $llave = "AUD-{$Accion->auditoria_id}/TurnoArchivo-{$Accion->id}";
         }
 
         return $llave;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\TurnoOIC;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
+use App\Models\Auditoria;
 use App\Models\Movimientos;
 use App\Models\TurnoOIC;
 use App\Models\User;
@@ -88,6 +89,20 @@ class TurnoOICAutorizacionController extends Controller
             'usuario_asignado_id' => auth()->id(),
             'motivo_rechazo' => $request->motivo_rechazo,
         ]);
+        $auditoria = Auditoria::find($turnooic->auditoria_id);
+        if(getSession('cp')==2022){
+            //$director=User::where('unidad_administrativa_id',substr($auditoria->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $analista=$auditoria->accion->analista;
+            $lider=$auditoria->accion->lider;
+            $jefe=$auditoria->accion->depaasignado;
+            $director=User::where('unidad_administrativa_id', substr($analista->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+
+        }else{
+            $director = $auditoria->directorasignado;
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp;
+            $lider = $auditoria->lidercp; 
+        }
 
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
@@ -100,26 +115,33 @@ class TurnoOICAutorizacionController extends Controller
             'Se ha autorizado el Turno al Órgano Interno de Control de la auditoría con exito.' :
             'El rechazo ha sido registrado.'
         );
-
-        $director=User::where('unidad_administrativa_id',substr($turnooic->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();
+        $url = route('turnooic.index');
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnooic).'/Aut')->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion); 
         if ($request->estatus == 'Aprobado') {
-            $titulo = 'Autorización del Turno a la Unidad de Investigación de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$turnooic->usuarioCreacion->name.', '.$turnooic->usuarioCreacion->puesto.':</strong><br>'
+            $titulo = 'Autorización del Turno al OIC';
+            $mensaje = '<strong>Estimado(a) '.$lider->name.', '.$lider->puesto.':</strong><br>'
                             .auth()->user()->titular->name.', '.auth()->user()->titular->puesto.
-                            '; ha aprobado la autorización del Turno al Órgano Interno de Control de la auditoría No. '.$turnooic->auditoria->numero_auditoria.
+                            '; ha aprobado la autorización del Turno al Órgano Interno de Control de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnooic->usuarioCreacion->unidad_administrativa_id, $turnooic->usuarioCreacion->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$turnooic->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnooic->usuarioCreacion->unidad_administrativa_id, $turnooic->usuarioCreacion->id);
+            //auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$turnooic->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id, GenerarLlave($turnooic).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name,$jefe->puesto,$auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($turnooic).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($turnooic).'/Consulta',$url);
 
         }else {
             
-            $titulo = 'Rechazo del Turno a la Unidad de Investigación de la auditoría No. '.$turnooic->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$turnooic->usuarioCreacion->name.', '.$turnooic->usuarioCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el Turno al Órgano Interno de Control de auditoría No. '.$turnooic->auditoria->numero_auditoria.
+            $titulo = 'Rechazo del Turno al OIC ';
+            $mensaje = '<strong>Estimado(a) '.$lider->name.', '.$lider->puesto.':</strong><br>'
+                            .'Ha sido rechazado el Turno al Órgano Interno de Control de auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
             
-                            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnooic->usuarioCreacion->unidad_administrativa_id, $turnooic->usuarioCreacion->id);
-                            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$turnooic->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnooic->usuarioCreacion->unidad_administrativa_id, $turnooic->usuarioCreacion->id);
+            //auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$turnooic->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($turnooic).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id, GenerarLlave($turnooic).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($turnooic).'/Rechazo',$url);
 
     }
     return redirect()->route('turnooic.index');
