@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Asignaciones;
 
 use App\Http\Controllers\Controller;
 use App\Models\CatalogoUnidadesAdministrativas;
-use App\Models\CuentaPublica;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class AsignacionUnidadAdministrativaController extends Controller
+class AsignacionUnidadAdministrativa2024Controller extends Controller
 {
     protected $model;
     
@@ -16,17 +15,14 @@ class AsignacionUnidadAdministrativaController extends Controller
     {
         $this->model = $model;
     }
-    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        //dd(2);
-        $users = $this->setQuery($request)->paginate(20);
-        return view('asignacionunidadadministrativa.index',compact('users','request'));
+        //
     }
 
     /**
@@ -34,9 +30,9 @@ class AsignacionUnidadAdministrativaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-        
+        //
     }
 
     /**
@@ -71,9 +67,8 @@ class AsignacionUnidadAdministrativaController extends Controller
     {
         $unidades = CatalogoUnidadesAdministrativas::orderBy('id','DESC')->get() ->pluck('descripcion','id')->prepend('Seleccionar una opción', '');
         $unidad_administrativa ='Asignación';
-        $cp_2021=null;
-
-        return view('asignacionunidadadministrativa.form', compact('unidades','unidad_administrativa','cp_2021','user'));
+        $cp_2024=null;
+        return view('asignacionunidadadministrativa2024.form', compact('unidades','unidad_administrativa','cp_2024','user'));  
     }
 
     /**
@@ -83,12 +78,11 @@ class AsignacionUnidadAdministrativaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request,User $user)
     {
-        $request ['cp_2021']='X';
+        $request ['cp_2024']='X';
         $user->update($request->all());
         return redirect()->route('asignacionunidadadministrativa.index',$user);  
-        // return view('asignacionunidadadministrativa.index');
     }
 
     /**
@@ -101,28 +95,4 @@ class AsignacionUnidadAdministrativaController extends Controller
     {
         //
     }
-    private function setQuery($request)
-    {
-        $query = $this->model;
-        $query = $query->orderBy('id','DESC');
-        if ($request->filled('name')) {
-             $query = $query->whereLike('name', $request->name);
-        }
-        if($request->filled('email')){
-            $query = $query->whereLike('email',$request->email);
-        }
-        if($request->filled('estatus')&& $request->input('estatus') != 'Todas') {
-            $query = $query->whereLike('estatus', $request->input('estatus'));
-        }
-        return $query;
-    }
-
-    public function asignartodosusuarios(Request $request, $cp)
-    {
-        dd(2);
-        //$request ['cp_2023']='X';;
-        $users = $this->setQuery($request)->paginate(20);
-        return view('asignacionunidadadministrativa.index',compact('users','request'));
-    }
-
 }

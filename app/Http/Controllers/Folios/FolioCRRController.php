@@ -79,8 +79,8 @@ class FolioCRRController extends Controller
 
         $auditoria = Auditoria::find(getSession('auditoria_id'));
 
-        // Aquí podrías mandar más datos si necesitas, además del folio
-        return view('folios.remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
+        //return view('folios.remitentes.show', compact('folioscrr', 'auditoria','remitentes'));
+		return view('folios.remitentes.index', compact('folioscrr', 'auditoria','remitentes'));
     }
 
     /**

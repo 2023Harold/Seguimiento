@@ -8,7 +8,7 @@ use App\Models\CuentaPublica;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class AsignacionUnidadAdministrativaController extends Controller
+class AsignacionUnidadAdministrativaTodosController extends Controller
 {
     protected $model;
     
@@ -67,13 +67,14 @@ class AsignacionUnidadAdministrativaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(Request $request, $cp)
     {
+        //dd($cp);
         $unidades = CatalogoUnidadesAdministrativas::orderBy('id','DESC')->get() ->pluck('descripcion','id')->prepend('Seleccionar una opción', '');
-        $unidad_administrativa ='Asignación';
+        $unidad_administrativa ='Asignación todos los usuarios';
         $cp_2021=null;
 
-        return view('asignacionunidadadministrativa.form', compact('unidades','unidad_administrativa','cp_2021','user'));
+        return view('asignacionunidadadministrativa.form', compact('unidades','unidad_administrativa','cp_2021'));
     }
 
     /**
@@ -85,7 +86,8 @@ class AsignacionUnidadAdministrativaController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $request ['cp_2021']='X';
+        //dd($user);
+        $request ['cp_2024']='X';
         $user->update($request->all());
         return redirect()->route('asignacionunidadadministrativa.index',$user);  
         // return view('asignacionunidadadministrativa.index');

@@ -8,6 +8,7 @@
 @endsection
 @section('content')
 <div class="card">
+    
     <div class="card-header">
         <h1 class="card-title">
             <a href="{{ route('seguimientoauditoriacp.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>                      

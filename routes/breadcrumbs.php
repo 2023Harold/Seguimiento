@@ -34,6 +34,10 @@ Breadcrumbs::for('asignacionunidadadministrativa2023.edit', function (Breadcrumb
     $trail->parent('administracion.index');
     $trail->push('Asignación Unidad Administrativa 2023', route('asignacionunidadadministrativa2023.edit',$user));
 });
+Breadcrumbs::for('asignacionunidadadministrativa2024.edit', function (BreadcrumbTrail $trail,$user) {
+    $trail->parent('administracion.index');
+    $trail->push('Asignación Unidad Administrativa 2024', route('asignacionunidadadministrativa2024.edit',$user));
+});
 
 Breadcrumbs::for('notificaciones', function (BreadcrumbTrail $trail) {
     $trail->parent('home');

@@ -37,9 +37,11 @@ class User extends Authenticatable
         'fecha_ultimo_acceso',
         'usuario_creacion_id',
         'usuario_actualizacion_id',
+        'cp_2024',
         'cp_2023',
         'cp_2022',
         'cp_2021',
+        'cp_ua2024',
         'cp_ua2023',
         'cp_ua2022',
         'cp_ua2021'
@@ -78,6 +80,9 @@ class User extends Authenticatable
         if(getSession('cp')==2023){
             return $this->cp_ua2023;
         }
+        if(getSession('cp')==2024){
+            return $this->cp_ua2024;
+        }
     }
 
     public function unidadAdministrativa()
@@ -95,6 +100,10 @@ class User extends Authenticatable
     public function unidadAdministrativa2023()
     {
         return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'id', 'cp_ua2023');
+    }
+    public function unidadAdministrativa2024()
+    {
+        return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'id', 'cp_ua2024');
     }
     public function getNotificacionesCountAttribute()
     {
@@ -128,6 +137,9 @@ class User extends Authenticatable
         if(getSession('cp')==2023){
             return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 5).'0')->where('siglas_rol','JD')->first();
         }
+        if(getSession('cp')==2024){
+            return $this->where('cp_ua2024', substr(getSession('cp_ua'), 0, 5).'0')->where('siglas_rol','JD')->first();
+        }
     }
 
     public function getDirectorAttribute()
@@ -140,6 +152,9 @@ class User extends Authenticatable
         }
         if(getSession('cp')==2023){
             return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 4).'00')->where('siglas_rol','DS')->first();
+        }
+        if(getSession('cp')==2024){
+            return $this->where('cp_ua2024', substr(getSession('cp_ua'), 0, 4).'00')->where('siglas_rol','DS')->first();
         }
 
         //return usuariocp( $clave)->first();
@@ -157,6 +172,9 @@ class User extends Authenticatable
         }
         if(getSession('cp')==2023){
             return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 4).'00')->where('siglas_rol','STAFF')->first();
+        }
+        if(getSession('cp')==2024){
+            return $this->where('cp_ua2024', substr(getSession('cp_ua'), 0, 4).'00')->where('siglas_rol','STAFF')->first();
         }
 
         //return usuariocp( $clave)->first();
@@ -176,6 +194,10 @@ class User extends Authenticatable
         if(getSession('cp')==2023){
             return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 3).'000')->where('siglas_rol','TUS')->first();
         }
+        if(getSession('cp')==2024){
+            return $this->where('cp_ua2024', substr(getSession('cp_ua'), 0, 3).'000')->where('siglas_rol','TUS')->first();
+        }
+        // ret
         // return $this->where('unidad_administrativa_id', substr((empty(auth()->user()->unidad_administrativa_id) ? '119' : auth()->user()->unidad_administrativa_id), 0, 3).'000')->first();
     }
     public function getLiderAttribute()
@@ -189,6 +211,9 @@ class User extends Authenticatable
         }
         if(getSession('cp')==2023){
             return $this->where('cp_ua2023', substr(getSession('cp_ua'), 0, 5).'0')->where('siglas_rol','LP')->first();
+        }
+        if(getSession('cp')==2024){
+            return $this->where('cp_ua2024', substr(getSession('cp_ua'), 0, 5).'0')->where('siglas_rol','LP')->first();
         }
 
 

@@ -316,48 +316,50 @@
 
 
             @canany(['seguimientoauditoria.index','tipologiaauditorias.index'])
-            <div class="mb-3 col-md-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h1 class="card-title">
-                            <span class="text-gray-800 fs-2x"><img alt="Logo" src="{{asset('assets/img/registro.png')}}"
-                                    class="h-40px logo" /></span>&nbsp;
-                            Auditorias
-                        </h1>
-                    </div>
-                    <div class="overflow-auto card-body h-200px">
-                        <div class="d-flex flex-column">
-                            @if(getSession('cp')==2023)
-                                @can('seguimientoauditoriacp.index')
-                                <li class="py-2 d-flex align-items-center">
-                                    <span class="bullet me-5 bg-primary"></span>
-                                    <a href="{{ route('seguimientoauditoriacp.index') }}">
-                                        Registro
-                                    </a>
-                                </li>
-                                @endcan
-                            @else
-                                @can('seguimientoauditoria.index')
-                                <li class="py-2 d-flex align-items-center">
-                                    <span class="bullet me-5 bg-primary"></span>
-                                    <a href="{{ route('seguimientoauditoria.index') }}">
-                                        Registro
-                                    </a>
-                                </li>
-                                @endcan
-                            @endif
-							@can('administracion.index')
-                            <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('reportesregistrosauditorias.index') }}">
-                                    Reportes de Registros de Auditorias
-                                </a>
-                            </li>
-							@endif
+                @if (getSession('cp')!=2024)
+                    <div class="mb-3 col-md-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title">
+                                    <span class="text-gray-800 fs-2x"><img alt="Logo" src="{{asset('assets/img/registro.png')}}"
+                                            class="h-40px logo" /></span>&nbsp;
+                                    Auditorias
+                                </h1>
+                            </div>
+                            <div class="overflow-auto card-body h-200px">
+                                <div class="d-flex flex-column">
+                                    @if(getSession('cp')==2023)
+                                        @can('seguimientoauditoriacp.index')
+                                        <li class="py-2 d-flex align-items-center">
+                                            <span class="bullet me-5 bg-primary"></span>
+                                            <a href="{{ route('seguimientoauditoriacp.index') }}">
+                                                Registro
+                                            </a>
+                                        </li>
+                                        @endcan
+                                    @else
+                                        @can('seguimientoauditoria.index')
+                                        <li class="py-2 d-flex align-items-center">
+                                            <span class="bullet me-5 bg-primary"></span>
+                                            <a href="{{ route('seguimientoauditoria.index') }}">
+                                                Registro
+                                            </a>
+                                        </li>
+                                        @endcan
+                                    @endif
+                                    @can('administracion.index')
+                                    <li class="py-2 d-flex align-items-center">
+                                        <span class="bullet me-5 bg-primary"></span>
+                                        <a href="{{ route('reportesregistrosauditorias.index') }}">
+                                            Reportes de Registros de Auditorias
+                                        </a>
+                                    </li>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                @endif
             @endcan
             @canany(['asignaciondireccion.index','asignaciondepartamento.index','asignacionlideranalista.index'])
             <div class="mb-3 col-md-3">
@@ -371,29 +373,39 @@
                     </div>
                     <div class="overflow-auto card-body h-200px">
                         <div class="d-flex flex-column">
+                            @if (getSession('cp')==2024)
+                                @can('asignacionauditorias.index')
+                                    <li class="py-2 d-flex align-items-center">
+                                        <span class="bullet me-5 bg-primary"></span>
+                                        <a href="{{ route('asignacionauditorias.index') }}">
+                                            Asignar auditorías
+                                        </a>
+                                    </li>
+                                @endcan
+                            @endif
                             @can('asignaciondireccion.index')
-                            <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('asignaciondireccion.index') }}">
-                                    Dirección
-                                </a>
-                            </li>
+                                <li class="py-2 d-flex align-items-center">
+                                    <span class="bullet me-5 bg-primary"></span>
+                                    <a href="{{ route('asignaciondireccion.index') }}">
+                                        Dirección
+                                    </a>
+                                </li>
                             @endcan
                             @can('asignaciondepartamento.index')
-                            <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('asignaciondepartamento.index') }}">
-                                    Departamentos y Staff Jurídico
-                                </a>
-                            </li>
+                                <li class="py-2 d-flex align-items-center">
+                                    <span class="bullet me-5 bg-primary"></span>
+                                    <a href="{{ route('asignaciondepartamento.index') }}">
+                                        Departamentos y Staff Jurídico
+                                    </a>
+                                </li>
                             @endcan
                             @can('asignacionlideranalista.index')
-                            <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('asignacionlideranalista.index') }}">
-                                    Lider y analista
-                                </a>
-                            </li>
+                                <li class="py-2 d-flex align-items-center">
+                                    <span class="bullet me-5 bg-primary"></span>
+                                    <a href="{{ route('asignacionlideranalista.index') }}">
+                                        Lider y analista
+                                    </a>
+                                </li>
                             @endcan
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('asignacionunidadadministrativa.index') }}
+{{Breadcrumbs::render('asignacionunidadadministrativa.index') }}
 @endsection
 @section('content')
 <div class="row">
@@ -14,24 +14,24 @@
                     </h1>
                 </div>
                 <div class="card-body">
-                    {!! BootForm::open(['id'=>'form', 'method' => 'GET']); !!}
+                    {!!BootForm::open(['id'=>'form', 'method' => 'GET']) !!}
                     <div class="row align-items-center">
                         <div class="col-md-4">
-                            {!! BootForm::text("name", "Nombre del usuario:", old("name", optional(request())->name)); !!}
+                            {!!BootForm::text("name", "Nombre del usuario:", old("name", optional(request())->name)) !!}
                         </div>
                         <div class="col-md-4">
-                            {!! BootForm::text("email", "Correo electrónico:", old("email", optional(request())->email)); !!}
+                            {!!BootForm::text("email", "Correo electrónico:", old("email", optional(request())->email)) !!}
                         </div>
                         <div class="col-md-3">
-                            {!! BootForm::radios("estatus",
+                            {!!BootForm::radios("estatus",
                             "Estatus:",['Todas'=>' Todas&nbsp;&nbsp;','Activo'=>' Activas&nbsp;&nbsp;','Inactivo'=>' Inactivas'] ,old("estatus",
-                            (request()->estatus != "")?request()->estatus:'Todas'),true,['class'=>'i-checks']); !!}
+                            (request()->estatus != "")?request()->estatus:'Todas'),true,['class'=>'i-checks']) !!}
                         </div>
                         <div class="col-md-1">
-                            {!! Form::submit('Buscar', ['class' => 'btn btn-primary pull-right']); !!}
+                            {!!Form::submit('Buscar', ['class' => 'btn btn-primary pull-right']) !!}
                         </div>
                     </div>
-                    {!! BootForm::close() !!}
+                    {!!BootForm::close() !!}
                     <div class="row">
                         <div class="col-md-12">
                             <table class="table table-hover table-rounded table-row-gray-300 gy-7">
@@ -43,7 +43,13 @@
                                         <th scope="col">Rol</th>
                                         <th scope="col">Unidad Administrativa 2021</th>
                                         <th scope="col">Unidad Administrativa 2022</th>
-                                        <th scope="col">Unidad Administrativa 2023</th>
+                                        <th scope="col">
+                                            Unidad Administrativa 2023
+                                            
+                                        </th>
+                                        <th scope="col">Unidad Administrativa 2024
+                                            
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,6 +103,18 @@
                                         </a>
                                        @endif
                                     </td>             
+                                    <td>
+                                        @if (empty($user->cp_ua2024))
+                                        <a href="{{ route('asignacionunidadadministrativa2024.edit',$user) }}"  class="btn btn-primary float-end">
+                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Asignar
+                                        </a>
+                                        @else
+                                        {{ $user->unidadAdministrativa2024->descripcion }}
+										<a href="{{ route('asignacionunidadadministrativa2024.edit',$user) }}"  class="btn btn-primary float-end">
+                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Asignar
+                                        </a>
+                                       @endif
+                                    </td>             
                                                                                                         
                                 </tr>
                                     @endforeach
@@ -109,6 +127,7 @@
                             </table>
                         </div>
                     </div>
+                    
                     <div class="pagination">
                         {{ $users->appends(['usuario' => $request->usuario,
                                     'email' => $request->email,

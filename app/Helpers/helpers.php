@@ -594,6 +594,11 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             $users=$users
             ->where('cp_ua2023','LIKE','%'.$ua .'%' );
         }
+        if(getSession('cp')==2024)
+        {
+            $users=$users
+            ->where('cp_ua2024','LIKE','%'.$ua .'%' );
+        }
         return $users;
     } 
     

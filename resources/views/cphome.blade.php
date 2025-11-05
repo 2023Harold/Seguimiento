@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{ Breadcrumbs::render('cphome') }}
+{{Breadcrumbs::render('cphome') }}
 @endsection
 @section('content')
 <div class="row">
@@ -36,6 +36,10 @@
                                 @elseif ($cp->cuenta_publica==2023)
                                     @php                   
                                         $acceso=auth()->user()->cp_2023=='X'?true:false;                                    
+                                    @endphp 
+                                @elseif ($cp->cuenta_publica==2024)
+                                    @php                   
+                                        $acceso=auth()->user()->cp_2024=='X'?true:false;                                    
                                     @endphp 
                                 @endif
                     <div class="col-12">

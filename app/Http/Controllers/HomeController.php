@@ -46,6 +46,10 @@ class HomeController extends Controller
             setSession('cp',2023);
             setSession('cp_ua',$usuario->cp_ua2023);
         }
+        if($cp->id==4){
+            setSession('cp',2024);
+            setSession('cp_ua',$usuario->cp_ua2024);
+        }
 
         
         return redirect('/home');
