@@ -23,6 +23,23 @@
                 {!!BootForm::open(['model' => $radicacion,'store' => 'radicacion.store','update' => 'radicacion.update','id' =>'form',]) !!}
                 {!!BootForm::hidden('acto_fiscalizacion_auditoria',$auditoria->acto_fiscalizacion)!!}
                 {!!BootForm::hidden('calculo_fecha','',['id'=> 'calculo_fecha'])!!}
+
+                 <h4 class="text-primary">Auditoría </h4><br>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {!! BootForm::text('numero_orden', 'Número de orden de auditoría: *', old('numero_orden', $auditoria->numero_orden)) !!}
+                        </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            {!! archivo('informe_auditoria', 'Informe de auditoria: ', optional($auditoria)->informe_auditoria) !!}
+                        </div>
+                        <div class="col-md-2">
+                            {!! BootForm::text('fojas_utiles', 'Número de fojas útiles: *', optional($auditoria)->fojas_utiles) !!}
+                        </div>
+                    </div>  
+                    </div>
+                <hr>
+                <h4 class="text-primary">Radicación</h4><br>
                 <div class="row">
                     <div class="col-md-3">
                         {!!BootForm::text('num_memo_recepcion_expediente', 'Número del memorándum de recepción del expediente: *', old('num_memo_recepcion_expediente',$radicacion->num_memo_recepcion_expediente)) !!}

@@ -14,7 +14,7 @@
             </div>
             <div class="card-body">
                 @include('flash::message')
-                {!!BootForm::open(['route'=>'auditoriaseguimiento.index','method'=>'GET']) !!}
+                {!!BootForm::open(['route'=>'auditoriaseguimiento2024.index','method'=>'GET']) !!}
                     <div class="row">
                         <div class="col-md-2">
                             {!!BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria)) !!}
@@ -47,10 +47,11 @@
                                 <th>Informe de auditoría</th>
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>
-                                <th>Seguimiento</th>
-                                @if(getSession('cp')==2023 || getSession('cp')==2024)
+                                <th>Auditoria</th>
+                                @if(getSession('cp')==2024)
                                 <th>Acciones</th>
                                 @endif
+                                <th>Seguimiento</th>                                
                             </tr>
                         </thead>
                         <tbody>
@@ -86,18 +87,15 @@
                                                 <a href="{{ route('auditoriaseguimiento.accionesconsulta', $auditoria) }}" class="btn btn-secondary">Consultar</a>
                                             @endif
                                         @endif
-                                    </td>
+                                    </td>                                    
                                     <td style="text-align: right!important;">
                                         {{ '$'.number_format( $auditoria->total(), 2) }}
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ route('auditoriaseguimiento.edit', $auditoria) }}" class="btn btn-primary">Ingresar</a>
-                                    </td>
-                                    {{-- <td class="text-center">
-                                        <a href="{{ route('seleccionarauditoria.auditoria', $auditoria) }}" class="btn btn-primary">Agregar</a>
-                                    </td> --}}
+                                        <a href="{{ route('seguimientoauditoriacp.edit', $auditoria) }}" class="btn btn-primary">Concluir</a>
+                                    </td>                                                                      
 {{-- revision --}}
-                                    @if(getSession('cp')==2023 || getSession('cp')==2024)                                   
+                                    @if(getSession('cp')==2024)                                   
                                       <td class="text-center">   
                                             @can('seleccionarauditoria.auditoria')                                         
                                                 <a href="{{ route('seleccionarauditoria.auditoria',$auditoria) }}"class="btn btn-primary">
@@ -107,6 +105,9 @@
                                     </td>         
                                     @endif
 {{-- fin del flujo --}}
+                                    <td class="text-center">
+                                        <a href="{{ route('auditoriaseguimiento.edit', $auditoria) }}" class="btn btn-primary">Ingresar</a>
+                                    </td> 
                                 </tr>
                             @empty
                                 <tr>

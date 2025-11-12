@@ -37,7 +37,7 @@
                     @else
                         @include('layouts.contextos._radicacion')					
                     @endif 
-                @elseif(getSession('cp')==2023)
+                @elseif(getSession('cp')==2023 || getSession('cp')==2024)
                     @if (empty($auditoria->radicacion) && $auditoria->lidercp_id==auth()->user()->id)
                         @can('radicacion.auditoria')
                             <div class="row">

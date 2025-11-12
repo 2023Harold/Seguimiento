@@ -420,6 +420,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
 
     /**Seguimiento - Auditorias */
     Route::resource('auditoriaseguimiento', AuditoriaSeguimientoController::class, ['parameters' => ['auditoriaseguimiento' => 'auditoria']]);
+    Route::resource('auditoriaseguimiento2024', AuditoriaSeguimientoController::class, ['parameters' => ['auditoriaseguimiento2024' => 'auditoria']]);
     Route::get('/auditoriaseguimiento/acciones/consulta/{auditoria}', [AuditoriaSeguimientoController::class, 'accionesConsulta'])->name('auditoriaseguimiento.accionesconsulta');
     Route::get('/auditoriaseguimiento/seleccionar/{auditoria}', [AuditoriaSeguimientoController::class, 'seleccionarauditoria'])->name('seleccionarauditoria.auditoria');
     Route::resource('auditoriaseguimientoacciones', AuditoriaSeguimientoAccionesController::class, ['parameters' => ['auditoriaseguimientoacciones' => 'auditoria']]);

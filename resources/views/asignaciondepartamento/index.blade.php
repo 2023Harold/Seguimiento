@@ -48,7 +48,7 @@
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>                                                                 
                                 <th>Asignación del encargado de la auditoría</th>
-                                @if(getSession('cp')!=2023)                               
+                                @if(getSession('cp')==2021 || getSession('cp')==2022)                               
                                 <th>Asignación de departamentos</th>
                                 @endif
                                 <th>Staff Jurídico</th>
@@ -103,7 +103,7 @@
                                             @endcan 
                                         @endif                                                                                                                                           
                                     </td>  
-                                    @if(getSession('cp')!=2023)                                                                    
+                                    @if(getSession('cp')==2022||getSession('cp')==2021) 
                                         <td class="text-center">
                                                 @can('asignaciondepartamento.edit')                                          
                                                     @if ($auditoria->asignacion_departamentos=='Si'|| in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray()) || in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray()))

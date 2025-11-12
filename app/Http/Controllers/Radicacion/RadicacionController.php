@@ -61,8 +61,8 @@ class RadicacionController extends Controller
         $request['auditoria_id']=getSession('radicacion_auditoria_id');
         $request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
         $request['fecha_termino_aclaracion'] = addBusinessDays($request->fecha_inicio_aclaracion, 30);
-
-
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+        $auditoria->update(['numero_orden'=>$request->numero_orden,'informe_auditoria'=>$request->informe_auditoria,'fojas_utiles'=>$request->fojas_utiles]);
         $radicacion = Radicacion::create($request->all());
         $comparecencia = Comparecencia::create($request->all());
 
@@ -132,11 +132,13 @@ class RadicacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Radicacion $radicacion)
-    {
+    { 
+        // dd($request);
         //mover_archivos($request, ['oficio_acuerdo','oficio_designacion'], $radicacion);
         $request['usuario_modificacion_id'] = auth()->user()->id;
         $radicacion->update($request->all());
         $auditoria=$radicacion->auditoria;
+        $auditoria->update(['numero_orden'=>$request->numero_orden,'informe_auditoria'=>$request->informe_auditoria,'fojas_utiles'=>$request->fojas_utiles]);
         $comparecencia=$auditoria->comparecencia;
 		if(empty($comparecencia)){
 			$request['usuario_creacion_id'] = auth()->user()->id;

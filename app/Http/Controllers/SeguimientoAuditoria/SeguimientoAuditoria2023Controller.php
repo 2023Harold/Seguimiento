@@ -25,6 +25,7 @@ class SeguimientoAuditoria2023Controller extends Controller
      */
     public function index(Request $request)
     {
+        
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
 
         return view('seguimientoauditoriacp.index', compact('auditorias', 'request'));

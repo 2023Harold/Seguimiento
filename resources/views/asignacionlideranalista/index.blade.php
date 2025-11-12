@@ -85,7 +85,7 @@
                                         {{ '$'.number_format( $auditoria->total(), 2) }}                                         
                                     </td>                                    
                                     <td class="text-center">
-                                    @if(getSession('cp')==2023)
+                                    @if(getSession('cp')==2023 || getSession('cp')==2024)
                                       @if (!empty($auditoria->lidercp_id))                                            
                                       <div class="row">
                                           <div class="col-md-6">

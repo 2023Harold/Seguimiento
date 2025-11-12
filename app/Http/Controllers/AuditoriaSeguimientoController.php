@@ -31,8 +31,11 @@ class AuditoriaSeguimientoController extends Controller
         //$auditorias = $this->setQuery($request)->paginate(30);
         $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
 
-
+        // if( getSession('cp')!=2024 ){
         return view('auditoriaseguimiento.index', compact('auditorias', 'request', 'solicitudesaclaracion'));
+        //  }else{
+        //     return view('auditoriaseguimiento2024.index', compact('auditorias', 'request', 'solicitudesaclaracion'));
+        // }
     }
 
     /**
@@ -42,7 +45,7 @@ class AuditoriaSeguimientoController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -117,7 +120,7 @@ class AuditoriaSeguimientoController extends Controller
          }
          if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
             //$query = $query->where('departamento_encargado_id',auth()->user()->unidad_administrativa_id);
-            if(getSession('cp')!=2023){
+            if(getSession('cp')!=2023 || getSession('cp')!=2024 ){
                 $query = $query->where(function ($queryJDE) {
                     $queryJDE->where('departamento_encargado_id', auth()->user()->unidad_administrativa_id)
                     ->orWhere(function ($queryJDA) {
@@ -131,22 +134,23 @@ class AuditoriaSeguimientoController extends Controller
                 });    
             }else{
                 $query = $query->where(function ($queryJDE) {
-                    $queryJDE->where('departamento_encargado_id', auth()->user()->cp_ua2023);
+                    $queryJDE->where('departamento_encargado_id', auth()->user()->cp_ua2023 || auth()->user()->cp_ua2024 );
                 });
             }
          }
+         /*
+         if(getSession('cp')==2023 || getSession('cp')==2024 ){
 
-         if(getSession('cp')!=2023){
             $query = $query->whereHas('acciones', function($q){
                 if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
-                    $q = $q->where('analista_asignado_id',auth()->user()->id);
+                    $q = $q->where('analistacp_id',auth()->user()->id);
                 }
                 if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
                     $userLider=auth()->user();
-                    $q = $q->whereRaw('LOWER(lider_asignado_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('segauditorias.fase_autorizacion');
+                    $q = $q->whereRaw('LOWER(lidercp_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('segauditorias.fase_autorizacion');
                 }
             });
-        }
+        }*/
         else{            
             if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){              
                 $query = $query->where('analistacp_id',auth()->user()->id);

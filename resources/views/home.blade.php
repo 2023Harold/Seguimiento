@@ -148,15 +148,15 @@
                         </h1>
                     </div>
                     <div class="overflow-auto card-body h-200px">
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column">                            
                             @can('programaanual.index')
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span> <a
                                     href="{{ route('programaanual.index') }}">
                                     Registro de Auditorías del Programa Anual de Auditorías (PAA)
                                 </a>
-                            </li>
-                            @endcan
+                            </li>                            
+                            @endcan                            
                             @can('programaanualauditoria.index')
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span> <a
@@ -425,10 +425,16 @@
                     <div class="overflow-auto card-body h-200px">
                         <div class="d-flex flex-column">
                             <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>
-                                <a href="{{ route('auditoriaseguimiento.index') }}">
-                                    Auditorias
-                                </a>
+                                <span class="bullet me-5 bg-primary"></span>                                
+                                @if (getsession ('cp') !=2024)
+                                    <a href="{{ route('auditoriaseguimiento.index') }}">
+                                        Auditorias
+                                    </a>
+                                @else
+                                <a href="{{ route('auditoriaseguimiento2024.index') }}">
+                                        Auditorias
+                                    </a>                                    
+                                @endif
                             </li>
                         </div>
                         <li class="py-2 d-flex align-items-center">

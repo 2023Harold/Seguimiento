@@ -25,6 +25,7 @@ class AsignacionLiderAnalistaController extends Controller
     public function index(Request $request)
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
+       // dd($auditorias);
 
         return view('asignacionlideranalista.index', compact('auditorias', 'request'));
     }
@@ -85,7 +86,7 @@ class AsignacionLiderAnalistaController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        if(getSession('cp')==2023){
+        if(getSession('cp')==2023 || getSession('cp')==2024 ){
 
             if($request->acciond=='reasignarlider'){
 
@@ -255,6 +256,7 @@ class AsignacionLiderAnalistaController extends Controller
 
     public function setQuery(Request $request)
     {
+    // dd(getSession('cp_ua'));
          $query = $this->model;
          $query = $query->where('cuenta_publica',getSession('cp'));
 
@@ -272,9 +274,12 @@ class AsignacionLiderAnalistaController extends Controller
                         ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);
 
         }elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-            if(getSession('cp')==2023){
+            if(getSession('cp')==2023 || getSession('cp')==2024){ 
                 $query = $query->where('departamento_encargado_id',getSession('cp_ua'));
+                //dd(getSession('cp_ua'));
+
             }else{
+                // dd(2);
                 $query = $query->whereHas('acciones', function($q){
                     $q->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
                 });
