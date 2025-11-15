@@ -45,7 +45,7 @@ class Radicacion extends Model
         'acta_cierre_auditoria',
         'created_at'=>'datetime',
         'updated_at'=>'datetime',   
-        'fecha_acta',     
+        'fecha_acta',        
     ];
 
            

@@ -111,7 +111,6 @@ class RecomendacionesAutorizacionController extends Controller
             $analista = $auditoria->analistacp;
             $lider = $auditoria->lidercp; 
         }
-        $auditoria = Auditoria::find($recomendacion->auditoria_id);
         $this->normalizarDatos($request);
         //$ruta = env('APP_RUTA_MINIO').'Expedientes/' . strtoupper(Str::slug($cierre->denunciado->expediente->carpeta_expediente)).'/Constancias';
         //$constancia = guardarConstanciasFirmadas($recomendacion, 'constancia_atencion_recomendacion', $request, 'constancia');

@@ -57,7 +57,7 @@
                         <thead>
                             <tr>  
                                 <th>Número de expediente</th>
-								 @if(getSession('cp')==2023)
+								 @if(getSession('cp')!=2022)
 									<th>Oficio de notificación de acuerdos</th>
 								 @elseif(getSession('cp')==2022)
 									<th>Número de oficio de notificación del informe de auditoria</th>
@@ -76,7 +76,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-										@if(getSession('cp')==2023)
+										@if(getSession('cp')!=2022)
 											{{ optional($auditoria->radicacion)->oficio_acuerdo }}
 										 @elseif(getSession('cp')==2022)
 											@if (!empty($auditoria->radicacion))
@@ -149,14 +149,17 @@
                                                 @endif
                                                                                                  
                                             @endif  
-                                    @elseif(getSession('cp')==2023 )
-                                            @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado' && auth()->user()->siglas_rol=='LP')
-                                                <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>
+                                    @elseif(getSession('cp')!=2022)
+                                            @if (empty($auditoria->radicacion->fase_autorizacion)||$auditoria->radicacion->fase_autorizacion=='Rechazado')
+                                                <span class="badge badge-light-danger">{{ $auditoria->radicacion->fase_autorizacion }} </span><br>   
+                                                @if (auth()->user()->siglas_rol=='LP')
                                                     @can('radicacion.edit')
                                                         <a href="{{ route('radicacion.edit',$auditoria->radicacion) }}" class="btn btn-primary">
                                                             <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
                                                         </a>
                                                     @endcan
+                                                @endif
+                                                
                                             @endif
                                             @if ($auditoria->radicacion->fase_autorizacion == 'En revisión')
                                                 @can('radicacionrevision.edit')
@@ -208,7 +211,7 @@
                                     <td class="text-center">                                                                            
                                         @if (!empty($auditoria->radicacion->fase_autorizacion)&&$auditoria->radicacion->fase_autorizacion=='Autorizado')
                                             @if (empty($auditoria->comparecencia->oficio_recepcion))  
-                                                @if(getSession('cp')==2023)                                                                                       
+                                                @if(getSession('cp')!=2022)                                                                                       
                                                     @can('comparecenciaacusecp.edit')
                                                         <a href="{{ route('comparecenciaacusecp.edit', $auditoria->comparecencia) }}" class="btn btn-primary">
                                                             <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar

@@ -31,7 +31,7 @@
                             {!!BootForm::text('numero_auditoria', 'Número de Auditoría', old('numero_auditoria', $request->numero_auditoria)) !!}
                         </div>
 						<div class="col-md-3">
-                            {!!BootForm::radios("cuenta", 'Cuenta Pública: ',['Todas' => ' Todas', '|2022'=>' 2022','|2023'=>' 2023'],
+                            {!!BootForm::radios("cuenta", 'Cuenta Pública: ',['Todas' => ' Todas', '|2022'=>' 2022','|2023'=>' 2023','|2024'=>' 2024'],
                                 old('cuenta', empty($request->cuenta) ? 'Todas' : $request->cuenta),true,['class'=>'i-checks']) !!}
                         </div> 
 						
@@ -60,6 +60,12 @@
 											<td>{{ $notificacion->cp??'Sin registro'}}</td>
                                             <td>{{ $notificacion->titulo}}</td>
                                             <td>
+												@if (!empty($notificacion->url))
+													<label class="fs-6 text-primary fw-bold float-end">
+														<a href="{{ route('notificacionurl.edit', $notificacion) }}"><i class="bi bi-box-arrow-in-up-right fa-2x text-primary float-end"></i></a>
+													</label>
+													<br>
+												@endif
                                                 @php
                                                     $partes = explode('<br>', $notificacion->mensaje);
                                                     $texto = $partes[1] ?? $notificacion->mensaje; // usa mensaje completo si no hay segunda parte
@@ -69,6 +75,7 @@
                                                 @else
                                                     {{explode("<br>", $notificacion->mensaje)[1]}}
                                                 @endif
+												
                                             </td>
                                             <td>{{ fecha($notificacion->created_at, 'd/m/Y H:i') }}</td>
                                             <td class="text-center">

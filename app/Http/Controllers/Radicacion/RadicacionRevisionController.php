@@ -100,14 +100,19 @@ class RadicacionRevisionController extends Controller
             'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
             'El rechazo ha sido registrado.'
         );
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $radicacion).'/RevJD')->first();
+        $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($radicacion)."/Rechazo")->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+        $url = route('radicacion.index');
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Validación de la radicación de la auditoría No. '.$radicacion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; ha aprobado la validación de la radiación de la auditoría No. '.$radicacion->auditoria->numero_auditoria.
+                            '; ha aprobado la revisión de la radiación de la auditoría No. '.$radicacion->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la validación oportuna de la misma.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id,GenerarLlave($radicacion).'/ValD',$url);
         }else {
             
             $titulo = 'Rechazo de la radicación de la auditoría No. '.$radicacion->auditoria->numero_auditoria;
@@ -115,7 +120,7 @@ class RadicacionRevisionController extends Controller
                             .'Ha sido rechazado la radicación de auditoría No. '.$radicacion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
             
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id,GenerarLlave($radicacion).'/Rechazo',$url);
         }
 
         return redirect()->route('radicacion.index');

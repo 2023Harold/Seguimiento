@@ -105,7 +105,7 @@
                                     </div>
                                 @endcan
                             @endif
-                    @elseif(getSession('cp')==2023)
+                    @elseif(getSession('cp')!=2022)
                                 @if (empty($auditoria->comparecencia->oficio_acta)&&!empty($auditoria->comparecencia->oficio_acuse) && $auditoria->lidercp_id==auth()->user()->id)
                                     @can('comparecenciaacta.edit')
                                         <div class="row">
@@ -129,7 +129,7 @@
 										<th>Fase / Acción</th>
                                         @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
                                         <th>Enviar</th>
-                                        @elseif(getSession('cp')==2023 && auth()->user()->siglas_rol=='LP')
+                                        @elseif(getSession('cp')!=2022 && auth()->user()->siglas_rol=='LP')
                                         <th>Enviar</th>
                                         @endif
                                     </tr>
@@ -230,7 +230,7 @@
                                                             Enviar
                                                             </a>
                                                         @endcan
-                                                    @elseif (getSession('cp')==2023 && $auditoria->lidercp_id==auth()->user()->id)
+                                                    @elseif (getSession('cp')!=2022 && $auditoria->lidercp_id==auth()->user()->id)
                                                         @can('comparecenciaacta.edit')
                                                             <a href="{{ route('comparecenciacpenvio.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
                                                             Enviar

@@ -83,9 +83,14 @@ class AgregarAccionesRevisionController extends Controller
 
                                     
         $accion->update(['fase_revision'=>$request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado']);
-            
-               
-       $director = usuariocp(substr($accion->usuarioCreacion->unidad, 0, 4).'00')->where('siglas_rol','DS')->first();
+        $cuenta_publicaSession = getSession('cp');
+        if($cuenta_publicaSession !=2022){
+            $director = auth()->user()->director;
+            $analista = $auditoria->analistacp; 
+        }else{
+            $director = usuariocp(substr($accion->usuarioCreacion->unidad, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $analista=$accion->analista;
+        }
        
       
         $this->normalizarDatos($request);
@@ -112,21 +117,27 @@ class AgregarAccionesRevisionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
+        $notificacion=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Rev')->first();
+        $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Rechazo')->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+
         if ($request->estatus == 'Aprobado') {
+            $url =  route("agregaraccionesvalidacion.edit",$accion);
             $auditoria->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
             $titulo = 'Validación del registro de la acción No.'.$accion->numero.' de la auditoria No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$director->name.', '.$director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de la acción No.'.$accion->numero.' de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($accion).'/Val',$url);
         } else {
-
+            $url =  route("agregaracciones.index");
             $titulo = 'Rechazo de la acción No.'.$accion->numero.' de la auditoria No. '.$auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$auditoria->usuarioCreacion->name.', '.$auditoria->usuarioCreacion->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la acción No.'.$accion->numero.'de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->usuarioCreacion->unidad, $auditoria->usuarioCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad, $analista->id,GenerarLlave($accion).'/Rechazo',$url);
         }
 
         return redirect()->route('agregaracciones.index');

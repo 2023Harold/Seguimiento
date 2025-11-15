@@ -18,7 +18,7 @@
                                 @if (!empty($auditoria->radicacion) && $auditoria->radicacion->fase_autorizacion=='Autorizado')
                                     <span class="fa fa-circle" style="color: green"></span>
                                 @else
-                                    @if(!empty($auditoria->radicacion) && ($auditoria->radicacion->fase_autorizacion == 'En validación' || $auditoria->radicacion->fase_autorizacion == 'En autorización' || $auditoria->radicacion->fase_autorizacion=='En revisión'))
+                                    @if(!empty($auditoria->radicacion) && !empty($auditoria->radicacion->fase_autorizacion))
                                         <span class="fa fa-circle" style="color: yellow"></span>
                                     @else
                                         <span class="fa fa-circle" style="color: red"></span>
@@ -38,8 +38,7 @@
                                 @if (!empty($auditoria->comparecencia) && $auditoria->comparecencia->fase_autorizacion=='Autorizado')
                                     <span class="fa fa-circle" style="color: green"></span>
                                 @else
-                                    @if(!empty($auditoria->comparecencia) && ($auditoria->comparecencia->fase_autorizacion == 'En validación'
-                                     || $auditoria->comparecencia->fase_autorizacion == 'En autorización' || $auditoria->comparecencia->fase_autorizacion == 'En revisión' ))
+                                    @if(!empty($auditoria->comparecencia) || !empty($auditoria->comparecencia->fase_autorizacion))
                                         <span class="fa fa-circle" style="color: yellow"></span>
                                     @else
                                         <span class="fa fa-circle" style="color: red"></span>

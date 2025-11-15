@@ -134,25 +134,35 @@ class ComparecenciaAgendaController extends Controller
 
        if(getSession('cp')==2022){
             $radicacion->update(['fase_autorizacion' =>  'En validación', 'nivel_autorizacion' => $nivel_autorizacion]);
-        
+            //$notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $radicacion).'/RevJD')->first();
+            $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($radicacion)."/Rechazo")->first();
+            //$LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+            $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+            $url = route('radicacion.index');
+
             $titulo = 'Validación de los datos de radicación';
             $mensaje = '<strong>Estimado (a) ' . auth()->user()->director->name . ', ' . auth()->user()->director->puesto . ':</strong><br>
                         Ha sido registrada la radicación de la auditoría No. ' . $radicacion->auditoria->numero_auditoria . ', por parte del ' . 
                         auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
     
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id); 
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id,auth()->user()->director->id,GenerarLlave($radicacion).'/ValD',$url); 
         
         
-        }elseif(getSession('cp')==2023){
+        }elseif(getSession('cp')!=2022){
             $radicacion->update(['fase_autorizacion' =>  'En revisión', 'nivel_autorizacion' => $nivel_autorizacion]);
-          
+
+            //$notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $radicacion).'/RevJD')->first();
+            $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($radicacion)."/Rechazo")->first();
+            //$LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+            $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+            $url = route('radicacion.index');
 
             $titulo = 'Revisión de los datos de radicación';
             $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
                         Ha sido registrada la radicación de la auditoría No. ' . $radicacion->auditoria->numero_auditoria . ', por parte del ' . 
                         auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la validación.';
     
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);        
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id,GenerarLlave($radicacion).'/RevJD',$url);        
         
         }
           

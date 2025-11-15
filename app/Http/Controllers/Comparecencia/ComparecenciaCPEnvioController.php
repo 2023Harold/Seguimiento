@@ -70,13 +70,18 @@ class ComparecenciaCPEnvioController extends Controller
             ]);
     
             $comparecencia->update(['fase_autorizacion' =>  'En revisión']);
-    
+            //$notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $radicacion).'/RevJD')->first();
+            $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($comparecencia)."/Rechazo")->first();
+            //$LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+            $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+            $url = route('comparecenciaacta.index');
+
             $titulo = 'Revisión de los datos de comparecencia';
             $mensaje = '<strong>Estimado (a) ' . auth()->user()->jefe->name . ', ' . auth()->user()->jefe->puesto . ':</strong><br>
                         Ha sido registrada la comparecencia de la auditoría No. ' . $comparecencia->auditoria->numero_auditoria . ', por parte del ' .
                         auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
     
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id,GenerarLlave($comparecencia).'/Rev',$url);
             setMessage('Se ha enviado la comparecencia a revisión');
     
         return redirect()->route('comparecenciaacta.index');

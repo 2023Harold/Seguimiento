@@ -63,6 +63,9 @@ class Auditoria extends Model
         'staff_asignada',
         'staff_juridico_id',
         'reasignacion_staff',
+        'nombre_informe_au',     
+        'cargo_informe_au',     
+        'administracion_informe_au',  
     ];
 
 

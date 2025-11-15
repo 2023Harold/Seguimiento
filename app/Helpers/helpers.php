@@ -427,20 +427,28 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
 
     function fechaactualreporte()
     {
-        $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");
-                    $fecha = Carbon::parse(now());
+        $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+        $fechaCarbon = Carbon::now();
+        $dia = $fechaCarbon->format('d');
+        $mes = $meses[$fechaCarbon->format('n') - 1];
+        $anio = $fechaCarbon->format('Y');
 
-                    $formatterD = new NumeroALetras();
-                    $anioD = $formatterD->toString($fecha->format('Y'));
+        $fechaHoy = "$dia de $mes de $anio"; // Resultado: "14 de noviembre de 2025"
 
-                    $anioMax = ucwords($anioD);             
-                    $anioMin = strtolower(ucwords(strtolower($anioMax)));
+       /* $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");
+       $fecha = Carbon::parse(now());
 
-                    $mes = strtolower($meses[($fecha->format('n')) - 1]);
-                    $fechaactual = $fecha->format('d') . ' dias del mes de ' . $mes . ' del año ' . $anioMin;
+       $formatterD = new NumeroALetras();
+       $anioD = $formatterD->toString($fecha->format('Y'));
 
+       $anioMax = ucwords($anioD);             
+       $anioMin = strtolower(ucwords(strtolower($anioMax)));
 
-        return $fechaactual;
+       $mes = strtolower($meses[($fecha->format('n')) - 1]);
+       $fechaactual = $fecha->format('d') . ' dias del mes de ' . $mes . ' del año ' . $anioMin;
+        */
+
+        return $fechaHoy;
     }
 
     function reportepdf($nombrereporte,$temporal=1,$qr='',$auditoria,$accion='',$modeloprincipal=[],$relacion1=[],$relacion2=[],$relacion3=[],$relacion4=null,$firma='', $hash='', $fechahora='', $estatus='',$motivo_rechazo='', $firmante='',$firmante_puesto='')
@@ -681,7 +689,17 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
 
     function GenerarLlave($Accion){
         //dd($Accion);
-        if(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Recomendación')){
+        if(!empty($Accion->normativa_infringida)){
+            //ACCIONES 
+            $llave = "AUD-{$Accion->segauditoria_id}/Acc-{$Accion->id}/Tipo-{$Accion->tipo}";
+        }elseif(!empty($Accion->acta_cierre_auditoria)){
+            //RADICACION
+            $llave = "AUD-{$Accion->auditoria_id}/Radicacion-{$Accion->id}";
+
+        }elseif(!empty($Accion->fecha_comparecencia)){
+            //COMPARECENCIA
+            $llave = "AUD-{$Accion->auditoria->id}/Comparecencia-{$Accion->id}";
+        }elseif(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Recomendación')){
             //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
             $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/REC-{$Accion->id}";
        
@@ -708,12 +726,16 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             //comentarios
             $llave = "AUD-{$Accion->segauditoria_id}/AudAc-{$Accion->id}/SOL-{$Accion->solicitudesaclaracion->id}";
         }elseif(!empty($Accion->numero_informe)){
+            //INFORME
             $llave = "AUD-{$Accion->auditoria_id}/IS-{$Accion->id}/informe{$Accion->tipo}";
         }elseif(!empty($Accion->numero_turno_ui)){
+            //TUNOUI
             $llave = "AUD-{$Accion->auditoria_id}/TurnoUI-{$Accion->id}";
         }elseif(!empty($Accion->numero_turno_oic)){
+            //TURNOOIC
             $llave = "AUD-{$Accion->auditoria_id}/TurnoOIC-{$Accion->id}";
         }elseif(!empty($Accion->turno_archivo)){
+            //TURNO ARCHIVO
             $llave = "AUD-{$Accion->auditoria_id}/TurnoArchivo-{$Accion->id}";
         }
 
@@ -727,6 +749,8 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         $partes = explode('/', $notificacion->llave);
         $clavesaud = explode('-', $partes[0]);
         setSession('auditoria_id',$clavesaud[1]);
+        setSession('auditoriacp_id',$clavesaud[1]);
+
         $clavesacn = explode('-', $partes[1]);
         if(count($partes) > 2){
             if(str_contains($partes[2],'SOL')){

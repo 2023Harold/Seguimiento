@@ -26,81 +26,90 @@
 
                  <h4 class="text-primary">Auditoría </h4><br>
                     <div class="row">
-                        <div class="col-md-3">
-                            {!! BootForm::text('numero_orden', 'Número de orden de auditoría: *', old('numero_orden', $auditoria->numero_orden)) !!}
+                        <div class="col-md-3 mb-3">
+                            {!!BootForm::text('numero_orden', 'Número de orden de auditoría: *', old('numero_orden', $auditoria->numero_orden)) !!}
                         </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            {!! archivo('informe_auditoria', 'Informe de auditoria: ', optional($auditoria)->informe_auditoria) !!}
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                {!! archivo('informe_auditoria', 'Informe de auditoria: ', optional($auditoria)->informe_auditoria) !!}
+                            </div>
+                            <div class="col-md-2">
+                                {!!BootForm::text('fojas_utiles', 'Número de fojas útiles: *', optional($auditoria)->fojas_utiles) !!}
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <h5><label>Datos del servidor público al que se le notificó el informe de auditoría:</label></h5>
+                            <div class="col-md-4">
+                                {!!BootForm::text('nombre_informe_au', 'Nombre: *', old('nombre_informe_au', $auditoria->nombre_informe_au)) !!}
+                            </div>
+                            <div class="col-md-4">
+                                {!!BootForm::text('cargo_informe_au', 'Cargo : *', old('cargo_informe_au', $auditoria->cargo_informe_au)) !!}
+                            </div>
+                            <div class="col-md-4">
+                                {!!BootForm::text('administracion_informe_au', 'Administración: *', old('administracion_informe_au', $auditoria->administracion_informe_au)) !!}
+                            </div>
+                        
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {!!BootForm::text('num_memo_recepcion_expediente', 'Número del memorándum de recepción del expediente: *', old('num_memo_recepcion_expediente',$radicacion->num_memo_recepcion_expediente)) !!}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                {!!BootForm::date('fecha_expediente_turnado', 'Fecha de recepción del expediente turnado: *', old('fecha_expediente_turnado',fecha($radicacion->fecha_expediente_turnado, 'Y-m-d'))) !!}
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            {!! BootForm::text('fojas_utiles', 'Número de fojas útiles: *', optional($auditoria)->fojas_utiles) !!}
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {!!BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
+                            </div>
+                            <div class="col-lg-3 col-md-3 mb-3">
+                                {!!BootForm::date('fecha_oficio_informe','Fecha de notificación: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
+                            </div>
                         </div>
-                    </div>  
+                        
                     </div>
                 <hr>
                 <h4 class="text-primary">Radicación</h4><br>
+                
                 <div class="row">
-                    <div class="col-md-3">
-                        {!!BootForm::text('num_memo_recepcion_expediente', 'Número del memorándum de recepción del expediente: *', old('num_memo_recepcion_expediente',$radicacion->num_memo_recepcion_expediente)) !!}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        {!!BootForm::date('fecha_expediente_turnado', 'Fecha de recepción del expediente turnado: *', old('fecha_expediente_turnado',fecha($radicacion->fecha_expediente_turnado, 'Y-m-d'))) !!}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-3 mb-5">
                         {!!BootForm::text('numero_expediente', 'Número de expediente US: *', old('numero_expediente',$radicacion->numero_expediente)) !!}
                     </div>
                 </div>
 				<div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-2 mb-5">
                         {!!BootForm::date('fecha_notificacion', 'Fecha de radicación: *', old('fecha_notificacion',fecha($radicacion->fecha_notificacion,'Y-m-d'))) !!}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
-                        {!!BootForm::text('numero_acuerdo', 'Número de oficio de notificación del informe de auditoría: *', old('numero_acuerdo',$radicacion->numero_acuerdo)) !!}
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        {!!BootForm::date('fecha_oficio_informe','Fecha de notificación: *', old('fecha_oficio_informe',fecha($radicacion->fecha_oficio_informe,'Y-m-d'))) !!}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-5">
                         {!!BootForm::text('oficio_acuerdo', 'Oficio de notificación de acuerdos: *', old('numero_acuerdo',$radicacion->oficio_acuerdo)) !!}
                     </div>
 
-                <div class="col-lg-3 col-md-3">
+                <div class="col-lg-3 col-md-3 mb-5">
                         {!!BootForm::date('fecha_oficio_acuerdo','Fecha de oficio: *', old('fecha_oficio_acuerdo',fecha($radicacion->fecha_oficio_acuerdo,'Y-m-d'))) !!}
                     </div>
 					</div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-5">
                         {!!BootForm::text('acta_cierre_auditoria', 'Acta de reunión de resultados finales y cierre de auditoría: *', old('acta_cierre_auditoria',$radicacion->acta_cierre_auditoria)) !!}
                     </div>
-                    <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-3 col-md-3 mb-5">
                         {!!BootForm::date('fecha_acta','Fecha del acta: *', old('fecha_acta',fecha($radicacion->fecha_acta,'Y-m-d'))) !!}
                     </div>
                 </div>
-
-
-
-
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-5">
                         {!!BootForm::text('nombre_titular','Nombre del titular a quien se dirige la comparecencia: *',old('nombre_titular', optional($comparecencia)->nombre_titular),) !!}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-5">
                         {!!BootForm::text('cargo_titular','Cargo del titular a quien se dirige la comparecencia: *',old('cargo_titular', optional($comparecencia)->cargo_titular),) !!}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-5">
                         {!!BootForm::text('domicilio_notificacion','Domicilio: *',old('domicilio', optional($comparecencia)->domicilio_notificacion),) !!}
                     </div>
                 </div>

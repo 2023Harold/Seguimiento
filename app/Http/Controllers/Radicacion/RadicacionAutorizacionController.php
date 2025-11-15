@@ -80,20 +80,18 @@ class RadicacionAutorizacionController extends Controller
 		$horas=explode(':',$auditoria->comparecencia->hora_comparecencia_inicio); 
         $formatter = new NumeroALetras();
 		if(empty($auditoria->comparecencia->fecha_comparecencia)){
-
+            $hora = $formatter->toString($horas[0]);
+            $minutos = $formatter->toString($horas[1]);
         
-        $hora = $formatter->toString($horas[0]);
-        $minutos = $formatter->toString($horas[1]);
-      
-        $horaMax = ucwords($hora);             
-        $horaMin = ucwords(strtolower($horaMax));
-       
-        $minutosMax = ucwords($minutos);            
-        $minutosMin = ucwords(strtolower($minutosMax));
+            $horaMax = ucwords($hora);             
+            $horaMin = ucwords(strtolower($horaMax));
+        
+            $minutosMax = ucwords($minutos);            
+            $minutosMin = ucwords(strtolower($minutosMax));
 
-        $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);        
-        $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);       
-        $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
+            $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);        
+            $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);       
+            $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
 		}
 
         $formatterPM = new NumeroALetras();
@@ -101,10 +99,19 @@ class RadicacionAutorizacionController extends Controller
 
         $plazomaxMax = ucwords($plazomax);            
         $plazomaxMin = ucwords(strtolower($plazomaxMax));
-
-        $fechaactual=fechaaletra(now());
-		
+        //$hoy = Carbon::now()->format('d/m/Y'); // Ejemplo: 14/11/2025
+        //dd($hoy);
         
+        $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+        $fechaCarbon = Carbon::now();
+        $dia = $fechaCarbon->format('d');
+        $mes = $meses[$fechaCarbon->format('n') - 1];
+        $anio = $fechaCarbon->format('Y');
+
+        $fechaHoy = "$dia de $mes de $anio"; // Resultado: "14 de noviembre de 2025"
+        //dd($fechaHoy);
+        //$fechaactual=fechaaletra(now()->format( 'd/m/Y'));
+
         $relacion4=[
             'horastxt'=> $horaMin,
             'mintxt'=> $minutosMin,
@@ -112,7 +119,7 @@ class RadicacionAutorizacionController extends Controller
             'fechainicioaclaraciontxt'=>$fechainicioaclaracion,
             'fechaterminoaclaraciontxt'=>$fechaterminoaclaracion,
             'plazomaximo'=>$plazomaxMin,
-            'fechaactual'=>$fechaactual,
+            'fechaactual'=>$fechaHoy,
         ];
 
         $datosConstancia = [
@@ -139,7 +146,7 @@ class RadicacionAutorizacionController extends Controller
         $b64pdf=base64_encode(file_get_contents(asset($preconstancia)));
        
         
-         return view('radicacionautorizacion.form', compact('radicacion', 'auditoria', 'preconstancia', 'b64archivoxml','b64pdf', 'datosConstancia'));
+         return view('radicacionautorizacion.form', compact('radicacion','fechaHoy', 'auditoria', 'preconstancia', 'b64archivoxml','b64pdf', 'datosConstancia'));
     }
 
     /**
@@ -205,13 +212,36 @@ class RadicacionAutorizacionController extends Controller
             // ]);
         // }
 
+        $auditoria = $radicacion->auditoria;                                    
+                
+        $cuenta_publicaSession = getSession('cp');
+        if($cuenta_publicaSession !=2022){
+            //$jefe = auth()->user()->jefe;
+            $director = $auditoria->directorasignado;
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp; 
+            $lider = $auditoria->lidercp; 
+        }else{
+            $jefe=usuariocp(substr($auditoria->accion->usuarioCreacion->unidad, 0, 5).'0')->where('siglas_rol','JD')->first();
+            $director = usuariocp(substr($auditoria->accion->usuarioCreacion->unidad, 0, 4).'00')->where('siglas_rol','DS')->first();
+            $analista=$auditoria->accion->analista;
+            $lider=$auditoria->accion->lider;
+            $director=User::where('unidad_administrativa_id',substr($radicacion->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();
+
+        }
         
-        $director=User::where('unidad_administrativa_id',substr($radicacion->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $radicacion).'/Aut')->first();
+        $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($radicacion)."/Rechazo")->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+        $url = route('radicacion.index');
+
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la radiación de la auditoría No. '.$radicacion->auditoria->numero_auditoria;
             
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($radicacion->usuarioCreacion->name,$radicacion->usuarioCreacion->puesto,$radicacion->auditoria->numero_auditoria), now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$radicacion->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($radicacion->usuarioCreacion->name,$radicacion->usuarioCreacion->puesto,$radicacion->auditoria->numero_auditoria), now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id,GenerarLlave($radicacion).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$radicacion->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($radicacion).'/Consulta',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name,$jefe->puesto,$radicacion->auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($radicacion).'/Consulta',$url);
             
             setMessage('Se ha autorizado el registro de la radicación de la auditoría con exito.');
         } else {
@@ -220,8 +250,9 @@ class RadicacionAutorizacionController extends Controller
                             .'Ha sido rechazado el registro de la radicación de auditoría No. '.$radicacion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id);           
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$radicacion->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id,GenerarLlave($radicacion).'/Rechazo',$url);           
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$radicacion->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($radicacion).'/Rechazo',$url);
+            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$radicacion->auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($radicacion).'/Rechazo',$url);
             
             setMessage('Se ha rechazado el registro de la radicación de la auditoría con exito.');
             

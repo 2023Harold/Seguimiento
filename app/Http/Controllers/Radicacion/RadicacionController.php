@@ -62,7 +62,12 @@ class RadicacionController extends Controller
         $request['fecha_inicio_aclaracion'] = addBusinessDays($request->fecha_comparecencia, 1);
         $request['fecha_termino_aclaracion'] = addBusinessDays($request->fecha_inicio_aclaracion, 30);
         $auditoria=Auditoria::find(getSession('auditoria_id'));
-        $auditoria->update(['numero_orden'=>$request->numero_orden,'informe_auditoria'=>$request->informe_auditoria,'fojas_utiles'=>$request->fojas_utiles]);
+        $auditoria->update(['numero_orden'=>$request->numero_orden,
+                            'informe_auditoria'=>$request->informe_auditoria,
+                            'fojas_utiles'=>$request->fojas_utiles,
+                            'nombre_informe_au'=>$request->nombre_informe_au,
+                            'cargo_informe_au'=>$request->cargo_informe_au,
+                            'administracion_informe_au'=>$request->administracion_informe_au]);
         $radicacion = Radicacion::create($request->all());
         $comparecencia = Comparecencia::create($request->all());
 
@@ -138,7 +143,12 @@ class RadicacionController extends Controller
         $request['usuario_modificacion_id'] = auth()->user()->id;
         $radicacion->update($request->all());
         $auditoria=$radicacion->auditoria;
-        $auditoria->update(['numero_orden'=>$request->numero_orden,'informe_auditoria'=>$request->informe_auditoria,'fojas_utiles'=>$request->fojas_utiles]);
+        $auditoria->update(['numero_orden'=>$request->numero_orden,
+                            'informe_auditoria'=>$request->informe_auditoria,
+                            'fojas_utiles'=>$request->fojas_utiles,
+                            'nombre_informe_au'=>$request->nombre_informe_au,
+                            'cargo_informe_au'=>$request->cargo_informe_au,
+                            'administracion_informe_au'=>$request->administracion_informe_au]);
         $comparecencia=$auditoria->comparecencia;
 		if(empty($comparecencia)){
 			$request['usuario_creacion_id'] = auth()->user()->id;
