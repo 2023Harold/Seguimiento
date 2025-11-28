@@ -711,8 +711,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
 
     /*** Seguimiento - Auditorias - folios */
     Route::resource('folioscrr', FolioCRRController::class);
+    Route::get('/folioscrr/eliminar/{folio}', [FolioCRRController::class, 'eliminar'])->name('folioscrr.eliminar');
     Route::resource('remitentes', FolioRemitentesController::class,['parameters' => ['remitentes' => 'folioscrr']]);
     Route::get('/remitentes/crear/{folioscrr}', [FolioRemitentesController::class, 'remitentecrear'])->name('remitentes.remitentecrear');
+    
 
     /**Fin del apartado de Seguimiento - Auditorias - folios*/
     

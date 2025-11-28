@@ -88,14 +88,20 @@ class AnVController extends Controller
      */
     public function show(FolioCRR $folio)
     {
-        //dd($folio);
+        //dd($folio->acuerdoanvav);
         $acuerdoaccion = "Consulta";
         //dd($request);
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acuerdoanvav = AcuerdosValoracion::where('folio_id',$folio->id)->get()->first();
         $remitentes = RemitentesFolio::where('folio_id',$folio->id)->get();
-        setSession('anvav_id_session',$acuerdoanvav->id);
-        setSession('folio_id_session',$folio->id);
+        if($folio->acuerdoanvav == null){
+            setSession('folio_id_session',$folio->id);
+        }else{
+            setSession('anvav_id_session',$acuerdoanvav->id);
+            setSession('folio_id_session',$folio->id);
+        }
+
+        
         //dd($acuerdoanvav);
         return view('folios.acuerdosanvav.show', compact('auditoria','acuerdoanvav','folio','remitentes'));
     }

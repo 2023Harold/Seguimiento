@@ -100,13 +100,21 @@ class ComparecenciaValidacionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $comparecencia).'/Val')->first();
+        $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($comparecencia)."/Rechazo")->first();
+        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+        $url = route('comparecenciaacta.index');
+
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; ha aprobado la validación de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
-            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id);
+            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id,GenerarLlave($comparecencia).'/Aut',$url);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id,GenerarLlave($comparecencia).'/Consulta',$url);
+
         }else {
             
             $titulo = 'Rechazo de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria;
@@ -114,7 +122,7 @@ class ComparecenciaValidacionController extends Controller
                             .'Ha sido rechazado la comparecencia de auditoría No. '.$comparecencia->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
             
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id,GenerarLlave($comparecencia).'/Rechazo',$url);
         }
 
          return redirect()->route('comparecenciaacta.index');

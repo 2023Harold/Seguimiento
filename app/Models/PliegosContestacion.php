@@ -43,6 +43,10 @@ class PliegosContestacion extends Model
     {
         return $this->belongsTo(AuditoriaAccion::class, 'accion_id', 'id');
     }
+    public function pliego()
+    {
+        return $this->belongsTo(PliegosObservacion::class, 'pliegosobservacion_id','id');
+    }
     public function remitentes()
     {
         return $this->hasMany(RemitentesFolio::class, 'folio_id', 'foliocrr_id');

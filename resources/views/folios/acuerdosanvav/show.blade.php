@@ -94,9 +94,9 @@
                                     </td>
                                     <td class="text-center">
                                         @can('acuerdosanvav.edit')
-                                        <a href="{{ route('acuerdosanvav.edit', $acuerdoanvav) }}" class="btn btn-primary"> 
-                                            <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
-                                        </a>
+                                            <a href="{{ route('acuerdosanvav.edit', $acuerdoanvav) }}" class="btn btn-primary"> 
+                                                <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
+                                            </a>
                                         @endcan
                                     </td>
                                 </tr>

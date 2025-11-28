@@ -78,7 +78,7 @@ class RecomendacionesRevisionController extends Controller
     public function update(Request $request, Recomendaciones $recomendacion)
     {
         $auditoria = Auditoria::find($recomendacion->auditoria_id); 
-        $director=User::where('unidad_administrativa_id',substr($recomendacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+        $director=User::where('unidad_administrativa_id',substr($recomendacion->userCreacion->unidad, 0, 4).'00')->where('siglas_rol','DS')->first();
         $asistenteATUS=User::where('siglas_rol','ATUS')->first();
        
         $this->normalizarDatos($request);

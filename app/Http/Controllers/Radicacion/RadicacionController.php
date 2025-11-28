@@ -895,7 +895,6 @@ class RadicacionController extends Controller
 
             $minutosMax = ucwords($minutos);
             $minutosMin = ucwords(strtolower($minutosMax));
-
             $fechacomparecencia=fechaaletra($auditoria->comparecencia->fecha_comparecencia);
             $fechainicioaclaracion=fechaaletra($auditoria->comparecencia->fecha_inicio_aclaracion);
             $fechaterminoaclaracion=fechaaletra($auditoria->comparecencia->fecha_termino_aclaracion);
@@ -914,8 +913,9 @@ class RadicacionController extends Controller
         $plazomax=$formatter->toString($auditoria->radicacion->plazo_maximo);
         $plazomaxMax = ucwords($plazomax);
         $plazomaxMin = ucwords(strtolower($plazomaxMax));
-        $fechaactual=fechaaletra(now());
+        //$fechaactual=fechaaletra(now());
         $datenow = Carbon::now();
+        $fechaactual = Carbon::now();
         $datenow01 = date('Y', strtotime($datenow));
         $cierre = $auditoria->radicacion->acta_cierre_auditoria;
 
@@ -957,6 +957,9 @@ class RadicacionController extends Controller
             if ($entidad) {
                 $nombreEntidad = $entidad->entidades;
                 $textoDocumento = $entidad->textos_doc;
+            }else{
+                $nombreEntidad = "xxxxxxxxxxxxxxxx";
+                $textoDocumento = "xxxxxxxxxxx";
             }
         }
 
@@ -1050,7 +1053,7 @@ class RadicacionController extends Controller
                 $SiPRAS="y al Órgano Interno de Control de".$nombreEntidad;
             }
 
-            $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/AR_01.docx'); //*
+            $template=new TemplateProcessor('bases-word/PAC/LEGALIDAD/LIDER/1. AR_01.docx'); //*
             $template->setValue('orden_auditoria',$auditoria->radicacion->num_memo_recepcion_expediente);
             $template->setValue('entidad',$textoDocumento);
             $template->setValue('periodo',$auditoria->periodo_revision);

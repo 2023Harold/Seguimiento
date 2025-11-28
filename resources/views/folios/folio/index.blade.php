@@ -19,7 +19,7 @@
                         @can('folioscrr.create')
                             <div class="row">
                                 <div class="col-md-12">
-                                    <a href="{{ route('folioscrr.create') }}"  class="btn btn-primary float-end">
+                                    <a href="{{ route('folioscrr.create') }}"  class="btn btn-color-primary btn-active-color-success float-end">
                                         <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Agregar Folio
                                     </a>
                                 </div>
@@ -29,19 +29,25 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Oficio</th>
                                 <th>Remitentes</th>
                                 <th>Recepción en oficialía</th>
                                 <th>Fecha de recepción en la unidad de seguimiento</th>
-                                @if(auth()->user()->siglas_rol=="ANA")
-                                    <th></th>
-                                @endif
+                                <th></th>
                                 <th>Acuerdos Anv y AV</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($folios as $folio)
                             <tr>
+                                <td class="text-center">
+                                    @if(auth()->user()->siglas_rol=="ANA")
+                                        <a href="{{ route('folioscrr.eliminar', $folio) }}"  class="btn btn-color-primary btn-active-color-danger">
+                                            <i class="align-middle bi bi-trash-fill" style="font-size: 18px;" aria-hidden="true"></i> 
+                                        </a>
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     <a href="{{ asset($folio->oficio_contestacion_general) }}" target="_blank">
                                         <?php echo htmlspecialchars_decode(iconoArchivo($folio->oficio_contestacion_general)) ?>
@@ -50,8 +56,8 @@
                                     <small>Fecha: {{ fecha($folio->fecha_oficio_contestacion) }}</small>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('folioscrr.show',$folio) }}" class="btn btn-primary">
-                                        <i class="fa fa-magnifying-glass"></i> Consultar
+                                    <a href="{{ route('folioscrr.show',$folio) }}" class="btn btn-color-primary btn-active-color-info">
+                                        <i class="fa fa-magnifying-glass" aria-hidden="true"></i>Consultar
                                     </a>
                                     {{-- $folio->nombre_remitente --}} <br>
                                   {{--  <span class="badge-light-dark text-gray-500">{{ $folio->cargo_remitente }}</span>--}}
@@ -63,16 +69,13 @@
                                 <td class="text-center">
                                     {{ fecha($folio->fecha_recepcion_us) }}
                                 </td>
-
-                                @if(auth()->user()->siglas_rol=="ANA")
-                                    <td>
-                                        @if(empty($folio->usuario_modificacion_id))
-                                            <a href="{{ route('folioscrr.edit', $folio) }}"  class="btn btn-primary float-end">
-                                                <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
-                                            </a>
-                                        @endif
-                                    </td>
-                                @endif
+                                <td class="text-class">
+                                    @if(auth()->user()->siglas_rol=="ANA")
+                                        <a href="{{ route('folioscrr.edit', $folio) }}"  class="btn btn-color-primary btn-active-color-warning">
+                                            <i class="fas fa-edit" style="font-size: 16px;" aria-hidden="true"></i> 
+                                        </a>
+                                    @endif
+                                </td>
                                 
                                 @if (empty($folio->AnV_AV))
                                     @if(auth()->user()->siglas_rol=="LP")
@@ -82,6 +85,11 @@
                                             </a>
                                         </td>
                                     @endif
+                                    <td class="text-center">
+                                        <a href="{{ route('acuerdosanvav.show', $folio) }}" class="btn btn-secondary">
+                                            <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Ingresar
+                                        </a>
+                                    </td>
                                 @else
                                     <td class="text-center">
                                         <a href="{{ route('acuerdosanvav.show', $folio) }}" class="btn btn-secondary">
@@ -89,6 +97,7 @@
                                         </a>
                                     </td>
                                 @endif
+                                
                             </tr>
                             @empty
                             <tr>

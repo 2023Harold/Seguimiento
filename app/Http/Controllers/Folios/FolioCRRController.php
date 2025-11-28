@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Folios;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcuerdosValoracion;
+use App\Models\PliegosContestacion;
+use App\Models\Recomendaciones;
+use App\Models\RecomendacionesContestacion;
 use App\Models\RemitentesFolio;
+use App\Models\SolicitudesAclaracionContestacion;
 use Illuminate\Http\Request;
 use App\Models\FolioCrr;
 use App\Models\Auditoria;
@@ -126,9 +131,10 @@ class FolioCRRController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(FolioCrr $folio)
     {
-        //
+        dd("destroy");
+
     }
 	
 	public function normalizarDatos(Request $request){
@@ -156,4 +162,43 @@ class FolioCRRController extends Controller
 
         return $query;
     }
+
+    
+    public function eliminar(FolioCrr $folio)
+    {
+        $folioId = $folio->id;
+        /*
+        $recomendacion = \DB::table('SEGRECOMENDACIONES_CONTESTACIONES')
+            ->where('foliocrr_id', $folioId)
+            ->first();*/
+        $recomendacion = RecomendacionesContestacion::select('*')->where('foliocrr_id', $folioId)->first();
+        $pliego = PliegosContestacion::select('*')->where('foliocrr_id', $folioId)->first();
+        $solicitud = SolicitudesAclaracionContestacion::select('*')->where('foliocrr_id', $folioId)->first();
+        $AnvAv = AcuerdosValoracion::select('*')->where('folio_id', $folioId)->first();
+
+        if ($recomendacion) {
+            setMessage('No se puede eliminar: el folio está registrado en la recomendación número ' . $recomendacion->recomendacion->accion->numero,'error');
+            return redirect()->route('folioscrr.index')
+                ->with('error', 'No se puede eliminar: el folio está registrado en la recomendación número ' . $recomendacion->id);
+        }elseif ($pliego) {
+            setMessage('No se puede eliminar: el folio está registrado en el pliego de observació número ' . $pliego->pliego->accion->numero,'error');
+            return redirect()->route('folioscrr.index');
+        }elseif ($solicitud) {
+            setMessage('No se puede eliminar: el folio está registrado en la solicitud de aclaración número ' .  $solicitud->solicitud->accion->numero,'error');
+            return redirect()->route('folioscrr.index');
+        }elseif ($AnvAv) {
+            setMessage('No se puede eliminar: el folio está registrado en el Acuerdo de valoracion con numero de expediente ' .  $AnvAv->numero_expediente,'error');
+            return redirect()->route('folioscrr.index');
+        }
+
+        // Si no está en ninguna tabla, eliminar
+        
+        \DB::transaction(function () use ($folio) {
+            RemitentesFolio::where('folio_id', $folio->id)->delete();
+            FolioCrr::where('id', $folio->id)->delete();
+        });
+        setMessage('Folio eliminado correctamente.');
+        return redirect()->route('folioscrr.index')->with('message', 'Folio eliminado correctamente.');
+    }
+
 }

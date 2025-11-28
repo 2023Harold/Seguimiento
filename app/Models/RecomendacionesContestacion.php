@@ -44,6 +44,10 @@ class RecomendacionesContestacion extends Model
     {
         return $this->belongsTo(AuditoriaAccion::class, 'accion_id', 'id');
     }
+    public function recomendacion()
+    {
+        return $this->belongsTo(Recomendaciones::class, 'recomendacion_id','id');
+    }
 
     public function remitentes()
     {
