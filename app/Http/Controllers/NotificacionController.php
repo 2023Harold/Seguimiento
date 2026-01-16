@@ -29,6 +29,7 @@ class NotificacionController extends Controller
         */
     public function marcarleido(Request $request)
     {
+        
         $notificacion = Notificacion::find($request->id);
         // Actualizar el estatus a 'Leído'
         $notificacion->update(['estatus' => 'Leído']);

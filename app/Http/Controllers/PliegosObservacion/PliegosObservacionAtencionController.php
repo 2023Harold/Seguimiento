@@ -25,10 +25,12 @@ class PliegosObservacionAtencionController extends Controller
         $asistente_titular= user:: where ('siglas_rol', 'ATUS')->first();
 
         if(getSession('cp')==2022){
-            $director=User::where('unidad_administrativa_id',substr($pliegosobservacion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
-            $jefe=$pliegosobservacion->accion->depaasignado;
-            $lider=$pliegosobservacion->accion->lider;
-            $analista=$pliegosobservacion->accion->analista;
+             //dd($pliegosobservacion,$accion->depaasignado);	
+            //$director=User::where('unidad_administrativa_id',substr($accion->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+	        $jefe=$accion->depaasignado;
+            $lider=$accion->lider;
+            $analista=$accion->analista;
+	        $director=User::where('unidad_administrativa_id',substr($analista->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
         }else{
             $director = $auditoria->directorasignado;
             $jefe = $auditoria->jefedepartamentoencargado;

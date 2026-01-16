@@ -27,10 +27,11 @@ class RecomendacionesAtencionController extends Controller
         $asistente_titular= user:: where ('siglas_rol', 'ATUS')->first();
 
         if(getSession('cp')==2022){
-            $director=User::where('unidad_administrativa_id',substr($recomendaciones->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
-            $jefe=$recomendaciones->accion->depaasignado;
-            $lider=$recomendaciones->accion->lider;
-            $analista=$recomendaciones->accion->analista;
+            //$director=User::where('unidad_administrativa_id',substr($recomendaciones->userCreacion->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
+			$jefe=$accion->depaasignado;
+            $lider=$accion->lider;
+            $analista=$accion->analista;
+			$director=User::where('unidad_administrativa_id',substr($analista->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
         }else{
             $director = $auditoria->directorasignado;
             $jefe = $auditoria->jefedepartamentoencargado;

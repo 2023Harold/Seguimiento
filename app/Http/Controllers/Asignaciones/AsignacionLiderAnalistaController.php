@@ -86,7 +86,7 @@ class AsignacionLiderAnalistaController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        if(getSession('cp')==2023 || getSession('cp')==2024 ){
+       if(getSession('cp')!=2022){
 
             if($request->acciond=='reasignarlider'){
 
@@ -274,7 +274,7 @@ class AsignacionLiderAnalistaController extends Controller
                         ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);
 
         }elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-            if(getSession('cp')==2023 || getSession('cp')==2024){ 
+            if(getSession('cp')!=2022){
                 $query = $query->where('departamento_encargado_id',getSession('cp_ua'));
                 //dd(getSession('cp_ua'));
 
