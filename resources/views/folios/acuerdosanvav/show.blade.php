@@ -22,7 +22,7 @@
                         @endif
                             
                         @if($auditoria->acto_fiscalizacion=='Desempeño')
-                            <a href="{{route('acuerdosanvav.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AV</a>          
+                            <a href="{{route('anvavd.export')}}" class="btn btn-light-primary"><span class="fa fa-file-word"></span>&nbsp;&nbsp;&nbsp;AV</a>          
                         @endif
 
                         @if($auditoria->acto_fiscalizacion=='Cumplimiento Financiero')
@@ -94,9 +94,9 @@
                                     </td>
                                     <td class="text-center">
                                         @can('acuerdosanvav.edit')
-                                            <a href="{{ route('acuerdosanvav.edit', $acuerdoanvav) }}" class="btn btn-primary"> 
-                                                <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
-                                            </a>
+                                        <a href="{{ route('acuerdosanvav.edit', $acuerdoanvav) }}" class="btn btn-primary"> 
+                                            <i class="align-middle fas fa-edit" aria-hidden="true"></i> 
+                                        </a>
                                         @endcan
                                     </td>
                                 </tr>

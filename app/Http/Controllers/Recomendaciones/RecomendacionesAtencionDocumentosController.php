@@ -79,9 +79,6 @@ class RecomendacionesAtencionDocumentosController extends Controller
         $auditoria=$accion->auditoria;        
        
         return view('recomendacionesatenciondocumentos.show',compact('recomendacion','accion','auditoria'));
-
-      
-
     }
 
     /**

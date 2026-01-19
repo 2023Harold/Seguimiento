@@ -367,8 +367,8 @@
             <td colspan="8" style="text-align: center; width: 50%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Acción Promovida</strong></span></td>
         </tr>
 		</table>           
-		       
-            <div style="padding: 5px 20px 0 15px; text-align: justify; width: 97%; border: 1px solid; border-color: #424242;" ><span style="font-size: .6rem; " ><strong><p><?php echo nl2br(htmlspecialchars($pliegos->accion)); ?></p></strong></span></div>
+		       {{---- .6rem---}}
+            <div style="padding: 5px 20px 0 15px; text-align: justify; width: 97%; border: 1px solid; border-color: #424242;" ><span style="font-size: .5rem; " ><strong><p><?php echo nl2br(htmlspecialchars(str_replace('Μ.Ν.','M.N.',str_replace('$‬‬','$',$pliegos->accion)))); ?></p></strong></span></div>
        	</div>
         @endforeach
   
@@ -396,7 +396,7 @@
             <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
         </tr>
         <tr>
-            <td colspan="6" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe->name }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
+            <td colspan="6" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe->name }} <br> <span style="text-transform: uppercase">{{$jefe->puesto }}</span></strong></span></td>
 
         </tr>
         <tr>

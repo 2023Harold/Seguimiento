@@ -41,13 +41,19 @@
         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
             <label>Oficio de notificación de acuerdos: </label>
             <span class="text-primary">
-                {{ str_contains(optional($auditoria->radicacion)->oficio_acuerdo,'storage')?'':optional($auditoria->radicacion)->oficio_acuerdo }}
+				@if(str_contains(optional($auditoria->radicacion)->oficio_acuerdo,'storage'))
+					{{ str_contains(optional($auditoria->radicacion)->oficio_acuerdo,'storage')?'¡carga pendiente!':optional($auditoria->radicacion)->oficio_acuerdo }}
+				@else
+					{{optional($auditoria->radicacion)->oficio_acuerdo}}
+				
+                @endif
+				
             </span>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
             <label>Fecha de oficio notificación de acuerdos: </label>
             <span class="text-primary">
-                {{ str_contains(optional($auditoria->radicacion)->oficio_acuerdo,'storage')?'': fecha(optional($auditoria->radicacion)->fecha_oficio_acuerdo) }}
+                {{fecha(optional($auditoria->radicacion)->fecha_oficio_acuerdo) }}
             </span>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">

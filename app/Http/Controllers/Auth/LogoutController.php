@@ -18,6 +18,6 @@ class LogoutController extends Controller
 
         return redirect('/');
        
-        // return redirect('https://plataforma.osfem.gob.mx/login');
+        //return redirect('https://plataforma.osfem.gob.mx/login');
     }
 }

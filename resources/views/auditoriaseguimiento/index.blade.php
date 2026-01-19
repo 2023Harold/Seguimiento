@@ -48,8 +48,8 @@
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>
                                 <th>Seguimiento</th>
-                                @if(getSession('cp')==2023 || getSession('cp')==2024)
-                                <th>Acciones</th>
+                                @if(getSession('cp')!=2022)
+                                	<th>Acciones</th>
                                 @endif
                             </tr>
                         </thead>
@@ -97,7 +97,7 @@
                                         <a href="{{ route('seleccionarauditoria.auditoria', $auditoria) }}" class="btn btn-primary">Agregar</a>
                                     </td> --}}
 {{-- revision --}}
-                                    @if(getSession('cp')==2023 || getSession('cp')==2024)                                   
+                                    @if(getSession('cp')!=2022)                                   
                                       <td class="text-center">   
                                             @can('seleccionarauditoria.auditoria')                                         
                                                 <a href="{{ route('seleccionarauditoria.auditoria',$auditoria) }}"class="btn btn-primary">

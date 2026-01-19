@@ -33,8 +33,7 @@
                             !!}
                         </div>
                         <div class="col-md-3">
-                            {!! BootForm::date('fecha_acta', 'Fecha del acta: *', old('fecha_acta',
-                            fecha($comparecencia->fecha_acta, 'Y-m-d'))) !!}
+                            {!! BootForm::date('fecha_acta', 'Fecha del acta: *', old('fecha_acta',fecha($comparecencia->fecha_acta, 'Y-m-d'))) !!}
                         </div>
                     </div>                       
                     

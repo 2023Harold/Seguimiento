@@ -2,14 +2,14 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h1 class="card-title">           
+        <h1 class="card-title">
             {{$accion}}
         </h1>
     </div>
     <div class="card-body">
         @include('flash::message')
         {!! BootForm::open(['model' => $comentario, 'store' => 'revisionessolicitudesatencion.store', 'update' => 'revisionessolicitudesatencion.update', 'id' => 'form']) !!}
-      <div>           
+      <div>
                 @if($comentario->tipo == "Analisis")
                     <div class="col-md-12">
                         {!! BootForm::textarea('muestra_rev', 'Analisis: *', old("tipo", $comentario->muestra_rev))!!}
@@ -17,20 +17,20 @@
                 @endif
                 @if($comentario->tipo == "Conclusión")
                     <div class="col-md-12">
-                        {!! BootForm::textarea('muestra_rev', 'Conclusión: *', old("tipo", $comentario->muestra_rev),['rows'=>'10'])!!}                        
+                        {!! BootForm::textarea('muestra_rev', 'Conclusión: *', old("tipo", $comentario->muestra_rev),['rows'=>'10'])!!}
                     </div>
                 @endif
                 @if($comentario->tipo == "Normatividad")
                     <div class="col-md-12">
                         {!! BootForm::textarea('muestra_rev', 'Normatividad: *', old("tipo", $comentario->muestra_rev),['rows'=>'10'])!!}
-                        
+
                     </div>
                 @endif
-      </div>          
+      </div>
             <div class="row">
                 <div class="col-md-12">
                     {!!BootForm::textarea('comentario', 'Comentario:  *', old("comentario", ""))!!}
-                <div class="col-md-12">                    
+                <div class="col-md-12">
 
                     {!! BootForm::textarea('comentario', 'Comentario: *', old("comentario", $comentario->comentario))!!}
                 </div>

@@ -38,7 +38,7 @@ class PliegosObservacionAccionesController extends Controller
 
         //dd($auditoria->total(),$sumaMontoSolventadoPo,$restaMontoPo);
 
-        $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30);
+        $acciones =  $this->setQuery($request)->orderBy('consecutivo')->paginate(30);
        
         //$acciones->setPage(getSession('numpaginapo'));
         

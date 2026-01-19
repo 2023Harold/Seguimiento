@@ -138,7 +138,7 @@ class InformeDesempenoController extends Controller
             'segauditoria_acciones.plazo_recomendacion',
             'segauditoria_acciones.monto_aclarar',
             'segauditoria_acciones.normativa_infringida',
-            DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"),
+            DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"),
             DB::raw("(CASE WHEN segrecomendaciones_contestaciones.oficio_contestacion IS NULL THEN 'En ese orden de ideas...' ELSE NULL END) AS sicontestacion01"),
             'segrecomendaciones_contestaciones.numero_oficio',
             DB::raw("TO_CHAR(segrecomendaciones_contestaciones.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
@@ -150,9 +150,9 @@ class InformeDesempenoController extends Controller
             'segrecomendaciones.analisis',
             'segrecomendaciones.conclusion',
             'segrecomendaciones.listado_documentos',
-            DB::raw("(CASE WHEN segrecomendaciones.calificacion_sugerida = 'Atendida' THEN 'En ese sentido, con fundamento en...' ELSE NULL END) AS sicalificacionsugerida01"),
+            DB::raw("(CASE WHEN segrecomendaciones.calificacion_sugerida = 'Atendida0' THEN 'En ese sentido, con fundamento en...' ELSE NULL END) AS sicalificacionsugerida01"),
             DB::raw("(CASE WHEN segrecomendaciones.calificacion_sugerida = 'Atendida' THEN segauditoria_acciones.numero ELSE NULL END) AS tr01"),
-            DB::raw("(CASE WHEN segrecomendaciones.calificacion_sugerida = 'No Atendida' THEN 'Por tanto se tiene como no atendida...' ELSE NULL END) AS sicalificacionsugerida02")
+            DB::raw("(CASE WHEN segrecomendaciones.calificacion_sugerida = 'No Atendida0' THEN 'Por tanto se tiene como no atendida...' ELSE NULL END) AS sicalificacionsugerida02")
         )
         ->join('segrecomendaciones', 'segrecomendaciones.accion_id', '=', 'segauditoria_acciones.id')
         ->leftJoin('segrecomendaciones_contestaciones', 'segrecomendaciones_contestaciones.recomendacion_id', '=', 'segrecomendaciones.id')
@@ -161,7 +161,7 @@ class InformeDesempenoController extends Controller
 
         $segpliego = AuditoriaAccion::select('segauditoria_acciones.tipo',/*TABLA segauditoria_acciones*/
                                                 'segauditoria_acciones.accion', 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar', 'segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
+                                                DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
    /*TABLA segpliegos_observacion_contestacion*/DB::raw("(case when(segpliegos_observacion_contestacion.oficio_contestacion IS NULL) THEN 'En ese orden de ideas, esta Unidad de Seguimiento hace constar que durante el plazo concedido para el desahogo de la Etapa de Aclaración, la entidad fiscalizada no presentó información, documentación o consideraciones relacionadas con la observación de mérito.' ELSE null END) AS sicontestacion01"),
                                                 'segpliegos_observacion_contestacion.numero_oficio', 
                                                 DB::raw("TO_CHAR(segpliegos_observacion_contestacion.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
@@ -317,11 +317,11 @@ class InformeDesempenoController extends Controller
             $frac = 'fracción II.';
         }
 
-        $fecha_oficio_acuerdo = fechaaletra(optional($auditoria->radicacion)->fecha_oficio_acuerdo);
+        $fecha_oficio_acuerdo = fechaaletra(optional($auditoria->comparecencia)->fecha_acuse);
 
         $segrecomendacion = AuditoriaAccion::select('segauditoria_acciones.accion',/*TABLA segauditoria_acciones*/
                                                 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar','segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
+                                                DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
     /*TABLA segrecomendaciones_contestaciones*/ 
                                                 /*'segrecomendaciones_contestaciones.numero_oficio', 
                                                 DB::raw("TO_CHAR(segrecomendaciones_contestaciones.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
@@ -331,9 +331,9 @@ class InformeDesempenoController extends Controller
                                                 'segrecomendaciones.calificacion_sugerida',/*TABLA segrecomendaciones*/
                                                 DB::raw("UPPER(segrecomendaciones.calificacion_sugerida) AS calificacion_sugerida_mayus"),
                                                 'segrecomendaciones.analisis', 'segrecomendaciones.conclusion', 'segrecomendaciones.listado_documentos',
-                                                DB::raw("(case when(segrecomendaciones.calificacion_sugerida = 'Atendida') THEN 'En ese sentido, con fundamento en lo dispuesto por los artículos 54 fracción III de la Ley de Fiscalización Superior del Estado de México y; 23 fracciones XIX y XLIV y; 47 fracciones XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, se determina que XXX ha quedado aclarado y solventado.' ELSE NULL END) AS sicalificacionsugerida01"),
+                                                DB::raw("(case when(segrecomendaciones.calificacion_sugerida = 'Atendida0') THEN 'En ese sentido, con fundamento en lo dispuesto por los artículos 54 fracción III de la Ley de Fiscalización Superior del Estado de México y; 23 fracciones XIX y XLIV y; 47 fracciones XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, se determina que XXX ha quedado aclarado y solventado.' ELSE NULL END) AS sicalificacionsugerida01"),
                                                 DB::raw("(case when(segrecomendaciones.calificacion_sugerida = 'Atendida') THEN segauditoria_acciones.numero ELSE NULL END) AS tr01"),
-                                                DB::raw("(case when(segrecomendaciones.calificacion_sugerida = 'No Atendida') THEN 'Por tanto se tiene como no atendida para este Órgano Superior de Fiscalización del Estado de México, la Recomendación con clave de acción '||segauditoria_acciones.numero||'; en consecuencia, con fundamento en los artículos 8 fracción XXVII de la Ley de Fiscalización Superior del Estado de México y 23 fracciones XIX y XLIV y 47 fracción XV segundo párrafo y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; la Recomendación será turnada al Órgano Interno de Control de XXXXXXXXX o su equivalente, para el efecto de que dicha autoridad de control interno XXXXXXXXXXXXX promueva las acciones procedentes que garanticen su atención y cumplimiento.' ELSE NULL END)  AS sicalificacionsugerida02" ),
+                                                DB::raw("(case when(segrecomendaciones.calificacion_sugerida = 'No Atendida0') THEN 'Por tanto se tiene como no atendida para este Órgano Superior de Fiscalización del Estado de México, la Recomendación con clave de acción '||segauditoria_acciones.numero||'; en consecuencia, con fundamento en los artículos 8 fracción XXVII de la Ley de Fiscalización Superior del Estado de México y 23 fracciones XIX y XLIV y 47 fracción XV segundo párrafo y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; la Recomendación será turnada al Órgano Interno de Control de XXXXXXXXX o su equivalente, para el efecto de que dicha autoridad de control interno XXXXXXXXXXXXX promueva las acciones procedentes que garanticen su atención y cumplimiento.' ELSE NULL END)  AS sicalificacionsugerida02" ),
                                              
                                             )
                                              
@@ -347,6 +347,7 @@ class InformeDesempenoController extends Controller
 				$accion['conclusion'] = $this->limpiarTextoWord($accion['conclusion'] ?? '');
 				$accion['listado_documentos'] = $this->limpiarTextoWord($accion['listado_documentos'] ?? '');
                 $accion['accion'] = $this->limpiarTextoWord($accion['accion'] ?? '');
+				$accion['normativa_infringida'] = $this->limpiarTextoWord($accion['normativa_infringida'] ?? '');
 			}
         $accionesRecomendaciones = array_merge($segrecomendacion);
         $tr01 = collect($segrecomendacion)->pluck('tr01')->filter()->implode(', ');
@@ -401,8 +402,8 @@ class InformeDesempenoController extends Controller
             if(count($auditoria->accionesrecomendaciones)>0){
                 $siRecomendaciones01 = "y del Proceso de Atención a las Recomendaciones correspondientes";
                 $siRecomendaciones02 = "así como, se precisaran las mejoras realizadas y las acciones emprendidas en relación a las recomendaciones que le fueron formuladas, o en su caso, justificara su improcedencia";
-                $siRecomendaciones03 = "No obstante, esta instancia de fiscalización vigilará y corroborará a través de las siguientes revisiones técnicas, que los compromisos y acciones en materia de la presente, se estén cumpliendo conforme a la responsabilidad que tiene encomendada {$nombreEntidad}.";
-                $siRecomendaciones04 = "En ese sentido, con fundamento en lo dispuesto por los artículos 23 fracciones XIX y XLIV y; 47 fracciones III, XII, XV y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; se determina que la recomendación ha quedado atendida.";            
+                //$siRecomendaciones03 = "No obstante, esta instancia de fiscalización vigilará y corroborará a través de las siguientes revisiones técnicas, que los compromisos y acciones en materia de la presente, se estén cumpliendo conforme a la responsabilidad que tiene encomendada {$nombreEntidad}.";
+                //$siRecomendaciones04 = "En ese sentido, con fundamento en lo dispuesto por los artículos 23 fracciones XIX y XLIV y; 47 fracciones III, XII, XV y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; se determina que la recomendación ha quedado atendida.";            
                 if(count($auditoria->totalNOsolventadorecomendacion)>0){
                     $recNoAt = collect($auditoria->totalNOsolventadorecomendacion)->pluck('numero')->filter()->implode(', ');
                     $siRecomendaciones05 = "DE LAS RECOMENDACIONES NO ATENDIDAS ";

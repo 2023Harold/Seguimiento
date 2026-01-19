@@ -80,6 +80,7 @@ class Comparecencia extends Model
         'oficio_acuerdo',
         'fecha_oficio_acuerdo',
         'comparecio',
+		'fecha_plazo_maximo',
     ];
 
 
@@ -101,6 +102,7 @@ class Comparecencia extends Model
         'fecha_inicio_proceso'=>'date',
         'fecha_termino_proceso'=>'date',
         'fecha_oficio_acuerdo'=>'date',
+		'fecha_plazo_maximo'=>'date',
         'created_at'=>'datetime',
         'updated_at'=>'datetime'
     ];

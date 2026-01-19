@@ -8,7 +8,6 @@
 @endsection
 @section('content')
 <div class="card">
-    
     <div class="card-header">
         <h1 class="card-title">
             <a href="{{ route('seguimientoauditoriacp.index') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>                      
@@ -19,12 +18,9 @@
         @include('flash::message')
         {!! BootForm::open(['model' => $auditoria,'store' => 'seguimientoauditoriacp.store','update' => 'seguimientoauditoriacp.update','id' => 'form']) !!}
         {!! BootForm::hidden('entidad_fiscalizable_id',$auditoria->entidad_fiscalizable_id,['id'=>'entidad_fiscalizable_id']) !!}       
-       <div class="row">
+        <div class="row">
             <div class="col-md-3">
-                {!! BootForm::text('numero_auditoria', 'Número de auditoría: *', old('numero_auditoria', $auditoria->numero_auditoria),  [(getSession('cp')==2024
-                    
-                    
-                    ?'readonly':'')]) !!}
+                {!! BootForm::text('numero_auditoria', 'Número de auditoría: *', old('numero_auditoria', $auditoria->numero_auditoria)) !!}
             </div>
         </div>
         <div class="row">

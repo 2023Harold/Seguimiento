@@ -87,13 +87,14 @@
                                             <a class="btn btn-primary text-center" href="{{ route('pliegosobservacionatencioncontestacion.edit',$pliegos) }}">
                                                 <small> oficios de contestacion </small>
                                             </a>   
+										</td>
                                         @endif
                                     @endforelse --}}
                                 </td>
                                 <td class="text-center">
                                     @if (in_array("Analista", auth()->user()->getRoleNames()->toArray())&&(empty($pliegos->fase_autorizacion) || $pliegos->fase_autorizacion=='Rechazado'))
                                         @if (empty($pliegos->fase_revision) || $pliegos->fase_revision!='Pendiente'&& $pliegos->fase_revision!='Revisión Jefe')
-                                            @can('pliegosobservaciondocumentos.index')
+                                            @can('pliegosobservaciondocumentos.edit')
                                             <a href="{{ route('pliegosobservaciondocumentos.edit', $pliegos) }}" class="btn btn-light-primary">
                                                 <span class="fa fa-list" aria-hidden="true"></span>
                                             </a>
@@ -111,6 +112,15 @@
                                             <span class="fa fa-list" aria-hidden="true"></span>
                                         </a>
                                         @endcan
+										<!--------------------------------------------------------------------------------------------------------->
+										@if($auditoria->numero_auditoria == "ACF-021")
+											@can('pliegosobservaciondocumentos.edit')
+												<a href="{{ route('pliegosobservaciondocumentos.edit', $pliegos) }}" class="btn btn-light-primary">
+													<span class="fa fa-edit" aria-hidden="true"></span>
+												</a>
+                                            @endcan
+										@endif
+										<!--------------------------------------------------------------------------------------------------------->
                                     @endif
                                 </td>
                                 <td class="text-center">								
@@ -134,9 +144,18 @@
                                                 <span class="fa fa-align-justify" aria-hidden="true"></span>
                                             </a>
                                         @endcan
+										<!--------------------------------------------------------------------------------------------------------->
+										@if($auditoria->numero_auditoria == "ACF-021")
+											@can('pliegosobservacionanalisis.edit')
+												<a href="{{ route('pliegosobservacionanalisis.edit',$pliegos) }}" class="btn btn-light-primary">
+													<span class="fa fa-edit" aria-hidden="true"></span>
+												</a>
+                                            @endcan
+										@endif
+										<!--------------------------------------------------------------------------------------------------------->
                                     @endif
 
-
+									
                                 </td>
                                 <td class="text-center">
                                         @if (!empty($pliegos->calificacion_atencion))
@@ -332,7 +351,7 @@
                                                             <a href="{{ route('revisionespliegos.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
                                                                 <span class="fa fa-comment fa-lg" aria-hidden="true"></span>{{--- Solo respuesta Visualizacion ---}}
                                                             </a>
-                                                            @if($respuesta->estatus == null || ($respuesta->estatus == 'Guardar'))
+                                                            @if($comentario->estatus != 'Atendido')
                                                                 <a href="{{ route('respuestacomentariospliegos.edit',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
                                                                     <span class="bi bi-pencil-square fa-lg" aria-hidden="true"></span>{{--- Editar comentario  ---}}
                                                                 </a>

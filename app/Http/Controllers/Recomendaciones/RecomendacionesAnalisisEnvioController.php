@@ -81,7 +81,7 @@ class RecomendacionesAnalisisEnvioController extends Controller
         $request['concluido']='Si';
         $recomendacion->update($request->all());
 
-        $mov = Movimientos::create([
+         Movimientos::create([
             'tipo_movimiento' => 'Registro de la atención de la recomendación',
             'accion' => 'Recomendación',
             'accion_id' => $recomendacion->id,

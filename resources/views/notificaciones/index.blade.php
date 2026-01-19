@@ -45,6 +45,7 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
+										
                                         <th>Cuenta Pública</th>
                                         <th>Asunto</th>
 										<th>Mensaje</th>
@@ -54,9 +55,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+								@php
+												$num = 0;
+												
+											@endphp
                                     @forelse($notificaciones as $notificacion)
                                         
                                         <tr id="rownotificacion{{ $notificacion->id }}">
+											@php
+												$num++;												
+											@endphp
+											
 											<td>{{ $notificacion->cp??'Sin registro'}}</td>
                                             <td>{{ $notificacion->titulo}}</td>
                                             <td>
@@ -84,11 +93,11 @@
 														{!!BootForm::checkbox('notificacion' . $notificacion->id, false, $notificacion->id, old('notificacion' . $notificacion->id, $notificacion->estatus) == 'Leído' ? true : false, ['class' => 'i-checks mr-3 casilla', 'id' => 'notificacion' . $notificacion->id]) !!}
 														<span class="badge badge-light-warning">No leído</span>                                                    
                                                 @else
-                                                    <span class="badge badge-light-success">{{$notificacion->estatus}}</span>
+                                                    <span class="badge badge-light-success">Leído</span>
                                                 @endif
                                             </td>
                                             <td class="fecha-leido">
-                                                {{ $notificacion->estatus == 'Leído'? fecha($notificacion->updated_at, 'd/m/Y H:i') : 'Mensaje no leído' }}
+                                                {{ $notificacion->estatus != 'Pendiente'? fecha($notificacion->updated_at, 'd/m/Y H:i') : 'Mensaje no leído' }}
                                             </td>
                                         </tr>
                                         

@@ -37,7 +37,7 @@
                     @else
                         @include('layouts.contextos._radicacion')					
                     @endif 
-                @elseif(getSession('cp')==2023 || getSession('cp')==2024)
+                @elseif(getSession('cp')!=2022)
                     @if (empty($auditoria->radicacion) && $auditoria->lidercp_id==auth()->user()->id)
                         @can('radicacion.auditoria')
                             <div class="row">
@@ -136,12 +136,13 @@
                                             @endif
                                             @if ($auditoria->radicacion->fase_autorizacion=='Autorizado')
                                             <span class="badge badge-light-success">{{ $auditoria->radicacion->fase_autorizacion }} </span> <br>
-												@can('radicacionautorizacion.edit')
-                                                    <a href="{{ route('radicacionautorizacion.edit',$auditoria->radicacion) }}" class="btn btn-primary">
-                                                        <li class="fa fa-gavel"></li>
-                                                        Autorizar
-                                                    </a>                                                
-                                                @endcan
+												 @if (auth()->user()->siglas_rol=='LP')
+                                                    @can('radicacion.edit')
+                                                        <a href="{{ route('radicacion.edit',$auditoria->radicacion) }}" class="btn btn-primary">
+                                                            <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
+                                                        </a>
+                                                    @endcan
+                                                @endif
 										
                                                 @if(!empty($auditoria->radicacion->radicacion_sistema))
                                                     <br>

@@ -192,7 +192,7 @@ class AnVDesempenoController extends Controller
                 'height' => 70,
                 'alignment' => Jc::CENTER,
             ]);
-            $header->addText('“2026. Año del Humanismo Mexicano en el Estado de México”.', ['bold' => true, 'size' => 8], ['alignment' => 'center']);
+            $header->addText('“2025. Bicentenario de la vida municipal en el Estado de México”.', ['bold' => true, 'size' => 8], ['alignment' => 'center']);
             $header->addText('Unidad de Seguimiento', ['size' => 8], ['alignment' => 'center']);
             $header->addText('Número de Expediente: '.$acuerdoanvav->numero_expediente, ['bold' => true, 'size' => 10], ['alignment' => 'right']);
         // === FIN ENCABEZADO === //

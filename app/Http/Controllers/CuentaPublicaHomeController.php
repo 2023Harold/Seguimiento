@@ -24,7 +24,6 @@ class CuentaPublicaHomeController extends Controller
      */
     public function index()
     {
-        //$cps=CuentaPublica::all();
         $cps=CuentaPublica::orderBy('id')->get();
         return view('cphome',compact('cps'));
     }

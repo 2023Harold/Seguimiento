@@ -86,9 +86,9 @@
                                                 @if (empty($auditoria->informeprimeraetapa->fase_autorizacion)||$auditoria->informeprimeraetapa->fase_autorizacion=='Rechazado')                                                                                                                              
                                                     <th>Envío</th>
                                                 @endif
-												@if (!empty($auditoria->informeprimeraetapa)&&($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado'))
-													<th>Acuses</th>
-												@endif
+						@if (!empty($auditoria->informeprimeraetapa)&&($auditoria->informeprimeraetapa->fase_autorizacion=='Autorizado'))
+							<th>Acuses</th>
+						@endif
                 
                                             </tr>
                                         </thead>
@@ -293,11 +293,18 @@
                                                 @if (optional($auditoria->informepliegos)->fase_autorizacion=='Autorizado')
                                                     <td class="text-center">
                                                         @if (empty(optional($auditoria->informepliegos)->acuse_notificacion))
-                                                            <a href="{{ route('informeacuses.edit', $auditoria->informepliegos) }}" class="btn btn-primary">
-                                                                <span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
-                                                            </a>
+															@can('informeacuses.edit')
+																<a href="{{ route('informeacuses.edit', $auditoria->informepliegos) }}" class="btn btn-primary">
+																	<span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar
+																</a>
+															@else
+																<a href="{{ route('informeacuses.show', $auditoria->informepliegos) }}" class="btn btn-secondary" >
+																	<img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />
+																</a>
+                                                            @endcan
                                                         @endif
                                                         @if (!empty(optional($auditoria->informepliegos)->acuse_notificacion))
+															
                                                             @can('informeacuses.show')
                                                                 <a href="{{ route('informeacuses.show', $auditoria->informepliegos) }}" class="btn btn-secondary" >
                                                                     <img alt="Logo" src="{{asset('assets/img/consultar.png')}}" class="h-30px logo" />

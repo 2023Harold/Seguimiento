@@ -10,7 +10,7 @@
         @page {
             margin-left: 0;
             margin-right: 0;
-            margin-top: 0;
+            margin-top: 5px;
             margin-bottom: 0;
         }
 
@@ -95,121 +95,79 @@
                 </table>
             </td>                  
         </tr>
-        <tr>
-            <td colspan="8">
-                <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>OBSERVACIÓN PROMOVIDA:</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 5px 20px 10px 15px; width:60%; text-align: justify; border: .5 solid black;  color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                            <span>
-								<strong>
-									@php
-										 echo nl2br(htmlentities($accion->accion));									
-									@endphp
-								</strong>
-							</span> 
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>       
-        <tr>
-            <td colspan="8">
-             
-                @if(!empty($accion->normativa_infringida))
-                 <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ORDENAMIENTOS LEGALES Y DISPOSICIONES JURÍDICAS APLICABLES:</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 5px 20px 10px 15px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                            <span>
-								<strong>									
-									@php
-										 echo nl2br(htmlentities($accion->normativa_infringida));									
-									@endphp
-								</strong>
-							</span> 
-                        </td>
-                    </tr>
-                </table>                                             
-                @else
+		</table>
+		
+        <div style="width: 1115px; margin: 0px px 0px 2px; color: black; background-color: #D8D8D8; border: 1px solid black;"><span style="font-size: 0.6rem"><strong>OBSERVACIÓN PROMOVIDA:</strong></span></div>
+		<div style="width: 1075px; margin: 0px px 0px 2px; padding: 10px 20px 5px 20px; text-align: justify; border: 1px solid black; color: #960048; vertical-align:middle; font-size: .6rem;">
+            <span>
+				<strong>
+					@php
+						echo nl2br(htmlentities($accion->accion));									
+					@endphp
+				</strong>
+			</span> 
+        </div>
+        
+		@if(!empty($accion->normativa_infringida))
+		<div style="width: 100%; page-break-inside: avoid;">
+            <div style="width: 1115px; margin: 0px px 0px 2px; color: black; background-color: #D8D8D8; border: 1px solid black;"><span style="font-size: 0.6rem"><strong>ORDENAMIENTOS LEGALES Y DISPOSICIONES JURÍDICAS APLICABLES:</strong></span></div>
+            <div style="width: 1075px; margin: 0px px 0px 2px; padding: 10px 20px 5px 20px; text-align: justify; border: 1px solid black; color: #960048; vertical-align:middle; font-size: .6rem;">
+                <span>
+					<strong>									
+						@php
+							echo nl2br(htmlentities($accion->normativa_infringida));									
+						@endphp
+					</strong>
+				</span> 
+            </div>   
+		</div> 
+        @else
 
 
                     
-                @endif
+        @endif
                                     
-
-            </td>
-        </tr>
-        <tr>
-            <td colspan="8">
-                <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL PARA LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 5px 20px 10px 15px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                            <span>
-                                <strong>
-									@php
-										 echo nl2br(htmlentities($accion->evidencia_resumen));									
-									@endphp                                    
-                                </strong>
-                            </span> 
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="8">
-                <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DOCUMENTACIÓN PRESENTADA:</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 5px 20px 10px 15px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; margin:45px; font-size: 0.6rem;">
-							<strong>
-								<span>								   
-										@php
-										if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->listado_documentos)){
-										 echo nl2br(htmlentities($accion->recomendaciones->listado_documentos));
-										}									
-										@endphp
-								</span>
-							<strong>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="8">
-                <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ANALISIS DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 5px 20px 10px 15px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                            <span>
-                                <strong>
-									@php
-										if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->conclusion)){
-                                            echo nl2br(htmlentities($accion->recomendaciones->analisis."\n\n"));
-										    echo nl2br(htmlentities($accion->recomendaciones->conclusion));	
-										}
-									@endphp                                                           
-                                </strong>
-                            </span> 
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>         
-    </table>
+		<div style="width: 100%; page-break-inside: avoid;">
+			<div style="width: 1115px; margin: 0px px 0px 2px; color: black; background-color: #D8D8D8; border: 1px solid black;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL PARA LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></div>
+			<div style="width: 1075px; margin: 0px px 0px 2px; padding: 10px 20px 5px 20px; text-align: justify; border: 1px solid black; color: #960048; vertical-align:middle; font-size: .6rem;">
+				<span>
+					<strong>
+						@php
+							echo nl2br(htmlentities($accion->evidencia_resumen));									
+						@endphp                                    
+					</strong>
+				</span> 
+			</div>
+		</div>	
+        <div style="width: 100%; page-break-inside: avoid;">
+			<div style="width: 1115px; margin: 0px px 0px 2px; color: black; background-color: #D8D8D8; border: 1px solid black;"><span style="font-size: 0.6rem"><strong>DOCUMENTACIÓN PRESENTADA:</strong></span></div>
+			<div style="width: 1075px; margin: 0px px 0px 2px; padding: 10px 20px 5px 20px; text-align: justify; border: 1px solid black; color: #960048; vertical-align:middle; font-size: .6rem;">
+				<strong>
+					<span>								   
+						@php
+							if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->listado_documentos)){
+								echo nl2br(htmlentities($accion->recomendaciones->listado_documentos));
+							}									
+						@endphp
+					</span>
+				<strong>
+			</div>
+		</div>
+		<div style="width: 100%; page-break-inside: avoid;">
+			<div style="width: 1115px; margin: 0px px 0px 2px; color: black; background-color: #D8D8D8; border: 1px solid black;"><span style="font-size: 0.6rem"><strong>ANALISIS DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></div>
+			<div style="width: 1075px; margin: 0px px 0px 2px; padding: 10px 20px 5px 20px; text-align: justify; border: 1px solid black; color: #960048; vertical-align:middle; font-size: .6rem;">
+				<span>
+					<strong>
+						@php
+							if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->conclusion)){
+								echo nl2br(htmlentities($accion->recomendaciones->analisis."\n\n"));
+								echo nl2br(htmlentities($accion->recomendaciones->conclusion));	
+							}
+						@endphp                                                           
+					</strong>
+				</span> 
+			</div>
+        </div>
     @php
         $i=$i+1;
     @endphp
@@ -245,7 +203,7 @@
                     <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
                 </tr>
                 <tr>
-                     <td colspan="6" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe->name }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
+                     <td colspan="6" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe->name }} <br> <span style="text-transform: uppercase">{{$jefe->puesto }}</span></strong></span></td>
 
                 </tr>
                 <tr>

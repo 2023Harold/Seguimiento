@@ -25,8 +25,11 @@ class ListadoEntidades extends Model
         'entidades',
         'textos_doc',
         'cuenta_publica',
+		'orden',
+		'tipo_paa',
         'created_at'=>'datetime',
         'updated_at'=>'datetime',
+		'aud_paa_desc',
     ];
 
            

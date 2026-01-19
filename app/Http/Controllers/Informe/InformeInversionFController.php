@@ -116,143 +116,6 @@ class InformeInversionFController extends Controller
         //
     }
 
-    public function exportar(){
-        //$phpWord->addTitleStyle(1, ['bold' => true, 'size' => 10], ['alignment' => Jc::CENTER]); /**ESTO SIRVE PARA DAR ESTILOS GLOBALES A LOS TITULOS */
-        
-        $auditoria=Auditoria::find(getSession('auditoria_id')); 
-        $phpWord = new PhpWord();
-        $section = $phpWord->addSection();
-        if ($auditoria) {
-            $entidad = ListadoEntidades::where('no_auditoria', $auditoria->numero_auditoria)->where('cuenta_publica', $auditoria->cuenta_publica)->select('entidades', 'textos_doc')->first();
-                if ($entidad) {
-                    $nombreEntidad = $entidad->entidades;
-                    $entidad01 = $nombreEntidad;
-                    $textoDocumento = $entidad->textos_doc;
-                }
-            }
-
-        // Obtener los datos de la base
-        $segrecomendacion = AuditoriaAccion::select(
-            'segauditoria_acciones.accion',
-            'segauditoria_acciones.numero',
-            'segauditoria_acciones.plazo_recomendacion',
-            'segauditoria_acciones.monto_aclarar',
-            'segauditoria_acciones.normativa_infringida',
-            DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"),
-            DB::raw("(CASE WHEN segrecomendaciones_contestaciones.oficio_contestacion IS NULL THEN 'En ese orden de ideas...' ELSE NULL END) AS sicontestacion01"),
-            'segrecomendaciones_contestaciones.numero_oficio',
-            DB::raw("TO_CHAR(segrecomendaciones_contestaciones.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
-            DB::raw("TO_CHAR(segrecomendaciones_contestaciones.fecha_recepcion_oficialia, 'DD/MM/YYYY') AS fecha_recepcion_oficialia"),
-            'segrecomendaciones_contestaciones.folio_correspondencia',
-            'segrecomendaciones_contestaciones.nombre_remitente',
-            'segrecomendaciones_contestaciones.cargo_remitente',
-            'segrecomendaciones.calificacion_sugerida',
-            'segrecomendaciones.analisis',
-            'segrecomendaciones.conclusion',
-            'segrecomendaciones.listado_documentos',
-            DB::raw("(CASE WHEN segrecomendaciones.calificacion_sugerida = 'Atendida' THEN 'En ese sentido, con fundamento en...' ELSE NULL END) AS sicalificacionsugerida01"),
-            DB::raw("(CASE WHEN segrecomendaciones.calificacion_sugerida = 'Atendida' THEN segauditoria_acciones.numero ELSE NULL END) AS tr01"),
-            DB::raw("(CASE WHEN segrecomendaciones.calificacion_sugerida = 'No Atendida' THEN 'Por tanto se tiene como no atendida...' ELSE NULL END) AS sicalificacionsugerida02")
-        )
-        ->join('segrecomendaciones', 'segrecomendaciones.accion_id', '=', 'segauditoria_acciones.id')
-        ->leftJoin('segrecomendaciones_contestaciones', 'segrecomendaciones_contestaciones.recomendacion_id', '=', 'segrecomendaciones.id')
-        ->where('auditoria_id', $auditoria->id)
-        ->get();
-
-        $segpliego = AuditoriaAccion::select('segauditoria_acciones.tipo',/*TABLA segauditoria_acciones*/
-                                                'segauditoria_acciones.accion', 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar', 'segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
-   /*TABLA segpliegos_observacion_contestacion*/DB::raw("(case when(segpliegos_observacion_contestacion.oficio_contestacion IS NULL) THEN 'En ese orden de ideas, esta Unidad de Seguimiento hace constar que durante el plazo concedido para el desahogo de la Etapa de Aclaración, la entidad fiscalizada no presentó información, documentación o consideraciones relacionadas con la observación de mérito.' ELSE null END) AS sicontestacion01"),
-                                                'segpliegos_observacion_contestacion.numero_oficio', 
-                                                DB::raw("TO_CHAR(segpliegos_observacion_contestacion.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
-                                                DB::raw("TO_CHAR(segpliegos_observacion_contestacion.fecha_recepcion_oficialia, 'DD/MM/YYYY') AS fecha_recepcion_oficialia"), 
-                                                'segpliegos_observacion_contestacion.folio_correspondencia', 'segpliegos_observacion_contestacion.nombre_remitente', 'segpliegos_observacion_contestacion.cargo_remitente', 
-                                                'segpliegos_observacion.calificacion_sugerida',/*TABLA segpliegos_observacion*/
-                                                'segpliegos_observacion.analisis', 'segpliegos_observacion.conclusion','segpliegos_observacion.listado_documentos',
-                                                DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'No Solventado') THEN 'Por tanto, se tiene como no aclarado ni solventado para este Órgano Superior de Fiscalización del Estado de México, el Pliego de Observaciones con clave de acción '||segauditoria_acciones.numero||'; en consecuencia, con fundamento en el artículo 47 fracciones XII, XVIII y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; el Pliego de Observaciones será turnado a la autoridad investigadora de este Órgano Técnico, a efecto de que se inicie el procedimiento administrativo de investigación a que haya lugar, en términos de la Ley General de Responsabilidades Administrativas, la Ley de Responsabilidades Administrativas del Estado de México y Municipios y demás disposiciones jurídicas aplicables.' ELSE NULL END) AS sicalificacionsugerida01"),
-                                                DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'Solventado') THEN 'En ese sentido, con fundamento en lo dispuesto por los artículos 54 fracción III de la Ley de Fiscalización Superior del Estado de México y; 23 fracciones XIX y XLIV y; 47 fracciones XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, se determina que el Pliego de Observaciones ha quedado aclarado y solventado.' ELSE NULL END) AS sicalificacionsugerida02"),
-
-                                                DB::raw("(case when(segpliegos_observacion.promocion = 4) THEN segauditoria_acciones.numero ELSE NULL END) AS numpopras"),
-                                                DB::raw("(case when(segpliegos_observacion.promocion = 2) THEN segauditoria_acciones.numero ELSE NULL END) AS numporecomen"),
-
-                                                DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'Solventado') THEN segauditoria_acciones.numero ELSE NULL END) AS tpo01")
-                                                )
-                                             
-                                ->join('segpliegos_observacion', 'segpliegos_observacion.accion_id', '=', 'segauditoria_acciones.id')
-                                ->leftJoin('segpliegos_observacion_contestacion', 'segpliegos_observacion_contestacion.pliegosobservacion_id',"=",'segpliegos_observacion.id')
-                                ->where('auditoria_id', $auditoria->id)
-                                ->get();
-
-        $table = $section->addTable([
-            'borderSize' => 0,
-            'borderColor' => 'FFFF',
-            //'alignment' => JcTable::CENTER,
-        ]);
-
-        $table->addRow();
-        $table->addCell(2000)->addText("Entidad Fiscalizada:",['bold' => true]);
-        //$table->addCell(4000)->addText($nombreEntidad);
-
-        $table->addCell(3000, ['valign' => 'center'])->addText('Contenido centrado y negrita',['bold' => true]);
-
-        $table->addRow();
-        $table->addCell(2000)->addText("Tipo de Auditoría:",['bold' => true]);
-        $table->addCell(4000)->addText("Auditoría de Legalidad:");
-
-        $table->addRow();
-        $table->addCell(2000)->addText("Período Fiscalizado:");
-        $table->addCell(4000)->addText($auditoria->periodo_revision);
-
-        $section->addText('ANTECEDENTES',['bold' => true], ['alignment' => Jc::CENTER] // alineación
-        );
-
-        //DD($segpliego);
-        // Recorrer y agregar al documento
-        foreach ($segpliego as $item) {
-            $X = nl2br($item->listado_documentos); 
-
-            $xe=explode("\n",$item->listado_documentos);
-
-            //dd($item);
-            $section->addText("Número de acción: {$item->numero}", ['italic' => true]);
-            $section->addText("Acción: {$item->accion}");
-            $section->addText("Plazo de recomendación: {$item->plazo_recomendacion}");
-            $section->addText("Monto a aclarar: {$item->monto_aclarar} ({$item->monto_aclarar_letras})");
-
-            foreach($xe as $ex){
-                $section->addText("{$ex}");
-            }
-            
-
-            
-                $section->addText($item->sicontestacion01, ['italic' => true]);
-            
-
-            $section->addTextBreak(1); // Salto de línea
-
-            // Mostrar calificación
-            $section->addText("Calificación sugerida: {$item->calificacion_sugerida}", ['bold' => true]);
-
-            if ($item->sicalificacionsugerida01) {
-                $section->addText($item->sicalificacionsugerida01);
-            }
-            if ($item->sicalificacionsugerida02) {
-                $section->addText($item->sicalificacionsugerida02);
-            }
-
-            $section->addTextBreak(2); // Salto más grande entre recomendaciones
-        }
-
-        // Guardar y descargar
-        $fileName = 'informe_legalidad.docx';
-        $tempPath = storage_path($fileName);
-        $writer = IOFactory::createWriter($phpWord, 'Word2007');
-        $writer->save($tempPath);
-
-        return response()->download($tempPath)->deleteFileAfterSend(true);
-
-    }
-
      public function export(Request $request){
         //dd('export cumplimiento');
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
@@ -318,11 +181,11 @@ class InformeInversionFController extends Controller
         }
 
 
-        $fecha_oficio_acuerdo = fechaaletra(optional($auditoria->radicacion)->fecha_oficio_acuerdo);
+        $fecha_oficio_acuerdo = fechaaletra(optional($auditoria->comparecencia)->fecha_acuse);
         $segsolac = AuditoriaAccion::select(/*TABLA segauditoria_acciones*/
             DB::raw("UPPER(segauditoria_acciones.tipo) AS tipo_mayus"),
                                                 'segauditoria_acciones.tipo', 'segauditoria_acciones.accion', 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar', 'segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
+                                                DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
     /*TABLA segsolicitudes_acl_contestaciones*/ /*DB::raw("(case when(segsolicitudes_acl_contestaciones.oficio_contestacion IS NULL) THEN 'En ese orden de ideas, esta Unidad de Seguimiento hace constar que durante el plazo concedido para el desahogo de la Etapa de Aclaración, la entidad fiscalizada no presentó información, documentación o consideraciones relacionadas con la observación de mérito.' ELSE null END) AS sicontestacion01"),
                                                 'segsolicitudes_acl_contestaciones.numero_oficio', 
                                                 //'segsolicitudes_acl_contestaciones.fecha_oficio_contestacion', 
@@ -355,6 +218,7 @@ class InformeInversionFController extends Controller
 				$accion['conclusion'] = $this->limpiarTextoWord($accion['conclusion'] ?? '');
 				$accion['listado_documentos'] = $this->limpiarTextoWord($accion['listado_documentos'] ?? '');
                 $accion['accion'] = $this->limpiarTextoWord($accion['accion'] ?? '');
+				$accion['normativa_infringida'] = $this->limpiarTextoWord($accion['normativa_infringida'] ?? '');
 			}
         $NumSolacPromPo = collect($segsolac)->pluck('numsolacpo')->filter()->implode(', ');
         $CantSolacPromPo = count(collect($segsolac)->pluck('numsolacpo')->filter());
@@ -367,8 +231,9 @@ class InformeInversionFController extends Controller
 
         $segpliego = AuditoriaAccion::select('segauditoria_acciones.tipo',/*TABLA segauditoria_acciones*/
                                                 DB::raw("UPPER(segauditoria_acciones.tipo) AS tipo_mayus"),
-                                                'segauditoria_acciones.accion', 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar', 'segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
+                                                'segauditoria_acciones.accion', 
+												'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar', 'segauditoria_acciones.normativa_infringida',
+                                                DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
    /*TABLA segpliegos_observacion_contestacion*//*DB::raw("(case when(segpliegos_observacion_contestacion.oficio_contestacion IS NULL) THEN 'En ese orden de ideas, esta Unidad de Seguimiento hace constar que durante el plazo concedido para el desahogo de la Etapa de Aclaración, la entidad fiscalizada no presentó información, documentación o consideraciones relacionadas con la observación de mérito.' ELSE null END) AS sicontestacion01"),
                                                 'segpliegos_observacion_contestacion.numero_oficio', 
                                                 DB::raw("TO_CHAR(segpliegos_observacion_contestacion.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
@@ -378,8 +243,8 @@ class InformeInversionFController extends Controller
                                                 'segpliegos_observacion.calificacion_sugerida',/*TABLA segpliegos_observacion*/
                                                 DB::raw("UPPER(segpliegos_observacion.calificacion_sugerida) AS calificacion_sugerida_mayus"),
                                                 'segpliegos_observacion.analisis', 'segpliegos_observacion.conclusion','segpliegos_observacion.listado_documentos',
-                                                DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'No Solventado') THEN 'Por tanto, se tiene como no aclarado ni solventado para este Órgano Superior de Fiscalización del Estado de México, el Pliego de Observaciones con clave de acción '||segauditoria_acciones.numero||'; en consecuencia, con fundamento en el artículo 47 fracciones XII, XVIII y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; el Pliego de Observaciones será turnado a la autoridad investigadora de este Órgano Técnico, a efecto de que se inicie el procedimiento administrativo de investigación a que haya lugar, en términos de la Ley General de Responsabilidades Administrativas, la Ley de Responsabilidades Administrativas del Estado de México y Municipios y demás disposiciones jurídicas aplicables.' ELSE NULL END) AS sicalificacionsugerida01"),
-                                                DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'Solventado') THEN 'En ese sentido, con fundamento en lo dispuesto por los artículos 54 fracción III de la Ley de Fiscalización Superior del Estado de México y; 23 fracciones XIX y XLIV y; 47 fracciones XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, se determina que el Pliego de Observaciones ha quedado aclarado y solventado.' ELSE NULL END) AS sicalificacionsugerida02"),
+                                                DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'No Solventado0') THEN 'Por tanto, se tiene como no aclarado ni solventado para este Órgano Superior de Fiscalización del Estado de México, el Pliego de Observaciones con clave de acción '||segauditoria_acciones.numero||'; en consecuencia, con fundamento en el artículo 47 fracciones XII, XVIII y XX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México; el Pliego de Observaciones será turnado a la autoridad investigadora de este Órgano Técnico, a efecto de que se inicie el procedimiento administrativo de investigación a que haya lugar, en términos de la Ley General de Responsabilidades Administrativas, la Ley de Responsabilidades Administrativas del Estado de México y Municipios y demás disposiciones jurídicas aplicables.' ELSE NULL END) AS sicalificacionsugerida01"),
+                                                DB::raw("(case when(segpliegos_observacion.calificacion_sugerida = 'Solventado0') THEN 'En ese sentido, con fundamento en lo dispuesto por los artículos 54 fracción III de la Ley de Fiscalización Superior del Estado de México y; 23 fracciones XIX y XLIV y; 47 fracciones XII y XIX del Reglamento Interior del Órgano Superior de Fiscalización del Estado de México, se determina que el Pliego de Observaciones ha quedado aclarado y solventado.' ELSE NULL END) AS sicalificacionsugerida02"),
 
                                                 DB::raw("(case when(segpliegos_observacion.promocion = 4) THEN segauditoria_acciones.numero ELSE NULL END) AS numpopras"),
                                                 DB::raw("(case when(segpliegos_observacion.promocion = 2) THEN segauditoria_acciones.numero ELSE NULL END) AS numporecomen"),
@@ -397,6 +262,7 @@ class InformeInversionFController extends Controller
 				$accion['conclusion'] = $this->limpiarTextoWord($accion['conclusion'] ?? '');
 				$accion['listado_documentos'] = $this->limpiarTextoWord($accion['listado_documentos'] ?? '');
                 $accion['accion'] = $this->limpiarTextoWord($accion['accion'] ?? '');
+				$accion['normativa_infringida'] = $this->limpiarTextoWord($accion['normativa_infringida'] ?? '');
 			}
 
         $accionesSolAcPo = array_merge($segsolac,$segpliego);
@@ -408,7 +274,7 @@ class InformeInversionFController extends Controller
 
         $segrecomendacion = AuditoriaAccion::select('segauditoria_acciones.accion',/*TABLA segauditoria_acciones*/
                                                 'segauditoria_acciones.numero', 'segauditoria_acciones.plazo_recomendacion', 'segauditoria_acciones.monto_aclarar','segauditoria_acciones.normativa_infringida',
-                                                DB::raw("expresar_en_letras.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
+                                                DB::raw("expresar_en_letras1.numero_a_letras(segauditoria_acciones.monto_aclarar) AS monto_aclarar_letras"), 
     /*TABLA segrecomendaciones_contestaciones*/ /*DB::raw("(case when(segrecomendaciones_contestaciones.oficio_contestacion IS NULL) THEN 'En ese orden de ideas, esta Unidad de Seguimiento hace constar que durante el plazo concedido para el desahogo del Proceso de Atención a Recomendaciones, la entidad fiscalizada no presentó información, documentación o consideraciones relacionadas con la Recomendación de mérito.' ELSE null END) AS sicontestacion01"),
                                                 'segrecomendaciones_contestaciones.numero_oficio', 
                                                 DB::raw("TO_CHAR(segrecomendaciones_contestaciones.fecha_oficio_contestacion, 'DD/MM/YYYY') AS fecha_oficio_contestacion"),
@@ -434,6 +300,7 @@ class InformeInversionFController extends Controller
 				$accion['conclusion'] = $this->limpiarTextoWord($accion['conclusion'] ?? '');
 				$accion['listado_documentos'] = $this->limpiarTextoWord($accion['listado_documentos'] ?? '');
                 $accion['accion'] = $this->limpiarTextoWord($accion['accion'] ?? '');
+				$accion['normativa_infringida'] = $this->limpiarTextoWord($accion['normativa_infringida'] ?? '');
 			}
         $accionesRecomendaciones = array_merge($segrecomendacion);
         $tr01 = collect($segrecomendacion)->pluck('tr01')->filter()->implode(', ');

@@ -209,7 +209,14 @@
                                         @endcan
                                     @endif
                                     @if ($solicitud->fase_autorizacion=='Autorizado')
-                                        <span class="badge badge-light-success">{{ $solicitud->fase_autorizacion }} </span>                                     
+                                        <span class="badge badge-light-success">{{ $solicitud->fase_autorizacion }} </span> 
+										@can('solicitudesaclaracionautorizacion.edit')
+										<br>
+                                            <a href="{{ route('solicitudesaclaracionautorizacion.edit',$solicitud) }}" class="btn btn-primary">
+                                                <li class="fa fa-gavel"></li>
+                                                Autorizar
+                                            </a>                                       
+                                        @endcan                                    
                                     @endif                                    
                                 </td>
                             </tr>
@@ -320,7 +327,7 @@
                                                             <a href="{{ route('revisionessolicitudes.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                                                 <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
                                                             </a>
-                                                            @if($respuesta->estatus == null || ($respuesta->estatus == 'Guardar'))
+                                                            @if($comentario->estatus != 'Atendido')
                                                                 <a href="{{ route('respuestacomentariossolicitudes.edit',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
                                                                     <span class="bi bi-pencil-square fa-lg" aria-hidden="true"></span>{{--- Editar comentario  ---}}
                                                                 </a>

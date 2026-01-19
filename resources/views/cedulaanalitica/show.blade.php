@@ -10,7 +10,7 @@
         @page {
             margin-left: 0;
             margin-right: 0;
-            margin-top: 0;
+            margin-top: 5px;
             margin-bottom: 0;
         }
 
@@ -129,55 +129,42 @@
                     </table>
                 </td>                  
             </tr>
-			</table>
-			
-            <div width="100%" >
-				<div style="width: 100%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;">
-					<span style="font-size: 0.6rem"><strong>OBSERVACIÓN PROMOVIDA:</strong></span>
-				</div>
-				<div style="padding: 10px 40px 10px 20px; text-align: justify; border: .5 solid black; width:96%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
+			</table>           
+                  
+			<div style="width: 1115px; margin: 0px px 0px 2px; color: black; background-color: #D8D8D8; border: 1px solid black;"><span style="font-size: 0.7rem"><strong> &nbsp;&nbsp;&nbsp;OBSERVACIÓN PROMOVIDA:</strong></span></div>
+			<div style="width: 1075px; margin: 0px px 0px 2px; padding: 10px 20px 5px 20px; text-align: justify; border: 1px solid black; color: #960048; vertical-align:middle; font-size: .7rem;">
+				<span>
+					<strong>
+						@php
+							echo nl2br(htmlentities($accion->accion));									
+						@endphp  
+					</strong>
+				</span> 
+			</div>
+               
+            @if ($accion->tipo!='Recomendación')   
+			<div style="width: 100%; page-break-inside: avoid;">
+				<div style="width: 1115px; margin: 0px px 0px 2px; color: black; background-color: #D8D8D8; border: 1px solid black;"><span style="font-size: 0.7rem"><strong>&nbsp;&nbsp;&nbsp;NORMATIVIDAD INFRINGIDA:</strong></span></div>
+				<div style="width: 1075px; margin: 0px px 0px 2px; padding: 10px 20px 5px 20px; text-align: justify; border: 1px solid black; color: #960048; vertical-align:middle; font-size: .7rem;">
 					<span>
 						<strong>
 							@php
-								echo nl2br(htmlentities($accion->accion));									
+								echo nl2br(htmlentities($accion->normativa_infringida));									
 							@endphp  
 						</strong>
 					</span> 
-				</div>
-                      
-            </div> 
-			<table >
-            @if ($accion->tipo!='Recomendación')
-            <tr>
-                <td colspan="8">
-                    <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                        <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>NORMATIVIDAD INFRINGIDA:</strong></span></td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem;">
-                                <span>
-									<strong>
-										@php
-											 echo nl2br(htmlentities($accion->normativa_infringida));									
-										@endphp  
-									</strong>
-								</span> 
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr> 
+				</div> 
+			</div>
             @endif
             {{-- @if ($accion->tipo=='Recomendación')
             <tr>
                 <td colspan="8">
                     <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
                         <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>EVIDENCIA DOCUMENTAL QUE ACREDITE LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
+                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.7rem"><strong>&nbsp;&nbsp;&nbsp;EVIDENCIA DOCUMENTAL QUE ACREDITE LA ATENCIÓN DE LA RECOMENDACIÓN:</strong></span></td>
                         </tr>
                         <tr>
-                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: 0.6rem">
+                            <td style="text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle; font-size: .7rem">
                                 <span><strong>{{ $accion->evidencia_resumen }}</strong></span> 
                             </td>
                         </tr>
@@ -185,82 +172,66 @@
                 </td>
             </tr>
             @endif --}}
-            <tr>
-                <td colspan="8">
-                    <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                        <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>DOCUMENTACIÓN PRESENTADA:</strong></span></td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:60%; color: #960048; vertical-align:middle;font-size: 0.6rem;">
-                                <span>
-                                    <strong>
-										@php											 	
-											if ($accion->tipo=='Solicitud de aclaración'){
-												if(!empty($accion->solicitudesaclaracion)&&!empty($accion->solicitudesaclaracion->listado_documentos)){
-													echo nl2br(htmlentities($accion->solicitudesaclaracion->listado_documentos));
-												}
-											}elseif ($accion->tipo=='Pliego de observación'){
-												if(!empty($accion->pliegosobservacion)&&!empty($accion->pliegosobservacion->listado_documentos)){
-													echo nl2br(htmlentities($accion->pliegosobservacion->listado_documentos)); 
-												}
-											}elseif ($accion->tipo=='Recomendación'){
-												if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->listado_documentos)){
-													echo nl2br(htmlentities($accion->recomendaciones->listado_documentos)); 
-												}										
-											}elseif ($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria'){
-												if(!empty($accion->pras)&&!empty($accion->pras->listado_documentos)){
-													echo nl2br(htmlentities($accion->pras->listado_documentos)); 
-												}
-											}
-										@endphp                                        
-                                    </strong>
-                                </span> 
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="8">
-                    <table style="border: 1px none; border-collapse:collapse; border-color: #424242;" width="100%">
-                        <tr>
-                            <td style="width: 20%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"><span style="font-size: 0.6rem"><strong>ANALISIS DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></td>
-                        </tr>
-                       
-                    </table>
-                </td>
-            </tr>         
-        </table>
-		<div style="padding: 10px 20px 10px 20px; text-align: justify; border: .5 solid black; width:96%; color: #960048; vertical-align:middle;font-size: 0.6rem; ">
-		<span style="font-size: 0.6rem">
-                                    <strong>
-										@php
-											if ($accion->tipo=='Solicitud de aclaración'){
-												if(!empty($accion->solicitudesaclaracion)&&!empty($accion->solicitudesaclaracion->conclusion)){
-													echo nl2br(htmlentities($accion->solicitudesaclaracion->analisis."\n\n"));
-													echo nl2br(htmlentities($accion->solicitudesaclaracion->conclusion));
-												}
-											}elseif ($accion->tipo=='Pliego de observación'){
-												if(!empty($accion->pliegosobservacion)&&!empty($accion->pliegosobservacion->conclusion)){
-													echo nl2br(htmlentities($accion->pliegosobservacion->analisis."\n\n"));
-													echo nl2br(htmlentities($accion->pliegosobservacion->conclusion)); 
-												}
-											}elseif ($accion->tipo=='Recomendación'){
-												if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->conclusion)){
-													echo nl2br(htmlentities($accion->recomendaciones->analisis."\n\n"));
-													echo nl2br(htmlentities($accion->recomendaciones->conclusion)); 
-												}										
-											}elseif ($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria'){
-												if(!empty($accion->pras)&&!empty($accion->pras->conclusion)){
-													echo nl2br(htmlentities($accion->pras->analisis."\n\n"));
-													echo nl2br(htmlentities($accion->pras->conclusion)); 
-												}
-											}
-										@endphp
-                                    </strong>
-                                </span> 
-		</div>
+			<div style="width: 100%; page-break-inside: avoid;">
+				<div style="width: 1115px; margin: 0px px 0px 2px; color: black; background-color: #D8D8D8; border: 1px solid black;"><span style="font-size: 0.7rem"><strong>&nbsp;&nbsp;&nbsp;DOCUMENTACIÓN PRESENTADA:</strong></span></div>                        
+				<div style="width: 1075px; margin: 0px px 0px 2px; padding: 10px 20px 5px 20px; text-align: justify; border: 1px solid black; color: #960048; vertical-align:middle; font-size: .7rem;">
+					<span>
+						<strong>
+							@php											 	
+							if ($accion->tipo=='Solicitud de aclaración'){
+								if(!empty($accion->solicitudesaclaracion)&&!empty($accion->solicitudesaclaracion->listado_documentos)){
+									echo nl2br(htmlentities($accion->solicitudesaclaracion->listado_documentos));
+								}
+							}elseif ($accion->tipo=='Pliego de observación'){
+								if(!empty($accion->pliegosobservacion)&&!empty($accion->pliegosobservacion->listado_documentos)){
+									echo nl2br(htmlentities($accion->pliegosobservacion->listado_documentos)); 
+								}
+							}elseif ($accion->tipo=='Recomendación'){
+								if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->listado_documentos)){
+										echo nl2br(htmlentities($accion->recomendaciones->listado_documentos)); 
+								}										
+							}elseif ($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria'){
+								if(!empty($accion->pras)&&!empty($accion->pras->listado_documentos)){
+									echo nl2br(htmlentities($accion->pras->listado_documentos)); 
+								}
+							}
+							@endphp                                        
+						</strong>
+					</span> 
+				</div>
+			</div>			
+			<div style="width: 100%; page-break-inside: avoid;">			
+				<div style="width: 1115px; margin: 0px px 0px 2px; color: black; background-color: #D8D8D8; border: 1px solid black;"><span style="font-size: 0.7rem"><strong>&nbsp;&nbsp;&nbsp;ANALISIS DE LA DOCUMENTACIÓN PRESENTADA:</strong></span></div>                       
+				<div style="width: 1075px; margin: 0px px 0px 2px; padding: 10px 20px 5px 20px; text-align: justify; border: 1px solid black; color: #960048; vertical-align:middle; font-size: .7rem;">
+					<span>
+						<strong>
+							@php
+								if ($accion->tipo=='Solicitud de aclaración'){
+									if(!empty($accion->solicitudesaclaracion)&&!empty($accion->solicitudesaclaracion->conclusion)){
+										echo nl2br(htmlentities($accion->solicitudesaclaracion->analisis."\n\n"));
+										echo nl2br(htmlentities($accion->solicitudesaclaracion->conclusion));
+									}
+								}elseif ($accion->tipo=='Pliego de observación'){
+									if(!empty($accion->pliegosobservacion)&&!empty($accion->pliegosobservacion->conclusion)){
+										echo nl2br(htmlentities($accion->pliegosobservacion->analisis."\n\n"));
+										echo nl2br(htmlentities($accion->pliegosobservacion->conclusion)); 
+									}
+								}elseif ($accion->tipo=='Recomendación'){
+									if(!empty($accion->recomendaciones)&&!empty($accion->recomendaciones->conclusion)){
+										echo nl2br(htmlentities($accion->recomendaciones->analisis."\n\n"));
+										echo nl2br(htmlentities($accion->recomendaciones->conclusion)); 
+									}										
+								}elseif ($accion->tipo=='Promoción de responsabilidad administrativa sancionatoria'){
+									if(!empty($accion->pras)&&!empty($accion->pras->conclusion)){
+										echo nl2br(htmlentities($accion->pras->analisis."\n\n"));
+										echo nl2br(htmlentities($accion->pras->conclusion)); 
+									}
+								}
+							@endphp
+						</strong>
+					</span>
+				</div>
+			</div>
         @php
             $i=$i+1;
         @endphp

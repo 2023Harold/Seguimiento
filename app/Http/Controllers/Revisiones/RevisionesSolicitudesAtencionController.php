@@ -29,7 +29,7 @@ class RevisionesSolicitudesAtencionController extends Controller
     public function create()
     {
         $comentario = new Revisiones();
-             
+
         $accion = 'Agregar';
 
         return view('comentarios.revisionessolicitudesatencion.form', compact('comentario', 'accion'));
@@ -43,7 +43,7 @@ class RevisionesSolicitudesAtencionController extends Controller
      */
     public function store(Request $request)
     {
-        $comentario = Revisiones::find(getSession('comentario_id'));       
+        $comentario = Revisiones::find(getSession('comentario_id'));
         $comentario->update(['estatus'=>'Atendido']);
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $request->merge([
@@ -51,11 +51,11 @@ class RevisionesSolicitudesAtencionController extends Controller
             'de_usuario_id'=>auth()->user()->id,
             'para_usuario_id'=>intval($accion->analista_asignado_id),
             'accion'=>'Solicitud de Aclaración',
-            'accion_id'=>$accion->id,            
+            'accion_id'=>$accion->id,
             'usuario_creacion_id'=>auth()->user()->id,
-        ]);        
-        Revisiones::create($request->all()); 
-            
+        ]);
+        Revisiones::create($request->all());
+
         setMessage('se ha agregado el comentario correctamente.');
 
         return view('layouts.close');
@@ -82,7 +82,7 @@ class RevisionesSolicitudesAtencionController extends Controller
     {
         $accion = 'Atender';
         $acciones=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
-        $tipo = $comentario->tipo; // tipo para identificar el archivo solo aplica para 
+        $tipo = $comentario->tipo; // tipo para identificar el archivo solo aplica para
         $auditoria = Auditoria::find(getSession('auditoria_id'));
 
         return view('comentarios.revisionesatencion.form', compact('comentario', 'accion','tipo','auditoria','acciones'));
@@ -97,7 +97,7 @@ class RevisionesSolicitudesAtencionController extends Controller
      */
     public function update(Request $request, Revisiones $comentario,)
     {
-        //$comentario = Revisiones::find(getSession('comentario_id'));       
+        //$comentario = Revisiones::find(getSession('comentario_id'));
         $comentario->update(['estatus'=>'Atendido']);
         $accion = AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
         $request->merge([
@@ -105,11 +105,11 @@ class RevisionesSolicitudesAtencionController extends Controller
             'de_usuario_id'=>auth()->user()->id,
             'para_usuario_id'=>intval($accion->analista_asignado_id),
             'accion'=>'Solicitud de Aclaración',
-            'accion_id'=>$accion->id,            
+            'accion_id'=>$accion->id,
             'usuario_creacion_id'=>auth()->user()->id,
-        ]);        
-        Revisiones::create($request->all()); 
-            
+        ]);
+        Revisiones::create($request->all());
+
         setMessage('se atendio el comentario correctamente.');
 
         return view('layouts.close');
@@ -128,7 +128,7 @@ class RevisionesSolicitudesAtencionController extends Controller
     private function mensajeComentario(String $nombre, String $puesto)
     {
         $mensaje = '<strong>Estimado(a) '.$nombre.', '.$puesto.':</strong><br>'
-                    .'Se ha dado atención al comentario, realizando las modificaciones pertinentes según lo indicado.';    
+                    .'Se ha dado atención al comentario, realizando las modificaciones pertinentes según lo indicado.';
         return $mensaje;
     }
 }

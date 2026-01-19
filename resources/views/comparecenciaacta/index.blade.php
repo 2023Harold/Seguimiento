@@ -198,7 +198,12 @@
                                                     @endcan
                                                 @endif
                                                 @if ($auditoria->comparecencia->fase_autorizacion=='Autorizado')
-                                                    <span class="badge badge-light-success">{{ $auditoria->radicacion->fase_autorizacion }} </span>
+                                                    <span class="badge badge-light-success">{{ $auditoria->radicacion->fase_autorizacion }} </span> </br>
+													@if (getSession('cp')==2022 && auth()->user()->siglas_rol=='LP')
+														<a href="{{ route('comparecenciaacta.edit',$auditoria->comparecencia) }}" class="text-primary">
+														   <span class="fas fa-edit fa-lg" aria-hidden="true"></span>
+														</a>
+													@endif
                                                 @endif
                                                     @if(getSession('cp')==2023)
                                                         @if ($auditoria->comparecencia->fase_autorizacion == 'En validación')
@@ -224,7 +229,7 @@
 										</td>
 										<td class="text-center">
 											@if (empty($auditoria->comparecencia->fase_autorizacion)||$auditoria->comparecencia->fase_autorizacion=='Rechazado')
-                                                    @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')
+                                                    @if (getSession('cp')==2022 && auth()->user()->siglas_rol=='JD')														
                                                         @can('comparecenciaacta.edit')
                                                             <a href="{{ route('comparecenciaenvio.edit',$auditoria->comparecencia) }}" class="btn btn-primary">
                                                             Enviar

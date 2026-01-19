@@ -139,14 +139,16 @@ class AuditoriaSeguimientoController extends Controller
             }
          }
          if(getSession('cp')==2022){
+			//dd(2022);
             $query = $query->whereHas('acciones', function($q){
                 if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
                     $q = $q->where('analista_asignado_id',auth()->user()->id);
                 }
                 if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
                     $userLider=auth()->user();
-                    $q = $q->whereRaw('LOWER(lider_asignado_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('fase_autorizacion');
+                    $q = $q->whereRaw('LOWER(lider_asignado_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('segauditorias.fase_autorizacion');
                 }
+
             });
         }
         else{            

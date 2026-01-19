@@ -31,6 +31,15 @@
                     </div>
                 </div>
                 {!!BootForm::close() !!}
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pagination float-end">
+							{{
+							$acciones->appends(['numero_accion'=>$request->numero_accion])->links('vendor.pagination.bootstrap-5')
+							}}
+						</div>
+					</div>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -96,11 +105,16 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
-                    {{
-                    $acciones->appends(['numero_accion'=>$request->numero_accion])->links('vendor.pagination.bootstrap-5')
-                    }}
+                <div class="row">
+					<div class="col-md-12">
+						<div class="pagination float-end">
+							{{
+							$acciones->appends(['numero_accion'=>$request->numero_accion])->links('vendor.pagination.bootstrap-5')
+							}}
+						</div>
+					</div>
                 </div>
+				
             </div>
         </div>
     </div>

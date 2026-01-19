@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\TurnoArchivo;
 
 use App\Http\Controllers\Controller;

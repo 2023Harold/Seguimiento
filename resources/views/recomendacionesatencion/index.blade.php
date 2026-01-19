@@ -299,7 +299,7 @@
                                                             <a href="{{ route('revisionesrecomendaciones.show',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupSinLocation">
                                                                 <span class="fa fa-comment fa-lg" aria-hidden="true"></span>
                                                             </a>
-                                                            @if($respuesta->estatus == null || ($respuesta->estatus == 'Guardar'))
+                                                            @if($comentario->estatus != 'Atendido')
                                                                 <a href="{{ route('respuestacomentariosrecomendaciones.edit',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
                                                                     <span class="bi bi-pencil-square fa-lg" aria-hidden="true"></span>{{--- Editar comentario  ---}}
                                                                 </a>

@@ -524,5 +524,11 @@ class Auditoria extends Model
     //     return $this->hasOne(Cedulas::class, 'auditoria_id','id')->where('tipo','Cedula General Seguimiento');     
     // }
     
+	
+	
+	public function auditoriadatospaa()
+    {
+        return $this->hasOne(ListadoEntidades::class, 'no_auditoria','numero_auditoria')->where('seglistadoentidades.cuenta_publica',getSession('cp'));
+    }
     
 }

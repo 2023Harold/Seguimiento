@@ -10,16 +10,14 @@
         @page {
             margin-left: 0;
             margin-right: 0;
-            margin-top: 0;
+            margin-top: 5px;
             margin-bottom: 10px;
         }
 
     </style>
 </head>
 <body>
-
-
-<table width="100%" style="page-break-inside: avoid;">
+<table width="100%" style="page-break-inside: avoid; ">
         <tr style="border-collapse:separate;border-spacing:0px;">
             <td colspan="2" rowspan="3" style="width:20%; border: 1px solid;  color: grey;">
                 {{-- <div style="width: max-content;">--}}
@@ -92,10 +90,10 @@
                 <span style="font-size: 0.6rem"><strong>&nbsp;{{ fecha(optional($auditoria->comparecencia)->fecha_comparecencia) }}</strong></span>
             </td>
             <td style="text-align: center; width: 10%; color: white; background-color: #960048; vertical-align: middle;">
-                <span style="font-size: .6rem;"><strong>Fecha de Vencimiento</strong></span>
+                <span style="font-size: .6rem;"><strong>Fecha de Vencimiento</strong> </span>
             </td>
             <td colspan="2" style="border: .5 solid; width:10%; color: #424242; vertical-align:middle;">
-                <span style="font-size: 0.6rem"><strong>{{ fecha($rfm) }}</strong></span>
+                <span style="font-size: 0.6rem"><strong>{{ fecha(optional($auditoria->comparecencia)->fecha_termino_proceso) }}</strong></span>
             </td>
         </tr>
         <tr></tr>
@@ -130,33 +128,24 @@
                     </tr>
                 </table>
             </td>
-            <td colspan="2" rowspan="12" style="vertical-align: top;">
+            <td colspan="2" rowspan="2" style="vertical-align: top;">
             </td>
-        </tr>
-        <tr></tr>
-
-        <tr style="border-collapse:separate;border-spacing:0 500px;">
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-            <td style="text-align: center; width: 20%;"></td>
-        </tr>
-        <tr style="border-collapse:collapse;border-spacing:0 500px;">
-            <td colspan="8">
-                <table style="border: 1px solid; border-collapse:collapse; border-color: #424242;" width="100%">
-                    <tr>
-                        <td colspan="8" style="text-align: center; width: 20%; color: white; background-color: #960048; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Recomendaciones</strong></span></td>
-                    </tr>
+        </tr>     
+		</table>
+		
+       
+        <div style="text-align: center;width: 1115px; margin: 0px px 0px 2px; color: white; background-color: #960048; border: 1px solid black;"> <span style="font-size: .6rem;"><strong>Recomendaciones</strong></span></div>
+                    
                     @foreach ($auditoria->totalrecomendacion as $recomendacion)
-                    <tr>
-                        <td style="text-align: center; width: 25%; border-color: #424242;"> <span style="font-size: .6rem;"></span></td>
+					<div style="width:1115px; margin: 0px px 0px 2px; page-break-inside: avoid; ">   
+						<table style="width:100%; border: 1px solid; border-collapse:collapse;">
+                       <tr style="border-collapse:separate;border-spacing:0 500px;">
+                        <td style="text-align: center; width: 25%; border-color: #424242;"> <span style="font-size: .6rem;">&nbsp;</span></td>
                         <td style="text-align: center; width: 25%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Número</strong></span></td>
                         <td style="text-align: center; width: 25%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Plazo convenido</strong></span></td>
                         <td style="text-align: center; width: 25%; color: black; background-color: #D8D8D8; border: 1px solid; border-color: #424242;"> <span style="font-size: .6rem;"><strong>Estatus</strong></span></td>
-                    </tr>
-                        <tr>
+						</tr>
+                        <tr style="border-collapse:separate;border-spacing:0 500px;">
                             <td style="text-align: center; width: 25%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong> {{ $loop->iteration }}</strong></span></td>
                             <td style="text-align: center; width: 25%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $recomendacion->numero }}</strong></span></td>
                             <td style="text-align: center; width: 25%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>{{ $recomendacion->plazo_recomendacion }}</strong></span></td>
@@ -168,14 +157,15 @@
                         <tr>
                             <td style="padding: 10px 20px 10px 20px; text-align: justify; width: 90%; border: 1px solid; border-color: #424242;" colspan="4"><span style="font-size: .6rem;"><strong><?php echo nl2br(htmlspecialchars($recomendacion->accion)); ?></strong></span></td>
                         </tr>
+					</table>
+						
+                         
+					</div>
                     @endforeach
-                </table>
-            </td>
-        </tr>
-        <tr></tr>
-		</table>
+                
+		
    
-                <table style="border-collapse:collapse;" width="100%">
+                <table style="border-collapse:collapse; page-break-inside: avoid;" width="100%">
                     <tr>
                         <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>ELABORÓ:</strong></span></td>
                     </tr>
@@ -196,7 +186,7 @@
                         <td colspan="6" style="text-align: center; color: black; width: 100%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong>REVISÓ:</strong></span></td>
                     </tr>
                     <tr>
-                         <td colspan="6" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe->name }} <br> JEFE DE DEPARTAMENTO</strong></span></td>
+                         <td colspan="6" style="text-align: center; color: black; width: 40%; border: 1px solid; border-color: #424242;"><span style="font-size: .6rem;"><strong><br><br><br><br><br>  {{ $jefe->name }} <br> <span style="text-transform: uppercase">{{$jefe->puesto }}</span></strong></span></td>
 
                     </tr>
                     <tr>

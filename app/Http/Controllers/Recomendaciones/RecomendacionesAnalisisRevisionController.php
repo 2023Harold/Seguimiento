@@ -80,7 +80,7 @@ class RecomendacionesAnalisisRevisionController extends Controller
 
         $this->normalizarDatos($request);
 
-        $mov = Movimientos::create([
+        Movimientos::create([
             'tipo_movimiento' => 'Revisión de la actualización del análisis',
             'accion' => 'Recomendación',
             'accion_id' => $recomendacion->id,
@@ -96,7 +96,6 @@ class RecomendacionesAnalisisRevisionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
-        
 
         if ($request->estatus == 'Aprobado') {     
             $titulo = 'Revisión del análisis de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
@@ -114,9 +113,6 @@ class RecomendacionesAnalisisRevisionController extends Controller
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id);
         }
-        
-        
-         //AUD-142/ACC-181/USER-65/MOV-1063/Revisar Autorizar Validar
 
         return redirect()->route('recomendacionesatencion.index');
     }
