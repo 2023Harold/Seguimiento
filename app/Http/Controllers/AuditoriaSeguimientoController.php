@@ -26,7 +26,8 @@ class AuditoriaSeguimientoController extends Controller
         //$auditorias = $this->setQuery($request)->orderBy('id','ASC')->paginate(30);
         //$auditoriasQuery = DB::table('segauditorias')->select('*')->orderBy("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, '\d+'))");
         // Agrega la consulta RAW para usar funciones Oracle
-        $auditorias = $this->setQuery($request)->orderByRaw("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, '\\d+'))");
+        // $auditorias = $this->setQuery($request)->orderByRaw("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, '\\d+'))");
+        $auditorias = $this->setQuery($request)->orderByRaw("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, 'DESC'))");
         $auditorias = $auditorias->paginate(30);
         //$auditorias = $this->setQuery($request)->paginate(30);
         $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
@@ -45,7 +46,7 @@ class AuditoriaSeguimientoController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
@@ -106,16 +107,16 @@ class AuditoriaSeguimientoController extends Controller
         //
     }
 
-    public function setQuery(Request $request) 
+    public function setQuery(Request $request)
     {
          $query = $this->model;
 		 $query = $query->where('cuenta_publica',getSession('cp'));
-        
+
          if(in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray())){
             $query = $query->whereHas('auditoriausuarios', function($q){
-               
-                $q->where("staff_id", auth()->user()->id); 
-                
+
+                $q->where("staff_id", auth()->user()->id);
+
             });
          }
          if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
@@ -127,11 +128,11 @@ class AuditoriaSeguimientoController extends Controller
                         $queryJDA->whereHas('acciones', function($q){
                                 $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
                                 $q = $q->whereNotNull('segauditorias.fase_autorizacion')->whereRaw('LOWER(departamento_asignado_id) LIKE (?) ',["%{$unidadAdministrativa}%"])->whereNotNull('segauditorias.nivel_autorizacion');
-    
+
                         });
                     });
-    
-                });    
+
+                });
             }else{
                 $query = $query->where(function ($queryJDE) {
                     $queryJDE->where('departamento_encargado_id', auth()->user()->cp_ua2023 || auth()->user()->cp_ua2024 );
@@ -151,11 +152,11 @@ class AuditoriaSeguimientoController extends Controller
 
             });
         }
-        else{            
-            if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){              
+        else{
+            if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
                 $query = $query->where('analistacp_id',auth()->user()->id);
             }
-            if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){              
+            if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
                 $query = $query->where('lidercp_id',auth()->user()->id);
             }
         }

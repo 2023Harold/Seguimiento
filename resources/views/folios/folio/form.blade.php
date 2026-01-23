@@ -41,19 +41,19 @@
                             'En tiempo' => 'En tiempo',
                             'Extemporaneo' => 'Extemporaneo',
                         ], old('presentacionambs',(str_contains($folio->presentacion,'Extempo')?'Extemporaneo':
-						
-						(str_contains($folio->presentacion,'tiempo')?'En tiempo':'')))					
+
+						(str_contains($folio->presentacion,'tiempo')?'En tiempo':'')))
 						,true,['class'=>'i-checks rechazado'])
                         !!}
                         </div>
                     </div>
-					
+
 					@php
 						$extempambasdiv = (str_contains($folio->presentacion,'Extempo')?'block':'none');
-					@endphp					
+					@endphp
                     <div class="row" id="divextempambas" style="display:{{$extempambasdiv}};">
                         <div class="col-md-6">
-						
+
                             {!!BootForm::checkbox('acciones_extemp', ' Acciones a destiempo', 'XAD', ($folio->acciones_extemp?true:false), ['class' => 'i-checks','id'=>'sol_extemp_ad']) !!}
                             {!!BootForm::checkbox('recomendaciones_extemp',' Recomendaciones a destiempo', 'XRD', ($folio->recomendaciones_extemp?true:false), ['class' => 'i-checks','id'=>'sol_extemp_rd']) !!}
                             {!!BootForm::hidden('presentacion',old('',($folio->presentacion)),['id'=>'presentacion']) !!}
@@ -72,10 +72,30 @@
                             {!!BootForm::text('numero_oficio', 'Número del oficio: ', old('numero_oficio', $folio->numero_oficio)) !!} {{--si el numero es NULL es memorandum si es S/N o XXX/XXX/XX/XX entonces es Oficio --}}
                         </div>
                     </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        {!!BootForm::text('folio', 'Folio de correspondencia: *', old('num_memo_recepcion_expediente',$folio->num_memo_recepcion_expediente)) !!}
+               <div class="row">
+                    <div class="col-md-12">
+                        {!!BootForm::label('lb_folio', 'Folio de correspondecia: *') !!}
                     </div>
+                    {{-- <div class="col-md-12">
+                        {!!BootForm::label('lb_folio', 'Folio de correspondecia: *') !!}
+                    </div>
+                    <div class="col-md-1">
+                        {!!BootForm::text('folio', false, ' CRR', ['disabled']) !!}
+                    </div>
+                    <div class="col-md-3">
+                        {!!BootForm::text('folio', false, old('num_memo_recepcion_expediente',$folio->num_memo_recepcion_expediente)) !!}
+                    </div> --}}
+                    <div class="col-md-3">
+
+                         <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text" id="btnGroupAddon2">CRR-</div>
+                                </div>
+                                <input type="text" class="form-control" placeholder=" 89758 ejemplo" aria-describedby="btnGroupAddon2" name="folio" id="folio" value="{{ old('folio',$folio->num_memo_recepcion_expediente) }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-3">
                         {!!BootForm::date('fecha_recepcion_oficialia', 'Fecha de recepción en Oficialia de Partes: *', old('fecha_recepcion_oficialia',fecha($folio->fecha_recepcion_oficialia, 'Y-m-d')),['onchange'=>'handler(event)']) !!}
                     </div>
@@ -83,6 +103,7 @@
                         {!!BootForm::date('fecha_recepcion_us', 'Fecha de recepción en la Unidad de Seguimiento: *', old('fecha_recepcion_us',fecha($folio->fecha_recepcion_us,'Y-m-d'))) !!}
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         @canany(['folioscrr.store','folioscrr.update'])
