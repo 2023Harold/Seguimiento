@@ -69,7 +69,8 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead>                           
-                            <tr>                                             
+                            <tr>                
+
                                 <th>Número de oficio</th>
                                 <th>Nombre del titular a quien se dirige</th>
                                 <th>Cargo del titular a quien se dirige</th>
@@ -485,7 +486,7 @@
 										@if(!$auditoria->acuerdoconclusionpliegos->oficio_recepcion)  
 											@can('acuerdoconclusionacuse.edit')
 												<a href="{{ route('acuerdoconclusionacuse.edit', $auditoria->acuerdoconclusionpliegos) }}" class="btn btn-primary">
-													<span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar  2
+													<span class="fa fa-file-circle-plus" aria-hidden="true"></span>&nbsp; Adjuntar  
 												</a>
 											@endcan  
 										@else

@@ -27,7 +27,7 @@ class AsignacionLiderAnalistaController extends Controller
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
        // dd($auditorias);
 
-        return view('asignacionlideranalista.index', compact('auditorias', 'request'));
+        return view('Asignaciones.asignacionlideranalista.index', compact('auditorias', 'request'));
     }
 
     /**
@@ -74,7 +74,7 @@ class AsignacionLiderAnalistaController extends Controller
         $analistas = usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','ANA')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $accion="asignar";
 
-        return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
+        return view('Asignaciones.asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
     }
 
     /**
@@ -222,7 +222,7 @@ class AsignacionLiderAnalistaController extends Controller
         $lideres=usuariocp(auth()->user()->director->unidad_administrativa_id)->where('siglas_rol','LP')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $analistas=usuariocp(auth()->user()->unidad_administrativa_id)->where('siglas_rol','ANA')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $accion="reasignarlider";
-        return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
+        return view('Asignaciones.asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
     }
 
     public function reasignaranalista(Auditoria $auditoria)
@@ -231,7 +231,7 @@ class AsignacionLiderAnalistaController extends Controller
         $analistas=usuariocp(auth()->user()->unidad_administrativa_id)->where('siglas_rol','ANA')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $accion="reasignaranalista";
 
-        return view('asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
+        return view('Asignaciones.asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
     }
 
     public function accionesConsulta(Auditoria $auditoria)
@@ -251,7 +251,13 @@ class AsignacionLiderAnalistaController extends Controller
         $request = new Request();
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);
 
-        return view('asignacionlideranalistaconsulta.index', compact('acciones', 'request', 'auditoria','movimiento','tiposaccion'));
+        return view('Asignaciones.asignacionlideranalistaconsulta.index', compact('acciones', 'request', 'auditoria','movimiento','tiposaccion'));
+    }
+
+    public function analistaextraconsulta(Auditoria $auditoria)
+    {
+        setSession('auditoria_id_anaextra',$auditoria->id);
+        return redirect()->route('asignacionlideranalistaextra.index');
     }
 
     public function setQuery(Request $request)
@@ -299,6 +305,16 @@ class AsignacionLiderAnalistaController extends Controller
         if ($request->filled('acto_fiscalizacion')) {
             $actoFiscalizacion=strtolower($request->acto_fiscalizacion);
             $query = $query->whereRaw('LOWER(acto_fiscalizacion) LIKE (?) ',["%{$actoFiscalizacion}%"]);
+        }
+        if ($request->filled('asignaciones') && $request->asignaciones!='Todas') {
+            if($request->asignaciones=='Asignadas'){
+                $query = $query->whereNotNull('lidercp_id')->whereNotNull('analistacp_id');
+            }elseif($request->asignaciones=='Pendientes'){
+                $query = $query->where(function($q){
+                    $q->whereNull('lidercp_id')
+                      ->orWhereNull('analistacp_id');
+                });
+            }
         }
 
         return $query;

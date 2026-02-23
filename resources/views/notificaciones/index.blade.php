@@ -13,31 +13,32 @@
                     </h1>
                 </div>
                 <div class="card-body">
+                    @include('layouts.partials.Buzones._tabsbuzonnotificaciones')
+
                     {!!BootForm::open(['id' => 'form', 'method' => 'GET']) !!}
                     <div class="row align-items-center">
-                        <div class="col-md-3">
+                        {{--<div class="col-md-3">
                             {!!BootForm::radios("estatus", 'Estatus: ',['Todos' => ' Todos', 'Pendiente'=>' No leído','Leído'=>' Leído'],
                                 old('estatus', empty($request->estatus) ? 'Todos' : $request->estatus),true,['class'=>'i-checks']) !!}
-                        </div>
-                        <div class="col-md-3">
-                            {!!BootForm::date('created_at', 'Fecha de recepción', old('created_at', $request->created_at)) !!}
-                        </div>
-                        <div class="col-md-3">
-                            {!!BootForm::date('updated_at', 'Fecha de lectura', old('updated_at', $request->updated_at)) !!}
-                        </div>
-                    </div>
-                    <div class="row align-items-center">
+                        </div> --}}
                         <div class="col-md-3">
                             {!!BootForm::text('numero_auditoria', 'Número de Auditoría', old('numero_auditoria', $request->numero_auditoria)) !!}
                         </div>
-						<div class="col-md-3">
+                        <div class="col-md-3">
                             {!!BootForm::radios("cuenta", 'Cuenta Pública: ',['Todas' => ' Todas', '|2022'=>' 2022','|2023'=>' 2023','|2024'=>' 2024'],
                                 old('cuenta', empty($request->cuenta) ? 'Todas' : $request->cuenta),true,['class'=>'i-checks']) !!}
                         </div> 
-						
-						<div class="col-md-3 mt-8">
+                        <div class="col-md-2">
+                            {!!BootForm::date('created_at', 'Fecha de recepción', old('created_at', $request->created_at)) !!}
+                        </div>
+                        <div class="col-md-2">
+                            {!!BootForm::date('updated_at', 'Fecha de lectura', old('updated_at', $request->updated_at)) !!}
+                        </div>
+                        <div class="col-md-1 mt-8">
                             <button type="submit" class="btn btn-primary">Buscar</button>  
                         </div>
+                    </div>
+                    <div class="row align-items-center">
                     </div>
                     {!!BootForm::close() !!}
                     <div class="row">

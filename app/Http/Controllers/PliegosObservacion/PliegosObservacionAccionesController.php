@@ -151,9 +151,21 @@ class PliegosObservacionAccionesController extends Controller
             $query = $query->where('fase_revision','Autorizado');
          }
 
-         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
-            $query = $query->where('analista_asignado_id',auth()->user()->id);
-         } 
+         if (in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+            $userId = auth()->id();
+
+            $query = $query->where(function ($q) use ($userId) {
+                // 1) Acciones donde el usuario es el analista asignado de la ACCIÓN
+                $q->where('analista_asignado_id', $userId)
+
+                // 2) O acciones cuya AUDITORÍA tiene a este usuario como analista extra ACTIVO
+                ->orWhereHas('auditoria.analistacpextra', function ($r) use ($userId) {
+                    $r->where('analista_id', $userId)
+                        ->where('estatus', 'Activo'); // si quieres incluir solo extras activos
+                        // ->orWhereNull('estatus');  // (opcional) si en algún año dejan nulos como "activos"
+                });
+            });
+        }
          if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){           
             $query = $query->where('lider_asignado_id',auth()->user()->id);
          } 

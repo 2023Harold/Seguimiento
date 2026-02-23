@@ -283,7 +283,7 @@
                                         @can( 'respuestacomentariossolicitudes.edit')
                                             @if (($comentario->estatus=='Pendiente' && ($comentario->de_usuario_id==$asistente_titular->id || $comentario->de_usuario_id == $director->id )))
                                                 <a class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario" href="{{ route('respuestacomentariossolicitudes.edit',$comentario) }}">
-                                                    <span class="bi bi-chat-quote-fill fa-lg">Atender </span>{{--- Crear comentario  ---}}
+                                                    <span class="bi bi-chat-quote-fill fa-lg">Atender 1</span>{{--- Crear comentario  ---}}
                                                 </a>										                                       										                                       
                                             @endif 
                                         @endcan
@@ -291,7 +291,7 @@
                                     
                                     @if (auth()->user()->siglas_rol=='ANA' && ($comentario->estatus=='Pendiente') && ($comentario->de_usuario_id != $asistente_titular->id) && ($comentario->de_usuario_id != $director->id))
                                         <a class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario" href="{{ route('revisionessolicitudesatencion.edit',$comentario) }}">
-                                           <span class="bi bi-chat-quote-fill fa-lg">Atender </span>{{--- Crear comentario  ---}}
+                                           <span class="bi bi-chat-quote-fill fa-lg">Atender 2</span>{{--- Crear comentario  ---}}
                                         </a>                                        
                                     @endif 
                                 </td>

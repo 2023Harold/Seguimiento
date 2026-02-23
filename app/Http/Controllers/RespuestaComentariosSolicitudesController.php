@@ -43,7 +43,7 @@ class RespuestaComentariosSolicitudesController extends Controller
         
         $tipo = $comentario->tipo; // tipo para identificar el ar
 
-        return view('respuestacomentarios.form',compact('solicitudes','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
+        return view('respuestacomentariossolicitudes.form',compact('solicitudes','accion','accion2','comentario','tipo','AtenderComentario','accion3'));
         
     }
 
@@ -104,6 +104,7 @@ class RespuestaComentariosSolicitudesController extends Controller
      */
     public function edit(Revisiones $comentario,Request $request)
     {
+        
         /***************************************************************************************************************************** */
         $solicitudes= SolicitudesAclaracion::find(getSession('solicitudesaclaracionatencion_id'));
         $accion=$solicitudes->accion;
@@ -111,10 +112,11 @@ class RespuestaComentariosSolicitudesController extends Controller
         $acciones=AuditoriaAccion::find(getSession('solicitudesauditoriaaccion_id'));
 
         if(empty($comentario->id_revision)){
-            
+            //dd('111');
             setSession('comentarioAsis_id',$comentario->id);
             return redirect()->route('respuestacomentariossolicitudes.create');
         }else{
+            //dd('222');
             $respuesta = $comentario;
             //dd($respuesta);
             if(empty($respuesta->tipo)){

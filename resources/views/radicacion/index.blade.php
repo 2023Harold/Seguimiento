@@ -55,7 +55,7 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
-                            <tr>  
+                            <tr>   
                                 <th>Número de expediente</th>
 								 @if(getSession('cp')!=2022)
 									<th>Oficio de notificación de acuerdos</th>

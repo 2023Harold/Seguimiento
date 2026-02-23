@@ -33,7 +33,7 @@ class AsignacionStaffJuridicoController extends Controller
             ->with('usuario') // Asegúrate de tener la relación en el modelo
             ->get();
     
-        return view('asignacionstaffjuridico.index', compact('auditoria', 'staffAsignado'));
+        return view('Asignaciones.asignacionstaffjuridico.index', compact('auditoria', 'staffAsignado'));
     }
 
     /**
@@ -92,7 +92,7 @@ class AsignacionStaffJuridicoController extends Controller
             ->toArray();
 
         //return view('asignacionstaffjuridico.form', compact('auditoria', 'unidades', 'accion', 'directorasignado','staffasignada', 'staff'));
-        return view('asignacionstaffjuridico.form', compact('auditoria','unidades','accionstaff','departamentoasignado','acciones', 'staff', 'staffasignada'));        
+        return view('Asignaciones.asignacionstaffjuridico.form', compact('auditoria','unidades','accionstaff','departamentoasignado','acciones', 'staff', 'staffasignada'));        
 
 
     }
@@ -207,7 +207,7 @@ class AsignacionStaffJuridicoController extends Controller
             ->with('usuario') // Asegúrate de tener la relación en el modelo
             ->get();
         //return view('asignacionstaffjuridico.form', compact('auditoria', 'unidades', 'accion', 'directorasignado','staffasignada', 'staff'));
-        return view('asignacionstaffjuridico.index', compact('auditoria','unidades','accionstaff','departamentoasignado','acciones', 'staff', 'staffasignada', 'staffAsignado'));        
+        return view('Asignaciones.asignacionstaffjuridico.index', compact('auditoria','unidades','accionstaff','departamentoasignado','acciones', 'staff', 'staffasignada', 'staffAsignado'));        
 
     }
 
@@ -273,15 +273,11 @@ class AsignacionStaffJuridicoController extends Controller
 
     public function reasignar(Auditoria $auditoria)
     {              
-        //$auditoria = Auditoria::find($accionstaff->segauditoria_id);
-        
+
         if (!$auditoria) {
             dd('No se encontró la auditoría');
         }
-
         //dd($auditoria);
-
-        $accionstaff='Reasignación';   
         $departamentoasignado = null;           
         $acciones =  AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->orderBy('id')->get();
         $staffasignada = null;
@@ -297,7 +293,7 @@ class AsignacionStaffJuridicoController extends Controller
             ->toArray();
 
                
-        return view('asignacionstaffjuridico.form', compact('auditoria','unidades','accionstaff', 'staff', 'staffasignada'));  
+        return view('Asignaciones.asignacionstaffjuridico.form', compact('auditoria','unidades','accionstaff', 'staff', 'staffasignada'));  
 
     }
 

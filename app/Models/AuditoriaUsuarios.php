@@ -13,6 +13,8 @@ class AuditoriaUsuarios extends Model
     protected $fillable = [
         'auditoria_id',
         'staff_id',
+        'analista_id',
+        'estatus',
     ];
     protected $cast = [
         'created_at'=>'datetime',
@@ -52,6 +54,10 @@ class AuditoriaUsuarios extends Model
     public function usuario()
     {
         return $this->belongsTo(User::class, 'staff_id');
+    }
+    public function usuarioana()
+    {
+        return $this->belongsTo(User::class, 'analista_id');
     }
             
 }

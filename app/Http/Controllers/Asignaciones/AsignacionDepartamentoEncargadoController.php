@@ -66,7 +66,7 @@ class AsignacionDepartamentoEncargadoController extends Controller
         $acciondep ='Asignación del Departamento Encargado de la Auditoría';   
              
                
-        return view('asignaciondepartamentoencargado.form', compact('auditoria','unidades','acciondep'));  
+        return view('Asignaciones.asignaciondepartamentoencargado.form', compact('auditoria','unidades','acciondep'));  
     }
 
     /**

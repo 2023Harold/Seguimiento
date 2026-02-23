@@ -261,7 +261,7 @@ $(document).ready(function() {
                 showPreview: false, // Valor requerido cuando se usa uploadUrl
                 showUpload: false,
                 showCancel: false,
-                msgUploadEmpty: 'El archivo seleccionado no es válido para su envío. Revise que el tamaño y tipo de archivo coincida con lo permitido.',
+                msgUploadEmpty: 'El archivo seleccionado no es válido para su envío. Revise que el tamaño y tipo de archivo coincida con lo permitido. (Si necesita subir el archivo, por favor contacte al administrador del sistema).',
                 uploadUrl: uploadFile,
                 language: 'es',
                 progressClass: 'progress-bar progress-bar-primary progress-bar-striped active',
@@ -304,7 +304,7 @@ $(document).ready(function() {
                 showPreview: false, // Valor requerido cuando se usa uploadUrl
                 showUpload: false,
                 showCancel: false,
-                msgUploadEmpty: 'El archivo seleccionado no es válido para su envío. Revise que el tamaño y tipo de archivo coincida con lo permitido.',
+                msgUploadEmpty: 'El archivo seleccionado no es válido para su envío. Revise que el tamaño y tipo de archivo coincida con lo permitido. (Si necesita subir el archivo, por favor contacte al administrador del sistema).',
                 uploadUrl: uploadFile,
                 language: 'es',
                 progressClass: 'progress-bar progress-bar-primary progress-bar-striped active',

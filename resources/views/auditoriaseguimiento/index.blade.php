@@ -25,15 +25,37 @@
                         <div class="col-md-2">
                             {!!BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion)) !!}
                         </div>
-                        <div class="col-md-6 mt-8">
+                        @if(auth()->user()->siglas_rol=='TUS' && getSession('cp')!=2022)
+                            <div class="col-md-3">
+                            {!!BootForm::radios("direccionaud", 'Dirección: ',['Todas' => ' Todas','122100'=>'Direccion A','122200'=>'Direccion B'],
+                                old('direccionaud', empty($request->direccionaud) ? 'Todas' : $request->direccionaud),true,['class'=>'i-checks']) !!}
+                            </div> 
+                        @endif
+                        <div class="col-md-1 mt-8">
                             <button type="submit" class="btn btn-primary">Buscar</button>
                         </div>
+                    </div>
+                    <div class="row">
+                        
+                        @if((auth()->user()->siglas_rol=='TUS' || auth()->user()->siglas_rol=='DS')&& getSession('cp')!=2022 )
+                            <div class="col-md-3">
+                                {!!BootForm::select('departamentoasig', 'Departamento: ', $departamentos , old('departamentoasig'), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                            </div>
+                        @endif
+                        @if((auth()->user()->siglas_rol=='TUS' || auth()->user()->siglas_rol=='DS' || auth()->user()->siglas_rol=='JD')&& getSession('cp')!=2022 )
+                            <div class="col-md-3">
+                                {!!BootForm::select('liderasig', 'Lideres: ', $lideres , old('liderasig'), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                            </div>
+                            <div class="col-md-3">
+                                {!!BootForm::select('analistaasig', 'Analistas: ', $analistas , old('analistaasig'), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                            </div>
+                        @endif
                     </div>
                 {!!BootForm::close() !!}
 				<div class="row">
 					<div class="col-md-12">
 						<div class="pagination float-end">
-							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
+							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion, 'direccionaud'=>$request->direccionaud])->links('vendor.pagination.bootstrap-5') }}
 						</div>
 					</div>
 				</div>	
@@ -41,6 +63,9 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                @if(auth()->user()->siglas_rol=='TUS' || auth()->user()->siglas_rol=='DS' || auth()->user()->siglas_rol=='JD' && getSession('cp')!=2022)
+                                    <th>Encargados</th>
+                                @endif
                                 <th>No. de auditoría</th>
                                 <th>Entidad fiscalizable</th>
                                 <th>Acto de fiscalización</th>
@@ -56,6 +81,14 @@
                         <tbody>
                             @forelse ($auditorias as $auditoria)
                                 <tr>
+                                    @if((auth()->user()->siglas_rol=='TUS' || auth()->user()->siglas_rol=='DS' || auth()->user()->siglas_rol=='JD') && getSession('cp')!=2022)
+                                    <td>
+                                        <p><b>-Direccion:</b>{{$auditoria->direccion_asignada ?? 'Sin asignar' }}</p>
+                                        <p><b>-Depto:</b>{{$auditoria->departamento_encargado ?? 'Sin asignar' }}</p>
+                                        <p><b>-Lider de proyecto:</b> {{$auditoria->lidercp->name ?? 'Sin asignar' }}</p>
+                                        <p><b>-Analista:</b> {{$auditoria->analistacp->name ?? 'Sin asignar' }}</p>
+                                    </td>
+                                    @endif
                                     <td>
                                         {{ $auditoria->numero_auditoria }}
                                     </td>
@@ -119,10 +152,11 @@
                     </table>
                 </div>
                 <div class="pagination float-end">
-                    {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
+                    {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion, 'direccionaud'=>$request->direccionaud])->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+

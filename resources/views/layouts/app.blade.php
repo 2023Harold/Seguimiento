@@ -112,6 +112,72 @@
 		</div>
         @include('layouts.partials._foot')
         @yield('script')
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		
+		<script>
+		// Mixin de SweetAlert2 que usa clases de Bootstrap/Metronic
+		const SwalBT = Swal.mixin({
+			buttonsStyling: false, // importantísimo para que respete las clases de Bootstrap
+			customClass: {
+			confirmButton: 'btn btn-sm btn-danger',   // úsalo para “acción destructiva”
+			cancelButton:  'btn btn-sm btn-secondary'
+			}
+		});
+		</script>
+		<script>
+			$(document).ready(function() {
+				// --- Delegación para "Eliminar" usando SweetAlert2 ---
+				// NOTA: Esto funciona siempre que el helper NO tenga el confirm() inline.
+				document.querySelectorAll('a[id$="-upload-delete-link"]').forEach(function (btn) {
+					btn.addEventListener('click', function (e) {
+						e.preventDefault();
+
+						const field = btn.getAttribute('data-field');              // nombre base del campo
+						const fileInputId = btn.getAttribute('data-fileinput-id'); // p.ej. campo-upload
+						const hidden = document.getElementById(field);
+						const viewBtn = document.getElementById(field + '-upload-upload-link');
+						const delBtn = document.getElementById(field + '-upload-delete-link');
+						const $fileInput = $('#' + fileInputId);
+
+						Swal.fire({
+							title: '¿Deseas eliminar el archivo?',
+							text: 'Esta acción no se puede deshacer.',
+							icon: 'warning',
+							showCancelButton: true,
+							confirmButtonText: 'Sí, eliminar',
+							cancelButtonText: 'Cancelar',
+							buttonsStyling: false,
+							customClass: {
+								confirmButton: 'btn btn-sm btn-danger',   // úsalo para “acción destructiva”
+								cancelButton:  'btn btn-sm btn-primary'
+							}
+
+
+						}).then((result) => {
+							if (result.isConfirmed) {
+								if (viewBtn) viewBtn.style.display = 'none';
+								if (delBtn) delBtn.style.display = 'none';
+								if (hidden) hidden.value = '';
+								if ($fileInput && $fileInput.fileinput) {
+									$fileInput.fileinput('reset');
+
+								}
+								Swal.fire({
+									icon: 'success',
+									title: 'Archivo eliminado',
+									timer: 1200,
+									showConfirmButton: false
+								});
+							}
+						});
+					});
+				});
+
+			}); // fin document.ready
+
+
+		</script>
+
     </body>
 </html>
 

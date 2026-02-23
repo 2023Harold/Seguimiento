@@ -1939,7 +1939,7 @@
                     }
                 },
                 fileActionSettings: {
-                    showRemove: true,
+                    showRemove: false,
                     showUpload: true,
                     showDownload: true,
                     showZoom: true,
@@ -6080,7 +6080,7 @@
         showCaption: true,
         showBrowse: true,
         showPreview: true,
-        showRemove: true,
+        showRemove: false,
         showUpload: true,
         showUploadStats: true,
         showCancel: null,

@@ -626,6 +626,7 @@ class RadicacionController extends Controller
         $datenow = Carbon::now();
         $datenow01 = date('Y', strtotime($datenow));
 
+
         $ent = $auditoria->entidad_fiscalizable;
         $frac ='';
         if($auditoria->entidadFiscalizable->Ambito = 'Estatal'){
@@ -666,9 +667,11 @@ class RadicacionController extends Controller
         }
 
         $UMA = CatalogoUMAS::where('ejercicio', $datenow01)->select('texto')->first();
-        $UMATEXT = $UMA->texto;
-
-
+        if(empty($UMA)){
+            $UMATEXT = 'Sin UMA registrada para el ejercicio actual';
+        }else{
+            $UMATEXT = $UMA->texto;
+        }
         if($auditoria->acto_fiscalizacion=='Inversión Física'){
             $Orden = 'CUARTO.';
             if(count($auditoria->accionesrecomendaciones)>0){

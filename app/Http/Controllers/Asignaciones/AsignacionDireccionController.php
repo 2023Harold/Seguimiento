@@ -27,7 +27,7 @@ class AsignacionDireccionController extends Controller
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
 
-        return view('asignaciondireccion.index', compact('auditorias', 'request'));
+        return view('Asignaciones.asignaciondireccion.index', compact('auditorias', 'request'));
 
     }
 
@@ -77,7 +77,7 @@ class AsignacionDireccionController extends Controller
 
 
 
-        return view('asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
+        return view('Asignaciones.asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
     }
 
     /**
@@ -175,6 +175,13 @@ class AsignacionDireccionController extends Controller
             $actoFiscalizacion=strtolower($request->acto_fiscalizacion);
             $query = $query->whereRaw('LOWER(acto_fiscalizacion) LIKE (?) ',["%{$actoFiscalizacion}%"]);
         }
+        if ($request->filled('asignaciones') && $request->input('asignaciones') !='Todas') {
+            if($request->asignaciones=='Asignadas'){
+                $query = $query->whereNotNull('direccion_asignada_id');
+            }elseif($request->asignaciones=='Pendientes'){
+                $query = $query->whereNull('direccion_asignada_id');
+            }
+        }
 
         return $query;
     }
@@ -219,6 +226,6 @@ class AsignacionDireccionController extends Controller
             ->where('siglas_rol', 'DS')
             ->first();
 
-        return view('asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
+        return view('Asignaciones.asignaciondireccion.form', compact('auditoria','unidades','accion','directorasignado'));
     }
 }

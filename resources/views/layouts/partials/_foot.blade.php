@@ -16,3 +16,4 @@
 <script src="{{ asset('vendor/jquery-colorbox/jquery.colorbox.js') }}" defer></script>
 <script src="{{asset('assets/js/SgDataCryptoJsLitev1.7.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.app.js')}}" type="text/javascript"></script>
+

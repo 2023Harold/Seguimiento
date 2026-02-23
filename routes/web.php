@@ -12,6 +12,7 @@ use App\Http\Controllers\AcuerdoConclusion\AcuerdoConclusionRevisionController;
 use App\Http\Controllers\AcuerdoConclusion\AcuerdoConclusionValidacionController;
 use App\Http\Controllers\AcuerdoConclusion\AcuerdoConclusionAcuseController;
 use App\Http\Controllers\AcuerdoConclusion\AcuerdoConclusionAcuseCPController;
+use App\Http\Controllers\AcuerdoConclusionAcuseCPEnvioController;
 use App\Http\Controllers\AcuerdosAnV_AV\AnexosAnVController;
 use App\Http\Controllers\AcuerdosAnV_AV\AnVCFIFController;
 use App\Http\Controllers\AcuerdosAnV_AV\AnVController;
@@ -23,8 +24,22 @@ use App\Http\Controllers\AgregarAccionesController;
 use App\Http\Controllers\AgregarAccionesRevision01Controller;
 use App\Http\Controllers\AgregarAccionesRevisionController;
 use App\Http\Controllers\AgregarAccionesValidacionController;
+use App\Http\Controllers\Asignaciones\AsignacionLiderAnalistaExtraController;
 use App\Http\Controllers\Asignaciones\AsignacionUnidadAdministrativa2024Controller;
 use App\Http\Controllers\Asignaciones\AsignacionUnidadAdministrativaTodosController;
+use App\Http\Controllers\Buzones\BuzonAcuerdoConclusionController;
+use App\Http\Controllers\Buzones\BuzonComparecenciaController;
+use App\Http\Controllers\Buzones\BuzonInformesController;
+use App\Http\Controllers\Buzones\BuzonNotificacionLeidasController;
+use App\Http\Controllers\Buzones\BuzonNotificacionPendientesController;
+use App\Http\Controllers\Buzones\BuzonPliegosObservacionController;
+use App\Http\Controllers\Buzones\BuzonRadicacionController;
+use App\Http\Controllers\Buzones\BuzonRecomendacionesController;
+use App\Http\Controllers\Buzones\BuzonSeguimientoController;
+use App\Http\Controllers\Buzones\BuzonSolicitudesController;
+use App\Http\Controllers\Buzones\BuzonTurnoEnvioArchivoController;
+use App\Http\Controllers\Buzones\BuzonTurnoOICController;
+use App\Http\Controllers\Buzones\BuzonTurnoUIController;
 use App\Http\Controllers\Cedulas\AgregarCedulaInicialController;
 use App\Http\Controllers\AgregarTipologiaAccionController;
 use App\Http\Controllers\AjaxController;
@@ -165,6 +180,8 @@ use App\Http\Controllers\Recomendaciones\RecomendacionesRevision01Controller;
 use App\Http\Controllers\Recomendaciones\RecomendacionesRevisionController;
 use App\Http\Controllers\Recomendaciones\RecomendacionesValidacionController;
 use App\Http\Controllers\RemitentesController;
+use App\Http\Controllers\Reportes\ReporteAuditoriaAccionesController;
+use App\Http\Controllers\Reportes\ReporteAuditoriaUnidadController;
 use App\Http\Controllers\ReportesRegistrosAuditoriasController;
 use App\Http\Controllers\ReportesSeguimientoController;
 use App\Http\Controllers\RespuestaComentariosPliegosController;
@@ -381,10 +398,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     /**Fin apartado Auditorias - Registro*/
 
     /**Asiganciones - Auditorias*/
-    Route::resource('asignacionauditorias', AsignacionAuditoriasController::class, ['parameters' => ['asignacionauditorias' => 'auditoria']]);
-    Route::get('/asignacionauditorias/acciones/consulta/{auditoria}', [AsignacionAuditoriasController::class, 'accionesConsulta'])->name('asignacionauditorias.accionesconsulta');
-    Route::get('/asignacionauditorias/reasignacion/{auditoria}', [AsignacionAuditoriasController::class, 'reasignar'])->name('asignacionauditorias.reasignar');
-    Route::post('getDirector', [AsignacionAuditoriasController::class, 'getDirector'])->name('getDirector');
+    //Route::resource('asignacionauditorias', AsignacionAuditoriasController::class, ['parameters' => ['asignacionauditorias' => 'auditoria']]);
+    //Route::get('/asignacionauditorias/acciones/consulta/{auditoria}', [AsignacionAuditoriasController::class, 'accionesConsulta'])->name('asignacionauditorias.accionesconsulta');
+    //Route::get('/asignacionauditorias/reasignacion/{auditoria}', [AsignacionAuditoriasController::class, 'reasignar'])->name('asignacionauditorias.reasignar');
+    //Route::post('getDirector', [AsignacionAuditoriasController::class, 'getDirector'])->name('getDirector');
     /**Fin del apartado de la Asiganciones - Auditorias */
 
     /**Asiganciones - Direccion*/
@@ -412,12 +429,19 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
 
     /**Asignacion - Lider y Analista */
     Route::resource('asignacionlideranalista', AsignacionLiderAnalistaController::class, ['parameters' => ['asignacionlideranalista' => 'auditoria']]);
+    Route::resource('asignacionlideranalistaextra', AsignacionLiderAnalistaExtraController::class, ['parameters' => ['asignacionlideranalistaextra' => 'auditoria']]);
+    Route::get('asignacionlideranalistaextra/reasignacion/{auditoria}', [AsignacionLiderAnalistaExtraController::class, 'reasignar'])->name('asignacionlideranalistaextra.reasignar');
+    Route::post('asignacionlideranalistaextra/getAna', [AsignacionLiderAnalistaExtraController::class, 'getAna'])->name('asignacionlideranalistaextra.getAna');
+    Route::get('/asignacionlideranalistaextra/eliminar/{ana}', [AsignacionLiderAnalistaExtraController::class, 'eliminar'])->name('asignacionlideranalistaextra.eliminar');
+    Route::get('/asignacionlideranalistaextra/cambiar/{ana}', [AsignacionLiderAnalistaExtraController::class, 'cambiar'])->name('asignacionlideranalistaextra.cambiar');
+
     Route::post('getLider', [AsignacionLiderAnalistaController::class, 'getLider'])->name('getLider');
     Route::post('getAnalista', [AsignacionLiderAnalistaController::class, 'getAnalista'])->name('getAnalista');
     Route::get('/asignacionlider/reasignacion/{auditoria}', [AsignacionLiderAnalistaController::class, 'reasignarlider'])->name('asignacionlideranalista.reasignarlider');
     Route::get('/asignacionanalista/reasignacion/{auditoria}', [AsignacionLiderAnalistaController::class, 'reasignaranalista'])->name('asignacionlideranalista.reasignaranalista');
     Route::get('/asignacionlideranalista/acciones/consulta/{auditoria}', [AsignacionLiderAnalistaController::class, 'accionesConsulta'])->name('asignacionlideranalista.accionesconsulta');
     Route::get('/asignacionlideranalista/consulta/{auditoria}', [AsignacionLiderAnalistaController::class, 'consulta'])->name('asignacionlideranalista.consulta');
+    Route::get('/asignacionlideranalista/analistaextraconsulta/{auditoria}', [AsignacionLiderAnalistaController::class, 'analistaextraconsulta'])->name('asignacionlideranalista.analistaextraconsulta');
     /**Fin del apartado de Asignacion - Lider y Analista */
 
     /**Seguimiento - Auditorias */
@@ -504,8 +528,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('acuerdoconclusionvalidacion', AcuerdoConclusionValidacionController::class, ['parameters' => ['acuerdoconclusionvalidacion' => 'auditoria']]);
     Route::resource('acuerdoconclusionautorizacion', AcuerdoConclusionAutorizacionController::class, ['parameters' => ['acuerdoconclusionautorizacion' => 'auditoria']]);
     Route::resource('acuerdoconclusionacuse', AcuerdoConclusionAcuseController::class, ['parameters' => ['acuerdoconclusionacuse' => 'acuerdoconclusion']]);
-    Route::resource('acuerdoconclusionacuseenvio', AcuerdoConclusionAcuseEnvioController::class, ['parameters' => ['acuerdoconclusionacuseenvio' => 'accion']]);
-    Route::resource('acuerdoconclusionrevision', AcuerdoConclusionAcuseRevisionController::class, ['parameters' => ['acuerdoconclusionrevision' => 'accion']]);
+    Route::resource('acuerdoconclusionacuseenvio', AcuerdoConclusionAcuseCPEnvioController::class, ['parameters' => ['acuerdoconclusionacuseenvio' => 'accion']]);
+    //Route::resource('acuerdoconclusionrevision', AcuerdoConclusionAcuseRevisionController::class, ['parameters' => ['acuerdoconclusionrevision' => 'accion']]);
 
     // Route::resource('acuerdoconclusionacuse', AcuerdoConclusionAcuseController::class, ['parameters' => ['acuerdoconclusionacuse' => 'acuerdoconclusion']]);
     Route::resource('acuerdoconclusionacusecp', AcuerdoConclusionAcuseCPController::class, ['parameters' => ['acuerdoconclusionacusecp' => 'acuerdoconclusion']]);
@@ -707,6 +731,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
 
     /** Seguimiento - Auditorias - Reportes */
     Route::resource('reportesseg', ReportesSeguimientoController::class);
+    Route::resource('reporteauditoriaacciones', ReporteAuditoriaAccionesController::class);
+    Route::resource('reporteauditoriaunidad', ReporteAuditoriaUnidadController::class);
+    Route::get('reportes/auditoria/{auditoria}',[ReporteAuditoriaUnidadController::class, 'detalleAuditoria'])->name('reporteauditoriaunidad.detalle');
+
     Route::resource('reportesregistrosauditorias', ReportesRegistrosAuditoriasController::class);
     Route::get('/reportesseguimientoaud/excel/{aud?}/{ent?}', [ReportesSeguimientoController::class, 'export'])->name('reporteseguimiento.exportar');
     /**Fin del apartado de Seguimiento - Auditorias - Reportes*/
@@ -730,4 +758,20 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::get('/anvavl/exportpar', [AnVLegalidadController::class, 'exportpar'])->name('anvavl.exportpar');
     /**Fin del apartado de Seguimiento - Auditorias - folios - Acuerdo de No Valoracion y Valoracion */
 
+    /** Seguimiento - Buzon */
+    Route::resource('buzonseg', BuzonSeguimientoController::class, ['parameters' => ['buzonseg' => 'auditoria']]);
+    Route::resource('buzoncomparecencia', BuzonComparecenciaController::class);
+    Route::resource('buzonradicacion', BuzonRadicacionController::class);
+    Route::resource('buzonacuerdosconclusion', BuzonAcuerdoConclusionController::class);
+    //Route::resource('buzonpras', BuzonPRASController::class);
+    Route::resource('buzonrecomendaciones', BuzonRecomendacionesController::class);
+    Route::resource('buzonpliegosobservacion', BuzonPliegosObservacionController::class);
+    Route::resource('buzonsolicitudes', BuzonSolicitudesController::class);
+    Route::resource('buzoninformes', BuzonInformesController::class);
+    Route::resource('buzonturnooic', BuzonTurnoOICController::class);
+    Route::resource('buzonturnoui', BuzonTurnoUIController::class);
+    Route::resource('buzonturnoenvioarchivo', BuzonTurnoEnvioArchivoController::class);
+    Route::resource('buzonnotificacionesleidas', BuzonNotificacionLeidasController::class);
+    Route::resource('buzonnotificacionespendientes', BuzonNotificacionPendientesController::class);
+    /**Fin del apartado de Seguimiento - Buzon */
    });

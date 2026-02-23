@@ -27,6 +27,7 @@ class NotificacionController extends Controller
         return $request->id;
     }
         */
+       
     public function marcarleido(Request $request)
     {
         $notificacion = Notificacion::find($request->id);

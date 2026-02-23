@@ -114,6 +114,11 @@ class AuditoriaAccion extends Model
     {
         return $this->belongsTo(User::class, 'analista_asignado_id', 'id')->where('siglas_rol','ANA');
     }
+    public function analistacpextra()
+    {
+        //return $this->belongsTo(AuditoriaUsuarios::class, 'analista_id', 'id')->where('siglas_rol','ANA');
+        return $this->hasMany(AuditoriaUsuarios::class, 'segauditoria_id', 'id')->whereNotNull('analista_id');
+    }
     public function pras()
     {
         return $this->belongsTo(Segpras::class, 'id','accion_id');

@@ -412,7 +412,7 @@
                 </div>
             </div>
             @endcan
-            @canany(['radicacion.index','comparecencia.index','inicioarchivotransferencia.index'])
+            @canany(['radicacion.index','comparecencia.index','inicioarchivotransferencia.index','buzonseg.index'])
             <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">
@@ -438,17 +438,49 @@
                             </li>
                         </div>
                         <li class="py-2 d-flex align-items-center">
+                            <span class="bullet me-5 bg-primary"></span> 
+                            <a href="{{ route('buzonseg.index') }}">
+                                Buzón
+                        </li>
+                        <li class="py-2 d-flex align-items-center">
                             <span class="bullet me-5 bg-primary"></span>
                             <a href="{{ route('inicioarchivotransferencia.index') }}">
                                 Turno envío transferencia
                             </a>
-                            </li>
+                        </li>
+                    </div>
+                </div>
+            </div>
+            @endcan
+            @canany(['reportesseg.index', 'reporteauditoriaacciones.index'])
+            <div class="mb-3 col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="card-title">
+                            <span class="text-gray-800 fs-2x"><img alt="Logo"
+                                    src="{{asset('assets/img/planeacion.png')}}" class="h-40px logo" /></span>&nbsp;
+                            Reportes
+                        </h1>
+                    </div>
+                    <div class="overflow-auto card-body h-200px">
                         <li class="py-2 d-flex align-items-center">
                             <span class="bullet me-5 bg-primary"></span>
                             <a href="{{ route('reportesseg.index') }}">
-                                Reportes
+                                Reporte de auditorías
                             </a>
-                            </li>
+                        </li>
+                        <li class="py-2 d-flex align-items-center">
+                            <span class="bullet me-5 bg-primary"></span>
+                            <a href="{{ route('reporteauditoriaacciones.index') }}">
+                                Reporte de acciones
+                            </a>
+                        </li>
+                        <li class="py-2 d-flex align-items-center">
+                            <span class="bullet me-5 bg-primary"></span>
+                            <a href="{{ route('reporteauditoriaunidad.index') }}">
+                                Reporte de Auditoria por Unidad Responsable
+                            </a>
+                        </li>
                     </div>
                 </div>
             </div>

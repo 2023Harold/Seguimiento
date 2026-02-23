@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')
-    {{ Breadcrumbs::render('asignacionlideranalista.index') }}
+    {{Breadcrumbs::render('asignacionlideranalista.index') }}
 @endsection
 @section('content')
 <div class="row">
@@ -14,26 +14,30 @@
             </div>
             <div class="card-body">
                 @include('flash::message')                
-                {!! BootForm::open(['route'=>'asignacionlideranalista.index','method'=>'GET']) !!}
+                {!!BootForm::open(['route'=>'asignacionlideranalista.index','method'=>'GET']) !!}
                     <div class="row">
                         <div class="col-md-2">
-                            {!! BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria)) !!}
+                            {!!BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria)) !!}
                         </div>
                         <div class="col-md-2">
-                            {!! BootForm::text('entidad_fiscalizable', "Entidad fiscalizable:", old('entidad_fiscalizable', $request->entidad_fiscalizable)) !!}
+                            {!!BootForm::text('entidad_fiscalizable', "Entidad fiscalizable:", old('entidad_fiscalizable', $request->entidad_fiscalizable)) !!}
                         </div>
                         <div class="col-md-2">
-                            {!! BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion)) !!}
+                            {!!BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion)) !!}
                         </div>
-                        <div class="col-md-6 mt-8">
+                        <div class="col-md-3">
+                            {!!BootForm::radios("asignaciones", 'Auditorias: ',['Todas' => ' Todas', 'Asignadas'=>' Asignadas','Pendientes'=>' Pendientes'],
+                                old('asignaciones', empty($request->asignaciones) ? 'Todas' : $request->asignaciones),true,['class'=>'i-checks']) !!}
+                        </div> 
+                        <div class="col-md-1 mt-8">
                             <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search" aria-hidden="true"></i>Buscar</button>                           
                         </div>
                     </div>
-                {!! BootForm::close() !!}
+                {!!BootForm::close() !!}
 				<div class="row">
 					<div class="col-md-12">
 						<div class="pagination float-end">
-							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
+							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion,'asignaciones'=>$request->asignaciones])->links('vendor.pagination.bootstrap-5') }}
 						</div>
 					</div>
 				</div>				
@@ -48,6 +52,7 @@
                                 <th>Acciones promovidas</th>
                                 <th>Monto por aclarar</th>                                                                 
                                 <th>Asignación de lider y analista</th>
+                                <th>Analistas Adicionales</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -170,7 +175,12 @@
                                             </a> 
                                         @endcan                                                                        
                                     @endif                                                    
-                                    </td>                                  
+                                    </td>    
+                                    <td>
+                                        <a href="{{ route('asignacionlideranalista.analistaextraconsulta',$auditoria) }}" class="btn btn-primary">
+                                            <i class="fa fa-magnifying-glass-chart"></i> Consultar
+                                        </a>  
+                                    </td>                              
                                 </tr>                                                           
                             @empty
                                 <tr>
@@ -183,7 +193,7 @@
                     </table>
                 </div>
                 <div class="pagination float-end">
-                    {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion])->links('vendor.pagination.bootstrap-5') }}
+                    {{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion,'asignaciones'=>$request->asignaciones])->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>

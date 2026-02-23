@@ -27,7 +27,7 @@ class AsignacionDepartamentoController extends Controller
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
                
-        return view('asignaciondepartamento.index', compact('auditorias', 'request'));
+        return view('Asignaciones.asignaciondepartamento.index', compact('auditorias', 'request'));
     }
 
     /**
@@ -75,7 +75,7 @@ class AsignacionDepartamentoController extends Controller
         $departamentoasignado = null;           
         $acciones =  AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->orderBy('id')->get();
                
-        return view('asignaciondepartamento.form', compact('auditoria','unidades','acciondep','departamentoasignado','acciones'));        
+        return view('Asignaciones.asignaciondepartamento.form', compact('auditoria','unidades','acciondep','departamentoasignado','acciones'));        
     }
 
     /**
@@ -174,6 +174,13 @@ class AsignacionDepartamentoController extends Controller
             $actoFiscalizacion=strtolower($request->acto_fiscalizacion);
             $query = $query->whereRaw('LOWER(acto_fiscalizacion) LIKE (?) ',["%{$actoFiscalizacion}%"]);
         }
+        if ($request->filled('asignaciones') && $request->asignaciones!='Todas') {
+            if($request->asignaciones=='Asignadas'){
+                $query = $query->whereNotNull('departamento_encargado_id');
+            }elseif($request->asignaciones=='Pendientes'){
+                $query = $query->whereNull('departamento_encargado_id');
+            }
+        }
 
         return $query;
     }
@@ -216,6 +223,6 @@ class AsignacionDepartamentoController extends Controller
         
         $departamentoasignado=User::where('unidad_administrativa_id',$auditoria->departamento_asignado_id)->first();
                
-        return view('reasignaciondepartamento.form', compact('auditoria','unidades','acciondep','departamentoasignado','accion'));        
+        return view('Asignaciones.reasignaciondepartamento.form', compact('auditoria','unidades','acciondep','departamentoasignado','accion'));        
     }
 }

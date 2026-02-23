@@ -90,25 +90,70 @@ function iconoArchivo($archivo)
 
     return $icon;
 }
-
+/*
 function archivo($field, $caption, $value, array $options = [])
 {
     $url_archivo = (! empty($value)) ? asset($value) : 'javascript:void(0);';
     //$url_archivo = (! empty($value)) ? (asset(env('MINIO_URL')).'/'.$value) : 'javascript:void(0);';
     $verArchivoAdjunto = (! empty($value)) ? 'show' : 'none';
-    $allowedFileExtensions = (array_key_exists('data-allowedFileExtensions', $options)) ? ['data-allowedFileExtensions' => $options['data-allowedFileExtensions']] : ['data-allowedFileExtensions' => 'pdf,doc,docx,xls,xlsx,png'];
+    //$allowedFileExtensions = (array_key_exists('data-allowedFileExtensions', $options)) ? ['data-allowedFileExtensions' => $options['data-allowedFileExtensions']] : ['data-allowedFileExtensions' => 'pdf,doc,docx,xls,xlsx,png'];
+    $allowedFileExtensions = (array_key_exists('data-allowedFileExtensions', $options)) ? ['data-allowedFileExtensions' => 'pdf,zip'] : ['data-allowedFileExtensions' => 'pdf,zip'];
     $options = array_merge($options, $allowedFileExtensions);
-    $maxFileSize = (array_key_exists('data-maxFileSize', $options)) ? ['data-maxFileSize' => $options['data-maxFileSize']] : ['data-maxFileSize' => '20'];
+    //$maxFileSize = (array_key_exists('data-maxFileSize', $options)) ? ['data-maxFileSize' => $options['data-maxFileSize']] : ['data-maxFileSize' => '50'];
+    $maxFileSize = (array_key_exists('data-maxFileSize', $options)) ? ['data-maxFileSize' => '50'] : ['data-maxFileSize' => '50'];
     $options = array_merge($options, $maxFileSize);
     $html_tag = $caption;
 
     return ''.
-            '<label for="'.$field.'" class="form-label">'.$caption.'<small class="mx-2">('.$allowedFileExtensions['data-allowedFileExtensions'].','.$maxFileSize['data-maxFileSize'].'MB)</small>'.'</label>'.
+            '<label for="'.$field.'" class="form-label">'.$caption.'<small class="mx-2">('.$allowedFileExtensions['data-allowedFileExtensions'].','.$maxFileSize['data-maxFileSize'].'MB, Recuerda subir so)</small>'.'</label>'.
             '<a id="'.$field.'-upload-upload-link" href="'.$url_archivo.'" style="display: '.($value ? 'show' : 'none').';" class="btn btn-secondary btn-sm p-2 mx-2 pb-0 pt-0 mb-0" target="_blank">Archivo</a>'.
             '<a class="btn-link text-danger" id="'.$field.'-upload-delete-link" href="javascript:void(0);" onclick="javascript:if(confirm(\'¿Desea eliminar el archivo?\')){document.getElementById(\''.$field.'-upload-upload-link\').style.display=\'none\';document.getElementById(\''.$field.'-upload-delete-link\').style.display=\'none\';document.getElementById(\''.$field.'\').value=\'\'; $(\'#'.$field.'-upload'.'\').fileinput(\'reset\'); }" style="display:'.$verArchivoAdjunto.'">'.'<i class="mdi mdi-close"></i>Eliminar'.'</a>'.
             BootForm::file($field.'-upload', false, $options).
             '<div id="'.$field.'-upload-errorBlock" class="'.$field.'-upload-errors help-block mx-0"></div>'.
             BootForm::text($field, false, $value, ['class' => 'file-input-hidden', 'data-forig' => $field.'-upload', 'id' => $field, 'style' => 'display:none']);
+}*/
+
+function archivo($field, $caption, $value, array $options = [])
+{
+    $url_archivo = (! empty($value)) ? asset($value) : 'javascript:void(0);';
+    $verArchivoAdjunto = (! empty($value)) ? 'inline-block' : 'none'; // 'inline-block' para que el botón conserve estilos
+    $allowedFileExtensions = (array_key_exists('data-allowedFileExtensions', $options)) ? ['data-allowedFileExtensions' => 'pdf'] : ['data-allowedFileExtensions' => 'pdf'];
+    $options = array_merge($options, $allowedFileExtensions);
+    $maxFileSize = (array_key_exists('data-maxFileSize', $options)) ? ['data-maxFileSize' => '50'] : ['data-maxFileSize' => '50'];
+    $options = array_merge($options, $maxFileSize);
+
+    // Contenedor de errores del plugin
+    $options['data-elErrorContainer'] = "#{$field}-upload-errorBlock";
+
+    // Mensajes personalizados del plugin (bootstrap-fileinput)
+    $options['data-msg-size-too-large'] = "El archivo '{name}' (<b>{size}</b>) excede el tamaño permitido de <b>{maxSize}</b>, si desea subir el archivo, favor de contactar al area de soporte.";
+    $options['data-msg-invalid-file-type'] = "El tipo de archivo no es válido. Solo se permiten documentos.";
+    $options['data-msg-invalid-file-extension'] = "Extensión no permitida. Solo se aceptan: {extensions}.";
+    $options['data-browse-on-zone-click'] = "true";
+
+    $fileInputId = "{$field}-upload";
+
+    return ''
+        . '<label for="'.$field.'" class="form-label">'
+            . $caption
+            . '<small class="mx-2">('
+                . $allowedFileExtensions['data-allowedFileExtensions']
+                . ', '
+                . $maxFileSize['data-maxFileSize'].'MB)'
+                . ', recuerda subir solo PDFs'
+            . '</small>'
+        . '</label>'
+
+        // Botón para ver archivo (si existe)
+        . '<a id="'.$field.'-upload-upload-link" href="'.$url_archivo.'" style="display: '.$verArchivoAdjunto.';" class="btn btn-secondary btn-sm p-2 mx-2 pb-0 pt-0 mb-0" target="_blank">Archivo</a>'
+
+        . '<a class="btn-link text-danger" id="'.$field.'-upload-delete-link" href="javascript:void(0);" data-field="'.$field.'" data-fileinput-id="'.$field.'-upload"style="display:'.$verArchivoAdjunto.'">'
+        . '<i class="mdi mdi-close"></i> Eliminar'
+        . '</a>'
+
+        . BootForm::file($fileInputId, false, $options)
+        . '<div id="'.$fileInputId.'-errorBlock" class="'.$fileInputId.'-errors help-block mx-0"></div>'
+        . BootForm::text($field, false, $value, ['class' => 'file-input-hidden', 'data-forig' => $fileInputId, 'id' => $field,'style' => 'display:none']);
 }
 
 function mover_archivos_minio(Request $request, $lista_archivos, $old_data = null, $ruta = null)
@@ -223,6 +268,66 @@ function movimientosDesglose($id, $colspan, $movimientos)
 
     return $results;
 }
+
+
+if (!function_exists('movimientosEnTd')) {
+    function movimientosEnTd($id, $movimientos, $titulo = 'Lista de movimientos')
+    {
+        if (empty($movimientos) || count($movimientos) === 0) {
+            return ''; 
+        }
+
+        // ID único para el collapse
+        $collapseId = 'movs-' . $id;
+
+        $html  = '<div class="mt-1">';
+        $html .= '  <a class="text-primary d-inline-flex align-items-center" data-bs-toggle="collapse" href="#' . $collapseId . '" aria-expanded="false" aria-controls="' . $collapseId . '">';
+        $html .= '      <i class="fa fa-chevron-down me-1"></i> ' . e($titulo);
+        $html .= '  </a>';
+        $html .= '  <div id="' . $collapseId . '" class="collapse mt-2">';
+        $html .= '      <div class="table-responsive">';
+        $html .= '          <table class="table table-sm gray-200 mb-0">';
+        $html .= '              <thead class="table-secondary">';
+        $html .= '                  <tr>';
+        $html .= '                      <th class="col-3">Movimiento</th>';
+        $html .= '                      <th class="col-2">Fecha y Hora</th>';
+        $html .= '                      <th class="w-15">Usuario</th>';
+        $html .= '                      <th class="w-1">Estatus</th>';
+        $html .= '                      <th>Comentario</th>';
+        $html .= '                  </tr>';
+        $html .= '              </thead>';
+        $html .= '              <tbody>';
+
+        foreach ($movimientos as $movimiento) {
+            $mov = str_replace('Enviar', 'Se envío ', $movimiento->tipo_movimiento);
+            $fec = fecha($movimiento->created_at, 'd/m/Y H:i:s');
+            $usr = $movimiento->userCreacion?->name ?? '—';
+            $pst = $movimiento->userCreacion?->puesto ?? '';
+            $ico = ($movimiento->estatus === 'Rechazado')
+                ? '<i class="far fa-times-circle fa-2x text-danger"></i>'
+                : '<i class="far fa-check-circle fa-2x text-success"></i>';
+            $mot = $movimiento->motivo_rechazo ?? '';
+
+            $html .= '              <tr>';
+            $html .= '                  <td>' . e($mov) . '</td>';
+            $html .= '                  <td>' . e($fec) . '</td>';
+            $html .= '                  <td>' . e($usr) . '<br><small class="text-muted">' . e($pst) . '</small></td>';
+            $html .= '                  <td class="text-center">' . $ico . '</td>';
+            $html .= '                  <td>' . e($mot) . '</td>';
+            $html .= '              </tr>';
+        }
+
+        $html .= '              </tbody>';
+        $html .= '          </table>';
+        $html .= '      </div>';
+        $html .= '  </div>';
+        $html .= '</div>';
+
+        return $html;
+    }
+}
+
+
 
 function reporte($idRegistro, $name, $params, $type = 'pdf')
 {
@@ -562,10 +667,11 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
     function fechaaletra($fecha){
        
         if(!empty($fecha)){
+            //dd($fecha);
             $diacomparecencia=explode('/',fecha($fecha));
             $dia=$diacomparecencia[0];
             $anio=$diacomparecencia[2];
-
+            //dd($dia,$anio,$diacomparecencia);
             $formatterD = new NumeroALetras();
             $formatterD->apocope = true;
             $diaD = $formatterD->toString($dia);    
@@ -772,6 +878,12 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         //return redirect($notificacion->url);
     }
 
+    function totalFaltantesNotificaciones(){
+        $total=Notificacion::where('destinatario_id',auth()->user()->id)
+        ->where('estatus',"Pendiente")
+        ->count();
+        return $total;
+    }
 
 
 

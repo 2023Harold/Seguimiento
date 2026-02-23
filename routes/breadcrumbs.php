@@ -360,6 +360,14 @@ Breadcrumbs::for('asignacionlideranalista.reasignaranalista', function (Breadcru
     $trail->push('Reasignación del Analista', route('asignacionlideranalista.reasignaranalista',$auditoria));
 });
 
+Breadcrumbs::for('asignacionlideranalistaextra.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('asignacionlideranalista.index');
+    $trail->push('Asignación', route('asignacionlideranalistaextra.index'));
+});
+Breadcrumbs::for('asignacionlideranalistaextra.edit', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('asignacionlideranalistaextra.index');
+    $trail->push('Asignación Analista adicional', route('asignacionlideranalistaextra.edit',$auditoria));
+});
 
 
 /*Asignación del departamento encargado */
@@ -864,6 +872,14 @@ Breadcrumbs::for('reportesseg.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Reportes', route('reportesseg.index'));
 });
+Breadcrumbs::for('reporteauditoriaacciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Reportes de Acciones de Auditoría', route('reporteauditoriaacciones.index'));
+});
+Breadcrumbs::for('reporteauditoriaunidad.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Reportes de Acciones de Auditoría por Unidad', route('reporteauditoriaunidad.index'));
+});
 
 
 
@@ -1065,4 +1081,11 @@ Breadcrumbs::for('anexosanvav.index', function (BreadcrumbTrail $trail,$auditori
 
 });
 /** Fin de Acueros de valoracion y  no valoracion  */
+
+/***BUZONES */
+Breadcrumbs::for('buzonseg.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Buzón', route('buzonseg.index'));
+});
+
 

@@ -60,6 +60,7 @@ class RespuestaComentariosRecomendacionesController extends Controller
         $comentario = Revisiones::find(getSession('comentarioAsis_id'));        
         $recomendacion = Recomendaciones::find(getSession('recomendacioncalificacion_id'));
         $accion2 = AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
+        //dd($accion2);
         $request->merge([
                 'id_revision'=>$comentario->id,
                 'de_usuario_id'=>auth()->user()->id,
