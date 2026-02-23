@@ -117,6 +117,12 @@ class User extends Authenticatable
 
         return $this->hasMany(Notificacion::class, 'destinatario_id', 'id')->whereNull('fecha_muestra_fin')->where('fecha_muestra_inicio', '<=', $hoy)->where('estatus', 'Pendiente')->orderBy('fecha_muestra_inicio', 'asc');
     }
+    public function notificacionesLeidas()
+    {
+        $hoy = now();
+
+        return $this->hasMany(Notificacion::class, 'destinatario_id', 'id')->whereNull('fecha_muestra_fin')->where('fecha_muestra_inicio', '<=', $hoy)->where('estatus', '!=', 'Pendiente')->where('estatus', '!=', null)->orderBy('fecha_muestra_inicio', 'asc');
+    }
 
     public function todasNotificaciones()
     {

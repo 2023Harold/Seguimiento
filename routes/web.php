@@ -129,6 +129,7 @@ use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\NotificacionUrlController;
 use App\Http\Controllers\PacController;
 use App\Http\Controllers\PacAuditoriaController;
+use App\Http\Controllers\PasarNotificacionesController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\PliegosObservacion\PliegosObservacionAccionesController;
 use App\Http\Controllers\PliegosObservacion\PliegosObservacionAcusesController;
@@ -373,6 +374,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('asignacionunidadadministrativa2023', AsignacionUnidadAdministrativa2023Controller::class, ['parameters' => ['asignacionunidadadministrativa2023' => 'user']]);
     Route::resource('asignacionunidadadministrativa2024', AsignacionUnidadAdministrativa2024Controller::class, ['parameters' => ['asignacionunidadadministrativa2024' => 'user']]);
     Route::resource('asignacionunidadadministrativatodos', AsignacionUnidadAdministrativaTodosController::class, ['parameters' => ['asignacionunidadadministrativatodos' => 'cp']]);
+    Route::resource('pasarnotificaciones', PasarNotificacionesController::class, ['parameters' => ['pasarnotificaciones' => 'user']]);
     /**Fin apartado administración */
 
     /**Auditorias - Registro */

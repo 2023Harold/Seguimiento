@@ -885,5 +885,39 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         return $total;
     }
 
+    
+    function limpiarNotificacionMensaje($notificacion)
+    {
+        $mensaje = $notificacion->mensaje ?? '';
+        // 1) Localizar bloques <strong>...</strong> y procesarlos
+        $mensajeLimpio = preg_replace_callback(
+            '#<strong\b[^>]*>(.*?)</strong>#is',
+            function ($m) {
+                $contenido = $m[1];
+
+                $patron = '/\b(Estimado(?:\(a\))?)\s+([^,:<]+(?:\s[^,:<]+)*)\s*,\s*([^:<]+?)\s*:/isu';
+
+                $reemplazo = preg_replace(
+                    $patron,
+                    '$1 $3:',
+                    $contenido
+                );
+
+                // Si hizo match, devolvemos el <strong> con el texto modificado
+                if ($reemplazo !== null && $reemplazo !== $contenido) {
+                    return '<strong>' . $reemplazo . '</strong>';
+                }
+
+                // Si no, regresamos el bloque original
+                return $m[0];
+            },
+            $mensaje
+        );
+
+        // Si por algo preg_replace_callback falló, regresa el original
+        return $mensajeLimpio ?? $mensaje;
+    }
+
+
 
 

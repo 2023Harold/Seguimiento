@@ -61,7 +61,7 @@
                             <!--begin::Symbol-->
                             <div class="symbol symbol-40px me-4 d-flex flex-column w-50px text-center">
                                 <!--Check box para leido.-->
-                                {!! BootForm::checkbox('notificacion' . $notificacion->id, false, $notificacion->id, old('notificacion' . $notificacion->id, $notificacion->estatus) == 'Leído' ? true : false, ['class' => 'i-checks mr-3 casilla', 'id' => 'notificacion' . $notificacion->id]) !!}
+                                {!!BootForm::checkbox('notificacion' . $notificacion->id, false, $notificacion->id, old('notificacion' . $notificacion->id, $notificacion->estatus) == 'Leído' ? true : false, ['class' => 'i-checks mr-3 casilla', 'id' => 'notificacion' . $notificacion->id]) !!}
                             </div>
                             <!--end::Symbol-->
                             <!--begin::Title-->
@@ -75,7 +75,8 @@
                                     {{ $notificacion->titulo }}
                                 </label>
                                 <span class="fs-7 text-justify">
-                                    {!! $notificacion->mensaje !!}
+                                    <strong>Estimado(a) {{auth()->user()->name}} {{auth()->user()->puesto}}</strong>
+                                     {{explode("<br>", $notificacion->mensaje)[1]}}
                                 </span>
                             </div>
                             <!--end::Title-->

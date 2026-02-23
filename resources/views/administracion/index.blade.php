@@ -14,7 +14,7 @@
                             <i class="far fa-user-cog text-dark fs-2x"></i> Administración
                         </h1>
                     </div>
-                    <div class="card-body overflow-auto h-200px">
+                    <div class="card-body overflow-auto h-300px">
                         <div class="d-flex flex-column">
                             @can('user.index')
                             <li class="d-flex align-items-center py-2">
@@ -51,6 +51,14 @@
                                     <span class="bullet me-5 bg-primary"></span>
                                     <a href="{{ route('asignacionunidadadministrativa.index') }}">
                                         Asignar Unidad Administrativa  
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('pasarnotificaciones.index')
+                                <li class="d-flex align-items-center py-2">
+                                    <span class="bullet me-5 bg-primary"></span>
+                                    <a href="{{ route('pasarnotificaciones.index') }}">
+                                        Pasar notificaciones 
                                     </a>
                                 </li>
                             @endcan
