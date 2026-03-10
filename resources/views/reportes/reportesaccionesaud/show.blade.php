@@ -633,7 +633,7 @@ Highcharts.chart('progresoDetalleContainer', {
         name: 'No solventadas',
         color: colorNO,
         data: dataNoSolv,
-        pointPadding: 0.30,     // un poco más “atrás”
+        pointPadding: 0.10,     // un poco más “atrás”
         pointPlacement: 0,
         zIndex: 1,
         dataLabels: { enabled: false }
@@ -643,7 +643,7 @@ Highcharts.chart('progresoDetalleContainer', {
         name: 'Solventadas',
         color: colorOK,
         data: dataSolv,
-        pointPadding: 0.12,     // menos padding para quedar “adelante”
+        pointPadding: 0.20,     // menos padding para quedar “adelante”
         pointPlacement: 0,
         zIndex: 2,
         dataLabels: {

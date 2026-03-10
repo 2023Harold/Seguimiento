@@ -70,6 +70,10 @@ class InformePrimeraEtapa extends Model
     {
         return $this->belongsTo(Auditoria::class, 'auditoria_id', 'id');
     }   
+    public function scopeTipo($query, $tipo)
+    {
+        return $query->where('tipo', $tipo);
+    }
     public function usuarioCreacion()
     {
         return $this->belongsTo(User::class, 'usuario_creacion_id');

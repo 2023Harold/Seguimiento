@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @section('breadcrums')
 @if ($accion=='Agregar')
 {{Breadcrumbs::render('radicacion.create',$auditoria) }}
@@ -173,279 +174,75 @@
 @endsection
 @section('script')
 {!!JsValidator::formRequest('App\Http\Requests\RadicacionRequest') !!}
+
+@php
+  $noLab = \App\Models\SUTIC\DiasNoLaboralesIntra::query()
+      ->where('StsEntDia', 1)
+      ->whereIn('TipoDia', ['I','V'])
+      ->pluck('DiaNoLab')
+      ->map(fn($dt) => \Carbon\Carbon::parse($dt)->format('Y-m-d'))
+      ->values();
+@endphp
 <script>
-    $(document).ready(function() {
-              // function rmydays(date) {
-              //     return (date.getDay() === 0 || date.getDay() === 6);
-              // }
-              // $("#fecha_comparecencia").flatpickr({
-              //     dateFormat: "d-m-Y",
-              //     disable: [rmydays],
-              // });
-              //$("#fecha_comparecencia").prop('readonly', false);
-              $("#fecha_comparecencia").on("change", function() {
-                  let pd = $(this).val();
-                  console.log(pd,1);
-                  let dateu = pd.substr(0, 4)+'-'+pd.substr(5, 2)+'-'+pd.substr(8, 2);
-                  let date = new Date(dateu);
-                  //let date = new Date(pd);
-                  date.setDate(date.getDate() + 1);
-                  for (let index = 1; index <= 1; index++) {
-                      date.setDate(date.getDate() + 1);
-                      if (date.getDay() == 6 || date.getDay() == 0)
-                          index--;
-                  }
+  const NO_LAB = @json($noLab);
 
-                        //FEBRERO dias no laborables
-                        if(date.getMonth()==1 && date.getFullYear()==2024){
-                            if(date.getDate()==5){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
+  // --- Utilidades ---
+  function ymd(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
 
-                        //MARZO dias no laborables
-                        if(date.getMonth()==2 && date.getFullYear()==2024){
-                            if(date.getDate()==2 || date.getDate()==18 || date.getDate()==28 ){
-                                date.setDate(date.getDate() + 1);
-                            }
-                            if(date.getDate()==29 ){
-                                date.setDate(date.getDate() + 1);
-                            }
+  function parseYmd(str) {
+    // Siempre forzamos medianoche local para evitar desfases por huso horario
+    return new Date(str + 'T00:00:00');
+  }
 
-                        }
+  function esNoLaboralDate(d) {
+    const s = ymd(d);
+    return d.getDay() === 0 || d.getDay() === 6 || NO_LAB.includes(s);
+  }
 
-                        //MAYO dias no laborables
-                        if(date.getMonth()==4 && date.getFullYear()==2024){
-                            if(date.getDate()==1 || date.getDate()==5){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
+  function nextBusinessDayYmd(startYmd, mode = 'after') {
+    let d = parseYmd(startYmd);
+    if (mode === 'after') d.setDate(d.getDate() + 1);
+    while (esNoLaboralDate(d)) {
+      d.setDate(d.getDate() + 1);
+    }
+    return ymd(d);
+  }
 
-                        //JULIO dias no laborables
-                        if(date.getMonth()==6 && date.getFullYear()==2024){
-                            if(date.getDate()==22){
-                                date.setDate(date.getDate() + 14);
-                            }
-                        }
+  function addBusinessDaysYmd(startYmd, n) {
+    let d = parseYmd(startYmd);
+    let added = 0;
+    while (added < n) {
+      d.setDate(d.getDate() + 1);
+      if (!esNoLaboralDate(d)) added++;
+    }
+    return ymd(d);
+  }
 
-                        //SEPTIEMBRE dias no laborables
-                        if(date.getMonth()==8 && date.getFullYear()==2024){
-                            if(date.getDate()==16){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //OCTUBRE dias no laborables
-                        if(date.getMonth()==9 && date.getFullYear()==2024){
-                            if(date.getDate()==1){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //NOVIEMBRE dias no laborables
-                        if(date.getMonth()==10 && date.getFullYear()==2024){
-                            if(date.getDate()==2 || date.getDate()==18){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
+  // --- Handler único ---
+  $(function () {
+    $("#fecha_comparecencia").on("change", function () {
+      const sel = $(this).val(); // "YYYY-MM-DD"
+      if (!sel) return;
 
-                        //DICIEMBRE dias no laborables
-                        if(date.getMonth()==11 && date.getFullYear()==2024){
-                            if(date.getDate()==20 ){
-                                date.setDate(date.getDate() + 18);
-                            }
-                        }
+      // 1) Inicio de aclaración: siguiente hábil DESPUÉS de la comparecencia
+      const inicio = nextBusinessDayYmd(sel, 'after');
+      $("#fecha_inicio_aclaracion").val(inicio);
 
+      // 2) Término de aclaración: sumar 30 días hábiles desde el inicio
+      const termino = addBusinessDaysYmd(inicio, 30);
+      $("#fecha_termino_aclaracion").val(termino);
 
-                        var dd = String(date.getDate()).padStart(2, '0');
-                        var mm = String(date.getMonth() + 1).padStart(2, '0');
-                        var yyyy = date.getFullYear();
-                        today = yyyy + '-' + mm + '-' + dd;
-
-                        date.setDate(date.getDate() + 1);
-                        var dd2 = String(date.getDate()).padStart(2, '0');
-                        var mm2 = String(date.getMonth() + 1).padStart(2, '0');
-                        var yyyy2 = date.getFullYear();
-                        todayDP = yyyy2 + '-' + mm2 + '-' + dd2;
-
-                        $("#fecha_inicio_aclaracion").val(today);
-                        fechaTermino(30,'aclaracion',todayDP);
-              });
-
-              function fechaTermino(sumadias,etapa,inicio) {
-                  let pickedDate = inicio;
-                  let date = new Date(pickedDate);
-
-                  console.log('inicio In: '+inicio);
-                  console.log('inicio PD : '+pickedDate);
-                  console.log('inicio date: '+date);
-
-                //   date.setDate(date.getDate() + 2);
-                  for (let index = 1; index <= sumadias; index++) {
-                    if (date.getDay() == 5 ) {
-
-                        date.setDate(date.getDate() + 3);
-
-                          //FEBRERO dias no laborables
-                          if(date.getMonth()==1 && date.getFullYear()==2024){
-                            if(date.getDate()==5){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //MARZO dias no laborables
-                        if(date.getMonth()==2 && date.getFullYear()==2024){
-                            if(date.getDate()==2 || date.getDate()==18 || date.getDate()==28){
-                                date.setDate(date.getDate() + 1);
-                            }
-                            if(date.getDate()==29 ){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //MAYO dias no laborables
-                        if(date.getMonth()==4 && date.getFullYear()==2024){
-                            if(date.getDate()==1 || date.getDate()==5){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                         //JULIO dias no laborables
-                         if(date.getMonth()==6 && date.getFullYear()==2024){
-                            if(date.getDate()==22){
-                                date.setDate(date.getDate() + 14);
-                            }
-                        }
-                        //SEPTIEMBRE dias no laborables
-                        if(date.getMonth()==8 && date.getFullYear()==2024){
-                            if(date.getDate()==16){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //OCTUBRE dias no laborables
-                        if(date.getMonth()==9 && date.getFullYear()==2024){
-                            if(date.getDate()==1){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //NOVIEMBRE dias no laborables
-                        if(date.getMonth()==10 && date.getFullYear()==2024){
-                            if(date.getDate()==2 || date.getDate()==18){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-
-                        //DICIEMBRE dias no laborables
-                        if(date.getMonth()==11 && date.getFullYear()==2024){
-                            if(date.getDate()==20 ){
-                                date.setDate(date.getDate() + 18);
-                            }
-                        }
-
-                    }else {
-                        date.setDate(date.getDate() + 1);
-
-
-                        //FEBRERO dias no laborables
-                        if(date.getMonth()==1 && date.getFullYear()==2024){
-                            if(date.getDate()==5){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //MARZO dias no laborables
-                        if(date.getMonth()==2 && date.getFullYear()==2024){
-                            if(date.getDate()==2 || date.getDate()==18 || date.getDate()==28){
-                                date.setDate(date.getDate() + 1);
-                            }
-                            if(date.getDate()==29 ){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //MAYO dias no laborables
-                        if(date.getMonth()==4 && date.getFullYear()==2024){
-                            if(date.getDate()==1 || date.getDate()==5){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                         //JULIO dias no laborables
-                         if(date.getMonth()==6 && date.getFullYear()==2024){
-                            if(date.getDate()==22){
-                                date.setDate(date.getDate() + 14);
-                            }
-                        }
-                        //SEPTIEMBRE dias no laborables
-                        if(date.getMonth()==8 && date.getFullYear()==2024){
-                            if(date.getDate()==16){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //OCTUBRE dias no laborables
-                        if(date.getMonth()==9 && date.getFullYear()==2024){
-                            if(date.getDate()==1){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-                        //NOVIEMBRE dias no laborables
-                        if(date.getMonth()==10 && date.getFullYear()==2024){
-                            if(date.getDate()==2 || date.getDate()==18){
-                                date.setDate(date.getDate() + 1);
-                            }
-                        }
-
-                        //DICIEMBRE dias no laborables
-                        if(date.getMonth()==11 && date.getFullYear()==2024){
-                            if(date.getDate()==20 ){
-                                date.setDate(date.getDate() + 18);
-                            }
-                        }
-                    }
-
-                    console.log(index+"---------"+date.getDate()+"-----"+date.getMonth()+"------"+date.getFullYear());
-                }
-
-
-                  var dd = String(date.getDate()).padStart(2, '0');
-                  var mm = String(date.getMonth() + 1).padStart(2, '0');
-                  var yyyy = date.getFullYear();
-                  today = yyyy + '-' + mm + '-' + dd;
-
-                  if(etapa==='aclaracion') {
-                    console.log(today,2);
-                     $("#fecha_termino_aclaracion").val(today);
-                     fechaanalisis(today);
-                  }
-                  if(etapa==='analisis') {
-                    console.log(today,4);
-                     $("#calculo_fecha").val(today);
-                  }
-
-
-              }
-
-              function fechaanalisis(fechatermino) {
-
-                  let pd = fechatermino;
-                  console.log(3);
-                  let dateu = pd.substr(0, 4)+'-'+pd.substr(5, 2)+'-'+pd.substr(8, 2);
-                  let date = new Date(dateu);
-                  //let date = new Date(pd);
-                  date.setDate(date.getDate() + 1);
-                  for (let index = 1; index <= 1; index++) {
-                      date.setDate(date.getDate() + 1);
-                      if (date.getDay() == 6 || date.getDay() == 0)
-                          index--;
-                  }
-                  var dd = String(date.getDate()).padStart(2, '0');
-                  var mm = String(date.getMonth() + 1).padStart(2, '0');
-                  var yyyy = date.getFullYear();
-                  today = yyyy + '-' + mm + '-' + dd;
-                  fechaTermino(120,'analisis',today);
-              }
-
-
-                $('input[name="aplicacion_periodo"]').on('ifChanged', function(event) {
-                    // if (event.target.value == 'Si') {
-                    //     document.getElementById("fecha_termino_aclaracion").readOnly = true;
-                    // }else{
-                    //     document.getElementById("fecha_termino_aclaracion").readOnly = false;
-                    // }
-                });
-
-          });
+      // (Opcional) Si quieres calcular también tu "calculo_fecha" (120 hábiles
+      // después del día hábil posterior al término), descomenta:
+      // const inicioAnalisis = nextBusinessDayYmd(termino, 'after');
+      // const calculo = addBusinessDaysYmd(inicioAnalisis, 120);
+      // $("#calculo_fecha").val(calculo);
+    });
+  });
 </script>
 @endsection

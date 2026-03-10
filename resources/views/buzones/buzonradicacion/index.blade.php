@@ -153,10 +153,6 @@
                                                                 <span class="cb-content"><i class="bi bi-search" aria-hidden="true"></i></span>
                                                                 </a>
                                                                 -->
-                                                                 Normal con ícono + texto 
-                                                                <a href="#descargar" class="corner-button">
-                                                                <span class="cb-content"><i class="bi bi-download" aria-hidden="true"></i> Descargar</span>
-                                                                </a>
                                                             @else
                                                                 <span class="badge badge-light-secondary">Sin estatus</span>
                                                             @endif                        

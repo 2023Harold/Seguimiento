@@ -7,8 +7,9 @@ use App\Models\Auditoria;
 use App\Models\CatalogoUnidadesAdministrativas;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use LaravelDaily\LaravelCharts\Classes\LaravelChart;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Collection; // al inicio del controller
+
 
 class ReporteAuditoriaUnidadController extends Controller
 {
@@ -170,9 +171,6 @@ class ReporteAuditoriaUnidadController extends Controller
         return view('Reportes.reportesauditoriaunidad.show', compact('auditoria',));
     }
 
-    /**
-     * Devuelve detalles de una auditoría en JSON (usado por el JS del reporte)
-     */
     public function detalleAuditoria($id)
     {
         //todos estos datos los envio a la vista en formato json
@@ -235,6 +233,202 @@ class ReporteAuditoriaUnidadController extends Controller
     {
         //
     }
+    
+    public function pdf(Request $request)
+    {
+        //dd($request);
+        $cuentaPublica = getSession('cp');
+
+        // 1) totales (seguridad por backend)
+        $totalAudServer = Auditoria::where('cuenta_publica', $cuentaPublica)->count();
+
+        // 2) contexto recibido
+        $deptId      = $request->input('deptId');
+        $auditId     = $request->input('auditId');
+
+        // 3) si hay depto, lista de auditorías de ese depto (para la tabla)
+        $auditoriasDept = collect();
+        if ($deptId) {
+            $auditoriasDept = Auditoria::where('cuenta_publica', $cuentaPublica)
+                ->where('departamento_encargado_id', $deptId)
+                ->get(['id','numero_auditoria','entidad_fiscalizable','acto_fiscalizacion']);
+        }
+
+        // 4) si hay auditoría, carga TODAS las relaciones para el panel
+        $auditoria = null;
+        $progress  = null;
+        if ($auditId) {
+            $auditoria =Auditoria::with([
+                'radicacion',
+                'comparecencia',
+                'AC',
+                'acuerdoconclusion',
+                'acuerdoconclusionpliegos',
+                'accionesrecomendaciones.recomendaciones',
+                'accionespras.pras',
+                'accionespo.pliegosobservacion',
+                'accionessolacl.solicitudesaclaracion',
+                'segpras',
+                'informes',
+                'informeprimeraetapa',
+                'informepliegos',
+                'turnoui',
+                'turnooic',
+                'turnoarchivo',
+                'movimientos'
+            ])->find($auditId);
+
+            if ($auditoria) {
+                $progress = $this->computeAuditProgressPHP($auditoria);
+            }
+        }
+
+        $data = [
+            // imágenes de charts
+            'gaugeA'         => $request->input('gaugeA'),
+            'gaugeB'         => $request->input('gaugeB'),
+            'treemap'        => $request->input('treemap'),
+
+            // header/cards
+            'totalAuditorias'=> $request->input('totalAuditorias') ?: $totalAudServer,
+            'cuentaPublica'  => $cuentaPublica,
+            'dirA'           => $request->input('dirA') ?: 'Dirección de Seguimiento "A"',
+            'dirB'           => $request->input('dirB') ?: 'Dirección de Seguimiento "B"',
+            'directorA'      => $request->input('directorA') ?: '—',
+            'directorB'      => $request->input('directorB') ?: '—',
+
+
+            // contexto depto/dir
+            'deptId'   => $deptId,
+            'deptName' => $request->input('deptName'),
+            'dirName'  => $request->input('dirName'),
+
+            // auditoría seleccionada
+            'auditId'     => $auditId,
+            'auditName'   => $request->input('auditName'),
+            'auditAvance' => $request->input('auditAvance'),
+            'auditoria'   => $auditoria,
+            'progress'    => $progress,
+
+            // listado del depto
+            'auditoriasDept' => $auditoriasDept,
+        ];
+
+        $pdf = Pdf::loadView('Reportes.reportesauditoriaunidad.pdf', $data)
+                ->setPaper('letter', 'portrait');
+
+        return $pdf->download('reporte-auditorias.pdf');
+    }
+
+    
+    private function listify($v): array
+    {
+        if (!$v) return [];
+        if ($v instanceof Collection) return $v->values()->all();
+        return is_array($v) ? $v : [$v];
+    }
+    
+    private function computeAuditProgressPHP($aud)
+    {
+        $isAuth = fn($val) => trim((string)($val ?? '')) === 'Autorizado';
+
+        // Convierte Collections/arrays a arreglo plano de elementos; si es modelo suelto, lo envuelve
+        $listify = function($v): array {
+            if (!$v) return [];
+            if ($v instanceof Collection) return $v->values()->all();
+            return is_array($v) ? $v : [$v];
+        };
+
+        $total = 0; $done = 0;
+        $b = [
+            'radicacion'      => ['total'=>0,'done'=>0],
+            'comparecencia'   => ['total'=>0,'done'=>0],
+            'acuerdosRecs'    => ['total'=>0,'done'=>0],
+            'acuerdosPliegos' => ['total'=>0,'done'=>0],
+            'accionesRecs'    => ['total'=>0,'done'=>0],
+            'accionesPO'      => ['total'=>0,'done'=>0],
+            'accionesSol'     => ['total'=>0,'done'=>0],
+            'accionesPRAS'    => ['total'=>0,'done'=>0],
+            'informesRecs'    => ['total'=>0,'done'=>0],
+            'informesPliegos' => ['total'=>0,'done'=>0],
+            'turnoUI'         => ['total'=>0,'done'=>0],
+            'turnoOIC'        => ['total'=>0,'done'=>0],
+            'turnoArchivo'    => ['total'=>0,'done'=>0],
+        ];
+
+        // Radicación
+        if ($aud->radicacion) {
+            $b['radicacion']['total']++; $total++;
+            $ok = $isAuth($aud->radicacion->fase_autorizacion ?? null)
+            && !!($aud->comparecencia && $aud->comparecencia->oficio_acuerdo);
+            if ($ok) { $b['radicacion']['done']++; $done++; }
+        }
+
+        // Comparecencia
+        if ($aud->comparecencia) {
+            $b['comparecencia']['total']++; $total++;
+            if ($isAuth($aud->comparecencia->fase_autorizacion ?? null)) {
+                $b['comparecencia']['done']++; $done++;
+            }
+        }
+
+        // Acuerdos (recomendaciones)
+        foreach ($listify($aud->acuerdoconclusion) as $rec) {
+            $b['acuerdosRecs']['total']++; $total++;
+            $ok = $isAuth($rec->fase_autorizacion ?? null) && !!($rec->oficio_recepcion ?? null);
+            if ($ok) { $b['acuerdosRecs']['done']++; $done++; }
+        }
+
+        // Acuerdos (pliegos)
+        foreach ($listify($aud->acuerdoconclusionpliegos) as $pl) {
+            $b['acuerdosPliegos']['total']++; $total++;
+            $ok = $isAuth($pl->fase_autorizacion ?? null) && !!($pl->oficio_recepcion ?? null);
+            if ($ok) { $b['acuerdosPliegos']['done']++; $done++; }
+        }
+
+        // Acciones: recomendado / PO / solicitudes / PRAS
+        $countActionRel = function($list, string $relKey, string $bucketKey) use (&$b, &$total, &$done, $listify, $isAuth) {
+            foreach ($listify($list) as $act) {
+                // data_get evita errores aunque $act sea array/stdClass/modelo
+                $rel = data_get($act, $relKey);
+
+                foreach ($listify($rel) as $r) {
+                    $b[$bucketKey]['total']++; $total++;
+                    if ($isAuth(data_get($r, 'fase_autorizacion'))) {
+                        $b[$bucketKey]['done']++; $done++;
+                    }
+                }
+            }
+        };
+
+        $countActionRel($aud->accionesrecomendaciones, 'recomendaciones',   'accionesRecs');
+        $countActionRel($aud->accionespo,              'pliegosobservacion', 'accionesPO');
+        $countActionRel($aud->accionessolacl,          'solicitudesaclaracion', 'accionesSol');
+        $countActionRel($aud->accionespras,            'pras',               'accionesPRAS');
+
+        // Informes
+        foreach ($listify($aud->informeprimeraetapa) as $inf) {
+            $b['informesRecs']['total']++; $total++;
+            if ($isAuth($inf->fase_autorizacion ?? null)) { $b['informesRecs']['done']++; $done++; }
+        }
+        foreach ($listify($aud->informepliegos) as $inf) {
+            $b['informesPliegos']['total']++; $total++;
+            if ($isAuth($inf->fase_autorizacion ?? null)) { $b['informesPliegos']['done']++; $done++; }
+        }
+
+        // Turnos
+        foreach ([['turnoui','turnoUI'], ['turnooic','turnoOIC'], ['turnoarchivo','turnoArchivo']] as [$key,$bk]) {
+            $node = $aud->{$key} ?? null;
+            if ($node) {
+                $b[$bk]['total']++; $total++;
+                if ($isAuth($node->fase_autorizacion ?? null)) { $b[$bk]['done']++; $done++; }
+            }
+        }
+
+        $percent = $total ? (int) round(($done / $total) * 100) : 0;
+        return ['percent'=>$percent, 'done'=>$done, 'total'=>$total, 'breakdown'=>$b];
+    }
+
 
 
 }

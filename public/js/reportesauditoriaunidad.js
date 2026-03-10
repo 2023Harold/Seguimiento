@@ -502,6 +502,7 @@
     }
     const FS = getFontSizes();
     chart = Highcharts.chart(renderToId, {
+      colors: ['#fff', '#A13B71', '#BB945C', '#612344', '#EFc18B', '#6b7280', '#132a29', '#9CA3AF'],
       chart: {
         spacing: [10, 10, 10, 10],
         backgroundColor: "transparent",
@@ -528,18 +529,33 @@
       title: { text: title, align: "center", style: { fontSize: FS.title, color: "#132a29" } },
       subtitle: { text: subtitle || "", align: "center", style: { fontSize: FS.subtitle, color: "#132a29" } },
       credits: { enabled: false },
-      exporting: { enabled: true },
+      
+      exporting: {
+         enabled: true,
+         buttons: {
+           contextButton: {
+             symbolStroke: '#BB955C', // opcional: color del ícono
+           }
+         }
+       },
+
       series: [
         {
           type: "treemap",
           borderWidth: 10.2,
+          colorByPoint: false, 
           borderColor: "#BB945C",
           borderRadius: 10,
           pointPadding: options.pointPadding ?? 0,
           nodePadding: options.nodePadding ?? 2,
-          states: {
-            hover: { enabled: true, brightness: 0, borderColor: "#fff" },
-          },
+          states: { hover: { enabled: true, brightness: 0 } },
+                // (opcional) estilos por nivel
+                levels: [{
+                  level: 1,
+                  borderColor: '#BB945C',
+                  borderWidth: 10.2
+                }],
+
           dataLabels: {
             enabled: true,
             useHTML: true,
@@ -903,7 +919,15 @@
           },
         },
         credits: { enabled: false },
-        exporting: { enabled: false },
+        exporting: {
+           enabled: true,
+           buttons: {
+             contextButton: {
+               symbolStroke: '#BB955C', // opcional: color del ícono
+             }
+           }
+         },
+
         series: [
           { name: names[0], data: [{ color: ringColors[0], radius: "112%", innerRadius: "88%", y: vals[0] }] },
           { name: names[1], data: [{ color: ringColors[1], radius: "87%", innerRadius: "63%", y: vals[1] }] },
@@ -1049,6 +1073,13 @@
 
   // ====== Vista de Auditorías (treemap por depto) ======
   function viewAuditorias(dirKey, deptId, dirName, deptName) {
+
+    
+// Deja a la mano para el PDF
+  window.__pdfDeptId = deptId;
+  window.__pdfDeptName = deptName;
+  window.__pdfDirName = dirName;
+
   const titleHTML = `
     <div class="mb-2">
       <h6 class="mb-1">Auditorías — <span>${esc(dirName)}</span> / <span>${esc(deptName)}</span></h6>
@@ -1575,6 +1606,13 @@
     try {
       panel?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (e) {}
+    
+  window.__pdfAuditId = aud?.id || '';
+  window.__pdfAuditName = aud?.numero_auditoria || '';
+  const avTxt = document.getElementById('avanceAuditoria')?.textContent || '';
+  window.__pdfAuditAvanceText = avTxt;
+
+
   }
 
   // ====== INIT ======

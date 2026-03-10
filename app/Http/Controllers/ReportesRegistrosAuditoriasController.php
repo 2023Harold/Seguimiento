@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
+use App\Models\InformePrimeraEtapa;
 use App\Models\TurnoUI;
 use App\Models\TurnoOIC;
 use App\Models\TurnoArchivoTransferencia;
@@ -57,11 +58,34 @@ class ReportesRegistrosAuditoriasController extends Controller
 											$query->where('cuenta_publica', getSession('cp'));
 									})->count();
 
-		
-		//dd($auditorias,$turnosui,$turnooic,$turnotat);
-		
-		
-        return view('reportesregistrosauditorias.index', compact('request','auditorias','turnosui','turnooic','turnotat','radicaciones','comparecencias','acuerdoconclusion')); 
+        $informes = InformePrimeraEtapa::whereHas('auditoria', function (Builder $query) {
+											$query->where('cuenta_publica', getSession('cp'));
+									})->count();
+        
+        // ===== Informes de Auditorías =====
+        $informes = InformePrimeraEtapa::whereHas('auditoria', fn($q) =>
+            $q->where('cuenta_publica', getSession('cp'))
+        )->count();
+
+        $informesRec = InformePrimeraEtapa::whereHas('auditoria', fn($q) =>
+            $q->where('cuenta_publica', getSession('cp'))
+        )->where('tipo', 'recomendaciones')->count();
+
+        $informesPO = InformePrimeraEtapa::whereHas('auditoria', fn($q) =>
+            $q->where('cuenta_publica', getSession('cp'))
+        )->where('tipo', 'pliegos')->count();
+
+        // ===== Acuerdos de conclusión por tipo =====
+        $acuerdosRec = AcuerdoConclusion::whereHas('auditoria', fn($q) =>
+            $q->where('cuenta_publica', getSession('cp'))
+        )->where('tipo', 'recomendaciones')->count();
+
+        $acuerdosPO = AcuerdoConclusion::whereHas('auditoria', fn($q) =>
+            $q->where('cuenta_publica', getSession('cp'))
+        )->where('tipo', 'pliegos')->count();
+
+        return view('reportesregistrosauditorias.index', compact('request','auditorias','turnosui','turnooic','turnotat',
+                                    'radicaciones','comparecencias','acuerdoconclusion','informes','informesRec','informesPO','acuerdosRec','acuerdosPO'));
     }
 
     /**

@@ -40,6 +40,7 @@ use App\Http\Controllers\Buzones\BuzonSolicitudesController;
 use App\Http\Controllers\Buzones\BuzonTurnoEnvioArchivoController;
 use App\Http\Controllers\Buzones\BuzonTurnoOICController;
 use App\Http\Controllers\Buzones\BuzonTurnoUIController;
+use App\Http\Controllers\CalendarioLaboralController;
 use App\Http\Controllers\Cedulas\AgregarCedulaInicialController;
 use App\Http\Controllers\AgregarTipologiaAccionController;
 use App\Http\Controllers\AjaxController;
@@ -338,10 +339,11 @@ Route::post('archivo', [ArchivoController::class, 'upload']);
      /**    Titular         */
      Route::get('/pac/aa/{id}', [PacController::class, 'aa'])->name('pac.aa');
     /**Fin del apartado de Seguimiento - Auditorias - PAC*/
-
+    Route::post('/calendario/next', [CalendarioLaboralController::class, 'nextBusinessDay'])->name('cal.next');
+    Route::post('/calendario/add', [CalendarioLaboralController::class, 'addBusinessDays'])->name('cal.add');
 
 Route::middleware(['auth', CheckPermission::class])->group(function() {
-
+    
     /**Rutas Generales */
     Route::get('notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
     Route::get('marcarleido', [NotificacionController::class, 'marcarleido'])->name('marcarleido');
@@ -736,6 +738,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('reporteauditoriaacciones', ReporteAuditoriaAccionesController::class);
     Route::resource('reporteauditoriaunidad', ReporteAuditoriaUnidadController::class);
     Route::get('reportes/auditoria/{auditoria}',[ReporteAuditoriaUnidadController::class, 'detalleAuditoria'])->name('reporteauditoriaunidad.detalle');
+    Route::post('/reportes/auditoria/pdf', [ReporteAuditoriaUnidadController::class, 'pdf'])->name('reporteauditoriaunidad.pdf');
 
     Route::resource('reportesregistrosauditorias', ReportesRegistrosAuditoriasController::class);
     Route::get('/reportesseguimientoaud/excel/{aud?}/{ent?}', [ReportesSeguimientoController::class, 'export'])->name('reporteseguimiento.exportar');

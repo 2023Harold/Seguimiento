@@ -18,5 +18,18 @@
         "postcss": "^8.1.14",
         "sass": "^1.32.11",
         "sass-loader": "^11.0.1"
+    },
+    "name": "seguimiento",
+    "version": "1.0.0",
+    "description": "Componente de seguimiento 2\r cambio Diana",
+    "main": "webpack.mix.js",
+    "directories": {
+        "test": "tests"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "puppeteer": "^24.37.5"
     }
 }

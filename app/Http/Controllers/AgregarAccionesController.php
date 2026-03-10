@@ -98,7 +98,7 @@ class AgregarAccionesController extends Controller
         
         $request['departamento_asignado_id'] = $auditoria->departamento_encargado_id;
         $request['departamento_asignado'] = $auditoria->departamento_encargado;
-
+        //dd($request);
         $accion  = AuditoriaAccion::create($request->all());
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');

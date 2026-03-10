@@ -4,6 +4,7 @@ use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\Constancia;
 use App\Models\Notificacion;
+use App\Models\SUTIC\DiasNoLaboralesIntra;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -458,7 +459,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             return '';
         }
     }
-
+    /*
     function addBusinessDays($date, $days)
     {
         $start = strtotime($date);
@@ -470,6 +471,53 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             }
         }
         return date('Y-m-d', $start);
+    }*/
+    
+ 
+    /**
+     * Devuelve true si la fecha es sábado, domingo o existe en TblDiaNoLab (StsEntDia=1).
+     * Considera I (inhábil) y V (vacaciones) como no laborables.
+     */
+    function esNoLaboral(Carbon $fecha): bool
+    {
+        if ($fecha->isWeekend()) return true;
+
+        return DiasNoLaboralesIntra::query()
+            ->whereDate('DiaNoLab', $fecha->toDateString())
+            ->where('StsEntDia', 1)           // quítalo si no manejan “activo”
+            ->whereIn('TipoDia', ['I','V'])   // I = inhábil, V = vacaciones
+            ->exists();                       // <-- ¡ejecuta la consulta!
+    }
+
+    /**
+     * Suma N días hábiles (sin contar el día inicial).
+     * Ej: addBusinessDays('2026-03-13', 1) => el siguiente hábil.
+     */
+    function addBusinessDays(string $date, int $days): string
+    {
+        $f = Carbon::parse($date)->startOfDay();
+        $agregados = 0;
+
+        while ($agregados < $days) {
+            $f->addDay();
+            if (!esNoLaboral($f)) {
+                $agregados++;
+            }
+        }
+        return $f->toDateString();
+    }
+
+    /**
+     * Próximo día hábil a partir de una fecha.
+     * - $mode = 'on_or_after': si ya es hábil, devuelve la misma.
+     * - $mode = 'after': siempre salta al siguiente hábil.
+     */
+    function nextBusinessDay(string $date, string $mode = 'on_or_after'): string
+    {
+        $f = Carbon::parse($date)->startOfDay();
+        if ($mode === 'after') $f->addDay();
+        while (esNoLaboral($f)) $f->addDay();
+        return $f->toDateString();
     }
 
     function esVacioStr($valores=[],$auditoria){        
@@ -885,7 +933,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         return $total;
     }
 
-    
+        
     function limpiarNotificacionMensaje($notificacion)
     {
         $mensaje = $notificacion->mensaje ?? '';
@@ -917,7 +965,3 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         // Si por algo preg_replace_callback falló, regresa el original
         return $mensajeLimpio ?? $mensaje;
     }
-
-
-
-
