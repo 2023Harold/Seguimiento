@@ -123,7 +123,6 @@ class User extends Authenticatable
 
         return $this->hasMany(Notificacion::class, 'destinatario_id', 'id')->whereNull('fecha_muestra_fin')->where('fecha_muestra_inicio', '<=', $hoy)->where('estatus', '!=', 'Pendiente')->where('estatus', '!=', null)->orderBy('fecha_muestra_inicio', 'asc');
     }
-
     public function todasNotificaciones()
     {
         $hoy = now();
@@ -225,7 +224,6 @@ class User extends Authenticatable
 
         //return $this->where('unidad_administrativa_id', substr(auth()->user()->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','LP')->first();
     }
-
     public function NotMarcarLeido($notificacion){
         if(!empty($notificacion)&& ($notificacion->estatus == 'Pendiente')){
             $notificacion = Notificacion::find($notificacion->id);

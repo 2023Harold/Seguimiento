@@ -290,7 +290,7 @@ class CedulaInicialPrimeraEtapaController extends Controller
 
 			$director=$auditoria->directorasignado;
             $jefe=$auditoria->jefedepartamentoencargado;
-
+        $titular=User::where('siglas_rol','TUS')->first();
                
             $accionesanalistasListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get(); 
             $accionesLideresListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get();  
@@ -334,7 +334,7 @@ class CedulaInicialPrimeraEtapaController extends Controller
             $TAPNS=$TSPNS+$TPPNS;
                 
             $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])
-			->loadView('cedulageneral.show',compact('auditoria','TAP','TAPS','TAPNS','TSP','TSPS','TSPNS','TPP','TPPS','TPPNS','director','nombresanalistasL','nombreslideresL','jefe'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+			->loadView('cedulageneral.show',compact('auditoria','TAP','TAPS','TAPNS','TSP','TSPS','TSPNS','TPP','TPPS','TPPNS','director','nombresanalistasL','nombreslideresL','jefe','titular'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
             $nombre='storage/temporales/CedulaGeneral'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
             $pdfgenrado = file_put_contents($nombre, $pdf);
         /*

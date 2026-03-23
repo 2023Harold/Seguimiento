@@ -25,12 +25,12 @@ class AuditoriaSeguimientoController extends Controller
      */
     public function index(Request $request)
     {
-        //$auditorias = $this->setQuery($request)->orderBy('id','ASC')->paginate(30);
+        $auditorias = $this->setQuery($request)->orderBy('id','ASC')->paginate(30);
         //$auditoriasQuery = DB::table('segauditorias')->select('*')->orderBy("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, '\d+'))");
         // Agrega la consulta RAW para usar funciones Oracle
         // $auditorias = $this->setQuery($request)->orderByRaw("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, '\\d+'))");
-        $auditorias = $this->setQuery($request)->orderByRaw("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, 'DESC'))");
-        $auditorias = $auditorias->paginate(30);
+        //$auditorias = $this->setQuery($request)->orderByRaw("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, 'DESC'))");
+        //$auditorias = $auditorias->paginate(30);
         //$auditorias = $this->setQuery($request)->paginate(30);
         $solicitudesaclaracion = SolicitudesAclaracion::where('accion_id',getSession('solicitudesauditoriaaccion_id'))->get();
         $ids = [122110, 122120, 122130, 122210, 122220, 122230];
@@ -153,7 +153,7 @@ class AuditoriaSeguimientoController extends Controller
             $userId = auth()->id();
 
             $query = $query->where(function ($wrap) use ($roles, $userId) {
-                // 1) AuditorÃ­as con ACCIONES asignadas (como ya lo tenÃ­as)
+                // 1) Auditorías con ACCIONES asignadas (como ya lo tenías)
                 $wrap->whereHas('acciones', function ($q) use ($roles, $userId) {
                     if (in_array("Analista", $roles)) {
                         $q->where('analista_asignado_id', $userId);
@@ -164,7 +164,7 @@ class AuditoriaSeguimientoController extends Controller
                     }
                 });
 
-                // 2) O auditorÃ­as donde soy ANALISTA EXTRA (segauditoria_usuarios)
+                // 2) O auditorías donde soy ANALISTA EXTRA (segauditoria_usuarios)
                 if (in_array("Analista", $roles)) {
                     $wrap->orWhereHas('analistacpextra', function ($r) use ($userId) {
                         $r->where('analista_id', $userId)

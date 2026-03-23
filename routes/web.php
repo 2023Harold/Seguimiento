@@ -40,7 +40,7 @@ use App\Http\Controllers\Buzones\BuzonSolicitudesController;
 use App\Http\Controllers\Buzones\BuzonTurnoEnvioArchivoController;
 use App\Http\Controllers\Buzones\BuzonTurnoOICController;
 use App\Http\Controllers\Buzones\BuzonTurnoUIController;
-use App\Http\Controllers\CalendarioLaboralController;
+
 use App\Http\Controllers\Cedulas\AgregarCedulaInicialController;
 use App\Http\Controllers\AgregarTipologiaAccionController;
 use App\Http\Controllers\AjaxController;
@@ -62,6 +62,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Cedulas\CedulaAnaliticaAnalistaController;
 use App\Http\Controllers\Cedulas\CedulaAnaliticaAutorizacionController;
 use App\Http\Controllers\Cedulas\CedulaAnaliticaController;
+use App\Http\Controllers\Cedulas\CedController;
 use App\Http\Controllers\Cedulas\CedulaAnaliticaDesempenoAnalistaController;
 use App\Http\Controllers\Cedulas\CedulaAnaliticaDesempenoAutorizacionController;
 use App\Http\Controllers\Cedulas\CedulaAnaliticaDesempenoController;
@@ -339,8 +340,9 @@ Route::post('archivo', [ArchivoController::class, 'upload']);
      /**    Titular         */
      Route::get('/pac/aa/{id}', [PacController::class, 'aa'])->name('pac.aa');
     /**Fin del apartado de Seguimiento - Auditorias - PAC*/
-    Route::post('/calendario/next', [CalendarioLaboralController::class, 'nextBusinessDay'])->name('cal.next');
-    Route::post('/calendario/add', [CalendarioLaboralController::class, 'addBusinessDays'])->name('cal.add');
+
+	Route::get('/ver/cedula/{accion}', [CedController::class, 'ver'])->name('cedula.ver');
+    Route::get('/reportes/auditoria/bulk-progress', [ReporteAuditoriaUnidadController::class, 'bulkProgress']);
 
 Route::middleware(['auth', CheckPermission::class])->group(function() {
     
@@ -457,6 +459,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('auditoriaconsultaacciones', AuditoriaConsultaAccionesController::class, ['parameters' => ['auditoriaconsultaacciones' => 'accion']]);
      /**    2023        */
      Route::resource('agregaracciones', AgregarAccionesController::class, ['parameters' => ['agregaracciones' => 'accion']]);
+     Route::get('/agregaracciones/eliminar/{accion}', [AgregarAccionesController::class, 'eliminar'])->name('agregaracciones.eliminar');
      Route::get('/agregaracciones/acciones/{accion}', [AgregarAccionesController::class, 'accion'])->name('agregaracciones.accion');
      Route::get('/agregaracciones/concluircp/{auditoria}', [AgregarAccionesController::class, 'concluir'])->name('agregaracciones.concluir');
      Route::get('/AgregarAccionesController/acciones/consulta/{accion}', [AgregarAccionesController::class, 'accionesConsulta'])->name('AgregarAccionesController.accionesconsulta');
@@ -467,6 +470,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     //  Route::resource('tipologiaacciones', TipologiaAccionesController::class);
     //  Route::get('/tipologiaacciones/create/{auditoria}', [TipologiaAccionesController::class,'create'])->name('tipologiaacciones.create') ;
     Route::resource('agregartipologiaaccion', AgregarTipologiaAccionController::class, ['parameters' => ['agregartipologiaaccion' => 'accion']]);
+    Route::get('/agregartipologiaaccion/eliminar/{tipologia}', [AgregarTipologiaAccionController::class, 'eliminar'])->name('agregartipologiaaccion.eliminar');
     Route::resource('tipologiaaccionenvio', TipologiaAccionEnvioController::class, ['parameters' => ['tipologiaaccionenvio' => 'accion']]);
     Route::resource('tipologiaaccionrevision01', TipologiaAccionRevision01Controller::class, ['parameters' => ['tipologiaaccionrevision01' => 'accion']]);
     
@@ -737,6 +741,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('reportesseg', ReportesSeguimientoController::class);
     Route::resource('reporteauditoriaacciones', ReporteAuditoriaAccionesController::class);
     Route::resource('reporteauditoriaunidad', ReporteAuditoriaUnidadController::class);
+    
+    //Route::get('reportes/auditoria/departamento/{deptId}/metrics',[ReporteAuditoriaUnidadController::class, 'deptMetrics'])->name('reporteauditoriaunidad.deptMetrics');
+    Route::get('reportes/auditoria/metrics/{deptId}', [ReporteAuditoriaUnidadController::class, 'deptMetrics'])->name('reporteauditoriaunidad.deptMetrics');
+
     Route::get('reportes/auditoria/{auditoria}',[ReporteAuditoriaUnidadController::class, 'detalleAuditoria'])->name('reporteauditoriaunidad.detalle');
     Route::post('/reportes/auditoria/pdf', [ReporteAuditoriaUnidadController::class, 'pdf'])->name('reporteauditoriaunidad.pdf');
 

@@ -13,6 +13,7 @@
                 </h1>
             </div>
             <div class="card-body">
+                
                 @include('flash::message')                
                 {!!BootForm::open(['route'=>'asignacionlideranalista.index','method'=>'GET']) !!}
                     <div class="row">

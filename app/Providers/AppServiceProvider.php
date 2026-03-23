@@ -66,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
                 echo '<a href=\"$param2\" class=\"btn btn-secondary\">$param1</a>';
                 ?>";*/
         });
+        
         Blade::directive('btnConfirmacion', function ($expression) {
             $parametros_separados = explode(',', $expression);
             $text = $parametros_separados[0];
@@ -101,6 +102,7 @@ class AppServiceProvider extends ServiceProvider
             
             ?>";
         });
+        
         Blade::directive('destroyNoAuth', function ($url_destroy) {
             $url_destroy_despues_primer_comilla = Str::after($url_destroy, "'");
             $url_destroy_antes_segunda_comilla = Str::before($url_destroy_despues_primer_comilla, "'");
@@ -116,6 +118,7 @@ class AppServiceProvider extends ServiceProvider
                     .'</form>';
             ?>";
         });
+
         Blade::directive('btnEdit', function ($url) {
             return "<?php
                 echo '<a href=\"'.$url.'\"><i class=\"bi bi-pencil-square\"></i></a>';

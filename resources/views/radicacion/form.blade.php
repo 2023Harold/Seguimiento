@@ -234,7 +234,7 @@
       $("#fecha_inicio_aclaracion").val(inicio);
 
       // 2) Término de aclaración: sumar 30 días hábiles desde el inicio
-      const termino = addBusinessDaysYmd(inicio, 30);
+      const termino = addBusinessDaysYmd(inicio, 29);
       $("#fecha_termino_aclaracion").val(termino);
 
       // (Opcional) Si quieres calcular también tu "calculo_fecha" (120 hábiles

@@ -6,6 +6,8 @@ use App\Models\CatalogoTipologia;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
 use App\Models\CatalogoTipoAccion;
+use App\Models\TipologiasAccion;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AgregarTipologiaAccionController extends Controller
@@ -42,10 +44,26 @@ class AgregarTipologiaAccionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    
     public function store(Request $request)
     {
-        // dd('');
+        $auditoria = Auditoria::find(getSession('auditoriacp_id'));
+        $accion = AuditoriaAccion::findOrFail($request->accion_id);
+        
+        $t = CatalogoTipologia::findOrFail($request->tipologia_id);
+
+        TipologiasAccion::create([
+            'accion_id' => $accion->id,
+            'auditoria_id' => $auditoria->id,
+            'tipologia' => $t->tipologia,
+            'usuario_creacion_id' => auth()->id(),
+        ]);
+
+        setMessage('Se ha agregado la tipología correctamente');
+
+        return view('layouts.closeAcciones');
     }
+
 
     /**
      * Display the specified resource.
@@ -67,14 +85,12 @@ class AgregarTipologiaAccionController extends Controller
     public function edit(AuditoriaAccion $accion)
     {
         $auditoria= Auditoria::find(getSession('auditoria_id'));
-        
-        
-        //dd($accion->auditoria);
-        // $auditoria=$tipologia->auditoria;                  
-        //$accion = 'Agregar';
-        
+        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
+        $tipologias= CatalogoTipologia::all()->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
+        $tipologia = new TipologiasAccion();
+        $acc = 'Agregar';
  
-        return view('agregartipologiaaccion.form', compact('accion','auditoria'));
+        return view('agregartipologiaaccion.form', compact('acc','accion','auditoria','tipologia','tipologias','tiposaccion'));
     }
 
     /**
@@ -86,15 +102,11 @@ class AgregarTipologiaAccionController extends Controller
      */
     public function update(Request $request, Auditoriaaccion $accion)
     {
-        // dd($request);    
-        $request['usuario_modificacion_id'] = auth()->id();      
+        dd("404 Update Tipologia");    
+        $request['usuario_creacion_id'] = auth()->id();      
         $request['tipo_auditoria_id'] = $accion->auditoria->tipo_auditoria_id;       
-        $n_tipologia= CatalogoTipologia :: create ($request->all());                   
+        $tipologia= TipologiasAccion :: create ($request->all());                   
         
-        $request2 = new Request();
-        $request2 ['tipologia_id']= $n_tipologia->id;
-        $accion->update($request2->all());        
-        // $tipologia = new CatalogoTipologia();
         setMessage('Se ha agregado la tipología correctamente');
 
         return view('layouts.close');
@@ -106,8 +118,16 @@ class AgregarTipologiaAccionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(TipologiasAccion $accion)
     {
         //
+    }
+
+    public function eliminar(TipologiasAccion $tipologia){
+        $tipologia->delete();
+       
+        setMessage('Se ha eliminado la tipologia correctamente.');
+        
+        return redirect()->route('agregaracciones.create');
     }
 }

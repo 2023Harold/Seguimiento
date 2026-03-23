@@ -49,8 +49,8 @@
 							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion, 'departamentoasig'=>$request->departamentoasig, 'liderasig'=>$request->liderasig, 'analistaasig'=>$request->analistaasig, 'direccionaud'=>$request->direccionaud,'estatus'=>$request->estatus,'apartado'=>$request->apartado])->links('vendor.pagination.bootstrap-5') }}
 						</div>
 					</div>
-				</div>	
-                
+				</div>
+
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -86,11 +86,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                                 @forelse ($auditoria->accionesrecomendaciones as $accion)
                                                 @php
-                                                    $REC = "AUD-".$auditoria->id."-ACC-".$accion->id."-REC-".$accion->recomendaciones->id;
+
+													if(!empty($accion) && !empty($accion->recomendaciones)){
+														$REC = "AUD-".$auditoria->id."-ACC-".$accion->id."-REC-".$accion->recomendaciones->id;
                                                     //dd($accion->recomendaciones);
+													}else{
+														$REC = "Sin accion";
+													}
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">
@@ -106,11 +111,15 @@
                                                         {{ fecha($accion->fecha_termino_recomendacion) }}
                                                     </td>
                                                     <td>
-                                                        -{{ $accion->recomendaciones->auditoria->comparecencia->nombre_titular }}<br>
-                                                        -{{ $accion->recomendaciones->auditoria->comparecencia->cargo_titular }}
+                                                        @if (!empty($accion->recomendaciones->auditoria))
+                                                            -{{ $accion->recomendaciones->auditoria->comparecencia->nombre_titular }}<br>
+                                                            -{{ $accion->recomendaciones->auditoria->comparecencia->cargo_titular }}
+                                                        @else
+                                                            sin registro
+                                                        @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        
+
                                                         @if (!empty($accion->recomendaciones->calificacion_atencion))
                                                             <a href="{{ route('recomendacionescalificacion.show',$recomendacion) }}" class="btn btn-link btn-color-muted btn-active-color-primary">
                                                                 @if ($accion->recomendaciones->calificacion_atencion=='Atendida')
@@ -141,10 +150,10 @@
                                                     </td>
                                                     <td class="text-center">
                                                         @if (empty($accion->recomendaciones->fase_autorizacion))
-                                                            <span class="badge badge-light-warning">Pendiente</span>                                 
+                                                            <span class="badge badge-light-warning">Pendiente</span>
                                                         @elseif ($accion->recomendaciones->fase_autorizacion == 'Rechazado')
-                                                            <span class="badge badge-light-danger">{{ $accion->recomendaciones->fase_autorizacion }}</span>                                      
-                                                        @elseif ($accion->recomendaciones->fase_autorizacion == 'En revisión 01')                                        
+                                                            <span class="badge badge-light-danger">{{ $accion->recomendaciones->fase_autorizacion }}</span>
+                                                        @elseif ($accion->recomendaciones->fase_autorizacion == 'En revisión 01')
                                                             <span class="badge badge-light-warning">En revisión</span>
                                                         @elseif ($accion->recomendaciones->fase_autorizacion == 'En revisión')
                                                             <span class="badge badge-light-warning">{{ $accion->recomendaciones->fase_autorizacion }} </span>
@@ -153,27 +162,29 @@
                                                         @elseif ($accion->recomendaciones->fase_autorizacion == 'En autorización')
                                                             <span class="badge badge-light-warning">{{ $accion->recomendaciones->fase_autorizacion }} </span>
                                                         @elseif ($accion->recomendaciones->fase_autorizacion=='Autorizado')
-                                                            <span class="badge badge-light-success">{{ $accion->recomendaciones->fase_autorizacion }} </span>                                         
-                                                        @endif 
-                                                        
+                                                            <span class="badge badge-light-success">{{ $accion->recomendaciones->fase_autorizacion }} </span>
+                                                        @endif
+
                                                     </td>
                                                     <td>
+                                                        @if ($REC != "Sin accion" )
                                                         <a href="{{ route('buzonseg.show', $REC) }}" class="corner-button">
                                                             <span class="cb-content">Recomendación<i class="bi bi-arrow-up-right-circle-fill text-primary fs-1" aria-hidden="true"></i></span>
                                                         </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @empty
                                                 <tr>
                                                     <td class="text-center" colspan="5">
                                                         No se encuentran registros en este apartado.
-                                                    </td>                                
+                                                    </td>
                                                 </tr>
                                                 @endforelse
                                             </tbody>
                                         </table>
-                                        
-                                           
+
+
                                     </td>
                                 </tr>
                             @empty

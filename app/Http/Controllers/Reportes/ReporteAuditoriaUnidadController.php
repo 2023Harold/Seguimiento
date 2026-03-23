@@ -7,7 +7,10 @@ use App\Models\Auditoria;
 use App\Models\CatalogoUnidadesAdministrativas;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\Snappy\Facades\SnappyPdf as Snappy;
 use Illuminate\Support\Collection; // al inicio del controller
 
 
@@ -88,6 +91,7 @@ class ReporteAuditoriaUnidadController extends Controller
         ];
 
         // ===== Grilla de auditorías por departamento =====
+        /*
         $auditoriasGrid = $auditorias
             ->whereIn('departamento_encargado_id', $ids)
             ->groupBy('departamento_encargado_id')
@@ -103,8 +107,26 @@ class ReporteAuditoriaUnidadController extends Controller
                         
                     ];
                 })->values();
-            })->toArray();
+            })->toArray();*/
         
+        $auditoriasGrid = $auditorias
+            ->whereIn('departamento_encargado_id', $ids)
+            ->groupBy('departamento_encargado_id')
+            ->map(function ($grupo) {
+                return $grupo->map(function ($a) {
+                    return [
+                        'id' => $a->id,
+                        'numero_auditoria' => $a->numero_auditoria,
+                        'entidad_fiscalizable' => $a->entidad_fiscalizable,
+                        'nombre_entidad' => $a->nombreentidad
+                            ? $a->nombreentidad->entidades
+                            : null,
+                        'acto_fiscalizacion' => $a->acto_fiscalizacion,
+                    ];
+                })->values();
+            })
+            ->toArray();
+
         $DirBAsignado = User::where('unidad_administrativa_id',122200)->where('siglas_rol','DS')->where('estatus','Activo')->first();
         $DirAAsignado = User::where('unidad_administrativa_id',122100)->where('siglas_rol','DS')->where('estatus','Activo')->first();
         
@@ -171,35 +193,6 @@ class ReporteAuditoriaUnidadController extends Controller
         return view('Reportes.reportesauditoriaunidad.show', compact('auditoria',));
     }
 
-    public function detalleAuditoria($id)
-    {
-        //todos estos datos los envio a la vista en formato json
-        $auditoria = Auditoria::with([
-            'radicacion',
-            'comparecencia',
-            'AC',
-            //'a_c',
-            'acuerdoconclusion',
-            'acuerdoconclusionpliegos',
-            // acciones (filas de segauditoria_acciones)
-            'accionesrecomendaciones.recomendaciones',
-            'accionespras.pras',
-            'accionespo.pliegosobservacion',
-            'accionessolacl.solicitudesaclaracion',
-            // otros
-            'segpras',
-            'informes',
-            'informeprimeraetapa',
-            'informepliegos',
-            'turnoui',
-            'turnooic',
-            'turnoarchivo',
-            'movimientos'
-        ])->findOrFail($id);
-
-        return response()->json($auditoria);
-    }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -234,6 +227,34 @@ class ReporteAuditoriaUnidadController extends Controller
         //
     }
     
+    public function detalleAuditoria($id)
+    {
+        //todos estos datos los envio a la vista en formato json
+        $auditoria = Auditoria::with([
+            'radicacion',
+            'comparecencia',
+            'AC',
+            //'a_c',
+            'acuerdoconclusion',
+            'acuerdoconclusionpliegos',
+            // acciones (filas de segauditoria_acciones)
+            'accionesrecomendaciones.recomendaciones',
+            'accionespras.pras',
+            'accionespo.pliegosobservacion',
+            'accionessolacl.solicitudesaclaracion',
+            // otros
+            'segpras',
+            'informes',
+            'informeprimeraetapa',
+            'informepliegos',
+            'turnoui',
+            'turnooic',
+            'turnoarchivo',
+            'movimientos'
+        ])->findOrFail($id);
+
+        return response()->json($auditoria);
+    }
     public function pdf(Request $request)
     {
         //dd($request);
@@ -247,12 +268,66 @@ class ReporteAuditoriaUnidadController extends Controller
         $auditId     = $request->input('auditId');
 
         // 3) si hay depto, lista de auditorías de ese depto (para la tabla)
-        $auditoriasDept = collect();
+        /*$auditoriasDept = collect();
         if ($deptId) {
             $auditoriasDept = Auditoria::where('cuenta_publica', $cuentaPublica)
                 ->where('departamento_encargado_id', $deptId)
                 ->get(['id','numero_auditoria','entidad_fiscalizable','acto_fiscalizacion']);
+        }*/
+        if ($deptId) {
+            $auditoriasDept = Auditoria::with([
+                    'radicacion',
+                    'comparecencia',
+                    'acuerdoconclusion',
+                    'acuerdoconclusionpliegos',
+                    'accionesrecomendaciones.recomendaciones',
+                    'accionespras.pras',
+                    'accionespo.pliegosobservacion',
+                    'accionessolacl.solicitudesaclaracion',
+                    'informeprimeraetapa',
+                    'informepliegos',
+                    'turnoui',
+                    'turnooic',
+                    'turnoarchivo',
+                ])
+                ->where('cuenta_publica', $cuentaPublica)
+                ->where('departamento_encargado_id', $deptId)
+                ->get()
+                ->map(function ($aud) {
+                    $p = $this->computeAuditProgressPHP($aud);
+
+                    $aud->progressPercent = $p['percent'];
+                    $aud->progressDone    = $p['done'];
+                    $aud->progressTotal   = $p['total'];
+
+                    return $aud;
+                });
+                
+
+            $totalAud = 0;
+            $completedAud = 0;
+            $sumPercent = 0;
+
+            foreach ($auditoriasDept as $aud) {
+                $p = $this->computeAuditProgressPHP($aud);
+                $totalAud++;
+                if ($p['percent'] === 100) {
+                    $completedAud++;
+                }
+                $sumPercent += $p['percent'];
+            }
+
+            $avgPercent = $totalAud ? round($sumPercent / $totalAud) : 0;
+            $completedPercent = $totalAud
+                ? round(($completedAud / $totalAud) * 100)
+                : 0;
+
+
+        }else{
+            $auditoriasDept = [];
         }
+
+        
 
         // 4) si hay auditoría, carga TODAS las relaciones para el panel
         $auditoria = null;
@@ -283,19 +358,84 @@ class ReporteAuditoriaUnidadController extends Controller
             }
         }
 
+        $deptSuma = [];
+        $departamentosPorDireccion = [
+            122100 => [122110, 122120, 122130], // A1, A2, A3
+            122200 => [122210, 122220, 122230], // B1, B2, B3
+        ];
+
+        // Nombres de departamentos
+        $deptNames = CatalogoUnidadesAdministrativas::whereIn('id', array_merge(...array_values($departamentosPorDireccion)))->pluck('descripcion', 'id');
+        
+        $deptSuma = [];
+
+        foreach ($departamentosPorDireccion as $dirIdLoop => $deptIds) {
+
+            $dirLabel = $dirIdLoop === 122100
+                ? 'Dirección de Seguimiento "A"'
+                : 'Dirección de Seguimiento "B"';
+
+            foreach ($deptIds as $deptIdLoop) {
+                $auditoriasDepto = Auditoria::with([
+                    'radicacion','comparecencia',
+                    'acuerdoconclusion','acuerdoconclusionpliegos',
+                    'accionesrecomendaciones.recomendaciones',
+                    'accionespras.pras',
+                    'accionespo.pliegosobservacion',
+                    'accionessolacl.solicitudesaclaracion',
+                    'informeprimeraetapa','informepliegos',
+                    'turnoui','turnooic','turnoarchivo',
+                ])
+                ->where('cuenta_publica', $cuentaPublica)
+                ->where('departamento_encargado_id', $deptIdLoop)
+                ->get();
+
+                $totalAud = 0;
+                $completedAud = 0;
+                $sumPercent = 0;
+
+                foreach ($auditoriasDepto as $aud) {
+                    $p = $this->computeAuditProgressPHP($aud);
+                    $totalAud++;
+                    if ($p['percent'] === 100) $completedAud++;
+                    $sumPercent += $p['percent'];
+                }
+
+                $avgPercent = $totalAud ? round($sumPercent / $totalAud) : 0;
+                $completedPercent = $totalAud
+                    ? round(($completedAud / $totalAud) * 100)
+                    : 0;
+
+                $deptSuma[] = [
+                    'dirId'              => $dirIdLoop,
+                    'direccion'          => $dirLabel,
+                    'deptId'             => $deptIdLoop,
+                    'departamento'       => $deptNames[$deptIdLoop] ?? '—',
+                    'avgPercent'         => $avgPercent,
+                    'completed'          => $completedAud,
+                    'total'              => $totalAud,
+                    'completedPercent'   => $completedPercent,
+                ];
+            }
+        }
+        // Direcciones
+        $auditoriasPorDireccionA = Auditoria::where('cuenta_publica', $cuentaPublica)->where('direccion_asignada_id', 122100)->get();
+        $auditoriasPorDireccionB = Auditoria::where('cuenta_publica', $cuentaPublica)->where('direccion_asignada_id', 122200)->get();
+        
+
         $data = [
             // imágenes de charts
-            'gaugeA'         => $request->input('gaugeA'),
-            'gaugeB'         => $request->input('gaugeB'),
-            'treemap'        => $request->input('treemap'),
+            'gaugeA' => $request->input('gaugeA'),
+            'gaugeB' => $request->input('gaugeB'),
+            'treemap'=> $request->input('treemap'),
 
             // header/cards
             'totalAuditorias'=> $request->input('totalAuditorias') ?: $totalAudServer,
             'cuentaPublica'  => $cuentaPublica,
-            'dirA'           => $request->input('dirA') ?: 'Dirección de Seguimiento "A"',
-            'dirB'           => $request->input('dirB') ?: 'Dirección de Seguimiento "B"',
-            'directorA'      => $request->input('directorA') ?: '—',
-            'directorB'      => $request->input('directorB') ?: '—',
+            'dirA' => $request->input('dirA') ?: 'Dirección de Seguimiento "A"',
+            'dirB' => $request->input('dirB') ?: 'Dirección de Seguimiento "B"',
+            'directorA' => $request->input('directorA') ?: '—',
+            'directorB' => $request->input('directorB') ?: '—',
 
 
             // contexto depto/dir
@@ -312,15 +452,68 @@ class ReporteAuditoriaUnidadController extends Controller
 
             // listado del depto
             'auditoriasDept' => $auditoriasDept,
+            'deptSuma' => $deptSuma,
+
+            //total de departamentos
+            'auditoriasPorDireccionA' => $auditoriasPorDireccionA,
+            'auditoriasPorDireccionB' => $auditoriasPorDireccionB,
         ];
 
         $pdf = Pdf::loadView('Reportes.reportesauditoriaunidad.pdf', $data)
                 ->setPaper('letter', 'portrait');
 
+
+
         return $pdf->download('reporte-auditorias.pdf');
     }
-
     
+    public function deptMetrics($deptId)
+{
+    $cuentaPublica = getSession('cp');
+
+    $auditorias = Auditoria::with([
+        'radicacion',
+        'comparecencia',
+        'acuerdoconclusion',
+        'acuerdoconclusionpliegos',
+        'accionesrecomendaciones.recomendaciones',
+        'accionespras.pras',
+        'accionespo.pliegosobservacion',
+        'accionessolacl.solicitudesaclaracion',
+        'informeprimeraetapa',
+        'informepliegos',
+        'turnoui',
+        'turnooic',
+        'turnoarchivo',
+    ])
+    ->where('cuenta_publica', $cuentaPublica)
+    ->where('departamento_encargado_id', $deptId)
+    ->get();
+
+    $total = 0;
+    $completed = 0;
+    $sumPercent = 0;
+
+    foreach ($auditorias as $aud) {
+        $p = $this->computeAuditProgressPHP($aud);
+        $total++;
+        if ($p['percent'] === 100) $completed++;
+        $sumPercent += $p['percent'];
+    }
+
+    $avgRaw = $total ? ($sumPercent / $total) : 0;
+    $avgPercent = ($avgRaw > 0 && $avgRaw < 1) ? 1 : round($avgRaw);
+
+    return response()->json([
+        'total' => $total,
+        'completed' => $completed,
+        'completedPercent' => $total
+            ? round(($completed / $total) * 100)
+            : 0,
+        'avgPercent' => $avgPercent,
+    ]);
+}
+
     private function listify($v): array
     {
         if (!$v) return [];
@@ -359,8 +552,8 @@ class ReporteAuditoriaUnidadController extends Controller
         // Radicación
         if ($aud->radicacion) {
             $b['radicacion']['total']++; $total++;
-            $ok = $isAuth($aud->radicacion->fase_autorizacion ?? null)
-            && !!($aud->comparecencia && $aud->comparecencia->oficio_acuerdo);
+            $ok = $isAuth($aud->radicacion->fase_autorizacion ?? null);
+            //&& !!($aud->comparecencia && $aud->comparecencia->oficio_acuerdo);
             if ($ok) { $b['radicacion']['done']++; $done++; }
         }
 
@@ -375,14 +568,16 @@ class ReporteAuditoriaUnidadController extends Controller
         // Acuerdos (recomendaciones)
         foreach ($listify($aud->acuerdoconclusion) as $rec) {
             $b['acuerdosRecs']['total']++; $total++;
-            $ok = $isAuth($rec->fase_autorizacion ?? null) && !!($rec->oficio_recepcion ?? null);
+            //$ok = $isAuth($rec->fase_autorizacion ?? null) && !!($rec->oficio_recepcion ?? null);
+            $ok = $isAuth($rec->fase_autorizacion ?? null);
             if ($ok) { $b['acuerdosRecs']['done']++; $done++; }
         }
 
         // Acuerdos (pliegos)
         foreach ($listify($aud->acuerdoconclusionpliegos) as $pl) {
             $b['acuerdosPliegos']['total']++; $total++;
-            $ok = $isAuth($pl->fase_autorizacion ?? null) && !!($pl->oficio_recepcion ?? null);
+            //$ok = $isAuth($pl->fase_autorizacion ?? null) && !!($pl->oficio_recepcion ?? null);
+            $ok = $isAuth($pl->fase_autorizacion ?? null);
             if ($ok) { $b['acuerdosPliegos']['done']++; $done++; }
         }
 
@@ -401,10 +596,10 @@ class ReporteAuditoriaUnidadController extends Controller
             }
         };
 
-        $countActionRel($aud->accionesrecomendaciones, 'recomendaciones',   'accionesRecs');
-        $countActionRel($aud->accionespo,              'pliegosobservacion', 'accionesPO');
-        $countActionRel($aud->accionessolacl,          'solicitudesaclaracion', 'accionesSol');
-        $countActionRel($aud->accionespras,            'pras',               'accionesPRAS');
+        $countActionRel($aud->accionesrecomendaciones, 'recomendaciones', 'accionesRecs');
+        $countActionRel($aud->accionespo,'pliegosobservacion', 'accionesPO');
+        $countActionRel($aud->accionessolacl,'solicitudesaclaracion', 'accionesSol');
+        $countActionRel($aud->accionespras, 'pras', 'accionesPRAS');
 
         // Informes
         foreach ($listify($aud->informeprimeraetapa) as $inf) {
@@ -428,7 +623,6 @@ class ReporteAuditoriaUnidadController extends Controller
         $percent = $total ? (int) round(($done / $total) * 100) : 0;
         return ['percent'=>$percent, 'done'=>$done, 'total'=>$total, 'breakdown'=>$b];
     }
-
-
+    
 
 }

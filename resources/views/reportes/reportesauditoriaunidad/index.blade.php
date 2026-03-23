@@ -39,6 +39,10 @@
     .audit-meta { font-size: 0.95rem; color: #374151; line-height: 1.45; }
     .audit-meta .small { font-size: 0.95rem; color: #6b7280; }
     .audit-meta .badge { font-size: 0.95rem; padding: .36rem .6rem; border-radius: .375rem; }
+    
+    .audit-card--chart {
+        overflow: visible !important;
+    }
 
     .audit-meta .audit-field {
         font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 6px;
@@ -68,6 +72,10 @@
     }
     #auditoriasPanel .audit-meta .audit-field { align-items: flex-start; }
     #auditoriasPanel .audit-meta p { margin: 0; }
+    
+    .card-body {
+    position: relative;
+    }
 
     /* Móvil */
     @media (max-width: 576px) {
@@ -122,7 +130,11 @@
     /* === Layout del gauge + panel derecho === */
     .dept-gauge-wrap{ display:flex; align-items:stretch; gap:14px; min-height: 260px; }
     .dept-gauge-wrap .highcharts-figure{ flex: 0 1 360px; min-width: 280px; margin: 0; }
-    #grafica_deptos{ min-width: 260px; min-height: 260px; }
+    #grafica_deptos{ 
+min-height: 320px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+min-height: 260px; }
     .dept-gauge-info{
         flex: 1 1 220px; min-width: 200px; display:flex; flex-direction:column; justify-content:center;
         border-left: 1px solid rgba(187,148,92,.25); padding-left: 12px; color: #132a29;
@@ -146,34 +158,48 @@
 
     
     @media print {
-    /* Oculta TODO excepto #exportArea */
-    body > * {
-        display: none !important;
-    }
+        /* Oculta TODO excepto #exportArea */
+        body > * {
+            display: none !important;
+        }
 
-    /* Muestra solo la parte exportable */
-    #exportArea {
-        display: block !important;
-        position: relative !important;
-        overflow: visible !important;
-    }
+        /* Muestra solo la parte exportable */
+        #exportArea {
+            display: block !important;
+            position: relative !important;
+            overflow: visible !important;
+        }
 
-    /* Oculta botones dentro de exportArea */
-    #exportArea [data-print="hide"],
-    #exportArea .highcharts-contextbutton {
-        display: none !important;
-    }
+        /* Oculta botones dentro de exportArea */
+        #exportArea [data-print="hide"],
+        #exportArea .highcharts-contextbutton {
+            display: none !important;
+        }
 
-    /* Evita cortes feos */
-    .card, .audit-card {
-        break-inside: avoid;
-        page-break-inside: avoid;
-    }
+        /* Evita cortes feos */
+        .card, .audit-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
 
-    @page {
-        size: Letter;
-        margin: 10mm;
-    }
+        @page {
+            size: Letter;
+            margin: 10mm;
+        }
+        
+        /* Highcharts no debe recortarse */
+        .highcharts-container,
+        .highcharts-container svg {
+            overflow: visible !important;
+        }
+
+        /* El card del gauge SÍ puede romper página */
+        .dept-gauge-wrap,
+        .audit-card--chart {
+            break-inside: auto !important;
+            page-break-inside: auto !important;
+        }
+
     }
 
 </style>
@@ -213,7 +239,6 @@
     </script>
 @endif
 
-
 <div class="row">
     <div class="col-md-12 mt-2">
         <div class="card">
@@ -222,7 +247,7 @@
                     <div class="row w-100">
                         <div class="col-md-11">
                             <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>&nbsp;
-                            Reportes
+                                Reportes de Acciones de Auditoría por Unidad
                         </div>
                     </div>
                 </h1>
@@ -252,77 +277,145 @@
                                     </div>
                                 </div>
                             </div>
-
-                            {{-- Encargados A --}}
-                            <div class="col-12 col-lg-2">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body audit-card fancy-border" id="cardEncargadosA" style="font-size: 14px">
-                                        <small class="d-block mb-1"><b>Encargados</b></small>
-                                        <div id="encargadosDireccionA" class="mb-1">
-                                            <b>Dirección:</b> <span id="enc_dirA">Dirección de Seguimiento "A"</span>
+                                
+                            @if(auth()->user()->unidadAdministrativa->id == 122100 || auth()->user()->unidadAdministrativa->id ==  122000)
+                                {{-- Encargados A --}}
+                                <div class="col-12 col-lg-4">
+                                    <div class="card h-30 shadow-sm">
+                                        <div class="card-body audit-card fancy-border" style="font-size: 14px">
+                                            <h2> Total de Auditorias dirección A: {{ $auditoriasPorDireccionA->count() }} </h2>
                                         </div>
-                                        <div id="encargadosDirectorA" class="mb-2">
-                                            <b>Director:</b> <span id="enc_directorA">—</span>
+                                    </div><br>
+                                    <div class="card h-30 shadow-sm">
+                                        <div class="card-body audit-card fancy-border" id="cardEncargadosA" style="font-size: 14px">
+                                            <small class="d-block mb-1"><b>Encargados</b></small>
+                                            <div id="encargadosDireccionA" class="mb-1">
+                                                <b>Dirección:</b> <span id="enc_dirA">Dirección de Seguimiento "A"</span>
+                                            </div>
+                                            <div id="encargadosDirectorA" class="mb-2">
+                                                <b>Director:</b> <span id="enc_directorA">—</span>
+                                            </div>
                                         </div>
-                                        <div id="encargadosDeptoA" class="mb-1 d-none">
-                                            <b>Departamento:</b> <span id="enc_deptoA">—</span>
-                                        </div>
-                                        <div id="encargadosJefeA" class="mb-0 d-none">
-                                            <b>Jefe:</b> <span id="enc_jefeA">—</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Gauge A --}}
-                            <div class="col-12 col-lg-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body audit-card fancy-border">
-                                        <figure class="highcharts-figure mb-0">
-                                            <div id="grafica_depto_auditoriasA"></div>
-                                        </figure>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Encargados B --}}
-                            <div class="col-12 col-lg-2">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body audit-card fancy-border" id="cardEncargadosB" style="font-size: 14px">
-                                        <small class="d-block mb-1"><b>Encargados</b></small>
-                                        <div id="encargadosDireccionB" class="mb-1">
-                                            <b>Dirección:</b> <span id="enc_dirB">Dirección de Seguimiento "B"</span>
-                                        </div>
-                                        <div id="encargadosDirectorB" class="mb-2">
-                                            <b>Director:</b> <span id="enc_directorB">—</span>
-                                        </div>
-                                        <div id="encargadosDeptoB" class="mb-1 d-none">
-                                            <b>Departamento:</b> <span id="enc_deptoB">—</span>
-                                        </div>
-                                        <div id="encargadosJefeB" class="mb-0 d-none">
-                                            <b>Jefe:</b> <span id="enc_jefeB">—</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Gauge B + panel lateral --}}
-                            <div class="col-12 col-lg-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body audit-card fancy-border">
-                                        <div id="grafica_deptos_wrap" class="dept-gauge-wrap">
-                                            <figure class="highcharts-figure mb-0">
-                                                <div id="grafica_deptos"></div>
-                                            </figure>
-                                            <div id="grafica_deptos_info" class="dept-gauge-info">
-                                                {{-- Info dinámica al hover --}}
+                                    </div><br>
+                                    <div class="card h-30 shadow-sm">
+                                        <div class="card-body audit-card fancy-border" id="cardEncargadosA" style="font-size: 14px">
+                                            <div id="encargadosDeptoA" class="mb-1">
+                                                <b>Departamento:</b> <span id="enc_deptoA">—</span>
+                                            </div>
+                                            <div id="encargadosJefeA" class="mb-0">
+                                                <b>Jefe:</b> <span id="enc_jefeA">—</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {{-- % Avance --}}
+                                {{-- Gauge A --}}
+                                <div class="col-12 col-lg-8">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body audit-card fancy-border audit-card--chart">
+                                            <figure class="highcharts-figure mb-0">
+                                                <div id="grafica_depto_auditoriasA"></div>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            @if(auth()->user()->unidadAdministrativa->id == 122200 || auth()->user()->unidadAdministrativa->id ==  122000)
+                                {{-- Encargados B --}}
+                                <div class="col-12 col-lg-4">
+                                    <div class="card h-30 shadow-sm">
+                                        <div class="card-body audit-card fancy-border" style="font-size: 14px">
+                                            <h2> Total de Auditorias dirección B: {{ $auditoriasPorDireccionB->count() }} </h2>
+                                        </div>
+                                    </div><br>
+                                    <div class="card h-30 shadow-sm">
+                                        <div class="card-body audit-card fancy-border" id="cardEncargadosA" style="font-size: 14px">
+                                            <small class="d-block mb-1"><b>Encargados</b></small>
+                                            <div id="encargadosDireccionB" class="mb-1">
+                                                <b>Dirección:</b> <span id="enc_dirB">Dirección de Seguimiento "B"</span>
+                                            </div>
+                                            <div id="encargadosDirectorB" class="mb-2">
+                                                <b>Director:</b> <span id="enc_directorB">—</span>
+                                            </div>
+                                        </div>
+                                    </div><br>
+                                    <div class="card h-30 shadow-sm">
+                                        <div class="card-body audit-card fancy-border" id="cardEncargadosA" style="font-size: 14px">
+                                            <small class="d-block mb-1"><b>Encargados</b></small>
+                                            <div id="encargadosDeptoB" class="mb-1">
+                                                <b>Departamento:</b> <span id="enc_deptoB">—</span>
+                                            </div>
+                                            <div id="encargadosJefeB" class="mb-0 ">
+                                                <b>Jefe:</b> <span id="enc_jefeB">—</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- Gauge B + panel lateral --}}
+                                <div class="col-12 col-lg-8">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body audit-card fancy-border audit-card--chart">
+                                            @if (auth()->user()->siglas_rol == "DS" || auth()->user()->siglas_rol == "TUS")
+                                                <div id="grafica_deptos_wrap" class="dept-gauge-wrap">
+                                                    <figure class="highcharts-figure mb-0">
+                                                        <div id="grafica_deptos"></div>
+                                                    </figure>
+                                                    <div id="grafica_deptos_info" class="dept-gauge-info">
+                                                        {{-- Info dinámica al hover --}}
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>{{-- row g-4 --}}
+                    </div>
+                    <div id="jefesdiv">
+
+                    </div>
+
+                    <br><hr class="fancy-border">
+                    {{-- Filtros de búsqueda (se muestran en vista de auditorías) --}}
+                    <div id="auditFiltersCard" class="d-none">
+                        @if (auth()->user()->siglas_rol!="JD")
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="button" id="btnOcultarTreemap" class="btn btn-secondary">
+                                        <i class="bi bi-arrow-repeat" style="font-size: 1.5em;"></i>Limpiar Departamento
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
+                        {!! BootForm::open(['route' => 'reporteauditoriaunidad.index', 'method' => 'GET', 'id' => 'auditFiltersForm']) !!}
+                        <div class="row align-items-end">
+                            <div class="col-md-2">
+                                {!! BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria), ['id' => 'f_numero_auditoria']) !!}
+                            </div>
+                            <div class="col-md-3">
+                                {!! BootForm::text('entidad_fiscalizable', "Entidad fiscalizable:", old('entidad_fiscalizable', $request->entidad_fiscalizable), ['id' => 'f_entidad_fiscalizable']) !!}
+                            </div>
+                            <div class="col-md-3">
+                                {!! BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion), ['id' => 'f_acto_fiscalizacion']) !!}
+                            </div>
+                            <div class="col-md-3 mt-1">
+                                <button type="submit" class="btn btn-primary">Buscar</button>
+                                <button type="button" id="f_limpiar" class="btn btn-secondary"><i class="bi bi-arrow-repeat" style="font-size: 1.5em;"></i> Limpiar Filtros</button>
+                            </div>
+                            <div class="col-md-1">
+                                
+                            </div>
+                        </div>
+                        {!! BootForm::close() !!}
+                    </div>
+
+                    {{-- Treemap (se muestra al seleccionar depto) --}}
+                    <figure class="highcharts-figure mb-4 d-none" id="treemapFigure">
+                        <div id="container" style="position:relative">
+
+                        </div>
+                    </figure><br>
+                    {{-- % Avance --}}
                             <div class="col-12 col-lg-12">
                                 <div class="card h-100 shadow-sm">
                                     <div class="card-body audit-card fancy-border">
@@ -335,40 +428,7 @@
                                     </div>
                                 </div>
                             </div>
-
-                        </div>{{-- row g-4 --}}
-                    </div>
-
-                    <br><hr>
-
-                    {{-- Filtros de búsqueda (se muestran en vista de auditorías) --}}
-                    <div id="auditFiltersCard" class="d-none">
-                        {!! BootForm::open(['route' => 'reporteauditoriaunidad.index', 'method' => 'GET', 'id' => 'auditFiltersForm']) !!}
-                        <div class="row align-items-end">
-                            <div class="col-md-2">
-                                {!! BootForm::text('numero_auditoria', "No. auditoría:", old('numero_auditoria', $request->numero_auditoria), ['id' => 'f_numero_auditoria']) !!}
-                            </div>
-                            <div class="col-md-3">
-                                {!! BootForm::text('entidad_fiscalizable', "Entidad fiscalizable:", old('entidad_fiscalizable', $request->entidad_fiscalizable), ['id' => 'f_entidad_fiscalizable']) !!}
-                            </div>
-                            <div class="col-md-3">
-                                {!! BootForm::text('acto_fiscalizacion', "Acto de fiscalización:", old('acto_fiscalizacion', $request->acto_fiscalizacion), ['id' => 'f_acto_fiscalizacion']) !!}
-                            </div>
-                            <div class="col-md-1 mt-2">
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                            </div>
-                            <div class="col-md-1 mt-2">
-                                <button type="button" id="f_limpiar" class="btn btn-secondary">Limpiar</button>
-                            </div>
-                        </div>
-                        {!! BootForm::close() !!}
-                    </div>
-
-                    {{-- Treemap (se muestra al seleccionar depto) --}}
-                    <figure class="highcharts-figure mb-4 d-none" id="treemapFigure">
-                        <div id="container"></div>
-                    </figure>
-
+                        <hr class="fancy-border">
                     {{-- Panel de cuadrícula de auditorías --}}
                     <div id="auditoriasPanel" class="d-none">
                         <div class="d-flex align-items-center justify-content-between mb-15">
@@ -381,7 +441,7 @@
                                     (para cambiar los datos, selecciona otra auditoría u otro departamento).
                                 </small>
                             </div>
-                            <button type="button" class="btn btn-sm btn-secondary" id="btnOcultarPanel">Limpiar</button>
+                            <button type="button" class="btn btn-sm btn-secondary" id="btnOcultarPanel"><i class="bi bi-arrow-repeat" style="font-size: 2em;"></i>Limpiar Auditoría</button>
                         </div>
                         <hr class="fancy-border">
                         <div id="auditoriasGrid" class="row g-3"></div>
@@ -396,142 +456,301 @@
 
 @section('script')
 <!-- Highcharts core + módulos -->
-<script src="https://code.highcharts.com/11.4.0/highcharts.js"></script>
-<script src="https://code.highcharts.com/11.4.0/modules/treemap.js"></script>
-<script src="https://code.highcharts.com/11.4.0/highcharts-more.js"></script>
-<script src="https://code.highcharts.com/11.4.0/modules/solid-gauge.js"></script>
-<script src="https://code.highcharts.com/11.4.0/modules/accessibility.js"></script>
-<!-- (opcional) exportación de Highcharts -->
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+
+<script src="{{ asset('vendor/highcharts/highcharts.js') }}"></script>
+<script src="{{ asset('vendor/highcharts/highcharts-more.js') }}"></script>
+<script src="{{ asset('vendor/highcharts/modules/treemap.js') }}"></script>
+<script src="{{ asset('vendor/highcharts/modules/solid-gauge.js') }}"></script>
+<script src="{{ asset('vendor/highcharts/modules/accessibility.js') }}"></script>
+<script src="{{ asset('vendor/highcharts/modules/exporting.js') }}"></script>
 <!-- canvg UMD (antes de chartToPngById / sendPdfRequest) -->
 <script src="https://cdn.jsdelivr.net/npm/canvg@3.0.7/lib/umd.js"></script>
 
-
-
 <script>
-    window.REPORT_DATA = {
-        treemapData: @json($treemapData),
-        auditoriasMap: @json($auditoriasGrid),
-        currentUserId: @json(auth()->id()),
-        detalleBaseUrl: "{{ url('reportes/auditoria') }}",
-        directoresPorDireccion: @json($directoresPorDireccion),
-        jefesPorDepartamento: @json($jefesPorDepartamento),
-        auditoriaSeleccionada: @json($auditoriaSeleccionada),
+  // ========= Datos inyectados =========
+  window.REPORT_DATA = {
+    treemapData: @json($treemapData),
+    auditoriasMap: @json($auditoriasGrid),
+    currentUserId: @json(auth()->id()),
+    detalleBaseUrl: "{{ url('reportes/auditoria') }}",
+    directoresPorDireccion: @json($directoresPorDireccion),
+    jefesPorDepartamento: @json($jefesPorDepartamento),
+    auditoriaSeleccionada: @json($auditoriaSeleccionada),
+    userRole: @json(auth()->user()->siglas_rol),
+    userDeptId: @json(auth()->user()->unidadAdministrativa->id ?? null),
+    detalleBaseUrl: "{{ url('reportes/auditoria') }}",
+
+  };
+
+  // ========= Botón: ocultar treemap y reset =========
+  function hideTreemapAndReset() {
+    try {
+        document.getElementById('auditFiltersCard')?.classList.add('d-none');
+        document.getElementById('treemapFigure')?.classList.add('d-none');
+        document.getElementById('auditFiltersForm')?.reset();
+        document.getElementById('auditPagination')?.replaceChildren();
+
+        const t = document.getElementById('avanceAuditoria'); if (t) t.textContent = '—';
+        const a = document.getElementById('audi_name'); if (a) a.textContent = '—';
+        const b = document.getElementById('avanceBar');
+        if (b) {
+        b.style.width = '0%';
+        b.setAttribute('aria-valuenow', '0');
+        b.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+        b.classList.add('bg-warning');
+        }
+
+        const panel = document.getElementById('auditoriasPanel'); 
+        if (panel) panel.classList.add('d-none');
+
+        const ci = document.getElementById('chartInner'); 
+        if (ci) ci.innerHTML = '';
+
+        try { sessionStorage.removeItem('auditoriaViewState'); } catch (e) {}
+        clearPdfDeptState();
+
+    } catch (e) { console.error(e); }
+    }
+  
+    function clearPdfAuditState() {
+    window.__pdfAuditId = null;
+    window.__pdfAuditName = null;
+    window.__pdfAuditAvanceText = null;
+    }
+
+    function clearPdfDeptState() {
+    window.__pdfDeptId = null;
+    window.__pdfDeptName = null;
+    window.__pdfDirName = null;
+
+    // Al limpiar departamento, también se limpia la auditoría
+    clearPdfAuditState();
+    }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('btnOcultarTreemap')?.addEventListener('click', hideTreemapAndReset);
+  });
+
+  // ========= Utilidades Highcharts =========
+  function getChartByContainerId(containerId) {
+    const list = (window.Highcharts && Highcharts.charts) ? Highcharts.charts : [];
+    return list.find(c => c && c.renderTo && c.renderTo.id === containerId) || null;
+  }
+  async function reflowIfChart(containerId) {
+    const chart = getChartByContainerId(containerId);
+    if (!chart) return false;
+    try { chart.reflow(); chart.redraw(); } catch (e) {}
+    await new Promise(requestAnimationFrame);
+    return true;
+  }
+  // Espera hasta que el chart exista y tenga dimensiones (>0)
+  async function waitForChart(containerId, timeoutMs = 5000, stepMs = 150) {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      const c = getChartByContainerId(containerId);
+      if (c && c.chartWidth > 0 && c.chartHeight > 0 && typeof c.getSVG === 'function') return true;
+      await new Promise(r => setTimeout(r, stepMs));
+    }
+    return false;
+  }
+
+  // ========= Rasterizar chart visible a imagen (JPEG ligero) =========
+  
+
+async function chartToImageById(containerId, opts = {}) {
+  const { scale = 1.25, mime = 'image/jpeg', quality = 0.92 } = opts;
+
+  if (!window.canvg || !window.canvg.Canvg) {
+    console.error('[chartToImageById] canvg UMD no está cargado');
+    return null;
+  }
+  const { Canvg } = window.canvg;
+
+  // ===== 1) Obtiene SVG del chart (o del DOM como fallback) =====
+  const chart = getChartByContainerId(containerId);
+  let svg = null, w = 800, h = 450;
+
+  if (chart) {
+    try { chart.reflow(); chart.redraw(); } catch (e) {}
+    await new Promise(requestAnimationFrame);
+
+    const cw = Math.max(1, chart.chartWidth);
+    const ch = Math.max(1, chart.chartHeight);
+    if (cw > 0 && ch > 0 && typeof chart.getSVG === 'function') {
+      w = cw; h = ch;
+      // Forzamos fondo blanco SOLO para exportación
+      svg = chart.getSVG({
+        exporting: { sourceWidth: cw, sourceHeight: ch },
+        chart: { backgroundColor: '#FFFFFF', plotBackgroundColor: '#FFFFFF' }
+      });
+    }
+  }
+
+  // Fallback: usa el <svg> que está en el DOM
+  if (!svg) {
+    const mount = document.getElementById(containerId);
+    const svgEl = mount?.querySelector('svg') || mount?.parentElement?.querySelector('svg');
+    if (!svgEl) return null;
+    svg = svgEl.outerHTML;
+
+    const box = mount?.getBoundingClientRect();
+    if (box && box.width && box.height) {
+      w = Math.max(1, Math.round(box.width));
+      h = Math.max(1, Math.round(box.height));
+    }
+  }
+
+  // ===== 2) Inyecta un <rect> blanco al inicio del SVG (quita transparencias) =====
+  // Inserta justo después de la apertura de <svg ...>
+  try {
+    const hasRect = /<rect[^>]+fill\s*=\s*["']#?fff/i.test(svg);
+    if (!hasRect) {
+      svg = svg.replace(
+        /<svg([^>]*)>/i,
+        (m, attrs) => `<svg${attrs}><rect width="100%" height="100%" x="0" y="0" fill="#FFFFFF"/>`
+      );
+    }
+  } catch (e) {
+    // si algo falla, seguimos; el paso 3 cubre el fondo igualmente
+  }
+
+  // ===== 3) Renderiza con canvg y PONE fondo blanco por debajo =====
+  const canvas = document.createElement('canvas');
+  canvas.width  = Math.round(w * scale);
+  canvas.height = Math.round(h * scale);
+  const ctx = canvas.getContext('2d');
+
+  try {
+    const v = await Canvg.fromString(ctx, svg, {
+      ignoreMouse: true,
+      ignoreAnimation: true
+    });
+    await v.render();
+
+    // Fondo blanco *debajo* de lo ya dibujado
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  } catch (e) {
+    console.error('[chartToImageById] canvg falló al renderizar el SVG', e);
+    return null;
+  }
+
+  return canvas.toDataURL(mime, quality);
+}
+
+  // ========= Enviar PDF SOLO con lo que se está mostrando =========
+  async function sendPdfRequest() {
+    const btn = event?.currentTarget;
+    if (btn) { btn.disabled = true; btn.textContent = 'Generando…'; }
+
+    // Reflow por si cambió layout
+    await reflowIfChart('grafica_depto_auditoriasA');
+    await reflowIfChart('grafica_deptos');
+    await reflowIfChart('chartInner');
+
+    // Espera a que charts visibles estén listos (si existen en DOM)
+    const ids = ['grafica_depto_auditoriasA', 'grafica_deptos', 'chartInner']
+      .filter(id => document.getElementById(id)); // sólo los que existen
+    await Promise.all(ids.map(id => waitForChart(id, 5000, 150)));
+
+    // Captura SÓLO si hay chart real
+    const imgs = {
+      gaugeA: getChartByContainerId('grafica_depto_auditoriasA')
+                ? await chartToImageById('grafica_depto_auditoriasA', { scale: 1.25, mime: 'image/jpeg', quality: 0.85 })
+                : null,
+      gaugeB: getChartByContainerId('grafica_deptos')
+                ? await chartToImageById('grafica_deptos', { scale: 1.25, mime: 'image/jpeg', quality: 0.85 })
+                : null,
+      treemap: getChartByContainerId('chartInner')
+                ? await chartToImageById('chartInner', { scale: 1.10, mime: 'image/jpeg', quality: 0.80 })
+                : null,
     };
-    // Devuelve el objeto Highcharts cuyo contenedor tiene el id dado
-    function getChartByContainerId(containerId) {
-        const list = (window.Highcharts && Highcharts.charts) ? Highcharts.charts : [];
-        return list.find(c => c && c.renderTo && c.renderTo.id === containerId) || null;
-    }
 
-    // Convierte un chart Highcharts a PNG usando canvg (desde el SVG, sin html2canvas)
-    async function chartToPngById(containerId, scale = 2) {
-        // 1) Obtén la clase Canvg desde la build UMD
-        if (!window.canvg || !window.canvg.Canvg) {
-        console.error('[chartToPngById] canvg UMD no está cargado. Revisa el <script src=".../umd.js">');
-        return null;
-        }
-        const { Canvg } = window.canvg;
+    //console.log('[PDF] sizes:', { A: imgs.gaugeA?.length || 0, B: imgs.gaugeB?.length || 0, T: imgs.treemap?.length || 0 });
 
-        const chart = getChartByContainerId(containerId);
-        if (!chart || !chart.getSVG) {
-        console.warn('[chartToPngById] No encontré chart con containerId:', containerId);
-        return null;
-        }
-
-        // Asegura layout estable
-        try { chart.reflow(); chart.redraw(); } catch (e) {}
-
-        const w = Math.max(1, chart.chartWidth);
-        const h = Math.max(1, chart.chartHeight);
-
-        // 2) Obtener el SVG nativo del chart
-        const svg = chart.getSVG({
-        exporting: { sourceWidth: w, sourceHeight: h }
+    // Si no hay NINGUNA imagen, avisa y detén (WYSIWYG)
+    if (!imgs.gaugeA && !imgs.gaugeB && !imgs.treemap) {
+      if (window.Swal) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'No hay gráficos para exportar',
+          text: 'La exportación respeta lo que está en pantalla. Espera a que se dibujen los gauges o el treemap.'
         });
-
-        // 3) Rasterizar SVG → PNG con canvg (nitidez x2)
-        const canvas = document.createElement('canvas');
-        canvas.width  = Math.round(w * scale);
-        canvas.height = Math.round(h * scale);
-        const ctx = canvas.getContext('2d');
-
-        const v = await Canvg.fromString(ctx, svg, {
-        ignoreMouse: true,
-        ignoreAnimation: true
-        });
-        await v.render();
-
-        return canvas.toDataURL('image/png');
+      } else {
+        alert('No hay gráficos para exportar (espera a que se dibujen).');
+      }
+      if (btn) { btn.disabled = false; btn.textContent = 'PDF'; }
+      return;
     }
 
-    // Envía al servidor los PNG en Base64 para que Dompdf los incruste
-    async function sendPdfRequest() {
-        // Imágenes de charts (base64) con canvg
-        const imgs = {
-        gaugeA: await chartToPngById('grafica_depto_auditoriasA'),
-        gaugeB: await chartToPngById('grafica_deptos'),
-        treemap: await chartToPngById('chartInner') // si el treemap ya se dibujó
-        };
+    // Cards de texto
+    const totalAud = document.getElementById('totalAuditorias')?.textContent?.trim() || '';
+    const dirA = document.getElementById('enc_dirA')?.textContent?.trim() || '';
+    const dirB = document.getElementById('enc_dirB')?.textContent?.trim() || '';
+    const directorA = document.getElementById('enc_directorA')?.textContent?.trim() || '';
+    const directorB = document.getElementById('enc_directorB')?.textContent?.trim() || '';
 
-        // Cards superiores visibles
-        const totalAud = document.getElementById('totalAuditorias')?.textContent?.trim() || '';
-        const dirA = document.getElementById('enc_dirA')?.textContent?.trim() || '';
-        const dirB = document.getElementById('enc_dirB')?.textContent?.trim() || '';
-        const directorA = document.getElementById('enc_directorA')?.textContent?.trim() || '';
-        const directorB = document.getElementById('enc_directorB')?.textContent?.trim() || '';
+    // Contexto del panel / auditoría actual
+    const deptId      = window.__pdfDeptId || '';
+    const deptName    = window.__pdfDeptName || '';
+    const dirName     = window.__pdfDirName || '';
+    const auditId     = window.__pdfAuditId || '';
+    const auditName   = window.__pdfAuditName || '';
+    const auditAvance = window.__pdfAuditAvanceText || '';
 
-        // Contexto del panel / auditoría actual
-        const deptId      = window.__pdfDeptId || '';
-        const deptName    = window.__pdfDeptName || '';
-        const dirName     = window.__pdfDirName || '';
-        const auditId     = window.__pdfAuditId || '';
-        const auditName   = window.__pdfAuditName || '';
-        const auditAvance = window.__pdfAuditAvanceText || '';
+    // POST por form
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ route("reporteauditoriaunidad.pdf") }}';
 
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '{{ route("reporteauditoriaunidad.pdf") }}';
+    const add = (name, value) => {
+      if (value == null || value === '') return;
+      const inp = document.createElement('input');
+      inp.type = 'hidden';
+      inp.name = name;
+      inp.value = (typeof value === 'string') ? value.trim() : value;
+      form.appendChild(inp);
+    };
 
-        const add = (name, value) => {
-        const inp = document.createElement('input');
-        inp.type = 'hidden';
-        inp.name = name;
-        inp.value = value || '';
-        form.appendChild(inp);
-        };
+    add('_token', '{{ csrf_token() }}');
+    if (imgs.gaugeA) add('gaugeA', imgs.gaugeA);
+    if (imgs.gaugeB) add('gaugeB', imgs.gaugeB);
+    if (imgs.treemap) add('treemap', imgs.treemap);
 
-        // CSRF
-        add('_token', '{{ csrf_token() }}');
+    add('totalAuditorias', totalAud);
+    add('dirA', dirA);
+    add('dirB', dirB);
+    add('directorA', directorA);
+    add('directorB', directorB);
 
-        // Imágenes
-        add('gaugeA', imgs.gaugeA);
-        add('gaugeB', imgs.gaugeB);
-        add('treemap', imgs.treemap);
+    add('deptId', deptId);
+    add('deptName', deptName);
+    add('dirName', dirName);
+    add('auditId', auditId);
+    add('auditName', auditName);
+    add('auditAvance', auditAvance);
 
-        // Cards superiores
-        add('totalAuditorias', totalAud);
-        add('dirA', dirA);
-        add('dirB', dirB);
-        add('directorA', directorA);
-        add('directorB', directorB);
+    document.body.appendChild(form);
+    form.submit();
 
-        // Contexto
-        add('deptId', deptId);
-        add('deptName', deptName);
-        add('dirName', dirName);
-        add('auditId', auditId);
-        add('auditName', auditName);
-        add('auditAvance', auditAvance);
-
-        document.body.appendChild(form);
-        form.submit();
-    }
+    setTimeout(() => { if (btn) { btn.disabled = false; btn.textContent = 'PDF'; } }, 2000);
+  }
+  
+// FIX PRINT: recalcula gauges antes de imprimir
+window.addEventListener('beforeprint', () => {
+  try {
+    Highcharts.charts.forEach(ch => {
+      if (!ch) return;
+      ch.reflow();
+      ch.redraw(false);
+    });
+  } catch (e) {}
+});
 
 </script>
-
 {{-- JS de la página (tu archivo) --}}
 <script src="{{ asset('js/reportesauditoriaunidad.js') }}?v={{ filemtime(public_path('js/reportesauditoriaunidad.js')) }}"></script>
 @endsection

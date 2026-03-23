@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrums')    
-    {{ Breadcrumbs::render('agregaracciones.create') }}
+    {{Breadcrumbs::render('agregaracciones.create') }}
 @endsection
 @section('content')
 <div class="card">
@@ -18,33 +18,74 @@
                 <li>{{ $error }}</li>
             @endforeach
         </ul> --}}
-        {!! BootForm::open(['model' => $accion,'store' => 'agregaracciones.store','update' => 'agregaracciones.update','id' => 'form']) !!}
+        {!!BootForm::open(['model' => $accion,'store' => 'agregaracciones.store','update' => 'agregaracciones.update','id' => 'form']) !!}
           
         <div class="row">
             <div class="col-md-2">
-                {!! BootForm::text('consecutivo', 'Número consecutivo: *', old('consecutivo', $accion->consecutivo?str_pad($accion->consecutivo, 3, '0', STR_PAD_LEFT) : str_pad($numeroconsecutivo, 3, '0', STR_PAD_LEFT))) !!}
+                {!!BootForm::text('consecutivo', 'Número consecutivo: *', old('consecutivo', $accion->consecutivo?str_pad($accion->consecutivo, 3, '0', STR_PAD_LEFT) : str_pad($numeroconsecutivo, 3, '0', STR_PAD_LEFT))) !!}
             </div>
             
         </div>       
         <div class="row">
             <div class="col-md-4">
-                {!! BootForm::select('segtipo_accion_id', 'Tipo de acción: *', $tiposaccion->toArray(), old('segtipo_accion_id',$accion->segtipo_accion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!!BootForm::select('segtipo_accion_id', 'Tipo de acción: *', $tiposaccion->toArray(), old('segtipo_accion_id',$accion->segtipo_accion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>
         </div> 
         <div class="row">
             <div class="col-md-4">
-                {!! BootForm::select('acto_fiscalizacion_id', 'Acto de fiscalización: *', $actosfiscalizacion->toArray(), old('acto_fiscalizacion_id',$accion->acto_fiscalizacion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                {!!BootForm::select('acto_fiscalizacion_id', 'Acto de fiscalización: *', $actosfiscalizacion->toArray(), old('acto_fiscalizacion_id',$accion->acto_fiscalizacion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
             </div>      
             @php
                 $divtipologiamostrar=(empty(old('acto_fiscalizacion_id', $accion->acto_fiscalizacion_id))?'none':'block');
             @endphp 
-            <div class="col-md-4" id="divtipologia" style="display: {{$divtipologiamostrar}}">
-                {!! BootForm::select('tipologia_id', 'Tipología: ', $tipologias->toArray(), old('tipologia_id',$accion->tipologia_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
-            </div>
+        </div>
+        <div class="row">
+            {{-- <div class="col-md-4" id="divtipologia" style="display: {{$divtipologiamostrar}}">--}}
+                {{--- !!BootForm::select('tipologia_id', 'Tipología: ', $tipologias->toArray(), old('tipologia_id',$accion->tipologia_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!--}}
+                <div class="row">
+                    <div class="col-md-12 float-end">
+                        <a href="{{route('agregartipologiaaccion.edit', ['accion' => $accion]) }}" class="btn btn-link btn-active-color-success popupventana ">
+                            <span class="bi bi-plus-circle-fill" aria-hidden="true"> Agregar Tipología</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Tipología</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($accion->tipologias as $tipologia )
+                                <tr>
+                                    <input type="hidden" name="tipologias_id[]" value="{{ $tipologia->id }}">
+                                    <td>
+                                        {{ $tipologia->tipologia }}
+                                    </td>
+                                    <td class="text-center">
+                                        @can('agregartipologiaaccion.eliminar')
+                                            <a href="{{ route('agregartipologiaaccion.eliminar', $tipologia) }}"
+                                            
+                                                class="btn btn-link btn-active-color-danger js-confirm-delete"
+                                                data-confirm-title="¿Desea eliminar la tipología?"
+                                                data-confirm-text="Esta acción no se puede deshacer."
+                                                data-success-text="La tipología se eliminó correctamente.">
+                                                    <span class="bi bi-trash-fill"> Eliminar</span>
+                                            </a>
+                                        @endcan
+                                    </td>  
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            {{-- --</div> --}}
         </div> 
         <div class="row">
             <div class="col-md-3">
-                {!! BootForm::text('numero', 'Número de acción: *', old('numero_accion', $accion->numero_accion)) !!}
+                {!!BootForm::text('numero', 'Número de acción: *', old('numero_accion', $accion->numero_accion)) !!}
             </div>
         </div> 
         <div class="row">
@@ -54,17 +95,17 @@
         </div>         
         <div class="row">
             <div class="col-md-12">
-                {!! BootForm::textarea('accion', 'Acción: *', old('accion', $accion->accion)) !!}
+                {!!BootForm::textarea('accion', 'Acción: *', old('accion', $accion->accion)) !!}
             </div>
         </div>   
         <div class="row">
             <div class="col-md-12">
-                {!! BootForm::textarea('antecedentes_accion', 'Antecedentes de la acción: *', old('antecedentes_accion', $accion->antecedentes_accion),['class'=>'editor']) !!}
+                {!!BootForm::textarea('antecedentes_accion', 'Antecedentes de la acción: *', old('antecedentes_accion', $accion->antecedentes_accion),['class'=>'editor']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                {!! BootForm::textarea('normativa_infringida', 'Normativa infringida: *', old('normativa_infringida', $accion->normativa_infringida)) !!}
+                {!!BootForm::textarea('normativa_infringida', 'Normativa infringida: *', old('normativa_infringida', $accion->normativa_infringida)) !!}
             </div>
         </div>   
         @php           
@@ -73,13 +114,13 @@
         @endphp
         <div class="row" id="div_monto" style="display: {{$mostrarDivMonto}}">
             <div class="col-md-3">
-                {!! BootForm::text('monto_aclarar', 'Monto por aclarar: *', old('monto_aclarar', $accion->monto_aclarar),['class' => 'numeric']) !!}
+                {!!BootForm::text('monto_aclarar', 'Monto por aclarar: *', old('monto_aclarar', $accion->monto_aclarar),['class' => 'numeric']) !!}
             </div>
         </div> 
         <div id="div_recomendacion" style="display: {{$mostrarDivRecomendaciones}}">
             <div class="row" >
                 <div class="col-md-12">
-                    {!! BootForm::textarea('evidencia_resumen', 'Evidencia documental que acredite la atención de la recomendación: ', old('evidencia_resumen', $accion->evidencia_resumen)) !!}
+                    {!!BootForm::textarea('evidencia_resumen', 'Evidencia documental que acredite la atención de la recomendación: ', old('evidencia_resumen', $accion->evidencia_resumen)) !!}
                 </div>
             </div>
             <div class="row" >
@@ -190,6 +231,22 @@
 
             });  
            
+        });
+        $(document).ready(function() {
+            $('.popupventana').colorbox({
+                width:"85%",
+                height:"550px",
+                maxWidth:1000,
+                maxHeight:"550px",
+                iframe: true,
+                onClosed: function() {
+                    location.reload(true);
+                },
+                onComplete: function () {
+                 $(this).colorbox.resize({width:"85%",maxWidth:800, height:"800px", maxHeight:"850px"});
+                 $(window).trigger("resize");
+                }
+            });
         });
     </script>  
     {!! JsValidator::formRequest('App\Http\Requests\AuditoriaAccionRequest') !!}

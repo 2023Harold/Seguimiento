@@ -1,5 +1,6 @@
 // reportesauditoriaunidad.js (A3: 2 gauges, sin vista de direcciones/deptos)
 (function () {
+  
   // ====== Debounce resize para treemap ======
   let chart = null;
   let _resizeTO = null;
@@ -22,11 +23,32 @@
         );
         chart.reflow();
         chart.redraw();
-      } catch (e) {}
+      } catch (e) { }
     }, 150);
   });
 
   // ===== Utilidades / helpers =====
+  // === Inserta card de acciones SOLO si hay elementos (sin "No hay ...") ===
+  
+  
+  const TREEMAP_GAUGE_SPINNER_HTML = `
+    <div style="
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:420px;
+      width:100%;
+    ">
+      <div class="swapping-squares-spinner" aria-label="Cargando">
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+        <div class="square"></div>
+      </div>
+    </div>
+  `;
+
+
   function esc(s) {
     return String(s).replace(/[&<>"']/g, (ch) =>
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch])
@@ -73,10 +95,21 @@
     detalleBaseUrl = "",
     directoresPorDireccion = {},
     jefesPorDepartamento = {},
+    userRole,
+    userDeptId
   } = window.REPORT_DATA || {};
 
   const DETALLE_URL = (detalleBaseUrl || "").replace(/\/+$/, "");
   const _auditProgressCache = new Map(); // id -> { percent, done, total }
+  const LS_KEY = "__auditProgressLSv1";
+  const LS_TTL_MS = 15 * 60 * 1000; // 15 min
+
+  function loadLsCache() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch { return {}; }
+  }
+  function saveLsCache(obj) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(obj)); } catch { }
+  }
 
   const dirNames = {
     dirA: 'Dirección de Seguimiento "A"',
@@ -86,6 +119,37 @@
     dirA: (baseData || []).filter((p) => p.parent === "dirA"),
     dirB: (baseData || []).filter((p) => p.parent === "dirB"),
   };
+
+  // === Timeout con AbortController para fetch ===
+  async function fetchJsonWithTimeout(url, opts = {}, timeoutMs = 8000) {
+    const ctrl = new AbortController();
+    const id = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      return await fetchJson(url, { ...opts, signal: ctrl.signal });
+    } finally {
+      clearTimeout(id);
+    }
+  }
+
+  // === Reintentos con backoff para errores 5xx/429 ===
+  async function fetchJsonWithRetry(url, opts = {}, attempts = 2, backoffMs = 300, timeoutMs = 8000) {
+    let lastErr = null;
+    for (let i = 0; i <= attempts; i++) {
+      try {
+        return await fetchJsonWithTimeout(url, opts, timeoutMs);
+      } catch (err) {
+        lastErr = err;
+        const status = err?.status || 0;
+        // Reintenta solo si parece recuperable o timeout/abort
+        const isRetryable = [0, 408, 429, 500, 502, 503, 504].includes(status);
+        if (!isRetryable) break;
+        if (i < attempts) {
+          await new Promise(r => setTimeout(r, backoffMs * (i + 1))); // backoff incremental
+        }
+      }
+    }
+    throw lastErr;
+  }
 
   // ====== fetch JSON robusto (evita HTML por login/redirect) ======
   async function fetchJson(url, opts = {}) {
@@ -165,8 +229,16 @@
 
   // ====== Avance auditoría (cálculo + tooltip) ======
   function isAuth(val) {
-    return String(val ?? "").trim() === "Autorizado";
+    return String(val ?? "").trim() == "Autorizado";
   }
+  
+  function getAuditSemaphore(av) {
+    // av = { percent, done, total }
+    if (!av || av.total === 0) return 'red';
+    if (av.percent === 100) return 'green';
+    return 'yellow';
+  }
+
   async function mapWithConcurrency(items, limit, worker) {
     const ret = new Array(items.length);
     let idx = 0;
@@ -193,35 +265,24 @@
       _auditProgressCache.set(audId, av);
       return av;
     } catch (e) {
-      console.error("Error obteniendo detalle de auditoría", audId, e);
+      //console.error("Error obteniendo detalle de auditoría", audId, e);
       return { percent: 0, done: 0, total: 0 }; // fallback
     }
   }
-  async function computeDeptMetrics(deptId) {
-    const arr = auditoriasMap?.[String(deptId)] || [];
-    if (!arr.length) return { avgPercent: 0, completedPercent: 0, total: 0, completed: 0 };
-    const avs = await mapWithConcurrency(arr, 5, async (a) => {
-      try {
-        const av = await getAuditProgressPercent(a.id);
-        return av?.percent ?? 0;
-      } catch (e) {
-        console.warn("No se pudo obtener avance de auditoría", a.id, e);
-        return 0;
-      }
-    });
-    const total = avs.length;
-    const sum = avs.reduce((acc, p) => acc + (p || 0), 0);
-    const completed = avs.filter((p) => p >= 100).length;
-    return {
-      avgPercent: total ? Math.round(sum / total) : 0,
-      completedPercent: total ? Math.round((completed / total) * 100) : 0,
-      total,
-      completed,
-    };
-  }
+  
+
+async function computeDeptMetrics(deptId) {
+  const url = `${DETALLE_URL}/metrics/${encodeURIComponent(deptId)}`;
+  return await fetchJson(url);
+}
+
+
   function computeAuditProgress(aud) {
+
     let total = 0,
       done = 0;
+
+    // Desglose visible en el tooltip y, si gustas, para futuros KPIs
     const breakdown = {
       radicacion: { total: 0, done: 0 },
       comparecencia: { total: 0, done: 0 },
@@ -237,17 +298,18 @@
       turnoOIC: { total: 0, done: 0 },
       turnoArchivo: { total: 0, done: 0 },
     };
+
+    // Radicación
     if (aud.radicacion) {
       breakdown.radicacion.total++;
       total++;
-      const ok =
-        isAuth(aud.radicacion.fase_autorizacion) &&
-        !!(aud.comparecencia && aud.comparecencia.oficio_acuerdo);
-      if (ok) {
+      if (isAuth(aud.radicacion.fase_autorizacion)) {
         breakdown.radicacion.done++;
         done++;
       }
     }
+
+    // Comparecencia
     if (aud.comparecencia) {
       breakdown.comparecencia.total++;
       total++;
@@ -256,24 +318,28 @@
         done++;
       }
     }
+
+    // Acuerdos de conclusión (Recomendaciones)
     toArr(aud.acuerdoconclusion).forEach((rec) => {
       breakdown.acuerdosRecs.total++;
       total++;
-      const ok = isAuth(rec?.fase_autorizacion) && !!rec?.oficio_recepcion;
-      if (ok) {
+      if (isAuth(rec?.fase_autorizacion)) {
         breakdown.acuerdosRecs.done++;
         done++;
       }
     });
+
+    // Acuerdos de conclusión (Pliegos)
     toArr(aud.acuerdoconclusionpliegos).forEach((pl) => {
       breakdown.acuerdosPliegos.total++;
       total++;
-      const ok = isAuth(pl?.fase_autorizacion) && !!pl?.oficio_recepcion;
-      if (ok) {
+      if (isAuth(pl?.fase_autorizacion)) {
         breakdown.acuerdosPliegos.done++;
         done++;
       }
     });
+
+    // Helper para acciones con relaciones (PRAS, PO, Solicitudes, Recs.)
     function countActionRel(list, relKey, bucketKey) {
       toArr(list).forEach((act) => {
         const rel = act?.[relKey];
@@ -288,10 +354,13 @@
         });
       });
     }
+
     countActionRel(aud.accionesrecomendaciones, "recomendaciones", "accionesRecs");
     countActionRel(aud.accionespo, "pliegosobservacion", "accionesPO");
     countActionRel(aud.accionessolacl, "solicitudesaclaracion", "accionesSol");
     countActionRel(aud.accionespras, "pras", "accionesPRAS");
+
+    // Informes (Recs. / Pliegos)
     toArr(aud.informeprimeraetapa).forEach((inf) => {
       breakdown.informesRecs.total++;
       total++;
@@ -300,6 +369,7 @@
         done++;
       }
     });
+
     toArr(aud.informepliegos).forEach((inf) => {
       breakdown.informesPliegos.total++;
       total++;
@@ -308,7 +378,13 @@
         done++;
       }
     });
-    [["turnoui", "turnoUI"], ["turnooic", "turnoOIC"], ["turnoarchivo", "turnoArchivo"]].forEach(([key, bKey]) => {
+
+    // Turnos (UI / OIC / Archivo)
+    [
+      ["turnoui", "turnoUI"],
+      ["turnooic", "turnoOIC"],
+      ["turnoarchivo", "turnoArchivo"],
+    ].forEach(([key, bKey]) => {
       const node = aud[key];
       if (!node) return;
       breakdown[bKey].total++;
@@ -318,6 +394,7 @@
         done++;
       }
     });
+
     const percent = total ? Math.round((done / total) * 100) : 0;
     return { percent, done, total, breakdown };
   }
@@ -339,11 +416,11 @@
       const $j = document.getElementById(`encargadosJefe${side}`);
       const $de = document.getElementById(`enc_depto${side}`);
       const $je = document.getElementById(`enc_jefe${side}`);
-      $d && $d.classList.add("d-none");
-      $j && $j.classList.add("d-none");
+      //$d && $d.classList.add("d-none");
+      //$j && $j.classList.add("d-none");
       $de && $de.replaceChildren(document.createTextNode("—"));
       $je && $je.replaceChildren(document.createTextNode("—"));
-    } catch (e) {}
+    } catch (e) { }
   }
   function setEncargadosDepartamentoCard(side, deptId, deptName) {
     try {
@@ -352,11 +429,11 @@
       const $j = document.getElementById(`encargadosJefe${side}`);
       const $de = document.getElementById(`enc_depto${side}`);
       const $je = document.getElementById(`enc_jefe${side}`);
-      if ($d) $d.classList.remove("d-none");
-      if ($j) $j.classList.remove("d-none");
+      //if ($d) $d.classList.remove("d-none");
+      //if ($j) $j.classList.remove("d-none");
       $de && $de.replaceChildren(document.createTextNode(deptName || "—"));
       $je && $je.replaceChildren(document.createTextNode(jefe || "—"));
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // ====== Filtros (solo en viewAuditorias) ======
@@ -379,6 +456,7 @@
     const id = "treemap-neon-styles";
     if (document.getElementById(id)) return;
     const css = `
+
       :root{
         --bg1:#f7f8f9; --bg2:#ffffff;
         --aura: rgba(136,137,140,.22); --aura-strong: rgba(136,137,140,.34);
@@ -409,6 +487,31 @@
         animation: treemap-spin 26s linear infinite;
         pointer-events: none; z-index:0;
       }
+        .audit-title{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+          }
+
+          .audit-dot{
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: inline-block;
+            flex: 0 0 auto;
+          }
+
+          .audit-dot.red{
+            background: #dc2626;
+          }
+
+          .audit-dot.yellow{
+            background: #f59e0b;
+          }
+
+          .audit-dot.green{
+            background: #16a34a;
+          }
       @keyframes treemap-spin { to { --rot: 360deg; } }
       #chartInner.treemap-neon .highcharts-container, #chartInner.treemap-neon svg{ position:relative; z-index:1; }
       #chartInner.treemap-neon, #chartInner.treemap-neon * { color: var(--ink); }
@@ -515,14 +618,14 @@
             options.labelClamp != null
               ? options.labelClamp
               : typeof (
-                  this.series &&
-                  this.series[0] &&
-                  this.series[0].points &&
-                  this.series[0].points[0] &&
-                  this.series[0].points[0].real
-                ) !== "undefined"
-              ? 2
-              : 3;
+                this.series &&
+                this.series[0] &&
+                this.series[0].points &&
+                this.series[0].points[0] &&
+                this.series[0].points[0].real
+              ) !== "undefined"
+                ? 2
+                : 3;
           fitHtmlLabels(this, lines);
         },
       },
@@ -531,73 +634,111 @@
       credits: { enabled: false },
       
       exporting: {
-         enabled: true,
-         buttons: {
-           contextButton: {
-             symbolStroke: '#BB955C', // opcional: color del ícono
-           }
-         }
-       },
-
+        enabled: false,
+        buttons: {
+          contextButton: {
+            symbolStroke: '#BB955C', // opcional: color del ícono
+          }
+        }
+      },
       series: [
         {
           type: "treemap",
-          borderWidth: 10.2,
-          colorByPoint: false, 
+          sort: false,                              //no re-ordenes lo que ya te mandé
+          layoutAlgorithm: "sliceAndDice",          // orden legible (respeta secuencia)
+          layoutStartingDirection: "vertical",    // primero filas horizontales
+          alternateStartingDirection: false,        // sin alternancia (lectura natural)
+          borderRadius: 8,                          // puedes bajar a 6 si quieres más compacto
+          borderWidth: 6.5,                         // antes 10.2 → reduce “marcos”
           borderColor: "#BB945C",
-          borderRadius: 10,
-          pointPadding: options.pointPadding ?? 0,
-          nodePadding: options.nodePadding ?? 2,
+          pointPadding: 2,                        // antes 0 → deja un respirito sutil
+          nodePadding: 1.5,                           // puedes bajar a 1.5 si aún ves huecos
+          colorByPoint: false,
           states: { hover: { enabled: true, brightness: 0 } },
-                // (opcional) estilos por nivel
-                levels: [{
-                  level: 1,
-                  borderColor: '#BB945C',
-                  borderWidth: 10.2
-                }],
+          cursor: 'pointer',
+          point: {
+              events: {
+                click: function () {
+                  // 1) deselecciona los demás
+                  this.series.points.forEach(p => {
+                    if (p.selected) p.select(false, false);
+                  });
+
+                  // 2) selecciona este punto
+                  this.select(true, false);
+
+                  // 3) lógica original
+                  if (onPointClick) onPointClick(this);
+                }
+              }
+          },
+
+          // niveles (si sigues usando)
+          levels: [{
+            level: 1,
+            borderColor: '#BB945C',
+            borderWidth: 6.5
+          }],
 
           dataLabels: {
             enabled: true,
             useHTML: true,
             inside: true,
             allowOverlap: false,
-            crop: true,
-            overflow: "justify",
             padding: 2,
-            style: { textOutline: "none", fontWeight: "600", fontSize: options.labelFontSize || FS.dataLabel, color: "#132a29" },
+            style: {
+              textOutline: "none",
+              fontWeight: "600",
+              fontSize: options.labelFontSize || getFontSizes().dataLabel, // ya subimos fuente arriba
+              color: "#132a29"
+            },
+            
+          allowPointSelect: true,
+          states: {
+            select: {
+              color: 'rgba(239,193,139,0.25)',
+              borderColor: '#EFc18B',
+              borderWidth: 5
+            },
+            hover: {
+              enabled: true,
+              brightness: 0
+            }
+          },
+
             formatter: function () {
               const p = this.point;
               const clamp = (txt, max = 140) => {
                 txt = String(txt || "").trim();
                 return txt.length > max ? txt.slice(0, max - 1) + "…" : txt;
               };
-              if (typeof p.real !== "undefined") {
-                const total = Highcharts.numberFormat(p.real || 0, 0);
-                const title = esc(clamp(p.name, 70));
-                return `
-                  <div class="hc-label-wrap">
-                    <div class="hc-label-inner">
-                      <div style="font-weight:700">${title}</div>
-                      <div style="opacity:.9">${esc(String(total))}</div>
-                    </div>
-                  </div>`;
-              }
-              try {
-                const numero = p.numero_auditoria ? esc(clamp(p.numero_auditoria, 30)) : "";
-                const entidad = p.nombre_entidad
-                  ? esc(clamp(p.nombre_entidad, 110))
+              // — Primer renglón: No. Auditoría (ID visible si lo deseas)
+              const noAud = p.numero_auditoria ? esc(clamp(p.numero_auditoria, 34)) : "";
+              //const noAud = p.numero_auditoria ? esc(clamp(p.numero_auditoria, 34)) : (p.id ? esc(String(p.id)) : "");
+              
+              // — Segundo renglón: Entidad (o fallback)
+              const entidad = p.nombre_entidad
+                  ? esc(clamp(p.nombre_entidad, 100))
                   : p.entidad_fiscalizable
-                  ? esc(clamp(p.entidad_fiscalizable, 110))
-                  : "";
-                const acto = p.acto_fiscalizacion ? esc(clamp(p.acto_fiscalizacion, 80)) : "";
-                const lines = [numero, entidad, acto].filter(Boolean);
-                const html = lines.map((l) => `<div>${l}</div>`).join("");
-                return `<div class="hc-label-wrap"><div class="hc-label-inner">${html}</div></div>`;
-              } catch (e) {
-                return esc(String(p.name || ""));
-              }
+                    ? esc(clamp(p.entidad_fiscalizable, 100))
+                    : "";
+              // — Tercer renglón: Acto (si existe)
+              const acto = p.acto_fiscalizacion ? esc(clamp(p.acto_fiscalizacion, 70)) : "";
+
+              const lines = [noAud, entidad, acto].filter(Boolean);
+              //const html = lines.map(l => `<div>${l}</div>`).join("");
+              
+              const dot = `<span class="audit-dot ${p.semaphore}"></span>`;
+              const html = lines.map((l, i) =>
+                i === 0
+                  ? `<div class="audit-title">${dot}${l}</div>`
+                  : `<div>${l}</div>`
+              ).join("");
+
+              return `<div class="hc-label-wrap"><div class="hc-label-inner">${html}</div></div>`;
             },
           },
+
           tooltip: {
             useHTML: true,
             enabled: true,
@@ -606,109 +747,24 @@
             borderWidth: 0,
             borderRadius: 6,
             shadow: false,
-            style: { color: "#132a29", fontSize: FS.tooltip, maxWidth: FS.tooltipMaxW, whiteSpace: "normal" },
-            positioner: function (labelWidth, labelHeight, point) {
-              const chart = this.chart || (this && this.chart);
-              if (!chart) return { x: 10, y: 10 };
-              const cx = point && point.chartX !== undefined ? point.chartX : point && point.plotX ? chart.plotLeft + point.plotX : chart.plotWidth / 2;
-              const cy = point && point.chartY !== undefined ? point.chartY : point && point.plotY ? chart.plotTop + point.plotY : chart.plotHeight / 4;
-              let x = cx + 12;
-              let y = cy - labelHeight / 2;
-              if (x + labelWidth > chart.chartWidth - 10) x = cx - labelWidth - 12;
-              if (x < 10) x = 10;
-              if (y < chart.plotTop + 5) y = chart.plotTop + 5;
-              if (y + labelHeight > chart.plotTop + chart.plotHeight - 5) y = chart.plotTop + chart.plotHeight - labelHeight - 5;
-              return { x, y };
-            },
+            style: { color: "#132a29", fontSize: getFontSizes().tooltip, maxWidth: getFontSizes().tooltipMaxW, whiteSpace: "normal" },
+            
             pointFormatter: function () {
               try {
                 const p = this;
-                const shape = p.shapeArgs || {};
-                const boxW = shape.width || (p.plotX ? p.plotX : 0);
-                const boxH = shape.height || (p.plotY ? p.plotY : 0);
-                let textLines = [];
-                if (typeof p.real !== "undefined") {
-                  textLines = [String(p.name || ""), String(Highcharts.numberFormat(p.real || 0, 0))];
-                } else {
-                  if (p.numero_auditoria) textLines.push(String(p.numero_auditoria));
-                  if (p.nombre_entidad) textLines.push(String(p.nombre_entidad));
-                  else if (p.entidad_fiscalizable) textLines.push(String(p.entidad_fiscalizable));
-                  if (p.acto_fiscalizacion) textLines.push(String(p.acto_fiscalizacion));
-                  if (textLines.length === 0) textLines.push(String(p.name || ""));
-                }
-                const fontSize = options && options.labelFontSize ? String(options.labelFontSize) : "18px";
-                const font = `600 ${fontSize} sans-serif`;
-                const longest = textLines.reduce((m, ln) => Math.max(m, measureTextWidth(String(ln), font)), 0);
-                const lineHeight = parseInt(fontSize, 10) * 1.15;
-                const totalHeight = textLines.length * lineHeight;
-                const padding = 8;
-                const fits = boxW && longest <= boxW - padding && boxH && totalHeight <= boxH - padding;
-                if (fits) {
-                  if (p.series && p.series.chart && p.series.chart.tooltip) p.series.chart.tooltip.hide();
-                  return "";
-                }
-                const header = `<div style="font-weight:700;margin-bottom:6px;color:#132a29;">${esc(p.name || "")}</div>`;
-                let cuerpo = "";
-                if (typeof p.real !== "undefined") {
-                  cuerpo += `<div><b>Total:</b> ${Highcharts.numberFormat(p.real || 0, 0)}</div>`;
-                } else {
-                  const entidad = p.nombre_entidad || p.entidad_fiscalizable;
-                  if (entidad) cuerpo += `<br><div><b>Entidad:</b> ${esc(String(entidad))}</div>`;
-                  if (p.acto_fiscalizacion) cuerpo += `<br><div><b>Acto:</b> ${esc(String(p.acto_fiscalizacion))}</div>`;
-                }
-                return `<div style="max-width:${getFontSizes().tooltipMaxW};white-space:normal;color:#132a29;">${header}${cuerpo}</div>`;
-              } catch (e) {
-                try {
-                  this.series.chart.tooltip.hide();
-                } catch (err) {}
-                return "";
-              }
-            },
+                const h = [`<div style="font-weight:700;margin-bottom:6px;color:#132a29;">${esc(p.name || "")}</div><br>`];
+                const entidad = p.nombre_entidad || p.entidad_fiscalizable;
+                if (entidad) h.push(`<div><b>Entidad:</b> ${esc(String(entidad))}</div><br>`);
+                if (p.acto_fiscalizacion) h.push(`<div><b>Acto:</b> ${esc(String(p.acto_fiscalizacion))}</div><br>`);
+                return `<div style="max-width:${getFontSizes().tooltipMaxW};white-space:normal;color:#132a29;">${h.join("")}</div><br>`;
+              } catch (e) { return ""; }
+            }
           },
-          point: {
-            events: {
-              click: function () {
-                if (onPointClick) onPointClick(this);
-              },
-              mouseOver: function () {
-                try {
-                  if (this.graphic && this.graphic.element) {
-                    this.graphic.element.classList.add("neon-hover");
-                  }
-                  const p = this;
-                  const dl = p && p.dataLabel;
-                  if (dl) {
-                    let el = null;
-                    if (dl.element) el = dl.element;
-                    else if (dl.div) el = dl.div;
-                    else if (dl && dl.nodeType) el = dl;
-                    if (el && el.scrollWidth !== undefined && el.clientWidth !== undefined) {
-                      const overflow = el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight;
-                      if (!overflow) {
-                        if (p.series && p.series.chart && p.series.chart.tooltip) p.series.chart.tooltip.hide();
-                      }
-                    }
-                  }
-                } catch (e) {
-                  try {
-                    this.series.chart.tooltip.hide();
-                  } catch (err) {}
-                }
-              },
-              mouseOut: function () {
-                try {
-                  if (this.graphic && this.graphic.element) {
-                    this.graphic.element.classList.remove("neon-hover");
-                  }
-                  if (this.series && this.series.chart && this.series.chart.tooltip)
-                    this.series.chart.tooltip.hide();
-                } catch (e) {}
-              },
-            },
-          },
-          data: nodes,
-        },
+
+          data: nodes
+        }
       ],
+
       responsive: {
         rules: [
           {
@@ -733,6 +789,17 @@
       },
     });
     try {
+      // Evita que las etiquetas HTML intercepten el click
+        const disableClicksOnLabels = () => {
+          chart?.container?.querySelectorAll(
+            '.highcharts-data-label, .highcharts-label, .hc-label-wrap, .hc-label-inner'
+          )?.forEach(el => { el.style.pointerEvents = 'none'; });
+        };
+
+        // Llamar al inicio y en cada render (por si Highcharts re-crea labels)
+        disableClicksOnLabels();
+        Highcharts.addEvent(chart, 'render', disableClicksOnLabels);
+
       const chartContainer = chart && chart.container;
       if (chartContainer) {
         const hideEmptyTooltip = () => {
@@ -750,11 +817,11 @@
           try {
             mo.disconnect();
             chartContainer.removeEventListener("mousemove", hideEmptyTooltip);
-          } catch (e) {}
+          } catch (e) { }
           origDestroy.apply(this, arguments);
         };
       }
-    } catch (e) {}
+    } catch (e) { }
     attachBgMotion(renderToId);
   }
 
@@ -766,7 +833,7 @@
   async function renderDeptSolidGauge(dirKey, mountId, options = {}) {
     const mount = document.getElementById(mountId);
     if (!mount) {
-      console.warn(`[DeptGauge] No existe #${mountId}`);
+      //console.warn(`[DeptGauge] No existe #${mountId}`);
       return;
     }
     const useSideInfo = !!options.useSideInfo;
@@ -839,6 +906,7 @@
         infoEl.innerHTML = `
           <h6>${esc(dirNames?.[dirKey] || "")}</h6>
           <div class="kpi"><strong>${esc(d.name || `${prefix}${idx + 1}`)}</strong></div>
+          <div class="kpi"><span class="muted">Total de auditorías:</span>${m.total}</div>
           <div class="kpi"><span class="muted">Avance:</span><span class="big" style="color:${color}">${m.avgPercent}%</span></div>
           <div class="kpi"><span class="muted">Completadas:</span> ${m.completed} / ${m.total} (${m.completedPercent}%)</div>
         `;
@@ -849,8 +917,8 @@
       const gChart = Highcharts.chart(mountId, {
         chart: {
           type: "solidgauge",
-          height: "110%",
-          backgroundColor: "transparent",
+          backgroundColor: "#FFFFFF",
+          clip: false,
           events: {
             render: function () {
               // Etiquetas fijas (A1/A2/A3 o B1/B2/B3)
@@ -881,18 +949,22 @@
         subtitle: { text: dirNames?.[dirKey] || "", style: { fontSize: "12px", color: "#132a29" } },
         tooltip: { enabled: !useSideInfo }, // si hay panel lateral, desactiva tooltip
         pane: {
+          clip: false,
           startAngle: 0,
           endAngle: 360,
           background: [
             { outerRadius: "112%", innerRadius: "88%", backgroundColor: Highcharts.color(ringColors[0]).setOpacity(0.18).get("rgba"), borderWidth: 0 },
             { outerRadius: "87%", innerRadius: "63%", backgroundColor: Highcharts.color(ringColors[1]).setOpacity(0.18).get("rgba"), borderWidth: 0 },
             { outerRadius: "62%", innerRadius: "38%", backgroundColor: Highcharts.color(ringColors[2]).setOpacity(0.18).get("rgba"), borderWidth: 0 },
+            
           ],
+          
         },
         yAxis: { min: 0, max: 100, lineWidth: 0, tickPositions: [] },
         plotOptions: {
           solidgauge: { dataLabels: { enabled: false }, linecap: "round", stickyTracking: false, rounded: true },
           series: {
+            clip: false,
             animation: { duration: 300 },
             cursor: "pointer",
             point: {
@@ -902,17 +974,17 @@
                   if (useSideInfo) updateSideInfo(idx);
                 },
                 click: function () {
-                    const idx = this.series.index;
-                    const d = depts[idx];
-                    if (!d?.deptId) return;
-                    const side = dirKey === "dirA" ? "A" : "B";
-                    const panel = document.getElementById("auditoriasPanel");
-                    if (panel) panel.classList.add("d-none");
-                    resetAvanceCard();
-                    setEncargadosDepartamentoCard(side, d.deptId, d.name);
-                    viewAuditorias(dirKey, d.deptId, dirNames[dirKey], d.name);
-                    const figure = document.getElementById("container");
-                    try { figure?.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {}
+                  const idx = this.series.index;
+                  const d = depts[idx];
+                  if (!d?.deptId) return;
+                  const side = dirKey === "dirA" ? "A" : "B";
+                  const panel = document.getElementById("auditoriasPanel");
+                  if (panel) panel.classList.add("d-none");
+                  resetAvanceCard();
+                  setEncargadosDepartamentoCard(side, d.deptId, d.name);
+                  viewAuditorias(dirKey, d.deptId, dirNames[dirKey], d.name);
+                  const figure = document.getElementById("container");
+                  try { figure?.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) { }
                 },
               },
             },
@@ -920,21 +992,20 @@
         },
         credits: { enabled: false },
         exporting: {
-           enabled: true,
-           buttons: {
-             contextButton: {
-               symbolStroke: '#BB955C', // opcional: color del ícono
-             }
-           }
-         },
-
+          enabled: false,
+          buttons: {
+            contextButton: {
+              symbolStroke: '#BB955C', // opcional: color del ícono
+            }
+          }
+        },
         series: [
           { name: names[0], data: [{ color: ringColors[0], radius: "112%", innerRadius: "88%", y: vals[0] }] },
           { name: names[1], data: [{ color: ringColors[1], radius: "87%", innerRadius: "63%", y: vals[1] }] },
           { name: names[2], data: [{ color: ringColors[2], radius: "62%", innerRadius: "38%", y: vals[2] }] },
+          
         ],
       });
-
       // Altura responsiva del gauge
       function setGaugeHeightByWidth(chart, minH = 240, maxH = 360) {
         const cont = chart?.container?.parentElement;
@@ -945,7 +1016,7 @@
         chart.reflow();
       }
       setGaugeHeightByWidth(gChart);
-      requestAnimationFrame(() => { try { gChart.reflow(); } catch (e) {} });
+      requestAnimationFrame(() => { try { gChart.reflow(); } catch (e) { } });
 
       // Auto-stack (solo si hay panel lateral)
       if (useSideInfo) {
@@ -965,13 +1036,13 @@
           const ro = new ResizeObserver(() => {
             autoStackGaugeLayout();
             setGaugeHeightByWidth(gChart);
-            try { gChart.reflow(); } catch (e) {}
+            try { gChart.reflow(); } catch (e) { }
           });
           ro.observe(wrapEl);
           ro.observe(infoEl2);
           const _destroy = gChart.destroy;
           gChart.destroy = function () {
-            try { ro.disconnect(); } catch (e) {}
+            try { ro.disconnect(); } catch (e) { }
             _destroy.apply(this, arguments);
           };
         } else {
@@ -984,10 +1055,109 @@
         updateSideInfo(0);
       }
     } catch (e) {
-      console.error("Error renderDeptSolidGauge", e);
+      //console.error("Error renderDeptSolidGauge", e);
       mount.innerHTML = prevHTML;
     }
+    
   }
+  /******JEFES DE DEPARTAMENTO*********/
+    async function initJefeDepartamentoView() {
+      showJDSpinner(); //Spinner 
+
+      const deptId = userDeptId;
+      if (!deptId) return;
+
+      let dirKey = null;
+      let dept = null;
+
+      if (deptsByDir.dirA.some(d => d.deptId === deptId)) {
+        dirKey = "dirA";
+        dept = deptsByDir.dirA.find(d => d.deptId === deptId);
+      }
+      if (deptsByDir.dirB.some(d => d.deptId === deptId)) {
+        dirKey = "dirB";
+        dept = deptsByDir.dirB.find(d => d.deptId === deptId);
+      }
+
+      if (!dirKey || !dept) return;
+
+      const metrics = await computeDeptMetrics(deptId);
+
+      renderJefeDepartamentoBlock({
+        dirName: dirNames[dirKey],
+        deptName: dept.name,
+        metrics
+      });
+
+      // Renderiza directamente sus auditorías
+      viewAuditorias(dirKey, deptId, dirNames[dirKey], dept.name);
+    }
+
+    
+    function showJDSpinner() {
+      const el = document.getElementById('jefesdiv');
+      if (!el) return;
+
+      el.innerHTML = `
+        <div class="d-flex justify-content-center align-items-center" style="min-height: 180px;">
+          <div class="swapping-squares-spinner" aria-label="Cargando">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function hideJDSpinner() {
+      const el = document.getElementById('jefesdiv');
+      if (!el) return;
+      el.innerHTML = '';
+    }
+
+     function renderJefeDepartamentoBlock({ dirName, deptName, metrics }) {
+      const el = document.getElementById('jefesdiv');
+      if (!el) return;
+
+      el.innerHTML = `
+        <div class="card fancy-border mb-3">
+          <div class="card-body">
+
+            <h5 class="mb-2">
+              ${dirName} / <b>${deptName}</b>
+            </h5>
+
+            <div class="mb-2">
+              <b>Total de auditorías del departamento:</b>
+              <span>${metrics.total}</span>
+            </div>
+
+            <div class="mb-1">
+              <b>Avance promedio del departamento:</b>
+              ${metrics.avgPercent}%
+            </div>
+
+            <div class="progress" style="height: 10px;">
+              <div class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: ${metrics.avgPercent}%"
+                  aria-valuenow="${metrics.avgPercent}"
+                  aria-valuemin="0"
+                  aria-valuemax="100">
+              </div>
+            </div>
+
+            <div class="mt-2 muted">
+              Auditorías completadas:
+              ${metrics.completed} / ${metrics.total}
+              (${metrics.completedPercent}%)
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
 
   // ====== Shell del treemap (contenedor) ======
   const container = document.getElementById("container");
@@ -1013,10 +1183,26 @@
       b.classList.add("bg-warning");
     }
   }
+  
+  function clearPdfAuditState() {
+    window.__pdfAuditId = null;
+    window.__pdfAuditName = null;
+    window.__pdfAuditAvanceText = null;
+  }
+
+  function clearPdfDeptState() {
+    window.__pdfDeptId = null;
+    window.__pdfDeptName = null;
+    window.__pdfDirName = null;
+
+    // Al limpiar depto, también se limpia auditoría
+    clearPdfAuditState();
+}
+
   function setAuditoriaSeleccionada(audId, AudName) {
     try {
       document.getElementById("audi_name")?.replaceChildren(document.createTextNode(AudName || "—"));
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // ====== Progreso tooltip en avance de auditoría (UI superior) ======
@@ -1053,7 +1239,7 @@
       if (targetEl._avTooltip && typeof targetEl._avTooltip.dispose === "function") {
         targetEl._avTooltip.dispose();
       }
-    } catch (e) {}
+    } catch (e) { }
     targetEl.setAttribute("data-bs-toggle", "tooltip");
     targetEl.setAttribute("data-bs-html", "true");
     targetEl.setAttribute("data-bs-placement", "bottom");
@@ -1073,238 +1259,283 @@
 
   // ====== Vista de Auditorías (treemap por depto) ======
   function viewAuditorias(dirKey, deptId, dirName, deptName) {
+    document.getElementById('treemapFigure')?.classList.remove('d-none');
 
-    
-// Deja a la mano para el PDF
-  window.__pdfDeptId = deptId;
-  window.__pdfDeptName = deptName;
-  window.__pdfDirName = dirName;
+    const container = document.getElementById('container');
+    if (container) {
+      container.innerHTML = TREEMAP_GAUGE_SPINNER_HTML;
+    }
 
-  const titleHTML = `
+
+    // Deja a la mano para el PDF
+    window.__pdfDeptId = deptId;
+    window.__pdfDeptName = deptName;
+    window.__pdfDirName = dirName;
+
+    const titleHTML = `
     <div class="mb-2">
       <h6 class="mb-1">Auditorías — <span>${esc(dirName)}</span> / <span>${esc(deptName)}</span></h6>
       <hr class="fancy-border">
     </div>
   `;
-  renderShell({ titleHTML });
+    //renderShell({ titleHTML });
 
-  // Mostrar el contenedor del treemap si estaba oculto
-  const fig = document.getElementById('treemapFigure');
-  if (fig) fig.classList.remove('d-none');
+    // Mostrar el contenedor del treemap si estaba oculto
+    const fig = document.getElementById('treemapFigure');
+    if (fig) fig.classList.remove('d-none');
 
-  resetAvanceCard();
+    resetAvanceCard();
 
-  // Actualiza Encargados (depende de la dirección)
-  const side = dirKey === "dirA" ? "A" : "B";
-  setEncargadosDepartamentoCard(side, deptId, deptName);
+    // Actualiza Encargados (depende de la dirección)
+    const side = dirKey === "dirA" ? "A" : "B";
+    setEncargadosDepartamentoCard(side, deptId, deptName);
 
-  const items = auditoriasMap[String(deptId)] || [];
-  const originalItems = items.slice(); // fuente inmutable para filtros
-  let activeItems = items.slice();     // dataset visible/filtrado
+    const items = auditoriasMap[String(deptId)] || [];
+    const originalItems = items.slice(); // fuente inmutable para filtros
+    let activeItems = items.slice();     // dataset visible/filtrado
 
-  const perPage = 12;
-  let totalPages = Math.max(1, Math.ceil(activeItems.length / perPage));
-  let currentPage = 1;
-  let highlightId = null;
+    const perPage = 12;
+    let totalPages = Math.max(1, Math.ceil(activeItems.length / perPage));
+    let currentPage = 1;
+    let highlightId = null;
 
-  // ====== Estado de vista por depto (paginación) ======
-  try {
-    const s = JSON.parse(sessionStorage.getItem("auditoriaViewState") || "null");
-    if (
-      s &&
-      s.userId === currentUserId &&
-      s.pathname === window.location.pathname &&
-      String(s.deptId) === String(deptId) &&
-      s.page
-    ) {
-      currentPage = Math.min(Math.max(1, parseInt(s.page, 10) || 1), totalPages);
-    } else {
-      try { sessionStorage.removeItem("auditoriaViewState"); } catch (e) {}
-    }
-  } catch (e) {}
-
-  function saveViewState(page) {
+    // ====== Estado de vista por depto (paginación) ======
     try {
-      sessionStorage.setItem(
-        "auditoriaViewState",
-        JSON.stringify({
-          dirKey, deptId, dirName, deptName,
-          page, pathname: window.location.pathname,
-          userId: currentUserId,
-        })
-      );
-    } catch (e) {}
-  }
+      const s = JSON.parse(sessionStorage.getItem("auditoriaViewState") || "null");
+      if (
+        s &&
+        s.userId === currentUserId &&
+        s.pathname === window.location.pathname &&
+        String(s.deptId) === String(deptId) &&
+        s.page
+      ) {
+        currentPage = Math.min(Math.max(1, parseInt(s.page, 10) || 1), totalPages);
+      } else {
+        try { sessionStorage.removeItem("auditoriaViewState"); } catch (e) { }
+      }
+    } catch (e) { }
 
-  // ====== Filtros ======
-  // Mostramos tarjeta de filtros en esta vista
-  toggleAuditFilters(true);
-
-  // Guardamos el último depto/dirección para decidir si reseteamos los inputs
-  window.__lastDeptKey = window.__lastDeptKey || null;
-  const thisDeptKey = `${dirKey}-${deptId}`;
-
-  /**
-   * Clona el form para eliminar listeners previos y vuelve a enlazar handlers
-   * con el dataset del depto actual.
-   */
-  function rewireFilters() {
-    const form = document.getElementById("auditFiltersForm");
-    if (!form) return;
-
-    // 1) Reset de inputs si cambiaste de depto/dirección
-    if (window.__lastDeptKey !== thisDeptKey) {
-      try { form.reset(); } catch (e) {}
-      window.__lastDeptKey = thisDeptKey;
+    function saveViewState(page) {
+      try {
+        sessionStorage.setItem(
+          "auditoriaViewState",
+          JSON.stringify({
+            dirKey, deptId, dirName, deptName,
+            page, pathname: window.location.pathname,
+            userId: currentUserId,
+          })
+        );
+      } catch (e) { }
     }
 
-    // 2) Clonar para quitar listeners antiguos y evitar submits al servidor
-    const parent = form.parentNode;
-    const newForm = form.cloneNode(true);
-    parent.replaceChild(newForm, form);
+    // ====== Filtros ======
+    // Mostramos tarjeta de filtros en esta vista
+    toggleAuditFilters(true);
 
-    const btnClear = newForm.querySelector("#f_limpiar");
+    // Guardamos el último depto/dirección para decidir si reseteamos los inputs
+    window.__lastDeptKey = window.__lastDeptKey || null;
+    const thisDeptKey = `${dirKey}-${deptId}`;
 
-    // 3) Submit (Buscar): filtra SIEMPRE en cliente, sin recargar
-    newForm.addEventListener("submit", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
+    /**
+     * Clona el form para eliminar listeners previos y vuelve a enlazar handlers
+     * con el dataset del depto actual.
+     */
+    function rewireFilters() {
+      const form = document.getElementById("auditFiltersForm");
+      if (!form) return;
 
-      const f = readFilters(); // { numero, entidad, acto, solo: true }
+      // 1) Reset de inputs si cambiaste de depto/dirección
+      if (window.__lastDeptKey !== thisDeptKey) {
+        try { form.reset(); } catch (e) { }
+        window.__lastDeptKey = thisDeptKey;
+      }
 
-      // Sin criterios → restaurar dataset original
-      if (!f.numero && !f.entidad && !f.acto) {
+      // 2) Clonar para quitar listeners antiguos y evitar submits al servidor
+      const parent = form.parentNode;
+      const newForm = form.cloneNode(true);
+      parent.replaceChild(newForm, form);
+
+      const btnClear = newForm.querySelector("#f_limpiar");
+
+      // 3) Submit (Buscar): filtra SIEMPRE en cliente, sin recargar
+      newForm.addEventListener("submit", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        const f = readFilters(); // { numero, entidad, acto, solo: true }
+
+        // Sin criterios → restaurar dataset original
+        if (!f.numero && !f.entidad && !f.acto) {
+          activeItems = originalItems.slice();
+          totalPages = Math.max(1, Math.ceil(activeItems.length / perPage));
+          highlightId = null;
+          renderPage(1);
+          return;
+        }
+
+        // Coincidencias case-insensitive
+        const matches = originalItems.filter((a) =>
+          ciIncludes(a.numero_auditoria, f.numero) &&
+          (ciIncludes(a.entidad_fiscalizable, f.entidad) || ciIncludes(a.nombre_entidad, f.entidad)) &&
+          ciIncludes(a.acto_fiscalizacion, f.acto)
+        );
+
+        if (f.solo) {
+          // Mostrar SOLO coincidencias
+          activeItems = matches;
+          totalPages = Math.max(1, Math.ceil(activeItems.length / perPage));
+          highlightId = matches.length ? "aud" + matches[0].id : null;
+          renderPage(1, highlightId);
+        } else {
+          // (modo no-solo) Ir a la página donde está la primera coincidencia
+          if (!matches.length) {
+            highlightId = null;
+            renderPage(currentPage);
+            return;
+          }
+          const firstId = matches[0].id;
+          const idx = originalItems.findIndex((x) => x.id === firstId);
+          const page = Math.max(1, Math.floor(idx / perPage) + 1);
+          activeItems = originalItems.slice();
+          totalPages = Math.max(1, Math.ceil(activeItems.length / perPage));
+          highlightId = "aud" + firstId;
+          renderPage(page, highlightId);
+        }
+      });
+
+      // 4) Limpiar: no recarga, solo restaura dataset/paginación
+      btnClear?.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        try { newForm.reset(); } catch (e) { }
+
         activeItems = originalItems.slice();
         totalPages = Math.max(1, Math.ceil(activeItems.length / perPage));
         highlightId = null;
         renderPage(1);
-        return;
-      }
-
-      // Coincidencias case-insensitive
-      const matches = originalItems.filter((a) =>
-        ciIncludes(a.numero_auditoria, f.numero) &&
-        (ciIncludes(a.entidad_fiscalizable, f.entidad) || ciIncludes(a.nombre_entidad, f.entidad)) &&
-        ciIncludes(a.acto_fiscalizacion, f.acto)
-      );
-
-      if (f.solo) {
-        // Mostrar SOLO coincidencias
-        activeItems = matches;
-        totalPages = Math.max(1, Math.ceil(activeItems.length / perPage));
-        highlightId = matches.length ? "aud" + matches[0].id : null;
-        renderPage(1, highlightId);
-      } else {
-        // (modo no-solo) Ir a la página donde está la primera coincidencia
-        if (!matches.length) {
-          highlightId = null;
-          renderPage(currentPage);
-          return;
-        }
-        const firstId = matches[0].id;
-        const idx = originalItems.findIndex((x) => x.id === firstId);
-        const page = Math.max(1, Math.floor(idx / perPage) + 1);
-        activeItems = originalItems.slice();
-        totalPages = Math.max(1, Math.ceil(activeItems.length / perPage));
-        highlightId = "aud" + firstId;
-        renderPage(page, highlightId);
-      }
-    });
-
-    // 4) Limpiar: no recarga, solo restaura dataset/paginación
-    btnClear?.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      try { newForm.reset(); } catch (e) {}
-
-      activeItems = originalItems.slice();
-      totalPages = Math.max(1, Math.ceil(activeItems.length / perPage));
-      highlightId = null;
-      renderPage(1);
-    });
-  }
-
-  // ====== Render (treemap + paginación) ======
-  function renderPage(page, forceHighlightId) {
-    currentPage = page || 1;
-    saveViewState(currentPage);
-
-    const start = (currentPage - 1) * perPage;
-    const pageItems = activeItems.slice(start, start + perPage);
-    if (forceHighlightId) highlightId = forceHighlightId;
-
-    let nodes;
-    if (!pageItems.length) {
-      nodes = [{ id: "no-data", name: "Sin auditorías", value: 1, color: "#f8d7da" }];
-    } else {
-      nodes = pageItems.map((a) => ({
-        id: "aud" + a.id,
-        numero_auditoria: a.numero_auditoria,
-        entidad_fiscalizable: a.entidad_fiscalizable,
-        nombre_entidad: a.nombre_entidad,
-        acto_fiscalizacion: a.acto_fiscalizacion,
-        name: a.numero_auditoria ? a.numero_auditoria : "AUD-" + a.id,
-        value: 1,
-        className: highlightId === "aud" + a.id ? "is-highlight" : "",
-      }));
-    }
-
-    drawTreemapIn(
-      "chartInner",
-      `${dirName} / ${deptName}`,
-      activeItems.length ? "Auditorías" : "Sin resultados",
-      nodes,
-      (point) => {
-        if (!point || !point.id || String(point.id).startsWith("no-data")) return;
-        const audId = String(point.id).replace(/^aud/, "");
-        if (!audId) return;
-        try { showLoading(); } catch (e) {}
-        fetchJson(`${DETALLE_URL}/${audId}`)
-          .then((aud) => {
-            hideLoading();
-            renderAuditDetails(aud, dirName, deptName);
-          })
-          .catch((err) => {
-            hideLoading();
-            console.error("Error cargando auditoría", err);
-            const panel = document.getElementById("auditoriasPanel");
-            if (panel) panel.classList.add("d-none");
-            alert("No se pudo cargar el detalle de la auditoría. Verifica tu sesión o la URL del servicio.");
-          });
-      },
-      { layoutAlgorithm: "strip", height: 800, minPointSize: 8, labelFontSize: "16px", pointPadding: 4, nodePadding: 2, labelClamp: 3 }
-    );
-
-    // Paginación
-    const pager = document.getElementById("auditPagination");
-    if (!pager) return;
-    pager.innerHTML = "";
-
-    if (totalPages > 1) {
-      let html = '<nav aria-label="Paginación auditorías"><ul class="pagination pagination-sm">';
-      for (let p = 1; p <= totalPages; p++) {
-        html += `
-          <li class="page-item ${p === currentPage ? "active" : ""}">
-            <a href="#" class="page-link" data-page="${p}">${p}</a>
-          </li>`;
-      }
-      html += "</ul></nav>";
-      pager.innerHTML = html;
-
-      pager.querySelectorAll(".page-link").forEach((el) => {
-        el.addEventListener("click", (ev) => {
-          ev.preventDefault();
-          const p = parseInt(el.dataset.page, 10) || 1;
-          renderPage(p);
-        });
       });
     }
-  }
 
-  // Importante: primero re-alambramos el form (para cortar handlers viejos), luego render.
-  rewireFilters();
-  renderPage(currentPage);
-}
+    // ====== Render (treemap + paginación) ======
+    async function renderPage(page, forceHighlightId) {
+      currentPage = page || 1;
+      saveViewState(currentPage);
+
+      const start = (currentPage - 1) * perPage;
+      const pageItems = activeItems.slice(start, start + perPage);
+
+      if (forceHighlightId) highlightId = forceHighlightId;
+
+      //ORDENAR pageItems existe
+      const ordered = pageItems.slice().sort((a, b) => {
+        const ai = Number(a.id) || 0;
+        const bi = Number(b.id) || 0;
+        return ai - bi; // ASC por ID
+      });
+
+      let nodes;
+      if (!ordered.length) {
+        nodes = [{ id: "no-data", name: "Sin auditorías", value: 1, color: "#f8d7da" }];
+      } else {
+        
+          const progressMap = new Map();
+
+          await Promise.all(
+            ordered.map(async (a) => {
+              try {
+                const av = await getAuditProgressPercent(a.id);
+                progressMap.set(a.id, av);
+              } catch {
+                progressMap.set(a.id, { percent: 0, total: 0 });
+              }
+            })
+          );
+
+        
+          nodes = ordered.map((a) => {
+            const av = progressMap.get(a.id) || { percent: 0, total: 0 };
+            const semaforo = getAuditSemaphore(av);
+
+            return {
+              id: "aud" + a.id,
+              sortIndex: Number(a.id) || 0,
+              numero_auditoria: a.numero_auditoria,
+              entidad_fiscalizable: a.entidad_fiscalizable,
+              nombre_entidad: a.nombre_entidad,
+              acto_fiscalizacion: a.acto_fiscalizacion,
+              name: a.numero_auditoria ? a.numero_auditoria : "AUD-" + a.id,
+              value: 1,
+              semaphore: semaforo,
+              className: highlightId === "aud" + a.id ? "is-highlight" : "",
+            };
+          });
+
+      }
+      renderShell({ titleHTML });
+      drawTreemapIn(
+        "chartInner",
+        `${dirName} / ${deptName}`,
+        activeItems.length ? "Auditorías" : "Sin resultados",
+        nodes,
+        (point) => {
+          if (!point || !point.id || String(point.id).startsWith("no-data")) return;
+          const audId = String(point.id).replace(/^aud/, "");
+          if (!audId) return;
+          try { showLoading(); } catch (e) { }
+          fetchJson(`${DETALLE_URL}/${audId}`)
+            .then((aud) => {
+              hideLoading();
+              renderAuditDetails(aud, dirName, deptName);
+            })
+            .catch((err) => {
+              hideLoading();
+              //console.error("Error cargando auditoría", err);
+              const panel = document.getElementById("auditoriasPanel");
+              if (panel) panel.classList.add("d-none");
+              SwalBT.fire({
+                icon: 'error',
+                title: 'No se pudo cargar',
+                html: 'Verifica tu sesión o la URL del servicio.<br>Si el problema persiste, intenta refrescar la página.',
+                confirmButtonText: 'Entendido'
+              });
+            });
+        },
+        {
+          height: 800,
+          minPointSize: 8,
+          labelFontSize: "16px",
+          labelClamp: 3
+        }
+      );
+      // ===== Paginación =====
+      const pager = document.getElementById("auditPagination");
+      if (!pager) return;
+      pager.innerHTML = "";
+
+      if (totalPages > 1) {
+        let html = '<nav aria-label="Paginación auditorías"><ul class="pagination pagination-sm">';
+        for (let p = 1; p <= totalPages; p++) {
+          html += `
+            <li class="page-item ${p === currentPage ? "active" : ""}">
+              <a href="#" class="page-link" data-page="${p}">${p}</a>
+            </li>`;
+        }
+        html += "</ul></nav>";
+        pager.innerHTML = html;
+
+        pager.querySelectorAll(".page-link").forEach((el) => {
+          el.addEventListener("click", (ev) => {
+            ev.preventDefault();
+            renderPage(parseInt(el.dataset.page, 10) || 1);
+          });
+        });
+      }
+    }
+
+    // Importante: primero re-alambramos el form (para cortar handlers viejos), luego render.
+    rewireFilters();
+    renderPage(currentPage);
+  }
 
 
   // ====== Panel de detalles de auditoría ======
@@ -1320,26 +1551,48 @@
     try {
       const av = computeAuditProgress(aud);
       setAuditoriaSeleccionada(aud.id, aud.numero_auditoria);
+
+      const estadoTxt = av.percent === 100 ? "Completada" : "En proceso";
       const $txt = document.getElementById("avanceAuditoria");
-      if ($txt) $txt.textContent = `${av.percent}% (${av.done}/${av.total})`;
+      if ($txt) $txt.textContent = `${estadoTxt} — ${av.percent}% (${av.done}/${av.total})`;
+
       const $bar = document.getElementById("avanceBar");
       if ($bar) {
         $bar.style.width = av.percent + "%";
         $bar.setAttribute("aria-valuenow", String(av.percent));
         $bar.classList.remove("bg-success", "bg-warning", "bg-danger");
-        $bar.classList.add(av.percent === 100 ? "bg-success" : av.percent >= 10 ? "bg-warning" : "bg-danger");
+        $bar.classList.add(
+          av.percent === 100 ? "bg-success" :
+            av.percent >= 25 ? "bg-warning" :
+              "bg-danger"
+        );
       }
       applyProgressTooltip($txt, av);
       applyProgressTooltip($bar, av);
-    } catch (e) {}
+    } catch (e) { }
 
     const grid = document.getElementById("auditoriasGrid");
     if (!grid) return;
     grid.innerHTML = "";
 
-    function cardHTML(title, bodyHtml) {
+    function cardHTML(title, bodyHtml, opts = {}) {
+      const { span = 'half' } = opts; // 'half' = col-12 col-lg-6, 'full' = col-12
+      const colCls = span === 'full' ? 'col-12' : 'col-12 col-lg-6';
       return `
-        <div class="col-12 col-md-6">
+        <div class="${colCls}">
+          <div class="card audit-card position-relative">
+            <div class="card-body fancy-border">
+              <h6 class="audit-card-title mb-2 ">${esc(title)}</h6>
+              <div class="audit-meta ">${bodyHtml}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+    function cardHTMLTurnos(title, bodyHtml, opts = {}) {
+      const { span = 'half' } = opts; // 'half' = col-12 col-lg-6, 'full' = col-12
+      const colCls = span === 'full' ? 'col-12' : 'col-12 col-lg-4';
+      return `
+        <div class="${colCls}">
           <div class="card audit-card position-relative">
             <div class="card-body fancy-border">
               <h6 class="audit-card-title mb-2 ">${esc(title)}</h6>
@@ -1368,6 +1621,115 @@
       const phase = node.fase_autorizacion ? String(node.fase_autorizacion).trim() : null;
       return phase ? (phase === "Autorizado" ? "status-autorizado" : "status-pending") : "status-absent";
     }
+    // === Estilos para la cuadrícula de acciones (se inyectan una sola vez) ===
+    function injectActionGridStyles() {
+      if (document.getElementById('action-grid-styles')) return;
+      const css = `
+        .action-grid{
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 12px;
+          font-size: 13px;
+          width: 100%;
+        }
+        @media (max-width: 576px){
+          .action-grid{ grid-template-columns: 1fr; gap: 10px; }
+        }
+        
+        .action-item{
+          border-radius: 8px;
+          padding: 10px;
+          font-size: 13px;
+          background: #FFFFFF;
+        }
+        .action-item .num{
+          font-weight: 700;
+          font-size: 13px;
+          color: #111827;
+          margin-bottom: 4px;
+          overflow-wrap: anywhere;
+        }
+
+        .status-ok   { color: #10b981; fontSize: 700; font-size: 13.5px; }
+        .status-warn { color: #f59e0b; font-weight: 700; font-size: 13.5px; }
+        .status-bad  { color: #b91f1f; font-weight: 700; font-size: 13.5px; }
+      `;
+      const s = document.createElement('style');
+      s.id = 'action-grid-styles';
+      s.appendChild(document.createTextNode(css));
+      document.head.appendChild(s);
+    }
+
+    // === Normaliza a array seguro ===
+    function toArraySafe(v) {
+      if (!v) return [];
+      return Array.isArray(v) ? v : [v];
+    }
+
+    // === Aplana relaciones de acciones (igual que en tu PDF) ===
+    // Devuelve [{numero, fase}] a partir de acciones y su relación hija (relKey)
+    function flattenRelations(actions, relKey) {
+      const items = [];
+      toArraySafe(actions).forEach(act => {
+        const baseNum = act?.numero ?? act?.consecutivo ?? ('#' + (act?.id ?? ''));
+        const rel = act?.[relKey];
+        if (!rel) return;
+
+        if (Array.isArray(rel)) {
+          rel.forEach(r => {
+            items.push({
+              numero: String(r?.numero ?? baseNum),
+              fase: String((r?.fase_autorizacion ?? act?.fase_autorizacion ?? 'Pendiente')).trim() || 'Pendiente',
+            });
+          });
+        } else if (typeof rel === 'object') {
+          items.push({
+            numero: String(rel?.numero ?? baseNum),
+            fase: String((rel?.fase_autorizacion ?? act?.fase_autorizacion ?? 'Pendiente')).trim() || 'Pendiente',
+          });
+        } else {
+          items.push({ numero: String(baseNum), fase: String(rel) });
+        }
+      });
+      return items;
+    }
+
+    // === Badge inline compacto (sin <p>) para usar dentro de la grilla ===
+    function phaseBadgeInline(phase) {
+      const p = String(phase || 'Pendiente').trim();
+      if (p == 'Autorizado') return `<span class="status-ok">${esc(p)}</span>`;
+      if (p == 'Rechazado') return `<span class="status-bad">${esc(p)}</span>`;
+      return `<span class="status-warn">${esc(p)}</span>`;
+    }
+
+    // === Inserta card de acciones SOLO si hay elementos (sin "No hay ...") ===
+    // Reutiliza getGroupStatus(actions, relKey) para el dot (status-breath)
+    function insertActionsCardIfAny(title, actions, relKey, gridEl, cardHTML, opts = {}) {
+      const items = flattenRelations(actions, relKey);
+      if (!items.length) return;
+
+      const status = getGroupStatus(actions, relKey);
+      const span = opts.span || 'half'; // 'half' por default
+
+      let body = '';
+      body += `<div class="d-flex align-items-start gap-3">`;
+      body += `<div class="status-breath ${status}" aria-hidden="true"></div>`;
+      body += `<div style="width:100%">`;
+      body += `<div class="audit-field"><b>Total ${esc(title)}:</b><span class="field-value"> ${items.length}</span></div>`;
+      body += `<div class="action-grid">`;
+      items.forEach(it => {
+        body += `<div class="action-item">
+                  <div class="num">No. de acción: ${esc(it.numero)}</div>
+                  <div>Estatus: ${phaseBadgeInline(it.fase)}</div>
+                </div>`;
+      });
+      body += `</div>`;
+      body += `</div>`;
+      body += `</div>`;
+
+      gridEl.insertAdjacentHTML("beforeend", cardHTML(title, body, { span }));
+    }
+
     function getGroupStatus(actions, relKey) {
       if (!actions || actions.length === 0) return "status-absent";
       let totalRelations = 0;
@@ -1388,30 +1750,62 @@
       if (totalRelations === 0) return "status-absent";
       return totalAuthorized === totalRelations ? "status-autorizado" : "status-pending";
     }
-    function renderActionList(actions, relKey, relLabel) {
-      if (!actions || !actions.length) return "<div>No hay " + relLabel + "</div>";
-      let html = `<div class="audit-field"><b>Total ${relLabel}:</b><span class="field-value"> ${actions.length}</span></div><div class="mt-1">`;
-      actions.forEach((act) => {
-        const numero = esc(act.numero ?? act.consecutivo ?? "#" + (act.id ?? ""));
-        const rel = act[relKey];
-        if (rel) {
-          if (Array.isArray(rel)) {
-            const parts = rel.map(
-              (r) => `<div class="audit-field"><b>Estatus:</b><span class="field-value">${phaseBadgeHtml(r.fase_autorizacion ?? "Pendiente")}</span></div>`
-            );
-            html += `<div class="small mb-1 audit-field "><b>No. de acción:</b>${numero}<div class="small text-muted">${parts.join("<br/>")}</div></div>`;
-          } else if (typeof rel === "object") {
-            html += `<div class=" small mb-1 audit-field"><b>No. de acción:</b>${numero}</div><div class="audit-field"><b>Estatus:</b>${phaseBadgeHtml(rel.fase_autorizacion ?? "Pendiente")}</div><br>`;
-          } else {
-            html += `<div class=" small mb-1 audit-field"><b>No. de acción:</b>${numero}<div class="small text-muted">${esc(String(rel))}</div></div>`;
-          }
-        } else {
-          html += `<div class="small mb-1 audit-field"><b><strong>${numero}</strong></b><div class="small text-muted">${phaseBadgeHtml(act.fase_autorizacion)}</div></div>`;
+    // === Estilos de info-grid (una sola vez) ===
+    function injectInfoGridStyles() {
+      if (document.getElementById('info-grid-styles')) return;
+      const css = `
+        .info-grid{
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 12px;
+          font-size: 13px;
+          width: 100%;
         }
-      });
-      html += "</div>";
-      return html;
+        .info-tile{
+          border-radius: 8px;
+          padding: 10px;
+          font-size: 13px;
+          background: #FFFFFF;
+        }
+        .info-tile .tile-title{
+          font-size: 13px;
+          font-weight: 700; color: #111827; margin-bottom: 4px;
+        }
+      `;
+      const s = document.createElement('style');
+      s.id = 'info-grid-styles';
+      s.appendChild(document.createTextNode(css));
+      document.head.appendChild(s);
     }
+
+    // === Tile para un grupo (p.ej. "Recomendaciones" o "Pliegos") ===
+    // items: array de nodos con fase_autorizacion (string)
+    function renderInfoGroupTile(groupTitle, items) {
+      const list = Array.isArray(items) ? items : (items ? [items] : []);
+      const total = list.length;
+      if (!total) return ``; // si no hay, la baldosa no aparece
+
+      // Conteo por estatus
+      const counts = list.reduce((acc, it) => {
+        const p = String(it?.fase_autorizacion || 'Pendiente').trim();
+        acc[p] = (acc[p] || 0) + 1;
+        return acc;
+      }, {});
+
+      const chips = Object.entries(counts).map(([phase, cnt]) => {
+        // usa tu badge inline actual para color (ok/warn/bad)
+        return `<span class="badge-chip"> ${phaseBadgeInline(phase)} · ${cnt}</span>`;
+      }).join('');
+
+      return `
+        <div class="info-tile">
+          <div class="tile-title">${esc(groupTitle)}</div>
+          <div>Total: <b>${total}</b></div>
+          <div class="badges">${chips}</div>
+        </div>
+      `;
+    }
+
 
     // Radicación
     const radStatus = statusFor(aud.radicacion);
@@ -1423,7 +1817,8 @@
       `
       : "<div>No registrada</div>";
     const radHtml = `<div class="d-flex align-items-start gap-3"><div class="status-breath ${radStatus}" aria-hidden="true"></div><div>${radBody}</div></div>`;
-    grid.insertAdjacentHTML("beforeend", cardHTML("Radicación", radHtml));
+    //grid.insertAdjacentHTML("beforeend", cardHTML("Radicación", radHtml));
+    grid.insertAdjacentHTML("beforeend", cardHTML("Radicación", radHtml, { span: 'half' }));
 
     // Comparecencia
     const compStatus = statusFor(aud.comparecencia);
@@ -1434,7 +1829,8 @@
       `
       : "<div>No registrada</div>";
     const compHtml = `<div class="d-flex align-items-start gap-3"><div class="status-breath ${compStatus}" aria-hidden="true"></div><div>${compBody}</div></div>`;
-    grid.insertAdjacentHTML("beforeend", cardHTML("Comparecencia", compHtml));
+    //grid.insertAdjacentHTML("beforeend", cardHTML("Comparecencia", compHtml));
+    grid.insertAdjacentHTML("beforeend", cardHTML("Comparecencia", compHtml, { span: 'half' }));
 
     grid.insertAdjacentHTML(
       "beforeend",
@@ -1464,56 +1860,59 @@
         acuerdosList.push(aud.acuerdoconclusionpliegos);
       }
     }
+
+    injectInfoGridStyles();
+
+    const recsAC = toArraySafe(aud.acuerdoconclusion);
+    const plisAC = toArraySafe(aud.acuerdoconclusionpliegos);
+    //const acuerdosList = [...recsAC, ...plisAC];
     const acuerdosStatus = statusFor(acuerdosList);
-    let acuerdosHtml = "";
-    if (acuerdosList.length) {
-      acuerdosHtml += `<div class="audit-field"><b>Total acuerdos:</b><span class="field-value"> ${acuerdosList.length}</span></div>`;
-      if (recCount)
-        acuerdosHtml += `<div class="audit-field"><b>Recomendaciones:</b><span class="field-value"> ${recCount}</span></div>
-                         <div class="audit-field"><b>Estatus:</b><span class="field-value"> ${phaseBadgeHtml(aud.acuerdoconclusion?.fase_autorizacion ?? "Pendiente")}</span></div>`;
-      if (pliegosCount)
-        acuerdosHtml += `<div class="audit-field"><b>Pliegos:</b><span class="field-value"> ${pliegosCount}</span></div>
-                         <div class="audit-field"><b>Estatus:</b><span class="field-value"> ${phaseBadgeHtml(aud.acuerdoconclusionpliegos?.fase_autorizacion ?? "Pendiente")}</span></div>`;
-    } else {
-      acuerdosHtml = "<div>No hay acuerdos registrados</div>";
-    }
+    const acuerdosHtml = `
+                            <div class="d-flex align-items-start gap-3">
+                              <div class="status-breath ${acuerdosStatus}" aria-hidden="true"></div>
+                              <div style="width:100%">
+                                <div class="info-grid">
+                                  ${renderInfoGroupTile('Recomendaciones', recsAC)} 
+                                  ${renderInfoGroupTile('Pliegos', plisAC)}
+                                </div>
+                              </div>
+                            </div>
+                          `;
+
+    // Inserta la card a ancho completo
     grid.insertAdjacentHTML(
       "beforeend",
-      cardHTML("Acuerdos de conclusión", `<div class="d-flex align-items-start gap-3"><div class="status-breath ${acuerdosStatus}" aria-hidden="true"></div><div>${acuerdosHtml}</div></div>`)
+      cardHTML("Acuerdos de conclusión", acuerdosHtml ?? "Sin registros", { span: 'full' })
     );
 
-    // PRAS / Recomendaciones / Pliegos / Solicitudes
-    const pras = aud.accionespras || [];
-    const prasStatus = getGroupStatus(pras, "pras");
-    const prasHtml = renderActionList(pras, "pras", "PRAS");
-    grid.insertAdjacentHTML(
-      "beforeend",
-      cardHTML("PRAS", `<div class="d-flex align-items-start gap-3"><div class="status-breath ${prasStatus}" aria-hidden="true"></div><div>${prasHtml}</div></div>`)
-    );
+    //grid.insertAdjacentHTML("beforeend",cardHTML("Acuerdos de conclusión", `<div class="d-flex align-items-start gap-3"><div class="status-breath ${acuerdosStatus}" aria-hidden="true"></div><div>${acuerdosHtml}</div></div>`));
 
-    const recs = aud.accionesrecomendaciones || [];
-    const recsStatus = getGroupStatus(recs, "recomendaciones");
-    const recsHtml = renderActionList(recs, "recomendaciones", "recomendaciones");
-    grid.insertAdjacentHTML(
-      "beforeend",
-      cardHTML("Recomendaciones", `<div class="d-flex align-items-start gap-3"><div class="status-breath ${recsStatus}" aria-hidden="true"></div><div>${recsHtml}</div></div>`)
-    );
+    // === Acciones en cuadrícula (sin "No hay ...") ===
+    injectActionGridStyles();
+    const actionGroups = [
+      { title: "Recomendaciones", actions: aud.accionesrecomendaciones || [], relKey: "recomendaciones" },
+      { title: "Pliegos de observación", actions: aud.accionespo || [], relKey: "pliegosobservacion" },
+      { title: "Solicitudes de aclaración", actions: aud.accionessolacl || [], relKey: "solicitudesaclaracion" },
+      { title: "PRAS", actions: aud.accionespras || [], relKey: "pras" }
+    ];
 
-    const pos = aud.accionespo || [];
-    const posStatus = getGroupStatus(pos, "pliegosobservacion");
-    const posHtml = renderActionList(pos, "pliegosobservacion", "pliegos de observación");
-    grid.insertAdjacentHTML(
-      "beforeend",
-      cardHTML("Pliegos de observación", `<div class="d-flex align-items-start gap-3"><div class="status-breath ${posStatus}" aria-hidden="true"></div><div>${posHtml}</div></div>`)
-    );
+    // ¿Cuántas categorías NO están vacías?
+    const nonEmptyCount = actionGroups.reduce((acc, g) => {
+      const items = flattenRelations(g.actions, g.relKey);
+      return acc + (items.length > 0 ? 1 : 0);
+    }, 0);
 
-    const sol = aud.accionessolacl || [];
-    const solStatus = getGroupStatus(sol, "solicitudesaclaracion");
-    const solHtml = renderActionList(sol, "solicitudesaclaracion", "solicitudes");
-    grid.insertAdjacentHTML(
-      "beforeend",
-      cardHTML("Solicitudes de aclaración", `<div class="d-flex align-items-start gap-3"><div class="status-breath ${solStatus}" aria-hidden="true"></div><div>${solHtml}</div></div>`)
-    );
+    // Regla: si solo hay 1, esa card va 'full'; en otro caso, 'half'
+    const spanFor = (nonEmptyCount === 1) ? 'full' : 'half';
+
+    // Inserta cada grupo (solo si trae datos)
+    actionGroups.forEach(g => {
+      insertActionsCardIfAny(g.title, g.actions, g.relKey, grid, cardHTML, { span: spanFor });
+    });
+    //insertActionsCardIfAny("Recomendaciones", aud.accionesrecomendaciones || [], "recomendaciones", grid, cardHTML);
+    //insertActionsCardIfAny("Pliegos de observación", aud.accionespo || [], "pliegosobservacion", grid, cardHTML);
+    //insertActionsCardIfAny("Solicitudes de aclaración", aud.accionessolacl || [], "solicitudesaclaracion", grid, cardHTML);
+    //insertActionsCardIfAny("PRAS", aud.accionespras || [], "pras", grid, cardHTML);
 
     // Informes
     const informesList = [];
@@ -1547,21 +1946,28 @@
       }
       return node.fase_autorizacion ? String(node.fase_autorizacion).trim() : "Pendiente";
     }
+    const informesRecs = toArraySafe(aud.informeprimeraetapa);
+    const informesPliegos = toArraySafe(aud.informepliegos);
+    //const informesList   = [...informesRecs, ...informesPliegos];
     const informesStatus = statusFor(informesList);
-    let informesHtml = "";
-    if (informesList.length) {
-      informesHtml += `<div class="audit-field"><b>Total Informes:</b><span class="field-value"> ${aud.informes?.length ?? informesList.length}</span></div>`;
-      if (isrecCount)
-        informesHtml += `<div class="audit-field"><b>Recomendaciones:</b><span class="field-value"> ${isrecCount}</span></div><div class="audit-field"><b>Estatus:</b><span class="field-value"> ${phaseBadgeHtml(phaseLabel(aud.informeprimeraetapa))}</span></div>`;
-      if (ispliegosCount)
-        informesHtml += `<div class="audit-field"><b>Pliegos:</b><span class="field-value"> ${ispliegosCount}</span></div><div class="audit-field"><b>Estatus:</b><span class="field-value"> ${phaseBadgeHtml(phaseLabel(aud.informepliegos))}</span></div>`;
-    } else {
-      informesHtml = "<div>No hay informes registrados</div>";
-    }
+
+    const informesHtml = `
+      <div class="d-flex align-items-start gap-3">
+        <div class="status-breath ${informesStatus}" aria-hidden="true"></div>
+        <div style="width:100%">
+          <div class="info-grid">
+            ${renderInfoGroupTile('Recomendaciones', informesRecs)}
+            ${renderInfoGroupTile('Pliegos', informesPliegos)}
+          </div>
+        </div>
+      </div>
+    `;
+
     grid.insertAdjacentHTML(
       "beforeend",
-      cardHTML("Informes", `<div class="d-flex align-items-start gap-3"><div class="status-breath ${informesStatus}" aria-hidden="true"></div><div>${informesHtml}</div></div>`)
+      cardHTML("Informes", informesHtml, { span: 'full' })
     );
+    //grid.insertAdjacentHTML("beforeend",cardHTML("Informes", `<div class="d-flex align-items-start gap-3"><div class="status-breath ${informesStatus}" aria-hidden="true"></div><div>${informesHtml}</div></div>`));
 
     // Separador y Turnos
     grid.insertAdjacentHTML(
@@ -1579,7 +1985,7 @@
         <div class="audit-field"><b>Estatus del turno:</b> ${phaseBadgeHtml(esc(aud.turnoui.fase_autorizacion ?? "Pendiente"))}</div>`
       : "<div>No registrada</div>";
     const TurnoUIHtml = `<div class="d-flex align-items-start gap-3"><div class="status-breath ${TurnoUIStatus}" aria-hidden="true"></div><div>${TurnoUIBody}</div></div>`;
-    grid.insertAdjacentHTML("beforeend", cardHTML("Turno UI", TurnoUIHtml));
+    grid.insertAdjacentHTML("beforeend", cardHTMLTurnos("Turno UI", TurnoUIHtml));
 
     const TurnoOICBody = aud.turnooic
       ? `
@@ -1587,7 +1993,7 @@
         <div class="audit-field"><b>Estatus del turno:</b> ${phaseBadgeHtml(esc(aud.turnooic.fase_autorizacion ?? "Pendiente"))}</div>`
       : "<div>No registrada</div>";
     const TurnoOICHtml = `<div class="d-flex align-items-start gap-3"><div class="status-breath ${TurnoOICStatus}" aria-hidden="true"></div><div>${TurnoOICBody}</div></div>`;
-    grid.insertAdjacentHTML("beforeend", cardHTML("Turno OIC", TurnoOICHtml));
+    grid.insertAdjacentHTML("beforeend", cardHTMLTurnos("Turno OIC", TurnoOICHtml));
 
     const TurnoArchivoBody = aud.turnoarchivo
       ? `
@@ -1595,40 +2001,69 @@
         <div class="audit-field"><b>Estatus del turno:</b> ${phaseBadgeHtml(esc(aud.turnoarchivo.fase_autorizacion ?? "Pendiente"))}</div>`
       : "<div>No registrada</div>";
     const TurnoArchivoHtml = `<div class="d-flex align-items-start gap-3"><div class="status-breath ${TurnoArchivoStatus}" aria-hidden="true"></div><div>${TurnoArchivoBody}</div></div>`;
-    grid.insertAdjacentHTML("beforeend", cardHTML("Turno Archivo", TurnoArchivoHtml));
+    grid.insertAdjacentHTML("beforeend", cardHTMLTurnos("Turno Archivo", TurnoArchivoHtml));
 
     const btnOcultar = document.getElementById("btnOcultarPanel");
+    
     if (btnOcultar)
       btnOcultar.addEventListener("click", () => {
-        if (panel) panel.classList.add("d-none");
-        resetAvanceCard();
+          if (panel) panel.classList.add("d-none");
+          resetAvanceCard();
+          clearPdfAuditState();
       });
     try {
       panel?.scrollIntoView({ behavior: "smooth", block: "start" });
-    } catch (e) {}
-    
-  window.__pdfAuditId = aud?.id || '';
-  window.__pdfAuditName = aud?.numero_auditoria || '';
-  const avTxt = document.getElementById('avanceAuditoria')?.textContent || '';
-  window.__pdfAuditAvanceText = avTxt;
+    } catch (e) { }
+
+    window.__pdfAuditId = aud?.id || '';
+    window.__pdfAuditName = aud?.numero_auditoria || '';
+    const avTxt = document.getElementById('avanceAuditoria')?.textContent || '';
+    window.__pdfAuditAvanceText = avTxt;
 
 
   }
-
   // ====== INIT ======
   (function init() {
-    injectNeonSkinStyles();
-    // Oculta filtros hasta abrir auditorías
-    toggleAuditFilters(false);
+    // Estilos del treemap
+    try { injectNeonSkinStyles(); } catch (e) { }
 
-    setEncargadosDireccionCard("A");
-    setEncargadosDireccionCard("B");
-    renderDeptSolidGauge("dirA", "grafica_depto_auditoriasA", { useSideInfo: true });
-    renderDeptSolidGauge("dirB", "grafica_deptos", { useSideInfo: true });
+    // Oculta tarjeta de filtros hasta que el usuario seleccione depto
+    try { toggleAuditFilters(false); } catch (e) { }
+    //Flujo para JD
+    
+    if (userRole == 'JD' && userDeptId) {
+        initJefeDepartamentoView();
+        return;
+      }
+
+
+    // Tarjetas de "Encargados" (A/B) – muestran director por dirección
+    try { setEncargadosDireccionCard("A"); } catch (e) { }
+    try { setEncargadosDireccionCard("B"); } catch (e) { }
+
+    // Gauges SOLO si existe el contenedor en el DOM (según permisos/Blade)
+    if (document.getElementById("grafica_depto_auditoriasA")) {
+      renderDeptSolidGauge("dirA", "grafica_depto_auditoriasA", { useSideInfo: true });
+    }
+    if (document.getElementById("grafica_deptos")) {
+      renderDeptSolidGauge("dirB", "grafica_deptos", { useSideInfo: true });
+    }
 
     // Limpia treemap inicial
+    const container = document.getElementById("container");
     if (container) {
-      container.innerHTML = `<div id="chartInner" class="treemap-neon" style="min-height: 80px;"></div>`;
+      container.innerHTML = '<div id="chartInner" class="treemap-neon" style="min-height: 80px;"></div>';
     }
+    
   })();
+  // FIX PRINT: recalcula gauges antes de imprimir
+    window.addEventListener('beforeprint', () => {
+    try {
+        Highcharts.charts.forEach(ch => {
+        if (!ch) return;
+        ch.reflow();
+        ch.redraw(false);
+        });
+    } catch (e) {}
+    });
 })();

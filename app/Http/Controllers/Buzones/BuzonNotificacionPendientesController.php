@@ -18,7 +18,7 @@ class BuzonNotificacionPendientesController extends Controller
     public function index(Request $request)
     {
         $notificaciones = $this->setQuery($request)->paginate(25);
-		
+
 
         return view('notificaciones.index', compact('notificaciones', 'request'));
     }
@@ -41,7 +41,7 @@ class BuzonNotificacionPendientesController extends Controller
      */
     public function store(Request $request, )
     {
-        
+
     }
 
     /**
@@ -63,7 +63,7 @@ class BuzonNotificacionPendientesController extends Controller
      */
     public function edit()
     {
-        
+
 		//
     }
 
@@ -90,8 +90,8 @@ class BuzonNotificacionPendientesController extends Controller
         dd("destroy");
 
     }
-	
-    
+
+
     public function marcarleido(Request $request)
     {
         $notificacion = Notificacion::find($request->id);
@@ -106,7 +106,7 @@ class BuzonNotificacionPendientesController extends Controller
     }
 
 
-    
+
 
     private function setQuery($request)
     {
@@ -127,10 +127,10 @@ class BuzonNotificacionPendientesController extends Controller
 			$cp = str_replace("|", "", $request->input('cuenta'));
             $query = $query->where('cp', $cp);
         }
-        return $query->orderBy('created_at', 'asc');
+        return $query->orderBy('created_at', 'desc');
     }
 
-    
+
     public function nuevas()
     {
         $notificaciones = auth()->user()->notificaciones;

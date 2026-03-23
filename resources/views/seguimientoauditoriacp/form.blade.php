@@ -172,8 +172,7 @@
 
             $('#entidad_fiscalizable_id').val(entidadN3SeleccionadoId);
         });        
-    }); // fin document.ready
-
+    });
 
 </script>
 {!! JsValidator::formRequest('App\Http\Requests\AuditoriaRequest') !!}

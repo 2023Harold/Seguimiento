@@ -70,16 +70,29 @@
 											<td>{{ $notificacion->cp??'Sin registro'}}</td>
                                             <td>{{ $notificacion->titulo}}</td>
                                             <td>
-												@if (!empty($notificacion->url))
-													<label class="fs-6 text-primary fw-bold float-end">
-														<a href="{{ route('notificacionurl.edit', $notificacion) }}"><i class="bi bi-box-arrow-in-up-right fa-2x text-primary float-end"></i></a>
-													</label>
-													<br>
-												@endif
-                                                @php
+												@php
                                                     $partes = explode('<br>', $notificacion->mensaje);
                                                     $texto = $partes[1] ?? $notificacion->mensaje; // usa mensaje completo si no hay segunda parte
                                                 @endphp
+												@if(str_contains($notificacion->mensaje, "registro de la acción")&& ($notificacion->estatus == 'Pendiente'))
+													@if (!empty($notificacion->url))
+														<label class="fs-6 text-primary fw-bold float-end">
+															<a href="{{ route('notificacionurl.edit', $notificacion) }}"><i class="bi bi-box-arrow-in-up-right fa-2x text-primary float-end"></i></a>
+														</label>
+														<br>
+													@endif
+												@elseif(str_contains($notificacion->mensaje, "registro de la acción"))
+													
+												@else
+													@if (!empty($notificacion->url))
+														<label class="fs-6 text-primary fw-bold float-end">
+															<a href="{{ route('notificacionurl.edit', $notificacion) }}"><i class="bi bi-box-arrow-in-up-right fa-2x text-primary float-end"></i></a>
+														</label>
+														<br>
+													@endif
+												@endif
+												
+                                                
                                                 @if(!empty($notificacion->auditoria_id)||!empty($notificacion->accion_id))
                                                     @button($texto, route('notificacionaccion.edit', $notificacion), '')
                                                 @else
@@ -155,7 +168,13 @@
                 //window.location.reload();
             },
             error: function() {
-                alert('Error al generar la petición');
+                //alert('Error al generar la petición');
+                SwalBT.fire({
+                    icon: 'error',
+                    title: 'Error al generar la petición',
+                    html: '',
+                    confirmButtonText: 'Entendido'
+                });
             }
         });
     });

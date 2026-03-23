@@ -71,12 +71,14 @@
         <div class="col-lg-4 col-md-4 col-sm-12 col-12"></div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-12">
             <label>Informe de auditoría: </label>
-            <span class="text-primary">
-                <a href="{{ asset($auditoria->informe_auditoria) }}" target="_blank">
-                    <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->informe_auditoria)) ?>
-                </a>
-                
-            </span><br>
+			@if ($auditoria->informe_auditoria)
+				<span class="text-primary">
+					<a href="{{ asset($auditoria->informe_auditoria) }}" target="_blank">
+						<?php echo htmlspecialchars_decode(iconoArchivo($auditoria->informe_auditoria)) ?>
+					</a>
+				</span>
+			@endif
+			<br>
             <label>Numero fojas: </label>
             <span class="text-primary">
                 {{ $auditoria->fojas_utiles}}

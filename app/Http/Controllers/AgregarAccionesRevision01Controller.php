@@ -88,7 +88,9 @@ class AgregarAccionesRevision01Controller extends Controller
         $accion->update(['fase_revision' => $request->estatus == 'Aprobado' ? 'En revisión' : 'Rechazado']);
         $cuenta_publicaSession = getSession('cp');
         if($cuenta_publicaSession !=2022){
-            $jefe = auth()->user()->jefe;
+            //$jefe = auth()->user()->jefe;
+            $jefe = User::Where('unidad_administrativa_id',$auditoria->departamento_encargado_id)->first();
+            //dd($jefe->name, $jefe->puesto);
             //$jefe = $auditoria->jefedepartamentoencargado;
             $analista = $auditoria->analistacp; 
             $lider = $auditoria->lidercp; 

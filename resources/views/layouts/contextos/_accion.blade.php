@@ -1,5 +1,5 @@
 <div>
-    <h3 class="card-title text-primary">Acción</h3>
+    <h3 class="card-title text-primary">Acción 999</h3>
     <div class="card-body py-7">
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-12 col-12">
@@ -18,7 +18,14 @@
 			    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                     <label>Acto de fiscalización: </label>
                     <span class="text-primary">
-                        {{ $accion->acto_fiscalizacion}} - {{ (empty($accion->tipologia_id)?'':$accion->tipologiadesc->tipologia) }}
+                        {{ $accion->acto_fiscalizacion}} 
+                         @foreach ($accion->tipologias as $tipologias)
+                             @if(empty($tipologias->tipologia))
+                                 {{" - "}}
+                             @else
+                                 {{' - '.$tipologias->tipologia}}
+                             @endif
+                         @endforeach
                     </span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-12">
@@ -65,7 +72,8 @@
                         {{ '$'.number_format( $accion->monto_aclarar, 2) }}
                     </span>
                 </div>
-            </div>			
+            </div>
+            {{--
             @if (!empty($accion->departamento_asignado))
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <label>Departamento:</label>
@@ -75,7 +83,7 @@
                         {{ $accion->depaasignado->puesto }}
                     </span>
                 </div>
-            @endif
+            @endif--}}
 			@if ($accion->tipo=='Recomendación')
                 @if (!empty($accion->evidencia_recomendacion))
                 <div class="row">

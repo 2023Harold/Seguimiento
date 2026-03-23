@@ -20,7 +20,7 @@ class BuzonNotificacionLeidasController extends Controller
         //$auditoria = Auditoria::find(getSession('auditoria_id'));
        // dd("index leidas");
         $notificaciones = $this->setQuery($request)->paginate(25);
-	
+
         return view('notificaciones.index', compact('notificaciones', 'request'));
     }
 
@@ -42,7 +42,7 @@ class BuzonNotificacionLeidasController extends Controller
      */
     public function store(Request $request, )
     {
-        
+
     }
 
     /**
@@ -64,7 +64,7 @@ class BuzonNotificacionLeidasController extends Controller
      */
     public function edit()
     {
-        
+
 		//
     }
 
@@ -91,7 +91,7 @@ class BuzonNotificacionLeidasController extends Controller
         dd("destroy");
 
     }
-	
+
     public function marcarleido(Request $request)
     {
         $notificacion = Notificacion::find($request->id);
@@ -106,7 +106,7 @@ class BuzonNotificacionLeidasController extends Controller
     }
 
 
-    
+
 
     private function setQuery($request)
     {
@@ -128,10 +128,10 @@ class BuzonNotificacionLeidasController extends Controller
             $query = $query->where('cp', $cp);
         }
 
-        return $query->orderBy('created_at', 'asc');
+        return $query->orderBy('created_at', 'desc');
     }
 
-    
+
     public function nuevas()
     {
         $notificaciones = auth()->user()->notificaciones;

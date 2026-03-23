@@ -36,7 +36,7 @@ class AuditoriaAccionRequest extends FormRequest
             'plazo_recomendacion' => 'sometimes|nullable|string|max:250',
             // 'tipologia_id' => 'integer|max:999999999',
             'monto_aclarar'=> 'sometimes|nullable|required_if:segtipo_accion_id,1,3,4',
-        ];        
+        ];
     }
 
     public function attributes()

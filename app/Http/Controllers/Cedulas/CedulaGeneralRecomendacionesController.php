@@ -237,10 +237,11 @@ class CedulaGeneralRecomendacionesController extends Controller
         //$jefe=User::where('unidad_administrativa_id',substr($cedula->userCreacion->unidad_administrativa_id, 0, 5).'0')->where('siglas_rol','JD')->first();
 		$director=$auditoria->directorasignado;
         $jefe=$auditoria->jefedepartamentoencargado;
-               
-            $accionesanalistasListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get(); 
-            $accionesLideresListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get();  
-            //$accionesJefesListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get();    
+        $titular=User::where('siglas_rol','TUS')->first();
+        //dd($titular->name);
+            $accionesanalistasListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get();
+            $accionesLideresListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get();
+            //$accionesJefesListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get();
             $analistasL=array_unique($accionesanalistasListos->pluck('analista_asignado_id', 'id')->toArray());
             $nombresanalistasL=array_unique($accionesanalistasListos->pluck('analista_asignado', 'id')->toArray());
             $lideresL=array_unique($accionesLideresListos->pluck('lider_asignado_id', 'id')->toArray());
@@ -259,7 +260,7 @@ class CedulaGeneralRecomendacionesController extends Controller
             $rfm = Carbon::parse($registroconfechamaxima); 
                           
             $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])
-			->loadView('cedulageneralrecomendaciones.show',compact('auditoria','rfm','director','nombresanalistasL','nombreslideresL','jefe'))
+			->loadView('cedulageneralrecomendaciones.show',compact('titular','auditoria','rfm','director','nombresanalistasL','nombreslideresL','jefe'))
 			->setPaper('a4', 'landscape')->stream('archivo.pdf');
             $nombre='storage/temporales/CedulaGeneralRecomendaciones'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
             $pdfgenrado = file_put_contents($nombre, $pdf);

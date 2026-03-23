@@ -70,9 +70,9 @@
                                             @endif
                                         </span>
                                     </h1>  
-                               </div>
-                               <!-- Tabla Informe de Recomendaciones -->
-                               <div class="table-responsive">
+                                </div>
+
+                                <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                             <tr>

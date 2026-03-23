@@ -110,21 +110,82 @@
 			</span>
 			<!--end::Svg Icon-->
 		</div>
+		{{-- SWEET ALERT PARA CUANDO DETECTA ALERT --}}
+		@if(session('success') || session('status') || session('message'))
+		<script>
+			SwalNotify.success(@json(session('success') ?? session('status') ?? session('message')), 'Éxito');
+		</script>
+		@endif
+
+		@if(session('error'))
+		<script>
+			SwalNotify.error(@json(session('error')), 'Error');
+		</script>
+		@endif
+
+		@if(session('warning'))
+		<script>
+			SwalNotify.warn(@json(session('warning')), 'Atención');
+		</script>
+		@endif
+
+		@if(session('info'))
+		<script>
+			SwalNotify.info(@json(session('info')), 'Aviso');
+		</script>
+		@endif
+
         @include('layouts.partials._foot')
         @yield('script')
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-		
+	
 		<script>
-		// Mixin de SweetAlert2 que usa clases de Bootstrap/Metronic
-		const SwalBT = Swal.mixin({
-			buttonsStyling: false, // importantísimo para que respete las clases de Bootstrap
-			customClass: {
-			confirmButton: 'btn btn-sm btn-danger',   // úsalo para “acción destructiva”
-			cancelButton:  'btn btn-sm btn-secondary'
-			}
-		});
-		</script>
-		<script>
+			// Mixin de SweetAlert2 que usa clases de Bootstrap/Metronic
+
+			///SWEETALERT para tipologias o para eliminar y confirmar
+			document.addEventListener('click', function (e) {
+				const btn = e.target.closest('.js-confirm-delete');
+				if (!btn) return;
+
+				e.preventDefault();
+
+				const url = btn.getAttribute('href');
+				const title = btn.dataset.confirmTitle || '¿Confirmar?';
+				const text = btn.dataset.confirmText || '';
+				const successText = btn.dataset.successText || 'Eliminado correctamente';
+
+				Swal.fire({
+					icon: 'warning',
+					title: title,
+					text: text,
+					showCancelButton: true,
+					confirmButtonText: 'Sí, eliminar',
+					cancelButtonText: 'Cancelar',
+					buttonsStyling: false,
+					customClass: {
+						confirmButton: 'btn btn-sm btn-danger',
+						cancelButton: 'btn btn-sm btn-primary'
+					}
+				}).then(result => {
+					if (!result.isConfirmed) return;
+
+					// Paso 2: mostrar feedback inmediato
+					Swal.fire({
+						icon: 'success',
+						title: 'Eliminado',
+						text: successText,
+						timer: 1200,
+						showConfirmButton: false
+					});
+
+					// Paso 3: navegar después del mensaje
+					setTimeout(() => {
+						window.location.href = url;
+					}, 1200);
+				});
+			});
+
+
 			$(document).ready(function() {
 				// --- Delegación para "Eliminar" usando SweetAlert2 ---
 				// NOTA: Esto funciona siempre que el helper NO tenga el confirm() inline.
@@ -175,9 +236,99 @@
 
 			}); // fin document.ready
 
+			// === Mixin buttons estilo Bootstrap/Metronic (ya lo tenías como SwalBT) ===
+			const SwalBT = Swal.mixin({
+				buttonsStyling: false,
+				customClass: {
+				confirmButton: 'btn btn-sm btn-primary',
+				cancelButton:  'btn btn-sm btn-secondary',
+				denyButton:    'btn btn-sm btn-danger'
+				}
+			});
 
-		</script>
+			// === Mixin de "toast" (esquinas, autodesaparición) ===
+			const Toast = Swal.mixin({
+				toast: true,
+				position: 'top-end',    // puedes cambiar a 'bottom-end'
+				showConfirmButton: false,
+				timer: 2500,
+				timerProgressBar: true,
+			});
+			
+			window.sweetConfirm = function(message='¿Confirmas?', opts={}) {
+			return Swal.fire({
+				icon: opts.icon || 'question',
+				title: opts.title || 'Confirmar',
+				text: message,
+				showCancelButton: true,
+				confirmButtonText: opts.confirmText || 'Sí',
+				cancelButtonText:  opts.cancelText  || 'Cancelar',
+				buttonsStyling: false,
+				customClass: {
+				confirmButton: 'btn btn-sm btn-primary',
+				cancelButton:  'btn btn-sm btn-secondary'
+				}
+			}).then(r => !!r.isConfirmed);
+			};
 
+			// === Helpers rápidos (por si prefieres nombres explícitos) ===
+			window.SwalNotify = {
+				success: (msg, title='Listo') => Toast.fire({ icon: 'success', title: title, text: String(msg || '') }),
+				info:    (msg, title='Aviso') => Toast.fire({ icon: 'info',    title: title, text: String(msg || '') }),
+				warn:    (msg, title='Atención') => Toast.fire({ icon: 'warning', title: title, text: String(msg || '') }),
+				error:   (msg, title='Error') => SwalBT.fire({ icon: 'error', title: title, html: `<div style="text-align:left;">${String(msg||'')}</div>` })
+			};
+			// Intercepta cualquier form con data-swal-confirm y muestra SweetAlert2 antes de enviar
+			(function attachSwalConfirmToForms() {
+				document.addEventListener('submit', function (ev) {
+					const form = ev.target;
+					if (!(form instanceof HTMLFormElement)) return;
+
+					const msg = form.dataset.swalConfirm;
+					if (!msg) return; // solo forms marcados
+
+					// Evita submit automático
+					ev.preventDefault();
+					ev.stopImmediatePropagation();
+
+					// Anti doble ejecución
+					if (form.dataset.confirming === '1') return;
+					form.dataset.confirming = '1';
+
+					Swal.fire({
+					icon: 'warning',
+					title: '¿Desea eliminar el registro?',
+					text: "Esta acción no se puede deshacer.",
+					showCancelButton: true,
+					confirmButtonText: form.dataset.swalConfirmText || 'Confirmar',
+					cancelButtonText:  form.dataset.swalCancelText  || 'Cancelar',
+					buttonsStyling: false,
+					customClass: {
+						confirmButton: 'btn btn-sm btn-danger',
+						cancelButton:  'btn btn-sm btn-primary'
+					},
+					// Opcional: evita que la rueda del mouse lo cierre por accidente
+					allowOutsideClick: false,
+					allowEscapeKey: true
+					}).then(res => {
+					if (res.isConfirmed) {
+						// Submit intencional
+						Swal.fire({
+							icon: 'success',
+							title: 'Accion eliminada',
+							timer: 1200,
+							showConfirmButton: false
+						});
+						form.submit();
+					} else {
+						// Permite reintentar
+						delete form.dataset.confirming;
+					}
+					});
+				}, true); // capture para ganarle a otros listeners
+				})();
+
+			</script>
     </body>
 </html>
 

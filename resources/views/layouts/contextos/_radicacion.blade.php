@@ -69,12 +69,6 @@
                 {{ fecha(optional($auditoria->radicacion)->fecha_acta)}}
             </span>
         </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-            <label>Fecha radicación: </label>
-            <span class="text-primary">
-                {{ fecha(optional($auditoria->radicacion)->fecha_notificacion)}}
-            </span>
-        </div>
         @if(!empty($auditoria->comparecencia))
         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
             <label>Nombre del titular a quien se dirige la comparecencia:</label>

@@ -4,20 +4,18 @@
     <div class="card-header">
         <h1 class="card-title">           
             {{-- {{$accion}} --}}
-            Agregar
+            Agregar Tipología
         </h1>
     </div>
 {{-- {{ dd($tipologia); }} --}}
     <div class="card-body">
         @include('flash::message')
         {{-- @include('layouts.contextos._auditoria') --}}
-        {!!BootForm::open(['model' => $accion, 'update' => 'agregartipologiaaccion.update', 'id' => 'form']) !!}           
-        {{-- {!!BootForm::hidden('tipo_auditoria_id', $auditoria->id) !!} --}}
-        
-
+        {!!BootForm::open(['model' => $tipologia, 'store' => 'agregartipologiaaccion.store','update' => 'agregartipologiaaccion.update','id' => 'form']) !!}           
+       {!!BootForm::hidden('accion_id', $accion->id) !!} 
             <div class="row">                
                 <div class="col-md-12">                    
-                    {!!BootForm::text('tipologia', 'Tipología: *', old("tipologia", $accion->tipologia))!!}
+                    {!!BootForm::select('tipologia_id', 'Tipología: ', $tipologias->toArray(), old('tipologia_id',$tipologia->tipologia_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
                 </div>
             </div>
             <div class="row">

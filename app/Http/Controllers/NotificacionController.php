@@ -10,15 +10,15 @@ class NotificacionController extends Controller
     public function index(Request $request){
         /*
         $notificaciones = $this->setQuery($request)->paginate(25);
-        
+
         return view('notificaciones.index', compact('notificaciones','request'));*/
 		$notificaciones = $this->setQuery($request)->paginate(25);
-		
+
 
         return view('notificaciones.index', compact('notificaciones', 'request'));
     }
 
-    /** 
+    /**
     public function marcarleido(Request $request)
     {
         $notificacion = Notificacion::find($request->id);
@@ -27,7 +27,7 @@ class NotificacionController extends Controller
         return $request->id;
     }
         */
-       
+
     public function marcarleido(Request $request)
     {
         $notificacion = Notificacion::find($request->id);
@@ -42,7 +42,7 @@ class NotificacionController extends Controller
     }
 
 
-    
+
 
     private function setQuery($request)
     {
@@ -65,10 +65,10 @@ class NotificacionController extends Controller
             $query = $query->where('cp', $cp);
         }
 
-        return $query->orderBy('created_at', 'asc');
+        return $query->orderBy('created_at', 'desc');
     }
 
-    
+
     public function nuevas()
     {
         $notificaciones = auth()->user()->notificaciones;
@@ -82,6 +82,6 @@ class NotificacionController extends Controller
 
 
 
-    
+
 
 }

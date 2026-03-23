@@ -54,9 +54,15 @@ function setSession($attribute = '', $value = '')
     session([config('app.name').'_'.$attribute => $value]);
 }
 //Eliminar las variables de sesion para el usuario
+/*
 function delSession($attribute = '', $value = '')
 {
     unset($_SESSION[config('app.name').'_'.$attribute]);
+}*/
+
+function delSession($attribute = '')
+{
+    session()->forget(config('app.name').'_'.$attribute);
 }
 
 //Retorna las variables de sesion para el usuario
@@ -118,7 +124,7 @@ function archivo($field, $caption, $value, array $options = [])
 {
     $url_archivo = (! empty($value)) ? asset($value) : 'javascript:void(0);';
     $verArchivoAdjunto = (! empty($value)) ? 'inline-block' : 'none'; // 'inline-block' para que el botón conserve estilos
-    $allowedFileExtensions = (array_key_exists('data-allowedFileExtensions', $options)) ? ['data-allowedFileExtensions' => 'pdf'] : ['data-allowedFileExtensions' => 'pdf'];
+    $allowedFileExtensions = (array_key_exists('data-allowedFileExtensions', $options)) ? ['data-allowedFileExtensions' => 'pdf,xls,xlsx'] : ['data-allowedFileExtensions' => 'pdf,xls,xlsx'];
     $options = array_merge($options, $allowedFileExtensions);
     $maxFileSize = (array_key_exists('data-maxFileSize', $options)) ? ['data-maxFileSize' => '50'] : ['data-maxFileSize' => '50'];
     $options = array_merge($options, $maxFileSize);
@@ -141,7 +147,7 @@ function archivo($field, $caption, $value, array $options = [])
                 . $allowedFileExtensions['data-allowedFileExtensions']
                 . ', '
                 . $maxFileSize['data-maxFileSize'].'MB)'
-                . ', recuerda subir solo PDFs'
+                . ', recuerda subir solo PDFs o xls'
             . '</small>'
         . '</label>'
 

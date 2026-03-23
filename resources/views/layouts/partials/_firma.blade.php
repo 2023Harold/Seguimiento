@@ -38,7 +38,13 @@
                 console.log(respuesta);
             },
             error: function() {
-                alert('Error al generar la petición');
+                //alert('Error al generar la petición');
+                SwalBT.fire({
+                    icon: 'error',
+                    title: 'Error al generar la petición',
+                    html: '',
+                    confirmButtonText: 'Entendido'
+                });
                 $('#body_loader').hide();
                 $('#campos').show();
                 $('#btn-firma').html('Firmar y guardar');
@@ -85,7 +91,13 @@
                 console.log(respuesta.datosXML)
             },
             error: function() {
-                alert('Error al generar la petición');
+                //alert('Error al generar la petición');
+                SwalBT.fire({
+                    icon: 'error',
+                    title: 'Error al generar la petición',
+                    html: '',
+                    confirmButtonText: 'Entendido'
+                });
                 $('#campos').show();
                 $('#body_loader').hide();
                 $('#btn-firma').html('Firmar y guardar');
@@ -121,7 +133,13 @@
                 $("#form").submit();
             },
             error: function() {
-                alert('Error al generar la petición');
+                //alert('Error al generar la petición');
+                SwalBT.fire({
+                    icon: 'error',
+                    title: 'Error al generar la petición',
+                    html: '',
+                    confirmButtonText: 'Entendido'
+                });
                 $('#campos').show();
                 $('#body_loader').hide();
                 $('#btn-firma').html('Firmar y guardar');

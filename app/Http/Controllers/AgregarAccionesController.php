@@ -48,6 +48,9 @@ class AgregarAccionesController extends Controller
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Todas', 0);        
         $monto_aclarar=$this->setQuery($request)->orderBy('monto_aclarar');
         $movimiento=null;
+        
+        delSession('accion_borrador_id'); 
+
         // dd( $auditoria->tipologiaacciones->fase_autorizacion );
 
         return view('agregaracciones.index', compact('acciones', 'request', 'auditoria','tiposaccion','monto_aclarar','movimiento'));
@@ -60,15 +63,31 @@ class AgregarAccionesController extends Controller
      */
     public function create()
     {
+        $accion_borrador = getSession('accion_borrador_id');
+        if(!empty($accion_borrador)){
+            $accion = AuditoriaAccion::find(getSession('accion_borrador_id'));
+            return redirect()->route('agregaracciones.edit', $accion);
+        }
         //dd("create agregar acciones 2024");
         $auditoria = Auditoria::find(getSession('auditoriacp_id'));        
-        $numeroconsecutivo=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->get()->count()+1;
-        $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
-        $tipologias= CatalogoTipologia::all()->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
-        $accion = new AuditoriaAccion();
-        $actosfiscalizacion=CatalogoTipoAuditoria::whereIn('id',[1,2,3,4])->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
+        $numeroconsecutivo = AuditoriaAccion::where('segauditoria_id',$auditoria->id)->whereNull('eliminado')->count() + 1;
+        $tiposaccion = CatalogoTipoAccion::all()->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
+        $tipologias = CatalogoTipologia::all()->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
+        //$accion = new AuditoriaAccion();
+        $accion = AuditoriaAccion::create([
+            'consecutivo' => $numeroconsecutivo,
+            'segauditoria_id' => $auditoria->id,
+            'eliminado' => 'X', 
+            'usuario_creacion_id' => auth()->id(),
+        ]);
 
-        return view('agregaracciones.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion','tipologias'));
+        setSession('accion_borrador_id',$accion->id);
+        
+
+        $actosfiscalizacion = CatalogoTipoAuditoria::whereIn('id',[1,2,3,4])->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
+
+        // return view('agregaracciones.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion','tipologias'));
+        return redirect()->route('agregaracciones.edit', $accion);
     }
 
     /**
@@ -102,6 +121,7 @@ class AgregarAccionesController extends Controller
         $accion  = AuditoriaAccion::create($request->all());
         $this->actualizaProgresivo();
         setMessage('El registro ha sido agregado');
+        delSession('accion_borrador_id');
 
         return redirect()->route('agregaracciones.index','auditoria');
     }
@@ -115,7 +135,7 @@ class AgregarAccionesController extends Controller
     public function show(AuditoriaAccion $accion)
     {
         $auditoria = $accion->auditoria;
-        return view('agregaracciones.showacciones',compact('accion','auditoria'));
+        return view('agregaracciones.show',compact('accion','auditoria'));
     }
 
     /**
@@ -126,12 +146,12 @@ class AgregarAccionesController extends Controller
      */
     public function edit(AuditoriaAccion $accion)
     {       
+        
         $auditoria = Auditoria::find(getSession('auditoriacp_id'));
         $numeroconsecutivo=$accion->consecutivo;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id');
         $tipologias= CatalogoTipologia::where('tipo_auditoria_id',$accion->acto_fiscalizacion_id)->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
         $actosfiscalizacion=CatalogoTipoAuditoria::whereIn('id',[1,2,3,4])->pluck('descripcion', 'id')->prepend('Seleccionar una opción', '');
-
 
         return view('agregaracciones.form', compact('numeroconsecutivo','tiposaccion','accion','auditoria','actosfiscalizacion','tipologias'));
     }
@@ -143,25 +163,55 @@ class AgregarAccionesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AuditoriaAccionRequest $request, AuditoriaAccion $accion)
+    
+    public function update(Request $request, AuditoriaAccion $accion)
     {
-        $this->setValidator($request)->validate();
+
+        $this->setValidator($request)->validate();       
+        $auditoria = Auditoria::find(getSession('auditoriacp_id'));
         $this->normalizarDatos($request);
         mover_archivos($request, ['cedula'], $accion);
-        $accion->update($request->all());
-        $this->actualizaProgresivo();
+        //mover_archivos($request, ['cedula'], null);
+        $request['usuario_creacion_id'] = auth()->user()->id;
+        $request['analista_asignado_id'] = auth()->user()->id;
+        $request['analista_asignado'] = auth()->user()->name;
+        $request['eliminado'] =null;
+		$cuenta_publicaSession = getSession('cp');
+		
+		if($cuenta_publicaSession !=2022){
+			$request['lider_asignado_id'] = $auditoria->lidercp->id;
+			$request['lider_asignado'] = $auditoria->lidercp->name;
+		}else{
+			$request['lider_asignado_id'] = $auditoria->lider->id;
+			$request['lider_asignado'] = $auditoria->lider->name;
+		}
+        
+        $request['departamento_asignado_id'] = $auditoria->departamento_encargado_id;
+        $request['departamento_asignado'] = $auditoria->departamento_encargado;
 
-        setMessage('La acción se ha modificado correctamente.');
+        $accion->update(array_merge(
+            $request->all()
+            //,['eliminado' => null]
+        ));
+
+        delSession('accion_borrador_id');
+
+        $this->actualizaProgresivo();
+        setMessage('El registro ha sido agregado');
 
         return redirect()->route('agregaracciones.index');
     }
+
     public function destroy(AuditoriaAccion $accion)
     {
         $accion->update(['eliminado'=>'X']);
-
         return redirect()->route('agregaracciones.index');
     }
 
+    public function eliminar(AuditoriaAccion $accion){
+        $accion->update(['eliminado'=>'X']);
+        return redirect()->route('agregaracciones.index');
+    }
     public function setQuery(Request $request)
     {
          $query = $this->model;

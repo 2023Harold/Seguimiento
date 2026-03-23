@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('segrevisiones', function (Blueprint $table) {
-            $table->text('universo_rev')->nullable();
+            //$table->text('universo_rev')->nullable();
         });
     }
 

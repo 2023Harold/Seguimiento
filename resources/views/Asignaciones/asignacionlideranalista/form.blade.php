@@ -27,10 +27,11 @@
         @include('flash::message')
         @include('layouts.contextos._auditoria')
         @include('layouts.contextos._acciones')
-        {!! BootForm::open(['model' => $auditoria,'update' => 'asignacionlideranalista.update','id' => 'form']) !!}
-        {!! BootForm::hidden('acciond',$accion) !!}
-        {!! BootForm::hidden('lider_asignado',null,['id'=>'lider_asignado_fid']) !!}
-        {!! BootForm::hidden('analista_asignado',null,['id'=>'analista_asignado_fid']) !!}
+        {!!BootForm::open(['model' => $auditoria,'update' => 'asignacionlideranalista.update','id' => 'form']) !!}
+        {!!BootForm::hidden('acciond',$accion) !!}
+		{!!BootForm::hidden('auditoria',$auditoria->id) !!}
+        {!!BootForm::hidden('lider_asignado',null,['id'=>'lider_asignado_fid']) !!}
+        {!!BootForm::hidden('analista_asignado',null,['id'=>'analista_asignado_fid']) !!}
         <div class="row">
             <div class="col-md-8">
                 @php
@@ -43,10 +44,10 @@
                             &nbsp;
                         </div>
                         <div class="col-md-5">
-                            {!! BootForm::select('lider_asignado_id', 'Nombre: *', $lideres->toArray() , old('lider_asignado_id'), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                            {!!BootForm::select('lider_asignado_id', 'Nombre: *', $lideres->toArray() , old('lider_asignado_id'), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
                         </div>
                         <div class="col-md-5">
-                            {!! BootForm::text('cargo_lider', 'Cargo: *', old('cargo_lider'),['readonly']) !!}
+                            {!!BootForm::text('cargo_lider', 'Cargo: *', old('cargo_lider'),['readonly']) !!}
                         </div>
                     </div>
                 </div>
@@ -60,10 +61,10 @@
                             &nbsp;
                         </div>
                         <div class="col-md-5">
-                            {!! BootForm::select('analista_asignado_id', 'Nombre: *', $analistas->toArray() , old('analista_asignado_id'), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
+                            {!!BootForm::select('analista_asignado_id', 'Nombre: *', $analistas->toArray() , old('analista_asignado_id'), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
                         </div>
                         <div class="col-md-5">
-                            {!! BootForm::text('cargo_analista', 'Cargo: *', old('cargo_analista'),['readonly']) !!}
+                            {!!BootForm::text('cargo_analista', 'Cargo: *', old('cargo_analista'),['readonly']) !!}
                         </div>
                     </div>
                 </div>
@@ -147,5 +148,5 @@
         });
     });
 </script>
-{!! JsValidator::formRequest('App\Http\Requests\AsignacionLiderAnalistaRequest') !!}
+{!!JsValidator::formRequest('App\Http\Requests\AsignacionLiderAnalistaRequest') !!}
 @endsection

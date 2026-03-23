@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="{{ asset('assets/img/favicon.png')}}" type="image/png">
 <meta name="csrf-token" content="{{ csrf_token()}}">
 
@@ -71,25 +71,25 @@
 }
 
 
-  /* Bot√≥n de esquinas con animaci√≥n (versi√≥n para <a>) */
+  /* BotÛn de esquinas con animaciÛn (versiÛn para <a>) */
   a.corner-button {
-    /* Variables fluidas (en em para escalar con el font-size del bot√≥n) */
+    /* Variables fluidas (en em para escalar con el font-size del botÛn) */
     --cb-color: #A13B71;          /* texto y borde (currentColor) */
-    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m√°s grande/peque√±o */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m·s grande/pequeÒo */
     --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
     --cb-pad-y: 0.5em;
     --cb-pad-x: 0.9em;
     --cb-gap: 0.45em;             /* hueco entre paneles */
-    --cb-over: 0.35em;            /* leve superposici√≥n para cubrir borde */
+    --cb-over: 0.35em;            /* leve superposiciÛn para cubrir borde */
     --cb-anim: 0.25s;
-    --cb-bg: #fff;                /* ‚Äúpaneles‚Äù de la animaci√≥n (fondo) */
+    --cb-bg: #fff;                /* ìpanelesî de la animaciÛn (fondo) */
     --cb-focus: 2px;              /* grosor del focus ring */
 
     font-family: var(--cb-font);
     font-size: var(--cb-font-size);
     line-height: 1;               /* evita crecimiento vertical irregular */
     color: var(--cb-color);
-    text-decoration: none;        /* estilo ‚Äúbot√≥n‚Äù */
+    text-decoration: none;        /* estilo ìbotÛnî */
     display: inline-flex;         /* contenido fluido */
     align-items: center;
     gap: 0.4em;
@@ -112,7 +112,7 @@
     gap: 0.35em; /* espacio entre icono y texto */
   }
 
-  /* Paneles que se ‚Äúcierran‚Äù (100% fluidos, basados en em) */
+  /* Paneles que se ìcierranî (100% fluidos, basados en em) */
   a.corner-button::before,
   a.corner-button::after {
     content: '';
@@ -141,7 +141,7 @@
     transform: translateY(-50%);
   }
 
-  /* Interacci√≥n */
+  /* InteracciÛn */
   a.corner-button:hover {
     color: var(--cb-color);
   }
@@ -169,9 +169,9 @@
     --cb-over: 0.3em;
   }
 
-  /* Solo √≠cono (sin fijar width/height ‚Üí no se deforma; usa line-height y padding) */
+  /* Solo Ìcono (sin fijar width/height ? no se deforma; usa line-height y padding) */
   a.corner-button--icon {
-    --cb-font-size: 2rem; /* tama√±o base del icono */
+    --cb-font-size: 2rem; /* tamaÒo base del icono */
     --cb-border: 0.2em;
     --cb-pad-y: 0.35em;
     --cb-pad-x: 0.35em;
@@ -188,25 +188,25 @@
     }
   }
   /******* PARA BOTON DE SUCESS *******/
-    /* Bot√≥n de esquinas con animaci√≥n (versi√≥n para <a>) */
+    /* BotÛn de esquinas con animaciÛn (versiÛn para <a>) */
   a.corner-button-success {
-    /* Variables fluidas (en em para escalar con el font-size del bot√≥n) */
+    /* Variables fluidas (en em para escalar con el font-size del botÛn) */
     --cb-color: #50cd89;          /* texto y borde (currentColor) */
-    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m√°s grande/peque√±o */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m·s grande/pequeÒo */
     --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
     --cb-pad-y: 0.5em;
     --cb-pad-x: 0.9em;
     --cb-gap: 0.45em;             /* hueco entre paneles */
-    --cb-over: 0.35em;            /* leve superposici√≥n para cubrir borde */
+    --cb-over: 0.35em;            /* leve superposiciÛn para cubrir borde */
     --cb-anim: 0.25s;
-    --cb-bg: #fff;                /* ‚Äúpaneles‚Äù de la animaci√≥n (fondo) */
+    --cb-bg: #fff;                /* ìpanelesî de la animaciÛn (fondo) */
     --cb-focus: 2px;              /* grosor del focus ring */
 
     font-family: var(--cb-font);
     font-size: var(--cb-font-size);
     line-height: 1;               /* evita crecimiento vertical irregular */
     color: var(--cb-color);
-    text-decoration: none;        /* estilo ‚Äúbot√≥n‚Äù */
+    text-decoration: none;        /* estilo ìbotÛnî */
     display: inline-flex;         /* contenido fluido */
     align-items: center;
     gap: 0.4em;
@@ -229,7 +229,7 @@
     gap: 0.35em; /* espacio entre icono y texto */
   }
 
-  /* Paneles que se ‚Äúcierran‚Äù (100% fluidos, basados en em) */
+  /* Paneles que se ìcierranî (100% fluidos, basados en em) */
   a.corner-button-success::before,
   a.corner-button-success::after {
     content: '';
@@ -258,7 +258,7 @@
     transform: translateY(-50%);
   }
 
-  /* Interacci√≥n */
+  /* InteracciÛn */
   a.corner-button-success:hover {
     color: var(--cb-color);
   }
@@ -286,9 +286,9 @@
     --cb-over: 0.3em;
   }
 
-  /* Solo √≠cono (sin fijar width/height ‚Üí no se deforma; usa line-height y padding) */
+  /* Solo Ìcono (sin fijar width/height ? no se deforma; usa line-height y padding) */
   a.corner-button-success--icon {
-    --cb-font-size: 2rem; /* tama√±o base del icono */
+    --cb-font-size: 2rem; /* tamaÒo base del icono */
     --cb-border: 0.2em;
     --cb-pad-y: 0.35em;
     --cb-pad-x: 0.35em;
@@ -305,25 +305,25 @@
     }
   }
   /******* PARA BOTON DE SUCESS *******/
-    /* Bot√≥n de esquinas con animaci√≥n (versi√≥n para <a>) */
+    /* BotÛn de esquinas con animaciÛn (versiÛn para <a>) */
   a.corner-button-error {
-    /* Variables fluidas (en em para escalar con el font-size del bot√≥n) */
+    /* Variables fluidas (en em para escalar con el font-size del botÛn) */
     --cb-color: #dc3545;          /* texto y borde (currentColor) */
-    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m√°s grande/peque√±o */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m·s grande/pequeÒo */
     --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
     --cb-pad-y: 0.5em;
     --cb-pad-x: 0.9em;
     --cb-gap: 0.45em;             /* hueco entre paneles */
-    --cb-over: 0.35em;            /* leve superposici√≥n para cubrir borde */
+    --cb-over: 0.35em;            /* leve superposiciÛn para cubrir borde */
     --cb-anim: 0.25s;
-    --cb-bg: #fff;                /* ‚Äúpaneles‚Äù de la animaci√≥n (fondo) */
+    --cb-bg: #fff;                /* ìpanelesî de la animaciÛn (fondo) */
     --cb-focus: 2px;              /* grosor del focus ring */
 
     font-family: var(--cb-font);
     font-size: var(--cb-font-size);
     line-height: 1;               /* evita crecimiento vertical irregular */
     color: var(--cb-color);
-    text-decoration: none;        /* estilo ‚Äúbot√≥n‚Äù */
+    text-decoration: none;        /* estilo ìbotÛnî */
     display: inline-flex;         /* contenido fluido */
     align-items: center;
     gap: 0.4em;
@@ -346,7 +346,7 @@
     gap: 0.35em; /* espacio entre icono y texto */
   }
 
-  /* Paneles que se ‚Äúcierran‚Äù (100% fluidos, basados en em) */
+  /* Paneles que se ìcierranî (100% fluidos, basados en em) */
   a.corner-button-error::before,
   a.corner-button-error::after {
     content: '';
@@ -375,7 +375,7 @@
     transform: translateY(-50%);
   }
 
-  /* Interacci√≥n */
+  /* InteracciÛn */
   a.corner-button-error:hover {
     color: var(--cb-color);
   }
@@ -403,9 +403,9 @@
     --cb-over: 0.3em;
   }
 
-  /* Solo √≠cono (sin fijar width/height ‚Üí no se deforma; usa line-height y padding) */
+  /* Solo Ìcono (sin fijar width/height ? no se deforma; usa line-height y padding) */
   a.corner-button-error--icon {
-    --cb-font-size: 2rem; /* tama√±o base del icono */
+    --cb-font-size: 2rem; /* tamaÒo base del icono */
     --cb-border: 0.2em;
     --cb-pad-y: 0.35em;
     --cb-pad-x: 0.35em;

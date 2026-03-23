@@ -194,7 +194,7 @@
                     <div class="row w-100">
                         <div class="col-md-11">
                             <a href="{{ route('home') }}"><i class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a> &nbsp;
-                            Reportes
+							Reportes de Acciones de Auditoría
                         </div>
                     </div>                
                 </h1>                

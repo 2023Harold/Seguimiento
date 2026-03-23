@@ -87,18 +87,17 @@ class AsignacionLiderAnalistaController extends Controller
     public function update(Request $request, Auditoria $auditoria)
     {
         if(getSession('cp')!=2022){
-
+            $auditoria = Auditoria::where('id', $request->auditoria)->first();
             if($request->acciond=='reasignarlider'){
-
                 $userLider=User::find($request->lider_asignado_id);
-                $requestlider=new Request();
-                    $requestlider['lidercp_id']=$request->lider_asignado_id;
-                
-                    $auditoria->update($request->all());
+                //$requestlider=new Request();
+                $request['lidercp_id']=$request->lider_asignado_id;
+                $auditoria->update(['lider_asignado_id' => $request->lider_asignado_id, 'cargo_lider'=> $request->cargo_lider, 'lidercp_id'=>$request->lidercp_id]);
+                //$auditoria->update($request->all());
     
-                    $titulo = 'Reasignación de la auditoría '.$auditoria->numero_auditoria;
-                    $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha reasignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
-                    auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id);
+                $titulo = 'Reasignación de la auditoría '.$auditoria->numero_auditoria;
+                $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha reasignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id);
              
                 setMessage('Se ha realizado la reasignación del lider de proyecto correctamente.');
     
@@ -219,7 +218,7 @@ class AsignacionLiderAnalistaController extends Controller
 
     public function reasignarlider(Auditoria $auditoria)
     {
-        $lideres=usuariocp(auth()->user()->director->unidad_administrativa_id)->where('siglas_rol','LP')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $lideres=usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','LP')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $analistas=usuariocp(auth()->user()->unidad_administrativa_id)->where('siglas_rol','ANA')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $accion="reasignarlider";
         return view('Asignaciones.asignacionlideranalista.form', compact('auditoria','lideres','analistas','accion'));
@@ -227,7 +226,7 @@ class AsignacionLiderAnalistaController extends Controller
 
     public function reasignaranalista(Auditoria $auditoria)
     {
-        $lideres=usuariocp(auth()->user()->director->unidad_administrativa_id)->where('siglas_rol','LP')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
+        $lideres=usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','LP')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $analistas=usuariocp(auth()->user()->unidad_administrativa_id)->where('siglas_rol','ANA')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
         $accion="reasignaranalista";
 

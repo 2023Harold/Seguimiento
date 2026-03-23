@@ -62,7 +62,9 @@
 								 @elseif(getSession('cp')==2022)
 									<th>Número de oficio de notificación del informe de auditoria</th>
 								 @endif
- 							    <th>Acuerdo de radicación</th>                          
+								 @if(!empty($auditoria->comparecencia->oficio_acuerdo))
+									<th>Acuerdo de radicación</th>  
+								 @endif
                                 <th>Fase / Acción / Constancia</th>
                                 <th>Acuses</th>
                             </tr>
@@ -94,11 +96,19 @@
                                         @endif
                                     </td> --}}
 									<td class="text-center">
-										@can('radicacion.radicacionpdf')
-											<a href="{{route('radicacion.radicacionpdf',$auditoria->radicacion)}}" target="_blank">
-												<?php echo htmlspecialchars_decode(iconoArchivo('.pdf')) ?>
-											</a>
-										@endcan
+										@if(getSession('cp')!=2024)
+											@can('radicacion.radicacionpdf')
+												<a href="{{route('radicacion.radicacionpdf',$auditoria->radicacion)}}" target="_blank">
+													<?php echo htmlspecialchars_decode(iconoArchivo('.pdf')) ?>
+												</a>
+											@endcan
+										@else
+											@if(!empty($auditoria->comparecencia->oficio_acuerdo))
+												<a href="{{ asset($auditoria->comparecencia->oficio_acuerdo) }}" target="_blank">
+													<?php echo htmlspecialchars_decode(iconoArchivo($auditoria->comparecencia->oficio_acuerdo)); ?>
+												</a>
+											@endif
+										@endif
                                         <!--AQUI SE COLOCA EL WORD-->
                                         <!--<a href=" route('radicacion.word', $auditoria->radicacion) }}" class="btn btn-primary">Descargar Word</a>-->
 

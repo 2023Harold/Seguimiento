@@ -49,8 +49,8 @@
 							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion, 'departamentoasig'=>$request->departamentoasig, 'liderasig'=>$request->liderasig, 'analistaasig'=>$request->analistaasig, 'direccionaud'=>$request->direccionaud,'estatus'=>$request->estatus,'apartado'=>$request->apartado])->links('vendor.pagination.bootstrap-5') }}
 						</div>
 					</div>
-				</div>	
-                
+				</div>
+
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -66,9 +66,9 @@
                                         @php
                                             $AUD = "AUD-".$auditoria->id;
                                         @endphp
-                                        <a href="{{ route('buzonseg.show', $AUD) }}">
-                                            -{{ $auditoria->numero_auditoria }}
-                                        </a><br>
+
+                                            {{ $auditoria->numero_auditoria }}
+                                        <br>
                                         <small>{{$auditoria->entidad_fiscalizable}}</small>
                                     </td>
                                     <td rowspan=1 colspan=2 style="width:20px" class="">
@@ -86,11 +86,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                                 @forelse ($auditoria->accionessolacl as $accion)
                                                 @php
+                                                if(!empty($accion) && !empty($accion->solicitudesaclaracion)){
                                                     $SOLAC = "AUD-".$auditoria->id."-ACC-".$accion->id."-SOLAC-".$accion->solicitudesaclaracion->id;
                                                     //dd($accion->recomendaciones);
+                                                }else{
+                                                    $SOLAC = "Sin accion";
+                                                }
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">
@@ -103,13 +107,17 @@
                                                         {{'$'.number_format( $accion->monto_aclarar, 2)}}
                                                     </td>
                                                     <td style="text-align: right!important;">
-                                                        {{ '$'.number_format( $accion->solicitudesaclaracion->monto_solventado, 2) }}
+                                                        @if (!empty($accion->solicitudesaclaracion))
+                                                            {{ '$'.number_format( $accion->solicitudesaclaracion->monto_solventado, 2) }}
+                                                        @endif
                                                     </td>
                                                     <td style="text-align: right!important;">
+                                                        @if (!empty($accion->solicitudesaclaracion))
                                                         {{ '$'.number_format( ($accion->monto_aclarar - $accion->solicitudesaclaracion->monto_solventado), 2) }}
+                                                        @endif
                                                     </td>
                                                     <td class="text-center">
-                                                        @if (empty($accion->solicitudesaclaracion->calificacion_atencion))
+                                                        @if (!empty($accion->solicitudesaclaracion->calificacion_sugerida))
                                                             @if ($accion->solicitudesaclaracion->calificacion_sugerida=='Solventada')
                                                                 <span class="badge badge-light-success">Solventada</span><br>
                                                             @endif
@@ -120,23 +128,25 @@
                                                                     <span class="badge badge-light-warning">Solventada Parcialmente</span><br>
                                                             @endif
                                                         @else
-                                                            @if ($accion->solicitudesaclaracion->calificacion_atencion=='Solventada')
-                                                                <span class="badge badge-light-success">Solventada</span><br>
-                                                            @endif
-                                                            @if ($accion->solicitudesaclaracion->calificacion_atencion=='No Solventada')
-                                                                <span class="badge badge-light-danger">No Solventada</span><br>
-                                                            @endif
-                                                            @if ($accion->solicitudesaclaracion->calificacion_atencion=='Solventada Parcialmente')
-                                                                <span class="badge badge-light-warning">Solventada Parcialmente</span><br>
+                                                            @if (!empty($accion->solicitudesaclaracion->calificacion_atencion))
+                                                                @if ($accion->solicitudesaclaracion->calificacion_atencion=='Solventada')
+                                                                    <span class="badge badge-light-success">Solventada</span><br>
+                                                                @endif
+                                                                @if ($accion->solicitudesaclaracion->calificacion_atencion=='No Solventada')
+                                                                    <span class="badge badge-light-danger">No Solventada</span><br>
+                                                                @endif
+                                                                @if ($accion->solicitudesaclaracion->calificacion_atencion=='Solventada Parcialmente')
+                                                                    <span class="badge badge-light-warning">Solventada Parcialmente</span><br>
+                                                                @endif
                                                             @endif
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
                                                         @if (empty($accion->solicitudesaclaracion->fase_autorizacion))
-                                                            <span class="badge badge-light-warning">Pendiente</span>                                 
+                                                            <span class="badge badge-light-warning">Pendiente</span>
                                                         @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'Rechazado')
-                                                            <span class="badge badge-light-danger">{{ $accion->solicitudesaclaracion->fase_autorizacion }}</span>                                      
-                                                        @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'En revisión 01')                                        
+                                                            <span class="badge badge-light-danger">{{ $accion->solicitudesaclaracion->fase_autorizacion }}</span>
+                                                        @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'En revisión 01')
                                                             <span class="badge badge-light-warning">En revisión</span>
                                                         @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'En revisión')
                                                             <span class="badge badge-light-warning">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>
@@ -145,27 +155,29 @@
                                                         @elseif ($accion->solicitudesaclaracion->fase_autorizacion == 'En autorización')
                                                             <span class="badge badge-light-warning">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>
                                                         @elseif ($accion->solicitudesaclaracion->fase_autorizacion=='Autorizado')
-                                                            <span class="badge badge-light-success">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>                                         
-                                                        @endif 
-                                                        
+                                                            <span class="badge badge-light-success">{{ $accion->solicitudesaclaracion->fase_autorizacion }} </span>
+                                                        @endif
+
                                                     </td>
                                                     <td class="text-center">
+                                                        @if ($SOLAC != "Sin accion")
                                                         <a href="{{ route('buzonseg.show', $SOLAC) }}" class="corner-button">
                                                             <span class="cb-content">Solicitud de aclaración<i class="bi bi-arrow-up-right-circle-fill text-primary fs-1" aria-hidden="true"></i></span>
                                                         </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @empty
                                                 <tr>
                                                     <td class="text-center" colspan="5">
                                                         No se encuentran registros en este apartado.
-                                                    </td>                                
+                                                    </td>
                                                 </tr>
                                                 @endforelse
                                             </tbody>
                                         </table>
-                                        
-                                           
+
+
                                     </td>
                                 </tr>
                             @empty

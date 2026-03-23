@@ -49,8 +49,8 @@
 							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion, 'departamentoasig'=>$request->departamentoasig, 'liderasig'=>$request->liderasig, 'analistaasig'=>$request->analistaasig, 'direccionaud'=>$request->direccionaud,'estatus'=>$request->estatus,'apartado'=>$request->apartado])->links('vendor.pagination.bootstrap-5') }}
 						</div>
 					</div>
-				</div>	
-                
+				</div>
+
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -86,11 +86,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                                 @forelse ($auditoria->accionespo as $accion)
                                                 @php
-                                                    $PO = "AUD-".$auditoria->id."-ACC-".$accion->id."-PO-".$accion->pliegosobservacion->id;
-                                                    //dd($accion->recomendaciones);
+                                                    if(!empty($accion) && !empty($accion->pliegosobservacion)){
+                                                        $PO = "AUD-".$auditoria->id."-ACC-".$accion->id."-PO-".$accion->pliegosobservacion->id;
+                                                    }else{
+                                                        $PO = "Sin accion";
+                                                    }
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">
@@ -103,10 +106,14 @@
                                                         {{'$'.number_format( $accion->monto_aclarar, 2)}}
                                                     </td>
                                                     <td style="text-align: right!important;">
-                                                        {{ '$'.number_format( $accion->pliegosobservacion->monto_solventado, 2) }}
+                                                        @if (!empty( $accion->pliegosobservacion))
+                                                            {{ '$'.number_format( $accion->pliegosobservacion->monto_solventado, 2) }}
+                                                        @endif
                                                     </td>
                                                     <td style="text-align: right!important;">
+                                                        @if (!empty( $accion->pliegosobservacion))
                                                         {{ '$'.number_format( ($accion->monto_aclarar - $accion->pliegosobservacion->monto_solventado), 2) }}
+                                                        @endif
                                                     </td>
                                                     <td class="text-center">
                                                         @if (!empty($accion->pliegosobservacion->calificacion_atencion))
@@ -120,23 +127,25 @@
                                                                 <span class="badge badge-light-warning">Solventado Parcialmente</span><br>
                                                             @endif
                                                         @else
-                                                            @if ($accion->pliegosobservacion->calificacion_sugerida=='Solventado')
-                                                            <span class="badge badge-light-success">Solventado</span><br>
-                                                            @endif
-                                                            @if ($accion->pliegosobservacion->calificacion_sugerida=='No Solventado')
-                                                                <span class="badge badge-light-danger">No Solventado</span><br>
-                                                            @endif
-                                                            @if ($accion->pliegosobservacion->calificacion_sugerida=='Solventado Parcialmente')
-                                                                <span class="badge badge-light-warning">Solventado Parcialmente</span><br>
+                                                            @if (!empty($accion->pliegosobservacion->calificacion_sugerida))
+                                                                @if ($accion->pliegosobservacion->calificacion_sugerida=='Solventado')
+                                                                <span class="badge badge-light-success">Solventado</span><br>
+                                                                @endif
+                                                                @if ($accion->pliegosobservacion->calificacion_sugerida=='No Solventado')
+                                                                    <span class="badge badge-light-danger">No Solventado</span><br>
+                                                                @endif
+                                                                @if ($accion->pliegosobservacion->calificacion_sugerida=='Solventado Parcialmente')
+                                                                    <span class="badge badge-light-warning">Solventado Parcialmente</span><br>
+                                                                @endif
                                                             @endif
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
                                                         @if (empty($accion->pliegosobservacion->fase_autorizacion))
-                                                            <span class="badge badge-light-warning">Pendiente</span>                                 
+                                                            <span class="badge badge-light-warning">Pendiente</span>
                                                         @elseif ($accion->pliegosobservacion->fase_autorizacion == 'Rechazado')
-                                                            <span class="badge badge-light-danger">{{ $accion->pliegosobservacion->fase_autorizacion }}</span>                                      
-                                                        @elseif ($accion->pliegosobservacion->fase_autorizacion == 'En revisión 01')                                        
+                                                            <span class="badge badge-light-danger">{{ $accion->pliegosobservacion->fase_autorizacion }}</span>
+                                                        @elseif ($accion->pliegosobservacion->fase_autorizacion == 'En revisión 01')
                                                             <span class="badge badge-light-warning">En revisión</span>
                                                         @elseif ($accion->pliegosobservacion->fase_autorizacion == 'En revisión')
                                                             <span class="badge badge-light-warning">{{ $accion->pliegosobservacion->fase_autorizacion }} </span>
@@ -145,27 +154,30 @@
                                                         @elseif ($accion->pliegosobservacion->fase_autorizacion == 'En autorización')
                                                             <span class="badge badge-light-warning">{{ $accion->pliegosobservacion->fase_autorizacion }} </span>
                                                         @elseif ($accion->pliegosobservacion->fase_autorizacion=='Autorizado')
-                                                            <span class="badge badge-light-success">{{ $accion->pliegosobservacion->fase_autorizacion }} </span>                                         
-                                                        @endif 
-                                                        
+                                                            <span class="badge badge-light-success">{{ $accion->pliegosobservacion->fase_autorizacion }} </span>
+                                                        @endif
+
                                                     </td>
                                                     <td class="text-center">
+                                                        @if ($PO != "Sin accion" )
                                                         <a href="{{ route('buzonseg.show', $PO) }}" class="corner-button">
                                                             <span class="cb-content">Pliego<i class="bi bi-arrow-up-right-circle-fill text-primary fs-1" aria-hidden="true"></i></span>
                                                         </a>
+
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @empty
                                                 <tr>
                                                     <td class="text-center" colspan="5">
                                                         No se encuentran registros en este apartado.
-                                                    </td>                                
+                                                    </td>
                                                 </tr>
                                                 @endforelse
                                             </tbody>
                                         </table>
-                                        
-                                           
+
+
                                     </td>
                                 </tr>
                             @empty

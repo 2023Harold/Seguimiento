@@ -42,7 +42,13 @@
                 <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                     <label>Acto de fiscalización: </label>
                     <span class="text-primary">
-                        {{ $accion->acto_fiscalizacion}} - {{ (empty($accion->tipologia_id)?'':$accion->tipologiadesc->tipologia) }}
+                        {{ $accion->acto_fiscalizacion}} @foreach ($accion->tipologias as $tipologias)
+                                        @if(empty($tipologias->tipologia))
+                                            {{" - "}}
+                                        @else
+                                            {{' - '.$tipologias->tipologia}}
+                                        @endif
+                                    @endforeach
                     </span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-12">

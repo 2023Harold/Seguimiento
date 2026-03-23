@@ -255,13 +255,13 @@ class CedulaAnaliticaController extends Controller
         $jefesF=array_unique($accionesJefesFaltantes->pluck('departamento_asignado_id', 'id')->toArray());
         $jefesL=array_unique($accionesJefesListos->pluck('departamento_asignado_id', 'id')->toArray());        
                 
-            /*$pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulaanalitica.show',compact('auditoria'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
-            $nombre='storage/temporales/CedulaAnalitica'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
-            $pdfgenrado = file_put_contents($nombre, $pdf);    */
-			
-			$director=$auditoria->directorasignado;
-            $jefe=$auditoria->jefedepartamentoencargado;
-
+        /*$pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('cedulaanalitica.show',compact('auditoria'))->setPaper('a4', 'landscape')->stream('archivo.pdf');
+        $nombre='storage/temporales/CedulaAnalitica'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
+        $pdfgenrado = file_put_contents($nombre, $pdf);    */
+		
+		$director=$auditoria->directorasignado;
+        $jefe=$auditoria->jefedepartamentoencargado;
+        $titular=User::where('siglas_rol','TUS')->first();
                
             $accionesanalistasListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get(); 
             $accionesLideresListos=AuditoriaAccion::where('segauditoria_id',$auditoria->id)->get();  
@@ -282,7 +282,7 @@ class CedulaAnaliticaController extends Controller
             } */
                 
             $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])
-			->loadView('cedulaanalitica.show',compact('auditoria','director','nombresanalistasL','nombreslideresL','jefe'))
+			->loadView('cedulaanalitica.show',compact('auditoria','director','nombresanalistasL','nombreslideresL','jefe','titular'))
 			->setPaper('a4', 'landscape')->stream('archivo.pdf');
             $nombre='storage/temporales/CedulaAnalitica'.str_replace("/", "_", $auditoria->numero_auditoria).'.pdf';
             $pdfgenrado = file_put_contents($nombre, $pdf);        			

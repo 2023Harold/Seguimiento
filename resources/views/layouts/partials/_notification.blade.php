@@ -148,7 +148,13 @@
                     }
                 },
                 error: function() {
-                    alert('Error al generar la peticion');
+                    //alert('Error al generar la peticion');}
+                    SwalBT.fire({
+                        icon: 'error',
+                        title: 'Error al generar la petición',
+                        html: '',
+                        confirmButtonText: 'Entendido'
+                    });
                 }
             });
         });
