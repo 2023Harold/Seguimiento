@@ -108,8 +108,14 @@ class AsignacionUnidadAdministrativaController extends Controller
         if ($request->filled('name')) {
              $query = $query->whereLike('name', $request->name);
         }
+        if ($request->filled('puesto')) {
+             $query = $query->whereLike('puesto', $request->puesto);
+        }
         if($request->filled('email')){
             $query = $query->whereLike('email',$request->email);
+        }
+        if ($request->filled('siglas_rol')) {
+             $query = $query->whereLike('siglas_rol', $request->siglas_rol);
         }
         if($request->filled('estatus')&& $request->input('estatus') != 'Todas') {
             $query = $query->whereLike('estatus', $request->input('estatus'));

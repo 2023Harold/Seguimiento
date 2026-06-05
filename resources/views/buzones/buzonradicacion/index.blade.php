@@ -83,7 +83,7 @@
                                                     @if(getSession('cp')!=2022)
                                                         <th>Oficio de notificación de acuerdos</th>
                                                     @elseif(getSession('cp')==2022)
-                                                        <th>Número de oficio de notificación del informe de auditoria</th>
+                                                        <th>Número de oficio de notificación del informe de auditoría</th>
                                                     @endif
                                                     <th>Acuerdo de radicación</th>                          
                                                     <th>Fase / Acción / Constancia</th>

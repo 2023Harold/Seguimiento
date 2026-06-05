@@ -110,7 +110,11 @@ class BuzonNotificacionLeidasController extends Controller
 
     private function setQuery($request)
     {
-        $query = auth()->user()->todasNotificaciones();
+        if((auth()->user()->siglas_rol == 'LP' || auth()->user()->siglas_rol == 'ANA') && getSession('cp') >= 2024){
+            $query = auth()->user()->todasNotificacionesNuevas();
+        }else{
+            $query = auth()->user()->todasNotificaciones();
+        }
 
         $query = $query->where('estatus', '!=', 'Pendiente');
         if ($request->filled('created_at')) {
@@ -134,12 +138,18 @@ class BuzonNotificacionLeidasController extends Controller
 
     public function nuevas()
     {
-        $notificaciones = auth()->user()->notificaciones;
-        $totalNotificaciones = $notificaciones->count();
+        if (in_array(auth()->user()->siglas_rol, ['LP', 'ANA']) && getSession('cp') >= 2024) {
+            $notificaciones = auth()->user()
+                ->todasNotificacionesNuevas()
+                ->where('estatus', 'Pendiente')
+                ->get();
+        } else {
+            $notificaciones = auth()->user()->notificaciones()->get();
+        }
 
         return response()->json([
             'notificaciones' => $notificaciones,
-            'total' => $totalNotificaciones,
+            'total'          => $notificaciones->count(),
         ]);
     }
 

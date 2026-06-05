@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AcuerdoConclusion;
 use App\Http\Controllers\Controller;
 use App\Models\AcuerdoConclusion;
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -73,9 +74,20 @@ class AcuerdoConclusionCPEnvioController extends Controller
             $jefe = $auditoria->jefedepartamentoencargado;
             $lider = $auditoria->lidercp; 
         }
+
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        if ($usaEquipo) {
+            $NotificacionRechazo=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave',GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo')->first();
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo')->first();
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
         
         $acuerdoconclusion->update(['fase_autorizacion' =>  'En revisión']);
-        $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo')->first();
         $LeerNotificacionRechazo = auth()->user()->NotMarcarLeido($NotificacionRechazo);
 
         $titulo = 'Revisión del Acuerdo de Conclusión de '.$acuerdoconclusion->tipo;

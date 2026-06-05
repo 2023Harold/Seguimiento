@@ -31,9 +31,7 @@
                                 old('direccionaud', empty($request->direccionaud) ? 'Todas' : $request->direccionaud),true,['class'=>'i-checks']) !!}
                             </div> 
                         @endif
-                        <div class="col-md-1 mt-8">
-                            <button type="submit" class="btn btn-primary">Buscar</button>
-                        </div>
+                        
                     </div>
                     <div class="row">
                         
@@ -50,6 +48,9 @@
                                 {!!BootForm::select('analistaasig', 'Analistas: ', $analistas , old('analistaasig'), ['data-control'=>'select2', 'class'=>'form-select', 'data-placeholder'=>'Seleccionar una opción']) !!}
                             </div>
                         @endif
+                        <div class="col-md-1 mt-8">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
                     </div>
                 {!!BootForm::close() !!}
 				<div class="row">
@@ -82,12 +83,16 @@
                             @forelse ($auditorias as $auditoria)
                                 <tr>
                                     @if((auth()->user()->siglas_rol=='TUS' || auth()->user()->siglas_rol=='DS' || auth()->user()->siglas_rol=='JD') && getSession('cp')!=2022)
-                                    <td>
-                                        <p><b>-Direccion:</b>{{$auditoria->direccion_asignada ?? 'Sin asignar' }}</p>
-                                        <p><b>-Depto:</b>{{$auditoria->departamento_encargado ?? 'Sin asignar' }}</p>
-                                        <p><b>-Lider de proyecto:</b> {{$auditoria->lidercp->name ?? 'Sin asignar' }}</p>
-                                        <p><b>-Analista:</b> {{$auditoria->analistacp->name ?? 'Sin asignar' }}</p>
-                                    </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-light-primary"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#equipo-{{ $auditoria->id }}">
+                                                <i class="fa fa-users"></i> Ver equipo
+                                            </button>
+                                            <div id="equipo-{{ $auditoria->id }}" class="collapse mt-3">
+                                                @include('layouts.partials._equipostrabajoseguimiento', ['auditoria' => $auditoria])
+                                            </div>
+                                        </td>
                                     @endif
                                     <td>
                                         {{ $auditoria->numero_auditoria }}

@@ -84,7 +84,7 @@
                                             {{-- @can('comparecenciaanexo.edit') --}}
 
                                                 {{-- <a href="{{route('comparecenciaanexo.edit', $anexo)}}"> --}}
-                                                    {{ str_pad($contestacion->consecutivo, 3, '0', STR_PAD_LEFT) }}
+                                                {{ str_pad($contestacion->consecutivo, 3, '0', STR_PAD_LEFT) }}
                                                 {{-- </a> --}}
                                             {{-- @else
                                                 {{ str_pad($anexo->numero, 3, '0', STR_PAD_LEFT) }}
@@ -98,8 +98,11 @@
                                             <small>Fecha: {{ fecha($contestacion->fecha_oficio_contestacion) }}</small> 
                                         </td>                                                              
                                         <td>
-                                           {{ $contestacion->nombre_remitente }} <br>
-                                           <span class="badge-light-dark text-gray-500">{{ $contestacion->cargo_remitente }}</span> 
+                                            @foreach ($contestacion->remitentes as $remitente)
+                                                {{ $remitente->nombre_remitente ?? $contestacion->nombre_remitente }} <br>
+                                                <span class="badge-light-dark text-gray-500">{{ $remitente->cargo_remitente ?? $contestacion->cargo_remitente}}</span>
+                                                
+                                            @endforeach
                                         </td>
                                         <td class="text-center">
                                             CRR: {{ $contestacion->folio_correspondencia }} <br>
@@ -109,13 +112,17 @@
                                             {{ fecha($contestacion->fecha_recepcion_seguimiento) }}                                            
                                          </td>
                                         <td class="text-center">
-                                            <a href="{{route('recomendacionescontestaciones.edit', $contestacion)}}" class="icon-hover">
-                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            <a href="{{route('recomendacionescontestaciones.edit', $contestacion)}}" class="btn btn-color-primary btn-active-color-warning icon-hover">
+                                                <i class="fa-solid fa-pen-to-square" style="font-size: 16px;" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                         <td class="text-center">
                                             {{-- @can('comparecenciaanexo.destroy') --}}
-                                                @destroy(route('recomendacionescontestaciones.destroy', $contestacion))
+                                                {{-- @destroy(route('recomendacionescontestaciones.destroy', $contestacion)) --}}
+                                                <a href="{{ route('recomendacionescontestaciones.eliminar', $contestacion) }}" class="btn btn-link btn-active-color-danger sweet-contestacion"
+                                                    data-success-text="El oficio de contestación se eliminó correctamente.">
+                                                        <span class="bi bi-trash-fill" style="font-size: 1.6rem;"></span>
+                                                </a>
                                             {{-- @endcan --}}
                                         </td>
                                     </tr>

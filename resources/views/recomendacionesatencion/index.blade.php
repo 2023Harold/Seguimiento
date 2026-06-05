@@ -132,16 +132,16 @@
                                 <td class="text-center">                                   
                                     @if (empty($recomendacion->fase_autorizacion))
                                         @can('recomendacionesanalisisenvio.edit')
-                                            <a href="{{ route('recomendacionesanalisisenvio.edit',$recomendacion) }}" class="btn btn-primary">
-                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                            <a href="{{route('recomendacionesanalisisenvio.edit', $recomendacion)}}" class="btn btn-color-primary btn-active-color-info">
+                                                <i class="bi bi-send-check-fill" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Enviar
                                             </a>
                                         @endcan                                        
                                     @endif
                                     @if ($recomendacion->fase_autorizacion == 'Rechazado')
                                         <span class="badge badge-light-danger">{{ $recomendacion->fase_autorizacion }}</span>
                                         @if (auth()->user()->siglas_rol=='ANA')
-                                            <a href="{{ route('recomendacionesanalisisenvio.edit',$recomendacion) }}" class="btn btn-primary">
-                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                            <a href="{{route('recomendacionesanalisisenvio.edit', $recomendacion)}}" class="btn btn-color-primary btn-active-color-info">
+                                                <i class="bi bi-send-check-fill" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Enviar
                                             </a>
                                         @endif
                                     @endif
@@ -303,7 +303,11 @@
                                                                 <a href="{{ route('respuestacomentariosrecomendaciones.edit',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
                                                                     <span class="bi bi-pencil-square fa-lg" aria-hidden="true"></span>{{--- Editar comentario  ---}}
                                                                 </a>
-                                                                <a href="{{ route('rescomrec.enviarcomentario',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
+                                                                {{-- <a href="{{ route('rescomrec.enviarcomentario',$respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary popupcomentario">
+                                                                    <span class="bi bi-send-fill fa-lg" aria-hidden="true"></span> 
+                                                                </a> --}}
+                                                                <a href="{{ route('rescomrec.enviarcomentario', $respuesta) }}" class="btn btn-link btn-color-muted btn-active-color-primary sweet-comentarios"
+                                                                    data-success-text="El oficio de contestación se eliminó correctamente.">
                                                                     <span class="bi bi-send-fill fa-lg" aria-hidden="true"></span> {{--- Enviar comentario  ---}}
                                                                 </a>
                                                             @endif

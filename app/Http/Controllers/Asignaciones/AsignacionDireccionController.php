@@ -9,6 +9,7 @@ use App\Models\CatalogoTipoAccion;
 use App\Models\CatalogoUnidadesAdministrativas;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Uri\WhatWg\Url;
 
 class AsignacionDireccionController extends Controller
 {
@@ -26,7 +27,6 @@ class AsignacionDireccionController extends Controller
     public function index(Request $request)
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
-
         return view('Asignaciones.asignaciondireccion.index', compact('auditorias', 'request'));
 
     }
@@ -89,12 +89,16 @@ class AsignacionDireccionController extends Controller
      */
      public function update(Request $request, Auditoria $auditoria)
     {
+        //dd($auditoria->id);
+        $auditoriacp_id = $auditoria->id;
+        $llave = null;
+        $url = null;
         if ($request->accion == 'Asignación') {
 
             $auditoria->update($request->all());
             $titulo = 'Asignación de auditoría';
             $mensaje = '<strong>Estimado(a) ' . $request->nombre . ', ' . $request->cargo . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del Titular, por lo que se requiere realice la asignación oportuna de los departamentos, en el módulo de Asignación.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $request->direccion_asignada_id, $request->usuario_id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $request->direccion_asignada_id, $request->usuario_id, $llave, $url, $auditoriacp_id);
 
             setMessage('Se ha realizado la asignación de la dirección correctamente.');
         } elseif ($request->accion == 'Reasignación') {
@@ -103,7 +107,7 @@ class AsignacionDireccionController extends Controller
             $auditoria->update($request->all());
             $titulo = 'Reasignación de auditoría';
             $mensaje = '<strong>Estimado(a) ' . $request->nombre . ', ' . $request->cargo . '.</strong><br>Se le ha reasignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del Titular, por lo que se requiere realice la asignación oportuna de los departamentos, en el módulo de Asignación.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $request->direccion_asignada_id, $request->usuario_id);
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $request->direccion_asignada_id, $request->usuario_id, $llave, $url, $auditoriacp_id);
 
             setMessage('Se ha realizado la reasignación de la dirección correctamente.');
         }

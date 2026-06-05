@@ -96,8 +96,19 @@ class RecomendacionesAnalisisEnvioController extends Controller
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
 
-		$notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $recomendacion).'/Rechazo')->first();
-		$LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+
+        if ($usaEquipo) {
+            $notificacion=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($recomendacion).'/Rechazo')->first();
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($recomendacion).'/Rechazo')->first();
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+		auth()->user()->NotMarcarLeido($notificacion);
         $url = route('recomendacionesatencion.index');
         
         $recomendacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
@@ -105,8 +116,12 @@ class RecomendacionesAnalisisEnvioController extends Controller
         $mensaje = '<strong>Estimado (a) ' . $recomendacion->accion->lider->name . ', ' . $recomendacion->accion->lider->puesto . ':</strong><br>
                     Ha sido registrada la atención de la recomendación de la acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria . ', por parte del ' .
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+        if ($usaEquipo) {
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave( $recomendacion).'/RevL',$url, $auditoria->id, $equipoId,'Lider');
+        }else{
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->lider->unidad_administrativa_id,$recomendacion->accion->lider->id,  GenerarLlave( $recomendacion).'/RevL', $url);
+        }
         
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->accion->lider->unidad_administrativa_id,$recomendacion->accion->lider->id,  GenerarLlave( $recomendacion).'/RevL', $url);
         setMessage('Se han enviado la información de la recomendación a revisión');
 
         $staffA = AuditoriaUsuarios::select('segusers.id','segusers.name','segusers.puesto', 'segusers.unidad_administrativa_id', 'segusers.siglas_rol', 'segusers.estatus',   

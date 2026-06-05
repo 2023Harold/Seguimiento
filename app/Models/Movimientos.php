@@ -32,7 +32,8 @@ class Movimientos extends Model
         'usuario_creacion_id',
         'usuario_actualizacion_id',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'auditoria_id',
     ];
 
            

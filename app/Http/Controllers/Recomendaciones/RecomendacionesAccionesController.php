@@ -23,6 +23,7 @@ class RecomendacionesAccionesController extends Controller
      */
     public function index(Request $request)
     {
+
         $auditoria = Auditoria::find(getSession('auditoria_id'));
         $acciones =  $this->setQuery($request)->orderBy('id')->paginate(30); 
         
@@ -132,37 +133,54 @@ class RecomendacionesAccionesController extends Controller
 
     public function setQuery(Request $request)
     {
-         $query = $this->model;
-
-         $query = $query->where('segauditoria_id',getSession('auditoria_id'))->whereNull('eliminado')->where('segtipo_accion_id',2);
-
-         if(getSession('cp')==2023){
-            $query = $query->where('fase_revision','Autorizado');
-         }
+        $query = $this->model;
+        $query = $query->where('segauditoria_id',getSession('auditoria_id'))->whereNull('eliminado')->where('segtipo_accion_id',2);
+        if(getSession('cp')==2023){
+           $query = $query->where('fase_revision','Autorizado');
+        }
         
-         if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){           
-            $query = $query->where('analista_asignado_id',auth()->user()->id);
-         } 
-         if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){           
-            $query = $query->where('lider_asignado_id',auth()->user()->id);
-         } 
-         if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){           
-            //$query = $query->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
-            if(getSession('cp')==2023){
-                $query = $query->whereHas('auditoria', function($q){
-                    $q->where('departamento_encargado_id',auth()->user()->cp_ua2023);
+        if (!usaEquipoTrabajo()) {
+            if (in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+                $query->where('analista_asignado_id', auth()->id());
+            }
+
+            if (in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())) {
+                $query->where('lider_asignado_id', auth()->id());
+            }
+        } else {
+            if (in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+                $query->whereHas('auditoria.auditoriausuarios', function ($q) {
+                    $q->where('user_id', auth()->id())
+                    ->where('rol_code', 'Analista')
+                    ->where('estatus', 'Activo');
                 });
-             }else{
-                $query = $query->whereHas('auditoria', function($q){
-                    $q->where('departamento_encargado_id',auth()->user()->cp_ua2022);
-                 });
-             }
-         } 
+            }
+
+            if (in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())) {
+                $query->whereHas('auditoria.auditoriausuarios', function ($q) {
+                    $q->where('user_id', auth()->id())
+                    ->where('rol_code', 'Lider')
+                    ->where('estatus', 'Activo');
+                });
+            }
+        }
+ 
+        if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){           
+           //$query = $query->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
+           if(getSession('cp')==2023){
+               $query = $query->whereHas('auditoria', function($q){
+                   $q->where('departamento_encargado_id',auth()->user()->cp_ua2023);
+               });
+            }else{
+               $query = $query->whereHas('auditoria', function($q){
+                   $q->where('departamento_encargado_id',auth()->user()->cp_ua2022);
+                });
+            }
+        } 
 
         if ($request->filled('consecutivo')) {            
             $query = $query->where('consecutivo',$request->consecutivo);
-         }
-
+        }
         if ($request->filled('tipo')) {
             $query = $query->where('tipo',$request->tipo);
         }

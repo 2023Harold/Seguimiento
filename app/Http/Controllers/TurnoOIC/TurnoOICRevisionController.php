@@ -4,6 +4,7 @@ namespace App\Http\Controllers\TurnoOIC;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\TurnoOIC;
 use App\Models\User;
@@ -121,11 +122,15 @@ class TurnoOICRevisionController extends Controller
             $analista = $auditoria->analistacp;
             $lider = $auditoria->lidercp; 
         }
-        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnooic).'/RevJD')->first();
-        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($turnooic).'/RevJD')->first();
+        auth()->user()->NotMarcarLeido($notificacion);
         $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnooic).'/Rechazo')->first();
-        $LeerNotificacionRechazo = auth()->user()->NotMarcarLeido($NotificacionRechazo);
-
+        auth()->user()->NotMarcarLeido($NotificacionRechazo);
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        if ($usaEquipo) {
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+        } 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Validación del Turno al Órgano Interno de Control de la auditoría No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
@@ -143,7 +148,11 @@ class TurnoOICRevisionController extends Controller
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
             
             //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnooic->usuarioCreacion->unidad_administrativa_id, $turnooic->usuarioCreacion->id);
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($turnooic).'/Rechazo',$url);
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($turnooic). '/Rechazo', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($turnooic).'/Rechazo',$url);
+            }
 
         }  
 

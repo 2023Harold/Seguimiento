@@ -183,18 +183,24 @@
                                 <td class="text-center">
                                     @if (empty($pliegos->fase_autorizacion))
                                       @can('pliegosobservacionanalisisenvio.edit')
-                                      <a href="{{ route('pliegosobservacionanalisisenvio.edit',$pliegos) }}" class="btn btn-primary">
-                                          <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
-                                      </a>
+                                        {{-- <a href="{{ route('pliegosobservacionanalisisenvio.edit',$pliegos) }}" class="btn btn-primary">
+                                            <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                        </a> --}}
+                                        <a href="{{route('pliegosobservacionanalisisenvio.edit', $pliegos)}}" class="btn btn-color-primary btn-active-color-info">
+                                            <i class="bi bi-send-check-fill" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Enviar
+                                        </a>
                                       @endcan
                                     @endif
                                     @if ($pliegos->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $pliegos->fase_autorizacion }}</span>
                                         @can('pliegosobservacionanalisisenvio.edit')
-                                        <br>
-                                        <a href="{{ route('pliegosobservacionanalisisenvio.edit',$pliegos) }}" class="btn btn-primary">
-                                            <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
-                                        </a>
+                                            <br>
+                                            {{-- <a href="{{ route('pliegosobservacionanalisisenvio.edit',$pliegos) }}" class="btn btn-primary">
+                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                            </a> --}}
+                                            <a href="{{route('pliegosobservacionanalisisenvio.edit', $pliegos)}}" class="btn btn-color-primary btn-active-color-info">
+                                                <i class="bi bi-send-check-fill" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Enviar
+                                            </a>
                                         @endcan
                                     @endif
                                     @if ($pliegos->fase_autorizacion == 'En revisión 01')

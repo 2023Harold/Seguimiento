@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Comparecencia;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Comparecencia;
 use App\Models\Movimientos;
 use Illuminate\Http\Request;
@@ -70,8 +71,22 @@ class ComparecenciaCPEnvioController extends Controller
             ]);
     
             $comparecencia->update(['fase_autorizacion' =>  'En revisión']);
+            
+            $auditoria = $comparecencia->auditoria;
+            $cuenta_publicaSession = getSession('cp');
+            $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+            
+            // Obtener quién recibe la notificación según la lógica
+            if ($usaEquipo) {
+                $notificacionRechazo=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($comparecencia).'/Rechazo')->first();
+                $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+                $equipoId = $registroLider->equipo_id ?? null;
+                $liderIndividual = null; // ya no se usa para notificar
+            } else {
+                $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($comparecencia)."/Rechazo")->first();
+                $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+            }
             //$notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $radicacion).'/RevJD')->first();
-            $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($comparecencia)."/Rechazo")->first();
             //$LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
             $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
             $url = route('comparecenciaacta.index');

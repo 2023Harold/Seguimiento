@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\AuditoriaUsuarios;
 use App\Models\CatalogoTipoAuditoria;
 use App\Models\Movimientos;
 use App\Models\SUTIC\EntidadFiscalizableIntra;
@@ -76,7 +77,13 @@ class AgregarAccionesRevision01Controller extends Controller
      */
     public function update(Request $request, AuditoriaAccion $accion)
     {
-
+        if (usaEquipoTrabajo()){
+            $notificacion=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($accion).'/Rev01')->first();
+            $notificacionRechazo=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($accion).'/Rechazo')->first();
+        } else {
+            $notificacion=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Rev01')->first();
+            $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Rechazo')->first();
+        }
         $auditoria = $accion->auditoria;
         /*if ($request->estatus == 'Aprobado' && count($auditoria->accionesrechazadaslider)>0) {
             setMessage('Si hay acciones rechazadas no se puede aprobar la auditoría.','error');
@@ -122,12 +129,9 @@ class AgregarAccionesRevision01Controller extends Controller
             'La aprobación ha sido registrada y se ha enviado a revisión del superior.' :
             'El rechazo ha sido registrado.'
         );
-
-        $notificacion=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Rev01')->first();
-        $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Rechazo')->first();
+        
         $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
         $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
-        
 
         if ($request->estatus == 'Aprobado') {
             $url =  route("agregaraccionesrevision.edit",$accion);
@@ -138,13 +142,20 @@ class AgregarAccionesRevision01Controller extends Controller
                             '; se ha aprobado el registro de la acción No.'.$accion->numero.' de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($accion).'/Rev',$url);
-        } else {
+        } else {            
             $url =  route("agregaracciones.index");
             $titulo = 'Rechazo del registro de la acción No.'.$accion->numero.'  auditoria No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Rechazo',$url);
+            if (usaEquipoTrabajo()){
+                // Obtener equipo_id del analista activo en esa auditoría
+                $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($accion) . '/Rechazo', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+            }else{
+
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(),$analista->unidad_administrativa_id,$analista->id,GenerarLlave($accion) . '/Rechazo',$url);
+            }
         }
 
         return redirect()->route('agregaracciones.index');

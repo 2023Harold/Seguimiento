@@ -5,6 +5,7 @@ namespace App\Http\Controllers\TurnoUI;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\TurnoUI;
 use App\Models\User;
@@ -109,16 +110,21 @@ class TurnoUIValidacionController extends Controller
             $analista = $auditoria->analistacp;
             $lider = $auditoria->lidercp; 
         }
-       $turnoui->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
-       setMessage($request->estatus == 'Aprobado' ?
+        $turnoui->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
+        setMessage($request->estatus == 'Aprobado' ?
            'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
            'El rechazo ha sido registrado.'
-       );
-       
+        );
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+
+        if ($usaEquipo) {
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+        } 
         $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($turnoui).'/ValD')->first();
         $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($turnoui)."/Rechazo")->first();
-        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
-        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+        auth()->user()->NotMarcarLeido($notificacion);
+        auth()->user()->NotMarcarLeido($notificacionRechazo);
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del Turno UI de la auditoría No. '.$auditoria->numero_auditoria;
@@ -136,7 +142,11 @@ class TurnoUIValidacionController extends Controller
                         ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
         
             //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoui->usuarioCreacion->unidad_administrativa_id, $turnoui->usuarioCreacion->id);
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($turnoui).'/Rechazo',$url);
+            if ($usaEquipo){
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($turnoui). '/Rechazo', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($turnoui).'/Rechazo',$url);
+            }
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name, $jefe->name, $auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($turnoui).'/Rechazo',$url);
     }
         

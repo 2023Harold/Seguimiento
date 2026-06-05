@@ -5,6 +5,7 @@ namespace App\Http\Controllers\TurnoUI;
 use App\Http\Controllers\Controller;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\TurnoUI;
 use App\Models\User;
@@ -112,9 +113,15 @@ class TurnoUIRevisionController extends Controller
             $lider = $auditoria->lidercp; 
         }
         $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnoui).'/RevJD')->first();
-        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        auth()->user()->NotMarcarLeido($notificacion);
         $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnoui).'/Rechazo')->first();
-        $LeerNotificacionRechazo = auth()->user()->NotMarcarLeido($NotificacionRechazo);
+        auth()->user()->NotMarcarLeido($NotificacionRechazo);
+
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        if ($usaEquipo) {
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+        } 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Validación del Turno UI de la auditoría No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
@@ -128,10 +135,12 @@ class TurnoUIRevisionController extends Controller
             $mensaje = '<strong>Estimado(a) '.$lider->name.', '.$lider->puesto.':</strong><br>'
                             .'Ha sido rechazado el Turno a la Unidad de Investigación de auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
-            
             //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoui->usuarioCreacion->unidad_administrativa_id, $turnoui->usuarioCreacion->id);
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($turnoui).'/Rechazo',$url);
-
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($turnoui). '/Rechazo', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($turnoui).'/Rechazo',$url);
+            }
         }  
 
         

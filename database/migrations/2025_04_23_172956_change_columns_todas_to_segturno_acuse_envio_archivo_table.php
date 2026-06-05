@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::table('segturno_acuse_envio_archivo', function (Blueprint $table) {
             
-            $table->string('numero_turno_archivo', 100)->nullable()->change();
-            $table->string('turno_archivo',100)->nullable()->change();
-            $table->foreignId('auditoria_id')->constrained('segauditorias')->nullable()->change();
+            //$table->string('numero_turno_archivo', 100)->nullable()->change();
+           // $table->string('turno_archivo',100)->nullable()->change();
+            //$table->foreignId('auditoria_id')->constrained('segauditorias')->nullable()->change();
 
             
 

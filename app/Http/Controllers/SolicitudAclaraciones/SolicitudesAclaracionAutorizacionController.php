@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SolicitudAclaraciones;
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\Notificacion;
 use App\Models\SolicitudesAclaracion;
@@ -134,31 +135,50 @@ class SolicitudesAclaracionAutorizacionController extends Controller
         }
 		/** Leer notifiacion si hay  **/
         $idUser = auth()->user()->id;
-        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($solicitud)."/Aut")->first();
+        
         $url = route('solicitudesaclaracionatencion.index');
-        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+
+        if ($usaEquipo) {
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+        } else {
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($solicitud)."/Aut")->first();
+        auth()->user()->NotMarcarLeido($notificacion);
 		$notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($solicitud)."/Rechazo")->first();
-        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+        auth()->user()->NotMarcarLeido($notificacionRechazo);
         /** fin Leer notifiacion si hay  **/
 		
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
 
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($analista->name,$analista->puesto,$solicitud), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($solicitud)."/Consulta",$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$solicitud), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($solicitud)."/Consulta",$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name,$jefe->puesto,$solicitud), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($solicitud)."/Consulta",$url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($lider->name,$lider->puesto,$solicitud), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($solicitud)."/Consulta",$url);
-
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado("analista","Analista de seguimiento",$solicitud), now(), null, null,GenerarLlave($solicitud). '/Consulta', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+                auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado("lider","lider de proyecto",$solicitud), now(), null, null,GenerarLlave($solicitud). '/Consulta', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($lider->name,$lider->puesto,$solicitud), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($solicitud)."/Consulta",$url);
+                auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($analista->name,$analista->puesto,$solicitud), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($solicitud)."/Consulta",$url);
+            }
             setMessage('Se ha autorizado el registro de la atención de la solicitud de aclaración.');
         } else {
             $titulo = 'Rechazo del registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$solicitud->userCreacion->name.', '.$solicitud->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la atención de la solicitud de aclaración de la Acción No. '.$solicitud->accion->numero.' de la Auditoría No. '.$solicitud->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($solicitud)."/Rechazo",$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$solicitud), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($solicitud)."/Rechazo",$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$solicitud), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($solicitud)."/Rechazo",$url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$solicitud), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($solicitud)."/Rechazo",$url);
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($solicitud). '/Rechazo', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+                auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo("lider","lider de proyecto",$solicitud), now(), null, null,GenerarLlave($solicitud). '/Rechazo', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$solicitud), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($solicitud)."/Rechazo",$url);
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($solicitud)."/Rechazo",$url);
+            }
 
             setMessage('Se ha rechazado el registro de la calificación y conclusión de la atención de la solicitud de aclaración.');
         }

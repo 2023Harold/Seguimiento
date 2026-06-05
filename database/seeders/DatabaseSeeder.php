@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             CatTipologiasSeeder::class,  
             UsersSeeder::class, 
             LeyendaSeeder::class,    
+            segequipos_trabajoSeeder::class,    
         ]);
         
     }

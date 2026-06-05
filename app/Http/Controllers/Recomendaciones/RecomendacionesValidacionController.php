@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Recomendaciones;
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\Notificacion;
 use App\Models\Recomendaciones;
@@ -103,10 +104,20 @@ class RecomendacionesValidacionController extends Controller
         }
 
         $url = route('recomendacionesatencion.index');
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+
+        if ($usaEquipo) {
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+        } else {
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+        
         $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($recomendacion).'/ValD')->first();
         $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($recomendacion)."/Rechazo")->first();
-        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
-        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+        auth()->user()->NotMarcarLeido($notificacion);
+        auth()->user()->NotMarcarLeido($notificacionRechazo);
 
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
@@ -124,9 +135,13 @@ class RecomendacionesValidacionController extends Controller
             $mensaje = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id, GenerarLlave($recomendacion).'/Rechazo',$url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$recomendacion), now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($recomendacion).'/Rechazo',$url);
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($recomendacion). '/Rechazo', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+                auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo("lider","lider de proyecto",$recomendacion), now(), null, null,GenerarLlave($recomendacion). '/Rechazo', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id, GenerarLlave($recomendacion).'/Rechazo',$url);
+                auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($lider->name,$lider->puesto,$recomendacion), now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($recomendacion).'/Rechazo',$url);
+            }
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$recomendacion), now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($recomendacion).'/Rechazo',$url);
         }
         $recomendacion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);

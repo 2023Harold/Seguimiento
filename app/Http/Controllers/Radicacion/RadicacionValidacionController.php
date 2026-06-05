@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Radicacion;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\Radicacion;
 use Illuminate\Http\Request;
@@ -93,6 +94,21 @@ class RadicacionValidacionController extends Controller
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
 
+        $auditoria = $radicacion->auditoria;
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        
+        // Obtener quién recibe la notificación según la lógica
+        if ($usaEquipo) {
+            // Notificación va al equipo (lider activo en esa auditoría)
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            // Comportamiento original
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+        
         $radicacion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En autorización' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
         setMessage($request->estatus == 'Aprobado' ?
             'La aprobación ha sido registrada y se ha enviado a autorización del superior.' :
@@ -114,11 +130,17 @@ class RadicacionValidacionController extends Controller
         }else {
             
             $titulo = 'Rechazo de la radicación de la auditoría No. '.$radicacion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$radicacion->usuarioCreacion->name.', '.$radicacion->usuarioCreacion->puesto.':</strong><br>'
+            if ($usaEquipo) {
+                    $mensaje = '<strong>Estimado(a) Líder de Proyecto:</strong><br>'
+                                .'Ha sido rechazado la radicación de auditoría No. '.$radicacion->auditoria->numero_auditoria.
+                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave($radicacion).'/Rechazo',$url, $auditoria->id, $equipoId,'Lider');
+                }else{
+                    $mensaje = '<strong>Estimado(a) '.$radicacion->usuarioCreacion->name.', '.$radicacion->usuarioCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado la radicación de auditoría No. '.$radicacion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
-            
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id,GenerarLlave($radicacion).'/Rechazo',$url);
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id,GenerarLlave($radicacion).'/Rechazo',$url);
+            }
         }
 
          return redirect()->route('radicacion.index');

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('segturno_archivo_trasferencia', function (Blueprint $table) {
-            $table->string('numero_transferencia', 100)->nullable()->change();
+            //$table->string('numero_transferencia', 100)->nullable()->change();
         });
     }
 

@@ -180,12 +180,18 @@ class NotificacionAccionesController extends Controller
     
     public function nuevas()
     {
-        $notificaciones = auth()->user()->notificaciones;
-        $totalNotificaciones = $notificaciones->count();
+        if (in_array(auth()->user()->siglas_rol, ['LP', 'ANA']) && getSession('cp') >= 2024) {
+            $notificaciones = auth()->user()
+                ->todasNotificacionesNuevas()
+                ->where('estatus', 'Pendiente')
+                ->get();
+        } else {
+            $notificaciones = auth()->user()->notificaciones()->get();
+        }
 
         return response()->json([
             'notificaciones' => $notificaciones,
-            'total' => $totalNotificaciones,
+            'total'          => $notificaciones->count(),
         ]);
     }
 

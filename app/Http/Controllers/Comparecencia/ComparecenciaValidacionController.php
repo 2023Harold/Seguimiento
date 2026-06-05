@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Comparecencia;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
+use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Comparecencia;
 use App\Models\Movimientos;
 use Illuminate\Http\Request;
@@ -76,6 +78,7 @@ class ComparecenciaValidacionController extends Controller
      */
     public function update(AprobarFlujoAutorizacionRequest $request, Comparecencia $comparecencia)
     {
+        
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -93,7 +96,21 @@ class ComparecenciaValidacionController extends Controller
         } else {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
-
+        $auditoria=Auditoria::find(getSession('auditoria_id')); 
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        
+        // Obtener quién recibe la notificación según la lógica
+        if ($usaEquipo) {
+            // Notificación va al equipo (lider activo en esa auditoría)
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            // Comportamiento original
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+        
         $comparecencia->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
         setMessage($request->estatus == 'Aprobado' ?
             'Se ha autorizado la comparecencia de la auditoría con exito.' :
@@ -108,21 +125,28 @@ class ComparecenciaValidacionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.auth()->user()->director->name.', '.auth()->user()->director->puesto.':</strong><br>'
+            $mensaje = '<strong>Estimado(a) Líder de Proyecto:</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; ha aprobado la validación de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria.
-                            ', por lo que se requiere realice la autorización oportuna de la misma.';
+                            '; ha aprobado la autorización de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria;
+            if ($usaEquipo) {
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave($comparecencia).'/Rechazo',$url, $auditoria->id, $equipoId,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id,GenerarLlave($comparecencia).'/Consulta',$url);
+            }
             //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->titular->unidad_administrativa_id, auth()->user()->titular->id,GenerarLlave($comparecencia).'/Aut',$url);
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id,GenerarLlave($comparecencia).'/Consulta',$url);
-
         }else {
-            
             $titulo = 'Rechazo de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$comparecencia->usuarioCreacion->name.', '.$comparecencia->usuarioCreacion->puesto.':</strong><br>'
+            if ($usaEquipo) {
+                    $mensaje = '<strong>Estimado(a) Líder de Proyecto:</strong><br>'
+                                .'Ha sido rechazado la comparecencia de auditoría No. '.$comparecencia->auditoria->numero_auditoria.
+                                ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave($comparecencia).'/Rechazo',$url, $auditoria->id, $equipoId,'Lider');
+            }else{
+                $mensaje = '<strong>Estimado(a) '.$comparecencia->usuarioCreacion->name.', '.$comparecencia->usuarioCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado la comparecencia de auditoría No. '.$comparecencia->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
-            
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id,GenerarLlave($comparecencia).'/Rechazo',$url);
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id,GenerarLlave($comparecencia).'/Rechazo',$url);
+            }
         }
 
          return redirect()->route('comparecenciaacta.index');

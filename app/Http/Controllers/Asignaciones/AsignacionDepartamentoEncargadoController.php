@@ -81,7 +81,7 @@ class AsignacionDepartamentoEncargadoController extends Controller
         
             $auditoria->update($request->all());
             $titulo = 'Asignación de auditoría';
-            $mensaje = '<strong>Estimado(a) ' . $request->nombre . ', ' . $request->cargo . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del Titular, por lo que se requiere realice la radicación y comparecencia.';
+            $mensaje = '<strong>Estimado(a) ' . $request->nombre . ', ' . $request->cargo . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del Titular, por lo que se requiere realice la asignación oportuna del equipo de analistas y lider de proyecto, en el módulo de Asignación.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $request->departamento_encargado_id, $request->usuario_id);
             $mensaje='Se ha realizado la asignación del departamento encargado de la auditoría correctamente.';
             

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\PliegosObservacion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\PliegosObservacion;
 use Illuminate\Http\Request;
 use App\Models\PliegosContestacion;
+use DB;
 
 class PliegosObservacionAnalisisEnvioController extends Controller
 {
@@ -60,52 +63,80 @@ class PliegosObservacionAnalisisEnvioController extends Controller
      */
     public function edit(PliegosObservacion $pliegosobservacion)
     {
-      $request=new Request();
-      if(empty($pliegosobservacion->listado_documentos)){
-          setMessage('No se ha capturado información en el apartado de listado de documentos.','error');
+        $request=new Request();
+        if(empty($pliegosobservacion->listado_documentos)){
+            setMessage('No se ha capturado información en el apartado de listado de documentos.','error');
 
-          return back()->withInput();
-      }
-      /*$contestaciones = PliegosContestacion::where('pliegosobservacion_id',$pliegosobservacion->id)->get();
-      if($contestaciones->count()==0){
-          setMessage('No se ha capturado información en el apartado de contestaciones.','error');
+            return back()->withInput();
+        }
+        /*$contestaciones = PliegosContestacion::where('pliegosobservacion_id',$pliegosobservacion->id)->get();
+        if($contestaciones->count()==0){
+            setMessage('No se ha capturado información en el apartado de contestaciones.','error');
 
-          return back()->withInput();
-      }*/
-      $request['concluido']='Si';
-      $pliegosobservacion->update($request->all());
+            return back()->withInput();
+        }*/
+        $request['concluido']='Si';
+        $pliegosobservacion->update($request->all());
 
 
-      Movimientos::create([
-         'tipo_movimiento' => 'Registro de la atención del pliego de observación.',
-         'accion' => 'Pliegos de observación',
-         'accion_id' => $pliegosobservacion->id,
-         'estatus' => 'Aprobado',
-         'usuario_creacion_id' => auth()->id(),
-         'usuario_asignado_id' => auth()->id(),
-     ]);
+        Movimientos::create([
+            'tipo_movimiento' => 'Registro de la atención del pliego de observación.',
+            'accion' => 'Pliegos de observación',
+            'accion_id' => $pliegosobservacion->id,
+            'estatus' => 'Aprobado',
+            'usuario_creacion_id' => auth()->id(),
+            'usuario_asignado_id' => auth()->id(),
+        ]);
 
-     if (strlen($pliegosobservacion->nivel_autorizacion) == 3) {
-         $nivel_autorizacion = $pliegosobservacion->nivel_autorizacion;
-     } else {
-         $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
-     }
+        if (strlen($pliegosobservacion->nivel_autorizacion) == 3) {
+            $nivel_autorizacion = $pliegosobservacion->nivel_autorizacion;
+        } else {
+            $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
+        }
+        $auditoria = Auditoria::find($pliegosobservacion->auditoria_id); 
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
 
-     $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $pliegosobservacion).'/Rechazo')->first();
-	 $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
-     $url = route('pliegosobservacionatencion.index');
+        if ($usaEquipo) {
+            $notificacion=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($pliegosobservacion).'/Rechazo')->first();
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave($pliegosobservacion).'/Rechazo')->first();
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+        auth()->user()->NotMarcarLeido($notificacion);
+        $url = route('pliegosobservacionatencion.index');
 
-     $pliegosobservacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
-     $titulo = 'Revisión del registro de la atención del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
-     $mensaje = '<strong>Estimado (a) ' . $pliegosobservacion->accion->lider->name . ', ' . $pliegosobservacion->accion->lider->puesto . ':</strong><br>
-                 Ha sido registrada la atención del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria . ', por parte del ' .
-                 auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+        $pliegosobservacion->update(['fase_autorizacion' =>  'En revisión 01', 'nivel_autorizacion' => $nivel_autorizacion]);
+        $titulo = 'Revisión del registro de la atención del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
+        $mensaje = '<strong>Estimado (a) ' . $pliegosobservacion->accion->lider->name . ', ' . $pliegosobservacion->accion->lider->puesto . ':</strong><br>
+                    Ha sido registrada la atención del pliego de observación de la acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria . ', por parte del ' .
+                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+        if ($usaEquipo) {
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave( $pliegosobservacion).'/RevL',$url, $auditoria->id, $equipoId,'Lider');
+        }else{
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->accion->lider->unidad_administrativa_id,$pliegosobservacion->accion->lider->id,GenerarLlave( $pliegosobservacion).'/RevL', $url);
+        }
+        
+        $staffA = AuditoriaUsuarios::select('segusers.id','segusers.name','segusers.puesto', 'segusers.unidad_administrativa_id', 'segusers.siglas_rol', 'segusers.estatus',   
+                                            DB::raw("(case when(segusers.id = segauditoria_usuarios.staff_id) THEN segusers.name ELSE NULL END) AS staffAsignado01"),
+                                            )->join('segusers', 'segusers.id', '=', 'segauditoria_usuarios.staff_id')->where('auditoria_id', $auditoria->id)->get()->toArray();
+        foreach ($staffA as $staff) {
+            if (!empty($staff['id'])) {
+                $tituloStaff = 'Revisión del registro de atención de la pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria;
 
-     auth()->user()->insertNotificacion($titulo, $mensaje, now(), $pliegosobservacion->accion->lider->unidad_administrativa_id,$pliegosobservacion->accion->lider->id,GenerarLlave( $pliegosobservacion).'/RevL', $url);
+                $mensajeStaff = '<strong>Estimado(a) '.$staff['name'].', '.$staff['puesto'].':</strong><br>'
+                                .auth()->user()->name.', '.auth()->user()->puesto.
+                                '; ha aprobado el registro de atención de la pliego de observación de la Acción No. '.$pliegosobservacion->accion->numero.' de la Auditoría No. '.$pliegosobservacion->accion->auditoria->numero_auditoria.
+                                ', por lo que se le notifica para su conocimiento.';
+                auth()->user()->insertNotificacion($tituloStaff, $mensajeStaff, now(), $staff['unidad_administrativa_id'], $staff['id'], GenerarLlave( $pliegosobservacion).'/Consulta', $url);
+            }
+        }
+        setMessage('Se han enviado la información de la atención del pliego de observación a revisión');
 
-     setMessage('Se han enviado la información de la atención del pliego de observación a revisión');
-
-    return redirect()->route('pliegosobservacionatencion.index');
+        return redirect()->route('pliegosobservacionatencion.index');
     }
 
     /**

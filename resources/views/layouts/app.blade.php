@@ -140,52 +140,97 @@
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	
 		<script>
-			// Mixin de SweetAlert2 que usa clases de Bootstrap/Metronic
+			document.addEventListener('click', function (e) {
+				const btn = e.target.closest('.sweet-comentarios');
+				if (!btn) return;
 
-			///SWEETALERT para tipologias o para eliminar y confirmar
+				e.preventDefault();
+
+				Swal.fire({
+					icon: 'warning',
+					title: btn.dataset.title || '¿Estás seguro de enviar el comentario?',
+					text: btn.dataset.text || 'Una vez enviado el comentario, se atendera y no permitira modificarlo, (esta acción no se puede deshacer).',
+					showCancelButton: true,
+					confirmButtonText: 'Sí, continuar',
+					cancelButtonText: 'Cancelar',
+					buttonsStyling: false,
+					customClass: {
+						confirmButton: 'btn btn-sm btn-primary',
+						cancelButton:  'btn btn-sm btn-secondary'
+					}
+				}).then(result => {
+					if (result.isConfirmed) {
+						Swal.fire({
+									icon: 'success',
+									title: 'Enviado correctamente',
+									timer: 1200,
+									showConfirmButton: false
+								});
+						window.location.href = btn.href;
+					}
+				});
+			});
+			document.addEventListener('click', function (e) {
+				const btn = e.target.closest('.sweet-contestacion');
+				if (!btn) return;
+
+				e.preventDefault();
+
+				Swal.fire({
+					icon: 'warning',
+					title: btn.dataset.title || '¿Desea eliminar el oficio de contestación?',
+					text: btn.dataset.text || 'Esta acción no se puede deshacer.',
+					showCancelButton: true,
+					confirmButtonText: 'Sí, continuar',
+					cancelButtonText: 'Cancelar',
+					buttonsStyling: false,
+					customClass: {
+						confirmButton: 'btn btn-sm btn-danger',
+						cancelButton:  'btn btn-sm btn-secondary'
+					}
+				}).then(result => {
+					if (result.isConfirmed) {
+						Swal.fire({
+									icon: 'success',
+									title: 'Eliminado correctamente',
+									timer: 1200,
+									showConfirmButton: false
+								});
+						window.location.href = btn.href;
+					}
+				});
+			});
 			document.addEventListener('click', function (e) {
 				const btn = e.target.closest('.js-confirm-delete');
 				if (!btn) return;
 
 				e.preventDefault();
 
-				const url = btn.getAttribute('href');
-				const title = btn.dataset.confirmTitle || '¿Confirmar?';
-				const text = btn.dataset.confirmText || '';
-				const successText = btn.dataset.successText || 'Eliminado correctamente';
-
 				Swal.fire({
 					icon: 'warning',
-					title: title,
-					text: text,
+					title: btn.dataset.title || '¿Desea eliminar?',
+					text: btn.dataset.text || 'Esta acción no se puede deshacer.',
 					showCancelButton: true,
-					confirmButtonText: 'Sí, eliminar',
+					confirmButtonText: 'Sí, continuar',
 					cancelButtonText: 'Cancelar',
 					buttonsStyling: false,
 					customClass: {
 						confirmButton: 'btn btn-sm btn-danger',
-						cancelButton: 'btn btn-sm btn-primary'
+						cancelButton:  'btn btn-sm btn-secondary'
 					}
 				}).then(result => {
-					if (!result.isConfirmed) return;
-
-					// Paso 2: mostrar feedback inmediato
-					Swal.fire({
-						icon: 'success',
-						title: 'Eliminado',
-						text: successText,
-						timer: 1200,
-						showConfirmButton: false
-					});
-
-					// Paso 3: navegar después del mensaje
-					setTimeout(() => {
-						window.location.href = url;
-					}, 1200);
+					if (result.isConfirmed) {
+						Swal.fire({
+									icon: 'success',
+									title: 'Eliminado correctamente',
+									timer: 1200,
+									showConfirmButton: false
+								});
+						window.location.href = btn.href;
+					}
 				});
 			});
-
-
+			// Mixin de SweetAlert2 que usa clases de Bootstrap/Metronic
 			$(document).ready(function() {
 				// --- Delegación para "Eliminar" usando SweetAlert2 ---
 				// NOTA: Esto funciona siempre que el helper NO tenga el confirm() inline.

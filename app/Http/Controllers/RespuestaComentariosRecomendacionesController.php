@@ -189,6 +189,7 @@ class RespuestaComentariosRecomendacionesController extends Controller
         $comentario->update(['estatus'=>'Atendido']);     
         $respuesta->update(['estatus'=>'Atendido']);     
         setMessage('se atendio el comentario correctamente.');      
-        return view('layouts.close');
+        //return view('layouts.close');
+        return redirect()->route('recomendacionesatencion.index');
     }
 }

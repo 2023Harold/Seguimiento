@@ -4,9 +4,9 @@
     <i class="fa fa-bell fs-2x"></i>
     @if (auth()->user()->NotificacionesCount>0)
     <!--end::Svg Icon-->
-    <span class="badge badge-square badge-danger h-20px w-20px t-10 position-static translate-middle pulse pulse-danger top-0 start-100 animation-blink" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="badge_id"> 
+    <span class="badge badge-square badge-danger h-20px w-20px t-10 position-static translate-middle pulse pulse-danger top-0 start-100 animation-blink" style="visibility:{{ count(auth()->user()->notificacionesPendientes)>0?'visible':'hidden'}}" id="badge_id"> 
         <span id="numero_notificaciones">{{ auth()->user()->NotificacionesCount }}</span>
-        <span class="pulse-ring" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="pulse_id"></span>
+        <span class="pulse-ring" style="visibility:{{ count(auth()->user()->notificacionesPendientes)>0?'visible':'hidden'}}" id="pulse_id"></span>
     </span>
     <!--<span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
     end::Svg Icon-->
@@ -29,7 +29,7 @@
         <!--end::Title-->
         @if (auth()->user()->NotificacionesCount>0)
             <!--begin::Status-->
-            <span class="badge bg-primary py-2 px-3" style="visibility:{{ count(auth()->user()->notificaciones)>0?'visible':'hidden'}}" id="badge_etiqueta_id"><span id="numero_notificaciones_badge">{{ auth()->user()->NotificacionesCount}}</span> &nbsp;  <span id="span-ntf">{{auth()->user()->NotificacionesCount==1?'notificación':'notificaciones'}}</span></span>
+            <span class="badge bg-primary py-2 px-3" style="visibility:{{ count(auth()->user()->notificacionesPendientes)>0?'visible':'hidden'}}" id="badge_etiqueta_id"><span id="numero_notificaciones_badge">{{ auth()->user()->NotificacionesCount}}</span> &nbsp;  <span id="span-ntf">{{auth()->user()->NotificacionesCount==1?'notificación':'notificaciones'}}</span></span>
             <!--end::Status-->
         @endif
         <span class="mt-2"><a href="{{route('notificaciones.index')}}">Ver todas las notificaciones</a></span>
@@ -40,8 +40,8 @@
         <div class="sin-ntf p-1 w-100 w-md-100 text-center d-none">
             No se han encontrado notificaciones pendientes.
         </div>
-        @if (count(auth()->user()->notificaciones) > 0)
-            @foreach (auth()->user()->notificaciones->take(10) as $notificacion)<!-- Take para limitar a 10 notifiaciones -->
+        @if (count(auth()->user()->notificacionesPendientes) > 0)
+            @foreach (auth()->user()->notificacionesPendientes as $notificacion)<!-- Take para limitar a 10 notifiaciones -->
                 <!--begin::Items-->
                 <div class="p-0 w-100 pe-5" id="rownotificacion{{ $notificacion->id }}">
                     <div class="mh-300px mh-lg-325px border-1 border-bottom border-top p-2">
@@ -112,7 +112,7 @@
 
 <script>
     $(document).ready(function() {
-        var total_notificaciones = '{{ !empty(auth()->user()->notificaciones) && count(auth()->user()->notificaciones) != 0 ? count(auth()->user()->notificaciones) : 0 }}';
+        var total_notificaciones = '{{ !empty(auth()->user()->notificaciones) && count(auth()->user()->notificacionesPendientes) != 0 ? count(auth()->user()->notificacionesPendientes) : 0 }}';
         $('.casilla').on('ifChanged', function(event) {
             var idcheck = $(this).attr('id');
             var idrow = '#rownotificacion' + $(this).val();

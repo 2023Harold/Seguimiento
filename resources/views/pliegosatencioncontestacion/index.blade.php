@@ -79,13 +79,16 @@
                                             {{ fecha($contestacion->fecha_recepcion_seguimiento) }}
                                          </td>
                                         <td class="text-center">
-                                            <a href="{{route('pliegosobservacionatencioncontestacion.edit', $contestacion)}}" class="icon-hover">
-                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            <a href="{{route('pliegosobservacionatencioncontestacion.edit', $contestacion)}}" class="btn btn-color-primary btn-active-color-warning icon-hover">
+                                                <i class="fa-solid fa-pen-to-square" style="font-size: 16px;" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                         <td class="text-center">
-                                            {{-- @can('comparecenciaanexo.destroy') --}}
-                                                @destroy(route('pliegosobservacionatencioncontestacion.destroy', $contestacion))
+                                            {{-- @can('comparecenciaanexo.destroy') @destroy(route('pliegosobservacionatencioncontestacion.destroy', $contestacion))--}}
+                                            <a href="{{ route('pliegosobservacionatencioncontestacion.eliminar', $contestacion) }}" class="btn btn-link btn-active-color-danger sweet-contestacion"
+                                                data-success-text="El oficio de contestación se eliminó correctamente.">
+                                                    <span class="bi bi-trash-fill" style="font-size: 1.6rem;"></span>
+                                            </a>
                                             {{-- @endcan --}}
                                         </td>
                                     </tr>

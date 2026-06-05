@@ -163,6 +163,48 @@
 @endsection
 @section('script')   
     <script>
+        ///SWEETALERT para tipologias o para eliminar y confirmar
+			document.addEventListener('click', function (e) {
+				const btn = e.target.closest('.js-confirm-delete');
+				if (!btn) return;
+
+				e.preventDefault();
+
+				const url = btn.getAttribute('href');
+				const title = btn.dataset.confirmTitle || '¿Confirmar?';
+				const text = btn.dataset.confirmText || '';
+				const successText = btn.dataset.successText || 'Eliminado correctamente';
+
+				Swal.fire({
+					icon: 'warning',
+					title: title,
+					text: text,
+					showCancelButton: true,
+					confirmButtonText: 'Sí, eliminar',
+					cancelButtonText: 'Cancelar',
+					buttonsStyling: false,
+					customClass: {
+						confirmButton: 'btn btn-sm btn-danger',
+						cancelButton: 'btn btn-sm btn-primary'
+					}
+				}).then(result => {
+					if (!result.isConfirmed) return;
+
+					// Paso 2: mostrar feedback inmediato
+					Swal.fire({
+						icon: 'success',
+						title: 'Eliminado',
+						text: successText,
+						timer: 2000,
+						showConfirmButton: false
+					});
+
+					// Paso 3: navegar después del mensaje
+					setTimeout(() => {
+						window.location.href = url;
+					}, 1200);
+				});
+			});
         $(document).ready(function() {
             $("#segtipo_accion_id").select2().on('change', function(e) {
                 var tipoaccionseleccionado = $(this).children("option:selected").text();              

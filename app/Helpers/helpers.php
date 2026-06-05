@@ -135,7 +135,7 @@ function archivo($field, $caption, $value, array $options = [])
     // Mensajes personalizados del plugin (bootstrap-fileinput)
     $options['data-msg-size-too-large'] = "El archivo '{name}' (<b>{size}</b>) excede el tamaño permitido de <b>{maxSize}</b>, si desea subir el archivo, favor de contactar al area de soporte.";
     $options['data-msg-invalid-file-type'] = "El tipo de archivo no es válido. Solo se permiten documentos.";
-    $options['data-msg-invalid-file-extension'] = "Extensión no permitida. Solo se aceptan: {extensions}.";
+    $options['data-msg-invalid-file-extension'] = "Archivo no permitido, recuerda subir archivos en: {extensions}.";
     $options['data-browse-on-zone-click'] = "true";
 
     $fileInputId = "{$field}-upload";
@@ -275,6 +275,46 @@ function movimientosDesglose($id, $colspan, $movimientos)
 
     return $results;
 }
+function movimientosDesgloseAsignacionesLA($id, $colspan, $movimientosLider, $movimientosAnalista)
+{
+    if (count($movimientosLider) > 0 || count($movimientosAnalista) > 0) {
+        $movimientos = $movimientosLider->merge($movimientosAnalista)->sortBy('created_at');
+        $results = '<tr><td colspan="'.$colspan. '"><div class="row mb-1">
+                <div class="col-md-12 list-desglose">
+                    <div class="text-primary pl-4 pt-2 collapsed" data-bs-toggle="collapse" href="#a-list-' . $id . '" aria-expanded="true">
+                        <i class="fa fa-chevron-down fa-chev"></i> Lista de movimientos
+                    </div>
+                </div>
+            </div>
+            <div id="a-list-'.$id.'" class="collapse">
+               
+                    <table class="table gray-200">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th class="w-15">Usuario</th>
+                                <th class="col-3">Movimiento</th>
+                                <th class="col-2">Fecha y Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+        foreach ($movimientos as $movimiento) {
+            $results .= '<tr>
+                            <td>'.$movimiento->userCreacion->name.'<br><small class="text-muted">'.$movimiento->userCreacion->puesto.'</small></td>
+                            <td>'.str_replace('Enviar', 'Se envío ', $movimiento->tipo_movimiento).'</td>
+                            <td>'.fecha($movimiento->created_at, 'd/m/Y H:i:s').'</td>
+                    </tr>';
+        }
+        $results .= '</tbody>
+                    </table>
+                    
+                
+            </div></td></tr>';
+    } else {
+        $results = '';
+    }
+
+    return $results;
+}
 
 
 if (!function_exists('movimientosEnTd')) {
@@ -299,8 +339,8 @@ if (!function_exists('movimientosEnTd')) {
         $html .= '                      <th class="col-3">Movimiento</th>';
         $html .= '                      <th class="col-2">Fecha y Hora</th>';
         $html .= '                      <th class="w-15">Usuario</th>';
-        $html .= '                      <th class="w-1">Estatus</th>';
-        $html .= '                      <th>Comentario</th>';
+        //$html .= '                      <th class="w-1">Estatus</th>';
+        //$html .= '                      <th>Comentario</th>';
         $html .= '                  </tr>';
         $html .= '              </thead>';
         $html .= '              <tbody>';
@@ -319,8 +359,8 @@ if (!function_exists('movimientosEnTd')) {
             $html .= '                  <td>' . e($mov) . '</td>';
             $html .= '                  <td>' . e($fec) . '</td>';
             $html .= '                  <td>' . e($usr) . '<br><small class="text-muted">' . e($pst) . '</small></td>';
-            $html .= '                  <td class="text-center">' . $ico . '</td>';
-            $html .= '                  <td>' . e($mot) . '</td>';
+            //$html .= '                  <td class="text-center">' . $ico . '</td>';
+            //$html .= '                  <td>' . e($mot) . '</td>';
             $html .= '              </tr>';
         }
 
@@ -630,7 +670,8 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         if(!empty($relacion3))
         $relacionconstancia3 = DB::table( $relacion3['tbl_rel'])->where($relacion3['col_rel'],$modelo->id)->get();
        
-        $codigoQR = QrCode::format('png')->size(100)->generate($qr);       
+        //$codigoQR = QrCode::format('png')->size(100)->generate($qr);       
+        $codigoQR = "";       
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $data = [
@@ -933,9 +974,15 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
     }
 
     function totalFaltantesNotificaciones(){
-        $total=Notificacion::where('destinatario_id',auth()->user()->id)
-        ->where('estatus',"Pendiente")
-        ->count();
+        
+        if((auth()->user()->siglas_rol == 'LP' || auth()->user()->siglas_rol == 'ANA') && getSession('cp') >= 2024){
+            //$total = auth()->user()->todasNotificacionesNuevas()->count();
+            $total = count(auth()->user()->notificacionesPendientes);
+        }else{
+            //$total=Notificacion::where('destinatario_id',auth()->user()->id)->where('estatus',"Pendiente")->count();
+            $total=count(auth()->user()->notificacionesPendientes);
+        }
+        
         return $total;
     }
 
@@ -970,4 +1017,8 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
 
         // Si por algo preg_replace_callback falló, regresa el original
         return $mensajeLimpio ?? $mensaje;
+    }
+    function usaEquipoTrabajo(): bool
+    {
+        return getSession('cp') >= 2024;
     }

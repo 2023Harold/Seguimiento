@@ -41,7 +41,20 @@
 							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion,'asignaciones'=>$request->asignaciones])->links('vendor.pagination.bootstrap-5') }}
 						</div>
 					</div>
-				</div>				
+				</div>	
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="float-end">
+                            <a href="javascript:void(0)" id="btn-sincronizar" class="corner-button float-end">
+                                <span class="cb-content text-primary">
+                                    <i class="bi bi-arrow-repeat text-primary" style="font-size: 20px"></i>
+                                        Sincronizar
+                                </span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -51,10 +64,24 @@
                                 <th>Acto de fiscalización</th>
                                 <th>Informe de auditoría</th>
                                 <th>Acciones promovidas</th>
-                                <th>Monto por aclarar</th>                                                                 
-                                <th>Asignación de lider y analista</th>
-                                <th>Analistas Adicionales</th>
+                                <th>Monto por aclarar</th>     
+                                @if(!usaEquipoTrabajo())
+                                    @if(getSession('cp')==2023)
+                                        <th>Asignación de lider y analista</th>                                                   
+                                    @else       
+                                        <th>Asignación de lider y analista</th>                                
+                                    @endif     
+                                @else
+                                    <th colspan="4">Equipo de trabajo </th>
+                                @endif
                             </tr>
+                            @if(usaEquipoTrabajo())
+                                <tr>
+                                    <th colspan="6"></th>
+                                    <th colspan="2">Lider</th>
+                                    <th colspan="2">Analista</th>
+                                </tr>
+                            @endif
                         </thead>
                         <tbody>
                             @forelse ($auditorias as $auditoria)
@@ -62,13 +89,8 @@
                                     <td>
                                         {{ $auditoria->numero_auditoria }}
                                     </td>
-                                    <td width='40%'>
-                                        @php
-                                            $entidadparciales = explode("-", $auditoria->entidad_fiscalizable);                                            
-                                        @endphp
-                                        @foreach ($entidadparciales as $entidadparcial)
-                                            {{ mb_convert_encoding(mb_convert_case(strtolower($entidadparcial), MB_CASE_TITLE), "UTF-8") }}<br>
-                                        @endforeach                                        
+                                    <td>
+                                        {{$auditoria->nombreentidad->entidades ?? "sin nombre"}}                                     
                                     </td>
                                     <td>
                                         {{ $auditoria->acto_fiscalizacion }}
@@ -81,108 +103,80 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                            @if($auditoria->registro_concluido=='Si'&& count($auditoria->acciones) > 0)
-                                                @can('asignacionlideranalista.accionesconsulta')
-                                                    <a href="{{ route('asignacionlideranalista.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-magnifying-glass-chart"></i>Consultar</a>
-                                                @endcan
-                                            @endif                                  
+                                        @if($auditoria->registro_concluido=='Si'&& count($auditoria->acciones) > 0)
+                                            @can('asignacionlideranalista.accionesconsulta')
+                                                <a href="{{ route('asignacionlideranalista.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-magnifying-glass-chart"></i>Consultar</a>
+                                            @endcan
+                                        @endif                                  
                                     </td>
                                     <td style="text-align: right!important;">
                                         {{ '$'.number_format( $auditoria->total(), 2) }}                                         
                                     </td>                                    
-                                    <td class="text-center">
-                                    @if(getSession('cp')!=2022)
-                                      @if (!empty($auditoria->lidercp_id))                                            
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <span class="badge-light-secondary text-gray-600">
-                                                  {{ $auditoria->lidercp->name  }} <br>
-                                                  {{ $auditoria->lidercp->puesto  }}
-                                              </span><br>                                              
-                                                  @can('asignacionlideranalista.reasignarlider')
-                                                      <a href="{{ route('asignacionlideranalista.reasignarlider',$auditoria) }}" class="btn btn-primary">
-                                                          <i class="fa fa-exchange"></i> Reasignar
-                                                      </a>
-                                                  @endcan                                                                                              
-                                          </div>
-                                          <div class="col-md-6">
-                                              <span class="badge-light-secondary text-gray-600">
-                                                  {{ $auditoria->analistacp->name }} <br>
-                                                  {{ $auditoria->analistacp->puesto  }}
-                                              </span><br>                                            
-                                                  @can('asignacionlideranalista.reasignaranalista')
-                                                      <a href="{{ route('asignacionlideranalista.reasignaranalista',$auditoria) }}" class="btn btn-primary">
-                                                          <i class="fa fa-exchange"></i> Reasignar
-                                                      </a>
-                                                  @endcan                                              
-                                          </div>
-                                      </div>  
-                                      @else
-                                          @can('asignacionlideranalista.edit')
-                                              <a href="{{ route('asignacionlideranalista.edit',$auditoria) }}" class="btn btn-primary">
-                                                  <i class="fa fa-handshake"></i> Asignar
-                                              </a>  
-                                          @endcan                                      
-                                      @endif 
-                                      @can('asignacionlideranalista.consulta')
-                                          <a href="{{ route('asignacionlideranalista.consulta',$auditoria) }}" class="btn btn-primary">
-                                              <i class="fa fa-magnifying-glass-chart"></i> Consultar
-                                          </a> 
-                                      @endcan                                                                        
-                                    @else                                        
-                                        @if (!empty($auditoria->accionesDepartamento[0]->lider_asignado))                                            
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <span class="badge-light-secondary text-gray-600">
-                                                    {{ $auditoria->accionesDepartamento[0]->lider_asignado  }} <br>
-                                                    {{ $auditoria->accionesDepartamento[0]->lider->puesto  }}
-                                                </span><br>
-                                                @if ($auditoria->accionesDepartamento[0]->reasignacion_lider=='Si')
-                                                    <span class="badge badge-square badge-light-secondary text-gray-500">Reasignado</span>
-                                                @else
-                                                    @can('asignacionlideranalista.reasignarlider')
-                                                        <a href="{{ route('asignacionlideranalista.reasignarlider',$auditoria) }}" class="btn btn-primary">
-                                                            <i class="fa fa-exchange"></i> Reasignar
+                                    @if(!usaEquipoTrabajo())
+                                        @if(getSession('cp')==2023)
+                                            @include('layouts.partials._asignacionlideranalista2023',$auditoria)                                                             
+                                        @else       
+                                            @include('layouts.partials._asignacionlideranalista2022')                                        
+                                        @endif     
+                                    @else
+                                        <td>
+                                            @if (!empty($auditoria->liderEquipo))
+                                                @foreach ($auditoria->liderEquipo as $lider )
+                                                    {{$lider->usuarioequipo->name ?? 'Sin asignar'}}<br>
+                                                    {{$lider->usuarioequipo->puesto ?? 'Sin asignar'}}
+                                                    @can('asignarequipotrabajo.eliminar')
+                                                        <a href="{{ route('asignarequipotrabajo.eliminar', [$lider, $auditoria]) }}" class="btn btn-link btn-active-color-danger js-confirm-delete"
+                                                            data-confirm-title="¿Desea eliminar al lider de la auditoría?"
+                                                            data-confirm-text="Esta acción no se puede deshacer."
+                                                            data-success-text="El lider se eliminó correctamente, recuerda que el historial se puede ver en el apartado de consulta.">
+                                                                <span class="bi bi-trash-fill" style="font-size: 1rem;"></span>
                                                         </a>
                                                     @endcan
-                                                @endif                                                
-                                            </div>
-                                            <div class="col-md-6">
-                                                <span class="badge-light-secondary text-gray-600">
-                                                    {{ $auditoria->accionesDepartamento[0]->analista_asignado  }} <br>
-                                                    {{ $auditoria->accionesDepartamento[0]->analista->puesto  }}
-                                                </span><br>
-                                                @if ($auditoria->accionesDepartamento[0]->reasignacion_analista=='Si')
-                                                    <span class="badge badge-square badge-light-secondary text-gray-500">Reasignado</span>
-                                                @else
-                                                    @can('asignacionlideranalista.reasignaranalista')
-                                                        <a href="{{ route('asignacionlideranalista.reasignaranalista',$auditoria) }}" class="btn btn-primary">
-                                                            <i class="fa fa-exchange"></i> Reasignar
+                                                    <br><br>
+                                                    @if (!empty($lider))
+                                                        {!! movimientosEnTd($lider->id."10", $lider->movimientos) !!}
+                                                    @endif
+                                                @endforeach
+                                            @else
+                                                Sin asignar
+                                            @endif
+                                        </td>
+                                        <td >
+                                            <a href="{{ route('asignarequipotrabajo.lider',$auditoria) }}" class="corner-button-success2 ">
+                                                <span class="cb-content"><i class="fa fa-users text-primary" style="font-size: 20px" aria-hidden="true"></i><i class="bi bi-plus-square-fill text-primary"  style="font-size: 16px"aria-hidden="true"></i></span>
+                                            </a>  
+                                        </td>
+                                        <td>
+                                            @if (!empty($auditoria->analistaEquipo))
+                                                @foreach ( $auditoria->analistaEquipo as $analista )
+                                                    -{{optional($analista->usuarioequipo)->name ?? "Sin asignar" }}<br>
+                                                    {{optional($analista->usuarioequipo)->puesto ?? "Sin asignar"}}
+                                                    @can('asignarequipotrabajo.eliminar')
+                                                        <a href="{{ route('asignarequipotrabajo.eliminar', [$analista, $auditoria]) }}" class="btn btn-link btn-active-color-danger js-confirm-delete"
+                                                            data-confirm-title="¿Desea eliminar al analista de la auditoría?"
+                                                            data-confirm-text="Esta acción no se puede deshacer."
+                                                            data-success-text="El analista se eliminó correctamente, recuerda que el historial se puede ver en el apartado de consulta.">
+                                                                <span class="bi bi-trash-fill" style="font-size: 1rem;"></span>
                                                         </a>
                                                     @endcan
-                                                @endif
-                                            </div>
-                                        </div>  
-                                        @else
-                                            @can('asignacionlideranalista.edit')
-                                                <a href="{{ route('asignacionlideranalista.edit',$auditoria) }}" class="btn btn-primary">
-                                                    <i class="fa fa-handshake"></i> Asignar
-                                                </a>  
-                                            @endcan                                      
-                                        @endif 
-                                        @can('asignacionlideranalista.consulta')
-                                            <a href="{{ route('asignacionlideranalista.consulta',$auditoria) }}" class="btn btn-primary">
-                                                <i class="fa fa-magnifying-glass-chart"></i> Consultar
-                                            </a> 
-                                        @endcan                                                                        
-                                    @endif                                                    
-                                    </td>    
-                                    <td>
-                                        <a href="{{ route('asignacionlideranalista.analistaextraconsulta',$auditoria) }}" class="btn btn-primary">
-                                            <i class="fa fa-magnifying-glass-chart"></i> Consultar
-                                        </a>  
-                                    </td>                              
-                                </tr>                                                           
+                                                    <br><br>
+                                                    
+                                                @endforeach 
+                                            @else
+                                                Sin asignar
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('asignarequipotrabajo.analista',$auditoria) }}" class="corner-button-success2">
+                                                <span class="cb-content"><i class="fa fa-users text-primary" style="font-size: 20px" aria-hidden="true"></i><i class="bi bi-plus-square-fill text-primary"  style="font-size: 16px"aria-hidden="true"></i></span>
+                                            </a>  
+                                        </td>
+                                    @endif                                                                           
+                                </tr> 
+                                @if (!empty($auditoria->movimientosAsignacionLider))
+                                    {!! movimientosDesgloseAsignacionesLA($auditoria->id,"12", $auditoria->movimientosAsignacionLider, $auditoria->movimientosAsignacionAnalista) !!}
+                                @endif  
+                                                                                        
                             @empty
                                 <tr>
                                     <td class="text-center" colspan="8">
@@ -200,4 +194,31 @@
         </div>
     </div>
 </div>
+@endsection
+@section('script')
+    <script>
+        document.getElementById('btn-sincronizar').addEventListener('click', () => {
+            Swal.fire({
+                title: '¿Sincronizar equipo?',
+                text: 'Se actualizarán todos los integrantes',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, sincronizar',
+                customClass: {
+					confirmButton: 'btn btn-sm btn-primary',
+					cancelButton:  'btn btn-sm btn-danger'
+				}
+            }).then(result => {
+                if (result.isConfirmed) {
+                    fetch("{{ route('asignarequipotrabajo.sincronizarTodo') }}", {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    }).then(() => location.reload());
+                }
+            });
+        });
+
+    </script>
 @endsection

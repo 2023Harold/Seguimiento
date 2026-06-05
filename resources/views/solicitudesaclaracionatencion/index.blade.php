@@ -154,8 +154,8 @@
                                 <td class="text-center">
                                     @if (empty($solicitud->fase_autorizacion))
                                         @can('solicitudesaclanalisisenvio.edit')
-                                            <a href="{{ route('solicitudesaclanalisisenvio.edit',$solicitud) }}" class="btn btn-primary">
-                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                            <a href="{{route('solicitudesaclanalisisenvio.edit', $solicitud)}}" class="btn btn-color-primary btn-active-color-info">
+                                                <i class="bi bi-send-check-fill" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Enviar
                                             </a>
                                         @endcan
                                     @endif
@@ -163,8 +163,8 @@
                                         <span class="badge badge-light-danger">{{ $solicitud->fase_autorizacion }}</span>
                                         @can('solicitudesaclanalisisenvio.edit')
                                             <br>
-                                            <a href="{{ route('solicitudesaclanalisisenvio.edit',$solicitud) }}" class="btn btn-primary">
-                                                <span class="fa phpdebugbar-fa-send" aria-hidden="true"></span> Enviar
+                                            <a href="{{route('solicitudesaclanalisisenvio.edit', $solicitud)}}" class="btn btn-color-primary btn-active-color-info">
+                                                <i class="bi bi-send-check-fill" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Enviar
                                             </a>
                                         @endcan
                                     @endif

@@ -145,6 +145,7 @@ class AsignacionDepartamentoController extends Controller
          if(in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray())){
             $query = $query->where('staff_juridico_id',auth()->user()->id);
             }
+            
         if(in_array("Administrador del Sistema", auth()->user()->getRoleNames()->toArray())||
            in_array("Auditor Superior", auth()->user()->getRoleNames()->toArray())||
            in_array("Titular Unidad de Seguimiento", auth()->user()->getRoleNames()->toArray())){   
@@ -153,7 +154,6 @@ class AsignacionDepartamentoController extends Controller
             ->where('fase_autorizacion','Autorizado');
 
         }elseif(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-//dd(1);
             $query = $query->whereNotNull('fase_autorizacion')
                         ->where('fase_autorizacion','Autorizado')
                         ->whereNotNull('direccion_asignada_id')

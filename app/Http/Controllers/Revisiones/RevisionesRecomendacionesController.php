@@ -31,7 +31,6 @@ class RevisionesRecomendacionesController extends Controller
      */
     public function create(Request $request)
     {
-        //dd('hola');
         $comentario = new Revisiones();
         $accion = 'Agregar';
         $acciones=AuditoriaAccion::find(getSession('recomendacionesauditoriaaccion_id'));
@@ -98,13 +97,27 @@ class RevisionesRecomendacionesController extends Controller
                 $lider = $auditoria->lidercp; 
             }
         $url = route('recomendacionesatencion.index');
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        if ($usaEquipo) {
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+        } else {
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
         
         if(auth()->user()->siglas_rol=='AS'){
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($titular->name,$titular->puesto), now(), $titular->unidad_administrativa_id, $titular->id,GenerarLlave($accion).'/Comentario', $url);           
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($director->name,$director->puesto), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($accion).'/Comentario', $url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($jefe->name,$jefe->puesto), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($accion).'/Comentario', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("analista","analista de seguimiento"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("lider","lider de proyecto"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            }
+            
         }
         if(auth()->user()->siglas_rol=='ATUS'){
            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($jefe->name,$jefe->puesto), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($accion).'/Comentario', $url); 
@@ -120,13 +133,23 @@ class RevisionesRecomendacionesController extends Controller
         if(auth()->user()->siglas_rol=='TUS'){
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($director->name,$director->puesto), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($accion).'/Comentario', $url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($jefe->name,$jefe->puesto), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($accion).'/Comentario', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("analista","analista de seguimiento"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("lider","lider de proyecto"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            }
         }
        elseif(auth()->user()->siglas_rol=='DS'){
             auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($jefe->name,$jefe->puesto), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($accion).'/Comentario', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("analista","analista de seguimiento"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("lider","lider de proyecto"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            }
             foreach ($staffA as $staff) {
                 if (!empty($staff['id'])) {
                     $mensaje = '<strong>Estimado(a) '.$staff['name'].', '.$staff['puesto'].':</strong><br>'
@@ -135,8 +158,13 @@ class RevisionesRecomendacionesController extends Controller
                 }
             }  
         }elseif (auth()->user()->siglas_rol=='JD') {
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+           if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("analista","analista de seguimiento"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("lider","lider de proyecto"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            }
             foreach ($staffA as $staff) {
                 if (!empty($staff['id'])) {
                     $mensaje = '<strong>Estimado(a) '.$staff['name'].', '.$staff['puesto'].':</strong><br>'
@@ -145,7 +173,11 @@ class RevisionesRecomendacionesController extends Controller
                 }
             }   
         }elseif (auth()->user()->siglas_rol=='LP') {
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("analista","analista de seguimiento"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            }
             foreach ($staffA as $staff) {
                 if (!empty($staff['id'])) {
                     $mensaje = '<strong>Estimado(a) '.$staff['name'].', '.$staff['puesto'].':</strong><br>'
@@ -154,8 +186,13 @@ class RevisionesRecomendacionesController extends Controller
                 }
             }   
         }elseif(auth()->user()->siglas_rol=='STAFF'){
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
-            auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("analista","analista de seguimiento"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario("lider","lider de proyecto"), now(), null, null,GenerarLlave($accion). '/Comentario', $url,$auditoria->id, $registroLider->equipo_id ?? null,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($lider->name,$lider->puesto), now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Comentario', $url);
+                auth()->user()->insertNotificacion($titulo, $this->mensajeComentario($analista->name,$analista->puesto), now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Comentario', $url);
+            }
         }   
         
         

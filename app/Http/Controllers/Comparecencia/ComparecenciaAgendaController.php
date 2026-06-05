@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Comparecencia;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Comparecencia;
 use App\Models\ComparecenciaAgenda;
 use App\Models\Movimientos;
@@ -131,11 +132,23 @@ class ComparecenciaAgendaController extends Controller
         } else {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
         }
-
+        
+        $auditoria = $radicacion->auditoria;
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        if ($usaEquipo) {
+            $notificacionRechazo=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($radicacion).'/Rechazo')->first();
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($radicacion)."/Rechazo")->first();
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+        
        if(getSession('cp')==2022){
             $radicacion->update(['fase_autorizacion' =>  'En validación', 'nivel_autorizacion' => $nivel_autorizacion]);
             //$notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $radicacion).'/RevJD')->first();
-            $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($radicacion)."/Rechazo")->first();
             //$LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
             $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
             $url = route('radicacion.index');
@@ -150,9 +163,7 @@ class ComparecenciaAgendaController extends Controller
         
         }elseif(getSession('cp')!=2022){
             $radicacion->update(['fase_autorizacion' =>  'En revisión', 'nivel_autorizacion' => $nivel_autorizacion]);
-
             //$notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $radicacion).'/RevJD')->first();
-            $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($radicacion)."/Rechazo")->first();
             //$LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
             $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
             $url = route('radicacion.index');

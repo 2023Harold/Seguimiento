@@ -89,6 +89,7 @@ class AgregarTipologiaAccionController extends Controller
         $tipologias= CatalogoTipologia::all()->pluck('tipologia', 'id')->prepend('Seleccionar una opción', '');
         $tipologia = new TipologiasAccion();
         $acc = 'Agregar';
+        setSession('AgregarAccion_id', $accion->id);
  
         return view('agregartipologiaaccion.form', compact('acc','accion','auditoria','tipologia','tipologias','tiposaccion'));
     }
@@ -125,9 +126,9 @@ class AgregarTipologiaAccionController extends Controller
 
     public function eliminar(TipologiasAccion $tipologia){
         $tipologia->delete();
-       
+        $accion = AuditoriaAccion::find(getSession('AgregarAccion_id'));
         setMessage('Se ha eliminado la tipologia correctamente.');
         
-        return redirect()->route('agregaracciones.create');
+        return redirect()->route('agregaracciones.edit',$accion);
     }
 }

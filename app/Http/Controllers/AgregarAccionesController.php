@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuditoriaAccionRequest;
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\AuditoriaUsuarios;
 use App\Models\CatalogoTipoAccion;
 use App\Models\CatalogoTipoAuditoria;
 use App\Models\CatalogoTipologia;
@@ -50,6 +51,7 @@ class AgregarAccionesController extends Controller
         $movimiento=null;
         
         delSession('accion_borrador_id'); 
+        delSession('AgregarAccion_id'); 
 
         // dd( $auditoria->tipologiaacciones->fase_autorizacion );
 
@@ -80,7 +82,7 @@ class AgregarAccionesController extends Controller
             'eliminado' => 'X', 
             'usuario_creacion_id' => auth()->id(),
         ]);
-
+        setSession('AgregarAccion_id', $accion->id);
         setSession('accion_borrador_id',$accion->id);
         
 
@@ -146,7 +148,7 @@ class AgregarAccionesController extends Controller
      */
     public function edit(AuditoriaAccion $accion)
     {       
-        
+        setSession('AgregarAccion_id', $accion->id);
         $auditoria = Auditoria::find(getSession('auditoriacp_id'));
         $numeroconsecutivo=$accion->consecutivo;
         $tiposaccion= CatalogoTipoAccion::all()->pluck('descripcion', 'id');
@@ -296,83 +298,117 @@ class AgregarAccionesController extends Controller
     public function concluir(Auditoria $auditoria)
     {
         $cuenta_publicaSession = getSession('cp');
-		
-		if($cuenta_publicaSession !=2022){
-			$lider_asignadoCP = $auditoria->lidercp;
-		}else{
-			$lider_asignadoCP = $auditoria->lider;
-		}
-        $auditoria->update(['fase_autorizacion_cp'=>'En revisión 01']);
-            if (count($auditoria->acciones)>0)
-            {
-                foreach ($auditoria->accionesrechazadas as $accionrechazada)
-                {
-                    $accionrechazada->update(['fase_revision'=>'En revisión 01']);
-                    $accionrechazada->update(['revision_lider'=>'En revisión 01']);
-                    $accionrechazada->update(['revision_jefe'=>null]);
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
 
-                    Movimientos::create([
-                        'tipo_movimiento' => 'Registro de la acción de la auditoría',
-                        'accion' => 'Revisión Acción Registro Auditoría',
-                        'accion_id' => $accionrechazada->id,
-                        'estatus' => 'Aprobado',
-                        'usuario_creacion_id' => auth()->id(),
-                        'usuario_asignado_id' => auth()->id(),
-                    ]);
-                    
-                    
+        // Obtener quién recibe la notificación según la lógica
+        if ($usaEquipo) {
+            // Notificación va al equipo (lider activo en esa auditoría)
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            // Comportamiento original
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+
+        $auditoria->update(['fase_autorizacion_cp' => 'En revisión 01']);
+
+        if(count($auditoria->acciones) > 0) {
+
+            foreach ($auditoria->accionesrechazadas as $accionrechazada) {
+                $accionrechazada->update([
+                    'fase_revision'  => 'En revisión 01',
+                    'revision_lider' => 'En revisión 01',
+                    'revision_jefe'  => null,
+                ]);
+
+                Movimientos::create([
+                    'tipo_movimiento'     => 'Registro de la acción de la auditoría',
+                    'accion'              => 'Revisión Acción Registro Auditoría',
+                    'accion_id'           => $accionrechazada->id,
+                    'estatus'             => 'Aprobado',
+                    'usuario_creacion_id' => auth()->id(),
+                    'usuario_asignado_id' => auth()->id(),
+                ]);
+
+                
+                if(usaEquipoTrabajo()) {
+                    $notificacionRechazo = auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($accionrechazada).'/Rechazo')->first();
+                    auth()->user()->NotMarcarLeido($notificacionRechazo);
+                }else{
                     $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($accionrechazada).'/Rechazo')->first();
                     $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
-                    $url =  route("agregaraccionesrevision01.edit",$accionrechazada);
-                    
-                    $titulo = 'Registro de la acción No.'.$accionrechazada->numero.' de la auditoría No.'.$auditoria->numero_auditoria;
+                }
+
+                //$url   = route("agregaraccionesrevision01.edit", $accionrechazada);
+                $url   = route("agregaracciones.index",$accionrechazada);
+                $llave = GenerarLlave($accionrechazada) . '/Rev01';
+
+                $titulo  = 'Registro de la acción No.' . $accionrechazada->numero . ' de la auditoría No.' . $auditoria->numero_auditoria;
+                if ($usaEquipo) {
+                    // NUEVA lógica: notificación al equipo, solo para el Lider
+                    $mensaje = '<strong>Estimado(a) Líder de Proyecto:</strong><br>
+                                Ha sido registrada la acción No. ' . $accionrechazada->numero . ' auditoría No. ' . $auditoria->numero_auditoria . ', 
+                                por parte del Analista ' . auth()->user()->name . ', por lo que se requiere realice la revisión oportuna.';
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, $llave,$url, $auditoria->id, $equipoId,'Lider');
+                }else{
+                    // VIEJA lógica: notificación individual
                     $mensaje = '<strong>Estimado (a) ' . $lider_asignadoCP->name . ', ' . $lider_asignadoCP->puesto . ':</strong><br>
-                                Ha sido registrada la acción  No. '.$accionrechazada->numero.'auditoría No. ' . $auditoria->numero_auditoria . ', por parte del Analista ' .
-                                auth()->user()->name . ', por lo que se requiere realice la revisión oportuna de la auditoría.';
-
-                    auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider_asignadoCP->unidad_administrativa_id,$lider_asignadoCP->id,GenerarLlave($accionrechazada).'/Rev01',$url);
+                                Ha sido registrada la acción No. ' . $accionrechazada->numero . ' auditoría No. ' . $auditoria->numero_auditoria . ', 
+                                por parte del Analista ' . auth()->user()->name . ', por lo que se requiere realice la revisión oportuna.';
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider_asignadoCP->unidad_administrativa_id, $lider_asignadoCP->id, $llave,$url);
                 }
-
-                $accionesnuevas=AuditoriaAccion::where('segauditoria_id',getSession('auditoriacp_id'))->whereNull('eliminado')->whereNull('fase_revision')->get();
-
-                if (count($accionesnuevas)>0)
-                {
-                    foreach ($accionesnuevas as $accionnueva)
-                    {
-                        $llav010101 = GenerarLlave($accionnueva).'/Rev01';
-                        //dd($accionnueva, $llav010101);
-                        $accionnueva->update(['fase_revision'=>'En revisión 01']);
-                        $accionnueva->update(['revision_lider'=>'En revisión 01']);
-                        $accionnueva->update(['revision_jefe'=>null]);
-
-                        Movimientos::create([
-                            'tipo_movimiento' => 'Registro de la acción de la auditoría',
-                            'accion' => 'Revisión Acción Registro Auditoría',
-                            'accion_id' => $accionnueva->id,
-                            'estatus' => 'Aprobado',
-                            'usuario_creacion_id' => auth()->id(),
-                            'usuario_asignado_id' => auth()->id(),
-                        ]);
-
-                        //$notificacion=auth()->user()->notificaciones()->where('llave', GenerarLlave($accionnueva).'/Rev01')->first();
-                        $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($accionnueva).'/Rechazo')->first();
-                       // $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
-                        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
-                        $url =  route("agregaraccionesrevision01.edit",$accionnueva);
-
-                        $titulo = 'Registro de la acción No.'.$accionnueva->numero.' de la auditoría No.'.$auditoria->numero_auditoria;
-                        $mensaje = '<strong>Estimado (a) ' . $lider_asignadoCP->name . ', ' . $lider_asignadoCP->puesto . ':</strong><br>
-                                Ha sido registrada la acción  No. '.$accionnueva->numero.'auditoría No. ' . $auditoria->numero_auditoria . ', por parte del Analista ' .
-                                auth()->user()->name . ', por lo que se requiere realice la revisión oportuna de la auditoría.';
-
-                        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider_asignadoCP->unidad_administrativa_id,$lider_asignadoCP->id,GenerarLlave($accionnueva).'/Rev01',$url);
-                    }
-                }
-                setMessage('El registro de acciones de auditoría se ha concluido y enviado a revisión.');
             }
-       
 
-        return  redirect()->route('agregaracciones.index');
+            // Acciones nuevas — mismo patrón
+            $accionesnuevas = AuditoriaAccion::where('segauditoria_id', getSession('auditoriacp_id'))->whereNull('eliminado')->whereNull('fase_revision')->get();
+
+            foreach ($accionesnuevas as $accionnueva) {
+                $accionnueva->update([
+                    'fase_revision'  => 'En revisión 01',
+                    'revision_lider' => 'En revisión 01',
+                    'revision_jefe'  => null,
+                ]);
+
+                Movimientos::create([
+                    'tipo_movimiento'     => 'Registro de la acción de la auditoría',
+                    'accion'              => 'Revisión Acción Registro Auditoría',
+                    'accion_id'           => $accionnueva->id,
+                    'estatus'             => 'Aprobado',
+                    'usuario_creacion_id' => auth()->id(),
+                    'usuario_asignado_id' => auth()->id(),
+                ]);
+
+                if(usaEquipoTrabajo()) {
+                    $notificacionRechazo = auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($accionrechazada).'/Rechazo')->first();
+                    auth()->user()->NotMarcarLeido($notificacionRechazo);
+                }else{
+                    $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($accionrechazada).'/Rechazo')->first();
+                    $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+                }
+
+                //$url   = route("agregaraccionesrevision01.edit", $accionnueva);
+                $url   = route("agregaracciones.index",$accionnueva);
+                $llave = GenerarLlave($accionnueva) . '/Rev01';
+                $titulo = 'Registro de la acción No.' . $accionnueva->numero . ' de la auditoría No.' . $auditoria->numero_auditoria;
+
+                if ($usaEquipo) {
+                    $mensaje = '<strong>Estimado(a) Líder de Proyecto:</strong><br>
+                                Ha sido registrada la acción No. ' . $accionnueva->numero . ' auditoría No. ' . $auditoria->numero_auditoria . ', 
+                                por parte del Analista ' . auth()->user()->name . ', por lo que se requiere realice la revisión oportuna.';
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),null, null, $llave, $url,$auditoria->id, $equipoId, 'Lider');
+
+                }else{
+                    $mensaje = '<strong>Estimado (a) ' . $lider_asignadoCP->name . ', ' . $lider_asignadoCP->puesto . ':</strong><br>
+                                Ha sido registrada la acción No. ' . $accionnueva->numero . ' auditoría No. ' . $auditoria->numero_auditoria . ', 
+                                por parte del Analista ' . auth()->user()->name . ', por lo que se requiere realice la revisión oportuna.';
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),$lider_asignadoCP->unidad_administrativa_id,$lider_asignadoCP->id, $llave, $url);
+                }
+            }
+            setMessage('El registro de acciones de auditoría se ha concluido y enviado a revisión.');
+        }
+
+        return redirect()->route('agregaracciones.index');
     }
 
 

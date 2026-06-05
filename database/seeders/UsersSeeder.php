@@ -19,9 +19,9 @@ class UsersSeeder extends Seeder
     {
        User::create([
             'usuario_plataforma_id'=>1,
-            'name' => 'Ulises Ivan Lovera Villegas',
-            'curp' => 'LOVU810319HMCVLL10',
-            'email' => 'ulises.lovera@osfem.gob.mx',
+            'name' => 'Hector Hans Marin Kado',
+            'curp' => 'XXXXXXXXXXXXXXXXXX',
+            'email' => 'hans.marin@osfem.gob.mx',
             'password' => Hash::make('d3s42023'),
             'puesto' => 'Unidad de Tecnologías de la Información y Comunicación',
             'unidad_administrativa_id' => 130000,
@@ -31,9 +31,31 @@ class UsersSeeder extends Seeder
             'cp_2021'=>null,
             'cp_2022'=>'X',
             'cp_2023'=>'X',
+            'cp_2024'=>'X',
             'cp_ua2021'=>null,
             'cp_ua2022'=>130000,
             'cp_ua2023'=>130000,
+            'cp_ua2024'=>130000,
+        ])->assignRole('Administrador TI');
+       User::create([
+            'usuario_plataforma_id'=>null,
+            'name' => 'Jorge Angel Becerril Gonzalez',
+            'curp' => 'XXXXXXXXXXXXXXXXXX',
+            'email' => 'jorge.becerril@osfem.gob.mx',
+            'password' => Hash::make('d3s42023'),
+            'puesto' => 'Unidad de Tecnologías de la Información y Comunicación',
+            'unidad_administrativa_id' => 130000,
+            'siglas_rol'=>'ATI',
+            'estatus' => 'Activo',
+            'usuario_creacion_id' => 1,
+            'cp_2021'=>null,
+            'cp_2022'=>'X',
+            'cp_2023'=>'X',
+            'cp_2024'=>'X',
+            'cp_ua2021'=>null,
+            'cp_ua2022'=>130000,
+            'cp_ua2023'=>130000,
+            'cp_ua2024'=>130000,
         ])->assignRole('Administrador TI');
         User::create([
             'usuario_plataforma_id'=>541,
@@ -73,9 +95,9 @@ class UsersSeeder extends Seeder
         ])->assignRole('Administrador del Sistema');
         User::create([
             'usuario_plataforma_id'=>544,
-            'name' => 'Luis Ignacio Sierra Villa',
-            'curp' => 'SIVL631102HMCRLS08',
-            'email' => 'luis.sierra@osfem.gob.mx',
+            'name' => 'Roberto Osorio García',
+            'curp' => 'XXXXXXXXXXXXXXXXXX',
+            'email' => 'roberto.osorio@osfem.gob.mx',
             'password' => Hash::make('d3s42023'),
             'puesto' => 'Titular de la Unidad de Seguimiento',
             'unidad_administrativa_id' => 122000,
@@ -85,18 +107,20 @@ class UsersSeeder extends Seeder
             'cp_2021'=>null,
             'cp_2022'=>'X',
             'cp_2023'=>'X',
+            'cp_2024'=>'X',
             'cp_ua2021'=>null,
             'cp_ua2022'=>122000,
             'cp_ua2023'=>122000,
+            'cp_ua2024'=>122000,
         ])->assignRole('Titular Unidad de Seguimiento');
         //Dirección A
         User::create([
 			'usuario_plataforma_id'=>1649,
-            'name' => 'Karem Ríos Lara',
-            'curp' => 'RILK840402MMCSRR05',
-            'email' => 'karem.rios@osfem.gob.mx',
+            'name' => 'Giovanna Delgado Casas',
+            'curp' => 'XXXXXXXXXXXXXXXXXX',
+            'email' => 'giovanna.delgado@osfem.gob.mx',
             'password' => Hash::make('d3s42023'),
-            'puesto' => 'Director de la Dirección de Seguimiento "A"',
+            'puesto' => 'Directora de la Dirección de Seguimiento "A"',
             'unidad_administrativa_id' => 122100,
             'siglas_rol'=>'DS',
             'estatus' => 'Activo',
@@ -104,18 +128,20 @@ class UsersSeeder extends Seeder
             'cp_2021'=>null,
             'cp_2022'=>'X',
             'cp_2023'=>'X',
+            'cp_2024'=>'X',
             'cp_ua2021'=>null,
             'cp_ua2022'=>122100,
             'cp_ua2023'=>122100,
+            'cp_ua2024'=>122100,
         ])->assignRole('Director de Seguimiento');
         //Dirección B
         User::create([
 			'usuario_plataforma_id'=>1650,
-            'name' => 'Edgar Castellanos Álvarez ',
+            'name' => 'Guadalupe Ruíz Velázquez',
             'curp' => 'CAAE830723HDFSLD04',
-            'email' => 'edgar.castellanos@osfem.gob.mx',
+            'email' => 'guadalupe.ruiz@osfem.gob.mx',
             'password' => Hash::make('d3s42023'),
-            'puesto' => 'Director de la Dirección de Seguimiento "B"',
+            'puesto' => 'Directora de la Dirección de Seguimiento "B"',
             'unidad_administrativa_id' => 122200,
             'siglas_rol'=>'DS',
             'estatus' => 'Activo',
@@ -123,9 +149,11 @@ class UsersSeeder extends Seeder
             'cp_2021'=>null,
             'cp_2022'=>'X',
             'cp_2023'=>'X',
+            'cp_2024'=>'X',
             'cp_ua2021'=>null,
             'cp_ua2022'=>122200,
             'cp_ua2023'=>122200,
+            'cp_ua2024'=>122200,
         ])->assignRole('Director de Seguimiento');
 
         Excel::import(new UserImport, base_path().'/database/seeders/Usuarios.xlsx');

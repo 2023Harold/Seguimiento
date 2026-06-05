@@ -392,12 +392,23 @@
                                 </li>
                             @endcan
                             @can('asignacionlideranalista.index')
-                                <li class="py-2 d-flex align-items-center">
-                                    <span class="bullet me-5 bg-primary"></span>
-                                    <a href="{{ route('asignacionlideranalista.index') }}">
-                                        Lider y analista
-                                    </a>
-                                </li>
+                                {{--@if(!usaEquipoTrabajo())--}}
+                                    <li class="py-2 d-flex align-items-center">
+                                        <span class="bullet me-5 bg-primary"></span>
+                                        <a href="{{ route('asignacionlideranalista.index') }}">
+                                            Lider y analista
+                                        </a>
+                                    </li>
+                                {{----
+                                @else
+                                    <li class="py-2 d-flex align-items-center">
+                                        <span class="bullet me-5 bg-primary"></span>
+                                        <a href="{{ route('asignarequipotrabajo.index') }}">
+                                            Asignar equipo de trabajo
+                                        </a>
+                                    </li>
+                                @endif
+                                --}}
                             @endcan
                         </div>
                     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -76,10 +77,17 @@ class AgregarAccionesAutorizacionController extends Controller
         $auditoria = $accion->auditoria;       
         if ($request->estatus == 'Aprobado'){                               
                 $accion->update(['fase_revision'=>$request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado']);
-            
         }       
-       $jefe=User::where('unidad_administrativa_id', substr($auditoria->usuarioCreacion->unidad_administrativa_id, 0, 5).'0')->first();
-      
+        $jefe=User::where('unidad_administrativa_id', substr($auditoria->usuarioCreacion->unidad_administrativa_id, 0, 5).'0')->first();
+        $cuenta_publicaSession = getSession('cp');
+        if($cuenta_publicaSession !=2022){
+            $jefe = $auditoria->jefedepartamentoencargado;
+            $analista = $auditoria->analistacp; 
+        }else{
+            $jefe=usuariocp(substr($accion->usuarioCreacion->unidad, 0, 5).'0')->where('siglas_rol','JD')->first();
+            $analista=$accion->analista;
+        }
+        
         $this->normalizarDatos($request);
 
         Movimientos::create([
@@ -105,12 +113,26 @@ class AgregarAccionesAutorizacionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $auditoria->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
-            $titulo = 'Revisión del registro de la auditoria No. '.$auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
-                            .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado el registro de la auditoría No. '.$auditoria->numero_auditoria.
-                            ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
+            
+            if (usaEquipoTrabajo()){
+                $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+
+                $titulo = 'Registro de la auditoria No. '.$auditoria->numero_auditoria. ' Autorizada';
+                $mensaje = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
+                                .auth()->user()->name.', '.auth()->user()->puesto.
+                                '; se ha autorizado el registro de la auditoría No. '.$auditoria->numero_auditoria.
+                                ', por lo que se requiere comience con el apartado de análisis oportuno en el módulo Seguimiento.';
+                // Obtener equipo_id del analista activo en esa auditoría
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($accion) . '/Rechazo', NULL,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+            }else{
+                $titulo = 'Revisión del registro de la auditoria No. '.$auditoria->numero_auditoria;
+                $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
+                                .auth()->user()->name.', '.auth()->user()->puesto.
+                                '; se ha aprobado el registro de la auditoría No. '.$auditoria->numero_auditoria.
+                                ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
+                //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->usuarioCreacion->unidad_administrativa_id, $auditoria->usuarioCreacion->id);
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id);
+            }
         } else {
 
             $auditoria->update(['registro_concluido'=>'No']);
@@ -118,7 +140,15 @@ class AgregarAccionesAutorizacionController extends Controller
             $mensaje = '<strong>Estimado(a) '.$auditoria->usuarioCreacion->name.', '.$auditoria->usuarioCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->usuarioCreacion->unidad_administrativa_id, $auditoria->usuarioCreacion->id);
+            
+            if (usaEquipoTrabajo()){
+                // Obtener equipo_id del analista activo en esa auditoría
+                $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($accion) . '/Rechazo', NULL,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $auditoria->usuarioCreacion->unidad_administrativa_id, $auditoria->usuarioCreacion->id);
+                //auth()->user()->insertNotificacion($titulo, $mensaje, now(),$analista->unidad_administrativa_id,$analista->id,GenerarLlave($accion) . '/Rechazo',$url);
+            }
         }
 
         return redirect()->route('agregaracciones.index');

@@ -71,25 +71,25 @@
 }
 
 
-  /* Botón de esquinas con animación (versión para <a>) */
+  /* Botï¿½n de esquinas con animaciï¿½n (versiï¿½n para <a>) */
   a.corner-button {
-    /* Variables fluidas (en em para escalar con el font-size del botón) */
+    /* Variables fluidas (en em para escalar con el font-size del botï¿½n) */
     --cb-color: #A13B71;          /* texto y borde (currentColor) */
-    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo más grande/pequeño */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo mï¿½s grande/pequeï¿½o */
     --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
     --cb-pad-y: 0.5em;
     --cb-pad-x: 0.9em;
     --cb-gap: 0.45em;             /* hueco entre paneles */
-    --cb-over: 0.35em;            /* leve superposición para cubrir borde */
+    --cb-over: 0.35em;            /* leve superposiciï¿½n para cubrir borde */
     --cb-anim: 0.25s;
-    --cb-bg: #fff;                /* “paneles” de la animación (fondo) */
+    --cb-bg: #fff;                /* ï¿½panelesï¿½ de la animaciï¿½n (fondo) */
     --cb-focus: 2px;              /* grosor del focus ring */
 
     font-family: var(--cb-font);
     font-size: var(--cb-font-size);
     line-height: 1;               /* evita crecimiento vertical irregular */
     color: var(--cb-color);
-    text-decoration: none;        /* estilo “botón” */
+    text-decoration: none;        /* estilo ï¿½botï¿½nï¿½ */
     display: inline-flex;         /* contenido fluido */
     align-items: center;
     gap: 0.4em;
@@ -112,7 +112,7 @@
     gap: 0.35em; /* espacio entre icono y texto */
   }
 
-  /* Paneles que se “cierran” (100% fluidos, basados en em) */
+  /* Paneles que se ï¿½cierranï¿½ (100% fluidos, basados en em) */
   a.corner-button::before,
   a.corner-button::after {
     content: '';
@@ -141,7 +141,7 @@
     transform: translateY(-50%);
   }
 
-  /* Interacción */
+  /* Interacciï¿½n */
   a.corner-button:hover {
     color: var(--cb-color);
   }
@@ -169,9 +169,9 @@
     --cb-over: 0.3em;
   }
 
-  /* Solo ícono (sin fijar width/height ? no se deforma; usa line-height y padding) */
+  /* Solo ï¿½cono (sin fijar width/height ? no se deforma; usa line-height y padding) */
   a.corner-button--icon {
-    --cb-font-size: 2rem; /* tamaño base del icono */
+    --cb-font-size: 2rem; /* tamaï¿½o base del icono */
     --cb-border: 0.2em;
     --cb-pad-y: 0.35em;
     --cb-pad-x: 0.35em;
@@ -188,25 +188,25 @@
     }
   }
   /******* PARA BOTON DE SUCESS *******/
-    /* Botón de esquinas con animación (versión para <a>) */
+    /* Botï¿½n de esquinas con animaciï¿½n (versiï¿½n para <a>) */
   a.corner-button-success {
-    /* Variables fluidas (en em para escalar con el font-size del botón) */
+    /* Variables fluidas (en em para escalar con el font-size del botï¿½n) */
     --cb-color: #50cd89;          /* texto y borde (currentColor) */
-    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo más grande/pequeño */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo mï¿½s grande/pequeï¿½o */
     --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
     --cb-pad-y: 0.5em;
     --cb-pad-x: 0.9em;
     --cb-gap: 0.45em;             /* hueco entre paneles */
-    --cb-over: 0.35em;            /* leve superposición para cubrir borde */
+    --cb-over: 0.35em;            /* leve superposiciï¿½n para cubrir borde */
     --cb-anim: 0.25s;
-    --cb-bg: #fff;                /* “paneles” de la animación (fondo) */
+    --cb-bg: #fff;                /* ï¿½panelesï¿½ de la animaciï¿½n (fondo) */
     --cb-focus: 2px;              /* grosor del focus ring */
 
     font-family: var(--cb-font);
     font-size: var(--cb-font-size);
     line-height: 1;               /* evita crecimiento vertical irregular */
     color: var(--cb-color);
-    text-decoration: none;        /* estilo “botón” */
+    text-decoration: none;        /* estilo ï¿½botï¿½nï¿½ */
     display: inline-flex;         /* contenido fluido */
     align-items: center;
     gap: 0.4em;
@@ -229,7 +229,7 @@
     gap: 0.35em; /* espacio entre icono y texto */
   }
 
-  /* Paneles que se “cierran” (100% fluidos, basados en em) */
+  /* Paneles que se ï¿½cierranï¿½ (100% fluidos, basados en em) */
   a.corner-button-success::before,
   a.corner-button-success::after {
     content: '';
@@ -258,7 +258,7 @@
     transform: translateY(-50%);
   }
 
-  /* Interacción */
+  /* Interacciï¿½n */
   a.corner-button-success:hover {
     color: var(--cb-color);
   }
@@ -286,9 +286,9 @@
     --cb-over: 0.3em;
   }
 
-  /* Solo ícono (sin fijar width/height ? no se deforma; usa line-height y padding) */
+  /* Solo ï¿½cono (sin fijar width/height ? no se deforma; usa line-height y padding) */
   a.corner-button-success--icon {
-    --cb-font-size: 2rem; /* tamaño base del icono */
+    --cb-font-size: 2rem; /* tamaï¿½o base del icono */
     --cb-border: 0.2em;
     --cb-pad-y: 0.35em;
     --cb-pad-x: 0.35em;
@@ -304,26 +304,141 @@
       transition: none;
     }
   }
-  /******* PARA BOTON DE SUCESS *******/
-    /* Botón de esquinas con animación (versión para <a>) */
-  a.corner-button-error {
-    /* Variables fluidas (en em para escalar con el font-size del botón) */
-    --cb-color: #dc3545;          /* texto y borde (currentColor) */
-    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo más grande/pequeño */
+  a.corner-button-success2 {
+    /* Variables fluidas (en em para escalar con el font-size del botï¿½n) */
+    --cb-color: #c6d4b0;          /* texto y borde (currentColor) */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo mï¿½s grande/pequeï¿½o */
     --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
     --cb-pad-y: 0.5em;
     --cb-pad-x: 0.9em;
     --cb-gap: 0.45em;             /* hueco entre paneles */
-    --cb-over: 0.35em;            /* leve superposición para cubrir borde */
+    --cb-over: 0.35em;            /* leve superposiciï¿½n para cubrir borde */
     --cb-anim: 0.25s;
-    --cb-bg: #fff;                /* “paneles” de la animación (fondo) */
+    --cb-bg: #fff;                /* ï¿½panelesï¿½ de la animaciï¿½n (fondo) */
     --cb-focus: 2px;              /* grosor del focus ring */
 
     font-family: var(--cb-font);
     font-size: var(--cb-font-size);
     line-height: 1;               /* evita crecimiento vertical irregular */
     color: var(--cb-color);
-    text-decoration: none;        /* estilo “botón” */
+    text-decoration: none;        /* estilo ï¿½botï¿½nï¿½ */
+    display: inline-flex;         /* contenido fluido */
+    align-items: center;
+    gap: 0.4em;
+
+    cursor: pointer;
+    background: transparent;
+    border: var(--cb-border) solid currentColor;
+    padding: var(--cb-pad-y) var(--cb-pad-x);
+    position: relative;
+    transition: color var(--cb-anim), border-width var(--cb-anim);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Contenido interior: protegido por z-index sobre los paneles */
+  a.corner-button-success2 > .cb-content {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em; /* espacio entre icono y texto */
+  }
+
+  /* Paneles que se ï¿½cierranï¿½ (100% fluidos, basados en em) */
+  a.corner-button-success2::before,
+  a.corner-button-success2::after {
+    content: '';
+    position: absolute;
+    background: var(--cb-bg);
+    z-index: 1;
+    transition: all var(--cb-anim);
+    pointer-events: none; /* no bloquea clicks */
+  }
+
+  /* Panel horizontal (cubriendo arriba/abajo dejando hueco vertical) */
+  a.corner-button-success2::before {
+    width: calc(100% - (var(--cb-gap) * 2));
+    height: calc(100% + var(--cb-over));
+    top: calc(-1 * var(--cb-over) / 2);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Panel vertical (cubriendo lados dejando hueco horizontal) */
+  a.corner-button-success2::after {
+    height: calc(100% - (var(--cb-gap) * 2));
+    width: calc(100% + var(--cb-over));
+    left: calc(-1 * var(--cb-over) / 2);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Interacciï¿½n */
+  a.corner-button-success2:hover {
+    color: var(--cb-color);
+  }
+  a.corner-button-success2:hover::before { width: 0; }
+  a.corner-button-success2:hover::after  { height: 0; }
+
+  /* Active: reduce ligeramente el borde (fluido) */
+  a.corner-button-success2:active {
+    border-width: calc(var(--cb-border) * 0.8);
+  }
+
+  /* Enfoque accesible (teclado) */
+  a.corner-button-success2:focus-visible {
+    outline: var(--cb-focus) solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px; /* leve para diferenciar el outline */
+  }
+
+  a.corner-button-success2--sm {
+    --cb-font-size: 2rem;
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.6em;
+    --cb-gap: 0.4em;
+    --cb-over: 0.3em;
+  }
+
+  /* Solo ï¿½cono (sin fijar width/height ? no se deforma; usa line-height y padding) */
+  a.corner-button-success2--icon {
+    --cb-font-size: 2rem; /* tamaï¿½o base del icono */
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.35em;
+    --cb-gap: 0.38em;
+    --cb-over: 0.28em;
+  }
+
+  /* Reducir movimiento si el usuario lo prefiere */
+  @media (prefers-reduced-motion: reduce) {
+    a.corner-button-success2,
+    a.corner-button-success2::before,
+    a.corner-button-success2::after {
+      transition: none;
+    }
+  }
+  /******* PARA BOTON DE SUCESS *******/
+    /* Botï¿½n de esquinas con animaciï¿½n (versiï¿½n para <a>) */
+  a.corner-button-error {
+    /* Variables fluidas (en em para escalar con el font-size del botï¿½n) */
+    --cb-color: #dc3545;          /* texto y borde (currentColor) */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo mï¿½s grande/pequeï¿½o */
+    --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
+    --cb-pad-y: 0.5em;
+    --cb-pad-x: 0.9em;
+    --cb-gap: 0.45em;             /* hueco entre paneles */
+    --cb-over: 0.35em;            /* leve superposiciï¿½n para cubrir borde */
+    --cb-anim: 0.25s;
+    --cb-bg: #fff;                /* ï¿½panelesï¿½ de la animaciï¿½n (fondo) */
+    --cb-focus: 2px;              /* grosor del focus ring */
+
+    font-family: var(--cb-font);
+    font-size: var(--cb-font-size);
+    line-height: 1;               /* evita crecimiento vertical irregular */
+    color: var(--cb-color);
+    text-decoration: none;        /* estilo ï¿½botï¿½nï¿½ */
     display: inline-flex;         /* contenido fluido */
     align-items: center;
     gap: 0.4em;
@@ -346,7 +461,7 @@
     gap: 0.35em; /* espacio entre icono y texto */
   }
 
-  /* Paneles que se “cierran” (100% fluidos, basados en em) */
+  /* Paneles que se ï¿½cierranï¿½ (100% fluidos, basados en em) */
   a.corner-button-error::before,
   a.corner-button-error::after {
     content: '';
@@ -375,7 +490,7 @@
     transform: translateY(-50%);
   }
 
-  /* Interacción */
+  /* Interacciï¿½n */
   a.corner-button-error:hover {
     color: var(--cb-color);
   }
@@ -403,9 +518,9 @@
     --cb-over: 0.3em;
   }
 
-  /* Solo ícono (sin fijar width/height ? no se deforma; usa line-height y padding) */
+  /* Solo ï¿½cono (sin fijar width/height ? no se deforma; usa line-height y padding) */
   a.corner-button-error--icon {
-    --cb-font-size: 2rem; /* tamaño base del icono */
+    --cb-font-size: 2rem; /* tamaï¿½o base del icono */
     --cb-border: 0.2em;
     --cb-pad-y: 0.35em;
     --cb-pad-x: 0.35em;

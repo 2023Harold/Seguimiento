@@ -27,6 +27,10 @@ class LeyendaSeeder extends Seeder
             'cuenta_publica'=>'2023',
             'leyenda'=>'"2023. Año del Septuagésimo Aniversario del Reconocimiento del Derecho al Voto de las Mujeres en México"',
         ]);
+        CuentaPublica::create([
+            'cuenta_publica'=>'2024',
+            'leyenda'=>'"2024. Bicentenario de la vida municipal en el Estado de México"',
+        ]);
         
             
     }

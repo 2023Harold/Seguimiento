@@ -24,6 +24,7 @@ use App\Http\Controllers\AgregarAccionesController;
 use App\Http\Controllers\AgregarAccionesRevision01Controller;
 use App\Http\Controllers\AgregarAccionesRevisionController;
 use App\Http\Controllers\AgregarAccionesValidacionController;
+use App\Http\Controllers\Asignaciones\AsignacionEquipoDeTrabajoController;
 use App\Http\Controllers\Asignaciones\AsignacionLiderAnalistaExtraController;
 use App\Http\Controllers\Asignaciones\AsignacionUnidadAdministrativa2024Controller;
 use App\Http\Controllers\Asignaciones\AsignacionUnidadAdministrativaTodosController;
@@ -408,6 +409,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     //Route::get('/asignacionauditorias/acciones/consulta/{auditoria}', [AsignacionAuditoriasController::class, 'accionesConsulta'])->name('asignacionauditorias.accionesconsulta');
     //Route::get('/asignacionauditorias/reasignacion/{auditoria}', [AsignacionAuditoriasController::class, 'reasignar'])->name('asignacionauditorias.reasignar');
     //Route::post('getDirector', [AsignacionAuditoriasController::class, 'getDirector'])->name('getDirector');
+    Route::resource('asignarequipotrabajo', AsignacionEquipoDeTrabajoController::class, ['parameters' => ['asignarequipotrabajo' => 'auditoria']]);
+    Route::get('/asignarequipotrabajo/lider/{auditoria}', [AsignacionEquipoDeTrabajoController::class, 'lider'])->name('asignarequipotrabajo.lider');
+    Route::get('/asignarequipotrabajo/analista/{auditoria}', [AsignacionEquipoDeTrabajoController::class, 'analista'])->name('asignarequipotrabajo.analista');
+    Route::get('/asignarequipotrabajo/eliminar/{user}/{auditoria}', [AsignacionEquipoDeTrabajoController::class, 'eliminar'])->name('asignarequipotrabajo.eliminar');
+    Route::post('asignarequipotrabajo/sincronizar', [AsignacionEquipoDeTrabajoController::class, 'sincronizarTodo'])->name('asignarequipotrabajo.sincronizarTodo');
     /**Fin del apartado de la Asiganciones - Auditorias */
 
     /**Asiganciones - Direccion*/
@@ -562,6 +568,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
      Route::resource('recomendacionescalificacion', RecomendacionesAtencionCalificacionController::class, ['parameters' => ['recomendacionescalificacion' => 'recomendacion']]);
      Route::resource('recomendacionesdocumentos', RecomendacionesAtencionDocumentosController::class, ['parameters' => ['recomendacionesdocumentos' => 'documento']]);
      Route::resource('recomendacionescontestaciones', RecomendacionesAtencionContestacionController::class, ['parameters' => ['recomendacionescontestaciones' => 'contestacion']]);
+     Route::get('/recomendacionescontestaciones/eliminar/{contestacion}', [RecomendacionesAtencionContestacionController::class, 'eliminar'])->name('recomendacionescontestaciones.eliminar');
      Route::get('recomendacionescontestacionesoficios/{recomendacion}', [RecomendacionesAtencionContestacionController::class, 'oficiosrecomendacion'])->name('recomendacionescontestaciones.oficiosrecomendacion');
      Route::resource('recomendacionesanalisis', RecomendacionesAnalisisController::class, ['parameters' => ['recomendacionesanalisis' => 'recomendacion']]);
      Route::get('recomendacionanexos/{recomendacion}', [RecomendacionesAnexoController::class, 'anexos'])->name('recomendacion.anexos');
@@ -583,6 +590,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
      Route::resource('solicitudesaclaracionacciones', SolicitudesAclaracionAccionesController::class, ['parameters' => ['solicitudesaclaracionacciones' => 'accion']]);
      Route::resource('solicitudesaclaracionatencion', SolicitudesAclaracionAtencionController::class, ['parameters' => ['solicitudesaclaracionatencion' => 'solicitud']]);
      Route::resource('solicitudesaclaracioncontestacion', SolicitudesAclaracionContestacionController::class, ['parameters' => ['solicitudesaclaracioncontestacion' => 'contestacion']]);
+     Route::get('/solicitudesaclaracioncontestacion/eliminar/{contestacion}', [SolicitudesAclaracionContestacionController::class, 'eliminar'])->name('solicitudesaclaracioncontestacion.eliminar');
      Route::get('solicitudesaclaracioncontestacionoficios/{solicitud}', [SolicitudesAclaracionContestacionController::class, 'oficiossolicitudes'])->name('solicitudescontestaciones.oficiossolicitud');
      Route::resource('solicitudesaclaraciondocumentos', SolicitudesAclaracionDocumentosController::class, ['parameters' => ['solicitudesaclaraciondocumentos' => 'documento']]);
      Route::resource('solicitudesaclaracionanalisis', SolicitudesAclaracionAnalisisController::class, ['parameters' => ['solicitudesaclaracionanalisis' => 'solicitud']]);
@@ -605,6 +613,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function() {
     Route::resource('pliegosobservacionacciones', PliegosObservacionAccionesController::class, ['parameters' => ['pliegosobservacionacciones' => 'accion']]);
     Route::resource('pliegosobservacionatencion', PliegosObservacionAtencionController::class, ['parameters' => ['pliegosobservacionatencion' => 'pliegosobservacionatencion']]);
     Route::resource('pliegosobservacionatencioncontestacion', PliegosObservacionAtencionContestacionController::class, ['parameters' => ['pliegosobservacionatencioncontestacion' => 'contestacion']]);
+    Route::get('/pliegosobservacionatencioncontestacion/eliminar/{contestacion}', [PliegosObservacionAtencionContestacionController::class, 'eliminar'])->name('pliegosobservacionatencioncontestacion.eliminar');
     Route::resource('pliegosobservaciondocumentos', PliegosObservacionAtencionDocumentosController::class, ['parameters' => ['pliegosobservaciondocumentos' => 'documento']]);
     Route::resource('pliegosobservacionanalisis', PliegosObservacionAtencionAnalisisController::class, ['parameters' => ['pliegosobservacionanalisis' => 'pliegosobservacion']]);
     Route::get('pliegosobsanexos/{pliegosobservacion}', [PliegosObservacionAnexoController::class, 'anexos'])->name('pliegos.anexos');

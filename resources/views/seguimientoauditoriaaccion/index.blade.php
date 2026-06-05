@@ -192,7 +192,9 @@
                 @can('seguimientoauditoria.concluir')
                     <div class="row">
                         <div class="col-md-6">
-                            <a href="{{ route('seguimientoauditoria.concluir',$auditoria) }}" class="btn btn-primary" onclick="return  confirm('Al concluir con el registro de la auditoría, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?');">Concluir</a>
+                           {{--  <a href="{{ route('seguimientoauditoria.concluir',$auditoria) }}" class="btn btn-primary" onclick="return  confirm('Al concluir con el registro de la auditoría, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?');">Concluir</a> --}}
+                            <a href="{{ route('seguimientoauditoria.concluir',$auditoria) }}" class="btn btn-primary js-swal-confirm" data-title="¿Deseas concluir?" data-text="Al concluir con el registro de la auditoría, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?"> Concluir </a>
+
                         </div>
                     </div>
                 @endcan

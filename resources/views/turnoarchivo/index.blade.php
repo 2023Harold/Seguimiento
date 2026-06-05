@@ -43,10 +43,7 @@
                             <tr>
                                 <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente Técnico de la Auditoría</th>
                                 <th rowspan=1 colspan=2 style="width:20px" class="text-center"> Expediente de Seguimiento</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th rowspan=1 colspan=4 style="width:20px"></th>
                             </tr>
                             <tr>
                                 {{-- <th>Número del oficio</th> --}}
@@ -57,7 +54,9 @@
                                 <th>Relación de expedientes al archivo</th>
                                 <th>Fecha de entrega</th>
                                 <th>Fase/Acción</th>
-                                <th> Envío </th>
+                                @can('turnoarchivoenvio.edit')
+                                    <th> Envío </th>
+                                @endcan
                             </tr>
                         </thead>
                         <tbody>
@@ -83,16 +82,17 @@
                                     {{ fecha($turnoarchivo->fecha_turno_archivo) }}
                                 </td>
                                 <td class="text-center">
-								
                                     @if (empty($auditoria->turnoarchivo->fase_autorizacion)||$auditoria->turnoarchivo->fase_autorizacion=='Rechazado')
                                         <span class="badge badge-light-danger">{{ $auditoria->turnoarchivo->fase_autorizacion }} </span>
                                         @can('turnoarchivo.edit')
-                                        <a href="{{ route('turnoarchivo.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
-                                            <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
-                                        </a>
+                                        {{--<a href="{{ route('turnoarchivo.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
+                                                <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
+                                            </a> --}}
+                                            <a href="{{route('turnoui.edit', $auditoria->turnoui)}}" class="btn btn-color-primary btn-active-color-warning ">
+                                                <i class="fa-solid fa-pen-to-square" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Editar
+                                            </a>
                                         @endcan
                                     @endif
-                                
                                     @if ($auditoria->turnoarchivo->fase_autorizacion == 'En revisión01')
                                         @can('turnoarchivorevision01.edit')
                                             <a href="{{ route('turnoarchivorevision01.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
@@ -138,15 +138,18 @@
                                     @endif
              
                             </td>
-							<td class="text-center">
+                            @can('turnoarchivoenvio.edit')
+							    <td class="text-center">
                                     @if(empty($auditoria->turnoarchivo->fase_autorizacion)||($auditoria->turnoarchivo->fase_autorizacion=='Rechazado'))
-                                        @can('turnoarchivoenvio.edit')
-                                            <a href="{{ route('turnoarchivoenvio.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
-                                             Enviar
-                                            </a>
-                                        @endcan
+                                     {{-- <a href="{{ route('turnoarchivoenvio.edit',$auditoria->turnoarchivo) }}" class="btn btn-primary">
+                                      Enviar
+                                     </a> --}}
+                                     <a href="{{route('turnoarchivoenvio.edit', $auditoria->turnoarchivo)}}" class="btn btn-color-primary btn-active-color-info">
+                                         <i class="bi bi-send-check-fill" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Enviar
+                                     </a>
                                     @endif
                                 </td>
+                            @endcan
                             </tr>
                             @if (!empty($auditoria->turnoarchivo))
                                     {!! movimientosDesglose($auditoria->turnoarchivo->id, 10, $auditoria->turnoarchivo->movimientos) !!}

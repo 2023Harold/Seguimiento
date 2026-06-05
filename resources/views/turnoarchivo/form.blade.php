@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('breadcrums')
 @if (empty($turnoarchivo->numero_ordenauditoria))
-    {{ Breadcrumbs::render('turnoarchivo.create') }}
+    {{Breadcrumbs::render('turnoarchivo.create') }}
 @else
-    {{ Breadcrumbs::render('turnoarchivo.edit',$turnoarchivo) }}
+    {{Breadcrumbs::render('turnoarchivo.edit',$turnoarchivo) }}
 @endif
 @endsection
 @section('content')
@@ -20,17 +20,17 @@
             <div class="card-body">
                 @include('flash::message')
                 @include('layouts.contextos._auditoria')
-                {!! BootForm::open(['model' => $turnoarchivo,'store' => 'turnoarchivo.store','update' => 'turnoarchivo.update','id' => 'form']) !!}
+                {!!BootForm::open(['model' => $turnoarchivo,'store' => 'turnoarchivo.store','update' => 'turnoarchivo.update','id' => 'form']) !!}
                 <div class="row">
                     <div class="col-md-12">
-                        {!! BootForm::checkbox('no_aplica', 'No Aplica', 'X', false, ['class' => 'i-checks rxs']) !!}
+                        {!!BootForm::checkbox('no_aplica', 'No Aplica', 'X', false, ['class' => 'i-checks rxs']) !!}
                     </div>                    
                 </div>
                 <div class="row">
                     <div class="col-md-12" style="display: none;" id="no_aplica"> 
                     <div class="row">
                         <div class="col-md-3">
-                            {!! BootForm::date('fecha_turno_archivo', 'Fecha de entrega *', old('fecha_turno_archivo', fecha($turnoarchivo->fecha_turno_archivo, 'Y-m-d'))) !!}
+                            {!!BootForm::date('fecha_turno_archivo', 'Fecha de entrega *', old('fecha_turno_archivo', fecha($turnoarchivo->fecha_turno_archivo, 'Y-m-d'))) !!}
                         </div>
                         {{--    ¿PORQUE SE QUITO? 
                         <div class="col-md-4">
@@ -38,8 +38,10 @@
                         </div> 
                         --}}
                     </div>
-                
-                    <div class="row"> Expediente Técnico de la Auditoría:
+                    <div class="row"> 
+                        <span class="text-primary"> Expediente Técnico de la Auditoría:</span>
+                    </div>
+                    <div class="row"> 
                         <div class="row">
                             <div class="col-md-2">
                                 {!!BootForm::text('legajos_tecnico_archivo', 'Número de legajos:  ', old('legajos_tecnico_archivo', ($turnoarchivo->legajos_tecnico_archivo))) !!}
@@ -49,7 +51,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row"> Expediente de Seguimiento:
+                    <div class="row"> 
+                        <span class="text-primary"> Expediente de Seguimiento:</span>
+                    </div>
+                    <div class="row"> 
                         <div class="row">
                             <div class="col-md-2">
                                 {!!BootForm::text('legajos_seg_archivo', 'Número de legajos:  ', old('legajos_seg_archivo', ($turnoarchivo->legajos_seg_archivo))) !!}

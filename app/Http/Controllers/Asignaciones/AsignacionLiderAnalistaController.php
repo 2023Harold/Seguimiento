@@ -26,7 +26,7 @@ class AsignacionLiderAnalistaController extends Controller
     {
         $auditorias = $this->setQuery($request)->orderBy('id')->paginate(30);
        // dd($auditorias);
-
+        delSession('accionasignacion'); 
         return view('Asignaciones.asignacionlideranalista.index', compact('auditorias', 'request'));
     }
 

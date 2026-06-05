@@ -19,8 +19,14 @@
                         <div class="col-md-4">
                             {!!BootForm::text("name", "Nombre del usuario:", old("name", optional(request())->name)) !!}
                         </div>
+                        <div class="col-md-2">
+                            {!!BootForm::text("puesto", "Puesto:", old("name", optional(request())->puesto)) !!}
+                        </div>
                         <div class="col-md-4">
                             {!!BootForm::text("email", "Correo electrónico:", old("email", optional(request())->email)) !!}
+                        </div>
+                        <div class="col-md-2">
+                            {!!BootForm::text("siglas_rol", "Siglas Rol:", old("name", optional(request())->siglas_rol)) !!}
                         </div>
                         <div class="col-md-3">
                             {!!BootForm::radios("estatus",

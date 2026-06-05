@@ -15,6 +15,9 @@ class AuditoriaUsuarios extends Model
         'staff_id',
         'analista_id',
         'estatus',
+        'rol_code',
+        'user_id',
+        'equipo_id',
     ];
     protected $cast = [
         'created_at'=>'datetime',
@@ -42,7 +45,7 @@ class AuditoriaUsuarios extends Model
     }
     public function movimientos()
     {
-        return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'AcuerdoConclusion')->orderBy('id', 'ASC');
+       return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Asignación de auditoría')->orderBy('id', 'ASC');
     }
 
     //STAFF JURIDICO
@@ -53,13 +56,16 @@ class AuditoriaUsuarios extends Model
 
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'staff_id');
+        return $this->belongsTo(User::class, 'staff_id','id');
     }
     public function usuarioana()
     {
         return $this->belongsTo(User::class, 'analista_id');
     }
-            
+    public function usuarioequipo()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }     
 }
 
 

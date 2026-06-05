@@ -38,6 +38,7 @@ class CatTipoAuditoriaSeeder extends Seeder
             'desempenio_legalidad' => 'X',
             'nombre_ae'=>'Javier López Pérez',
         ]);
+        /*
         CatalogoTipoAuditoria::create([
             'Descripcion' => 'Legalidad y Desempeño',
             'Sigla' => 'ALD',
@@ -107,6 +108,6 @@ class CatTipoAuditoriaSeeder extends Seeder
             'cumplimiento_financiero' => 'X',
             'inversion_fisica' => 'X',
             'desempenio_legalidad' => 'X',
-        ]);
+        ]);*/
     }
 }

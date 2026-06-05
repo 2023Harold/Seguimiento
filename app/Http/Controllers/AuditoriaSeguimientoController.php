@@ -25,6 +25,7 @@ class AuditoriaSeguimientoController extends Controller
      */
     public function index(Request $request)
     {
+        
         $auditorias = $this->setQuery($request)->orderBy('id','ASC')->paginate(30);
         //$auditoriasQuery = DB::table('segauditorias')->select('*')->orderBy("TO_NUMBER(REGEXP_SUBSTR(numero_auditoria, '\d+'))");
         // Agrega la consulta RAW para usar funciones Oracle
@@ -115,17 +116,15 @@ class AuditoriaSeguimientoController extends Controller
     {
         //
     }
-
+    
     public function setQuery(Request $request)
     {
          $query = $this->model;
 		 $query = $query->where('cuenta_publica',getSession('cp'));
-
-         if(in_array("Staff Juridico", auth()->user()->getRoleNames()->toArray())){
+         
+         if(in_array(auth()->user()->siglas_rol == 'STAFF', auth()->user()->getRoleNames()->toArray())){
             $query = $query->whereHas('auditoriausuarios', function($q){
-
                 $q->where("staff_id", auth()->user()->id);
-
             });
         }
          if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
@@ -148,50 +147,52 @@ class AuditoriaSeguimientoController extends Controller
                 });
             }
          }
-         if (getSession('cp') == 2022) {
-            $roles  = auth()->user()->getRoleNames()->toArray();
-            $userId = auth()->id();
-
-            $query = $query->where(function ($wrap) use ($roles, $userId) {
-                // 1) Auditorías con ACCIONES asignadas (como ya lo tenías)
-                $wrap->whereHas('acciones', function ($q) use ($roles, $userId) {
-                    if (in_array("Analista", $roles)) {
-                        $q->where('analista_asignado_id', $userId);
+         if(!usaEquipoTrabajo()){
+            if(getSession('cp')==2022){
+                //dd(2022);
+                $query = $query->whereHas('acciones', function($q){
+                    if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
+                        $q = $q->where('analista_asignado_id',auth()->user()->id);
                     }
-                    if (in_array("Lider de Proyecto", $roles)) {
-                        $q->whereRaw('LOWER(lider_asignado_id) LIKE (?) ', ["%{$userId}%"])
-                        ->whereNotNull('segauditorias.fase_autorizacion');
+                    if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
+                        $userLider=auth()->user();
+                        $q = $q->whereRaw('LOWER(lider_asignado_id) LIKE (?) ',["%{$userLider->id}%"])->whereNotNull('segauditorias.fase_autorizacion');
                     }
                 });
-
-                // 2) O auditorías donde soy ANALISTA EXTRA (segauditoria_usuarios)
-                if (in_array("Analista", $roles)) {
-                    $wrap->orWhereHas('analistacpextra', function ($r) use ($userId) {
-                        $r->where('analista_id', $userId)
-                        ->where('estatus', 'Activo'); // si quieres incluir solo extras activos
-                        // ->orWhereNull('estatus');   // (opcional) incluir nulos si aplica en tus datos
-                    });
+            }else{
+                if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
+                    $query = $query->where('analistacp_id',auth()->user()->id);
                 }
-            });
-        }
-        else{
-            $roles  = auth()->user()->getRoleNames()->toArray();
-            $userId = auth()->id();
-            if (in_array("Analista", $roles)) {
-                $query = $query->where(function ($q) use ($userId) {
-                    $q->where('analistacp_id', $userId)
-                    ->orWhereHas('analistacpextra', function ($r) use ($userId) {
-                        $r->where('analista_id', $userId)
-                            ->where('estatus', 'Activo'); // si quieres incluir solo extras activos
-                            // ->orWhereNull('estatus');   // (opcional) incluir nulos si aplica
-                    });
+                if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
+                    $query = $query->where('lidercp_id',auth()->user()->id);
+                }
+            }
+         }else{
+            if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){
+                $query = $query->whereHas('auditoriausuarios', function($q){
+                    $q->where('user_id', auth()->user()->id)
+                    ->where('rol_code', 'Analista')
+                    ->where('estatus', 'Activo');
                 });
             }
-
             if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){
-                $query = $query->where('lidercp_id',auth()->user()->id);
+                $query = $query->whereHas('auditoriausuarios', function($q){
+                    $q->where('user_id', auth()->user()->id)
+                    ->where('rol_code', 'Lider')
+                    ->where('estatus', 'Activo');
+                });
             }
-        }
+            /*  
+            // JEFE DE DEPARTAMENTO (en equipo de trabajo se muestra si el jefe es el encargado del departamento o si tiene alguna acciÃ³n asignada en alguna auditoria del departamento)
+            if(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray()){
+                $query = $query->whereHas('auditoriausuarios', function($q){
+                    $q->where('user_id', auth()->user()->id)
+                    ->where('rol_code', 'JEFE')
+                    ->where('estatus', 'Activo');
+                });
+            }*/
+         }
+         
 		if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){
              $unidadAdministrativa=auth()->user()->unidad_administrativa_id;
              $query = $query->whereRaw('LOWER(direccion_asignada_id) LIKE (?) ',["%{$unidadAdministrativa}%"]);
@@ -229,15 +230,52 @@ class AuditoriaSeguimientoController extends Controller
         if ($request->filled('departamentoasig')) {
             $query = $query->whereRaw('LOWER(departamento_encargado_id) LIKE (?) ',["%{$request->input('departamentoasig')}%"]);
         }
-        if ($request->filled('liderasig')) {
+        if(!usaEquipoTrabajo()){
+            if ($request->filled('liderasig')) {
             $query = $query->whereRaw('LOWER(lidercp_id) LIKE (?) ',["%{$request->input('liderasig')}%"]);
+            }
+            if ($request->filled('analistaasig')) {
+                $query = $query->whereRaw('LOWER(analistacp_id) LIKE (?) ',["%{$request->input('analistaasig')}%"]);
+            }
+        }else{
+            if ($request->filled('liderasig')) {
+                $query = $query->whereHas('auditoriausuarios', function($q) use ($request){
+                    $q->where('user_id', $request->input('liderasig'))
+                    ->where('rol_code', 'Lider')
+                    ->where('estatus', 'Activo');
+                });
+            }
+            if ($request->filled('analistaasig')) {
+                $query = $query->whereHas('auditoriausuarios', function($q) use ($request){
+                    $q->where('user_id', $request->input('analistaasig'))
+                    ->where('rol_code', 'Analista')
+                    ->where('estatus', 'Activo');
+                });
+            }
         }
-        if ($request->filled('analistaasig')) {
-            $query = $query->whereRaw('LOWER(analistacp_id) LIKE (?) ',["%{$request->input('analistaasig')}%"]);
-        }
+        
         return $query;
     }
+    /*
+    public function setQuery(Request $request)
+    {
+        $query = $this->model
+            ->where('cuenta_publica', getSession('cp'));
 
+        if (usaEquipoTrabajo()) {
+            //CP 2024 en adelante (NUEVO MODELO)
+            $this->aplicarFiltroEquipoTrabajo($query);
+        } else {
+            //CP 2023 hacia atrÃ¡s (MODELO ANTIGUO â€” TAL CUAL)
+            $this->aplicarFiltroModeloAntiguo($query, $request);
+        }
+
+        // filtros
+        $this->aplicarFiltrosGenerales($query, $request);
+
+        return $query; 
+    }*/
+    
     public function accionesConsulta(Auditoria $auditoria)
     {
         setSession('acciones_auditoria_id',$auditoria->id);

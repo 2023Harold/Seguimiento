@@ -4,6 +4,7 @@ namespace App\Http\Controllers\TurnoArchivo;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\TurnoAcuseArchivo;
 use Illuminate\Http\Request;
@@ -108,10 +109,23 @@ class TurnoArchivoRevision01Controller extends Controller
         }
 
         $url = route('turnoarchivo.index');
-        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnoarchivo).'/RevL')->first();
-        $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($turnoarchivo)."/Rechazo")->first();
-        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
-        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+
+        if ($usaEquipo) {
+            $notificacion=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave',GenerarLlave($turnoarchivo).'/RevL')->first();
+            $notificacionRechazo=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave',GenerarLlave($turnoarchivo).'/Rechazo')->first();
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnoarchivo).'/RevL')->first();
+            $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($turnoarchivo)."/Rechazo")->first();
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+        auth()->user()->NotMarcarLeido($notificacion);
+        auth()->user()->NotMarcarLeido($notificacionRechazo);
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Revisión del Turno Acuse Envío de la auditoría No. '.$auditoria->numero_auditoria;
@@ -123,15 +137,16 @@ class TurnoArchivoRevision01Controller extends Controller
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($turnoarchivo).'/RevJD', $url);
 
         }else {
-
             $titulo = 'Rechazo del Turno acuse envio al archivo';
             $mensaje = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
                             .'Se rechazo el Turno acuse envio al archivo de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-
             //auth()->user()->insertNotificacion($titulo, $mensaje, now(), $turnoarchivo->usuarioCreacion->unidad_administrativa_id, $turnoarchivo->usuarioCreacion->id);
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id, GenerarLlave($turnoarchivo).'/Rechazo', $url);
-
+            if ($usaEquipo) {
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($turnoarchivo). '/Rechazo', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id, GenerarLlave($turnoarchivo).'/Rechazo', $url);
+            }
         }
 
         return redirect()->route('turnoarchivo.index');

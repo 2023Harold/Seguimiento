@@ -4,6 +4,7 @@ namespace App\Http\Controllers\TurnoArchivo;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\TurnoAcuseArchivo;
 use App\Models\User;
@@ -80,8 +81,17 @@ class TurnoArchivoEnvioController extends Controller
         $turnoarchivo->update(['fase_autorizacion' =>  'En revisión01']);
 
         $url = route('turnoarchivo.index');
-        $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnoarchivo).'/Rechazo')->first();
-        $LeerNotificacionRechazo = auth()->user()->NotMarcarLeido($NotificacionRechazo);
+
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        if ($usaEquipo) {
+            $NotificacionRechazo=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($turnoarchivo).'/Rechazo')->first();
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+        } else {
+            $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($turnoarchivo).'/Rechazo')->first();
+        }
+        auth()->user()->NotMarcarLeido($NotificacionRechazo);
 
         $titulo = 'Revisión de los datos hacia el Turno acuse envio al archivo';
         $mensaje = '<strong>Estimado (a) ' . $lider->name . ', ' . $lider->puesto . ':</strong><br>'.
@@ -89,7 +99,11 @@ class TurnoArchivoEnvioController extends Controller
                     auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
 
             //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->lider->unidad_administrativa_id,auth()->user()->lider->id);
-        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id,$lider->id,GenerarLlave($turnoarchivo).'/RevL',$url);
+        if ($usaEquipo) {
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave($turnoarchivo).'/RevL',$url, $auditoria->id, $equipoId,'Lider');
+        }else{
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id,$lider->id,GenerarLlave($turnoarchivo).'/RevL',$url);
+        }
 
         setMessage('Se ha enviado el turno archivo a Revisión');
 

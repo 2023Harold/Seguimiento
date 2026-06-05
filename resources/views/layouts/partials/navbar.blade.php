@@ -17,10 +17,10 @@
 <!--begin::Toolbar wrapper-->
 <div class="d-flex align-items-stretch flex-shrink-0">
     <!--begin::Quick links-->
-    @if (auth()->check())
-    <div class="d-flex align-items-center ms-1 ms-lg-3">
-		@include('layouts.partials._notification')
-    </div>
+    @if (auth()->check() && getSession('cp') !== null)
+        <div class="d-flex align-items-center ms-1 ms-lg-3">
+            @include('layouts.partials._notification')
+        </div>
     @endif
     <!--end::Quick links-->
     <!--begin::User-->

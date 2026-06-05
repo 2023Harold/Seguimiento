@@ -40,7 +40,9 @@
                                 <th>Acuse de notificación</th>
                                 <th>Fecha de notificacion</th>
                                 <th>Fase / Acción </th>
-                                <th>Envío</th>
+                                @can('turnoui.edit')
+                                    <th>Envío</th>
+                                @endcan
                             </tr>
                         </thead>
                         <tbody>
@@ -62,9 +64,9 @@
                                         @if (empty($auditoria->turnoui->fase_autorizacion)||$auditoria->turnoui->fase_autorizacion=='Rechazado')
                                             <span class="badge badge-light-danger">{{ $auditoria->turnoui->fase_autorizacion }} </span>
                                             @can('turnoui.edit')
-                                            <a href="{{ route('turnoui.edit',$auditoria->turnoui) }}" class="btn btn-primary">
-                                                <span class="fas fa-edit" aria-hidden="true"></span>&nbsp; Editar
-                                            </a>
+                                                <a href="{{route('turnoui.edit', $auditoria->turnoui)}}" class="btn btn-color-primary btn-active-color-warning ">
+                                                    <i class="fa-solid fa-pen-to-square" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Editar
+                                                </a>
                                             @endcan
                                         @endif
                                         @if ($auditoria->turnoui->fase_autorizacion == 'En revisión')
@@ -100,15 +102,18 @@
                                         @if ($auditoria->turnoui->fase_autorizacion=='Autorizado')
                                             <span class="badge badge-light-success">{{ $auditoria->turnoui->fase_autorizacion }} </span>
                                         @endif
-                                    <td class="text-center">
-                                        @if (empty($auditoria->turnoui->fase_autorizacion)||$auditoria->turnoui->fase_autorizacion=='Rechazado')
-                                            @can('turnoui.edit')
-                                                <a href="{{ route('turnouienvio.edit',$auditoria->turnoui) }}" class="btn btn-primary">
-                                                 Enviar
+                                    @can('turnoui.edit')
+                                        <td class="text-center">
+                                            @if (empty($auditoria->turnoui->fase_autorizacion)||$auditoria->turnoui->fase_autorizacion=='Rechazado')
+                                                {{-- <a href="{{ route('turnouienvio.edit',$auditoria->turnoui) }}" class="btn btn-primary">
+                                                Enviar
+                                                </a> --}}
+                                                <a href="{{route('turnouienvio.edit', $auditoria->turnoui)}}" class="btn btn-color-primary btn-active-color-info">
+                                                    <i class="bi bi-send-check-fill" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Enviar
                                                 </a>
-                                            @endcan
-                                        @endif
-                                    </td>
+                                            @endif
+                                        </td>
+                                    @endcan
                                 </td>
                                 </tr>
                                 @if (!empty($auditoria->turnoui))

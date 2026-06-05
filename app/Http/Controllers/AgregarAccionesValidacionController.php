@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Auditoria;
 use App\Models\AuditoriaAccion;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -113,10 +114,17 @@ class AgregarAccionesValidacionController extends Controller
             'El rechazo ha sido registrado.'
         );
 
-        $notificacion=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Val')->first();
-        $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Rechazo')->first();
+        if (usaEquipoTrabajo()){
+            $notificacion=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($accion).'/Val')->first();
+            $notificacionRechazo=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($accion).'/Rechazo')->first();
+        } else {
+            $notificacion=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Val')->first();
+            $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($accion).'/Rechazo')->first();
+        }
+        
         $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
         $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+
         $url =  route("agregaracciones.index");
         if ($request->estatus == 'Aprobado') {
             $auditoria->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
@@ -125,24 +133,33 @@ class AgregarAccionesValidacionController extends Controller
                             .auth()->user()->name.', '.auth()->user()->puesto.
                             '; se ha aprobado el registro de la acción No.'.$accion->numero.' de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            $mensaje2 = '<strong>Estimado(a) '.$lider->name.', '.$lider->puesto.':</strong><br>'
-                            .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado el registro de la acción No.'.$accion->numero.' de la auditoría No. '.$auditoria->numero_auditoria.
-                            ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            $mensaje3 = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
-                            .auth()->user()->name.', '.auth()->user()->puesto.
-                            '; se ha aprobado el registro de la acción No.'.$accion->numero.' de la auditoría No. '.$auditoria->numero_auditoria.
-                            ', por lo que se requiere realice la revisión oportuna en el módulo Seguimiento.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($accion).'/Consulta',$url);
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Consulta',$url);
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Consulta',$url);
+            if (usaEquipoTrabajo()){
+                $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+                $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($accion).'/Consulta',$url);
+                /* auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Consulta',$url); */
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(),null, null, GenerarLlave($accion).'/Consulta', $url,$auditoria->id, $registroLider->equipo_id, 'Lider');
+                /* auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Consulta',$url); */
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(),null, null, GenerarLlave($accion).'/Consulta', $url,$auditoria->id, $registroAnalista->equipo_id, 'Analista');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($accion).'/Consulta',$url);
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id,GenerarLlave($accion).'/Consulta',$url);
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Consulta',$url);
+            }
         } else {
             
             $titulo = 'Rechazo del registro de la acción No.'.$accion->numero.' de la auditoria No. '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$analista->name.', '.$analista->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de la acción No.'.$accion->numero.' de la auditoría No. '.$auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $analista->unidad_administrativa_id, $analista->id,GenerarLlave($accion).'/Rechazo',$url);
+            if (usaEquipoTrabajo()){
+                // Obtener equipo_id del analista activo en esa auditoría
+                $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($accion) . '/Rechazo', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(),$analista->unidad_administrativa_id,$analista->id,GenerarLlave($accion) . '/Rechazo',$url);
+            }
         }
 
         return redirect()->route('agregaracciones.index');

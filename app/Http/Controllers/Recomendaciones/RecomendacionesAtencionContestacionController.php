@@ -161,6 +161,16 @@ class RecomendacionesAtencionContestacionController extends Controller
         return redirect()->route('recomendacionescontestaciones.index');
     }
 
+    public function eliminar(RecomendacionesContestacion $contestacion)
+    {
+        File::delete($contestacion->oficio_contestacion);
+        $contestacion->delete();
+        $this->actualizaProgresivo();
+        setMessage('El registro ha sido eliminado');
+
+        return redirect()->route('recomendacionescontestaciones.index');
+    }
+
     private function setQuery($request)
     {
         $query = $this->model;

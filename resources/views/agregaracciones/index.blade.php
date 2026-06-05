@@ -277,7 +277,8 @@
 					@can('agregaracciones.concluir')
                     <div class="row">
                         <div class="col-md-6">
-                            <a href="{{ route('agregaracciones.concluir',$auditoria) }}" class="btn btn-primary" onclick="return  confirm('Al concluir con el registro, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?');">Concluir</a>
+                            {{-- <a href="{{ route('agregaracciones.concluir',$auditoria) }}" class="btn btn-primary" onclick="return  confirm('Al concluir con el registro, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?');">Concluir</a> --}}
+                            <a href="{{ route('agregaracciones.concluir',$auditoria) }}" class="btn btn-primary js-swal-confirm" data-text="Al concluir con el registro, no se podran registrar mas acciones. ¿Esta seguro que deseas continuar?"> Concluir </a>
                         </div>
                     </div>
                     @endcan

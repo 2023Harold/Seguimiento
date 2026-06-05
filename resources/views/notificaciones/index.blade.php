@@ -57,9 +57,8 @@
                                 </thead>
                                 <tbody>
 								@php
-												$num = 0;
-												
-											@endphp
+									$num = 0;
+								@endphp
                                     @forelse($notificaciones as $notificacion)
                                         
                                         <tr id="rownotificacion{{ $notificacion->id }}">

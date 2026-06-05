@@ -254,6 +254,17 @@ Breadcrumbs::for('seguimientoauditoriaautorizacion.edit', function (BreadcrumbTr
     $trail->push('Validar', route('seguimientoauditoriaautorizacion.edit',$auditoria));
 });
 
+//Asignacion equipos de trabajo
+Breadcrumbs::for('asignarequipotrabajo.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Asignación de equipos de trabajo', route('asignarequipotrabajo.index'));
+});
+
+Breadcrumbs::for('asignarequipotrabajo.edit', function (BreadcrumbTrail $trail, $auditoria) {
+    $trail->parent('asignacionlideranalista.index');
+    $trail->push('Agregar lider y analista', route('asignarequipotrabajo.edit',$auditoria));
+});
+
 //Asignacion Direccion
 Breadcrumbs::for('asignaciondireccion.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');

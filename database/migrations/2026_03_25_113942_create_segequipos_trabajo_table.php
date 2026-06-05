@@ -13,11 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('segturno_archivo_trasferencia', function (Blueprint $table) {
+        Schema::create('segequipos_trabajo', function (Blueprint $table) {
+            $table->id();
+            $table->string('equipo_name', 250)->nullable();
+            $table->integer('consecutivo')->nullable();
+            $table->integer('auditoria_id')->nullable();
+            $table->string('departamento_encargado')->nullable();
+	        $table->unsignedBigInteger('departamento_encargado_id')->nullable();
+            $table->string('estatus', 10)->default('Activo');
             $table->foreignId('usuario_creacion_id')->nullable()->constrained('segusers');
             $table->foreignId('usuario_modificacion_id')->nullable()->constrained('segusers');
-            $table->string('fase_autorizacion', 50)->nullable();
-            $table->string('nivel_autorizacion', 5)->nullable();
+            $table->timestamps();
         });
     }
 
@@ -28,8 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('segturno_archivo_trasferencia', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('segequipos_trabajo');
     }
 };

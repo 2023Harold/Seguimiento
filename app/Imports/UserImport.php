@@ -27,9 +27,11 @@ class UserImport implements ToModel, WithHeadingRow
             'cp_2021'=>null,
             'cp_2022'=>'X',
             'cp_2023'=>'X',
+            'cp_2024'=>'X',
             'cp_ua2021'=>null,
             'cp_ua2022'=>$row['unidad_administrativa'],
             'cp_ua2023'=>$row['unidad_administrativa'],
+            'cp_ua2024'=>$row['unidad_administrativa'],
         ])->assignRole($row['rol']);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\TurnoUI;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\TurnoUI;
 use App\Models\User;
@@ -82,21 +83,32 @@ class TurnoUIEnvioController extends Controller
                 'usuario_asignado_id' => auth()->id(),
             ]);
     
-            $turnoui->update(['fase_autorizacion' =>  'En revisión']);
-            $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave( $turnoui).'/Rechazo')->first();
-            $LeerNotificacionRechazo = auth()->user()->NotMarcarLeido($NotificacionRechazo);
 
-            $url = route('turnoui.index');
+        $turnoui->update(['fase_autorizacion' =>  'En revisión']);
+        $url = route('turnoui.index');
     
-            $titulo = 'Revisión de los datos del turno a la UI';
-            $mensaje = '<strong>Estimado (a) ' . $jefe->name . ', ' . $jefe->puesto . ':</strong><br>'.
-                        'Ha sido registrada el turno a la UI de la auditoría No. ' . $auditoria->numero_auditoria . ', por parte del ' .
-                        auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
-    
-            //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id,$jefe->id,GenerarLlave( $turnoui).'/RevJD',$url);
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
 
-            setMessage('Se ha enviado el turno a la UI, a revisión');
+        if ($usaEquipo) {
+            $notificacionRechazo=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave',GenerarLlave($turnoui).'/Rechazo')->first();
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            $NotificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($turnoui).'/Rechazo')->first();
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+        auth()->user()->NotMarcarLeido($notificacionRechazo);
+        
+        $titulo = 'Revisión de los datos del turno a la UI';
+        $mensaje = '<strong>Estimado (a) ' . $jefe->name . ', ' . $jefe->puesto . ':</strong><br>'.
+                    'Ha sido registrada el turno a la UI de la auditoría No. ' . $auditoria->numero_auditoria . ', por parte del ' .
+                    auth()->user()->puesto.' '.auth()->user()->name . ', por lo que se requiere realice la revisión.';
+        //auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->jefe->unidad_administrativa_id,auth()->user()->jefe->id);
+        auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id,$jefe->id,GenerarLlave( $turnoui).'/RevJD',$url);
+
+        setMessage('Se ha enviado el turno a la UI, a revisión');
     
 
         return redirect()->route('turnoui.index');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\AcuerdoConclusion;
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -98,7 +99,19 @@ class AcuerdoConclusionAutorizacionController extends Controller
             $lider = $auditoria->lidercp; 
         }
         $director=User::where('unidad_administrativa_id',substr($lider->unidad_administrativa_id, 0, 4).'00')->where('siglas_rol','DS')->first();
-
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        
+        // Obtener quién recibe la notificación según la lógica
+        if ($usaEquipo) {
+            // Notificación va al equipo (lider activo en esa auditoría)
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            // Comportamiento original
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
 
         $acuerdoconclusion->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'Autorizado' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
         setMessage($request->estatus == 'Aprobado' ?
@@ -110,7 +123,11 @@ class AcuerdoConclusionAutorizacionController extends Controller
             $titulo = 'Acuerdo de conclusión de '.$acuerdoconclusion->tipo.' Autorizado';
             $mensaje = '<strong>Estimado(a) '.$lider->name.', '.$lider->puesto.':</strong><br>'
                             .'Se ha autorizado el Acuerdo de conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.', por lo que se deben adjuntar los acuses correspondientes';                          
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Consulta',$url);
+            if ($usaEquipo) {
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave($acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Consulta',$url, $auditoria->id, $equipoId,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Consulta',$url);
+            }
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $director->unidad_administrativa_id, $director->id, GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Consulta',$url);
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $jefe->unidad_administrativa_id,$jefe->id,GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Consulta',$url);
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $Atus->unidad_administrativa_id, $Atus->id,GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Consulta',$url ); 
@@ -121,8 +138,11 @@ class AcuerdoConclusionAutorizacionController extends Controller
              $mensaje = '<strong>Estimado(a) '.$lider->name.', '.$lider->puesto.':</strong><br>'
                              .'Ha sido rechazado el Acuerdo de Conclusión de la auditoría No. '.$acuerdoconclusion->auditoria->numero_auditoria.
                              ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a autorización.';
-            
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo',$url);
+            if ($usaEquipo) {
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave($acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo',$url, $auditoria->id, $equipoId,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $lider->unidad_administrativa_id, $lider->id, GenerarLlave($acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo',$url);
+            }
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$acuerdoconclusion->auditoria->numero_auditoria),now(), $director->unidad_administrativa_id, $director->id, GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo',$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name, $jefe->puesto, $acuerdoconclusion->auditoria->numero_auditoria),now(), $jefe->unidad_administrativa_id, $jefe->id, GenerarLlave($acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo',$url);        
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($Atus->name, $Atus->puesto,$acuerdoconclusion->auditoria->numero_auditoria), now(), $Atus->unidad_administrativa_id, $Atus->id,GenerarLlave( $acuerdoconclusion).'/'.$acuerdoconclusion->tipo.'/Rechazo',$url ); 

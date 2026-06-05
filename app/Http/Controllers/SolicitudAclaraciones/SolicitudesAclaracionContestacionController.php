@@ -161,6 +161,16 @@ class SolicitudesAclaracionContestacionController extends Controller
         return redirect()->route('solicitudesaclaracioncontestacion.index');
     }
 
+    public function eliminar(SolicitudesAclaracionContestacion $contestacion)
+    {
+        File::delete($contestacion->oficio_contestacion);
+        $contestacion->delete();
+        $this->actualizaProgresivo();
+        setMessage('El registro ha sido eliminado');
+
+        return redirect()->route('solicitudesaclaracioncontestacion.index');
+    }
+
     private function setQuery($request)
     {
         $query = $this->model;

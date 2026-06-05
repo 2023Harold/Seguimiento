@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Catalogo\CatUnidadAdministrativa;
+use App\Models\CatalogoUnidadesAdministrativas;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Propaganistas\LaravelFakeId\RoutesWithFakeIds;
@@ -29,6 +29,9 @@ class Notificacion extends Model
 		'cp',
 		'llave',
 		'url',
+		'auditoriacp_id',
+		'equipo_id',
+		'destinatario',
     ];
 
     protected $dates = [
@@ -40,7 +43,7 @@ class Notificacion extends Model
 
     public function unidadAdministrativa()
     {
-        return $this->hasOne(CatUnidadAdministrativa::class, 'unidad_administrativa_id', 'id');
+        return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'unidad_administrativa_id', 'id');
     }
 
     public function destinatario()
@@ -50,7 +53,8 @@ class Notificacion extends Model
 
     public function auditoria()
     {
-        return $this->belongsTo(Auditoria::class, 'auditoria_id','id');
+        return $this->belongsTo(Auditoria::class, 'auditoriacp_id','id');
     }
+
 
 }

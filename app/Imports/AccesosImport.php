@@ -27,17 +27,26 @@ class AccesosImport implements ToCollection, WithStartRow
         $permisosGenerales = [];
         $i = 0;
         foreach ($rows as $row) {
-            if ($row[2] != '' && $row[2] != '' && $row[2] != null) {
+            if (!empty($row[2])) {
                 foreach (explode(',', $row[2]) as $action) {
-                    $permisosGenerales[$i] = ['name' => $row[1].'.'.$action, 'guard_name' => 'web'];
-                    $i++;
+                    $permisosGenerales[] = [
+                        'name' => trim($row[1].'.'.trim($action)),
+                        'guard_name' => 'web'
+                    ];
                 }
             } else {
-                $permisosGenerales[$i] = ['name' => $row[1], 'guard_name' => 'web'];
-                $i++;
+                $permisosGenerales[] = [
+                    'name' => trim($row[1]),
+                    'guard_name' => 'web'
+                ];
             }
         }
-        Permission::insert($permisosGenerales);
+        foreach ($permisosGenerales as $permiso) {
+            Permission::firstOrCreate([
+                'name' => $permiso['name'],
+                'guard_name' => 'web'
+            ]);
+        }
 
 
         $roles_accesos = [[], [], [], [], [], [], [], [], [], [], [], [] ];
@@ -50,16 +59,16 @@ class AccesosImport implements ToCollection, WithStartRow
                 }
             }
         }
-        Role::create(['name' => 'Administrador TI'])->givePermissionTo(Permission::all());
-        Role::create(['name' => 'Auditor Superior'])->givePermissionTo($roles_accesos[1]);
-        Role::create(['name' => 'Administrador del Sistema'])->givePermissionTo($roles_accesos[2]);
-        Role::create(['name' => 'Titular Unidad de Seguimiento'])->givePermissionTo($roles_accesos[3]);
-        Role::create(['name' => 'Director de Seguimiento'])->givePermissionTo($roles_accesos[4]);
-        Role::create(['name' => 'Jefe de Departamento de Seguimiento'])->givePermissionTo($roles_accesos[5]);
-        Role::create(['name' => 'Lider de Proyecto'])->givePermissionTo($roles_accesos[6]);
-        Role::create(['name' => 'Analista'])->givePermissionTo($roles_accesos[7]);
-        Role::create(['name' => 'Staff Juridico'])->givePermissionTo($roles_accesos[8]);
-        Role::create(['name' => 'Consultor Administrativo'])->givePermissionTo($roles_accesos[9]);
+        Role::firstOrCreate(['name' => 'Administrador TI'])->givePermissionTo(Permission::all());
+        Role::firstOrCreate(['name' => 'Auditor Superior'])->givePermissionTo($roles_accesos[1]);
+        Role::firstOrCreate(['name' => 'Administrador del Sistema'])->givePermissionTo($roles_accesos[2]);
+        Role::firstOrCreate(['name' => 'Titular Unidad de Seguimiento'])->givePermissionTo($roles_accesos[3]);
+        Role::firstOrCreate(['name' => 'Director de Seguimiento'])->givePermissionTo($roles_accesos[4]);
+        Role::firstOrCreate(['name' => 'Jefe de Departamento de Seguimiento'])->givePermissionTo($roles_accesos[5]);
+        Role::firstOrCreate(['name' => 'Lider de Proyecto'])->givePermissionTo($roles_accesos[6]);
+        Role::firstOrCreate(['name' => 'Analista'])->givePermissionTo($roles_accesos[7]);
+        Role::firstOrCreate(['name' => 'Staff Juridico'])->givePermissionTo($roles_accesos[8]);
+        Role::firstOrCreate(['name' => 'Consultor Administrativo'])->givePermissionTo($roles_accesos[9]);
 
 
 

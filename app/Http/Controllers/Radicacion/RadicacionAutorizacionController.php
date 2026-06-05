@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Radicacion;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\Movimientos;
 use App\Models\Radicacion;
 use App\Models\User;
@@ -229,6 +230,19 @@ class RadicacionAutorizacionController extends Controller
             $director=User::where('unidad_administrativa_id',substr($radicacion->auditoria->unidad_administrativa_registro, 0, 4).'00')->where('siglas_rol','DS')->first();
 
         }
+        $auditoria = $radicacion->auditoria;
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        
+        // Obtener quién recibe la notificación según la lógica
+        if ($usaEquipo) {
+            // Notificación va al equipo (lider activo en esa auditoría)
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            // Comportamiento original
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
         
         $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $radicacion).'/Aut')->first();
         $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($radicacion)."/Rechazo")->first();
@@ -238,19 +252,32 @@ class RadicacionAutorizacionController extends Controller
 
         if ($request->estatus == 'Aprobado') {
             $titulo = 'Autorización del registro de la radiación de la auditoría No. '.$radicacion->auditoria->numero_auditoria;
-            
-            auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($radicacion->usuarioCreacion->name,$radicacion->usuarioCreacion->puesto,$radicacion->auditoria->numero_auditoria), now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id,GenerarLlave($radicacion).'/Consulta',$url);
+            if ($usaEquipo) {
+                $mensaje = '<strong>Estimado(a) Líder de Proyecto:</strong><br>'
+                    .' Ha sido autorizado el registro de radicación de la auditoría No. '.$radicacion->auditoria->numero_auditoria.
+                    ', por parte del Titular. por lo que se requiere realice la carga de los acuses correspondientes.';
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave($radicacion).'/Consulta',$url, $auditoria->id, $equipoId,'Lider');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($radicacion->usuarioCreacion->name,$radicacion->usuarioCreacion->puesto,$radicacion->auditoria->numero_auditoria), now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id,GenerarLlave($radicacion).'/Consulta',$url);
+            }
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($director->name,$director->puesto,$radicacion->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($radicacion).'/Consulta',$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeAprobado($jefe->name,$jefe->puesto,$radicacion->auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($radicacion).'/Consulta',$url);
             
             setMessage('Se ha autorizado el registro de la radicación de la auditoría con exito.');
         } else {
-            $titulo = 'Rechazo del registro de radiación de la auditoría No. '.$radicacion->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$radicacion->usuarioCreacion->name.', '.$radicacion->usuarioCreacion->puesto.':</strong><br>'
-                            .'Ha sido rechazado el registro de la radicación de auditoría No. '.$radicacion->auditoria->numero_auditoria.
-                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
+            $titulo = 'Rechazo de la radicación de la auditoría No. '.$radicacion->auditoria->numero_auditoria;
+            if ($usaEquipo) {
+                    $mensaje = '<strong>Estimado(a) Líder de Proyecto:</strong><br>'
+                                .'Ha sido rechazado la radicación de auditoría No. '.$radicacion->auditoria->numero_auditoria.
+                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave($radicacion).'/Rechazo',$url, $auditoria->id, $equipoId,'Lider');
+                }else{
+                    $mensaje = '<strong>Estimado(a) '.$radicacion->usuarioCreacion->name.', '.$radicacion->usuarioCreacion->puesto.':</strong><br>'
+                            .'Ha sido rechazado la radicación de auditoría No. '.$radicacion->auditoria->numero_auditoria.
+                            ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id,GenerarLlave($radicacion).'/Rechazo',$url);
+            }
             
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $radicacion->usuarioCreacion->unidad_administrativa_id, $radicacion->usuarioCreacion->id,GenerarLlave($radicacion).'/Rechazo',$url);           
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($director->name,$director->puesto,$radicacion->auditoria->numero_auditoria), now(), $director->unidad_administrativa_id, $director->id,GenerarLlave($radicacion).'/Rechazo',$url);
             auth()->user()->insertNotificacion($titulo, $this->mensajeRechazo($jefe->name,$jefe->puesto,$radicacion->auditoria->numero_auditoria), now(), $jefe->unidad_administrativa_id, $jefe->id,GenerarLlave($radicacion).'/Rechazo',$url);
             

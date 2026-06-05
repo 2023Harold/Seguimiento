@@ -163,6 +163,16 @@ class PliegosObservacionAtencionContestacionController extends Controller
 
         return redirect()->route('pliegosobservacionatencioncontestacion.index');
     }
+
+    public function eliminar(PliegosContestacion $contestacion)
+    {
+        File::delete($contestacion->oficio_contestacion);
+        $contestacion->delete();
+        $this->actualizaProgresivo();
+        setMessage('El registro ha sido eliminado');
+
+        return redirect()->route('pliegosobservacionatencioncontestacion.index');
+    }
     private function setQuery($request)
     {
         $query = $this->model;

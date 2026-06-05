@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Comparecencia;
 
 use App\Models\Auditoria;
+use App\Models\AuditoriaUsuarios;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AprobarFlujoAutorizacionRequest;
@@ -79,13 +80,27 @@ class ComparecenciaRevisionController extends Controller
     {
         $auditoria=Auditoria::find(getSession('auditoria_id')); 
         $this->normalizarDatos($request);
-		$licMartha=User::where('siglas_rol','ATUS')->first();
+		$AsistenteTitular=User::where('siglas_rol','ATUS')->first();
 	
         
         if ($request->estatus == 'Aprobado') {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 3);
         } else {
             $nivel_autorizacion = substr(auth()->user()->unidad_administrativa_id, 0, 4);
+        }
+
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+        
+        // Obtener quién recibe la notificación según la lógica
+        if ($usaEquipo) {
+            // Notificación va al equipo (lider activo en esa auditoría)
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            // Comportamiento original
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
         }
 
         $comparecencia->update(['fase_autorizacion' => $request->estatus == 'Aprobado' ? 'En validación' : 'Rechazado', 'nivel_autorizacion' => $nivel_autorizacion]);
@@ -107,16 +122,21 @@ class ComparecenciaRevisionController extends Controller
                             '; ha aprobado la validación de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria.
                             ', por lo que se requiere realice la autorización oportuna de la misma.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), auth()->user()->director->unidad_administrativa_id, auth()->user()->director->id,GenerarLlave($comparecencia).'/Val',$url);
-			auth()->user()->insertNotificacion($titulo, $this->mensajeNotificacion($licMartha->name,$licMartha->puesto,$auditoria), now(), $licMartha->unidad_administrativa_id, $licMartha->id,GenerarLlave($comparecencia).'/Consulta',$url); 
+			auth()->user()->insertNotificacion($titulo, $this->mensajeNotificacion($AsistenteTitular->name,$AsistenteTitular->puesto,$auditoria), now(), $AsistenteTitular->unidad_administrativa_id, $AsistenteTitular->id,GenerarLlave($comparecencia).'/Consulta',$url); 
 
         }else {
-            
             $titulo = 'Rechazo de la comparecencia de la auditoría No. '.$comparecencia->auditoria->numero_auditoria;
-            $mensaje = '<strong>Estimado(a) '.$comparecencia->usuarioCreacion->name.', '.$comparecencia->usuarioCreacion->puesto.':</strong><br>'
+            if ($usaEquipo) {
+                    $mensaje = '<strong>Estimado(a) Líder de Proyecto:</strong><br>'
+                                .'Ha sido rechazado la comparecencia de auditoría No. '.$comparecencia->auditoria->numero_auditoria.
+                                ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
+                    auth()->user()->insertNotificacion($titulo, $mensaje, now(),null,null, GenerarLlave($comparecencia).'/Rechazo',$url, $auditoria->id, $equipoId,'Lider');
+            }else{
+                $mensaje = '<strong>Estimado(a) '.$comparecencia->usuarioCreacion->name.', '.$comparecencia->usuarioCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado la comparecencia de auditoría No. '.$comparecencia->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a validación.';
-            
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id,GenerarLlave($comparecencia).'/Rechazo',$url);
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $comparecencia->usuarioCreacion->unidad_administrativa_id, $comparecencia->usuarioCreacion->id,GenerarLlave($comparecencia).'/Rechazo',$url);
+            }
         }
 		
 		Movimientos::create([

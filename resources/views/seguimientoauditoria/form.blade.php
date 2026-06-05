@@ -63,7 +63,7 @@
         </div>       
         <div class="row">
             <div class="col-md-4">
-                {!! archivo('informe_auditoria', 'Informe de auditoria: ', optional($auditoria)->informe_auditoria) !!}
+                {!! archivo('informe_auditoria', 'informe de auditoría: ', optional($auditoria)->informe_auditoria) !!}
             </div>
             <div class="col-md-2">
                 {!! BootForm::text('fojas_utiles', 'Número de fojas útiles: *', optional($auditoria)->fojas_utiles) !!}

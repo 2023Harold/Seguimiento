@@ -116,14 +116,26 @@ class RecomendacionesRevision01Controller extends Controller
             'El rechazo ha sido registrado.'
         );
         $url = route('recomendacionesatencion.index');
-        $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $recomendacion).'/RevL')->first();
-        $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($recomendacion)."/Rechazo")->first();
-        $LeerNotificacion = auth()->user()->NotMarcarLeido($notificacion);
-        $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+
+        $cuenta_publicaSession = getSession('cp');
+        $usaEquipo = usaEquipoTrabajo(); // guardamos en variable para reutilizar
+
+        if ($usaEquipo) {
+            $notificacion=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave',GenerarLlave($recomendacion).'/RevL')->first();
+            $notificacionRechazo=auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave',GenerarLlave($recomendacion).'/Rechazo')->first();
+            $registroLider = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Lider')->where('estatus', 'Activo')->first();
+            $equipoId = $registroLider->equipo_id ?? null;
+            $liderIndividual = null; // ya no se usa para notificar
+        } else {
+            $notificacion=auth()->user()->notificaciones()->where('llave',GenerarLlave( $recomendacion).'/RevL')->first();
+            $notificacionRechazo=auth()->user()->notificaciones()->where('llave',GenerarLlave($recomendacion)."/Rechazo")->first();
+            $lider_asignadoCP = ($cuenta_publicaSession != 2022) ? $auditoria->lidercp : $auditoria->lider;
+        }
+        auth()->user()->NotMarcarLeido($notificacion);
+        auth()->user()->NotMarcarLeido($notificacionRechazo);
 
         if ($request->estatus == 'Aprobado') {
             $recomendacion->update([ 'nivel_autorizacion' => $nivel_autorizacion]);
-            
             $titulo = 'Revisión del registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) '.$jefe->name.', '.$jefe->puesto.':</strong><br>'
                             .auth()->user()->name.', '.auth()->user()->puesto.
@@ -135,8 +147,12 @@ class RecomendacionesRevision01Controller extends Controller
             $mensaje = '<strong>Estimado(a) '.$recomendacion->userCreacion->name.', '.$recomendacion->userCreacion->puesto.':</strong><br>'
                             .'Ha sido rechazado el registro de atención de la recomendación de la Acción No. '.$recomendacion->accion->numero.' de la Auditoría No. '.$recomendacion->accion->auditoria->numero_auditoria.
                             ', por lo que se debe atender los comentarios y enviar la información corregida nuevamente a revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, GenerarLlave( $recomendacion).'/Rechazo', $url);
-
+            if ($usaEquipo) {
+                $registroAnalista = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)->where('rol_code', 'Analista')->where('estatus', 'Activo')->first();
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), null, null,GenerarLlave($recomendacion). '/Rechazo', $url,$auditoria->id, $registroAnalista->equipo_id ?? null,'Analista');
+            }else{
+                auth()->user()->insertNotificacion($titulo, $mensaje, now(), $recomendacion->userCreacion->unidad_administrativa_id, $recomendacion->userCreacion->id, GenerarLlave($recomendacion).'/Rechazo', $url);
+            }
         }
         foreach ($staffA as $staff) {
             if (!empty($staff['id'])) {

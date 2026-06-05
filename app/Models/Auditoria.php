@@ -84,6 +84,12 @@ class Auditoria extends Model
         return $this->hasOne(Paa::class,'ejercicio_fiscal','cuenta_publica');
     }
 
+    public function liderEquipo(){
+        return $this->hasMany(AuditoriaUsuarios::class, 'auditoria_id','id')->where('rol_code','Lider')->where('estatus','Activo');
+    }
+    public function analistaEquipo(){
+        return $this->hasMany(AuditoriaUsuarios::class, 'auditoria_id','id')->where('rol_code','Analista')->where('estatus','Activo');
+    }
     public function auditoriausuarios()
     {
         return $this->hasMany(AuditoriaUsuarios::class, 'auditoria_id', 'id');
@@ -372,6 +378,14 @@ class Auditoria extends Model
     {
         return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'Registro de la auditoría')->orderBy('id', 'ASC');
     }
+    public function movimientosAsignacionLider()
+    {
+        return $this->hasMany(Movimientos::class, 'auditoria_id', 'id')->where('accion', 'Asignación de Lider a la auditoría')->orderBy('id', 'ASC');
+    }
+    public function movimientosAsignacionAnalista()
+    {
+        return $this->hasMany(Movimientos::class, 'auditoria_id', 'id')->where('accion', 'Asignación de Analista a la auditoría')->orderBy('id', 'ASC');
+    }
 
     public function usuarioCreacion()
     {
@@ -412,7 +426,7 @@ class Auditoria extends Model
     }
     public function Staff()
     {
-        return $this->hasMany(AuditoriaUsuarios::class, 'auditoria_id', 'id')->whereNotNull('staff_id');
+        return $this->hasMany(AuditoriaUsuarios::class, 'auditoria_id', 'id')->whereNotNull('staff_id')->whereNull('analista_id')->whereNull('user_id')->whereNull('equipo_id');
     }            
 
     public function totalrecomendacion()
@@ -709,9 +723,6 @@ class Auditoria extends Model
     // {
     //     return $this->hasOne(Cedulas::class, 'auditoria_id','id')->where('tipo','Cedula General Seguimiento');     
     // }
-    
-	
-	
 	public function auditoriadatospaa()
     {
         return $this->hasOne(ListadoEntidades::class, 'no_auditoria','numero_auditoria')->where('seglistadoentidades.cuenta_publica',getSession('cp'));
