@@ -96,7 +96,7 @@ class AsignacionEquipoDeTrabajoController extends Controller
             ],
         ]);
 
-        delSession('accionasignacion'); 
+        delSession('accionasignacion');
     }
 
 
@@ -119,7 +119,7 @@ class AsignacionEquipoDeTrabajoController extends Controller
      */
     public function edit(Auditoria $auditoria,Request $request)
     {
-        $acc = getSession('accionasignacion'); 
+        $acc = getSession('accionasignacion');
         //dd($auditoria,$acc);
         $asignaciones = $auditoria->auditoriausuarios()->where('estatus', 'Activo')->orderBy('rol_code')->get();
         $lideres = usuariocp(auth()->user()->jefe->unidad_administrativa_id)->where('siglas_rol','LP')->where('estatus', 'Activo')->get()->pluck('name', 'id')->prepend('Seleccionar una opción', '');
@@ -138,7 +138,7 @@ class AsignacionEquipoDeTrabajoController extends Controller
      */
     public function update(Request $request, Auditoria $auditoria)
     {
-        $jefeUnidadAdministrativa = auth()->user()->unidadAdministrativa->id; 
+        $jefeUnidadAdministrativa = auth()->user()->unidadAdministrativa->id;
         $equipo = EquiposDeTrabajo::where('departamento_encargado_id',$jefeUnidadAdministrativa)->first();
 
         if(getSession('accionasignacion') == 'Asignar Lider'){
@@ -224,7 +224,7 @@ class AsignacionEquipoDeTrabajoController extends Controller
             $titulo = 'Asignación de la auditoría '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) ' . $userLider->name . ', ' . $userLider->puesto . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
             auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userLider->unidad_adscripcion_id, $userLider->id);
-                    
+
         }else{
             $registro = AuditoriaUsuarios::where('auditoria_id', $auditoria->id)
                 ->where('rol_code', 'Analista')
@@ -275,10 +275,10 @@ class AsignacionEquipoDeTrabajoController extends Controller
 
             $titulo = 'Asignación de la auditoría '.$auditoria->numero_auditoria;
             $mensaje = '<strong>Estimado(a) ' . $userAnalista->name . ', ' . $userAnalista->puesto . '.</strong><br>Se le ha asignado la auditoría No.  ' . $auditoria->numero_auditoria . ', por parte del '.auth()->user()->puesto. ' '.auth()->user()->name.', para su revisión.';
-            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userAnalista->unidad_adscripcion_id, $userAnalista->id);         
+            auth()->user()->insertNotificacion($titulo, $mensaje, now(), $userAnalista->unidad_adscripcion_id, $userAnalista->id);
         }
 
-        delSession('accionasignacion'); 
+        delSession('accionasignacion');
         setMessage("Usuario asignado correctamente al equipo de trabajo");
 
         return redirect()->route('asignacionlideranalista.index');
@@ -322,7 +322,7 @@ class AsignacionEquipoDeTrabajoController extends Controller
                     'auditoria_id' => $auditoria->id,
                 ]);
         }
-        
+
         setMessage('Integrante removido del equipo.');
         //$ana->delete();
         return redirect()->route('asignacionlideranalista.index');
@@ -347,13 +347,13 @@ class AsignacionEquipoDeTrabajoController extends Controller
                         ->where('direccion_asignada_id',auth()->user()->unidad_administrativa_id);
 
         }elseif(in_array("Jefe de Departamento de Seguimiento", auth()->user()->getRoleNames()->toArray())){
-            if(getSession('cp')!=2022){ 
+            if(getSession('cp')!=2022){
                 $query = $query->where('departamento_encargado_id',getSession('cp_ua'));
             }else{
                 $query = $query->whereHas('acciones', function($q){
                     $q->where('departamento_asignado_id',auth()->user()->unidad_administrativa_id);
                 });
-            }            
+            }
         }
 
         if ($request->filled('numero_auditoria')) {
@@ -390,9 +390,9 @@ class AsignacionEquipoDeTrabajoController extends Controller
         return redirect()->route('asignarequipotrabajo.edit', $auditoria);
     }
 
-    public function sincronizarTodo()
+    public function sincronizarTodo2()
     {
-        $jefeUnidadAdministrativa = auth()->user()->unidadAdministrativa->id; 
+        $jefeUnidadAdministrativa = auth()->user()->unidadAdministrativa->id;
         $equipo = EquiposDeTrabajo::where('departamento_encargado_id',$jefeUnidadAdministrativa)->first();
 
         $auditorias = Auditoria::whereNotNull('fase_autorizacion')
@@ -427,7 +427,7 @@ class AsignacionEquipoDeTrabajoController extends Controller
                     );
                 }
             }*/
-            if ($auditoria->lidercp_id) {
+             if ($auditoria->lidercp_id) {
                 AuditoriaUsuarios::firstOrCreate(
                     ['auditoria_id' => $auditoria->id,
                         'user_id'      => $auditoria->lidercp_id,
@@ -451,5 +451,51 @@ class AsignacionEquipoDeTrabajoController extends Controller
         setMessage('Sincronización completada correctamente.');
         return redirect()->route('asignacionlideranalista.index');
     }
+    public function sincronizarTodo()
+    {
+        try {
 
+            $jefeUnidadAdministrativa = auth()->user()->unidadAdministrativa->id;
+            $equipo = EquiposDeTrabajo::where('departamento_encargado_id',$jefeUnidadAdministrativa)->first();
+
+            $auditorias = Auditoria::whereNotNull('fase_autorizacion')
+                ->where('fase_autorizacion', 'Autorizado')
+                ->where('cuenta_publica', getSession('cp'))
+                ->get();
+
+            foreach ($auditorias as $auditoria) {
+
+                if ($auditoria->lidercp_id) {
+                    AuditoriaUsuarios::firstOrCreate([
+                        'auditoria_id' => $auditoria->id,
+                        'user_id' => $auditoria->lidercp_id,
+                        'rol_code' => 'Lider',
+                        'equipo_id' => $equipo->id,
+                    ], ['estatus' => 'Activo']);
+                }
+
+                if ($auditoria->analistacp_id) {
+                    AuditoriaUsuarios::firstOrCreate([
+                        'auditoria_id' => $auditoria->id,
+                        'user_id' => $auditoria->analistacp_id,
+                        'rol_code' => 'Analista',
+                        'equipo_id' => $equipo->id,
+                    ], ['estatus' => 'Activo']);
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sincronización completada correctamente.'
+            ]);
+
+        } catch (\Throwable $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error interno',
+                'error' => $e->getMessage() // opcional debug
+            ], 500);
+        }
+    }
 }

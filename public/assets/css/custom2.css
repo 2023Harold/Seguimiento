@@ -1,0 +1,942 @@
+/* Overlay pantalla completa */
+#global-spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.315);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+
+#global-spinner-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.text-cafe {
+    --bs-text-opacity: 1;
+    color: #48180b;
+}
+/* ===== TU SPINNER ===== */
+.swapping-squares-spinner,
+.swapping-squares-spinner * { box-sizing: border-box; }
+
+.swapping-squares-spinner {
+    height: 65px;
+    width: 65px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swapping-squares-spinner .square {
+    height: calc(65px * 0.25 / 1.3);
+    width: calc(65px * 0.25 / 1.3);
+    animation-duration: 1000ms;
+    border: calc(65px * 0.04 / 1.3) solid #BB945C;
+    position: absolute;
+    animation-iteration-count: infinite;
+}
+
+.swapping-squares-spinner .square:nth-child(1) { animation-name: swapping-squares-animation-child-1; animation-delay: 500ms; }
+.swapping-squares-spinner .square:nth-child(2) { animation-name: swapping-squares-animation-child-2; animation-delay: 0ms; }
+.swapping-squares-spinner .square:nth-child(3) { animation-name: swapping-squares-animation-child-3; animation-delay: 500ms; }
+.swapping-squares-spinner .square:nth-child(4) { animation-name: swapping-squares-animation-child-4; animation-delay: 0ms; }
+
+@keyframes swapping-squares-animation-child-1 { 50% { transform: translate(150%,150%) scale(2,2);} }
+@keyframes swapping-squares-animation-child-2 { 50% { transform: translate(-150%,150%) scale(2,2);} }
+@keyframes swapping-squares-animation-child-3 { 50% { transform: translate(-150%,-150%) scale(2,2);} }
+@keyframes swapping-squares-animation-child-4 { 50% { transform: translate(150%,-150%) scale(2,2);} }
+
+   [data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+[data-title]:after {
+    content: attr(data-title);
+    background-color: #A13B71;
+    color: #fff;
+    font-size: 14px;
+    font-family: Raleway;
+    position: absolute;
+    padding: 3px 20px;
+    bottom: -1.6em;
+    left: 100%;
+    white-space: nowrap;
+    box-shadow: 1px 1px 3px #ffffff00;
+    opacity: 0;
+    z-index: 99999;
+    visibility: hidden;
+    border-radius: 6px;
+
+}
+[data-title] {
+    position: relative;
+}
+
+
+  /* Bot�n de esquinas con animaci�n (versi�n para <a>) */
+  a.corner-button {
+    /* Variables fluidas (en em para escalar con el font-size del bot�n) */
+    --cb-color: #A13B71;          /* texto y borde (currentColor) */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m�s grande/peque�o */
+    --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
+    --cb-pad-y: 0.5em;
+    --cb-pad-x: 0.9em;
+    --cb-gap: 0.45em;             /* hueco entre paneles */
+    --cb-over: 0.35em;            /* leve superposici�n para cubrir borde */
+    --cb-anim: 0.25s;
+    --cb-bg: #fff;                /* �paneles� de la animaci�n (fondo) */
+    --cb-focus: 2px;              /* grosor del focus ring */
+
+    font-family: var(--cb-font);
+    font-size: var(--cb-font-size);
+    line-height: 1;               /* evita crecimiento vertical irregular */
+    color: var(--cb-color);
+    text-decoration: none;        /* estilo �bot�n� */
+    display: inline-flex;         /* contenido fluido */
+    align-items: center;
+    gap: 0.4em;
+
+    cursor: pointer;
+    background: transparent;
+    border: var(--cb-border) solid currentColor;
+    padding: var(--cb-pad-y) var(--cb-pad-x);
+    position: relative;
+    transition: color var(--cb-anim), border-width var(--cb-anim);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Contenido interior: protegido por z-index sobre los paneles */
+  a.corner-button > .cb-content {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em; /* espacio entre icono y texto */
+  }
+
+  /* Paneles que se �cierran� (100% fluidos, basados en em) */
+  a.corner-button::before,
+  a.corner-button::after {
+    content: '';
+    position: absolute;
+    background: var(--cb-bg);
+    z-index: 1;
+    transition: all var(--cb-anim);
+    pointer-events: none; /* no bloquea clicks */
+  }
+
+  /* Panel horizontal (cubriendo arriba/abajo dejando hueco vertical) */
+  a.corner-button::before {
+    width: calc(100% - (var(--cb-gap) * 2));
+    height: calc(100% + var(--cb-over));
+    top: calc(-1 * var(--cb-over) / 2);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Panel vertical (cubriendo lados dejando hueco horizontal) */
+  a.corner-button::after {
+    height: calc(100% - (var(--cb-gap) * 2));
+    width: calc(100% + var(--cb-over));
+    left: calc(-1 * var(--cb-over) / 2);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Interacci�n */
+  a.corner-button:hover {
+    color: var(--cb-color);
+  }
+  a.corner-button:hover::before { width: 0; }
+  a.corner-button:hover::after  { height: 0; }
+
+  /* Active: reduce ligeramente el borde (fluido) */
+  a.corner-button:active {
+    border-width: calc(var(--cb-border) * 0.8);
+  }
+
+  /* Enfoque accesible (teclado) */
+  a.corner-button:focus-visible {
+    outline: var(--cb-focus) solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px; /* leve para diferenciar el outline */
+  }
+
+  a.corner-button--sm {
+    --cb-font-size: 2rem;
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.6em;
+    --cb-gap: 0.4em;
+    --cb-over: 0.3em;
+  }
+
+  /* Solo �cono (sin fijar width/height ? no se deforma; usa line-height y padding) */
+  a.corner-button--icon {
+    --cb-font-size: 2rem; /* tama�o base del icono */
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.35em;
+    --cb-gap: 0.38em;
+    --cb-over: 0.28em;
+  }
+
+  /* Reducir movimiento si el usuario lo prefiere */
+  @media (prefers-reduced-motion: reduce) {
+    a.corner-button,
+    a.corner-button::before,
+    a.corner-button::after {
+      transition: none;
+    }
+  }
+  /******* PARA BOTON DE SUCESS *******/
+    /* Bot�n de esquinas con animaci�n (versi�n para <a>) */
+  a.corner-button-success {
+    /* Variables fluidas (en em para escalar con el font-size del bot�n) */
+    --cb-color: #50cd89;          /* texto y borde (currentColor) */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m�s grande/peque�o */
+    --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
+    --cb-pad-y: 0.5em;
+    --cb-pad-x: 0.9em;
+    --cb-gap: 0.45em;             /* hueco entre paneles */
+    --cb-over: 0.35em;            /* leve superposici�n para cubrir borde */
+    --cb-anim: 0.25s;
+    --cb-bg: #fff;                /* �paneles� de la animaci�n (fondo) */
+    --cb-focus: 2px;              /* grosor del focus ring */
+
+    font-family: var(--cb-font);
+    font-size: var(--cb-font-size);
+    line-height: 1;               /* evita crecimiento vertical irregular */
+    color: var(--cb-color);
+    text-decoration: none;        /* estilo �bot�n� */
+    display: inline-flex;         /* contenido fluido */
+    align-items: center;
+    gap: 0.4em;
+
+    cursor: pointer;
+    background: transparent;
+    border: var(--cb-border) solid currentColor;
+    padding: var(--cb-pad-y) var(--cb-pad-x);
+    position: relative;
+    transition: color var(--cb-anim), border-width var(--cb-anim);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Contenido interior: protegido por z-index sobre los paneles */
+  a.corner-button-success > .cb-content {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em; /* espacio entre icono y texto */
+  }
+
+  /* Paneles que se �cierran� (100% fluidos, basados en em) */
+  a.corner-button-success::before,
+  a.corner-button-success::after {
+    content: '';
+    position: absolute;
+    background: var(--cb-bg);
+    z-index: 1;
+    transition: all var(--cb-anim);
+    pointer-events: none; /* no bloquea clicks */
+  }
+
+  /* Panel horizontal (cubriendo arriba/abajo dejando hueco vertical) */
+  a.corner-button-success::before {
+    width: calc(100% - (var(--cb-gap) * 2));
+    height: calc(100% + var(--cb-over));
+    top: calc(-1 * var(--cb-over) / 2);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Panel vertical (cubriendo lados dejando hueco horizontal) */
+  a.corner-button-success::after {
+    height: calc(100% - (var(--cb-gap) * 2));
+    width: calc(100% + var(--cb-over));
+    left: calc(-1 * var(--cb-over) / 2);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Interacci�n */
+  a.corner-button-success:hover {
+    color: var(--cb-color);
+  }
+  a.corner-button-success:hover::before { width: 0; }
+  a.corner-button-success:hover::after  { height: 0; }
+
+  /* Active: reduce ligeramente el borde (fluido) */
+  a.corner-button-success:active {
+    border-width: calc(var(--cb-border) * 0.8);
+  }
+
+  /* Enfoque accesible (teclado) */
+  a.corner-button-success:focus-visible {
+    outline: var(--cb-focus) solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px; /* leve para diferenciar el outline */
+  }
+
+  a.corner-button-success--sm {
+    --cb-font-size: 2rem;
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.6em;
+    --cb-gap: 0.4em;
+    --cb-over: 0.3em;
+  }
+
+  /* Solo �cono (sin fijar width/height ? no se deforma; usa line-height y padding) */
+  a.corner-button-success--icon {
+    --cb-font-size: 2rem; /* tama�o base del icono */
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.35em;
+    --cb-gap: 0.38em;
+    --cb-over: 0.28em;
+  }
+
+  /* Reducir movimiento si el usuario lo prefiere */
+  @media (prefers-reduced-motion: reduce) {
+    a.corner-button-success,
+    a.corner-button-success::before,
+    a.corner-button-success::after {
+      transition: none;
+    }
+  }
+  a.corner-button-success2 {
+    /* Variables fluidas (en em para escalar con el font-size del bot�n) */
+    --cb-color: #c6d4b0;          /* texto y borde (currentColor) */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m�s grande/peque�o */
+    --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
+    --cb-pad-y: 0.5em;
+    --cb-pad-x: 0.9em;
+    --cb-gap: 0.45em;             /* hueco entre paneles */
+    --cb-over: 0.35em;            /* leve superposici�n para cubrir borde */
+    --cb-anim: 0.25s;
+    --cb-bg: #fff;                /* �paneles� de la animaci�n (fondo) */
+    --cb-focus: 2px;              /* grosor del focus ring */
+
+    font-family: var(--cb-font);
+    font-size: var(--cb-font-size);
+    line-height: 1;               /* evita crecimiento vertical irregular */
+    color: var(--cb-color);
+    text-decoration: none;        /* estilo �bot�n� */
+    display: inline-flex;         /* contenido fluido */
+    align-items: center;
+    gap: 0.4em;
+
+    cursor: pointer;
+    background: transparent;
+    border: var(--cb-border) solid currentColor;
+    padding: var(--cb-pad-y) var(--cb-pad-x);
+    position: relative;
+    transition: color var(--cb-anim), border-width var(--cb-anim);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Contenido interior: protegido por z-index sobre los paneles */
+  a.corner-button-success2 > .cb-content {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em; /* espacio entre icono y texto */
+  }
+
+  /* Paneles que se �cierran� (100% fluidos, basados en em) */
+  a.corner-button-success2::before,
+  a.corner-button-success2::after {
+    content: '';
+    position: absolute;
+    background: var(--cb-bg);
+    z-index: 1;
+    transition: all var(--cb-anim);
+    pointer-events: none; /* no bloquea clicks */
+  }
+
+  /* Panel horizontal (cubriendo arriba/abajo dejando hueco vertical) */
+  a.corner-button-success2::before {
+    width: calc(100% - (var(--cb-gap) * 2));
+    height: calc(100% + var(--cb-over));
+    top: calc(-1 * var(--cb-over) / 2);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Panel vertical (cubriendo lados dejando hueco horizontal) */
+  a.corner-button-success2::after {
+    height: calc(100% - (var(--cb-gap) * 2));
+    width: calc(100% + var(--cb-over));
+    left: calc(-1 * var(--cb-over) / 2);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Interacci�n */
+  a.corner-button-success2:hover {
+    color: var(--cb-color);
+  }
+  a.corner-button-success2:hover::before { width: 0; }
+  a.corner-button-success2:hover::after  { height: 0; }
+
+  /* Active: reduce ligeramente el borde (fluido) */
+  a.corner-button-success2:active {
+    border-width: calc(var(--cb-border) * 0.8);
+  }
+
+  /* Enfoque accesible (teclado) */
+  a.corner-button-success2:focus-visible {
+    outline: var(--cb-focus) solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px; /* leve para diferenciar el outline */
+  }
+
+  a.corner-button-success2--sm {
+    --cb-font-size: 2rem;
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.6em;
+    --cb-gap: 0.4em;
+    --cb-over: 0.3em;
+  }
+
+  /* Solo �cono (sin fijar width/height ? no se deforma; usa line-height y padding) */
+  a.corner-button-success2--icon {
+    --cb-font-size: 2rem; /* tama�o base del icono */
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.35em;
+    --cb-gap: 0.38em;
+    --cb-over: 0.28em;
+  }
+
+  /* Reducir movimiento si el usuario lo prefiere */
+  @media (prefers-reduced-motion: reduce) {
+    a.corner-button-success2,
+    a.corner-button-success2::before,
+    a.corner-button-success2::after {
+      transition: none;
+    }
+  }
+  /******* PARA BOTON DE eliminar *******/
+    /* Bot�n de esquinas con animaci�n (versi�n para <a>) */
+  a.corner-button-error {
+    /* Variables fluidas (en em para escalar con el font-size del bot�n) */
+    --cb-color: #dc3545;          /* texto y borde (currentColor) */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m�s grande/peque�o */
+    --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
+    --cb-pad-y: 0.5em;
+    --cb-pad-x: 0.9em;
+    --cb-gap: 0.45em;             /* hueco entre paneles */
+    --cb-over: 0.35em;            /* leve superposici�n para cubrir borde */
+    --cb-anim: 0.25s;
+    --cb-bg: #fff;                /* �paneles� de la animaci�n (fondo) */
+    --cb-focus: 2px;              /* grosor del focus ring */
+
+    font-family: var(--cb-font);
+    font-size: var(--cb-font-size);
+    line-height: 1;               /* evita crecimiento vertical irregular */
+    color: var(--cb-color);
+    text-decoration: none;        /* estilo �bot�n� */
+    display: inline-flex;         /* contenido fluido */
+    align-items: center;
+    gap: 0.4em;
+
+    cursor: pointer;
+    background: transparent;
+    border: var(--cb-border) solid currentColor;
+    padding: var(--cb-pad-y) var(--cb-pad-x);
+    position: relative;
+    transition: color var(--cb-anim), border-width var(--cb-anim);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Contenido interior: protegido por z-index sobre los paneles */
+  a.corner-button-error > .cb-content {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em; /* espacio entre icono y texto */
+  }
+
+  /* Paneles que se �cierran� (100% fluidos, basados en em) */
+  a.corner-button-error::before,
+  a.corner-button-error::after {
+    content: '';
+    position: absolute;
+    background: var(--cb-bg);
+    z-index: 1;
+    transition: all var(--cb-anim);
+    pointer-events: none; /* no bloquea clicks */
+  }
+
+  /* Panel horizontal (cubriendo arriba/abajo dejando hueco vertical) */
+  a.corner-button-error::before {
+    width: calc(100% - (var(--cb-gap) * 2));
+    height: calc(100% + var(--cb-over));
+    top: calc(-1 * var(--cb-over) / 2);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Panel vertical (cubriendo lados dejando hueco horizontal) */
+  a.corner-button-error::after {
+    height: calc(100% - (var(--cb-gap) * 2));
+    width: calc(100% + var(--cb-over));
+    left: calc(-1 * var(--cb-over) / 2);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Interacci�n */
+  a.corner-button-error:hover {
+    color: var(--cb-color);
+  }
+  a.corner-button-error:hover::before { width: 0; }
+  a.corner-button-error:hover::after  { height: 0; }
+
+  /* Active: reduce ligeramente el borde (fluido) */
+  a.corner-button-error:active {
+    border-width: calc(var(--cb-border) * 0.8);
+  }
+
+  /* Enfoque accesible (teclado) */
+  a.corner-button-error:focus-visible {
+    outline: var(--cb-focus) solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px; /* leve para diferenciar el outline */
+  }
+
+  a.corner-button-error--sm {
+    --cb-font-size: 2rem;
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.6em;
+    --cb-gap: 0.4em;
+    --cb-over: 0.3em;
+  }
+
+  /* Solo �cono (sin fijar width/height ? no se deforma; usa line-height y padding) */
+  a.corner-button-error--icon {
+    --cb-font-size: 2rem; /* tama�o base del icono */
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.35em;
+    --cb-gap: 0.38em;
+    --cb-over: 0.28em;
+  }
+
+  /* Reducir movimiento si el usuario lo prefiere */
+  @media (prefers-reduced-motion: reduce) {
+    a.corner-button-error,
+    a.corner-button-error::before,
+    a.corner-button-error::after {
+      transition: none;
+    }
+  }
+
+  /******/
+  a.corner-button-cafe {
+    /* Variables fluidas (en em para escalar con el font-size del bot�n) */
+    --cb-color: #48180b;          /* texto y borde (currentColor) */
+    --cb-font-size: 1.2rem;         /* cambia esto para hacerlo m�s grande/peque�o */
+    --cb-border: 0.22em;          /* grosor de borde relativo al font-size */
+    --cb-pad-y: 0.5em;
+    --cb-pad-x: 0.9em;
+    --cb-gap: 0.45em;             /* hueco entre paneles */
+    --cb-over: 0.35em;            /* leve superposici�n para cubrir borde */
+    --cb-anim: 0.25s;
+    --cb-bg: #fff;                /* �paneles� de la animaci�n (fondo) */
+    --cb-focus: 2px;              /* grosor del focus ring */
+
+    font-family: var(--cb-font);
+    font-size: var(--cb-font-size);
+    line-height: 1;               /* evita crecimiento vertical irregular */
+    color: var(--cb-color);
+    text-decoration: none;        /* estilo �bot�n� */
+    display: inline-flex;         /* contenido fluido */
+    align-items: center;
+    gap: 0.4em;
+
+    cursor: pointer;
+    background: transparent;
+    border: var(--cb-border) solid currentColor;
+    padding: var(--cb-pad-y) var(--cb-pad-x);
+    position: relative;
+    transition: color var(--cb-anim), border-width var(--cb-anim);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Contenido interior: protegido por z-index sobre los paneles */
+  a.corner-button-cafe > .cb-content {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em; /* espacio entre icono y texto */
+  }
+
+  /* Paneles que se �cierran� (100% fluidos, basados en em) */
+  a.corner-button-cafe::before,
+  a.corner-button-cafe::after {
+    content: '';
+    position: absolute;
+    background: var(--cb-bg);
+    z-index: 1;
+    transition: all var(--cb-anim);
+    pointer-events: none; /* no bloquea clicks */
+  }
+
+  /* Panel horizontal (cubriendo arriba/abajo dejando hueco vertical) */
+  a.corner-button-cafe::before {
+    width: calc(100% - (var(--cb-gap) * 2));
+    height: calc(100% + var(--cb-over));
+    top: calc(-1 * var(--cb-over) / 2);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Panel vertical (cubriendo lados dejando hueco horizontal) */
+  a.corner-button-cafe::after {
+    height: calc(100% - (var(--cb-gap) * 2));
+    width: calc(100% + var(--cb-over));
+    left: calc(-1 * var(--cb-over) / 2);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Interacci�n */
+  a.corner-button-cafe:hover {
+    color: var(--cb-color);
+  }
+  a.corner-button-cafe:hover::before { width: 0; }
+  a.corner-button-cafe:hover::after  { height: 0; }
+
+  /* Active: reduce ligeramente el borde (fluido) */
+  a.corner-button-cafe:active {
+    border-width: calc(var(--cb-border) * 0.8);
+  }
+
+  /* Enfoque accesible (teclado) */
+  a.corner-button-cafe:focus-visible {
+    outline: var(--cb-focus) solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px; /* leve para diferenciar el outline */
+  }
+
+  a.corner-button-cafe--sm {
+    --cb-font-size: 2rem;
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.6em;
+    --cb-gap: 0.4em;
+    --cb-over: 0.3em;
+  }
+
+  /* Solo �cono (sin fijar width/height ? no se deforma; usa line-height y padding) */
+  a.corner-button-cafe--icon {
+    --cb-font-size: 2rem; /* tama�o base del icono */
+    --cb-border: 0.2em;
+    --cb-pad-y: 0.35em;
+    --cb-pad-x: 0.35em;
+    --cb-gap: 0.38em;
+    --cb-over: 0.28em;
+  }
+
+  /* Reducir movimiento si el usuario lo prefiere */
+  @media (prefers-reduced-motion: reduce) {
+    a.corner-button-cafe,
+    a.corner-button-cafe::before,
+    a.corner-button-cafe::after {
+      transition: none;
+    }
+  }
+  /******/
+
+  /**VISTA REPORTES*/
+  tr:hover { background-color: #cad5e21e !important; }
+
+    #container { min-height: 620px; }
+
+    .highcharts-breadcrumbs text { font-size: 13px !important; }
+    .highcharts-data-label text { cursor: pointer; }
+    .highcharts-point:hover { opacity: 0.9; }
+
+    .badge { font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+
+    /* Estilos para la cuadrícula de auditorías */
+    #auditoriasPanel .card { border: 1px linear-gradient(135deg, #ffffff 0%, #fbfbfe 100%); }
+
+    #auditoriasPanel .audit-card-title { font-weight: 600; font-size: .95rem; line-height: 1.2; min-height: 2.1em; }
+    #auditoriasPanel .audit-meta { font-size: .8rem; color: #6b7280; }
+
+    @keyframes breath { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.45); opacity: 0.9; } 100% { transform: scale(1); opacity: 1; } }
+
+    .audit-card {
+        border-radius: 10px; overflow: hidden; border: 0;
+        background: linear-gradient(135deg, #ffffff 0%, #fbfbfe 100%);
+        box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+        transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .audit-card::before {
+        content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+        background: linear-gradient(180deg, #960048, #BB945C);
+        border-top-left-radius: 18px; border-bottom-left-radius: 18px;
+    }
+    .audit-card-title { font-weight: 600; font-size: 1rem; color: #111827; }
+    .audit-meta { font-size: 0.95rem; color: #374151; line-height: 1.45; }
+    .audit-meta .small { font-size: 0.95rem; color: #6b7280; }
+    .audit-meta .badge { font-size: 0.95rem; padding: .36rem .6rem; border-radius: .375rem; }
+
+    .audit-card--chart {
+        overflow: visible !important;
+    }
+
+    .audit-meta .audit-field {
+        font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 6px;
+        display: flex; align-items: baseline; gap: 8px;
+    }
+    .audit-meta .audit-field .field-value { font-weight: 400; color: #374151; margin-left: 0; }
+    .audit-meta b { color: #111827; font-weight: 600; }
+
+    .status-breath {
+        width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
+        flex: 0 0 auto; margin-top: 4px;
+    }
+    .status-autorizado { background: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.28); }
+    .status-pending    { background: #f59e0b; box-shadow: 0 0 12px rgba(245, 158, 11, 0.18); }
+    .status-absent     { background: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.12); }
+
+    @keyframes card-breath { 0% { transform: translateY(0) } 50% { transform: translateY(-2px) } 100% { transform: translateY(0) } }
+
+    /* ====== Ajustes generales para que NUNCA se salga el texto ====== */
+    #auditoriasPanel .audit-meta,
+    #auditoriasPanel .audit-meta .audit-field,
+    #auditoriasPanel .audit-meta .audit-field .field-value,
+    #auditoriasPanel .audit-card-title,
+    #auditoriasPanel .audit-meta .small,
+    #auditoriasPanel .audit-meta .badge {
+        overflow-wrap: anywhere; word-break: break-word; hyphens: auto;
+    }
+    #auditoriasPanel .audit-meta .audit-field { align-items: flex-start; }
+    #auditoriasPanel .audit-meta p { margin: 0; }
+
+    .card-body {
+    position: relative;
+    }
+
+    /* Móvil */
+    @media (max-width: 576px) {
+        #auditoriasPanel .audit-card { border-radius: 10px; }
+        #auditoriasPanel .audit-card .card-body { padding: 12px 12px; }
+        #auditoriasPanel .audit-card-title { font-size: 0.95rem; line-height: 1.25; margin-bottom: .5rem; }
+        #auditoriasPanel .audit-meta { font-size: .78rem; line-height: 1.35; }
+        #auditoriasPanel .audit-meta .audit-field { font-size: .78rem; margin-bottom: 6px; gap: 6px; }
+        #auditoriasPanel .audit-meta .audit-field .field-value { font-size: .78rem; }
+        #auditoriasPanel .audit-meta .badge, #auditoriasPanel .audit-meta .small { font-size: .72rem; }
+        #auditoriasPanel .d-flex.align-items-start.gap-3 { gap: 8px !important; }
+        #auditoriasPanel .status-breath { width: 10px; height: 10px; margin-top: 2px; }
+        #auditoriasPanel .audit-meta b, #auditoriasPanel .audit-meta .field-value, #auditoriasPanel .audit-meta .text-muted {
+            overflow-wrap: anywhere; word-break: break-word;
+        }
+    }
+
+    /* Tablet */
+    @media (min-width: 577px) and (max-width: 768px) {
+        #auditoriasPanel .audit-card .card-body { padding: 14px 14px; }
+        #auditoriasPanel .audit-card-title { font-size: 1rem; }
+        #auditoriasPanel .audit-meta, #auditoriasPanel .audit-meta .audit-field { font-size: .85rem; }
+        #auditoriasPanel .audit-meta .badge, #auditoriasPanel .audit-meta .small { font-size: .78rem; }
+    }
+
+    .fancy-border { border: 2px solid #BB945C; box-shadow: 1px 1px 10px 1px rgba(239, 193, 139, .95); }
+    .tooltip .tooltip-inner { max-width: 420px; text-align: left; font-size: 14PX; }
+
+    /* Loader cuadrado */
+    .swapping-squares-spinner, .swapping-squares-spinner * { box-sizing: border-box; }
+    .swapping-squares-spinner {
+        height: 65px; width: 65px; position: relative; display: flex; flex-direction: row;
+        justify-content: center; align-items: center; margin: 8px auto;
+    }
+    .swapping-squares-spinner .square {
+        height: calc(65px * 0.25 / 1.3);
+        width: calc(65px * 0.25 / 1.3);
+        animation-duration: 1000ms;
+        border: calc(65px * 0.04 / 1.3) solid #BB945C;
+        margin-right: auto; margin-left: auto; position: absolute; animation-iteration-count: infinite;
+    }
+    .swapping-squares-spinner .square:nth-child(1) { animation-name: swapping-squares-animation-child-1; animation-delay: 500ms; }
+    .swapping-squares-spinner .square:nth-child(2) { animation-name: swapping-squares-animation-child-2; animation-delay: 0ms; }
+    .swapping-squares-spinner .square:nth-child(3) { animation-name: swapping-squares-animation-child-3; animation-delay: 500ms; }
+    .swapping-squares-spinner .square:nth-child(4) { animation-name: swapping-squares-animation-child-4; animation-delay: 0ms; }
+
+    @keyframes swapping-squares-animation-child-1 { 50% { transform: translate(150%, 150%) scale(2, 2); } }
+    @keyframes swapping-squares-animation-child-2 { 50% { transform: translate(-150%, 150%) scale(2, 2); } }
+    @keyframes swapping-squares-animation-child-3 { 50% { transform: translate(-150%, -150%) scale(2, 2); } }
+    @keyframes swapping-squares-animation-child-4 { 50% { transform: translate(150%, -150%) scale(2, 2); } }
+
+    /* === Layout del gauge + panel derecho === */
+    .dept-gauge-wrap{ display:flex; align-items:stretch; gap:14px; min-height: 260px; }
+    .dept-gauge-wrap .highcharts-figure{ flex: 0 1 360px; min-width: 280px; margin: 0; }
+    #grafica_deptos{
+min-height: 320px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+min-height: 260px; }
+    .dept-gauge-info{
+        flex: 1 1 220px; min-width: 200px; display:flex; flex-direction:column; justify-content:center;
+        border-left: 1px solid rgba(187,148,92,.25); padding-left: 12px; color: #132a29;
+    }
+    .dept-gauge-info h6{ margin:0 0 6px 0; font-weight:700; }
+    .dept-gauge-info .kpi{ display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
+    .dept-gauge-info .kpi .big{ font-size: clamp(1.2rem, 2.2vw, 1.7rem); font-weight: 800; }
+    .dept-gauge-info .muted{ color:#6b7280; }
+    @media (max-width: 1200px){ .dept-gauge-wrap .highcharts-figure{ flex-basis: 320px; min-width: 260px; } }
+    @media (max-width: 768px){
+        .dept-gauge-wrap{ flex-direction: column; }
+        .dept-gauge-info{ border-left: 0; border-top:1px solid rgba(187,148,92,.25); padding-top: 10px; padding-left:0; }
+        .dept-gauge-wrap .highcharts-figure{ flex-basis: auto; min-width: 100%; }
+    }
+    .dept-gauge-wrap.is-stacked{ flex-direction: column; }
+    .dept-gauge-wrap.is-stacked .dept-gauge-info{
+        border-left: 0; border-top:1px solid rgba(187,148,92,.25);
+        padding-top: 10px; padding-left:0;
+    }
+    .dept-gauge-wrap.is-stacked .highcharts-figure{ flex-basis: auto; min-width: 100%; }
+
+
+    @media print {
+        /* Oculta TODO excepto #exportArea */
+        body > * {
+            display: none !important;
+        }
+
+        /* Muestra solo la parte exportable */
+        #exportArea {
+            display: block !important;
+            position: relative !important;
+            overflow: visible !important;
+        }
+
+        /* Oculta botones dentro de exportArea */
+        #exportArea [data-print="hide"],
+        #exportArea .highcharts-contextbutton {
+            display: none !important;
+        }
+
+        /* Evita cortes feos */
+        .card, .audit-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        @page {
+            size: Letter;
+            margin: 10mm;
+        }
+
+        /* Highcharts no debe recortarse */
+        .highcharts-container,
+        .highcharts-container svg {
+            overflow: visible !important;
+        }
+
+        /* El card del gauge SÍ puede romper página */
+        .dept-gauge-wrap,
+        .audit-card--chart {
+            break-inside: auto !important;
+            page-break-inside: auto !important;
+        }
+
+    }
+  /**VISTA REPORTES*/
+
+  /**BADGES*/
+  .badge-verde {
+        color: #FFF;
+        background-color: #2D5346;
+    }
+  .badge-verdeclaro {
+        color: #FFF;
+         background-color: #3c5c14
+        /* background-color: #9D9655; */
+       /*  background-color: #c6d4b0;
+        background-color: #B5C99A */
+    }
+
+ .badge-gris {
+     color: #FFF;
+     background-color: #7e7470;
+ }
+
+ .badge-cafe {
+     color: #FFF;
+     background-color: #48180b;
+ }
+ .badge-amarillo {
+     color: #FFF;
+     background-color: #f4d69a;
+ }
+ .badge-rojo {
+     color: #FFF;
+     background-color: #c92525;
+ }
+ .badge-morado {
+     color: #FFF;
+     background-color: #A07885;
+ }
+
+
+/**BADGES*/
+
+/**BOTONES**/
+/* Base */
+.btn-export {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+/* PDF - tono institucional oscuro */
+    .btn-pdf {
+        background-color: #5a0f2e;   /* vino oscuro */
+        color: #fff;
+        border-color: #4a0c0c;
+    }
+
+    .btn-pdf:hover {
+        background-color: #3e0a0a;
+        border-color: #2f0707;
+    }
+
+    /* Excel - verde sobrio */
+    .btn-excel {
+        background-color: #1f3f2d;   /* verde oscuro */
+        color: #fff;
+        border-color: #183324;
+    }
+
+    .btn-excel:hover {
+        background-color: #15271d;
+        border-color: #0f1c14;
+    }
+/** FIN BOTONES**/
+

@@ -148,15 +148,15 @@
                         </h1>
                     </div>
                     <div class="overflow-auto card-body h-200px">
-                        <div class="d-flex flex-column">                            
+                        <div class="d-flex flex-column">
                             @can('programaanual.index')
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span> <a
                                     href="{{ route('programaanual.index') }}">
                                     Registro de Auditorías del Programa Anual de Auditorías (PAA)
                                 </a>
-                            </li>                            
-                            @endcan                            
+                            </li>
+                            @endcan
                             @can('programaanualauditoria.index')
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span> <a
@@ -326,7 +326,7 @@
                                     Auditorias
                                 </h1>
                             </div>
-                            <div class="overflow-auto card-body h-200px">
+                            <div class="overflow-auto card-body h-300px">
                                 <div class="d-flex flex-column">
                                     @if(getSession('cp')==2023)
                                         @can('seguimientoauditoriacp.index')
@@ -363,7 +363,7 @@
                             Asignaciones
                         </h1>
                     </div>
-                    <div class="overflow-auto card-body h-200px">
+                    <div class="overflow-auto card-body h-300px">
                         <div class="d-flex flex-column">
                             @if (getSession('cp')==2024)
                                 @can('asignacionauditorias.index')
@@ -425,10 +425,10 @@
                             Seguimiento
                         </h1>
                     </div>
-                    <div class="overflow-auto card-body h-200px">
+                    <div class="overflow-auto card-body h-300px">
                         <div class="d-flex flex-column">
                             <li class="py-2 d-flex align-items-center">
-                                <span class="bullet me-5 bg-primary"></span>                                
+                                <span class="bullet me-5 bg-primary"></span>
                                 @if (getsession ('cp') !=2024)
                                     <a href="{{ route('auditoriaseguimiento.index') }}">
                                         Auditorias
@@ -436,12 +436,12 @@
                                 @else
                                 <a href="{{ route('auditoriaseguimiento2024.index') }}">
                                         Auditorias
-                                    </a>                                    
+                                    </a>
                                 @endif
                             </li>
                         </div>
                         <li class="py-2 d-flex align-items-center">
-                            <span class="bullet me-5 bg-primary"></span> 
+                            <span class="bullet me-5 bg-primary"></span>
                             <a href="{{ route('buzonseg.index') }}">
                                 Buzón
                         </li>
@@ -455,7 +455,7 @@
                 </div>
             </div>
             @endcan
-            @canany(['reportesseg.index', 'reporteauditoriaacciones.index'])
+            @canany(['reportesseg.index', 'reporteauditoriaacciones.index','reporteauditoriaunidad.index','reportesregistrosauditorias.index'])
             <div class="mb-3 col-md-3">
                 <div class="card">
                     <div class="card-header">
@@ -465,33 +465,55 @@
                             Reportes
                         </h1>
                     </div>
-                    <div class="overflow-auto card-body h-200px">
-                        <li class="py-2 d-flex align-items-center">
-                            <span class="bullet me-5 bg-primary"></span>
-                            <a href="{{ route('reportesseg.index') }}">
-                                Reporte de auditorías
-                            </a>
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                            <span class="bullet me-5 bg-primary"></span>
-                            <a href="{{ route('reporteauditoriaacciones.index') }}">
-                                Reporte de acciones
-                            </a>
-                        </li>
-                        <li class="py-2 d-flex align-items-center">
-                            <span class="bullet me-5 bg-primary"></span>
-                            <a href="{{ route('reporteauditoriaunidad.index') }}">
-                                Reporte de Auditoria por Unidad Responsable
-                            </a>
-                        </li>
-                        {{-- @can('administracion.index') --}}
+                    <div class="overflow-auto card-body h-300px">
+                        @can('reportesseg.index')
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('reportesseg.index') }}">
+                                     Auditorías
+                                </a>
+                            </li>
+                        @endcan
+                        @can('reporteauditoriaacciones.index')
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('reporteauditoriaacciones.index') }}">
+                                    Acciones
+                                </a>
+                            </li>
+                        @endcan
+                        @can('reporteauditoriaunidad.index')
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('reporteauditoriaunidad.index') }}">
+                                    Auditoria por Unidad Responsable
+                                </a>
+                            </li>
+                        @endcan
+                        @can('reportesregistrosauditorias.index')
                             <li class="py-2 d-flex align-items-center">
                                 <span class="bullet me-5 bg-primary"></span>
                                 <a href="{{ route('reportesregistrosauditorias.index') }}">
-                                    Reportes de Registros de Auditorias
+                                    Registros de Auditorias
                                 </a>
                             </li>
-                        {{--@endif- --}}
+                        @endcan
+                        @can('reportenotificaciones.index')
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('reportenotificaciones.index') }}">
+                                    Notificaciones
+                                </a>
+                            </li>
+                        @endcan
+                        @can('reportesesion.index')
+                            <li class="py-2 d-flex align-items-center">
+                                <span class="bullet me-5 bg-primary"></span>
+                                <a href="{{ route('reportesesion.index') }}">
+                                    Sesión
+                                </a>
+                            </li>
+                        @endcan
                     </div>
                 </div>
             </div>

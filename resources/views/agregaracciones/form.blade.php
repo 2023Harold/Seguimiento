@@ -25,19 +25,6 @@
                 {!!BootForm::text('consecutivo', 'Número consecutivo: *', old('consecutivo', $accion->consecutivo?str_pad($accion->consecutivo, 3, '0', STR_PAD_LEFT) : str_pad($numeroconsecutivo, 3, '0', STR_PAD_LEFT))) !!}
             </div>
             
-        </div>       
-        <div class="row">
-            <div class="col-md-4">
-                {!!BootForm::select('segtipo_accion_id', 'Tipo de acción: *', $tiposaccion->toArray(), old('segtipo_accion_id',$accion->segtipo_accion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
-            </div>
-        </div> 
-        <div class="row">
-            <div class="col-md-4">
-                {!!BootForm::select('acto_fiscalizacion_id', 'Acto de fiscalización: *', $actosfiscalizacion->toArray(), old('acto_fiscalizacion_id',$accion->acto_fiscalizacion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
-            </div>      
-            @php
-                $divtipologiamostrar=(empty(old('acto_fiscalizacion_id', $accion->acto_fiscalizacion_id))?'none':'block');
-            @endphp 
         </div>
         <div class="row">
             {{-- <div class="col-md-4" id="divtipologia" style="display: {{$divtipologiamostrar}}">--}}
@@ -82,7 +69,21 @@
                     </table>
                 </div>
             {{-- --</div> --}}
+        </div> 		
+        <div class="row">
+            <div class="col-md-4">
+                {!!BootForm::select('segtipo_accion_id', 'Tipo de acción: *', $tiposaccion->toArray(), old('segtipo_accion_id',$accion->segtipo_accion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+            </div>
         </div> 
+        <div class="row">
+            <div class="col-md-4">
+                {!!BootForm::select('acto_fiscalizacion_id', 'Acto de fiscalización: *', $actosfiscalizacion->toArray(), old('acto_fiscalizacion_id',$accion->acto_fiscalizacion_id),['data-control'=>'select2', 'class'=>'form-select form-group', 'data-placeholder'=>'Seleccionar una opción']) !!}
+            </div>      
+            @php
+                $divtipologiamostrar=(empty(old('acto_fiscalizacion_id', $accion->acto_fiscalizacion_id))?'none':'block');
+            @endphp 
+        </div>
+        
         <div class="row">
             <div class="col-md-3">
                 {!!BootForm::text('numero', 'Número de acción: *', old('numero_accion', $accion->numero_accion)) !!}

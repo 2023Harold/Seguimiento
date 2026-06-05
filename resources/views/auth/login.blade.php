@@ -32,7 +32,7 @@
 								<!--begin::Label-->
 								<!--end::Label-->
 								<!--begin::Input-->
-								{!! BootForm::email('email','Correo electrónico',null,['class'=>$errors->first('email') ? 'is-invalid' : '']) !!}
+								{!!BootForm::email('email','Correo electrónico',null,['class'=>$errors->first('email') ? 'is-invalid' : '']) !!}
                                 <!--end::Input-->
 							</div>
 							<!--end::Input group-->

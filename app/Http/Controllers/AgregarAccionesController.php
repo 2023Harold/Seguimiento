@@ -380,11 +380,11 @@ class AgregarAccionesController extends Controller
                 ]);
 
                 if(usaEquipoTrabajo()) {
-                    $notificacionRechazo = auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($accionrechazada).'/Rechazo')->first();
-                    auth()->user()->NotMarcarLeido($notificacionRechazo);
+                    $notificacion = auth()->user()->todasNotificacionesNuevas()->where('estatus', 'Pendiente')->where('llave', GenerarLlave($accionnueva).'/Rechazo')->first();
+                    auth()->user()->NotMarcarLeido($notificacion);
                 }else{
-                    $notificacionRechazo=auth()->user()->notificaciones()->where('llave', GenerarLlave($accionrechazada).'/Rechazo')->first();
-                    $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacionRechazo);
+                    $notificacion=auth()->user()->notificaciones()->where('llave', GenerarLlave($accionnueva).'/Rechazo')->first();
+                    $LeerNotificacionR = auth()->user()->NotMarcarLeido($notificacion);
                 }
 
                 //$url   = route("agregaraccionesrevision01.edit", $accionnueva);

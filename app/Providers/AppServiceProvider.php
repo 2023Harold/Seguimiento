@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {        
+    {
 
         Paginator::useBootstrap();
         Blade::directive('btnSubmit', function ($parametros) {
@@ -66,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
                 echo '<a href=\"$param2\" class=\"btn btn-secondary\">$param1</a>';
                 ?>";*/
         });
-        
+
         Blade::directive('btnConfirmacion', function ($expression) {
             $parametros_separados = explode(',', $expression);
             $text = $parametros_separados[0];
@@ -91,18 +91,21 @@ class AppServiceProvider extends ServiceProvider
             $permiso = $url_destroy_antes_segunda_comilla;
 
             return "<?php
-          
                 echo '<form method=\"POST\" action=\"'.$url_destroy.'\"
                         accept-charset=\"UTF-8\" style=\"display:inline;\"
-                        onSubmit=\"return confirm(&quot;¿Desea eliminar el registro?&quot;)\">'.
+                        id=\"form-delete-'.uniqid().'\"
+                        class=\"form-delete\">'.
                         method_field('DELETE').
                         csrf_field().
-                        '<button type=\"submit\" class=\"btn btn-link m-0 p-0 ms-2\"><i class=\"bi bi-trash text-primary fs-3\"></i></button>'
+                        '<button type=\"button\"
+                            class=\"btn btn-link m-0 p-0 ms-2 btn-destroy\"
+                            data-form=\"form-delete\">
+                            <i class=\"bi bi-trash text-primary fs-3\"></i>
+                        </button>'
                     .'</form>';
-            
             ?>";
         });
-        
+
         Blade::directive('destroyNoAuth', function ($url_destroy) {
             $url_destroy_despues_primer_comilla = Str::after($url_destroy, "'");
             $url_destroy_antes_segunda_comilla = Str::before($url_destroy_despues_primer_comilla, "'");

@@ -54,5 +54,9 @@ class TurnoAcuseArchivo extends Model
     {
         return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'TurnoArchivo')->orderBy('id', 'ASC');
     }
+    public function contestaciones()
+    {
+        return $this->hasMany(TurnoContestacion::class, 'turno_id', 'id')->where('tipo_turno', 'TurnoAcuseArchivo');
+    }
 
 }

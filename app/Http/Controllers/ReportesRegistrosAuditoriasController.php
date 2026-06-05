@@ -27,33 +27,33 @@ class ReportesRegistrosAuditoriasController extends Controller
      public function __construct(Auditoria $model)
      {
          $this->model = $model;
-     } 
+     }
 
     public function index(Request $request)
-    {	
+    {
         //$auditorias = $this->setQuery($request)->orderBy('id')->get();
 		$auditorias = Auditoria::select('id')->where('cuenta_publica',getSession('cp'))->count();
-		
+
 		$turnosui = TurnoUI::whereHas('auditoria', function (Builder $query) {
 											$query->where('cuenta_publica', getSession('cp'));
 									})->count();
-									
+
 		$turnooic = TurnoOIC::whereHas('auditoria', function (Builder $query) {
 											$query->where('cuenta_publica', getSession('cp'));
 									})->count();
-									
+
 		$turnotat = TurnoArchivoTransferencia::whereHas('auditoria', function (Builder $query) {
 											$query->where('cuenta_publica', getSession('cp'));
 									})->count();
-									
+
 		$radicaciones = Radicacion::whereHas('auditoria', function (Builder $query) {
 											$query->where('cuenta_publica', getSession('cp'));
 									})->count();
-									
+
 		$comparecencias = Comparecencia::whereHas('auditoria', function (Builder $query) {
 											$query->where('cuenta_publica', getSession('cp'));
 									})->count();
-		
+
 		$acuerdoconclusion = AcuerdoConclusion::whereHas('auditoria', function (Builder $query) {
 											$query->where('cuenta_publica', getSession('cp'));
 									})->count();
@@ -61,8 +61,8 @@ class ReportesRegistrosAuditoriasController extends Controller
         $informes = InformePrimeraEtapa::whereHas('auditoria', function (Builder $query) {
 											$query->where('cuenta_publica', getSession('cp'));
 									})->count();
-        
-        // ===== Informes de Auditorías =====
+
+        // ===== Informes de Auditorï¿½as =====
         $informes = InformePrimeraEtapa::whereHas('auditoria', fn($q) =>
             $q->where('cuenta_publica', getSession('cp'))
         )->count();
@@ -75,7 +75,7 @@ class ReportesRegistrosAuditoriasController extends Controller
             $q->where('cuenta_publica', getSession('cp'))
         )->where('tipo', 'pliegos')->count();
 
-        // ===== Acuerdos de conclusión por tipo =====
+        // ===== Acuerdos de conclusiï¿½n por tipo =====
         $acuerdosRec = AcuerdoConclusion::whereHas('auditoria', fn($q) =>
             $q->where('cuenta_publica', getSession('cp'))
         )->where('tipo', 'recomendaciones')->count();
@@ -84,7 +84,7 @@ class ReportesRegistrosAuditoriasController extends Controller
             $q->where('cuenta_publica', getSession('cp'))
         )->where('tipo', 'pliegos')->count();
 
-        return view('reportesregistrosauditorias.index', compact('request','auditorias','turnosui','turnooic','turnotat',
+        return view('reportes.reportesregistrosauditorias.index', compact('request','auditorias','turnosui','turnooic','turnotat',
                                     'radicaciones','comparecencias','acuerdoconclusion','informes','informesRec','informesPO','acuerdosRec','acuerdosPO'));
     }
 

@@ -172,11 +172,29 @@ class BuzonPliegosObservacionController extends Controller
 
             });
         }else{            
-            if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){              
-                $query = $query->where('analistacp_id',auth()->user()->id);
-            }
-            if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){              
-                $query = $query->where('lidercp_id',auth()->user()->id);
+            if (!usaEquipoTrabajo()) {
+                if(in_array("Analista", auth()->user()->getRoleNames()->toArray())){              
+                    $query = $query->where('analistacp_id',auth()->user()->id);
+                }
+                if(in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())){              
+                    $query = $query->where('lidercp_id',auth()->user()->id);
+                }
+            } else {
+                if (in_array("Analista", auth()->user()->getRoleNames()->toArray())) {
+                    $query->whereHas('auditoriausuarios', function ($q) {
+                        $q->where('user_id', auth()->id())
+                        ->where('rol_code', 'Analista')
+                        ->where('estatus', 'Activo');
+                    });
+                }
+
+                if (in_array("Lider de Proyecto", auth()->user()->getRoleNames()->toArray())) {
+                    $query->whereHas('auditoriausuarios', function ($q) {
+                        $q->where('user_id', auth()->id())
+                        ->where('rol_code', 'Lider')
+                        ->where('estatus', 'Activo');
+                    });
+                }
             }
         }
 		if(in_array("Director de Seguimiento", auth()->user()->getRoleNames()->toArray())){

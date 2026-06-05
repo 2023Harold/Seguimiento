@@ -25,7 +25,7 @@ class TurnoOIC extends Model
         'domicilio_oic',
         'fecha_envio',
         'acuse_notificacion',
-        'fecha_notificacion',        
+        'fecha_notificacion',
         'fase_autorizacion',
         'nivel_autorizacion',
         'usuario_creacion_id',
@@ -36,7 +36,7 @@ protected $cast = [
     'fecha_envio'=>'date',
     'fecha_notificacion'=>'date',
     'created_at'=>'datetime',
-    'updated_at'=> 'datetime',    
+    'updated_at'=> 'datetime',
 ];
 
 public function getDepaasignadoAttribute()
@@ -46,7 +46,7 @@ public function getDepaasignadoAttribute()
     public function auditoria()
     {
         return $this->belongsTo(Auditoria::class, 'auditoria_id', 'id');
-    }   
+    }
     public function usuarioCreacion()
     {
         return $this->belongsTo(User::class, 'usuario_creacion_id');
@@ -58,6 +58,11 @@ public function getDepaasignadoAttribute()
     public function movimientos()
     {
         return $this->hasMany(Movimientos::class, 'accion_id', 'id')->where('accion', 'TurnoOIC')->orderBy('id', 'ASC');
+    }
+
+    public function contestaciones()
+    {
+        return $this->hasMany(TurnoContestacion::class, 'turno_id', 'id')->where('tipo_turno', 'TurnoOIC');
     }
 
 }

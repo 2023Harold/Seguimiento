@@ -406,12 +406,12 @@ Breadcrumbs::for('agregaracciones.index', function (BreadcrumbTrail $trail) {
 });
 Breadcrumbs::for('agregaracciones.create', function (BreadcrumbTrail $trail) {
     $trail->parent('auditoriaseguimiento.index');
-    $trail->push('Accion', route('agregaracciones.index'));
+    $trail->push('Acción', route('agregaracciones.index'));
 });
 
 Breadcrumbs::for('agregaracciones.accion', function (BreadcrumbTrail $trail,$accion) {
     $trail->parent('agregaracciones.index');
-    $trail->push('Accion', route('agregaracciones.accion',$accion));
+    $trail->push('Acción', route('agregaracciones.accion',$accion));
 });
 
 Breadcrumbs::for('agregaraccionesrevision01.edit', function (BreadcrumbTrail $trail,$accion) {
@@ -892,6 +892,23 @@ Breadcrumbs::for('reporteauditoriaunidad.index', function (BreadcrumbTrail $trai
     $trail->push('Reportes de Acciones de Auditoría por Unidad', route('reporteauditoriaunidad.index'));
 });
 
+Breadcrumbs::for('reportenotificaciones.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Reportes Notificaciones', route('reportenotificaciones.index'));
+});
+Breadcrumbs::for('reportenotificaciones.show', function (BreadcrumbTrail $trail, $notificacion) {
+    $trail->parent('reportenotificaciones.index');
+    $trail->push('Detalle de la Notificación', route('reportenotificaciones.show',$notificacion));
+});
+
+Breadcrumbs::for('reportesesion.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Reportes Sesiones', route('reportesesion.index'));
+});
+Breadcrumbs::for('reportesesion.show', function (BreadcrumbTrail $trail, $sesion) {
+    $trail->parent('reportesesion.index');
+    $trail->push('Detalle de la Sesión', route('reportesesion.show',$sesion));
+});
 
 
 // Informe Primer Etapa
@@ -934,7 +951,7 @@ Breadcrumbs::for('turnoui.index', function (BreadcrumbTrail $trail,$auditoria) {
 });
 
 Breadcrumbs::for('turnoui.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('auditoriaseguimiento.index');
+    $trail->parent('turnoui.index');
     $trail->push('Turno a la Unidad de Investigación', route('auditoriaseguimiento.create'));
 });
 
@@ -950,6 +967,32 @@ Breadcrumbs::for('turnouivalidacion.edit', function (BreadcrumbTrail $trail,$aud
 Breadcrumbs::for('turnouiautorizacion.edit', function (BreadcrumbTrail $trail,$auditoria) {
     $trail->parent('turnoui.index',$auditoria);
     $trail->push('Autorizacion Turno a la Unidad de Investigación ', route('turnoui.index'));
+});
+
+Breadcrumbs::for('turnocontestacionesui.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoui.index',$auditoria);
+    $trail->push('Contestaciones', route('turnocontestacionesui.index'));
+});
+Breadcrumbs::for('turnocontestacionesui.create', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnocontestacionesui.index',$auditoria);
+    $trail->push('Agregar Contestación', route('turnocontestacionesui.create'));
+});
+Breadcrumbs::for('turnocontestacionesui.edit', function (BreadcrumbTrail $trail,$auditoria,$contestacion) {
+    $trail->parent('turnocontestacionesui.index',$auditoria);
+    $trail->push('Editar Contestación', route('turnocontestacionesui.edit', $contestacion));
+});
+
+Breadcrumbs::for('turnocontestacionesoic.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnooic.index',$auditoria);
+    $trail->push('Contestaciones', route('turnocontestacionesoic.index'));
+});
+Breadcrumbs::for('turnocontestacionesoic.create', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnocontestacionesoic.index',$auditoria);
+    $trail->push('Agregar Contestación', route('turnocontestacionesoic.create'));
+});
+Breadcrumbs::for('turnocontestacionesoic.edit', function (BreadcrumbTrail $trail,$auditoria,$contestacion) {
+    $trail->parent('turnocontestacionesoic.index',$auditoria);
+    $trail->push('Editar Contestación', route('turnocontestacionesoic.edit', $contestacion));
 });
 
 
@@ -1009,6 +1052,21 @@ Breadcrumbs::for('turnoarchivoautorizacion.edit', function (BreadcrumbTrail $tra
     $trail->parent('turnoarchivo.index',$auditoria);
     $trail->push('Autorización del Turno Archivo Envío ', route('turnoarchivo.index'));
 });
+
+
+Breadcrumbs::for('turnocontestacionesarc.index', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnoarchivo.index',$auditoria);
+    $trail->push('Contestaciones', route('turnocontestacionesarc.index'));
+});
+Breadcrumbs::for('turnocontestacionesarc.create', function (BreadcrumbTrail $trail,$auditoria) {
+    $trail->parent('turnocontestacionesarc.index',$auditoria);
+    $trail->push('Agregar Contestación', route('turnocontestacionesarc.create'));
+});
+Breadcrumbs::for('turnocontestacionesarc.edit', function (BreadcrumbTrail $trail,$auditoria,$contestacion) {
+    $trail->parent('turnocontestacionesarc.index',$auditoria);
+    $trail->push('Editar Contestación', route('turnocontestacionesarc.edit', $contestacion));
+});
+
 
 Breadcrumbs::for('seguimientoauditoriascp.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');

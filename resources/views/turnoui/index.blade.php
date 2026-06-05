@@ -1,136 +1,164 @@
 @extends('layouts.app')
 @section('breadcrums')
-{{Breadcrumbs::render('turnoui.index',$auditoria) }}
+    {{ Breadcrumbs::render('turnoui.index', $auditoria) }}
 @endsection
 @section('content')
-<div class="row">
-    @include('layouts.partials._menu')
-    <div class="col-md-9 mt-2">
-        <div class="card">
-            <div class="card-header">
-                <h1 class="card-title">
-                    <a href="{{ route('auditoriaseguimiento.index') }}"><i
-                            class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
-                    &nbsp;
-                    Turno UI
-                </h1>
-            </div>
-            <div class="card-body">
-                @include('layouts.contextos._auditoria')
-                @include('flash::message')
-                <div class="row">
-                    <div class="col-md-12">
-                    @if(count($auditoria->totalNOsolventadopliegos) >0)
-                        @if (empty($turnoui))
-                            @can('turnoui.create')
-                                <a class="btn btn-primary float-end" href="{{ route('turnoui.create') }}">
-                                    <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Turno UI
-                                </a>
-                            @endcan
-                        @endif
-                    @endif
-                    </div>
+    <div class="row">
+        @include('layouts.partials._menu')
+        <div class="col-md-9 mt-2">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="card-title">
+                        <a href="{{ route('auditoriaseguimiento.index') }}"><i
+                                class="fa fa-arrow-alt-circle-left fa-1x text-primary"></i></a>
+                        &nbsp;
+                        Turno UI
+                    </h1>
                 </div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Fecha </th>
-                                <th>Número de oficio </th>
-                                <th>Acuse de notificación</th>
-                                <th>Fecha de notificacion</th>
-                                <th>Fase / Acción </th>
-                                @can('turnoui.edit')
-                                    <th>Envío</th>
-                                @endcan
-                            </tr>
-                        </thead>
-                        <tbody>
-                         @if (!empty($turnoui))
-                            <tr>
-                                <td class="text-center">
-                                    {{ fecha($turnoui->fecha_turno_oi) }}
-                                </td>
-                                <td class="text-center">
-                                    {{$turnoui->numero_turno_ui }}
-                                </td>
-                                <td class="text-center">
-                                    @btnFile($turnoui->turno_ui)
-                                </td>
-                                <td class="text-center">
-                                    {{ fecha($turnoui->fecha_notificacion_ui) }}
-                                </td>
-                                <td class="text-center">
-                                        @if (empty($auditoria->turnoui->fase_autorizacion)||$auditoria->turnoui->fase_autorizacion=='Rechazado')
-                                            <span class="badge badge-light-danger">{{ $auditoria->turnoui->fase_autorizacion }} </span>
-                                            @can('turnoui.edit')
-                                                <a href="{{route('turnoui.edit', $auditoria->turnoui)}}" class="btn btn-color-primary btn-active-color-warning ">
-                                                    <i class="fa-solid fa-pen-to-square" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Editar
-                                                </a>
-                                            @endcan
-                                        @endif
-                                        @if ($auditoria->turnoui->fase_autorizacion == 'En revisión')
-                                            @can('turnouirevision.edit')
-                                                <a href="{{ route('turnouirevision.edit',$auditoria->turnoui) }}" class="btn btn-primary">
-                                                    <li class="fa fa-gavel"></li>
-                                                    Revisar
-                                                </a>
-                                            @else
-                                                <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
-                                            @endcan
-                                        @endif
-                                        @if ($auditoria->turnoui->fase_autorizacion == 'En validación')
-                                            @can('turnouivalidacion.edit')
-                                                <a href="{{ route('turnouivalidacion.edit',$auditoria->turnoui) }}" class="btn btn-primary">
-                                                    <li class="fa fa-gavel"></li>
-                                                    Validar
-                                                </a>
-                                            @else
-                                                <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
-                                            @endcan
-                                        @endif
-                                        @if ($auditoria->turnoui->fase_autorizacion == 'En autorización')
-                                            @can('turnouiautorizacion.edit')
-                                                <a href="{{ route('turnouiautorizacion.edit',$auditoria->turnoui) }}" class="btn btn-primary">
-                                                    <li class="fa fa-gavel"></li>
-                                                    Autorizar
-                                                </a>
-                                            @else
-                                                <span class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }} </span>
-                                            @endcan
-                                        @endif
-                                        @if ($auditoria->turnoui->fase_autorizacion=='Autorizado')
-                                            <span class="badge badge-light-success">{{ $auditoria->turnoui->fase_autorizacion }} </span>
-                                        @endif
+                <div class="card-body">
+                    @include('layouts.contextos._auditoria')
+                    @include('flash::message')
+                    <div class="row">
+                        <div class="col-md-12">
+                            @if (count($auditoria->totalNOsolventadopliegos) > 0)
+                                @if (empty($turnoui))
+                                    @can('turnoui.create')
+                                        <a class="btn btn-primary float-end" href="{{ route('turnoui.create') }}">
+                                            <i class="align-middle fas fa-file-circle-plus" aria-hidden="true"></i> Turno UI
+                                        </a>
+                                    @endcan
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha </th>
+                                    <th>Número de oficio </th>
+                                    <th>Acuse de notificación</th>
+                                    <th>Fecha de notificacion</th>
+                                    <th>Fase / Acción </th>
                                     @can('turnoui.edit')
+                                        <th>Envío</th>
+                                    @endcan
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!empty($turnoui))
+                                    <tr>
                                         <td class="text-center">
-                                            @if (empty($auditoria->turnoui->fase_autorizacion)||$auditoria->turnoui->fase_autorizacion=='Rechazado')
-                                                {{-- <a href="{{ route('turnouienvio.edit',$auditoria->turnoui) }}" class="btn btn-primary">
+                                            {{ fecha($turnoui->fecha_turno_oi) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $turnoui->numero_turno_ui }}
+                                        </td>
+                                        <td class="text-center">
+                                            @btnFile($turnoui->turno_ui)
+                                        </td>
+                                        <td class="text-center">
+                                            {{ fecha($turnoui->fecha_notificacion_ui) }}
+                                        </td>
+                                        <td class="text-center">
+                                            @if (empty($auditoria->turnoui->fase_autorizacion) || $auditoria->turnoui->fase_autorizacion == 'Rechazado')
+                                                <span
+                                                    class="badge badge-light-danger">{{ $auditoria->turnoui->fase_autorizacion }}
+                                                </span>
+                                                @can('turnoui.edit')
+                                                    <a href="{{ route('turnoui.edit', $auditoria->turnoui) }}"
+                                                        class="btn btn-color-primary btn-active-color-warning ">
+                                                        <i class="fa-solid fa-pen-to-square" style="font-size: 16px;"
+                                                            aria-hidden="true"></i>&nbsp; Editar
+                                                    </a>
+                                                @endcan
+                                            @endif
+                                            @if ($auditoria->turnoui->fase_autorizacion == 'En revisión')
+                                                @can('turnouirevision.edit')
+                                                    <a href="{{ route('turnouirevision.edit', $auditoria->turnoui) }}"
+                                                        class="btn btn-primary">
+                                                        <li class="fa fa-gavel"></li>
+                                                        Revisar
+                                                    </a>
+                                                @else
+                                                    <span
+                                                        class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }}
+                                                    </span>
+                                                @endcan
+                                            @endif
+                                            @if ($auditoria->turnoui->fase_autorizacion == 'En validación')
+                                                @can('turnouivalidacion.edit')
+                                                    <a href="{{ route('turnouivalidacion.edit', $auditoria->turnoui) }}"
+                                                        class="btn btn-primary">
+                                                        <li class="fa fa-gavel"></li>
+                                                        Validar
+                                                    </a>
+                                                @else
+                                                    <span
+                                                        class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }}
+                                                    </span>
+                                                @endcan
+                                            @endif
+                                            @if ($auditoria->turnoui->fase_autorizacion == 'En autorización')
+                                                @can('turnouiautorizacion.edit')
+                                                    <a href="{{ route('turnouiautorizacion.edit', $auditoria->turnoui) }}"
+                                                        class="btn btn-primary">
+                                                        <li class="fa fa-gavel"></li>
+                                                        Autorizar
+                                                    </a>
+                                                @else
+                                                    <span
+                                                        class="badge badge-light-warning">{{ $auditoria->turnoui->fase_autorizacion }}
+                                                    </span>
+                                                @endcan
+                                            @endif
+                                            @if ($auditoria->turnoui->fase_autorizacion == 'Autorizado')
+                                                <span
+                                                    class="badge badge-light-success">{{ $auditoria->turnoui->fase_autorizacion }}
+                                                </span>
+                                            @endif
+                                            @can('turnoui.edit')
+                                            <td class="text-center">
+                                                @if (empty($auditoria->turnoui->fase_autorizacion) || $auditoria->turnoui->fase_autorizacion == 'Rechazado')
+                                                    {{-- <a href="{{ route('turnouienvio.edit',$auditoria->turnoui) }}" class="btn btn-primary">
                                                 Enviar
                                                 </a> --}}
-                                                <a href="{{route('turnouienvio.edit', $auditoria->turnoui)}}" class="btn btn-color-primary btn-active-color-info">
-                                                    <i class="bi bi-send-check-fill" style="font-size: 16px;" aria-hidden="true"></i>&nbsp; Enviar
-                                                </a>
-                                            @endif
+                                                    <a href="{{ route('turnouienvio.edit', $auditoria->turnoui) }}"
+                                                        class="btn btn-color-primary btn-active-color-info">
+                                                        <i class="bi bi-send-check-fill" style="font-size: 16px;"
+                                                            aria-hidden="true"></i>&nbsp; Enviar
+                                                    </a>
+                                                @endif
+                                            </td>
+                                        @endcan
                                         </td>
-                                    @endcan
-                                </td>
-                                </tr>
-                                @if (!empty($auditoria->turnoui))
-                                    {!! movimientosDesglose($auditoria->turnoui->id, 10, $auditoria->turnoui->movimientos) !!}
-                                @endif
+                                    </tr>
+                                    @if (!empty($auditoria->turnoui))
+                                        {!! movimientosDesglose($auditoria->turnoui->id, 10, $auditoria->turnoui->movimientos) !!}
+                                    @endif
                                 @else
-                            <tr>
-                                <td class="text-center" colspan="5">
-                                    No se encuentran registros en este apartado.
-                                </td>
-                            </tr>
-                         @endif
-                        </tbody>
-                    </table>
+                                    <tr>
+                                        <td class="text-center" colspan="5">
+                                            No se encuentran registros en este apartado.
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    @can('turnoui.contestaciones')
+                        @if (!empty($turnoui->fase_autorizacion)&&$turnoui->fase_autorizacion == 'Autorizado')
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="{{route('turnoui.contestaciones',$turnoui)}}" class="btn btn-primary float-end">
+                                        Contestaciones
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+                     @endcan
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

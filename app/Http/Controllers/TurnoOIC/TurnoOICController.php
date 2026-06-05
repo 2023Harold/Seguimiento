@@ -15,8 +15,8 @@ class TurnoOICController extends Controller
     public function __construct(TurnoOIC $model)
        {
            $this -> model = $model;
-       } 
-    
+       }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,11 +25,11 @@ class TurnoOICController extends Controller
     public function index(Request $request)
     {
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
-        $turnooic=TurnoOIC::where('auditoria_id',getSession('auditoria_id'))->first();   
-        
+        $turnooic=TurnoOIC::where('auditoria_id',getSession('auditoria_id'))->first();
+
 
         return view ('turnooic.index', compact('request','auditoria','turnooic'));
-        
+
     }
 
     /**
@@ -39,9 +39,9 @@ class TurnoOICController extends Controller
      */
     public function create()
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));               
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $turnooic = new TurnoOIC();
-       
+
         return view('turnooic.form', compact('auditoria','turnooic'));
     }
 
@@ -94,8 +94,8 @@ class TurnoOICController extends Controller
     public function edit(TurnoOIC $auditoria)
     {
         $turnooic = $auditoria;
-        $auditoria = Auditoria::find(getSession('auditoria_id'));                       
-       
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
+
         return view('turnooic.form', compact('auditoria','turnooic'));
     }
 
@@ -121,7 +121,7 @@ class TurnoOICController extends Controller
                 'usuario_creacion_id' => auth()->id(),
                 'usuario_asignado_id' => auth()->id(),
             ]);
-            
+
         return redirect() -> route('turnooic.index',compact('auditoria','turnooic'));
     }
 
@@ -150,11 +150,18 @@ class TurnoOICController extends Controller
         return redirect()->route('turnooic.create');
     }
     public function export(){
-        $auditoria=Auditoria::find(getSession('auditoria_id')); 
-        $template=new TemplateProcessorMod('bases-word/TurnoOIC.docx');       
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+        $template=new TemplateProcessorMod('bases-word/TurnoOIC.docx');
         $nombreword='Of. R_OICs';
         $template->saveAs($nombreword.'.docx');
 
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
+    }
+
+     public function contestaciones(TurnoOIC $turnooic)
+    {
+        setSession('contestturnooic_id',$turnooic->id);
+
+        return redirect()->route('turnocontestacionesoic.index');
     }
 }

@@ -43,12 +43,23 @@ class Notificacion extends Model
 
     public function unidadAdministrativa()
     {
-        return $this->hasOne(CatalogoUnidadesAdministrativas::class, 'unidad_administrativa_id', 'id');
+        return $this->belongsTo(CatalogoUnidadesAdministrativas::class, 'unidad_administrativa_id', 'id');
+    }
+    // CORRECTO — es belongsTo porque la FK está en segnotificaciones
+
+    public function usuarioDestinatario()
+    {
+        return $this->belongsTo(User::class, 'destinatario_id', 'id');
     }
 
-    public function destinatario()
+    public function usuarioCreacion()
     {
-        return $this->hasOne(User::class, 'destinatario_id', 'id');
+        return $this->belongsTo(User::class, 'usuario_creacion_id', 'id');
+    }
+
+    public function usuarioActualizacion()
+    {
+        return $this->belongsTo(User::class, 'usuario_actualizacion_id', 'id');
     }
 
     public function auditoria()

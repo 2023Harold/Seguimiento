@@ -20,7 +20,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 function fecha($fecha = null, string $formato = 'd/m/Y')
-{	
+{
     if(empty($fecha)){
         return "";
     }
@@ -34,9 +34,9 @@ function fechadias($fecha = null, $dias )
         return "";
     }
 
-    $fecha = new Carbon($fecha); 
-	$nuevafecha=$fecha->addDay($dias); 
-    return optional($nuevafecha); 
+    $fecha = new Carbon($fecha);
+	$nuevafecha=$fecha->addDay($dias);
+    return optional($nuevafecha);
 }
 function hora($fecha = null, string $formato = 'h:i')
 {
@@ -236,15 +236,30 @@ function btnFileMinio($archivo){
 function movimientosDesglose($id, $colspan, $movimientos)
 {
     if (count($movimientos) > 0) {
-        $results = '<tr><td colspan="'.$colspan. '"><div class="row mb-1">
-                <div class="col-md-12 list-desglose">
-                    <div class="text-primary pl-4 pt-2 collapsed" data-bs-toggle="collapse" href="#a-list-' . $id . '" aria-expanded="true">
+        // Preparar datos para exportación
+        $dataExport = $movimientos->map(fn($m) => [
+            'Movimiento'   => str_replace('Enviar', 'Se envío ', $m->tipo_movimiento),
+            'Fecha y Hora' => fecha($m->created_at, 'd/m/Y H:i:s'),
+            'Usuario'      => $m->userCreacion->name,
+            'Puesto'       => $m->userCreacion->puesto,
+            'Estatus'      => $m->estatus,
+            'Comentario'   => $m->motivo_rechazo ?? '',
+        ])->toJson(JSON_HEX_APOS | JSON_HEX_QUOT);
+
+        $results = '<tr><td colspan="'.$colspan.'"><div class="row mb-1">
+                <div class="col-md-12 list-desglose d-flex align-items-center">
+                    <div class="text-primary pl-4 pt-2 collapsed flex-grow-1" data-bs-toggle="collapse" href="#a-list-' . $id . '" aria-expanded="true">
                         <i class="fa fa-chevron-down fa-chev"></i> Lista de movimientos
                     </div>
+                    <button class="btn btn-sm btn-outline-success me-2 mt-1 btn-export-movimientos" data-no-spinner
+                            title="Exportar a Excel"
+                            data-id="'.$id.'"
+                            data-rows=\''.htmlspecialchars($dataExport, ENT_QUOTES).'\'>
+                        <i class="bi bi-file-earmark-excel"></i> Excel
+                    </button>
                 </div>
             </div>
             <div id="a-list-'.$id.'" class="collapse">
-               
                     <table class="table gray-200">
                         <thead class="table-secondary">
                             <tr>
@@ -256,6 +271,7 @@ function movimientosDesglose($id, $colspan, $movimientos)
                             </tr>
                         </thead>
                         <tbody>';
+
         foreach ($movimientos as $movimiento) {
             $results .= '<tr>
                             <td>'.str_replace('Enviar', 'Se envío ', $movimiento->tipo_movimiento).'</td>
@@ -265,9 +281,9 @@ function movimientosDesglose($id, $colspan, $movimientos)
                             <td>'.$movimiento->motivo_rechazo.'</td>
                     </tr>';
         }
+
         $results .= '</tbody>
                     </table>
-                
             </div></td></tr>';
     } else {
         $results = '';
@@ -275,6 +291,7 @@ function movimientosDesglose($id, $colspan, $movimientos)
 
     return $results;
 }
+
 function movimientosDesgloseAsignacionesLA($id, $colspan, $movimientosLider, $movimientosAnalista)
 {
     if (count($movimientosLider) > 0 || count($movimientosAnalista) > 0) {
@@ -287,7 +304,7 @@ function movimientosDesgloseAsignacionesLA($id, $colspan, $movimientosLider, $mo
                 </div>
             </div>
             <div id="a-list-'.$id.'" class="collapse">
-               
+
                     <table class="table gray-200">
                         <thead class="table-secondary">
                             <tr>
@@ -306,8 +323,8 @@ function movimientosDesgloseAsignacionesLA($id, $colspan, $movimientosLider, $mo
         }
         $results .= '</tbody>
                     </table>
-                    
-                
+
+
             </div></td></tr>';
     } else {
         $results = '';
@@ -321,7 +338,7 @@ if (!function_exists('movimientosEnTd')) {
     function movimientosEnTd($id, $movimientos, $titulo = 'Lista de movimientos')
     {
         if (empty($movimientos) || count($movimientos) === 0) {
-            return ''; 
+            return '';
         }
 
         // ID único para el collapse
@@ -433,44 +450,44 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         $requestCons['id_proceso_pdf'] = $request->id_proceso_pdf;
         $requestCons['hash_pdf'] = $request->hash_pdf;
 
-        
 
-        
+
+
         //MINIO ALMACENAR
         /*$requestCons['archivo_xml'] = $nombrexml = $ruta_minio.'/'.$archivoxml;
         Storage::cloud()->put($nombrexml, base64_decode($request->archivo_firmar));
-    
+
         $requestCons['archivo_fir'] = $nombrefir = $ruta_minio.'/'.$archivofir;
         Storage::cloud()->put($nombrefir, base64_decode($request->acuse_xml));
-    
+
         $requestCons['constancia_xml'] = $nombreder = $ruta_minio.'/'.$constancia;
         Storage::cloud()->put($nombreder, base64_decode($request->constancia_xml));
-    
+
         $request[$campo_constancia] = $requestCons['constancia_pdf'] = $nombre = $ruta_minio.'/'.$archivopdffirmado;
         Storage::cloud()->put($nombre, base64_decode($request->acuse_pdf));*/
 
-        //ALMACENAR DE FORMA LOCAL       
-        $requestCons['archivo_xml'] = $rutaDestino.'/'.$archivoxml;      
+        //ALMACENAR DE FORMA LOCAL
+        $requestCons['archivo_xml'] = $rutaDestino.'/'.$archivoxml;
         Storage::disk('local')->put('public/archivos/'.$archivoxml, base64_decode($request->archivo_firmar));
-       
+
         $requestCons['archivo_fir'] = $rutaDestino.'/'.$archivofir;
         Storage::disk('local')->put('public/archivos/'.$archivofir, base64_decode($request->acuse_xml));
 
         $requestCons['constancia_xml'] = $rutaDestino.'/'.$constancia;
         Storage::disk('local')->put('public/archivos/'.$archivofir, base64_decode($request->constancia_xml));
-       
+
         $requestCons['constancia_pdf'] = $rutaDestino.'/'.$archivopdffirmado;
         Storage::disk('local')->put('public/archivos/'.$archivopdffirmado, base64_decode($request->acuse_pdf));
 
-        
 
 
-        
+
+
         $requestCons['accion'] = $model->getTable();
         $requestCons['accion_campo'] = $campo_constancia;
         $requestCons['accion_id'] = $model->id;
         $requestCons['usuario_creacion_id'] = auth()->user()->id;
-               
+
         $constancia = Constancia::create($requestCons);
 
         return $constancia;
@@ -518,8 +535,8 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         }
         return date('Y-m-d', $start);
     }*/
-    
- 
+
+
     /**
      * Devuelve true si la fecha es sábado, domingo o existe en TblDiaNoLab (StsEntDia=1).
      * Considera I (inhábil) y V (vacaciones) como no laborables.
@@ -566,62 +583,62 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         return $f->toDateString();
     }
 
-    function esVacioStr($valores=[],$auditoria){        
+    function esVacioStr($valores=[],$auditoria){
         $nuevovalor=null;
         $band="";
-    
-        for ($i=0;   $i < count($valores); $i++) { 
+
+        for ($i=0;   $i < count($valores); $i++) {
             if($i==0){
                 if (empty(${$valores[$i]})){
                     return "";
                 }else{
                     $band=$valores[0];
-                }              
+                }
             }elseif($i==count($valores)-1){
                 $band=$band.'->'.$valores[$i];
                 if (empty(${$band})){
                     return "";
                 }else{
                     return ${$band};
-                }   
+                }
             }else{
                 $band=$band.'->'.$valores[$i];
                 if (empty(${$band})){
                     return "";
                 }else{
                     $band=$valores[0];
-                }   
-            }            
-        }        
+                }
+            }
+        }
     }
 
-    function esVacioInt($valores=[],$auditoria){        
+    function esVacioInt($valores=[],$auditoria){
         $nuevovalor=null;
         $band="";
-    
-        for ($i=0;   $i < count($valores); $i++) { 
+
+        for ($i=0;   $i < count($valores); $i++) {
             if($i==0){
                 if (empty(${$valores[$i]})){
                     return 0;
                 }else{
                     $band=$valores[0];
-                }              
+                }
             }elseif($i==count($valores)-1){
                 $band=$band.'->'.$valores[$i];
                 if (empty(${$band})){
                     return 0;
                 }else{
                     return ${$band};
-                }   
+                }
             }else{
                 $band=$band.'->'.$valores[$i];
                 if (empty(${$band})){
                     return 0;
                 }else{
                     $band=$valores[0];
-                }   
-            }            
-        }        
+                }
+            }
+        }
     }
 
     function fechaactualreporte()
@@ -640,7 +657,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
        $formatterD = new NumeroALetras();
        $anioD = $formatterD->toString($fecha->format('Y'));
 
-       $anioMax = ucwords($anioD);             
+       $anioMax = ucwords($anioD);
        $anioMin = strtolower(ucwords(strtolower($anioMax)));
 
        $mes = strtolower($meses[($fecha->format('n')) - 1]);
@@ -657,11 +674,11 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         $auditoria=Auditoria::find(substr(base64_decode($auditoria), 5, -5));
         if(!empty($accion))
         $accion=AuditoriaAccion::find(substr(base64_decode($accion), 5, -5));
-        
+
         $relacionconstancia1 ='';
         $relacionconstancia2 ='';
         $relacionconstancia3 ='';
-       
+
         $modelo = DB::table($modeloprincipal['tbl'])->where('id',substr(base64_decode($modeloprincipal['vinculo']), 5, -5))->first();
         if(!empty($relacion1))
         $relacionconstancia1 = DB::table( $relacion1['tbl_rel'])->where($relacion1['col_rel'],$modelo->id)->get();
@@ -669,16 +686,16 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         $relacionconstancia2 = DB::table( $relacion2['tbl_rel'])->where($relacion2['col_rel'],$modelo->id)->get();
         if(!empty($relacion3))
         $relacionconstancia3 = DB::table( $relacion3['tbl_rel'])->where($relacion3['col_rel'],$modelo->id)->get();
-       
-        //$codigoQR = QrCode::format('png')->size(100)->generate($qr);       
-        $codigoQR = "";       
+
+        //$codigoQR = QrCode::format('png')->size(100)->generate($qr);
+        $codigoQR = "";
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $data = [
                  'temporal'=>$temporal,
                  'qr'=>$codigoQR,
-                 'auditoria'=>$auditoria,                 
-                 'accion'=>$accion, 
+                 'auditoria'=>$auditoria,
+                 'accion'=>$accion,
                  'modelo'=>$modelo,
                  'relacion1'=>$relacionconstancia1,
                  'relacion2'=>$relacionconstancia2,
@@ -705,11 +722,11 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             $pdf->save(storage_path('app/public/temporales/') . $nombrereporte .'.pdf');
             $pdf64 = chunk_split(base64_encode(file_get_contents(storage_path('app/public/temporales/') . $nombrereporte.'.pdf')));
             $archivob64= $pdf64;
-        }          
+        }
 
         return $archivob64;
     }
-	
+
 	function reportepdfprevio($nombrereporte,$temporal=1,$qr='',$auditoria,$accion='',$modeloprincipal=[],$relacion1=[],$relacion2=[],$relacion3=[],$relacion4=null,$firma='', $hash='', $fechahora='', $estatus='',$motivo_rechazo='', $firmante='',$firmante_puesto='')
     {
         $archivob64='';
@@ -717,11 +734,11 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         $auditoria=Auditoria::find(substr(base64_decode($auditoria), 5, -5));
         if(!empty($accion))
         $accion=AuditoriaAccion::find(substr(base64_decode($accion), 5, -5));
-        
+
         $relacionconstancia1 ='';
         $relacionconstancia2 ='';
         $relacionconstancia3 ='';
-       
+
         $modelo = DB::table($modeloprincipal['tbl'])->where('id',substr(base64_decode($modeloprincipal['vinculo']), 5, -5))->first();
         if(!empty($relacion1))
         $relacionconstancia1 = DB::table( $relacion1['tbl_rel'])->where($relacion1['col_rel'],$modelo->id)->get();
@@ -729,15 +746,15 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         $relacionconstancia2 = DB::table( $relacion2['tbl_rel'])->where($relacion2['col_rel'],$modelo->id)->get();
         if(!empty($relacion3))
         $relacionconstancia3 = DB::table( $relacion3['tbl_rel'])->where($relacion3['col_rel'],$modelo->id)->get();
-       
-        $codigoQR = QrCode::format('png')->size(100)->generate($qr);       
+
+        $codigoQR = QrCode::format('png')->size(100)->generate($qr);
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $data = [
                  'temporal'=>$temporal,
                  'qr'=>$codigoQR,
-                 'auditoria'=>$auditoria,                 
-                 'accion'=>$accion, 
+                 'auditoria'=>$auditoria,
+                 'accion'=>$accion,
                  'modelo'=>$modelo,
                  'relacion1'=>$relacionconstancia1,
                  'relacion2'=>$relacionconstancia2,
@@ -754,13 +771,13 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
         $pdf->loadView('reportes.'.$nombrereporte, $data);
 
 
-       
+
         return $pdf;
     }
-	
+
 
     function fechaaletra($fecha){
-       
+
         if(!empty($fecha)){
             //dd($fecha);
             $diacomparecencia=explode('/',fecha($fecha));
@@ -769,13 +786,13 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             //dd($dia,$anio,$diacomparecencia);
             $formatterD = new NumeroALetras();
             $formatterD->apocope = true;
-            $diaD = $formatterD->toString($dia);    
+            $diaD = $formatterD->toString($dia);
             $anioD = $formatterD->toString($anio);
-        
-            $diaMax = $diaD;            
-            $diaMin = mb_convert_encoding(mb_convert_case(strtolower($diaMax), MB_CASE_TITLE), "UTF-8") ;       
 
-            $anioMax = $anioD;            
+            $diaMax = $diaD;
+            $diaMin = mb_convert_encoding(mb_convert_case(strtolower($diaMax), MB_CASE_TITLE), "UTF-8") ;
+
+            $anioMax = $anioD;
             $anioMin = strtolower($anioMax);
 
             $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");
@@ -809,8 +826,8 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             ->where('cp_ua2024','LIKE','%'.$ua .'%' );
         }
         return $users;
-    } 
-    
+    }
+
     function convertirPeriodo($texto)
     {
         // Diccionarios para días
@@ -872,7 +889,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
     }
 
     function Iniciales($nombre) {
-        //funcion obtener las iniciales de los nombres  y para quitar los acentos   
+        //funcion obtener las iniciales de los nombres  y para quitar los acentos
         $iniciales = '';
         $partes = explode(' ', $nombre);
 
@@ -891,7 +908,7 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
     function GenerarLlave($Accion){
         //dd($Accion);
         if(!empty($Accion->normativa_infringida)){
-            //ACCIONES 
+            //ACCIONES
             $llave = "AUD-{$Accion->segauditoria_id}/Acc-{$Accion->id}/Tipo-{$Accion->tipo}";
         }elseif(!empty($Accion->acta_cierre_auditoria)){
             //RADICACION
@@ -901,19 +918,22 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             //COMPARECENCIA
             $llave = "AUD-{$Accion->auditoria->id}/Comparecencia-{$Accion->id}";
         }elseif(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Recomendación')){
-            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
+            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA
             $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/REC-{$Accion->id}";
-       
+
         }elseif(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Pliego de observación')){
-            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
+            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA
             $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/PO-{$Accion->id}";
 
         }elseif(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Solicitud de aclaración')){
-            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA 
+            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA
             $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/SOL-{$Accion->id}";
+        }elseif(!empty($Accion->accion->tipo) && ($Accion->accion->tipo=='Promoción de responsabilidad administrativa sancionatoria')){
+            //AUDITORIA - AUDITORIA ACCION - AUDITORIA ACCION CONSECUTIVA
+            $llave = "AUD-{$Accion->auditoria_id}/AudAc-{$Accion->accion_id}/PRAS-{$Accion->id}";
 
         }elseif(!empty($Accion->acuerdo_conclusion)){
-            //AUDITORIA - Acuerdo Conclusion 
+            //AUDITORIA - Acuerdo Conclusion
             $llave = "AUD-{$Accion->auditoria_id}/AcuerdoCon-{$Accion->id}";
 
         }elseif((!empty($Accion->tipo) && ($Accion->tipo=='Recomendación'))){
@@ -957,24 +977,24 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             if(str_contains($partes[2],'SOL')){
                 $clavessol = explode('-', $partes[2]);
                 setSession('solicitudesauditoriaaccion_id',$clavesacn[1]);
-                setSession('solicitudesaclaracionatencion_id',$clavessol[1]);                
+                setSession('solicitudesaclaracionatencion_id',$clavessol[1]);
             }
             if(str_contains($partes[2],'REC')){
                 $clavesrec = explode('-', $partes[2]);
                 setSession('recomendacionesauditoriaaccion_id',$clavesacn[1]);
-                setSession('recomendacioncalificacion_id',$clavesrec[1]);                
+                setSession('recomendacioncalificacion_id',$clavesrec[1]);
             }
             if(str_contains($partes[2],'PO')){
                 $clavespo = explode('-', $partes[2]);
                 setSession('pliegosobservacionauditoriaaccion_id',$clavesacn[1]);
-                setSession('pliegosobservacionatencion_id',$clavespo[1]);                
+                setSession('pliegosobservacionatencion_id',$clavespo[1]);
             }
         }
         //return redirect($notificacion->url);
     }
 
     function totalFaltantesNotificaciones(){
-        
+
         if((auth()->user()->siglas_rol == 'LP' || auth()->user()->siglas_rol == 'ANA') && getSession('cp') >= 2024){
             //$total = auth()->user()->todasNotificacionesNuevas()->count();
             $total = count(auth()->user()->notificacionesPendientes);
@@ -982,11 +1002,11 @@ function guardarConstanciasFirmadas($model, $nombre_constancia, Request $request
             //$total=Notificacion::where('destinatario_id',auth()->user()->id)->where('estatus',"Pendiente")->count();
             $total=count(auth()->user()->notificacionesPendientes);
         }
-        
+
         return $total;
     }
 
-        
+
     function limpiarNotificacionMensaje($notificacion)
     {
         $mensaje = $notificacion->mensaje ?? '';

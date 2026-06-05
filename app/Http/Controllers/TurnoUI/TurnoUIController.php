@@ -12,23 +12,23 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 class TurnoUIController extends Controller
 {
-    
+
     protected $model;
     public function __construct(TurnoUI $model)
        {
            $this -> model = $model;
-       } 
+       }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function index(Request $request)
     {
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
         $turnoui=TurnoUI::where('auditoria_id',getSession('auditoria_id'))->first();
-       
+
         return view ('turnoui.index', compact('request', 'auditoria','turnoui'));
     }
 
@@ -39,9 +39,9 @@ class TurnoUIController extends Controller
      */
     public function create()
     {
-        $auditoria = Auditoria::find(getSession('auditoria_id'));               
+        $auditoria = Auditoria::find(getSession('auditoria_id'));
         $turnoui = new TurnoUI();
-       
+
         return view('turnoui.form', compact('auditoria','turnoui'));
     }
 
@@ -53,7 +53,7 @@ class TurnoUIController extends Controller
      */
     public function store(Request $request)
     {
-       
+
         mover_archivos($request, ['turno_ui']);
         $request['auditoria_id']= getSession('auditoria_id');
         $request['usuario_creacion_id'] = auth()->user()->id;
@@ -83,12 +83,12 @@ class TurnoUIController extends Controller
      */
     public function edit(TurnoUI $auditoria)
     {
-		
+
         $turnoui=$auditoria;
         $auditoria=$turnoui->auditoria;
 		//dd($auditoria);
-		
-       
+
+
         return view('turnoui.form', compact('auditoria','turnoui'));
     }
 
@@ -108,9 +108,9 @@ class TurnoUIController extends Controller
         $auditoria->update($request->all());
         $auditoria=$auditoria->auditoria;
         setMessage("Los datos se han actualizado correctamente.");
-  
+
         return redirect() -> route('turnoui.index',compact('auditoria','turnoui'));
-  
+
     }
 
     /**
@@ -138,12 +138,19 @@ class TurnoUIController extends Controller
         return redirect()->route('turnoui.create');
     }
     public function export(){
-        $auditoria=Auditoria::find(getSession('auditoria_id')); 
-        $template=new TemplateProcessorMod('bases-word/TurnoUI.docx');       
+        $auditoria=Auditoria::find(getSession('auditoria_id'));
+        $template=new TemplateProcessorMod('bases-word/TurnoUI.docx');
         $nombreword='TurnoUI';
         $template->saveAs($nombreword.'.docx');
 
         return response()->download($nombreword.'.docx')->deleteFileAfterSend(true);
-    }    
-   
+    }
+
+     public function contestaciones(TurnoUI $turnoui)
+    {
+        setSession('contestturnoui_id',$turnoui->id);
+
+        return redirect()->route('turnocontestacionesui.index');
+    }
+
 }

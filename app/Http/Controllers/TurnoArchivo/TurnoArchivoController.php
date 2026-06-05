@@ -4,7 +4,6 @@ namespace App\Http\Controllers\TurnoArchivo;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auditoria;
-use App\Models\AuditoriaAccion;
 use App\Models\TurnoAcuseArchivo;
 use Illuminate\Http\Request;
 
@@ -24,14 +23,10 @@ class TurnoArchivoController extends Controller
      */
     public function index(Request $request)
     {
-
         $auditoria = Auditoria :: find(getSession('auditoria_id'));
         $turnoarchivo=TurnoAcuseArchivo::where('auditoria_id',getSession('auditoria_id'))->first();
 
-
         return view ('turnoarchivo.index', compact('request','auditoria','turnoarchivo'));
-
-
     }
 
     /**
@@ -194,6 +189,13 @@ class TurnoArchivoController extends Controller
                     ', por parte del Titular.';
 
         return $mensaje;
+    }
+
+    public function contestaciones(TurnoAcuseArchivo $turnoarchivo)
+    {
+        setSession('contestturnoarch_id',$turnoarchivo->id);
+
+        return redirect()->route('turnocontestacionesarc.index');
     }
 
 }

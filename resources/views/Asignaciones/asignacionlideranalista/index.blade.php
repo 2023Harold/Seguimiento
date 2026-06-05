@@ -13,8 +13,8 @@
                 </h1>
             </div>
             <div class="card-body">
-                
-                @include('flash::message')                
+
+                @include('flash::message')
                 {!!BootForm::open(['route'=>'asignacionlideranalista.index','method'=>'GET']) !!}
                     <div class="row">
                         <div class="col-md-2">
@@ -29,9 +29,9 @@
                         <div class="col-md-3">
                             {!!BootForm::radios("asignaciones", 'Auditorias: ',['Todas' => ' Todas', 'Asignadas'=>' Asignadas','Pendientes'=>' Pendientes'],
                                 old('asignaciones', empty($request->asignaciones) ? 'Todas' : $request->asignaciones),true,['class'=>'i-checks']) !!}
-                        </div> 
+                        </div>
                         <div class="col-md-1 mt-8">
-                            <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search" aria-hidden="true"></i>Buscar</button>                           
+                            <button type="submit" class="btn btn-primary"><i class="align-middle fas fa-search" aria-hidden="true"></i>Buscar</button>
                         </div>
                     </div>
                 {!!BootForm::close() !!}
@@ -41,7 +41,7 @@
 							{{ $auditorias->appends(['numero_auditoria'=>$request->numero_auditoria,'entidad_fiscalizable'=>$request->entidad_fiscalizable,'acto_fiscalizacion'=>$request->acto_fiscalizacion,'asignaciones'=>$request->asignaciones])->links('vendor.pagination.bootstrap-5') }}
 						</div>
 					</div>
-				</div>	
+				</div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="float-end">
@@ -64,13 +64,13 @@
                                 <th>Acto de fiscalización</th>
                                 <th>Informe de auditoría</th>
                                 <th>Acciones promovidas</th>
-                                <th>Monto por aclarar</th>     
+                                <th>Monto por aclarar</th>
                                 @if(!usaEquipoTrabajo())
                                     @if(getSession('cp')==2023)
-                                        <th>Asignación de lider y analista</th>                                                   
-                                    @else       
-                                        <th>Asignación de lider y analista</th>                                
-                                    @endif     
+                                        <th>Asignación de lider y analista</th>
+                                    @else
+                                        <th>Asignación de lider y analista</th>
+                                    @endif
                                 @else
                                     <th colspan="4">Equipo de trabajo </th>
                                 @endif
@@ -90,16 +90,16 @@
                                         {{ $auditoria->numero_auditoria }}
                                     </td>
                                     <td>
-                                        {{$auditoria->nombreentidad->entidades ?? "sin nombre"}}                                     
+                                        {{$auditoria->nombreentidad->entidades ?? "sin nombre"}}
                                     </td>
                                     <td>
                                         {{ $auditoria->acto_fiscalizacion }}
-                                    </td>                                    
+                                    </td>
                                     <td class="text-center">
                                         @if (!empty($auditoria->informe_auditoria))
                                             <a href="{{ asset($auditoria->informe_auditoria) }}" target="_blank">
                                                 <?php echo htmlspecialchars_decode(iconoArchivo($auditoria->informe_auditoria)) ?>
-                                            </a>                                    
+                                            </a>
                                         @endif
                                     </td>
                                     <td class="text-center">
@@ -107,17 +107,17 @@
                                             @can('asignacionlideranalista.accionesconsulta')
                                                 <a href="{{ route('asignacionlideranalista.accionesconsulta', $auditoria) }}" class="btn btn-light-primary"><i class="fa fa-magnifying-glass-chart"></i>Consultar</a>
                                             @endcan
-                                        @endif                                  
+                                        @endif
                                     </td>
                                     <td style="text-align: right!important;">
-                                        {{ '$'.number_format( $auditoria->total(), 2) }}                                         
-                                    </td>                                    
+                                        {{ '$'.number_format( $auditoria->total(), 2) }}
+                                    </td>
                                     @if(!usaEquipoTrabajo())
                                         @if(getSession('cp')==2023)
-                                            @include('layouts.partials._asignacionlideranalista2023',$auditoria)                                                             
-                                        @else       
-                                            @include('layouts.partials._asignacionlideranalista2022')                                        
-                                        @endif     
+                                            @include('layouts.partials._asignacionlideranalista2023',$auditoria)
+                                        @else
+                                            @include('layouts.partials._asignacionlideranalista2022')
+                                        @endif
                                     @else
                                         <td>
                                             @if (!empty($auditoria->liderEquipo))
@@ -128,6 +128,7 @@
                                                         <a href="{{ route('asignarequipotrabajo.eliminar', [$lider, $auditoria]) }}" class="btn btn-link btn-active-color-danger js-confirm-delete"
                                                             data-confirm-title="¿Desea eliminar al lider de la auditoría?"
                                                             data-confirm-text="Esta acción no se puede deshacer."
+                                                            data-no-spinner
                                                             data-success-text="El lider se eliminó correctamente, recuerda que el historial se puede ver en el apartado de consulta.">
                                                                 <span class="bi bi-trash-fill" style="font-size: 1rem;"></span>
                                                         </a>
@@ -144,7 +145,7 @@
                                         <td >
                                             <a href="{{ route('asignarequipotrabajo.lider',$auditoria) }}" class="corner-button-success2 ">
                                                 <span class="cb-content"><i class="fa fa-users text-primary" style="font-size: 20px" aria-hidden="true"></i><i class="bi bi-plus-square-fill text-primary"  style="font-size: 16px"aria-hidden="true"></i></span>
-                                            </a>  
+                                            </a>
                                         </td>
                                         <td>
                                             @if (!empty($auditoria->analistaEquipo))
@@ -160,8 +161,8 @@
                                                         </a>
                                                     @endcan
                                                     <br><br>
-                                                    
-                                                @endforeach 
+
+                                                @endforeach
                                             @else
                                                 Sin asignar
                                             @endif
@@ -169,14 +170,14 @@
                                         <td>
                                             <a href="{{ route('asignarequipotrabajo.analista',$auditoria) }}" class="corner-button-success2">
                                                 <span class="cb-content"><i class="fa fa-users text-primary" style="font-size: 20px" aria-hidden="true"></i><i class="bi bi-plus-square-fill text-primary"  style="font-size: 16px"aria-hidden="true"></i></span>
-                                            </a>  
+                                            </a>
                                         </td>
-                                    @endif                                                                           
-                                </tr> 
+                                    @endif
+                                </tr>
                                 @if (!empty($auditoria->movimientosAsignacionLider))
                                     {!! movimientosDesgloseAsignacionesLA($auditoria->id,"12", $auditoria->movimientosAsignacionLider, $auditoria->movimientosAsignacionAnalista) !!}
-                                @endif  
-                                                                                        
+                                @endif
+
                             @empty
                                 <tr>
                                     <td class="text-center" colspan="8">
@@ -205,17 +206,45 @@
                 showCancelButton: true,
                 confirmButtonText: 'Sí, sincronizar',
                 customClass: {
-					confirmButton: 'btn btn-sm btn-primary',
-					cancelButton:  'btn btn-sm btn-danger'
-				}
+                    confirmButton: 'btn btn-sm btn-primary',
+                    cancelButton: 'btn btn-sm btn-danger'
+                }
             }).then(result => {
                 if (result.isConfirmed) {
+                    /* GlobalSpinner.show(); */
                     fetch("{{ route('asignarequipotrabajo.sincronizarTodo') }}", {
                         method: 'POST',
                         headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
                         }
-                    }).then(() => location.reload());
+                    })
+                    .then(response => {
+                        // validación REAL
+                        if (!response.ok) {
+                            throw new Error('Error en servidor');
+                        }
+
+                        return response.json(); // opcional si quieres JSON
+                    })
+                    .then(data => {
+                        /* GlobalSpinner.hide(); */
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sincronizado correctamente',
+                            timer: 1200,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+
+                    })
+                    .catch(error => {
+                        /* GlobalSpinner.hide(); */
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un problema al sincronizar'
+                        });
+                    });
                 }
             });
         });

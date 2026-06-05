@@ -4,7 +4,7 @@
     <i class="fa fa-bell fs-2x"></i>
     @if (auth()->user()->NotificacionesCount>0)
     <!--end::Svg Icon-->
-    <span class="badge badge-square badge-danger h-20px w-20px t-10 position-static translate-middle pulse pulse-danger top-0 start-100 animation-blink" style="visibility:{{ count(auth()->user()->notificacionesPendientes)>0?'visible':'hidden'}}" id="badge_id"> 
+    <span class="badge badge-square badge-danger h-20px w-20px t-10 position-static translate-middle pulse pulse-danger top-0 start-100 animation-blink" style="visibility:{{ count(auth()->user()->notificacionesPendientes)>0?'visible':'hidden'}}" id="badge_id">
         <span id="numero_notificaciones">{{ auth()->user()->NotificacionesCount }}</span>
         <span class="pulse-ring" style="visibility:{{ count(auth()->user()->notificacionesPendientes)>0?'visible':'hidden'}}" id="pulse_id"></span>
     </span>
@@ -14,18 +14,18 @@
 </div>
 
 <div class="menu menu-sub menu-sub-dropdown menu-column w-450px w-lg-525px" data-kt-menu="true">
-    
+
     <!--begin::Heading-->
     <div class="d-flex flex-column flex-center bgi-no-repeat rounded-top px-9 py-5" style="background-image:url('{{asset('assets/img/gris.jpg')}}')">
         <button id="btn-refrescar" class="btn btn-sm btn-primary mt-2 me-auto" title="Refrescar notificaciones">
             <i class="fa fa-sync-alt fa-6x"></i> <!-- Icono de refrescar más grande -->
         </button>
-        
+
         <!--begin::Title-->
         <h1 class="text-primary fw-bold mb-3">Notificaciones</h1>
-        
-        
-        
+
+
+
         <!--end::Title-->
         @if (auth()->user()->NotificacionesCount>0)
             <!--begin::Status-->
@@ -50,13 +50,13 @@
 									<span class="small text-muted fw-bold">
 										Cuenta Pública {{$notificacion->cp}}
 									</span>
-								</div>	
+								</div>
 								<div>
 									<span class="small text-muted fw-bold">
 										{{ fecha($notificacion->fecha_muestra_inicio, 'd/m/Y H:i') }}
 									</span>
-								</div>	
-						</div>	
+								</div>
+						</div>
                         <div class="d-flex align-items-center mb-2">
                             <!--begin::Symbol-->
                             <div class="symbol symbol-40px me-4 d-flex flex-column w-50px text-center">
@@ -66,11 +66,11 @@
                             <!--end::Symbol-->
                             <!--begin::Title-->
                             <div class="d-flex flex-column w-100">
-                                @if (!empty($notificacion->url))
+                               {{--  @if (!empty($notificacion->url))
                                     <label class="fs-6 text-primary fw-bold">
                                         <a href="{{ route('notificacionurl.edit', $notificacion) }}"><i class="bi bi-box-arrow-in-up-right fa-1x text-primary float-end"></i></a>
                                     </label>
-                                @endif
+                                @endif --}}
                                 <label class="fs-6 text-primary fw-bold">
                                     {{ $notificacion->titulo }}
                                 </label>
@@ -78,6 +78,15 @@
                                     <strong>Estimado(a) {{auth()->user()->name}} {{auth()->user()->puesto}}</strong>
                                      {{explode("<br>", $notificacion->mensaje)[1]}}
                                 </span>
+                            </div>
+                            <div class="symbol symbol-40px me-4 d-flex flex-column w-50px text-center">
+                                @if (!empty($notificacion->url))
+                                    <label class="fs-4 text-primary fw-bold">Ir:</label>
+                                    <label class="fs-6 text-primary fw-bold">
+                                        <a href="{{ route('notificacionurl.edit', $notificacion) }}"><i class="bi bi-arrow-right-square fa-2x text-primary"></i></a>
+                                    </label>
+                                @endif
+
                             </div>
                             <!--end::Title-->
                         </div>
@@ -160,7 +169,7 @@
         });
         $('.no-cerrar').on('click', function(event){
             event.stopPropagation();
-            
+
         });
     });
 

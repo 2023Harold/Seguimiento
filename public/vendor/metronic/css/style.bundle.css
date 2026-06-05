@@ -5562,7 +5562,7 @@ fieldset:disabled .btn {
     padding: .5rem 1rem;
     margin-bottom: 0;
     background: #9a9b9e;
-    border-bottom: 1px solid #eff2f5;    
+    border-bottom: 1px solid #eff2f5;
     color: #A13B71;
 }
 
@@ -38729,7 +38729,7 @@ a:hover {
     align-items: center;
     margin: .5rem;
     margin-left: 0;
-    color: #A13B71 !important;    
+    color: #A13B71 !important;
 }
 
 .card .card-header .card-title.flex-column {
@@ -43907,7 +43907,7 @@ code:not([class*=language-]) {
 
 
 .table td,
-.table th {   
+.table th {
     border-color: inherit;
     border-width: inherit;
     border-style: inherit;
@@ -52255,6 +52255,7 @@ code:not([class*=language-]) {
     color: #181c32;
     background-color: #eff2f5
 }
+
 
 .indicator-progress {
     display: none

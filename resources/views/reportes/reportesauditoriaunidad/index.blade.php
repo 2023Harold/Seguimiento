@@ -5,204 +5,7 @@
 @endsection
 
 @section('content')
-<style>
-    tr:hover { background-color: #CAD5E2 !important; }
 
-    #container { min-height: 620px; }
-
-    .highcharts-breadcrumbs text { font-size: 13px !important; }
-    .highcharts-data-label text { cursor: pointer; }
-    .highcharts-point:hover { opacity: 0.9; }
-
-    .badge { font-size: 13px; padding: 6px 10px; border-radius: 6px; }
-
-    /* Estilos para la cuadrícula de auditorías */
-    #auditoriasPanel .card { border: 1px linear-gradient(135deg, #ffffff 0%, #fbfbfe 100%); }
-
-    #auditoriasPanel .audit-card-title { font-weight: 600; font-size: .95rem; line-height: 1.2; min-height: 2.1em; }
-    #auditoriasPanel .audit-meta { font-size: .8rem; color: #6b7280; }
-
-    @keyframes breath { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.45); opacity: 0.9; } 100% { transform: scale(1); opacity: 1; } }
-
-    .audit-card {
-        border-radius: 10px; overflow: hidden; border: 0;
-        background: linear-gradient(135deg, #ffffff 0%, #fbfbfe 100%);
-        box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
-        transition: transform .18s ease, box-shadow .18s ease;
-    }
-    .audit-card::before {
-        content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
-        background: linear-gradient(180deg, #960048, #BB945C);
-        border-top-left-radius: 18px; border-bottom-left-radius: 18px;
-    }
-    .audit-card-title { font-weight: 600; font-size: 1rem; color: #111827; }
-    .audit-meta { font-size: 0.95rem; color: #374151; line-height: 1.45; }
-    .audit-meta .small { font-size: 0.95rem; color: #6b7280; }
-    .audit-meta .badge { font-size: 0.95rem; padding: .36rem .6rem; border-radius: .375rem; }
-    
-    .audit-card--chart {
-        overflow: visible !important;
-    }
-
-    .audit-meta .audit-field {
-        font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 6px;
-        display: flex; align-items: baseline; gap: 8px;
-    }
-    .audit-meta .audit-field .field-value { font-weight: 400; color: #374151; margin-left: 0; }
-    .audit-meta b { color: #111827; font-weight: 600; }
-
-    .status-breath {
-        width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
-        flex: 0 0 auto; margin-top: 4px;
-    }
-    .status-autorizado { background: #10b981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.28); }
-    .status-pending    { background: #f59e0b; box-shadow: 0 0 12px rgba(245, 158, 11, 0.18); }
-    .status-absent     { background: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.12); }
-
-    @keyframes card-breath { 0% { transform: translateY(0) } 50% { transform: translateY(-2px) } 100% { transform: translateY(0) } }
-
-    /* ====== Ajustes generales para que NUNCA se salga el texto ====== */
-    #auditoriasPanel .audit-meta,
-    #auditoriasPanel .audit-meta .audit-field,
-    #auditoriasPanel .audit-meta .audit-field .field-value,
-    #auditoriasPanel .audit-card-title,
-    #auditoriasPanel .audit-meta .small,
-    #auditoriasPanel .audit-meta .badge {
-        overflow-wrap: anywhere; word-break: break-word; hyphens: auto;
-    }
-    #auditoriasPanel .audit-meta .audit-field { align-items: flex-start; }
-    #auditoriasPanel .audit-meta p { margin: 0; }
-    
-    .card-body {
-    position: relative;
-    }
-
-    /* Móvil */
-    @media (max-width: 576px) {
-        #auditoriasPanel .audit-card { border-radius: 10px; }
-        #auditoriasPanel .audit-card .card-body { padding: 12px 12px; }
-        #auditoriasPanel .audit-card-title { font-size: 0.95rem; line-height: 1.25; margin-bottom: .5rem; }
-        #auditoriasPanel .audit-meta { font-size: .78rem; line-height: 1.35; }
-        #auditoriasPanel .audit-meta .audit-field { font-size: .78rem; margin-bottom: 6px; gap: 6px; }
-        #auditoriasPanel .audit-meta .audit-field .field-value { font-size: .78rem; }
-        #auditoriasPanel .audit-meta .badge, #auditoriasPanel .audit-meta .small { font-size: .72rem; }
-        #auditoriasPanel .d-flex.align-items-start.gap-3 { gap: 8px !important; }
-        #auditoriasPanel .status-breath { width: 10px; height: 10px; margin-top: 2px; }
-        #auditoriasPanel .audit-meta b, #auditoriasPanel .audit-meta .field-value, #auditoriasPanel .audit-meta .text-muted {
-            overflow-wrap: anywhere; word-break: break-word;
-        }
-    }
-
-    /* Tablet */
-    @media (min-width: 577px) and (max-width: 768px) {
-        #auditoriasPanel .audit-card .card-body { padding: 14px 14px; }
-        #auditoriasPanel .audit-card-title { font-size: 1rem; }
-        #auditoriasPanel .audit-meta, #auditoriasPanel .audit-meta .audit-field { font-size: .85rem; }
-        #auditoriasPanel .audit-meta .badge, #auditoriasPanel .audit-meta .small { font-size: .78rem; }
-    }
-
-    .fancy-border { border: 2px solid #BB945C; box-shadow: 1px 1px 10px 1px rgba(239, 193, 139, .95); }
-    .tooltip .tooltip-inner { max-width: 420px; text-align: left; font-size: 14PX; }
-
-    /* Loader cuadrado */
-    .swapping-squares-spinner, .swapping-squares-spinner * { box-sizing: border-box; }
-    .swapping-squares-spinner {
-        height: 65px; width: 65px; position: relative; display: flex; flex-direction: row;
-        justify-content: center; align-items: center; margin: 8px auto;
-    }
-    .swapping-squares-spinner .square {
-        height: calc(65px * 0.25 / 1.3);
-        width: calc(65px * 0.25 / 1.3);
-        animation-duration: 1000ms;
-        border: calc(65px * 0.04 / 1.3) solid #BB945C;
-        margin-right: auto; margin-left: auto; position: absolute; animation-iteration-count: infinite;
-    }
-    .swapping-squares-spinner .square:nth-child(1) { animation-name: swapping-squares-animation-child-1; animation-delay: 500ms; }
-    .swapping-squares-spinner .square:nth-child(2) { animation-name: swapping-squares-animation-child-2; animation-delay: 0ms; }
-    .swapping-squares-spinner .square:nth-child(3) { animation-name: swapping-squares-animation-child-3; animation-delay: 500ms; }
-    .swapping-squares-spinner .square:nth-child(4) { animation-name: swapping-squares-animation-child-4; animation-delay: 0ms; }
-
-    @keyframes swapping-squares-animation-child-1 { 50% { transform: translate(150%, 150%) scale(2, 2); } }
-    @keyframes swapping-squares-animation-child-2 { 50% { transform: translate(-150%, 150%) scale(2, 2); } }
-    @keyframes swapping-squares-animation-child-3 { 50% { transform: translate(-150%, -150%) scale(2, 2); } }
-    @keyframes swapping-squares-animation-child-4 { 50% { transform: translate(150%, -150%) scale(2, 2); } }
-
-    /* === Layout del gauge + panel derecho === */
-    .dept-gauge-wrap{ display:flex; align-items:stretch; gap:14px; min-height: 260px; }
-    .dept-gauge-wrap .highcharts-figure{ flex: 0 1 360px; min-width: 280px; margin: 0; }
-    #grafica_deptos{ 
-min-height: 320px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-min-height: 260px; }
-    .dept-gauge-info{
-        flex: 1 1 220px; min-width: 200px; display:flex; flex-direction:column; justify-content:center;
-        border-left: 1px solid rgba(187,148,92,.25); padding-left: 12px; color: #132a29;
-    }
-    .dept-gauge-info h6{ margin:0 0 6px 0; font-weight:700; }
-    .dept-gauge-info .kpi{ display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
-    .dept-gauge-info .kpi .big{ font-size: clamp(1.2rem, 2.2vw, 1.7rem); font-weight: 800; }
-    .dept-gauge-info .muted{ color:#6b7280; }
-    @media (max-width: 1200px){ .dept-gauge-wrap .highcharts-figure{ flex-basis: 320px; min-width: 260px; } }
-    @media (max-width: 768px){
-        .dept-gauge-wrap{ flex-direction: column; }
-        .dept-gauge-info{ border-left: 0; border-top:1px solid rgba(187,148,92,.25); padding-top: 10px; padding-left:0; }
-        .dept-gauge-wrap .highcharts-figure{ flex-basis: auto; min-width: 100%; }
-    }
-    .dept-gauge-wrap.is-stacked{ flex-direction: column; }
-    .dept-gauge-wrap.is-stacked .dept-gauge-info{
-        border-left: 0; border-top:1px solid rgba(187,148,92,.25);
-        padding-top: 10px; padding-left:0;
-    }
-    .dept-gauge-wrap.is-stacked .highcharts-figure{ flex-basis: auto; min-width: 100%; }
-
-    
-    @media print {
-        /* Oculta TODO excepto #exportArea */
-        body > * {
-            display: none !important;
-        }
-
-        /* Muestra solo la parte exportable */
-        #exportArea {
-            display: block !important;
-            position: relative !important;
-            overflow: visible !important;
-        }
-
-        /* Oculta botones dentro de exportArea */
-        #exportArea [data-print="hide"],
-        #exportArea .highcharts-contextbutton {
-            display: none !important;
-        }
-
-        /* Evita cortes feos */
-        .card, .audit-card {
-            break-inside: avoid;
-            page-break-inside: avoid;
-        }
-
-        @page {
-            size: Letter;
-            margin: 10mm;
-        }
-        
-        /* Highcharts no debe recortarse */
-        .highcharts-container,
-        .highcharts-container svg {
-            overflow: visible !important;
-        }
-
-        /* El card del gauge SÍ puede romper página */
-        .dept-gauge-wrap,
-        .audit-card--chart {
-            break-inside: auto !important;
-            page-break-inside: auto !important;
-        }
-
-    }
-
-</style>
 @if(request('print') == '1')
     <style>
     /* Oculta TODO menos #exportArea */
@@ -277,7 +80,7 @@ min-height: 260px; }
                                     </div>
                                 </div>
                             </div>
-                                
+
                             @if(auth()->user()->unidadAdministrativa->id == 122100 || auth()->user()->unidadAdministrativa->id ==  122000)
                                 {{-- Encargados A --}}
                                 <div class="col-12 col-lg-4">
@@ -403,7 +206,7 @@ min-height: 260px; }
                                 <button type="button" id="f_limpiar" class="btn btn-secondary"><i class="bi bi-arrow-repeat" style="font-size: 1.5em;"></i> Limpiar Filtros</button>
                             </div>
                             <div class="col-md-1">
-                                
+
                             </div>
                         </div>
                         {!! BootForm::close() !!}
@@ -467,6 +270,7 @@ min-height: 260px; }
 <script src="https://cdn.jsdelivr.net/npm/canvg@3.0.7/lib/umd.js"></script>
 
 <script>
+
   // ========= Datos inyectados =========
   window.REPORT_DATA = {
     treemapData: @json($treemapData),
@@ -500,10 +304,10 @@ min-height: 260px; }
         b.classList.add('bg-warning');
         }
 
-        const panel = document.getElementById('auditoriasPanel'); 
+        const panel = document.getElementById('auditoriasPanel');
         if (panel) panel.classList.add('d-none');
 
-        const ci = document.getElementById('chartInner'); 
+        const ci = document.getElementById('chartInner');
         if (ci) ci.innerHTML = '';
 
         try { sessionStorage.removeItem('auditoriaViewState'); } catch (e) {}
@@ -511,7 +315,7 @@ min-height: 260px; }
 
     } catch (e) { console.error(e); }
     }
-  
+
     function clearPdfAuditState() {
     window.__pdfAuditId = null;
     window.__pdfAuditName = null;
@@ -555,7 +359,7 @@ min-height: 260px; }
   }
 
   // ========= Rasterizar chart visible a imagen (JPEG ligero) =========
-  
+
 
 async function chartToImageById(containerId, opts = {}) {
   const { scale = 1.25, mime = 'image/jpeg', quality = 0.92 } = opts;
@@ -738,7 +542,7 @@ async function chartToImageById(containerId, opts = {}) {
 
     setTimeout(() => { if (btn) { btn.disabled = false; btn.textContent = 'PDF'; } }, 2000);
   }
-  
+
 // FIX PRINT: recalcula gauges antes de imprimir
 window.addEventListener('beforeprint', () => {
   try {

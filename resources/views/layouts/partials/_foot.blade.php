@@ -16,4 +16,8 @@
 <script src="{{ asset('vendor/jquery-colorbox/jquery.colorbox.js') }}" defer></script>
 <script src="{{asset('assets/js/SgDataCryptoJsLitev1.7.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.app.js')}}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/appScript.js')}}" type="text/javascript"></script>
 
+<!-- JS -->
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>

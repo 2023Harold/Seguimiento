@@ -290,4 +290,15 @@ class User extends Authenticatable
 			$notificacion->update(['estatus' => 'Leído']);
         }
     }
+    // app/Models/User.php
+    public function sessionLogs()
+    {
+        return $this->hasMany(UserSessionLog::class);
+    }
+
+    // Última sesión
+    public function lastSession()
+    {
+        return $this->hasOne(UserSessionLog::class)->latest('login_at');
+    }
 }
